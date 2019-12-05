@@ -66,6 +66,7 @@ let make = (~channelId: string) => {
         isArchived: channel.isArchived |> E.Bool.toString,
       },
       ~schema=ChannelForm.Form.Validation.Schema([||]),
+      (),
     )
     |> clb;
 
@@ -75,15 +76,18 @@ let make = (~channelId: string) => {
          HttpResponse.fmap(channel =>
            <ChannelUpdate.Mutation>
              ...{(mutation, data) =>
-               form(mutation, channel, ({submit, state}) =>
+               form(
+                 mutation,
+                 channel,
+                 ({submit, handleChange, state}: ChannelForm.Form.api) =>
                  CMutationForm.showWithLoading(
                    ~result=data.result,
                    ~form=
                      ChannelForm.showForm(
                        ~state,
-                       ~send=submit,
+                       ~handleChange,
                        ~creating=false,
-                       ~onSubmit=() => send(ChannelForm.Form.Submit),
+                       ~onSubmit=() => submit(),
                        (),
                      ),
                    ~successMessage="Community edited successfully.",

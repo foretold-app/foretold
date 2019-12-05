@@ -26,10 +26,7 @@ let make = (~loggedUser: Types.user) => {
         onSubmit,
         bot,
         ({handleChange, submit, state}: BotForm.Form.api) => {
-          let form =
-            BotForm.formFields(state, handleChange, () =>
-              submit(BotForm.Form.Submit)
-            );
+          let form = BotForm.formFields(state, handleChange, () => submit());
 
           CMutationForm.showWithLoading2(
             ~result=data.result,

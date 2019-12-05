@@ -8,8 +8,6 @@ module Config = {
 
   type state = {email: string};
 
-  type fields = [ | `email];
-
   let get: type value. (state, field(value)) => value =
     (state, field) =>
       switch (field) {
@@ -66,7 +64,7 @@ let fields = (form: Form.state, handleChange, onSubmit, getFieldState) => {
       <AntdInput
         value={form.values.email}
         onChange={ReForm.Helpers.handleDomFormChange(e =>
-          handleChange(Email, e)
+          handleChange(Config.Email, e)
         )}
       />
       {error(stateEmail)}

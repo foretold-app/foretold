@@ -62,6 +62,7 @@ let withForm = (onSubmit, bot: option(Types.bot), innerComponentFn) => {
           values => values.name == "" ? Error("Can't be empty") : Valid,
         ),
       |]),
+    (),
   )
   |> innerComponentFn;
 };
@@ -73,14 +74,14 @@ let onSuccess = (loggedUser: Types.user, ()) => {
   <Null />;
 };
 
-let formFields = (state: Form.state, send, onSubmit) =>
+let formFields = (state: Form.state, handleChange, onSubmit) =>
   <FC__PageCard.BodyPadding>
     <Antd.Form onSubmit={e => onSubmit()}>
       <Antd.Form.Item label={"Name" |> Utils.ste}>
         <Antd.Input
           value={state.values.name}
           onChange={ReForm.Helpers.handleDomFormChange(e =>
-            send(Form.FieldChangeValue(Name, e))
+            handleChange(FormConfig.Name, e)
           )}
         />
       </Antd.Form.Item>
@@ -88,7 +89,7 @@ let formFields = (state: Form.state, send, onSubmit) =>
         <Antd.Input
           value={state.values.description}
           onChange={ReForm.Helpers.handleDomFormChange(e =>
-            send(Form.FieldChangeValue(Description, e))
+            handleChange(Description, e)
           )}
         />
       </Antd.Form.Item>
@@ -96,7 +97,7 @@ let formFields = (state: Form.state, send, onSubmit) =>
         <Antd.Input
           value={state.values.picture}
           onChange={ReForm.Helpers.handleDomFormChange(e =>
-            send(Form.FieldChangeValue(Picture, e))
+            handleChange(Picture, e)
           )}
         />
       </Antd.Form.Item>

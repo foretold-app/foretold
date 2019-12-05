@@ -7,11 +7,11 @@ module CMutationForm =
 
 [@react.component]
 let make = (~channelId) => {
-  let formCreator = mutation =>
-    MeasurableForm.Form.make(
+  let formCreator = (mutation, clb) =>
+    MeasurableForm.Form.use(
       ~schema=MeasurableForm.Form.Validation.Schema([||]),
       ~onSubmit=
-        values =>
+        values => {
           MeasurableCreate.mutate(
             mutation,
             values.state.values.name,
@@ -26,7 +26,9 @@ let make = (~channelId) => {
             values.state.values.min,
             values.state.values.max,
             values.state.values.channelId,
-          ),
+          );
+          None;
+        },
       ~initialState={
         name: "",
         labelCustom: "",
@@ -45,20 +47,22 @@ let make = (~channelId) => {
         max: "",
         channelId,
       },
-    );
+      (),
+    )
+    |> clb;
 
   <SLayout head={SLayout.Header.textDiv("New Question")}>
     <FC.PageCard.BodyPadding>
       {<MeasurableCreate.Mutation>
          ...{(mutation, data) =>
-           formCreator(mutation, ({state, send, _}) =>
+           formCreator(mutation, ({state, handleChange, submit}) =>
              CMutationForm.showWithLoading2(
                ~result=data.result,
                ~form=
                  MeasurableForm.showForm(
                    ~state,
-                   ~send,
-                   ~onSubmit=_ => send(MeasurableForm.Form.Submit),
+                   ~handleChange,
+                   ~onSubmit=_ => submit(),
                    (),
                  ),
                ~onSuccess=
@@ -73,7 +77,6 @@ let make = (~channelId) => {
                (),
              )
            )
-           |> E.React2.el
          }
        </MeasurableCreate.Mutation>}
     </FC.PageCard.BodyPadding>

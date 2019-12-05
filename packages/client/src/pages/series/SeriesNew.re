@@ -19,8 +19,6 @@ module FormConfig = {
     dates: list(MomentRe.Moment.t),
   };
 
-  type fields = [ | `Name | `Description | `Subjects | `Properties | `Dates];
-
   let get: type value. (state, field(value)) => value =
     (state, field) =>
       switch (field) {
@@ -84,7 +82,7 @@ let withForm = (mutation, channelId, innerComponentFn) =>
   )
   |> innerComponentFn;
 
-let formFields = (form: Form.state, send, onSubmit) =>
+let formFields = (form: Form.state, handleChange, onSubmit) =>
   <Antd.Form onSubmit={e => onSubmit()}>
     <h3>
       {"Warning: You can not edit a Series after created it at this time."
@@ -94,7 +92,7 @@ let formFields = (form: Form.state, send, onSubmit) =>
       <Input
         value={form.values.name}
         onChange={ReForm.Helpers.handleDomFormChange(e =>
-          send(Form.FieldChangeValue(Name, e))
+          handleChange(FormConfig.Name, e)
         )}
       />
     </Antd.Form.Item>
@@ -102,7 +100,7 @@ let formFields = (form: Form.state, send, onSubmit) =>
       <Input
         value={form.values.description}
         onChange={ReForm.Helpers.handleDomFormChange(e =>
-          send(Form.FieldChangeValue(Description, e))
+          handleChange(Description, e)
         )}
       />
     </Antd.Form.Item>
@@ -112,11 +110,9 @@ let formFields = (form: Form.state, send, onSubmit) =>
             <Input
               value=r
               onChange={ReForm.Helpers.handleDomFormChange(e =>
-                send(
-                  Form.FieldChangeValue(
-                    Subjects,
-                    form.values.subjects |> E.L.update(e, i),
-                  ),
+                handleChange(
+                  FormConfig.Subjects,
+                  form.values.subjects |> E.L.update(e, i),
                 )
               )}
             />
@@ -125,11 +121,9 @@ let formFields = (form: Form.state, send, onSubmit) =>
        |> ReasonReact.array}
       <Button
         onClick={_ =>
-          send(
-            Form.FieldChangeValue(
-              Subjects,
-              form.values.subjects |> Rationale.RList.append(""),
-            ),
+          handleChange(
+            Subjects,
+            form.values.subjects |> Rationale.RList.append(""),
           )
         }>
         {"Add Subject" |> Utils.ste}
@@ -141,11 +135,9 @@ let formFields = (form: Form.state, send, onSubmit) =>
             <Input
               value=r
               onChange={ReForm.Helpers.handleDomFormChange(e =>
-                send(
-                  Form.FieldChangeValue(
-                    Properties,
-                    form.values.properties |> E.L.update(e, i),
-                  ),
+                handleChange(
+                  Properties,
+                  form.values.properties |> E.L.update(e, i),
                 )
               )}
             />
@@ -155,10 +147,8 @@ let formFields = (form: Form.state, send, onSubmit) =>
       <Button
         onClick={_ =>
           send(
-            Form.FieldChangeValue(
-              Properties,
-              form.values.properties |> Rationale.RList.append(""),
-            ),
+            Properties,
+            form.values.properties |> Rationale.RList.append(""),
           )
         }>
         {"Add Property" |> Utils.ste}
@@ -170,12 +160,7 @@ let formFields = (form: Form.state, send, onSubmit) =>
             <DatePicker
               value=r
               onChange={e => {
-                send(
-                  Form.FieldChangeValue(
-                    Dates,
-                    form.values.dates |> E.L.update(e, i),
-                  ),
-                );
+                handleChange(Dates, form.values.dates |> E.L.update(e, i));
 
                 _ => ();
               }}
@@ -185,12 +170,9 @@ let formFields = (form: Form.state, send, onSubmit) =>
        |> ReasonReact.array}
       <Button
         onClick={_ =>
-          send(
-            Form.FieldChangeValue(
-              Dates,
-              form.values.dates
-              |> Rationale.RList.append(MomentRe.momentNow()),
-            ),
+          handleChange(
+            Dates,
+            form.values.dates |> Rationale.RList.append(MomentRe.momentNow()),
           )
         }>
         {"Add Date" |> Utils.ste}

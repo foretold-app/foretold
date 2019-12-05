@@ -83,7 +83,8 @@ module FormConfig = {
 
 module Form = ReFormNext.Make(FormConfig);
 
-let showForm = (~state: Form.state, ~send, ~creating=true, ~onSubmit, ()) =>
+let showForm =
+    (~state: Form.state, ~handleChange, ~creating=true, ~onSubmit, ()) =>
   <Providers.AppContext.Consumer>
     ...{({loggedUser}) =>
       switch (loggedUser) {
@@ -102,7 +103,7 @@ let showForm = (~state: Form.state, ~send, ~creating=true, ~onSubmit, ()) =>
                  value={state.values.valueType}
                  defaultValue={state.values.valueType}
                  onChange={ReForm.Helpers.handleDomFormChange(e =>
-                   send(Form.FieldChangeValue(ValueType, e))
+                   handleChange(FormConfig.ValueType, e)
                  )}>
                  <Antd.Radio value="FLOAT"> {"Number" |> ste} </Antd.Radio>
                  <Antd.Radio value="PERCENTAGE">
@@ -119,7 +120,7 @@ let showForm = (~state: Form.state, ~send, ~creating=true, ~onSubmit, ()) =>
                  <Input
                    value={state.values.name}
                    onChange={ReForm.Helpers.handleDomFormChange(e =>
-                     send(Form.FieldChangeValue(Name, e))
+                     handleChange(Name, e)
                    )}
                  />
                </Antd.Form.Item>
@@ -146,9 +147,7 @@ let showForm = (~state: Form.state, ~send, ~creating=true, ~onSubmit, ()) =>
                         <Antd.Form.Item label={"Community" |> Utils.ste}>
                           <Antd.Select
                             value={state.values.channelId}
-                            onChange={e =>
-                              send(Form.FieldChangeValue(ChannelId, e))
-                            }>
+                            onChange={e => handleChange(ChannelId, e)}>
                             c
                           </Antd.Select>
                         </Antd.Form.Item>
@@ -174,11 +173,9 @@ let showForm = (~state: Form.state, ~send, ~creating=true, ~onSubmit, ()) =>
                  <Antd.Input
                    value={state.values.labelSubject}
                    onChange={e =>
-                     send(
-                       Form.FieldChangeValue(
-                         LabelSubject,
-                         ReactEvent.Form.target(e)##value,
-                       ),
+                     handleChange(
+                       LabelSubject,
+                       ReactEvent.Form.target(e)##value,
                      )
                    }
                  />
@@ -187,11 +184,9 @@ let showForm = (~state: Form.state, ~send, ~creating=true, ~onSubmit, ()) =>
                  <Antd.Input
                    value={state.values.labelProperty}
                    onChange={e =>
-                     send(
-                       Form.FieldChangeValue(
-                         LabelProperty,
-                         ReactEvent.Form.target(e)##value,
-                       ),
+                     handleChange(
+                       LabelProperty,
+                       ReactEvent.Form.target(e)##value,
                      )
                    }
                  />
@@ -201,12 +196,7 @@ let showForm = (~state: Form.state, ~send, ~creating=true, ~onSubmit, ()) =>
                  <AntdSwitch
                    checked={state.values.showDescriptionDate == "TRUE"}
                    onChange={e =>
-                     send(
-                       Form.FieldChangeValue(
-                         ShowDescriptionDate,
-                         e ? "TRUE" : "FALSE",
-                       ),
-                     )
+                     handleChange(ShowDescriptionDate, e ? "TRUE" : "FALSE")
                    }
                  />
                </Antd.Form.Item>
@@ -215,17 +205,10 @@ let showForm = (~state: Form.state, ~send, ~creating=true, ~onSubmit, ()) =>
                       <DatePicker
                         value={state.values.labelOnDate |> MomentRe.moment}
                         onChange={e => {
-                          send(
-                            Form.FieldChangeValue(
-                              LabelOnDate,
-                              e |> formatDate,
-                            ),
-                          );
-                          send(
-                            Form.FieldChangeValue(
-                              ExpectedResolutionDate,
-                              e |> formatDate,
-                            ),
+                          handleChange(LabelOnDate, e |> formatDate);
+                          handleChange(
+                            ExpectedResolutionDate,
+                            e |> formatDate,
                           );
                           _ => ();
                         }}
@@ -241,12 +224,7 @@ let showForm = (~state: Form.state, ~send, ~creating=true, ~onSubmit, ()) =>
               style={ReactDOMRe.Style.make(~minHeight="12em", ())}
               value={state.values.labelCustom}
               onChange={e =>
-                send(
-                  Form.FieldChangeValue(
-                    LabelCustom,
-                    ReactEvent.Form.target(e)##value,
-                  ),
-                )
+                handleChange(LabelCustom, ReactEvent.Form.target(e)##value)
               }
             />
           </Antd.Form.Item>
@@ -272,11 +250,9 @@ let showForm = (~state: Form.state, ~send, ~creating=true, ~onSubmit, ()) =>
                              className=Styles.shortInput
                              value={state.values.min}
                              onChange={e =>
-                               send(
-                                 Form.FieldChangeValue(
-                                   Min,
-                                   ReactEvent.Form.target(e)##value,
-                                 ),
+                               handleChange(
+                                 Min,
+                                 ReactEvent.Form.target(e)##value,
                                )
                              }
                            />
@@ -293,11 +269,9 @@ let showForm = (~state: Form.state, ~send, ~creating=true, ~onSubmit, ()) =>
                              className=Styles.shortInput
                              value={state.values.max}
                              onChange={e =>
-                               send(
-                                 Form.FieldChangeValue(
-                                   Max,
-                                   ReactEvent.Form.target(e)##value,
-                                 ),
+                               handleChange(
+                                 Max,
+                                 ReactEvent.Form.target(e)##value,
                                )
                              }
                            />
@@ -321,11 +295,9 @@ let showForm = (~state: Form.state, ~send, ~creating=true, ~onSubmit, ()) =>
                <Input
                  value={state.values.resolutionEndpoint}
                  onChange={e =>
-                   send(
-                     Form.FieldChangeValue(
-                       ResolutionEndpoint,
-                       ReactEvent.Form.target(e)##value,
-                     ),
+                   handleChange(
+                     ResolutionEndpoint,
+                     ReactEvent.Form.target(e)##value,
                    )
                  }
                />
@@ -343,12 +315,7 @@ let showForm = (~state: Form.state, ~send, ~creating=true, ~onSubmit, ()) =>
                 |> MomentRe.momentDefaultFormat
               }
               onChange={e => {
-                send(
-                  Form.FieldChangeValue(
-                    ExpectedResolutionDate,
-                    e |> formatDate,
-                  ),
-                );
+                handleChange(ExpectedResolutionDate, e |> formatDate);
 
                 (_ => ());
               }}
@@ -362,11 +329,9 @@ let showForm = (~state: Form.state, ~send, ~creating=true, ~onSubmit, ()) =>
                  value={state.values.showDescriptionProperty}
                  defaultValue={state.values.showDescriptionProperty}
                  onChange={e =>
-                   send(
-                     Form.FieldChangeValue(
-                       ShowDescriptionProperty,
-                       ReactEvent.Form.target(e)##value,
-                     ),
+                   handleChange(
+                     ShowDescriptionProperty,
+                     ReactEvent.Form.target(e)##value,
                    )
                  }>
                  <Antd.Radio value="FALSE"> {"No" |> ste} </Antd.Radio>

@@ -25,11 +25,8 @@ let make = (~pageParams: Types.pageParams, ~loggedUser: Types.user) => {
         BotForm.withForm(
           onSubmit,
           bot,
-          ({handleChange, state}) => {
-            let form =
-              BotForm.formFields(state, handleChange, () =>
-                send(BotForm.Form.Submit)
-              );
+          ({handleChange, state, submit}) => {
+            let form = BotForm.formFields(state, handleChange, () => submit());
 
             CMutationForm.showWithLoading2(
               ~result=data.result,

@@ -44,7 +44,7 @@ let make = () => {
               ~form=
                 ChannelForm.showForm(
                   ~state,
-                  ~send=handleChange,
+                  ~handleChange,
                   ~onSubmit=() => submit(),
                   (),
                 ),

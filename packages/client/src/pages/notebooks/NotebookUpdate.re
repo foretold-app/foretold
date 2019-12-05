@@ -8,19 +8,22 @@ module CMutationForm =
 [@react.component]
 let make = (~notebook: Types.notebook, ~onSuccess) => {
   NotebookUpdateMutation.withMutation((mutation, data) => {
-    let onSubmit = (values: NotebookForm.Form.onSubmitAPI): unit =>
+    let onSubmit = (values: NotebookForm.Form.onSubmitAPI) => {
       NotebookUpdateMutation.mutate(
         mutation,
         notebook.id,
         values.state.values.name,
         values.state.values.body,
       );
+      None;
+    };
 
     NotebookForm.withForm(
       onSubmit,
       Some(notebook),
-      ({send, state, getFieldState}) => {
-        let form = NotebookForm.formFields(state, send, getFieldState);
+      ({handleChange, state, getFieldState}) => {
+        let form =
+          NotebookForm.formFields(state, handleChange, getFieldState);
 
         let onSuccess = e => {
           onSuccess(e);

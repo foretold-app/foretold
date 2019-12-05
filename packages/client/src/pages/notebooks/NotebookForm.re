@@ -11,8 +11,6 @@ module FormConfig = {
     body: string,
   };
 
-  type fields = [ | `name | `body];
-
   let get: type value. (state, field(value)) => value =
     (state, field) =>
       switch (field) {
@@ -66,8 +64,8 @@ let withForm = (onSubmit, notebook: option(Types.notebook), innerComponentFn) =>
 
 module FormFields = {
   [@react.component]
-  let make = (~state: Form.state, ~send, ~getFieldState) => {
-    let onSubmit = () => send(Form.Submit);
+  let make = (~state: Form.state, ~handleChange, ~getFieldState, ~submit) => {
+    let onSubmit = () => submit();
 
     let notebookRedux = NotebookRedux.reducer();
     let stateName = getFieldState(Form.Field(Name));
@@ -101,7 +99,7 @@ module FormFields = {
         <Antd.Input
           value={state.values.name}
           onChange={ReForm.Helpers.handleDomFormChange(e =>
-            send(Form.FieldChangeValue(Name, e))
+            handleChange(FormConfig.Name, e)
           )}
         />
         {error(stateName)}
@@ -112,12 +110,7 @@ module FormFields = {
             style={ReactDOMRe.Style.make(~minHeight="80em", ())}
             value={state.values.body}
             onChange={e =>
-              send(
-                Form.FieldChangeValue(
-                  Body,
-                  ReactEvent.Form.target(e)##value,
-                ),
-              )
+              handleChange(Body, ReactEvent.Form.target(e)##value)
             }
           />
           {error(stateBody)}
@@ -139,5 +132,5 @@ module FormFields = {
   };
 };
 
-let formFields = (state: Form.state, send, getFieldState) =>
-  <FormFields state send getFieldState />;
+let formFields = (state: Form.state, handleChange, getFieldState, submit) =>
+  <FormFields state handleChange getFieldState submit />;

@@ -8,10 +8,10 @@ module CMutationForm =
 let formCreation = (id: string, measurable: Types.measurable) => {
   <MeasurableUpdate.Mutation>
     ...{(mutation, data) =>
-      MeasurableForm.Form.make(
+      MeasurableForm.Form.use(
         ~schema=MeasurableForm.Form.Validation.Schema([||]),
         ~onSubmit=
-          values =>
+          values => {
             MeasurableUpdate.mutate(
               mutation,
               id,
@@ -27,7 +27,9 @@ let formCreation = (id: string, measurable: Types.measurable) => {
               values.state.values.min,
               values.state.values.max,
               values.state.values.channelId,
-            ),
+            );
+            None;
+          },
         ~initialState={
           name: measurable.name,
           labelOnDate:
@@ -51,15 +53,18 @@ let formCreation = (id: string, measurable: Types.measurable) => {
           max: measurable.max |> E.O.dimap(E.Float.toString, () => ""),
           channelId: measurable.channelId,
         },
-        ({state, send, _}) =>
+        (),
+      )
+      |> (
+        ({state, handleChange, submit}) =>
           CMutationForm.showWithLoading2(
             ~result=data.result,
             ~form=
               MeasurableForm.showForm(
                 ~state,
-                ~send,
+                ~handleChange,
                 ~creating=false,
-                ~onSubmit=_ => send(MeasurableForm.Form.Submit),
+                ~onSubmit=_ => submit(),
                 (),
               ),
             ~onSuccess=
@@ -72,9 +77,8 @@ let formCreation = (id: string, measurable: Types.measurable) => {
                 <Null />;
               },
             (),
-          ),
+          )
       )
-      |> E.React2.el
     }
   </MeasurableUpdate.Mutation>;
 };

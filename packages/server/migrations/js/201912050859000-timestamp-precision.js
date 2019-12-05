@@ -1,8 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const timestampThree = 'timestamp(3) without time zone';
-const timestampSix = 'timestamp(6) without time zone';
+const timestampThree = 'timestamp(3) with time zone';
+const timestampSix = 'timestamp(6) with time zone';
 
 const sqlAgentChannelsFile = path.resolve(
   __dirname,
@@ -24,7 +24,7 @@ const sqlChannelAgents = fs.readFileSync(sqlChannelAgentsFile, 'utf8');
 const tables = [
   'Agents', 'Bots', 'ChannelMemberships',
   'Channels', 'FeedItems', 'GlobalSettings',
-  'Invitations', 'Measurables', 'Mutexes',
+  'Invitations', 'Measurables', 'Measurements', 'Mutexes',
   'Notebooks', 'Notifications', 'NotificationStatuses',
   'Preferences', 'Series', 'Templates', 'Tokens',
   'Users',
@@ -76,6 +76,11 @@ module.exports = {
       await queryInterface.sequelize.query(
           `ALTER TABLE "Tokens" `
         + `ALTER COLUMN "expiresAt" SET DATA TYPE ${timestampThree};`,
+      );
+
+      await queryInterface.sequelize.query(
+          `ALTER TABLE "Series" `
+        + `ALTER COLUMN "dates" SET DATA TYPE ${timestampThree}[];`,
       );
 
       // Creates views

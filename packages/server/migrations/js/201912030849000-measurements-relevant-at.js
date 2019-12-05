@@ -33,5 +33,5 @@ module.exports = {
       await queryInterface.sequelize.query('ROLLBACK');
       throw e;
     }
-  }
+  },
 };

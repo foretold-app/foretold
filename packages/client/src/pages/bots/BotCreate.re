@@ -9,7 +9,7 @@ module CMutationForm =
 let make = (~loggedUser: Types.user) => {
   let body =
     BotCreateMutation.withMutation((mutation, data) => {
-      let onSubmit = (values: BotForm.Form.onSubmitAPI): unit => {
+      let onSubmit = (values: BotForm.Form.onSubmitAPI) => {
         BotCreateMutation.mutate(
           mutation,
           values.state.values.name,
@@ -17,7 +17,7 @@ let make = (~loggedUser: Types.user) => {
           values.state.values.competitorType,
           values.state.values.picture,
         );
-        ();
+        None;
       };
 
       let bot = None;
@@ -25,9 +25,11 @@ let make = (~loggedUser: Types.user) => {
       BotForm.withForm(
         onSubmit,
         bot,
-        ({send, state}) => {
+        ({handleChange, submit, state}: BotForm.Form.api) => {
           let form =
-            BotForm.formFields(state, send, () => send(BotForm.Form.Submit));
+            BotForm.formFields(state, handleChange, () =>
+              submit(BotForm.Form.Submit)
+            );
 
           CMutationForm.showWithLoading2(
             ~result=data.result,

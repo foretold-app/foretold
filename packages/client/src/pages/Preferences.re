@@ -3,31 +3,29 @@
 open Antd;
 
 module FormConfig = {
-  type field(_) =
-    | StopAllEmails: field(bool)
-    | EnableExperimentalFeatures: field(bool);
-
+  /* Define the form state */
   type state = {
     stopAllEmails: bool,
     enableExperimentalFeatures: bool,
   };
 
-  let get: type value. (state, field(value)) => value =
-    (state, field) =>
-      switch (field) {
-      | StopAllEmails => state.stopAllEmails
-      | EnableExperimentalFeatures => state.enableExperimentalFeatures
-      };
+  /* Defined the field types, used for validation and change handling */
+  type fields = [ | `stopAllEmails | `enableExperimentalFeatures];
 
-  let set: type value. (state, field(value), value) => state =
-    (state, field, value) =>
-      switch (field) {
-      | StopAllEmails => {...state, stopAllEmails: value}
-      | EnableExperimentalFeatures => {
-          ...state,
-          enableExperimentalFeatures: value,
-        }
-      };
+  /* Now teach ReForm how to get and set your fields given the types */
+  /* The syntax goes (field, getter, setter) */
+  let lens = [
+    (
+      `stopAllEmails,
+      s => s.stopAllEmails,
+      (s, stopAllEmails) => {...s, stopAllEmails},
+    ),
+    (
+      `enableExperimentalFeatures,
+      s => s.enableExperimentalFeatures,
+      (s, enableExperimentalFeatures) => {...s, enableExperimentalFeatures},
+    ),
+  ];
 };
 
 module Form = ReFormNext.Make(FormConfig);
@@ -40,35 +38,35 @@ let withUserForm =
       mutation,
       innerComponentFn,
     ) =>
-  Form.make(
+  Form.use(
     ~initialState={stopAllEmails, enableExperimentalFeatures},
     ~onSubmit=
-      values =>
+      values => {
         PreferenceUpdate.mutate(
           mutation,
           values.state.values.stopAllEmails,
           values.state.values.enableExperimentalFeatures,
           id,
-        ),
+        );
+        None;
+      },
     ~schema=Form.Validation.Schema([||]),
-    innerComponentFn,
+    (),
   )
-  |> E.React2.el;
+  |> innerComponentFn;
 
-let formFields = (form: Form.state, send, onSubmit) =>
+let formFields = (form: Form.state, handleChange, onSubmit) =>
   <Antd.Form onSubmit={_e => onSubmit()}>
     <Antd.Form.Item label={"Do not send me emails" |> Utils.ste}>
       <AntdSwitch
         checked={form.values.stopAllEmails}
-        onChange={e => send(Form.FieldChangeValue(StopAllEmails, e))}
+        onChange={e => handleChange(`stopAllEmails, e)}
       />
     </Antd.Form.Item>
     <Antd.Form.Item label={"Enable experimental features" |> Utils.ste}>
       <AntdSwitch
         checked={form.values.enableExperimentalFeatures}
-        onChange={e =>
-          send(Form.FieldChangeValue(EnableExperimentalFeatures, e))
-        }
+        onChange={e => handleChange(`enableExperimentalFeatures, e)}
       />
     </Antd.Form.Item>
     <Antd.Form.Item>
@@ -110,10 +108,10 @@ let make = (~loggedUser: Types.user) => {
            stopAllEmails,
            enableExperimentalFeatures,
            mutation,
-           ({send, state}) =>
+           ({handleChange, state}: Form.api) =>
            CMutationForm.showWithLoading(
              ~result=data.result,
-             ~form=formFields(state, send, () => send(Form.Submit)),
+             ~form=formFields(state, handleChange, () => send(Form.Submit)),
              (),
            )
          );

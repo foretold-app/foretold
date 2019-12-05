@@ -8,6 +8,8 @@ module Config = {
 
   type state = {email: string};
 
+  type fields = [ | `email];
+
   let get: type value. (state, field(value)) => value =
     (state, field) =>
       switch (field) {
@@ -24,36 +26,38 @@ module Config = {
 module Form = ReFormNext.Make(Config);
 
 let withForm = (channelId, email, mutation, innerComponentFn) =>
-  Form.make(
+  Form.use(
     ~initialState={email: email},
     ~onSubmitFail=ignore,
     ~onSubmit=
-      values =>
+      values => {
         InvitationCreate.mutate(
           mutation,
           values.state.values.email,
           channelId,
-        ),
+        );
+        None;
+      },
     ~schema={
       Form.Validation.Schema([|Email(Email)|]);
     },
-    innerComponentFn,
+    (),
   )
-  |> E.React2.el;
+  |> innerComponentFn;
 
-let fields = (form: Form.state, send, onSubmit, getFieldState) => {
-  let stateEmail: Form.fieldState = getFieldState(Form.Field(Email));
+let fields = (form: Form.state, handleChange, onSubmit, getFieldState) => {
+  let stateEmail = getFieldState(Form.Field(Email));
 
   let error = state =>
     switch (state) {
-    | Form.Error(s) => <AntdAlert message=s type_="warning" />
+    | ReFormNext.Error(s) => <AntdAlert message=s type_="warning" />
     | _ => <Null />
     };
 
   let isFormValid =
     switch (stateEmail) {
-    | Form.Valid => true
-    | Form.Pristine => false
+    | ReFormNext.Valid => true
+    | ReFormNext.Pristine => false
     | _ => false
     };
 
@@ -62,7 +66,7 @@ let fields = (form: Form.state, send, onSubmit, getFieldState) => {
       <AntdInput
         value={form.values.email}
         onChange={ReForm.Helpers.handleDomFormChange(e =>
-          send(Form.FieldChangeValue(Email, e))
+          handleChange(Email, e)
         )}
       />
       {error(stateEmail)}
@@ -93,9 +97,9 @@ let make = (~channelId: string) => {
            channelId,
            "",
            mutation,
-           ({send, state, getFieldState}) => {
+           ({handleChange, state, getFieldState, submit}: Form.api) => {
              let form =
-               fields(state, send, () => send(Form.Submit), getFieldState);
+               fields(state, handleChange, () => submit(), getFieldState);
 
              let onSuccess = _ =>
                <>

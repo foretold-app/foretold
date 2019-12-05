@@ -11,6 +11,8 @@ module FormConfig = {
     body: string,
   };
 
+  type fields = [ | `name | `body];
+
   let get: type value. (state, field(value)) => value =
     (state, field) =>
       switch (field) {
@@ -43,7 +45,7 @@ let withForm = (onSubmit, notebook: option(Types.notebook), innerComponentFn) =>
     | None => {name: "", body: ""}
     };
 
-  Form.make(
+  Form.use(
     ~initialState,
     ~onSubmit,
     ~schema=
@@ -57,9 +59,9 @@ let withForm = (onSubmit, notebook: option(Types.notebook), innerComponentFn) =>
           values => testBody(values.body) ? Valid : Error(Lang.atLeast3),
         ),
       |]),
-    innerComponentFn,
+    (),
   )
-  |> E.React2.el;
+  |> innerComponentFn;
 };
 
 module FormFields = {
@@ -75,14 +77,14 @@ module FormFields = {
 
     let error = state =>
       switch (state) {
-      | Form.Error(s) => <AntdAlert message=s type_="warning" />
+      | ReFormNext.Error(s) => <AntdAlert message=s type_="warning" />
       | _ => <Null />
       };
 
     let isFormValid =
       switch (stateName, stateBody) {
-      | (Form.Error(_), _) => false
-      | (_, Form.Error(_)) => false
+      | (ReFormNext.Error(_), _) => false
+      | (_, ReFormNext.Error(_)) => false
       | _ => true
       };
 

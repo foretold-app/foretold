@@ -1,12 +1,7 @@
 [@bs.config {jsx: 3}];
 
 module FormConfig = {
-  type field(_) =
-    | Name: field(string)
-    | Email: field(string)
-    | Picture: field(string)
-    | Description: field(string);
-
+  /* Define the form state */
   type state = {
     name: string,
     email: string,
@@ -14,23 +9,21 @@ module FormConfig = {
     description: string,
   };
 
-  let get: type value. (state, field(value)) => value =
-    (state, field) =>
-      switch (field) {
-      | Name => state.name
-      | Email => state.email
-      | Picture => state.picture
-      | Description => state.description
-      };
+  /* Defined the field types, used for validation and change handling */
+  type fields = [ | `name | `email | `picture | `description];
 
-  let set: type value. (state, field(value), value) => state =
-    (state, field, value) =>
-      switch (field) {
-      | Name => {...state, name: value}
-      | Email => {...state, email: value}
-      | Picture => {...state, picture: value}
-      | Description => {...state, description: value}
-      };
+  /* Now teach ReForm how to get and set your fields given the types */
+  /* The syntax goes (field, getter, setter) */
+  let lens = [
+    (`name, s => s.name, (s, name) => {...s, name}),
+    (`email, s => s.email, (s, email) => {...s, email}),
+    (`picture, s => s.picture, (s, picture) => {...s, picture}),
+    (
+      `description,
+      s => s.description,
+      (s, description) => {...s, description},
+    ),
+  ];
 };
 
 module Form = ReFormNext.Make(FormConfig);
@@ -46,10 +39,10 @@ let testName = (str: string) => {
 
 let withUserForm =
     (id, name, email, picture, description, mutation, innerComponentFn) =>
-  Form.make(
+  Form.use(
     ~initialState={name, email, picture, description},
     ~onSubmit=
-      values =>
+      values => {
         UserUpdate.mutate(
           mutation,
           values.state.values.name,
@@ -57,7 +50,9 @@ let withUserForm =
           values.state.values.picture,
           values.state.values.description,
           id,
-        ),
+        );
+        None;
+      },
     ~schema=
       Form.Validation.Schema([|
         Custom(
@@ -67,12 +62,12 @@ let withUserForm =
         Custom(Picture, _ => Valid),
         Custom(Description, _ => Valid),
       |]),
-    innerComponentFn,
+    (),
   )
-  |> E.React2.el;
+  |> innerComponentFn;
 
-let formFields = (state: Form.state, send, getFieldState) => {
-  let onSubmit = () => send(Form.Submit);
+let formFields = (state: Form.state, handleChange, getFieldState, submit) => {
+  let onSubmit = () => submit(Form.Submit);
 
   let stateName = getFieldState(Form.Field(Name));
   let statePicture = getFieldState(Form.Field(Picture));
@@ -81,15 +76,15 @@ let formFields = (state: Form.state, send, getFieldState) => {
 
   let error = state =>
     switch (state) {
-    | Form.Error(s) => <AntdAlert message=s type_="warning" />
+    | ReFormNext.Error(s) => <AntdAlert message=s type_="warning" />
     | _ => <Null />
     };
 
   let isFormValid =
     switch (stateName, statePicture, stateDescription) {
-    | (Form.Error(_), _, _) => false
-    | (_, Form.Error(_), _) => false
-    | (_, _, Form.Error(_)) => false
+    | (ReFormNext.Error(_), _, _) => false
+    | (_, ReFormNext.Error(_), _) => false
+    | (_, _, ReFormNext.Error(_)) => false
     | _ => true
     };
 
@@ -106,7 +101,7 @@ let formFields = (state: Form.state, send, getFieldState) => {
       <Antd.Input
         value={state.values.name}
         onChange={ReForm.Helpers.handleDomFormChange(e => {
-          send(Form.FieldChangeValue(Name, e));
+          handleChange(`name, e);
           ();
         })}
       />
@@ -116,7 +111,7 @@ let formFields = (state: Form.state, send, getFieldState) => {
       <Antd.Input
         value={state.values.description}
         onChange={ReForm.Helpers.handleDomFormChange(e => {
-          send(Form.FieldChangeValue(Description, e));
+          handleChange(`description, e);
           ();
         })}
       />
@@ -126,7 +121,7 @@ let formFields = (state: Form.state, send, getFieldState) => {
         value={state.values.email}
         disabled=true
         onChange={ReForm.Helpers.handleDomFormChange(e => {
-          send(Form.FieldChangeValue(Email, e));
+          handleChange(`email, e);
           ();
         })}
       />
@@ -135,7 +130,7 @@ let formFields = (state: Form.state, send, getFieldState) => {
       <Antd.Input
         value={state.values.picture}
         onChange={ReForm.Helpers.handleDomFormChange(e => {
-          send(Form.FieldChangeValue(Picture, e));
+          handleChange(`picture, e);
           ();
         })}
       />
@@ -177,10 +172,10 @@ let make = (~loggedUser: Types.user) => {
             picture,
             description,
             mutation,
-            ({send, state, getFieldState}) =>
+            ({handleChange, state, getFieldState}: Form.api) =>
             CMutationForm.showWithLoading(
               ~result=data.result,
-              ~form=formFields(state, send, getFieldState),
+              ~form=formFields(state, handleChange, getFieldState),
               (),
             )
           );

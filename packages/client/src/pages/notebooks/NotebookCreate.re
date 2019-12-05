@@ -9,21 +9,23 @@ module CMutationForm =
 let make = (~channelId: string) => {
   <SLayout head={SLayout.Header.textDiv("Make a New Notebook")} isFluid=true>
     {NotebookCreateMutation.withMutation((mutation, data) => {
-       let onSubmit = (values: NotebookForm.Form.onSubmitAPI): unit =>
-         NotebookCreateMutation.mutate(
-           mutation,
-           channelId,
-           values.state.values.name,
-           values.state.values.body,
-         );
+       let onSubmit = (values: NotebookForm.Form.onSubmitAPI) =>
+         {NotebookCreateMutation.mutate(
+            mutation,
+            channelId,
+            values.state.values.name,
+            values.state.values.body,
+          )
+          None};
 
        let notebook = None;
 
        NotebookForm.withForm(
          onSubmit,
          notebook,
-         ({send, state, getFieldState}) => {
-           let form = NotebookForm.formFields(state, send, getFieldState);
+         ({handleChange, state, getFieldState}: NotebookForm.Form.api) => {
+           let form =
+             NotebookForm.formFields(state, handleChange, getFieldState);
 
            let onSuccess = _ =>
              {Routing.Url.push(ChannelNotebooks(channelId))

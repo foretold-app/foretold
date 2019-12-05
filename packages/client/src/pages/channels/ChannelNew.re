@@ -9,17 +9,19 @@ module CMutationForm =
 
 [@react.component]
 let make = () => {
-  let form = mutation =>
-    ChannelForm.Form.make(
+  let form = (mutation, innerComponentFn) =>
+    ChannelForm.Form.use(
       ~onSubmit=
-        values =>
+        values => {
           ChannelCreate.mutate(
             mutation,
             values.state.values.name,
             values.state.values.description,
             values.state.values.isPublic == "TRUE" ? true : false,
             values.state.values.isArchived == "TRUE" ? true : false,
-          ),
+          );
+          None;
+        },
       ~initialState={
         name: "",
         description: "",
@@ -27,21 +29,23 @@ let make = () => {
         isArchived: "FALSE",
       },
       ~schema=ChannelForm.Form.Validation.Schema([||]),
+      (),
     )
-    ||> E.React2.el;
+    |> innerComponentFn;
 
   let body =
     <FC.PageCard.BodyPadding>
       <ChannelCreate.Mutation>
         ...{(mutation, data) =>
-          form(mutation, ({send, state}) =>
+          form(
+            mutation, ({submit, state, handleChange}: ChannelForm.Form.api) =>
             CMutationForm.showWithLoading2(
               ~result=data.result,
               ~form=
                 ChannelForm.showForm(
                   ~state,
-                  ~send,
-                  ~onSubmit=() => send(ChannelForm.Form.Submit),
+                  ~send=handleChange,
+                  ~onSubmit=() => submit(),
                   (),
                 ),
               ~onSuccess=

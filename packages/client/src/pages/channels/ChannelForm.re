@@ -42,9 +42,7 @@ let showForm = (~state: Form.state, ~creating=true, ~onSubmit, ~send, ()) => {
     <Antd.Form.Item label={"Name" |> Utils.ste}>
       <Antd.Input
         value={state.values.name}
-        onChange={ReForm.Helpers.handleDomFormChange(e =>
-          send(Form.FieldChangeValue(Name, e))
-        )}
+        onChange={ReForm.Helpers.handleDomFormChange(e => send(`name, e))}
       />
     </Antd.Form.Item>
     <Antd.Form.Item
@@ -54,16 +52,14 @@ let showForm = (~state: Form.state, ~creating=true, ~onSubmit, ~send, ()) => {
         style={ReactDOMRe.Style.make(~minHeight="30em", ())}
         value={state.values.description}
         onChange={ReForm.Helpers.handleDomFormChange(e =>
-          send(Form.FieldChangeValue(Description, e))
+          send(`description, e)
         )}
       />
     </Antd.Form.Item>
     <Antd.Form.Item label={"Community is public" |> Utils.ste}>
       <AntdSwitch
         checked={state.values.isPublic == "TRUE"}
-        onChange={e =>
-          send(Form.FieldChangeValue(IsPublic, e ? "TRUE" : "FALSE"))
-        }
+        onChange={e => send(`isPublic, e ? "TRUE" : "FALSE")}
       />
     </Antd.Form.Item>
     {E.React2.showIf(
@@ -71,9 +67,7 @@ let showForm = (~state: Form.state, ~creating=true, ~onSubmit, ~send, ()) => {
        <Antd.Form.Item label={"Archive community" |> Utils.ste}>
          <AntdSwitch
            checked={state.values.isArchived == "TRUE"}
-           onChange={e =>
-             send(Form.FieldChangeValue(IsArchived, e ? "TRUE" : "FALSE"))
-           }
+           onChange={e => send(`isArchived, e ? "TRUE" : "FALSE")}
          />
        </Antd.Form.Item>,
      )}

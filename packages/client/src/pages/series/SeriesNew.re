@@ -10,6 +10,7 @@ module FormConfig = {
     | Subjects: field(list(string))
     | Properties: field(list(string))
     | Dates: field(list(MomentRe.Moment.t));
+
   type state = {
     name: string,
     description: string,
@@ -17,6 +18,8 @@ module FormConfig = {
     properties: list(string),
     dates: list(MomentRe.Moment.t),
   };
+
+  type fields = [ | `Name | `Description | `Subjects | `Properties | `Dates];
 
   let get: type value. (state, field(value)) => value =
     (state, field) =>
@@ -52,7 +55,7 @@ let processArray =
   E.L.filter(r => r != "") ||> E.L.toArray ||> E.A.fmap(E.O.some);
 
 let withForm = (mutation, channelId, innerComponentFn) =>
-  Form.make(
+  Form.use(
     ~initialState={
       description: "",
       name: "",
@@ -74,12 +77,12 @@ let withForm = (mutation, channelId, innerComponentFn) =>
             |> E.L.toArray
             |> E.A.fmap(formatDate ||> Js.Json.string ||> E.O.some),
           );
-        ();
+        None;
       },
     ~schema=Form.Validation.Schema([||]),
-    innerComponentFn,
+    (),
   )
-  |> E.React2.el;
+  |> innerComponentFn;
 
 let formFields = (form: Form.state, send, onSubmit) =>
   <Antd.Form onSubmit={e => onSubmit()}>
@@ -205,10 +208,11 @@ let make = (~channelId: string) => {
   <SLayout head={SLayout.Header.textDiv("Make a New Series")}>
     <FC.PageCard.BodyPadding>
       {SeriesCreate.withMutation((mutation, data) =>
-         withForm(mutation, channelId, ({send, state}) =>
+         withForm(
+           mutation, channelId, ({handleChange, submit, state}: Form.api) =>
            CMutationForm.showWithLoading(
              ~result=data.result,
-             ~form=formFields(state, send, () => send(Form.Submit)),
+             ~form=formFields(state, handleChange, () => submit(Form.Submit)),
              (),
            )
          )

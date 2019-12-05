@@ -45,10 +45,10 @@ let make = (~channelId: string) => {
       </Providers.AppContext.Consumer>
     </>;
 
-  let form = (mutation, channel: Types.channel) =>
-    ChannelForm.Form.make(
+  let form = (mutation, channel: Types.channel, clb) =>
+    ChannelForm.Form.use(
       ~onSubmit=
-        values =>
+        values => {
           ChannelUpdate.mutate(
             mutation,
             channelId,
@@ -56,7 +56,9 @@ let make = (~channelId: string) => {
             values.state.values.description,
             values.state.values.isPublic |> E.Bool.fromString,
             values.state.values.isArchived |> E.Bool.fromString,
-          ),
+          );
+          None;
+        },
       ~initialState={
         name: channel.name,
         description: channel.description |> E.O.default(""),
@@ -65,7 +67,7 @@ let make = (~channelId: string) => {
       },
       ~schema=ChannelForm.Form.Validation.Schema([||]),
     )
-    ||> E.React2.el;
+    |> clb;
 
   <SLayout head>
     <FC.PageCard.BodyPadding>
@@ -73,13 +75,13 @@ let make = (~channelId: string) => {
          HttpResponse.fmap(channel =>
            <ChannelUpdate.Mutation>
              ...{(mutation, data) =>
-               form(mutation, channel, ({send, state}) =>
+               form(mutation, channel, ({submit, state}) =>
                  CMutationForm.showWithLoading(
                    ~result=data.result,
                    ~form=
                      ChannelForm.showForm(
                        ~state,
-                       ~send,
+                       ~send=submit,
                        ~creating=false,
                        ~onSubmit=() => send(ChannelForm.Form.Submit),
                        (),

@@ -10,7 +10,7 @@ let make = (~pageParams: Types.pageParams, ~loggedUser: Types.user) => {
   let getForm = (bot: option(Types.bot)) =>
     <BotUpdate.Mutation>
       ...{(mutation, data) => {
-        let onSubmit = (values: BotForm.Form.onSubmitAPI): unit => {
+        let onSubmit = (values: BotForm.Form.onSubmitAPI) => {
           BotUpdate.mutate(
             mutation,
             pageParams.id,
@@ -19,15 +19,15 @@ let make = (~pageParams: Types.pageParams, ~loggedUser: Types.user) => {
             values.state.values.competitorType,
             values.state.values.picture,
           );
-          ();
+          None;
         };
 
         BotForm.withForm(
           onSubmit,
           bot,
-          ({send, state}) => {
+          ({handleChange, state}) => {
             let form =
-              BotForm.formFields(state, send, () =>
+              BotForm.formFields(state, handleChange, () =>
                 send(BotForm.Form.Submit)
               );
 

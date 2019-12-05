@@ -52,7 +52,7 @@ let withForm = (onSubmit, bot: option(Types.bot), innerComponentFn) => {
       }
     };
 
-  Form.make(
+  Form.use(
     ~initialState,
     ~onSubmit,
     ~schema=
@@ -62,9 +62,8 @@ let withForm = (onSubmit, bot: option(Types.bot), innerComponentFn) => {
           values => values.name == "" ? Error("Can't be empty") : Valid,
         ),
       |]),
-    innerComponentFn,
   )
-  |> E.React2.el;
+  |> innerComponentFn;
 };
 
 let onSuccess = (loggedUser: Types.user, ()) => {

@@ -21,9 +21,9 @@ let make = (~notebook: Types.notebook, ~onSuccess) => {
     NotebookForm.withForm(
       onSubmit,
       Some(notebook),
-      ({handleChange, state, getFieldState}) => {
+      ({handleChange, state, getFieldState, submit}) => {
         let form =
-          NotebookForm.formFields(state, handleChange, getFieldState);
+          NotebookForm.formFields(state, handleChange, getFieldState, submit);
 
         let onSuccess = e => {
           onSuccess(e);

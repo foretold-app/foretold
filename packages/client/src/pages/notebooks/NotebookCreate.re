@@ -23,9 +23,16 @@ let make = (~channelId: string) => {
        NotebookForm.withForm(
          onSubmit,
          notebook,
-         ({handleChange, state, getFieldState}: NotebookForm.Form.api) => {
+         (
+           {handleChange, state, getFieldState, submit}: NotebookForm.Form.api,
+         ) => {
            let form =
-             NotebookForm.formFields(state, handleChange, getFieldState);
+             NotebookForm.formFields(
+               state,
+               handleChange,
+               getFieldState,
+               submit,
+             );
 
            let onSuccess = _ =>
              {Routing.Url.push(ChannelNotebooks(channelId))

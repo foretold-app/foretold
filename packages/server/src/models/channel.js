@@ -35,6 +35,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: false,
     },
+    // @entity: creator-link
     creatorId: {
       type: DataTypes.UUID(),
       allowNull: false,

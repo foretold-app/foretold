@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: sequelize.fn('uuid_generate_v4'),
       allowNull: false,
     },
+    // @entity: notebook-name-validation
     name: {
       type: DataTypes.STRING(255),
       allowNull: false,
@@ -13,20 +14,22 @@ module.exports = (sequelize, DataTypes) => {
         len: [3, 255],
       },
     },
-    channelId: {
-      type: DataTypes.UUID(),
-      allowNull: false,
-    },
-    ownerId: {
-      type: DataTypes.UUID(),
-      allowNull: false,
-    },
+    // @entity: notebook-body-validation
     body: {
       type: DataTypes.TEXT,
       allowNull: false,
       validate: {
-        len: [3, 16*1024],
+        len: [3, 128 * 1024],
       },
+    },
+    channelId: {
+      type: DataTypes.UUID(),
+      allowNull: false,
+    },
+    // @entity: creator-link
+    ownerId: {
+      type: DataTypes.UUID(),
+      allowNull: false,
     },
     createdAt: {
       type: DataTypes.DATE,

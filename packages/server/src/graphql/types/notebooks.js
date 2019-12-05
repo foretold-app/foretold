@@ -8,12 +8,15 @@ const notebook = new graphql.GraphQLObjectType({
   name: 'Notebook',
   fields: () => ({
     id: { type: graphql.GraphQLNonNull(scalars.notebookId) },
+    // @entity: notebook-name-validation
     name: { type: graphql.GraphQLNonNull(scalars.string3to255) },
+    // @entity: notebook-body-validation
+    body: { type: graphql.GraphQLNonNull(scalars.string3to128K) },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
+    // @entity: creator-link
     ownerId: { type: graphql.GraphQLNonNull(scalars.agentId) },
     channelId: { type: graphql.GraphQLNonNull(scalars.channelId) },
-    body: { type: graphql.GraphQLNonNull(scalars.string3to128K) },
     owner: {
       type: graphql.GraphQLNonNull(require('./agents').agent),
       resolve: resolver(models.Notebook.Agent),
@@ -29,7 +32,9 @@ const notebookCreateInput = new graphql.GraphQLInputObjectType({
   name: 'NotebookCreateInput',
   fields: () => ({
     channelId: { type: graphql.GraphQLNonNull(scalars.channelId) },
+    // @entity: notebook-name-validation
     name: { type: graphql.GraphQLNonNull(scalars.string3to255) },
+    // @entity: notebook-body-validation
     body: { type: graphql.GraphQLNonNull(scalars.string3to128K) },
   }),
 });
@@ -37,7 +42,9 @@ const notebookCreateInput = new graphql.GraphQLInputObjectType({
 const notebookUpdateInput = new graphql.GraphQLInputObjectType({
   name: 'NotebookUpdateInput',
   fields: () => ({
+    // @entity: notebook-name-validation
     name: { type: graphql.GraphQLNonNull(scalars.string3to255) },
+    // @entity: notebook-body-validation
     body: { type: graphql.GraphQLNonNull(scalars.string3to128K) },
   }),
 });

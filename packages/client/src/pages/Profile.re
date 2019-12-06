@@ -1,39 +1,17 @@
 [@bs.config {jsx: 3}];
 
-module FormConfig = {
-  type field(_) =
-    | Name: field(string)
-    | Email: field(string)
-    | Picture: field(string)
-    | Description: field(string);
+open BsReform;
 
+module FormConfig = [%lenses
   type state = {
     name: string,
     email: string,
     picture: string,
     description: string,
-  };
+  }
+];
 
-  let get: type value. (state, field(value)) => value =
-    (state, field) =>
-      switch (field) {
-      | Name => state.name
-      | Email => state.email
-      | Picture => state.picture
-      | Description => state.description
-      };
-
-  let set: type value. (state, field(value), value) => state =
-    (state, field, value) =>
-      switch (field) {
-      | Name => {...state, name: value}
-      | Email => {...state, email: value}
-      | Picture => {...state, picture: value}
-      | Description => {...state, description: value}
-      };
-};
-
-module Form = ReFormNext.Make(FormConfig);
+module Form = ReForm.Make(FormConfig);
 
 let testName = (str: string) => {
   let exp = () => [%re "/^[a-z0-9._]{0,30}$/i"];
@@ -44,8 +22,7 @@ let testName = (str: string) => {
   };
 };
 
-let withUserForm =
-    (id, name, email, picture, description, mutation, innerComponentFn) =>
+let withUserForm = (id, name, email, picture, description, mutation) =>
   Form.use(
     ~initialState={name, email, picture, description},
     ~onSubmit=
@@ -62,89 +39,112 @@ let withUserForm =
       },
     ~schema=
       Form.Validation.Schema([|
-        Custom(
-          Name,
-          values => testName(values.name) ? Valid : Error(Lang.wrongName),
-        ),
-        Custom(Picture, _ => Valid),
-        Custom(Description, _ => Valid),
+        //        Custom(
+        //          Name,
+        //          values =>
+        //            testName(values.name)
+        //              ? ReForm.Valid : ReForm.Error(Lang.wrongName),
+        //        ),
+        //        Custom(Picture, _ => ReForm.Valid),
+        //        Custom(Description, _ => ReForm.Valid),
       |]),
     (),
-  )
-  |> innerComponentFn;
+  );
 
-let formFields = (state: Form.state, handleChange, getFieldState, submit) => {
-  let onSubmit = () => submit();
-
-  let stateName = getFieldState(Form.Field(Name));
-  let statePicture = getFieldState(Form.Field(Picture));
-  let stateDescription = getFieldState(Form.Field(Description));
-  let stateForm = state.formState;
-
-  let error = state =>
-    switch (state) {
-    | ReFormNext.Error(s) => <AntdAlert message=s type_="warning" />
-    | _ => <Null />
-    };
-
-  let isFormValid =
-    switch (stateName, statePicture, stateDescription) {
-    | (ReFormNext.Error(_), _, _) => false
-    | (_, ReFormNext.Error(_), _) => false
-    | (_, _, ReFormNext.Error(_)) => false
-    | _ => true
-    };
-
-  let isFormDirty =
-    switch (stateForm) {
-    | Form.Dirty => true
-    | _ => false
-    };
-
-  let isEnabled = isFormValid && isFormDirty;
-
-  <Antd.Form onSubmit={_e => onSubmit()}>
-    <Antd.Form.Item label={"Username" |> Utils.ste}>
-      <Antd.Input
-        value={state.values.name}
-        onChange={ReForm.Helpers.handleDomFormChange(e => {
-          handleChange(FormConfig.Name, e);
-          ();
-        })}
-      />
-      {error(stateName)}
-    </Antd.Form.Item>
-    <Antd.Form.Item label={"Description" |> Utils.ste}>
-      <Antd.Input
-        value={state.values.description}
-        onChange={ReForm.Helpers.handleDomFormChange(e => {
-          handleChange(FormConfig.Description, e);
-          ();
-        })}
-      />
-    </Antd.Form.Item>
-    <Antd.Form.Item label={"Email" |> Utils.ste}>
-      <Antd.Input
-        value={state.values.email}
-        disabled=true
-        onChange={ReForm.Helpers.handleDomFormChange(e => {
-          handleChange(FormConfig.Email, e);
-          ();
-        })}
-      />
-    </Antd.Form.Item>
-    <Antd.Form.Item label={"Picture URL" |> Utils.ste}>
-      <Antd.Input
-        value={state.values.picture}
-        onChange={ReForm.Helpers.handleDomFormChange(e => {
-          handleChange(FormConfig.Picture, e);
-          ();
-        })}
-      />
-    </Antd.Form.Item>
+let formFields = (reform: Form.api) => {
+  //  let stateName = getFieldState(Form.Field(Name));
+  //  let statePicture = getFieldState(Form.Field(Picture));
+  //  let stateDescription = getFieldState(Form.Field(Description));
+  //  let stateForm = state.formState;
+  //
+  //  let error = state =>
+  //    switch (state) {
+  //    | ReFormNext.Error(s) => <AntdAlert message=s type_="warning" />
+  //    | _ => <Null />
+  //    };
+  //
+  //  let isFormValid =
+  //    switch (stateName, statePicture, stateDescription) {
+  //    | (ReFormNext.Error(_), _, _) => false
+  //    | (_, ReFormNext.Error(_), _) => false
+  //    | (_, _, ReFormNext.Error(_)) => false
+  //    | _ => true
+  //    };
+  //
+  //  let isFormDirty =
+  //    switch (stateForm) {
+  //    | Form.Dirty => true
+  //    | _ => false
+  //    };
+  //  let isEnabled = isFormValid && isFormDirty;
+  <Antd.Form
+    onSubmit={event => {
+      ReactEvent.Synthetic.preventDefault(event);
+      reform.submit();
+    }}>
+    <Form.Field
+      field=FormConfig.Name
+      render={({handleChange, error, value}) =>
+        <Antd.Form.Item label={"Username" |> Utils.ste}>
+          <Antd.Input
+            value
+            onChange={event =>
+              ReactEvent.Form.target(event)##value |> handleChange
+            }
+          />
+          {error->Belt.Option.getWithDefault("")->React.string}
+        </Antd.Form.Item>
+      }
+    />
+    <Form.Field
+      field=FormConfig.Description
+      render={({handleChange, error, value}) =>
+        <Antd.Form.Item label={"Description" |> Utils.ste}>
+          <Antd.Input
+            value
+            onChange={event =>
+              ReactEvent.Form.target(event)##value |> handleChange
+            }
+          />
+          {error->Belt.Option.getWithDefault("")->React.string}
+        </Antd.Form.Item>
+      }
+    />
+    <Form.Field
+      field=FormConfig.Email
+      render={({handleChange, error, value}) =>
+        <Antd.Form.Item label={"Email" |> Utils.ste}>
+          <Antd.Input
+            value
+            onChange={event =>
+              ReactEvent.Form.target(event)##value |> handleChange
+            }
+          />
+          {error->Belt.Option.getWithDefault("")->React.string}
+        </Antd.Form.Item>
+      }
+    />
+    <Form.Field
+      field=FormConfig.Picture
+      render={({handleChange, error, value}) =>
+        <Antd.Form.Item label={"Picture URL" |> Utils.ste}>
+          <Antd.Input
+            value
+            onChange={event =>
+              ReactEvent.Form.target(event)##value |> handleChange
+            }
+          />
+          {error->Belt.Option.getWithDefault("")->React.string}
+        </Antd.Form.Item>
+      }
+    />
     <Antd.Form.Item>
       <Antd.Button
-        _type=`primary onClick={_ => onSubmit()} disabled={!isEnabled}>
+        _type=`primary
+        onClick={event => {
+          ReactEvent.Synthetic.preventDefault(event);
+          reform.submit();
+        }}>
         {"Submit" |> Utils.ste}
       </Antd.Button>
     </Antd.Form.Item>
@@ -172,20 +172,16 @@ let make = (~loggedUser: Types.user) => {
             |> E.O.bind(_, (r: Types.agent) => r.name)
             |> E.O.default("");
 
-          withUserForm(
-            id,
-            name,
-            email,
-            picture,
-            description,
-            mutation,
-            ({handleChange, state, getFieldState, submit}: Form.api) =>
-            CMutationForm.showWithLoading(
-              ~result=data.result,
-              ~form=formFields(state, handleChange, getFieldState, submit),
-              (),
-            )
-          );
+          let reform =
+            withUserForm(id, name, email, picture, description, mutation);
+
+          <Form.Provider value=reform>
+            {CMutationForm.showWithLoading(
+               ~result=data.result,
+               ~form=formFields(reform),
+               (),
+             )}
+          </Form.Provider>;
         }}
       </UserUpdate.Mutation>
     </FC.PageCard.BodyPadding>

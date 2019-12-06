@@ -45,7 +45,7 @@ let make = (~channelId: string) => {
       </Providers.AppContext.Consumer>
     </>;
 
-  let form = (mutation, channel: Types.channel, clb) =>
+  let form = (mutation, channel: Types.channel) =>
     ChannelForm.Form.use(
       ~onSubmit=
         values => {
@@ -67,34 +67,25 @@ let make = (~channelId: string) => {
       },
       ~schema=ChannelForm.Form.Validation.Schema([||]),
       (),
-    )
-    |> clb;
+    );
 
   <SLayout head>
     <FC.PageCard.BodyPadding>
       {loadChannel(
          HttpResponse.fmap(channel =>
            <ChannelUpdate.Mutation>
-             ...{(mutation, data) =>
-               form(
-                 mutation,
-                 channel,
-                 ({submit, handleChange, state}: ChannelForm.Form.api) =>
-                 CMutationForm.showWithLoading(
-                   ~result=data.result,
-                   ~form=
-                     ChannelForm.showForm(
-                       ~state,
-                       ~handleChange,
-                       ~creating=false,
-                       ~onSubmit=() => submit(),
-                       (),
-                     ),
-                   ~successMessage="Community edited successfully.",
-                   (),
-                 )
-               )
-             }
+             ...{(mutation, data) => {
+               let reform = form(mutation, channel);
+
+               <ChannelForm.Form.Provider value=reform>
+                 {CMutationForm.showWithLoading(
+                    ~result=data.result,
+                    ~form=ChannelForm.showForm(false, reform),
+                    ~successMessage="Community edited successfully.",
+                    (),
+                  )}
+               </ChannelForm.Form.Provider>;
+             }}
            </ChannelUpdate.Mutation>
          )
          ||> HttpResponse.withReactDefaults,

@@ -18,25 +18,22 @@ let make = (~notebook: Types.notebook, ~onSuccess) => {
       None;
     };
 
-    NotebookForm.withForm(
-      onSubmit,
-      Some(notebook),
-      ({handleChange, state, getFieldState, submit}) => {
-        let form =
-          NotebookForm.formFields(state, handleChange, getFieldState, submit);
+    let reform = NotebookForm.withForm(onSubmit, Some(notebook));
 
-        let onSuccess = e => {
-          onSuccess(e);
-          <Null />;
-        };
+    let form = NotebookForm.formFields(reform);
 
-        CMutationForm.showWithLoading2(
-          ~result=data.result,
-          ~form,
-          ~onSuccess,
-          (),
-        );
-      },
-    );
+    let onSuccess = e => {
+      onSuccess(e);
+      <Null />;
+    };
+
+    <NotebookForm.Form.Provider value=reform>
+      {CMutationForm.showWithLoading2(
+         ~result=data.result,
+         ~form,
+         ~onSuccess,
+         (),
+       )}
+    </NotebookForm.Form.Provider>;
   });
 };

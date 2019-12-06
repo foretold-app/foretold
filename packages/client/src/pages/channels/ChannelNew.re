@@ -9,7 +9,7 @@ module CMutationForm =
 
 [@react.component]
 let make = () => {
-  let form = (mutation, innerComponentFn) =>
+  let form = mutation =>
     ChannelForm.Form.use(
       ~onSubmit=
         values => {
@@ -30,37 +30,31 @@ let make = () => {
       },
       ~schema=ChannelForm.Form.Validation.Schema([||]),
       (),
-    )
-    |> innerComponentFn;
+    );
 
   let body =
     <FC.PageCard.BodyPadding>
       <ChannelCreate.Mutation>
-        ...{(mutation, data) =>
-          form(
-            mutation, ({submit, state, handleChange}: ChannelForm.Form.api) =>
-            CMutationForm.showWithLoading2(
-              ~result=data.result,
-              ~form=
-                ChannelForm.showForm(
-                  ~state,
-                  ~handleChange,
-                  ~onSubmit=() => submit(),
-                  (),
-                ),
-              ~onSuccess=
-                (response: ChannelCreate.Query.t) => {
-                  switch (response##channelCreate) {
-                  | Some(channel) =>
-                    Routing.Url.push(ChannelShow(channel##id))
-                  | _ => ()
-                  };
-                  <Null />;
-                },
-              (),
-            )
-          )
-        }
+        ...{(mutation, data) => {
+          let reform = form(mutation);
+
+          <ChannelForm.Form.Provider value=reform>
+            {CMutationForm.showWithLoading2(
+               ~result=data.result,
+               ~form=ChannelForm.showForm(false, reform),
+               ~onSuccess=
+                 (response: ChannelCreate.Query.t) => {
+                   switch (response##channelCreate) {
+                   | Some(channel) =>
+                     Routing.Url.push(ChannelShow(channel##id))
+                   | _ => ()
+                   };
+                   <Null />;
+                 },
+               (),
+             )}
+          </ChannelForm.Form.Provider>;
+        }}
       </ChannelCreate.Mutation>
     </FC.PageCard.BodyPadding>;
 

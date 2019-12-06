@@ -20,32 +20,22 @@ let make = (~channelId: string) => {
 
        let notebook = None;
 
-       NotebookForm.withForm(
-         onSubmit,
-         notebook,
-         (
-           {handleChange, state, getFieldState, submit}: NotebookForm.Form.api,
-         ) => {
-           let form =
-             NotebookForm.formFields(
-               state,
-               handleChange,
-               getFieldState,
-               submit,
-             );
+       let reform = NotebookForm.withForm(onSubmit, notebook);
 
-           let onSuccess = _ =>
-             {Routing.Url.push(ChannelNotebooks(channelId))
-              ReasonReact.null};
+       let form = NotebookForm.formFields(reform);
 
-           CMutationForm.showWithLoading2(
-             ~result=data.result,
-             ~form,
-             ~onSuccess,
-             (),
-           );
-         },
-       );
+       let onSuccess = _ =>
+         {Routing.Url.push(ChannelNotebooks(channelId))
+          ReasonReact.null};
+
+       <NotebookForm.Form.Provider value=reform>
+         {CMutationForm.showWithLoading2(
+            ~result=data.result,
+            ~form,
+            ~onSuccess,
+            (),
+          )}
+       </NotebookForm.Form.Provider>;
      })}
   </SLayout>;
 };

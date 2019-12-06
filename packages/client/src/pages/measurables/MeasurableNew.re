@@ -7,7 +7,7 @@ module CMutationForm =
 
 [@react.component]
 let make = (~channelId) => {
-  let formCreator = (mutation, clb) =>
+  let formCreator = mutation =>
     MeasurableForm.Form.use(
       ~schema=MeasurableForm.Form.Validation.Schema([||]),
       ~onSubmit=
@@ -48,36 +48,31 @@ let make = (~channelId) => {
         channelId,
       },
       (),
-    )
-    |> clb;
+    );
 
   <SLayout head={SLayout.Header.textDiv("New Question")}>
     <FC.PageCard.BodyPadding>
       {<MeasurableCreate.Mutation>
-         ...{(mutation, data) =>
-           formCreator(mutation, ({state, handleChange, submit}) =>
-             CMutationForm.showWithLoading2(
-               ~result=data.result,
-               ~form=
-                 MeasurableForm.showForm(
-                   ~state,
-                   ~handleChange,
-                   ~onSubmit=_ => submit(),
-                   (),
-                 ),
-               ~onSuccess=
-                 (response: MeasurableCreate.Query.t) => {
-                   switch (response##measurableCreate) {
-                   | Some(m) =>
-                     Routing.Url.push(MeasurableShow(channelId, m##id))
-                   | _ => ()
-                   };
-                   <Null />;
-                 },
-               (),
-             )
-           )
-         }
+         ...{(mutation, data) => {
+           let reform = formCreator(mutation);
+
+           <MeasurableForm.Form.Provider value=reform>
+             {CMutationForm.showWithLoading2(
+                ~result=data.result,
+                ~form=MeasurableForm.showForm(true, reform),
+                ~onSuccess=
+                  (response: MeasurableCreate.Query.t) => {
+                    switch (response##measurableCreate) {
+                    | Some(m) =>
+                      Routing.Url.push(MeasurableShow(channelId, m##id))
+                    | _ => ()
+                    };
+                    <Null />;
+                  },
+                (),
+              )}
+           </MeasurableForm.Form.Provider>;
+         }}
        </MeasurableCreate.Mutation>}
     </FC.PageCard.BodyPadding>
   </SLayout>;

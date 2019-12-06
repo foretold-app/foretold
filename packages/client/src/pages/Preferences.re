@@ -2,44 +2,18 @@
 
 open Antd;
 
-module FormConfig = {
-  type field(_) =
-    | StopAllEmails: field(bool)
-    | EnableExperimentalFeatures: field(bool);
+open BsReform;
 
+module FormConfig = [%lenses
   type state = {
     stopAllEmails: bool,
     enableExperimentalFeatures: bool,
-  };
+  }
+];
 
-  let get: type value. (state, field(value)) => value =
-    (state, field) =>
-      switch (field) {
-      | StopAllEmails => state.stopAllEmails
-      | EnableExperimentalFeatures => state.enableExperimentalFeatures
-      };
+module Form = ReForm.Make(FormConfig);
 
-  let set: type value. (state, field(value), value) => state =
-    (state, field, value) =>
-      switch (field) {
-      | StopAllEmails => {...state, stopAllEmails: value}
-      | EnableExperimentalFeatures => {
-          ...state,
-          enableExperimentalFeatures: value,
-        }
-      };
-};
-
-module Form = ReFormNext.Make(FormConfig);
-
-let withUserForm =
-    (
-      id,
-      stopAllEmails,
-      enableExperimentalFeatures,
-      mutation,
-      innerComponentFn,
-    ) =>
+let withUserForm = (id, stopAllEmails, enableExperimentalFeatures, mutation) =>
   Form.use(
     ~initialState={stopAllEmails, enableExperimentalFeatures},
     ~onSubmit=
@@ -54,25 +28,37 @@ let withUserForm =
       },
     ~schema=Form.Validation.Schema([||]),
     (),
-  )
-  |> innerComponentFn;
+  );
 
-let formFields = (form: Form.state, handleChange, onSubmit) =>
-  <Antd.Form onSubmit={_e => onSubmit()}>
-    <Antd.Form.Item label={"Do not send me emails" |> Utils.ste}>
-      <AntdSwitch
-        checked={form.values.stopAllEmails}
-        onChange={e => handleChange(FormConfig.StopAllEmails, e)}
-      />
-    </Antd.Form.Item>
-    <Antd.Form.Item label={"Enable experimental features" |> Utils.ste}>
-      <AntdSwitch
-        checked={form.values.enableExperimentalFeatures}
-        onChange={e => handleChange(EnableExperimentalFeatures, e)}
-      />
-    </Antd.Form.Item>
+let formFields = (reform: Form.api) =>
+  <Antd.Form
+    onSubmit={event => {
+      ReactEvent.Synthetic.preventDefault(event);
+      reform.submit();
+    }}>
+    <Form.Field
+      field=FormConfig.StopAllEmails
+      render={({handleChange, error, value}) =>
+        <Antd.Form.Item label={"Do not send me emails" |> Utils.ste}>
+          <AntdSwitch checked=value onChange={e => e |> handleChange} />
+        </Antd.Form.Item>
+      }
+    />
+    <Form.Field
+      field=FormConfig.StopAllEmails
+      render={({handleChange, error, value}) =>
+        <Antd.Form.Item label={"Enable experimental features" |> Utils.ste}>
+          <AntdSwitch checked=value onChange={e => e |> handleChange} />
+        </Antd.Form.Item>
+      }
+    />
     <Antd.Form.Item>
-      <Button _type=`primary onClick={_ => onSubmit()}>
+      <Button
+        _type=`primary
+        onClick={event => {
+          ReactEvent.Synthetic.preventDefault(event);
+          reform.submit();
+        }}>
         {"Submit" |> Utils.ste}
       </Button>
     </Antd.Form.Item>
@@ -105,18 +91,21 @@ let make = (~loggedUser: Types.user) => {
            |> E.O.fmap((r: Types.preference) => r.enableExperimentalFeatures)
            |> E.O.default(true);
 
-         withUserForm(
-           id,
-           stopAllEmails,
-           enableExperimentalFeatures,
-           mutation,
-           ({handleChange, state, submit}: Form.api) =>
-           CMutationForm.showWithLoading(
-             ~result=data.result,
-             ~form=formFields(state, handleChange, () => submit()),
-             (),
-           )
-         );
+         let reform =
+           withUserForm(
+             id,
+             stopAllEmails,
+             enableExperimentalFeatures,
+             mutation,
+           );
+
+         <Form.Provider value=reform>
+           {CMutationForm.showWithLoading(
+              ~result=data.result,
+              ~form=formFields(reform),
+              (),
+            )}
+         </Form.Provider>;
        })}
     </FC.PageCard.BodyPadding>
   </SLayout>;

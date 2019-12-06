@@ -22,20 +22,17 @@ let make = (~loggedUser: Types.user) => {
 
       let bot = None;
 
-      BotForm.withForm(
-        onSubmit,
-        bot,
-        ({handleChange, submit, state}: BotForm.Form.api) => {
-          let form = BotForm.formFields(state, handleChange, () => submit());
+      let reform = BotForm.withForm(onSubmit, bot);
+      let form = BotForm.formFields(reform);
 
-          CMutationForm.showWithLoading2(
-            ~result=data.result,
-            ~form,
-            ~onSuccess=_ => BotForm.onSuccess(loggedUser, ()),
-            (),
-          );
-        },
-      );
+      <BotForm.Form.Provider value=reform>
+        {CMutationForm.showWithLoading2(
+           ~result=data.result,
+           ~form,
+           ~onSuccess=_ => BotForm.onSuccess(loggedUser, ()),
+           (),
+         )}
+      </BotForm.Form.Provider>;
     });
 
   <SLayout head={SLayout.Header.textDiv("Make a New Bot")}> body </SLayout>;

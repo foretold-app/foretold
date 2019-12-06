@@ -1,41 +1,18 @@
 [@bs.config {jsx: 3}];
+open BsReform;
 
-module FormConfig = {
-  type field(_) =
-    | Name: field(string)
-    | Description: field(string)
-    | CompetitorType: field(Types.competitorType)
-    | Picture: field(string);
-
+module FormConfig = [%lenses
   type state = {
     name: string,
     description: string,
     competitorType: Types.competitorType,
     picture: string,
-  };
+  }
+];
 
-  let get: type value. (state, field(value)) => value =
-    (state, field) =>
-      switch (field) {
-      | Name => state.name
-      | Description => state.description
-      | CompetitorType => state.competitorType
-      | Picture => state.picture
-      };
+module Form = ReForm.Make(FormConfig);
 
-  let set: type value. (state, field(value), value) => state =
-    (state, field, value) =>
-      switch (field) {
-      | Name => {...state, name: value}
-      | Description => {...state, description: value}
-      | CompetitorType => {...state, competitorType: value}
-      | Picture => {...state, picture: value}
-      };
-};
-
-module Form = ReFormNext.Make(FormConfig);
-
-let withForm = (onSubmit, bot: option(Types.bot), innerComponentFn) => {
+let withForm = (onSubmit, bot: option(Types.bot)) => {
   let initialState: FormConfig.state =
     switch (bot) {
     | Some(bot) => {
@@ -53,18 +30,19 @@ let withForm = (onSubmit, bot: option(Types.bot), innerComponentFn) => {
     };
 
   Form.use(
+    ~validationStrategy=OnDemand,
     ~initialState,
     ~onSubmit,
     ~schema=
       Form.Validation.Schema([|
-        Custom(
-          Name,
-          values => values.name == "" ? Error("Can't be empty") : Valid,
-        ),
+        //        Custom(
+        //          Name,
+        //          values =>
+        //            values.name == "" ? ReForm.Error("Can't be empty") : ReForm.Valid,
+        //        ),
       |]),
     (),
-  )
-  |> innerComponentFn;
+  );
 };
 
 let onSuccess = (loggedUser: Types.user, ()) => {
@@ -74,35 +52,59 @@ let onSuccess = (loggedUser: Types.user, ()) => {
   <Null />;
 };
 
-let formFields = (state: Form.state, handleChange, onSubmit) =>
+let formFields = (reform: Form.api) =>
   <FC__PageCard.BodyPadding>
-    <Antd.Form onSubmit={e => onSubmit()}>
-      <Antd.Form.Item label={"Name" |> Utils.ste}>
-        <Antd.Input
-          value={state.values.name}
-          onChange={ReForm.Helpers.handleDomFormChange(e =>
-            handleChange(FormConfig.Name, e)
-          )}
-        />
-      </Antd.Form.Item>
-      <Antd.Form.Item label={"Description" |> Utils.ste}>
-        <Antd.Input
-          value={state.values.description}
-          onChange={ReForm.Helpers.handleDomFormChange(e =>
-            handleChange(Description, e)
-          )}
-        />
-      </Antd.Form.Item>
-      <Antd.Form.Item label={"Picture" |> Utils.ste}>
-        <Antd.Input
-          value={state.values.picture}
-          onChange={ReForm.Helpers.handleDomFormChange(e =>
-            handleChange(Picture, e)
-          )}
-        />
-      </Antd.Form.Item>
+    <Antd.Form
+      onSubmit={event => {
+        ReactEvent.Synthetic.preventDefault(event);
+        reform.submit();
+      }}>
+      <Form.Field
+        field=FormConfig.Name
+        render={({handleChange, error, value}) =>
+          <Antd.Form.Item label={"Name" |> Utils.ste}>
+            <Antd.Input
+              value
+              onChange={event =>
+                ReactEvent.Form.target(event)##value |> handleChange
+              }
+            />
+          </Antd.Form.Item>
+        }
+      />
+      <Form.Field
+        field=FormConfig.Description
+        render={({handleChange, error, value}) =>
+          <Antd.Form.Item label={"Description" |> Utils.ste}>
+            <Antd.Input
+              value
+              onChange={event =>
+                ReactEvent.Form.target(event)##value |> handleChange
+              }
+            />
+          </Antd.Form.Item>
+        }
+      />
+      <Form.Field
+        field=FormConfig.Picture
+        render={({handleChange, error, value}) =>
+          <Antd.Form.Item label={"Picture" |> Utils.ste}>
+            <Antd.Input
+              value
+              onChange={event =>
+                ReactEvent.Form.target(event)##value |> handleChange
+              }
+            />
+          </Antd.Form.Item>
+        }
+      />
       <Antd.Form.Item>
-        <Antd.Button _type=`primary onClick={_ => onSubmit()}>
+        <Antd.Button
+          _type=`primary
+          onClick={event => {
+            ReactEvent.Synthetic.preventDefault(event);
+            reform.submit();
+          }}>
           {"Submit" |> Utils.ste}
         </Antd.Button>
       </Antd.Form.Item>

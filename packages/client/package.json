@@ -72,7 +72,7 @@
     "parcel-plugin-less-js-enabled": "1.0.2",
     "apollo-client": "2.4.7",
     "react-apollo": "2.5.8",
-    "bs-reform": "8.3.2",
+    "bs-reform": "9.5.0",
     "reason-apollo": "0.16.4",
     "lenses-ppx": "4.0.0",
     "react": "16.11.0",

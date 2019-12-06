@@ -22,20 +22,17 @@ let make = (~pageParams: Types.pageParams, ~loggedUser: Types.user) => {
           None;
         };
 
-        BotForm.withForm(
-          onSubmit,
-          bot,
-          ({handleChange, state, submit}) => {
-            let form = BotForm.formFields(state, handleChange, () => submit());
+        let reform = BotForm.withForm(onSubmit, bot);
+        let form = BotForm.formFields(reform);
 
-            CMutationForm.showWithLoading2(
-              ~result=data.result,
-              ~form,
-              ~onSuccess=_ => BotForm.onSuccess(loggedUser, ()),
-              (),
-            );
-          },
-        );
+        <BotForm.Form.Provider value=reform>
+          {CMutationForm.showWithLoading2(
+             ~result=data.result,
+             ~form,
+             ~onSuccess=_ => BotForm.onSuccess(loggedUser, ()),
+             (),
+           )}
+        </BotForm.Form.Provider>;
       }}
     </BotUpdate.Mutation>;
 

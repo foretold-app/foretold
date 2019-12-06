@@ -1,29 +1,13 @@
 [@bs.config {jsx: 3}];
 
 open Antd;
+open BsReform;
 
-module Config = {
-  type field(_) =
-    | Email: field(string);
+module FormConfig = [%lenses type state = {email: string}];
 
-  type state = {email: string};
+module Form = ReForm.Make(FormConfig);
 
-  let get: type value. (state, field(value)) => value =
-    (state, field) =>
-      switch (field) {
-      | Email => state.email
-      };
-
-  let set: type value. (state, field(value), value) => state =
-    (state, field, value) =>
-      switch (field) {
-      | Email => {...state, email: value}
-      };
-};
-
-module Form = ReFormNext.Make(Config);
-
-let withForm = (channelId, email, mutation, innerComponentFn) =>
+let withForm = (channelId, email, mutation) =>
   Form.use(
     ~initialState={email: email},
     ~onSubmitFail=ignore,
@@ -40,41 +24,51 @@ let withForm = (channelId, email, mutation, innerComponentFn) =>
       Form.Validation.Schema([|Email(Email)|]);
     },
     (),
-  )
-  |> innerComponentFn;
+  );
 
-let fields = (form: Form.state, handleChange, onSubmit, getFieldState) => {
-  let stateEmail = getFieldState(Form.Field(Email));
-
-  let error = state =>
-    switch (state) {
-    | ReFormNext.Error(s) => <AntdAlert message=s type_="warning" />
-    | _ => <Null />
-    };
-
-  let isFormValid =
-    switch (stateEmail) {
-    | ReFormNext.Valid => true
-    | ReFormNext.Pristine => false
-    | _ => false
-    };
-
-  <Antd.Form onSubmit={e => onSubmit()}>
-    <Antd.Form.Item label={"Email*" |> Utils.ste}>
-      <AntdInput
-        value={form.values.email}
-        onChange={ReForm.Helpers.handleDomFormChange(e =>
-          handleChange(Config.Email, e)
-        )}
-      />
-      {error(stateEmail)}
-    </Antd.Form.Item>
+let fields = (reform: Form.api) => {
+  //  let stateEmail = getFieldState(Form.Field(Email));
+  //
+  //  let error = state =>
+  //    switch (state) {
+  //    | ReFormNext.Error(s) => <AntdAlert message=s type_="warning" />
+  //    | _ => <Null />
+  //    };
+  //
+  //  let isFormValid =
+  //    switch (stateEmail) {
+  //    | ReFormNext.Valid => true
+  //    | ReFormNext.Pristine => false
+  //    };
+  //    | _ => false
+  //        disabled={!isFormValid}
+  <Antd.Form
+    onSubmit={event => {
+      ReactEvent.Synthetic.preventDefault(event);
+      reform.submit();
+    }}>
+    <Form.Field
+      field=FormConfig.Email
+      render={({handleChange, error, value}) =>
+        <Antd.Form.Item label={"Email*" |> Utils.ste}>
+          <AntdInput
+            value
+            onChange={event =>
+              ReactEvent.Form.target(event)##value |> handleChange
+            }
+          />
+          {error->Belt.Option.getWithDefault("")->React.string}
+        </Antd.Form.Item>
+      }
+    />
     <Antd.Form.Item>
       <Button
         _type=`primary
-        onClick={_ => onSubmit()}
-        icon=Antd.IconName.usergroupAdd
-        disabled={!isFormValid}>
+        onClick={event => {
+          ReactEvent.Synthetic.preventDefault(event);
+          reform.submit();
+        }}
+        icon=Antd.IconName.usergroupAdd>
         {"Email an Invitation" |> Utils.ste}
       </Button>
     </Antd.Form.Item>
@@ -90,30 +84,25 @@ module CMutationForm =
 let make = (~channelId: string) => {
   <SLayout head={SLayout.Header.textDiv("Invite Member")}>
     <FC.PageCard.BodyPadding>
-      {InvitationCreate.withMutation((mutation, data) =>
-         withForm(
-           channelId,
-           "",
-           mutation,
-           ({handleChange, state, getFieldState, submit}: Form.api) => {
-             let form =
-               fields(state, handleChange, () => submit(), getFieldState);
+      {InvitationCreate.withMutation((mutation, data) => {
+         let reform = withForm(channelId, "", mutation);
+         let form = fields(reform);
 
-             let onSuccess = _ =>
-               <>
-                 <AntdAlert message=Lang.memberInvited type_="success" />
-                 form
-               </>;
+         let onSuccess = _ =>
+           <>
+             <AntdAlert message=Lang.memberInvited type_="success" />
+             form
+           </>;
 
-             CMutationForm.showWithLoading2(
-               ~result=data.result,
-               ~form,
-               ~onSuccess,
-               (),
-             );
-           },
-         )
-       )}
+         <Form.Provider value=reform>
+           {CMutationForm.showWithLoading2(
+              ~result=data.result,
+              ~form,
+              ~onSuccess,
+              (),
+            )}
+         </Form.Provider>;
+       })}
     </FC.PageCard.BodyPadding>
   </SLayout>;
 };

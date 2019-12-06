@@ -122,7 +122,7 @@ let formFields = (form: Form.state, handleChange, onSubmit) =>
       <Button
         onClick={_ =>
           handleChange(
-            Subjects,
+            FormConfig.Subjects,
             form.values.subjects |> Rationale.RList.append(""),
           )
         }>
@@ -194,7 +194,7 @@ let make = (~channelId: string) => {
            mutation, channelId, ({handleChange, submit, state}: Form.api) =>
            CMutationForm.showWithLoading(
              ~result=data.result,
-             ~form=formFields(state, handleChange, () => submit(Form.Submit)),
+             ~form=formFields(state, handleChange, () => submit()),
              (),
            )
          )

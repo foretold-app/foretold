@@ -82,7 +82,15 @@ let withForm = (mutation, channelId, innerComponentFn) =>
   )
   |> innerComponentFn;
 
-let formFields = (form: Form.state, handleChange, onSubmit) =>
+// @todo:
+let formFields =
+    (
+      form: Form.state,
+      handleChange: (FormConfig.field('a), 'a) => unit,
+      handleChange2: (FormConfig.field(list('b)), list('b)) => unit,
+      handleChange3: (FormConfig.field(list('c)), list('c)) => unit,
+      onSubmit,
+    ) => {
   <Antd.Form onSubmit={e => onSubmit()}>
     <h3>
       {"Warning: You can not edit a Series after created it at this time."
@@ -110,7 +118,7 @@ let formFields = (form: Form.state, handleChange, onSubmit) =>
             <Input
               value=r
               onChange={ReForm.Helpers.handleDomFormChange(e =>
-                handleChange(
+                handleChange2(
                   FormConfig.Subjects,
                   form.values.subjects |> E.L.update(e, i),
                 )
@@ -121,7 +129,7 @@ let formFields = (form: Form.state, handleChange, onSubmit) =>
        |> ReasonReact.array}
       <Button
         onClick={_ =>
-          handleChange(
+          handleChange2(
             FormConfig.Subjects,
             form.values.subjects |> Rationale.RList.append(""),
           )
@@ -135,7 +143,7 @@ let formFields = (form: Form.state, handleChange, onSubmit) =>
             <Input
               value=r
               onChange={ReForm.Helpers.handleDomFormChange(e =>
-                handleChange(
+                handleChange2(
                   Properties,
                   form.values.properties |> E.L.update(e, i),
                 )
@@ -146,7 +154,7 @@ let formFields = (form: Form.state, handleChange, onSubmit) =>
        |> ReasonReact.array}
       <Button
         onClick={_ =>
-          send(
+          handleChange2(
             Properties,
             form.values.properties |> Rationale.RList.append(""),
           )
@@ -160,7 +168,10 @@ let formFields = (form: Form.state, handleChange, onSubmit) =>
             <DatePicker
               value=r
               onChange={e => {
-                handleChange(Dates, form.values.dates |> E.L.update(e, i));
+                handleChange3(
+                  FormConfig.Dates,
+                  form.values.dates |> E.L.update(e, i),
+                );
 
                 _ => ();
               }}
@@ -170,7 +181,7 @@ let formFields = (form: Form.state, handleChange, onSubmit) =>
        |> ReasonReact.array}
       <Button
         onClick={_ =>
-          handleChange(
+          handleChange3(
             Dates,
             form.values.dates |> Rationale.RList.append(MomentRe.momentNow()),
           )
@@ -184,6 +195,7 @@ let formFields = (form: Form.state, handleChange, onSubmit) =>
       </Button>
     </Antd.Form.Item>
   </Antd.Form>;
+};
 
 [@react.component]
 let make = (~channelId: string) => {
@@ -194,7 +206,10 @@ let make = (~channelId: string) => {
            mutation, channelId, ({handleChange, submit, state}: Form.api) =>
            CMutationForm.showWithLoading(
              ~result=data.result,
-             ~form=formFields(state, handleChange, () => submit()),
+             ~form=
+               formFields(state, handleChange, handleChange, handleChange, () =>
+                 submit()
+               ),
              (),
            )
          )

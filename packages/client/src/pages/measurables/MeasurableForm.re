@@ -77,7 +77,7 @@ module FormComponent = {
                     creating,
                     <Form.Field
                       field=FormConfig.ValueType
-                      render={({handleChange, error, value}) =>
+                      render={({handleChange, value}) =>
                         <Antd.Form.Item
                           label={"Question Type" |> Utils.ste}
                           required=true
@@ -147,7 +147,7 @@ module FormComponent = {
                              c =>
                                <Form.Field
                                  field=FormConfig.ChannelId
-                                 render={({handleChange, error, value}) =>
+                                 render={({handleChange, value}) =>
                                    <Antd.Form.Item
                                      label={"Community" |> Utils.ste}>
                                      <Antd.Select
@@ -177,7 +177,7 @@ module FormComponent = {
                       </p>
                       <Form.Field
                         field=FormConfig.LabelSubject
-                        render={({handleChange, error, value}) =>
+                        render={({handleChange, value}) =>
                           <Antd.Form.Item
                             label={"Subject" |> Utils.ste} required=true>
                             <Antd.Input
@@ -192,7 +192,7 @@ module FormComponent = {
                       />
                       <Form.Field
                         field=FormConfig.LabelProperty
-                        render={({handleChange, error, value}) =>
+                        render={({handleChange, value}) =>
                           <Antd.Form.Item
                             label={"Property" |> Utils.ste} required=true>
                             <Antd.Input
@@ -207,7 +207,7 @@ module FormComponent = {
                       />
                       <Form.Field
                         field=FormConfig.ShowDescriptionDate
-                        render={({handleChange, error, value}) =>
+                        render={({handleChange, value}) =>
                           <Antd.Form.Item
                             label={
                               "Include a Specific Date in Name" |> Utils.ste
@@ -224,7 +224,7 @@ module FormComponent = {
                       {reform.state.values.showDescriptionDate == "TRUE"
                          ? <Form.Field
                              field=FormConfig.LabelOnDate
-                             render={({handleChange, error, value}) =>
+                             render={({handleChange, value}) =>
                                <Antd.Form.Item
                                  label={"'On' Date" |> Utils.ste}>
                                  <DatePicker
@@ -242,7 +242,7 @@ module FormComponent = {
                   )}
                  <Form.Field
                    field=FormConfig.LabelCustom
-                   render={({handleChange, error, value}) =>
+                   render={({handleChange, value}) =>
                      <Antd.Form.Item
                        label={"Description" |> Utils.ste}
                        help={"Markdown supported." |> Utils.ste}>
@@ -276,7 +276,7 @@ module FormComponent = {
                                 <div className="ant-form-item-control">
                                   <Form.Field
                                     field=FormConfig.Min
-                                    render={({handleChange, error, value}) =>
+                                    render={({handleChange, value}) =>
                                       <Antd.Input
                                         className=Styles.shortInput
                                         value
@@ -299,7 +299,7 @@ module FormComponent = {
                                 <div className="ant-form-item-control">
                                   <Form.Field
                                     field=FormConfig.Max
-                                    render={({handleChange, error, value}) =>
+                                    render={({handleChange, value}) =>
                                       <Antd.Input
                                         className=Styles.shortInput
                                         value
@@ -330,7 +330,7 @@ module FormComponent = {
                       }>
                       <Form.Field
                         field=FormConfig.ResolutionEndpoint
-                        render={({handleChange, error, value}) =>
+                        render={({handleChange, value}) =>
                           <Antd.Input
                             value
                             onChange={e =>
@@ -349,7 +349,7 @@ module FormComponent = {
                    }>
                    <Form.Field
                      field=FormConfig.ExpectedResolutionDate
-                     render={({handleChange, error, value}) =>
+                     render={({handleChange, value}) =>
                        <DatePicker
                          value={value |> MomentRe.momentDefaultFormat}
                          onChange={e => {
@@ -368,7 +368,7 @@ module FormComponent = {
                       label={"Use Entities in Title" |> Utils.ste}>
                       <Form.Field
                         field=FormConfig.ShowDescriptionProperty
-                        render={({handleChange, error, value}) =>
+                        render={({handleChange, value}) =>
                           <Antd.Radio.Group
                             value
                             defaultValue=value

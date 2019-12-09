@@ -1,5 +1,5 @@
 module.exports = {
-  up: async function (queryInterface, Sequelize) {
+  up: async function (queryInterface) {
     try {
       await queryInterface.sequelize.query('BEGIN');
 
@@ -15,7 +15,7 @@ module.exports = {
     }
   },
 
-  down: async function (queryInterface, Sequelize) {
+  down: async function (queryInterface) {
     try {
       await queryInterface.sequelize.query('BEGIN');
 

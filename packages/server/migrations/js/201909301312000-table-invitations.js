@@ -1,4 +1,4 @@
-const { INVITATION_STATUS } = require('../src/enums');
+const { INVITATION_STATUS } = require('../../src/enums');
 
 module.exports = {
   up: async function (queryInterface, Sequelize) {

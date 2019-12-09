@@ -1,4 +1,4 @@
-const { NOTIFICATION_ERROR_REASON } = require('../src/enums');
+const { NOTIFICATION_ERROR_REASON } = require('../../src/enums');
 
 module.exports = {
   up: async function (queryInterface, Sequelize) {

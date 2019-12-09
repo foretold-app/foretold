@@ -29,25 +29,6 @@ let schema =
     ),
   |]);
 
-module FieldString = {
-  [@react.component]
-  let make = (~field, ~label) => {
-    <Form.Field
-      field
-      render={({handleChange, error, value, validate}) =>
-        <Antd.Form.Item label={label |> Utils.ste}>
-          <Antd.Input
-            value
-            onChange={BsReform.Helpers.handleChange(handleChange)}
-            onBlur={_ => validate()}
-          />
-          <p> {error->Belt.Option.getWithDefault("") |> Utils.ste} </p>
-        </Antd.Form.Item>
-      }
-    />;
-  };
-};
-
 module FormComponent = {
   [@react.component]
   let make =

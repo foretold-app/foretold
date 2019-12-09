@@ -126,16 +126,21 @@ module FormComponent = {
                     reform.state.values.showDescriptionProperty == "FALSE",
                     <Form.Field
                       field=FormConfig.Name
-                      render={({handleChange, error, value}) =>
+                      render={({handleChange, error, value, validate}) =>
                         <Antd.Form.Item
                           label={"Question Title" |> Utils.ste} required=true>
                           <Antd.Input
                             value
+                            onBlur={_ => validate()}
                             onChange={event =>
                               ReactEvent.Form.target(event)##value
                               |> handleChange
                             }
                           />
+                          <p>
+                            {error->Belt.Option.getWithDefault("")
+                             |> Utils.ste}
+                          </p>
                         </Antd.Form.Item>
                       }
                     />,

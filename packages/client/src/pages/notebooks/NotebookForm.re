@@ -37,7 +37,7 @@ module FormComponent = {
       (
         ~channelId: string,
         ~reform: Form.api,
-        ~result: ReasonApolloHooks.Mutation.controledVariantResult('a),
+        ~result: ApolloHooks.Mutation.controlledVariantResult('a),
       ) => {
     let onSubmit = event => {
       ReactEvent.Synthetic.preventDefault(event);
@@ -113,7 +113,8 @@ module FormComponent = {
 module Create = {
   [@react.component]
   let make = (~channelId: string) => {
-    let (mutate, result, _) = NotebookCreateMutation.Mutation.use();
+    let (mutate, result, _) =
+      ApolloHooks.useMutation(NotebookCreateMutation.Query.definition);
 
     let reform =
       Form.use(
@@ -148,7 +149,8 @@ module Create = {
 module Edit = {
   [@react.component]
   let make = (~notebook: Types.notebook) => {
-    let (mutate, result, _) = NotebookUpdateMutation.Mutation.use();
+    let (mutate, result, _) =
+      ApolloHooks.useMutation(NotebookUpdateMutation.Query.definition);
 
     let reform =
       Form.use(

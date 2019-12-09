@@ -36,7 +36,7 @@ module FormComponent = {
         ~creating,
         ~onSuccess,
         ~reform: Form.api,
-        ~result: ReasonApolloHooks.Mutation.controledVariantResult('a),
+        ~result: ApolloHooks.Mutation.controlledVariantResult('a),
       ) => {
     let onSubmit = event => {
       ReactEvent.Synthetic.preventDefault(event);
@@ -133,7 +133,8 @@ module Create = {
 
   [@react.component]
   let make = () => {
-    let (mutate, result, _) = ChannelCreate.Mutation.use();
+    let (mutate, result, _) =
+      ApolloHooks.useMutation(ChannelCreate.Query.definition);
 
     let reform =
       Form.use(
@@ -183,7 +184,8 @@ module Edit = {
 
   [@react.component]
   let make = (~id, ~channel: Types.channel) => {
-    let (mutate, result, _) = ChannelUpdate.Mutation.use();
+    let (mutate, result, _) =
+      ApolloHooks.useMutation(ChannelUpdate.Query.definition);
 
     let reform =
       Form.use(

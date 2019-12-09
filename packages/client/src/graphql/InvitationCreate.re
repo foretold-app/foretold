@@ -13,5 +13,3 @@ module Query = [%graphql
     }
  |}
 ];
-
-module Mutation = ReasonApolloHooks.Mutation.Make(Query);

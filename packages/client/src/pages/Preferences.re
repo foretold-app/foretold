@@ -20,7 +20,7 @@ module FormComponent = {
   let make =
       (
         ~reform: Form.api,
-        ~result: ReasonApolloHooks.Mutation.controledVariantResult('a),
+        ~result: ApolloHooks.Mutation.controlledVariantResult('a),
       ) => {
     let onSubmit = event => {
       ReactEvent.Synthetic.preventDefault(event);
@@ -66,7 +66,8 @@ module FormComponent = {
 module Edit = {
   [@react.component]
   let make = (~id, ~stopAllEmails, ~enableExperimentalFeatures) => {
-    let (mutate, result, _) = PreferenceUpdate.Mutation.use();
+    let (mutate, result, _) =
+      ApolloHooks.useMutation(PreferenceUpdate.Query.definition);
 
     let reform =
       Form.use(

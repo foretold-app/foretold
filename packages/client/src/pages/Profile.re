@@ -37,7 +37,7 @@ module FormComponent = {
   let make =
       (
         ~reform: Form.api,
-        ~result: ReasonApolloHooks.Mutation.controledVariantResult('a),
+        ~result: ApolloHooks.Mutation.controlledVariantResult('a),
       ) => {
     let onSubmit = event => {
       ReactEvent.Synthetic.preventDefault(event);
@@ -126,7 +126,8 @@ module FormComponent = {
 module Edit = {
   [@react.component]
   let make = (~id, ~email, ~picture, ~description, ~name) => {
-    let (mutate, result, _) = UserUpdate.Mutation.use();
+    let (mutate, result, _) =
+      ApolloHooks.useMutation(UserUpdate.Query.definition);
 
     let reform =
       Form.use(

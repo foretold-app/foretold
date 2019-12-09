@@ -60,7 +60,7 @@ module FormComponent = {
   let make =
       (
         ~reform: Form.api,
-        ~result: ReasonApolloHooks.Mutation.controledVariantResult('a),
+        ~result: ApolloHooks.Mutation.controlledVariantResult('a),
       ) => {
     let onSubmit = event => {
       ReactEvent.Synthetic.preventDefault(event);
@@ -102,7 +102,8 @@ module FormComponent = {
 module Create = {
   [@react.component]
   let make = () => {
-    let (mutate, result, _) = BotCreateMutation.Mutation.use();
+    let (mutate, result, _) =
+      ApolloHooks.useMutation(BotCreateMutation.Query.definition);
 
     let reform =
       Form.use(
@@ -143,7 +144,8 @@ module Create = {
 module Edit = {
   [@react.component]
   let make = (~bot: Types.bot) => {
-    let (mutate, result, _) = BotUpdate.Mutation.use();
+    let (mutate, result, _) =
+      ApolloHooks.useMutation(BotUpdate.Query.definition);
 
     let reform =
       Form.use(

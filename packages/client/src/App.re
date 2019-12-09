@@ -7,7 +7,7 @@ module Main = {
   let make = (~serverJwt) => {
     let client = appApolloClient(serverJwt);
     <ReasonApollo.Provider client>
-      <ReasonApolloHooks.ApolloProvider client>
+      <ApolloHooks.Provider client>
         {GlobalSettingGet.inner(globalSetting =>
            UserGet.inner(loggedUser =>
              <Providers.AppContext.Provider value={loggedUser, globalSetting}>
@@ -17,7 +17,7 @@ module Main = {
              </Providers.AppContext.Provider>
            )
          )}
-      </ReasonApolloHooks.ApolloProvider>
+      </ApolloHooks.Provider>
     </ReasonApollo.Provider>;
   };
 };

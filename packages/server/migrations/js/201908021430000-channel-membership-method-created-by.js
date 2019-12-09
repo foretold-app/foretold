@@ -1,4 +1,4 @@
-const { CHANNEL_MEMBERSHIP_TYPE } = require('../src/enums');
+const { CHANNEL_MEMBERSHIP_TYPE } = require('../../src/enums');
 
 module.exports = {
   up: async function (queryInterface, Sequelize) {

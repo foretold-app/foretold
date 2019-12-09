@@ -1,4 +1,4 @@
-const { MEASUREMENT_COMPETITOR_TYPE } = require('../src/enums');
+const { MEASUREMENT_COMPETITOR_TYPE } = require('../../src/enums');
 
 module.exports = {
   up: async function (queryInterface) {

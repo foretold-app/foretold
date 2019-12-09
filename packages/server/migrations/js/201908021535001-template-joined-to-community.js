@@ -1,5 +1,5 @@
-const { TEMPLATE_NAME } = require('../src/enums');
-const { FeedItem } = require('../src/models/classes');
+const { TEMPLATE_NAME } = require('../../src/enums');
+const { FeedItem } = require('../../src/models/classes');
 
 module.exports = {
   up: async function (queryInterface, Sequelize) {

@@ -1,5 +1,4 @@
 [@bs.config {jsx: 3}];
-//open BsReform;
 
 module Query = [%graphql
   {|

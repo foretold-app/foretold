@@ -7,37 +7,14 @@ module CMutationForm =
 
 [@react.component]
 let make = (~pageParams: Types.pageParams, ~loggedUser: Types.user) => {
-  let getForm = (bot: option(Types.bot)) =>
-    <BotUpdate.Mutation>
-      ...{(mutation, data) => {
-        let onSubmit = (values: BotForm.Form.onSubmitAPI) => {
-          BotUpdate.mutate(
-            mutation,
-            pageParams.id,
-            values.state.values.name,
-            values.state.values.description,
-            values.state.values.competitorType,
-            values.state.values.picture,
-          );
-          None;
-        };
-
-        let reform = BotForm.withForm(onSubmit, bot);
-        let form = BotForm.formFields(reform);
-
-        <BotForm.Form.Provider value=reform>
-          {CMutationForm.showWithLoading2(
-             ~result=data.result,
-             ~form,
-             ~onSuccess=_ => BotForm.onSuccess(loggedUser, ()),
-             (),
-           )}
-        </BotForm.Form.Provider>;
-      }}
-    </BotUpdate.Mutation>;
-
   let botId = pageParams.id;
-  let body = BotGet.component(~id=botId, getForm);
 
-  <SLayout head={SLayout.Header.textDiv("Edit a Bot")}> body </SLayout>;
+  <SLayout head={SLayout.Header.textDiv("Edit a Bot")}>
+    {BotGet.component(~id=botId, (bot: option(Types.bot)) =>
+       switch (bot) {
+       | Some(bot) => <BotForm.Edit bot />
+       | _ => <NotFoundPage />
+       }
+     )}
+  </SLayout>;
 };

@@ -4,18 +4,22 @@ let appApolloClient = serverJwt => AppApolloClient.instance(serverJwt);
 
 module Main = {
   [@react.component]
-  let make = (~serverJwt) =>
-    <ReasonApollo.Provider client={appApolloClient(serverJwt)}>
-      {GlobalSettingGet.inner(globalSetting =>
-         UserGet.inner(loggedUser =>
-           <Providers.AppContext.Provider value={loggedUser, globalSetting}>
-             <Navigator />
-             <Intercom />
-             <CheckSession />
-           </Providers.AppContext.Provider>
-         )
-       )}
+  let make = (~serverJwt) => {
+    let client = appApolloClient(serverJwt);
+    <ReasonApollo.Provider client>
+      <ReasonApolloHooks.ApolloProvider client>
+        {GlobalSettingGet.inner(globalSetting =>
+           UserGet.inner(loggedUser =>
+             <Providers.AppContext.Provider value={loggedUser, globalSetting}>
+               <Navigator />
+               <Intercom />
+               <CheckSession />
+             </Providers.AppContext.Provider>
+           )
+         )}
+      </ReasonApolloHooks.ApolloProvider>
     </ReasonApollo.Provider>;
+  };
 };
 
 [@react.component]

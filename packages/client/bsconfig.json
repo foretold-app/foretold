@@ -22,7 +22,9 @@
     "bs-moment",
     "reason-react",
     "reason-apollo",
+    "reason-apollo-hooks",
     "rationale",
+    "reschema",
     "bs-ken",
     "bs-reform"
   ],
@@ -31,7 +33,7 @@
     "error": "+5"
   },
   "ppx-flags": [
-    "graphql_ppx/ppx",
+    "@baransu/graphql_ppx_re/ppx",
     "lenses-ppx/ppx"
   ]
 }

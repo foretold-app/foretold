@@ -36,7 +36,7 @@ module FormComponent = {
         ~creating,
         ~onSuccess,
         ~reform: Form.api,
-        ~result: ApolloHooks.Mutation.controlledVariantResult('a),
+        ~result: ReasonApolloHooks.Mutation.controledVariantResult('a),
       ) => {
     let onSubmit = event => {
       ReactEvent.Synthetic.preventDefault(event);
@@ -133,8 +133,7 @@ module Create = {
 
   [@react.component]
   let make = () => {
-    let (mutate, result, _) =
-      ApolloHooks.useMutation(ChannelCreate.Query.definition);
+    let (mutate, result, _) = ChannelCreate.Mutation.use();
 
     let reform =
       Form.use(
@@ -154,6 +153,7 @@ module Create = {
                   },
                   (),
                 )##variables,
+              ~refetchQueries=[|"getChannels", "user"|],
               (),
             )
             |> ignore;
@@ -184,8 +184,7 @@ module Edit = {
 
   [@react.component]
   let make = (~id, ~channel: Types.channel) => {
-    let (mutate, result, _) =
-      ApolloHooks.useMutation(ChannelUpdate.Query.definition);
+    let (mutate, result, _) = ChannelUpdate.Mutation.use();
 
     let reform =
       Form.use(
@@ -206,6 +205,7 @@ module Edit = {
                   },
                   (),
                 )##variables,
+              ~refetchQueries=[|"getChannels", "user", "channel"|],
               (),
             )
             |> ignore;

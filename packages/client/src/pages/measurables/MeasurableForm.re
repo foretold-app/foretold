@@ -56,7 +56,7 @@ module FormComponent = {
         ~creating: bool,
         ~onSuccess,
         ~reform: Form.api,
-        ~result: ApolloHooks.Mutation.controlledVariantResult('a),
+        ~result: ReasonApolloHooks.Mutation.controledVariantResult('a),
       ) => {
     let onSubmit = event => {
       ReactEvent.Synthetic.preventDefault(event);
@@ -415,8 +415,7 @@ module Create = {
 
   [@react.component]
   let make = (~channelId: string) => {
-    let (mutate, result, _) =
-      ApolloHooks.useMutation(MeasurableCreate.Query.definition);
+    let (mutate, result, _) = MeasurableCreate.Mutation.use();
 
     let reform =
       Form.use(
@@ -473,6 +472,7 @@ module Create = {
                 };
             mutate(
               ~variables=MeasurableCreate.Query.make(~input, ())##variables,
+              ~refetchQueries=[|"getMeasurables"|],
               (),
             )
             |> ignore;
@@ -518,8 +518,7 @@ module Edit = {
 
   [@react.component]
   let make = (~id, ~measurable: Types.measurable) => {
-    let (mutate, result, _) =
-      ApolloHooks.useMutation(MeasurableUpdate.Query.definition);
+    let (mutate, result, _) = MeasurableUpdate.Mutation.use();
 
     let reform =
       Form.use(
@@ -574,6 +573,11 @@ module Edit = {
                   },
                   (),
                 )##variables,
+              ~refetchQueries=[|
+                "getAgent",
+                "getMeasurable",
+                "getMeasurements",
+              |],
               (),
             )
             |> ignore;

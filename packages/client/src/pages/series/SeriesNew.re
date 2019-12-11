@@ -47,9 +47,7 @@ module FormComponent = {
                <Antd.Form.Item label={"Name" |> Utils.ste}>
                  <Antd.Input
                    value
-                   onChange={event =>
-                     ReactEvent.Form.target(event)##value |> handleChange
-                   }
+                   onChange={Helpers.handleChange(handleChange)}
                  />
                </Antd.Form.Item>
              }
@@ -60,9 +58,7 @@ module FormComponent = {
                <Antd.Form.Item label={"Description" |> Utils.ste}>
                  <Antd.Input
                    value
-                   onChange={event =>
-                     ReactEvent.Form.target(event)##value |> handleChange
-                   }
+                   onChange={Helpers.handleChange(handleChange)}
                  />
                </Antd.Form.Item>
              }

@@ -58,9 +58,7 @@ module FormComponent = {
                  <Antd.Input
                    value
                    onBlur={_ => validate()}
-                   onChange={e =>
-                     handleChange(ReactEvent.Form.target(e)##value)
-                   }
+                   onChange={Helpers.handleChange(handleChange)}
                  />
                  <p>
                    {error->Belt.Option.getWithDefault("")->React.string}
@@ -78,9 +76,7 @@ module FormComponent = {
                        style={ReactDOMRe.Style.make(~minHeight="80em", ())}
                        value
                        onBlur={_ => validate()}
-                       onChange={e =>
-                         handleChange(ReactEvent.Form.target(e)##value)
-                       }
+                       onChange={Helpers.handleChange(handleChange)}
                      />
                      <p>
                        {error->Belt.Option.getWithDefault("")->React.string}

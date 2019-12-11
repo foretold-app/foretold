@@ -47,9 +47,7 @@ module FormComponent = {
                  <Antd.Form.Item label={"Email*" |> Utils.ste}>
                    <Antd.Input
                      value
-                     onChange={event =>
-                       ReactEvent.Form.target(event)##value |> handleChange
-                     }
+                     onChange={Helpers.handleChange(handleChange)}
                    />
                    {E.React2.showIf(
                       error->Belt.Option.getWithDefault("") != "",

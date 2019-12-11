@@ -11,6 +11,8 @@ module FormConfig = [%lenses
 
 module Form = ReForm.Make(FormConfig);
 
+type result('a) = ReasonApolloHooks.Mutation.controledVariantResult('a);
+
 let schema =
   Form.Validation.Schema([|
     Custom(
@@ -27,14 +29,19 @@ let schema =
     ),
   |]);
 
+let onSuccess = result => {
+  switch (result) {
+  | Some(channel) =>
+    Utils.setTimeout(_ => Routing.Url.push(ChannelShow(channel##id)), 1000)
+    |> ignore;
+    ();
+  | _ => ()
+  };
+};
+
 module FormComponent = {
   [@react.component]
-  let make =
-      (
-        ~creating,
-        ~reform: Form.api,
-        ~result: ReasonApolloHooks.Mutation.controledVariantResult('a),
-      ) => {
+  let make = (~creating, ~reform: Form.api, ~result: result('a)) => {
     let onSubmit = event => {
       ReactEvent.Synthetic.preventDefault(event);
       reform.submit();
@@ -43,7 +50,7 @@ module FormComponent = {
     <Form.Provider value=reform>
       {switch (result) {
        | Error(_error) => <p> {"Something went wrong..." |> Utils.ste} </p>
-       | Data(data) => <Spin />
+       | Data(_) => <Spin />
        | _ =>
          <Antd.Form onSubmit>
            <Form.Field
@@ -52,9 +59,7 @@ module FormComponent = {
                <Antd.Form.Item label={"Name" |> Utils.ste}>
                  <Antd.Input
                    value
-                   onChange={event =>
-                     ReactEvent.Form.target(event)##value |> handleChange
-                   }
+                   onChange={Helpers.handleChange(handleChange)}
                  />
                  <p> {error->Belt.Option.getWithDefault("") |> Utils.ste} </p>
                </Antd.Form.Item>
@@ -67,11 +72,9 @@ module FormComponent = {
                  label={"Description" |> Utils.ste}
                  help={"Markdown supported" |> Utils.ste}>
                  <Antd.Input.TextArea
-                   style={ReactDOMRe.Style.make(~minHeight="30em", ())}
                    value
-                   onChange={event =>
-                     ReactEvent.Form.target(event)##value |> handleChange
-                   }
+                   style={ReactDOMRe.Style.make(~minHeight="30em", ())}
+                   onChange={Helpers.handleChange(handleChange)}
                  />
                  <p> {error->Belt.Option.getWithDefault("") |> Utils.ste} </p>
                </Antd.Form.Item>
@@ -120,18 +123,7 @@ module FormComponent = {
 };
 
 module Create = {
-  let onSuccess = data => {
-    switch (data##channelCreate) {
-    | Some(channel) =>
-      Utils.setTimeout(
-        _ => Routing.Url.push(ChannelShow(channel##id)),
-        1000,
-      )
-      |> ignore;
-      ();
-    | _ => ()
-    };
-  };
+  let onSuccess' = data => onSuccess(data##channelCreate);
 
   [@react.component]
   let make = () => {
@@ -164,7 +156,7 @@ module Create = {
                      ReasonApolloHooks.Mutation.controledVariantResult('a),
                  ) => {
                  switch (result) {
-                 | Data(data) => onSuccess(data)
+                 | Data(data) => onSuccess'(data)
                  | _ => ()
                  };
                  Js.Promise.resolve();
@@ -187,18 +179,7 @@ module Create = {
 };
 
 module Edit = {
-  let onSuccess = data => {
-    switch (data##channelUpdate) {
-    | Some(channel) =>
-      Utils.setTimeout(
-        _ => Routing.Url.push(ChannelShow(channel##id)),
-        1000,
-      )
-      |> ignore;
-      ();
-    | _ => ()
-    };
-  };
+  let onSuccess' = data => onSuccess(data##channelUpdate);
 
   [@react.component]
   let make = (~id, ~channel: Types.channel) => {
@@ -226,13 +207,9 @@ module Edit = {
               ~refetchQueries=[|"getChannels", "user", "channel"|],
               (),
             )
-            |> Js.Promise.then_(
-                 (
-                   result:
-                     ReasonApolloHooks.Mutation.controledVariantResult('a),
-                 ) => {
+            |> Js.Promise.then_((result: result('a)) => {
                  switch (result) {
-                 | Data(data) => onSuccess(data)
+                 | Data(data) => onSuccess'(data)
                  | _ => ()
                  };
                  Js.Promise.resolve();

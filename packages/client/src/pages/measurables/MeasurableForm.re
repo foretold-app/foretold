@@ -97,10 +97,7 @@ module FormComponent = {
                           <Antd.Radio.Group
                             value
                             defaultValue=value
-                            onChange={event =>
-                              ReactEvent.Form.target(event)##value
-                              |> handleChange
-                            }>
+                            onChange={Helpers.handleChange(handleChange)}>
                             <Antd.Radio value="FLOAT">
                               {"Number" |> ste}
                             </Antd.Radio>
@@ -122,10 +119,7 @@ module FormComponent = {
                           <Antd.Input
                             value
                             onBlur={_ => validate()}
-                            onChange={event =>
-                              ReactEvent.Form.target(event)##value
-                              |> handleChange
-                            }
+                            onChange={Helpers.handleChange(handleChange)}
                           />
                           <p>
                             {error->Belt.Option.getWithDefault("")
@@ -191,10 +185,7 @@ module FormComponent = {
                             label={"Subject" |> Utils.ste} required=true>
                             <Antd.Input
                               value
-                              onChange={event =>
-                                ReactEvent.Form.target(event)##value
-                                |> handleChange
-                              }
+                              onChange={Helpers.handleChange(handleChange)}
                             />
                           </Antd.Form.Item>
                         }
@@ -206,10 +197,7 @@ module FormComponent = {
                             label={"Property" |> Utils.ste} required=true>
                             <Antd.Input
                               value
-                              onChange={event =>
-                                ReactEvent.Form.target(event)##value
-                                |> handleChange
-                              }
+                              onChange={Helpers.handleChange(handleChange)}
                             />
                           </Antd.Form.Item>
                         }
@@ -258,9 +246,7 @@ module FormComponent = {
                        <Antd.Input.TextArea
                          style={ReactDOMRe.Style.make(~minHeight="12em", ())}
                          value
-                         onChange={e =>
-                           handleChange(ReactEvent.Form.target(e)##value)
-                         }
+                         onChange={Helpers.handleChange(handleChange)}
                        />
                      </Antd.Form.Item>
                    }
@@ -342,9 +328,7 @@ module FormComponent = {
                         render={({handleChange, value}) =>
                           <Antd.Input
                             value
-                            onChange={e =>
-                              handleChange(ReactEvent.Form.target(e)##value)
-                            }
+                            onChange={Helpers.handleChange(handleChange)}
                           />
                         }
                       />
@@ -381,9 +365,7 @@ module FormComponent = {
                           <Antd.Radio.Group
                             value
                             defaultValue=value
-                            onChange={e =>
-                              handleChange(ReactEvent.Form.target(e)##value)
-                            }>
+                            onChange={Helpers.handleChange(handleChange)}>
                             <Antd.Radio value="FALSE">
                               {"No" |> ste}
                             </Antd.Radio>

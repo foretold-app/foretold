@@ -11,6 +11,8 @@ module FormConfig = [%lenses
 
 module Form = ReForm.Make(FormConfig);
 
+type result('a) = ReasonApolloHooks.Mutation.controledVariantResult('a);
+
 let schema =
   Form.Validation.Schema([|
     Custom(
@@ -47,20 +49,20 @@ module FieldString = {
 };
 
 let onSuccess = (loggedUser: Types.user) => {
-  Primary.User.getAgent(loggedUser, agent =>
-    Routing.Url.push(Agent({agentId: agent.id, subPage: AgentBots}))
-  );
-
-  <Null />;
+  Utils.setTimeout(
+    _ =>
+      Primary.User.getAgent(loggedUser, agent =>
+        Routing.Url.push(Agent({agentId: agent.id, subPage: AgentBots}))
+      ),
+    1000,
+  )
+  |> ignore;
+  ();
 };
 
 module FormComponent = {
   [@react.component]
-  let make =
-      (
-        ~reform: Form.api,
-        ~result: ReasonApolloHooks.Mutation.controledVariantResult('a),
-      ) => {
+  let make = (~reform: Form.api, ~result: result('a)) => {
     let onSubmit = event => {
       ReactEvent.Synthetic.preventDefault(event);
       reform.submit();
@@ -69,15 +71,7 @@ module FormComponent = {
     <Form.Provider value=reform>
       {switch (result) {
        | Error(_error) => <p> {"Something went wrong..." |> Utils.ste} </p>
-       | Data(_) =>
-         <Providers.AppContext.Consumer>
-           ...{({loggedUser}) =>
-             switch (loggedUser) {
-             | Some(loggedUser) => onSuccess(loggedUser)
-             | _ => <Null />
-             }
-           }
-         </Providers.AppContext.Consumer>
+       | Data(_) => <Spin />
        | _ =>
          <FC__PageCard.BodyPadding>
            <Antd.Form onSubmit>
@@ -100,7 +94,7 @@ module FormComponent = {
 
 module Create = {
   [@react.component]
-  let make = () => {
+  let make = (~loggedUser) => {
     let (mutate, result, _) = BotCreateMutation.Mutation.use();
 
     let reform =
@@ -123,6 +117,13 @@ module Create = {
               ~refetchQueries=[|"user", "bots"|],
               (),
             )
+            |> Js.Promise.then_((result: result('a)) => {
+                 switch (result) {
+                 | Data(_) => onSuccess(loggedUser)
+                 | _ => ()
+                 };
+                 Js.Promise.resolve();
+               })
             |> ignore;
 
             None;
@@ -142,7 +143,7 @@ module Create = {
 
 module Edit = {
   [@react.component]
-  let make = (~bot: Types.bot) => {
+  let make = (~bot: Types.bot, ~loggedUser) => {
     let (mutate, result, _) = BotUpdate.Mutation.use();
 
     let reform =
@@ -166,6 +167,13 @@ module Edit = {
               ~refetchQueries=[|"user", "bots"|],
               (),
             )
+            |> Js.Promise.then_((result: result('a)) => {
+                 switch (result) {
+                 | Data(_) => onSuccess(loggedUser)
+                 | _ => ()
+                 };
+                 Js.Promise.resolve();
+               })
             |> ignore;
 
             None;

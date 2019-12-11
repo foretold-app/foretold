@@ -1,4 +1,3 @@
-open Antd;
 open BsReform;
 
 module FormConfig = [%lenses type state = {email: string}];
@@ -43,28 +42,26 @@ module FormComponent = {
            <Form.Field
              field=FormConfig.Email
              render={({handleChange, error, value}) =>
-               <>
-                 <Antd.Form.Item label={"Email*" |> Utils.ste}>
-                   <Antd.Input
-                     value
-                     onChange={Helpers.handleChange(handleChange)}
-                   />
-                   {E.React2.showIf(
-                      error->Belt.Option.getWithDefault("") != "",
-                      <AntdAlert
-                        message={error->Belt.Option.getWithDefault("")}
-                        type_="warning"
-                      />,
-                    )}
-                 </Antd.Form.Item>
-               </>
+               <Antd.Form.Item label={"Email*" |> Utils.ste}>
+                 <Antd.Input
+                   value
+                   onChange={Helpers.handleChange(handleChange)}
+                 />
+                 {E.React2.showIf(
+                    error->Belt.Option.getWithDefault("") != "",
+                    <AntdAlert
+                      message={error->Belt.Option.getWithDefault("")}
+                      type_="warning"
+                    />,
+                  )}
+               </Antd.Form.Item>
              }
            />
            <Antd.Form.Item>
-             <Button
+             <Antd.Button
                _type=`primary onClick=onSubmit icon=Antd.IconName.usergroupAdd>
                {"Email an Invitation" |> Utils.ste}
-             </Button>
+             </Antd.Button>
            </Antd.Form.Item>
          </Antd.Form>
        }}

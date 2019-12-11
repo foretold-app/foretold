@@ -150,11 +150,7 @@ module Create = {
               ~refetchQueries=[|"getChannels", "user", "channel"|],
               (),
             )
-            |> Js.Promise.then_(
-                 (
-                   result:
-                     ReasonApolloHooks.Mutation.controledVariantResult('a),
-                 ) => {
+            |> Js.Promise.then_((result: result('a)) => {
                  switch (result) {
                  | Data(data) => onSuccess'(data)
                  | _ => ()

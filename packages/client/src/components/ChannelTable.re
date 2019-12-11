@@ -2,16 +2,16 @@ module Columns = {
   type record = Types.channel;
   type column = Table.column(Types.channel);
 
-  let nameDescriptionColumn =
+  let nameDescription =
     Table.Column.make(
       ~name="Name & Description" |> Utils.ste,
       ~render=
-        (r: record) =>
+        (channel: record) =>
           <div>
-            <Link linkType={Internal(ChannelShow(r.id))}>
-              {r.name |> Utils.ste}
+            <Link linkType={Internal(ChannelShow(channel.id))}>
+              {channel.name |> Utils.ste}
             </Link>
-            {r.description
+            {channel.description
              |> E.O.React.fmapOrNull(description =>
                   <ReactMarkdown source=description />
                 )}
@@ -20,12 +20,12 @@ module Columns = {
       (),
     );
 
-  let memberCountColumn =
+  let memberCount =
     Table.Column.make(
       ~name="Members" |> Utils.ste,
       ~render=
-        (r: record) =>
-          r.membershipCount
+        (channel: record) =>
+          channel.membershipCount
           |> E.O.fmap(string_of_int)
           |> E.O.default("")
           |> Utils.ste,
@@ -33,12 +33,12 @@ module Columns = {
       (),
     );
 
-  let openedCountColumn =
+  let openedCount =
     Table.Column.make(
       ~name="Open Questions" |> Utils.ste,
       ~render=
-        (r: record) =>
-          r.openedMeasurablesCount
+        (channel: record) =>
+          channel.openedMeasurablesCount
           |> E.O.fmap(string_of_int)
           |> E.O.default("")
           |> Utils.ste,
@@ -46,34 +46,17 @@ module Columns = {
       (),
     );
 
-  let labelsColumn =
+  let labels =
     Table.Column.make(
       ~name="Curation" |> Utils.ste,
       ~render=
-        (r: record) =>
-          <>
-            {r.isCurated
-               ? <div className="ant-tag ant-tag-blue">
-                   {"Curated" |> Utils.ste}
-                 </div>
-               : <Null />}
-            {r.isArchived
-               ? <div className="ant-tag ant-tag-gold">
-                   {"Archived" |> Utils.ste}
-                 </div>
-               : <Null />}
-          </>,
-      ~show=(r: record) => r.isCurated || r.isArchived,
+        (channel: record) => <> <Curated channel /> <Curated channel /> </>,
+      ~show=(channel: record) => channel.isCurated || channel.isArchived,
       ~flex=1,
       (),
     );
 
-  let all = [|
-    nameDescriptionColumn,
-    memberCountColumn,
-    openedCountColumn,
-    labelsColumn,
-  |];
+  let all = [|nameDescription, memberCount, openedCount, labels|];
 };
 
 [@react.component]

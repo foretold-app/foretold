@@ -43,3 +43,14 @@ let doIfSome = (fn, s: option('a)) =>
   };
 
 [@bs.val] external setTimeout: (unit => unit, int) => float = "setTimeout";
+
+let truncateByWords = (~maxLength=200, ~postfix="&hellip;", text) => {
+  switch (String.length(text) > maxLength) {
+  | true =>
+    let text' = String.sub(text, 0, maxLength);
+    let spacePosion = Js.String.lastIndexOf(" ", text');
+    let spacePosion' = spacePosion > 0 ? spacePosion : maxLength;
+    String.sub(text, 0, spacePosion') ++ postfix;
+  | _ => text
+  };
+};

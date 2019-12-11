@@ -34,7 +34,6 @@ module FormComponent = {
   let make =
       (
         ~creating,
-        ~onSuccess,
         ~reform: Form.api,
         ~result: ReasonApolloHooks.Mutation.controledVariantResult('a),
       ) => {
@@ -46,7 +45,7 @@ module FormComponent = {
     <Form.Provider value=reform>
       {switch (result) {
        | Error(_error) => <p> {"Something went wrong..." |> Utils.ste} </p>
-       | Data(data) => onSuccess(data)
+       | Data(data) => <Spin />
        | _ =>
          <Antd.Form onSubmit>
            <Form.Field
@@ -125,10 +124,15 @@ module FormComponent = {
 module Create = {
   let onSuccess = data => {
     switch (data##channelCreate) {
-    | Some(channel) => Routing.Url.push(ChannelShow(channel##id))
+    | Some(channel) =>
+      Utils.setTimeout(
+        _ => Routing.Url.push(ChannelShow(channel##id)),
+        1000,
+      )
+      |> ignore;
+      ();
     | _ => ()
     };
-    <Null />;
   };
 
   [@react.component]
@@ -153,9 +157,20 @@ module Create = {
                   },
                   (),
                 )##variables,
-              ~refetchQueries=[|"getChannels", "user"|],
+              ~refetchQueries=[|"getChannels", "user", "channel"|],
               (),
             )
+            |> Js.Promise.then_(
+                 (
+                   result:
+                     ReasonApolloHooks.Mutation.controledVariantResult('a),
+                 ) => {
+                 switch (result) {
+                 | Data(data) => onSuccess(data)
+                 | _ => ()
+                 };
+                 Js.Promise.resolve();
+               })
             |> ignore;
 
             None;
@@ -169,17 +184,22 @@ module Create = {
         (),
       );
 
-    <FormComponent creating=true reform result onSuccess />;
+    <FormComponent creating=true reform result />;
   };
 };
 
 module Edit = {
   let onSuccess = data => {
     switch (data##channelUpdate) {
-    | Some(channel) => Routing.Url.push(ChannelShow(channel##id))
+    | Some(channel) =>
+      Utils.setTimeout(
+        _ => Routing.Url.push(ChannelShow(channel##id)),
+        1000,
+      )
+      |> ignore;
+      ();
     | _ => ()
     };
-    <Null />;
   };
 
   [@react.component]
@@ -208,6 +228,17 @@ module Edit = {
               ~refetchQueries=[|"getChannels", "user", "channel"|],
               (),
             )
+            |> Js.Promise.then_(
+                 (
+                   result:
+                     ReasonApolloHooks.Mutation.controledVariantResult('a),
+                 ) => {
+                 switch (result) {
+                 | Data(data) => onSuccess(data)
+                 | _ => ()
+                 };
+                 Js.Promise.resolve();
+               })
             |> ignore;
 
             None;
@@ -221,6 +252,6 @@ module Edit = {
         (),
       );
 
-    <FormComponent creating=false reform result onSuccess />;
+    <FormComponent creating=false reform result />;
   };
 };

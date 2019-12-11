@@ -1,12 +1,6 @@
 [@bs.config {jsx: 3}];
-
 open Utils;
-
 open BsReform;
-
-open Style.Grid;
-
-let formatDate = E.M.format(E.M.format_standard);
 
 module Styles = {
   open Css;
@@ -33,6 +27,10 @@ module FormConfig = [%lenses
 
 module Form = ReForm.Make(FormConfig);
 
+type result('a) = ReasonApolloHooks.Mutation.controledVariantResult('a);
+
+let formatDate = E.M.format(E.M.format_standard);
+
 let schema =
   Form.Validation.Schema([|
     Custom(
@@ -49,15 +47,27 @@ let schema =
     ),
   |]);
 
+let onSuccess = measurable => {
+  switch (measurable) {
+  | Some(measurable) =>
+    setTimeout(
+      _ =>
+        Routing.Url.push(
+          MeasurableShow(measurable##channelId, measurable##id),
+        ),
+      1000,
+    )
+    |> ignore;
+    ();
+  | _ => ()
+  };
+};
+
 module FormComponent = {
+  open Style.Grid;
+
   [@react.component]
-  let make =
-      (
-        ~creating: bool,
-        ~onSuccess,
-        ~reform: Form.api,
-        ~result: ReasonApolloHooks.Mutation.controledVariantResult('a),
-      ) => {
+  let make = (~creating: bool, ~reform: Form.api, ~result: result('a)) => {
     let onSubmit = event => {
       ReactEvent.Synthetic.preventDefault(event);
       reform.submit();
@@ -66,7 +76,7 @@ module FormComponent = {
     <Form.Provider value=reform>
       {switch (result) {
        | Error(_error) => <p> {"Something went wrong..." |> Utils.ste} </p>
-       | Data(data) => onSuccess(data)
+       | Data(_) => <Spin />
        | _ =>
          <Providers.AppContext.Consumer>
            ...{({loggedUser}) =>
@@ -404,14 +414,7 @@ module FormComponent = {
 };
 
 module Create = {
-  let onSuccess = response => {
-    switch (response##measurableCreate) {
-    | Some(measurable) =>
-      Routing.Url.push(MeasurableShow(measurable##channelId, measurable##id))
-    | _ => ()
-    };
-    <Null />;
-  };
+  let onSuccess' = response => onSuccess(response##measurableCreate);
 
   [@react.component]
   let make = (~channelId: string) => {
@@ -472,9 +475,20 @@ module Create = {
                 };
             mutate(
               ~variables=MeasurableCreate.Query.make(~input, ())##variables,
-              ~refetchQueries=[|"getMeasurables"|],
+              ~refetchQueries=[|
+                "getAgent",
+                "getMeasurable",
+                "getMeasurements",
+              |],
               (),
             )
+            |> Js.Promise.then_((result: result('a)) => {
+                 switch (result) {
+                 | Data(data) => onSuccess'(data)
+                 | _ => ()
+                 };
+                 Js.Promise.resolve();
+               })
             |> ignore;
 
             None;
@@ -502,19 +516,12 @@ module Create = {
         (),
       );
 
-    <FormComponent creating=true reform result onSuccess />;
+    <FormComponent creating=true reform result />;
   };
 };
 
 module Edit = {
-  let onSuccess = response => {
-    switch (response##measurableUpdate) {
-    | Some(measurable) =>
-      Routing.Url.push(MeasurableShow(measurable##channelId, measurable##id))
-    | _ => ()
-    };
-    <Null />;
-  };
+  let onSuccess' = response => onSuccess(response##measurableUpdate);
 
   [@react.component]
   let make = (~id, ~measurable: Types.measurable) => {
@@ -580,6 +587,13 @@ module Edit = {
               |],
               (),
             )
+            |> Js.Promise.then_((result: result('a)) => {
+                 switch (result) {
+                 | Data(data) => onSuccess'(data)
+                 | _ => ()
+                 };
+                 Js.Promise.resolve();
+               })
             |> ignore;
 
             None;
@@ -610,6 +624,6 @@ module Edit = {
         (),
       );
 
-    <FormComponent creating=false reform result onSuccess />;
+    <FormComponent creating=false reform result />;
   };
 };

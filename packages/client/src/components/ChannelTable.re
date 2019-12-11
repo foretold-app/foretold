@@ -11,10 +11,7 @@ module Columns = {
             <Link linkType={Internal(ChannelShow(channel.id))}>
               {channel.name |> Utils.ste}
             </Link>
-            {channel.description
-             |> E.O.React.fmapOrNull(description =>
-                  <ReactMarkdown source=description />
-                )}
+            <ChannelDescription channel />
           </div>,
       ~flex=4,
       (),
@@ -29,7 +26,6 @@ module Columns = {
           |> E.O.fmap(string_of_int)
           |> E.O.default("")
           |> Utils.ste,
-      ~flex=1,
       (),
     );
 
@@ -42,7 +38,6 @@ module Columns = {
           |> E.O.fmap(string_of_int)
           |> E.O.default("")
           |> Utils.ste,
-      ~flex=1,
       (),
     );
 
@@ -52,7 +47,6 @@ module Columns = {
       ~render=
         (channel: record) => <> <Curated channel /> <Curated channel /> </>,
       ~show=(channel: record) => channel.isCurated || channel.isArchived,
-      ~flex=1,
       (),
     );
 

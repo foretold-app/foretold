@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 let appApolloClient = serverJwt => AppApolloClient.instance(serverJwt);
 
 module Main = {

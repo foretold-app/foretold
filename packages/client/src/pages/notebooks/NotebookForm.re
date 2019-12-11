@@ -1,4 +1,3 @@
-[@bs.config {jsx: 3}];
 open Style.Grid;
 open BsReform;
 

@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 type input = {
   .
   "name": string,

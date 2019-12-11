@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 let toAgent = agent => {
   let agentType = Primary.AgentType.getAgentType(~agent, ());
 

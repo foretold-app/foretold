@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 let newMeasurable = channelId => {
   <FC__Button
     variant=FC__Button.Primary

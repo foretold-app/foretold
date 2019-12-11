@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 module Query = [%graphql
   {|
     mutation notebookUpdate($id: String!, $input: NotebookUpdateInput!) {

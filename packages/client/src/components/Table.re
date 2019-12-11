@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 type column('a) = {
   name: ReasonReact.reactElement,
   render: 'a => ReasonReact.reactElement,

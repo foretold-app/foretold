@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 open Utils;
 open ReactMarkdown;
 open Style.Grid;

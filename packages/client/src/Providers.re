@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 type appContext = {
   loggedUser: option(Types.user),
   globalSetting: option(Types.globalSetting),

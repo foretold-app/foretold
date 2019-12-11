@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 [@bs.module "./AntdDropdown.js"]
 external dropdown: ReasonReact.reactClass = "Dropdown";
 

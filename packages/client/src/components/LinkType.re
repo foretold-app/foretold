@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 type linkType =
   | Action(ReactEvent.Mouse.t => unit)
   | Internal(Routing.Url.t)

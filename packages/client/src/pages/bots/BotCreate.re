@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 module CMutationForm =
   MutationForm.Make({
     type queryType = BotCreateMutation.Query.t;

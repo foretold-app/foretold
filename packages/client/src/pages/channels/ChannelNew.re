@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 [@react.component]
 let make = () => {
   <SLayout head={SLayout.Header.textDiv("Create a New Community")}>

@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 type domain = {
   xMin: option(float),
   xMax: option(float),

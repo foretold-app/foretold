@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 let make = (~notebookRedux: NotebookRedux.t) => {
   switch (notebookRedux.state.selectedMeasurableId) {
   | Some(measurableId) =>

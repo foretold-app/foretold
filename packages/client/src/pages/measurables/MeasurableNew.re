@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 [@react.component]
 let make = (~channelId) => {
   <SLayout head={SLayout.Header.textDiv("New Question")}>

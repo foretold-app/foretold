@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 type column = Table.column(Types.agent);
 
 [@react.component]

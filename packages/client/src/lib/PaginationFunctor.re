@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 open Rationale.Option.Infix;
 
 type direction = Primary.Connection.direction;

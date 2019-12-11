@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 module Config = {
   type itemType = Types.measurable;
   type callFnParams = string;

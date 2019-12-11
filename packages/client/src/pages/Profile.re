@@ -1,39 +1,15 @@
-[@bs.config {jsx: 3}];
+open BsReform;
 
-module FormConfig = {
-  type field(_) =
-    | Name: field(string)
-    | Email: field(string)
-    | Picture: field(string)
-    | Description: field(string);
-
+module FormConfig = [%lenses
   type state = {
     name: string,
     email: string,
     picture: string,
     description: string,
-  };
+  }
+];
 
-  let get: type value. (state, field(value)) => value =
-    (state, field) =>
-      switch (field) {
-      | Name => state.name
-      | Email => state.email
-      | Picture => state.picture
-      | Description => state.description
-      };
-
-  let set: type value. (state, field(value), value) => state =
-    (state, field, value) =>
-      switch (field) {
-      | Name => {...state, name: value}
-      | Email => {...state, email: value}
-      | Picture => {...state, picture: value}
-      | Description => {...state, description: value}
-      };
-};
-
-module Form = ReFormNext.Make(FormConfig);
+module Form = ReForm.Make(FormConfig);
 
 let testName = (str: string) => {
   let exp = () => [%re "/^[a-z0-9._]{0,30}$/i"];
@@ -44,148 +20,163 @@ let testName = (str: string) => {
   };
 };
 
-let withUserForm =
-    (id, name, email, picture, description, mutation, innerComponentFn) =>
-  Form.make(
-    ~initialState={name, email, picture, description},
-    ~onSubmit=
+let schema =
+  Form.Validation.Schema([|
+    Custom(
+      Name,
       values =>
-        UserUpdate.mutate(
-          mutation,
-          values.state.values.name,
-          values.state.values.email,
-          values.state.values.picture,
-          values.state.values.description,
-          id,
-        ),
-    ~schema=
-      Form.Validation.Schema([|
-        Custom(
-          Name,
-          values => testName(values.name) ? Valid : Error(Lang.wrongName),
-        ),
-        Custom(Picture, _ => Valid),
-        Custom(Description, _ => Valid),
-      |]),
-    innerComponentFn,
-  )
-  |> E.React2.el;
+        testName(values.name) ? Valid : ReSchema.Error(Lang.wrongName),
+    ),
+    Email(Email),
+  |]);
 
-let formFields = (state: Form.state, send, getFieldState) => {
-  let onSubmit = () => send(Form.Submit);
-
-  let stateName = getFieldState(Form.Field(Name));
-  let statePicture = getFieldState(Form.Field(Picture));
-  let stateDescription = getFieldState(Form.Field(Description));
-  let stateForm = state.formState;
-
-  let error = state =>
-    switch (state) {
-    | Form.Error(s) => <AntdAlert message=s type_="warning" />
-    | _ => <Null />
+module FormComponent = {
+  [@react.component]
+  let make =
+      (
+        ~reform: Form.api,
+        ~result: ReasonApolloHooks.Mutation.controledVariantResult('a),
+      ) => {
+    let onSubmit = event => {
+      ReactEvent.Synthetic.preventDefault(event);
+      reform.submit();
     };
 
-  let isFormValid =
-    switch (stateName, statePicture, stateDescription) {
-    | (Form.Error(_), _, _) => false
-    | (_, Form.Error(_), _) => false
-    | (_, _, Form.Error(_)) => false
-    | _ => true
-    };
-
-  let isFormDirty =
-    switch (stateForm) {
-    | Form.Dirty => true
-    | _ => false
-    };
-
-  let isEnabled = isFormValid && isFormDirty;
-
-  <Antd.Form onSubmit={_e => onSubmit()}>
-    <Antd.Form.Item label={"Username" |> Utils.ste}>
-      <Antd.Input
-        value={state.values.name}
-        onChange={ReForm.Helpers.handleDomFormChange(e => {
-          send(Form.FieldChangeValue(Name, e));
-          ();
-        })}
-      />
-      {error(stateName)}
-    </Antd.Form.Item>
-    <Antd.Form.Item label={"Description" |> Utils.ste}>
-      <Antd.Input
-        value={state.values.description}
-        onChange={ReForm.Helpers.handleDomFormChange(e => {
-          send(Form.FieldChangeValue(Description, e));
-          ();
-        })}
-      />
-    </Antd.Form.Item>
-    <Antd.Form.Item label={"Email" |> Utils.ste}>
-      <Antd.Input
-        value={state.values.email}
-        disabled=true
-        onChange={ReForm.Helpers.handleDomFormChange(e => {
-          send(Form.FieldChangeValue(Email, e));
-          ();
-        })}
-      />
-    </Antd.Form.Item>
-    <Antd.Form.Item label={"Picture URL" |> Utils.ste}>
-      <Antd.Input
-        value={state.values.picture}
-        onChange={ReForm.Helpers.handleDomFormChange(e => {
-          send(Form.FieldChangeValue(Picture, e));
-          ();
-        })}
-      />
-    </Antd.Form.Item>
-    <Antd.Form.Item>
-      <Antd.Button
-        _type=`primary onClick={_ => onSubmit()} disabled={!isEnabled}>
-        {"Submit" |> Utils.ste}
-      </Antd.Button>
-    </Antd.Form.Item>
-  </Antd.Form>;
+    <Form.Provider value=reform>
+      {switch (result) {
+       | Error(_error) => <p> {"Something went wrong..." |> Utils.ste} </p>
+       | Data(_) => <p> {"Profile is updated." |> Utils.ste} </p>
+       | _ =>
+         <Antd.Form onSubmit>
+           <Form.Field
+             field=FormConfig.Name
+             render={({handleChange, error, value, validate}) =>
+               <Antd.Form.Item label={"Username" |> Utils.ste}>
+                 <Antd.Input
+                   value
+                   onBlur={_ => validate()}
+                   onChange={Helpers.handleChange(handleChange)}
+                 />
+                 <Warning error />
+               </Antd.Form.Item>
+             }
+           />
+           <Form.Field
+             field=FormConfig.Description
+             render={({handleChange, error, value, validate}) =>
+               <Antd.Form.Item label={"Description" |> Utils.ste}>
+                 <Antd.Input
+                   value
+                   onBlur={_ => validate()}
+                   onChange={Helpers.handleChange(handleChange)}
+                 />
+                 <Warning error />
+               </Antd.Form.Item>
+             }
+           />
+           <Form.Field
+             field=FormConfig.Email
+             render={({handleChange, error, value, validate}) =>
+               <Antd.Form.Item label={"Email" |> Utils.ste}>
+                 <Antd.Input
+                   value
+                   onBlur={_ => validate()}
+                   onChange={Helpers.handleChange(handleChange)}
+                 />
+                 <Warning error />
+               </Antd.Form.Item>
+             }
+           />
+           <Form.Field
+             field=FormConfig.Picture
+             render={({handleChange, error, value, validate}) =>
+               <Antd.Form.Item label={"Picture URL" |> Utils.ste}>
+                 <Antd.Input
+                   value
+                   onBlur={_ => validate()}
+                   onChange={Helpers.handleChange(handleChange)}
+                 />
+                 <Warning error />
+               </Antd.Form.Item>
+             }
+           />
+           <Antd.Form.Item>
+             {reform.state.formState == Submitting
+                ? <Spin />
+                : <Antd.Button _type=`primary onClick=onSubmit>
+                    {"Submit" |> Utils.ste}
+                  </Antd.Button>}
+           </Antd.Form.Item>
+         </Antd.Form>
+       }}
+    </Form.Provider>;
+  };
 };
 
-module CMutationForm =
-  MutationForm.Make({
-    type queryType = UserUpdate.Query.t;
-  });
+module Edit = {
+  [@react.component]
+  let make = (~id, ~email, ~picture, ~description, ~name) => {
+    let (mutate, result, _) = UserUpdate.Mutation.use();
+
+    let reform =
+      Form.use(
+        ~validationStrategy=OnDemand,
+        ~schema,
+        ~onSubmit=
+          ({state}) => {
+            let name' = state.values.name;
+
+            let email' =
+              state.values.email === "" ? None : Some(state.values.email);
+
+            let picture' =
+              state.values.picture === "" ? None : Some(state.values.picture);
+
+            let description' =
+              state.values.picture === ""
+                ? None : Some(state.values.description);
+
+            mutate(
+              ~variables=
+                UserUpdate.Query.make(
+                  ~id,
+                  ~input={
+                    "name": Some(name'),
+                    "email": email',
+                    "picture": picture',
+                    "description": description',
+                    "auth0AccessToken": None,
+                  },
+                  (),
+                )##variables,
+              ~refetchQueries=[|"user"|],
+              (),
+            )
+            |> ignore;
+
+            None;
+          },
+        ~initialState={name, email, picture, description},
+        (),
+      );
+
+    <FormComponent reform result />;
+  };
+};
 
 [@react.component]
 let make = (~loggedUser: Types.user) => {
+  let agent = loggedUser.agent;
+  let id = loggedUser.id;
+  let email = loggedUser.email |> E.O.default("");
+  let picture = loggedUser.picture |> E.O.default("");
+  let description = loggedUser.description |> E.O.default("");
+  let name =
+    agent |> E.O.bind(_, (r: Types.agent) => r.name) |> E.O.default("");
+
   <SLayout head={SLayout.Header.textDiv("Edit Profile Information")}>
     <FC.PageCard.BodyPadding>
-      <UserUpdate.Mutation>
-        ...{(mutation, data) => {
-          let agent = loggedUser.agent;
-          let id = loggedUser.id;
-          let email = loggedUser.email |> E.O.default("");
-          let picture = loggedUser.picture |> E.O.default("");
-          let description = loggedUser.description |> E.O.default("");
-          let name =
-            agent
-            |> E.O.bind(_, (r: Types.agent) => r.name)
-            |> E.O.default("");
-
-          withUserForm(
-            id,
-            name,
-            email,
-            picture,
-            description,
-            mutation,
-            ({send, state, getFieldState}) =>
-            CMutationForm.showWithLoading(
-              ~result=data.result,
-              ~form=formFields(state, send, getFieldState),
-              (),
-            )
-          );
-        }}
-      </UserUpdate.Mutation>
+      <Edit id email picture description name />
     </FC.PageCard.BodyPadding>
   </SLayout>;
 };

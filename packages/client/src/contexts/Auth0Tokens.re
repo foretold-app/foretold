@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 open Rationale.Function.Infix;
 
 type access_token = string;

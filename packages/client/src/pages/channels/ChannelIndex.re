@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 [@react.component]
 let make = (~title="") => {
   let head = SLayout.Header.textDiv(title);

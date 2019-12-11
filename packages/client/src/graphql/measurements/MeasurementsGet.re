@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 let toMeasurement = (measurement): Types.measurement => {
   let agentType =
     measurement##agent

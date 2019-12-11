@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 let toAgent = agent => {
   let agentType =
     agent |> E.O.bind(_, Primary.AgentType.getAgentType(~agent=_, ()));

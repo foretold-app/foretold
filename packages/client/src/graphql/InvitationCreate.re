@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 module Query = [%graphql
   {|
     mutation invitationCreate(
@@ -14,16 +12,4 @@ module Query = [%graphql
  |}
 ];
 
-module Mutation = ReasonApollo.CreateMutation(Query);
-
-let mutate =
-    (mutation: Mutation.apolloMutation, email: string, channelId: string) => {
-  let mutate =
-    Query.make(~input={"email": email, "channelId": channelId}, ());
-  mutation(~variables=mutate##variables, ~refetchQueries=[||], ()) |> ignore;
-};
-
-let withMutation = innerComponentFn =>
-  <Mutation onError={e => Js.log2("Graphql Error:", e)}>
-    ...innerComponentFn
-  </Mutation>;
+module Mutation = ReasonApolloHooks.Mutation.Make(Query);

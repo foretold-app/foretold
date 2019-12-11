@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 type error = string;
 
 type jwt = string;

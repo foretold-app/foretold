@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 [@bs.module]
 external reactClass: ReasonReact.reactClass = "antd/lib/input-number";
 

@@ -1,8 +1,5 @@
-[@bs.config {jsx: 3}];
-
 open Utils;
 open MomentRe;
-open Css;
 
 type measurement = Types.measurement;
 type measurable = Types.measurable;
@@ -39,6 +36,7 @@ module Styles = {
 };
 
 module Helpers = {
+  open Css;
   let smallDistribution =
       (
         ~measurement: measurement,

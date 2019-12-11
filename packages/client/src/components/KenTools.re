@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 open BsKen;
 
 module type KenModule = {

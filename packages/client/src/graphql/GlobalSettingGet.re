@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 let toGlobalSetting = a =>
   Primary.GlobalSetting.make(~id=a##id, ~entityGraph=a##entityGraph, ());
 

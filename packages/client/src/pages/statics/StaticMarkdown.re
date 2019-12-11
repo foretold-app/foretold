@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 let privacyPolicy = {js|
 Privacy Policy
 --------------

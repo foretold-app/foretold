@@ -1,15 +1,22 @@
-[@bs.config {jsx: 3}];
-
 module Query = [%graphql
   {|
     query getMeasurablesStateStats ($channelId: String) {
-        openState: measurables(states: [OPEN], channelId: $channelId) {
+        openState: measurables(
+            states: [OPEN],
+            channelId: $channelId
+        ) {
           total
         }
-        closedState: measurables(states: [JUDGED, CLOSED_AS_UNRESOLVED], channelId: $channelId) {
+        closedState: measurables(
+            states: [JUDGED, CLOSED_AS_UNRESOLVED],
+            channelId: $channelId
+        ) {
           total
         }
-        pendingState: measurables(states: [JUDGEMENT_PENDING], channelId: $channelId) {
+        pendingState: measurables(
+            states: [JUDGEMENT_PENDING],
+            channelId: $channelId
+        ) {
           total
         }
     }

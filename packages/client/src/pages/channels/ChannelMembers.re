@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 let changeRoleAction = (agentId, channelId, role, text) =>
   <ChannelMembershipRoleUpdate.Mutation>
     ...{(mutation, _) =>

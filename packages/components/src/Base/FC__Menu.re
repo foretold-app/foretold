@@ -32,7 +32,9 @@ module Styles = {
       outlineStyle(`none),
       borderRadius(menuBorderRadius),
       borderStyle(`none),
-      boxShadow(~x=`zero, ~y=`px(2), ~blur=`px(8), `rgba((0, 0, 0, 0.15))),
+      boxShadows([
+        Shadow.box(~x=zero, ~y=px(2), ~blur=px(8), rgba(0, 0, 0, 0.15)),
+      ]),
       margin(`zero),
       padding2(~v=`px(4), ~h=`zero),
       // This is applied to menu-items, submenu pointers, and dividers

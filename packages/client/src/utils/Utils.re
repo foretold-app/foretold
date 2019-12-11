@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 open Belt.Result;
 
 let resolveRegex = (exp, str) => {
@@ -43,3 +41,5 @@ let doIfSome = (fn, s: option('a)) =>
   | Some(r) => fn(r)
   | _ => ()
   };
+
+[@bs.val] external setTimeout: (unit => unit, int) => float = "setTimeout";

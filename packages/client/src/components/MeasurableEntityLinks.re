@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 module Functor = (Ken: KenTools.KenModule) => {
   let kenDisplay = id => {
     Ken.names(id)

@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 let inMemoryCache = () => ApolloInMemoryCache.createInMemoryCache();
 
 let storageToHeaders = (jwt: ServerJwt.t) =>

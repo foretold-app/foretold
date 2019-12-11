@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 type t = {
   key: string,
   value: string,

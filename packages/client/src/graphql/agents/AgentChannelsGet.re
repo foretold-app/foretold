@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 let toNode = node => {
   let channel = node##channel;
   let agent = node##agent;

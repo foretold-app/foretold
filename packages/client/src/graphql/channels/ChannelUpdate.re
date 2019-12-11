@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 module Query = [%graphql
   {|
             mutation channelUpdate($id: String!, $input: ChannelInput!) {
@@ -10,33 +8,4 @@ module Query = [%graphql
     |}
 ];
 
-module Mutation = ReasonApollo.CreateMutation(Query);
-
-let mutate =
-    (
-      mutation: Mutation.apolloMutation,
-      id,
-      name,
-      description,
-      isPublic,
-      isArchived,
-    ) => {
-  let m =
-    Query.make(
-      ~id,
-      ~input={
-        "name": name |> E.J.fromString,
-        "description": description |> E.J.O.fromString,
-        "isPublic": isPublic,
-        "isArchived": isArchived,
-      },
-      (),
-    );
-
-  mutation(
-    ~variables=m##variables,
-    ~refetchQueries=[|"getChannels", "user", "channel"|],
-    (),
-  )
-  |> ignore;
-};
+module Mutation = ReasonApolloHooks.Mutation.Make(Query);

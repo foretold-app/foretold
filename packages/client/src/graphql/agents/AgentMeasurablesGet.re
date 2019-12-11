@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 let toNode = (marketType, finalComparisonMeasurement, node) => {
   let measurable = node##measurable;
   let agent = node##agent;

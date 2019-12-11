@@ -1,141 +1,174 @@
-[@bs.config {jsx: 3}];
 open Style.Grid;
+open BsReform;
 
-module FormConfig = {
-  type field(_) =
-    | Name: field(string)
-    | Body: field(string);
-
+module FormConfig = [%lenses
   type state = {
     name: string,
     body: string,
-  };
+  }
+];
 
-  let get: type value. (state, field(value)) => value =
-    (state, field) =>
-      switch (field) {
-      | Name => state.name
-      | Body => state.body
-      };
+module Form = ReForm.Make(FormConfig);
 
-  let set: type value. (state, field(value), value) => state =
-    (state, field, value) =>
-      switch (field) {
-      | Name => {...state, name: value}
-      | Body => {...state, body: value}
-      };
+let schema =
+  Form.Validation.Schema([|
+    Custom(
+      Name,
+      values =>
+        Js.String.length(values.name) < 3 ? Error(Lang.atLeast3) : Valid,
+    ),
+    Custom(
+      Body,
+      values =>
+        Js.String.length(values.name) < 3 ? Error(Lang.atLeast3) : Valid,
+    ),
+  |]);
+
+let onSuccess = channelId => {
+  Routing.Url.push(ChannelNotebooks(channelId));
+
+  <Null />;
 };
 
-module Form = ReFormNext.Make(FormConfig);
-
-let testName = str => {
-  Js.String.length(str) > 3;
-};
-
-let testBody = str => {
-  Js.String.length(str) > 3;
-};
-
-let withForm = (onSubmit, notebook: option(Types.notebook), innerComponentFn) => {
-  let initialState: FormConfig.state =
-    switch (notebook) {
-    | Some(notebook) => {name: notebook.name, body: notebook.body}
-    | None => {name: "", body: ""}
+module FormComponent = {
+  [@react.component]
+  let make =
+      (
+        ~channelId: string,
+        ~reform: Form.api,
+        ~result: ReasonApolloHooks.Mutation.controledVariantResult('a),
+      ) => {
+    let onSubmit = event => {
+      ReactEvent.Synthetic.preventDefault(event);
+      reform.submit();
     };
 
-  Form.make(
-    ~initialState,
-    ~onSubmit,
-    ~schema=
-      Form.Validation.Schema([|
-        Custom(
-          Name,
-          values => testName(values.name) ? Valid : Error(Lang.atLeast3),
-        ),
-        Custom(
-          Body,
-          values => testBody(values.body) ? Valid : Error(Lang.atLeast3),
-        ),
-      |]),
-    innerComponentFn,
-  )
-  |> E.React2.el;
-};
+    <Form.Provider value=reform>
+      {switch (result) {
+       | Error(_error) => <p> {"Something went wrong..." |> Utils.ste} </p>
+       | Data(_) => onSuccess(channelId)
+       | _ =>
+         let notebookRedux = NotebookRedux.reducer();
 
-module FormFields = {
-  [@react.component]
-  let make = (~state: Form.state, ~send, ~getFieldState) => {
-    let onSubmit = () => send(Form.Submit);
-
-    let notebookRedux = NotebookRedux.reducer();
-    let stateName = getFieldState(Form.Field(Name));
-    let stateBody = getFieldState(Form.Field(Body));
-
-    let stateForm = state.formState;
-
-    let error = state =>
-      switch (state) {
-      | Form.Error(s) => <AntdAlert message=s type_="warning" />
-      | _ => <Null />
-      };
-
-    let isFormValid =
-      switch (stateName, stateBody) {
-      | (Form.Error(_), _) => false
-      | (_, Form.Error(_)) => false
-      | _ => true
-      };
-
-    let isFormDirty =
-      switch (stateForm) {
-      | Form.Dirty => true
-      | _ => false
-      };
-
-    let isEnabled = isFormValid && isFormDirty;
-
-    <FC__PageCard.BodyPadding>
-      <Antd.Form.Item label={"Name" |> Utils.ste}>
-        <Antd.Input
-          value={state.values.name}
-          onChange={ReForm.Helpers.handleDomFormChange(e =>
-            send(Form.FieldChangeValue(Name, e))
-          )}
-        />
-        {error(stateName)}
-      </Antd.Form.Item>
-      <Div flexDirection=`row>
-        <Div flex={`num(1.)}>
-          <Antd.Input.TextArea
-            style={ReactDOMRe.Style.make(~minHeight="80em", ())}
-            value={state.values.body}
-            onChange={e =>
-              send(
-                Form.FieldChangeValue(
-                  Body,
-                  ReactEvent.Form.target(e)##value,
-                ),
-              )
-            }
-          />
-          {error(stateBody)}
-          <Antd.Form.Item>
-            <Antd.Button
-              _type=`primary onClick={_ => onSubmit()} disabled={!isEnabled}>
-              {"Submit" |> Utils.ste}
-            </Antd.Button>
-          </Antd.Form.Item>
-        </Div>
-        <Div flex={`num(1.)}>
-          <NotebookMarkdown
-            blocks={NotebookMarkdown.markdownToBlocks(state.values.body)}
-            notebookRedux
-          />
-        </Div>
-      </Div>
-    </FC__PageCard.BodyPadding>;
+         <FC__PageCard.BodyPadding>
+           <Form.Field
+             field=FormConfig.Name
+             render={({handleChange, error, value, validate}) =>
+               <Antd.Form.Item label={"Name" |> Utils.ste}>
+                 <Antd.Input
+                   value
+                   onBlur={_ => validate()}
+                   onChange={Helpers.handleChange(handleChange)}
+                 />
+                 <Warning error />
+               </Antd.Form.Item>
+             }
+           />
+           <Div flexDirection=`row>
+             <Div flex={`num(1.)}>
+               <Form.Field
+                 field=FormConfig.Body
+                 render={({handleChange, error, value, validate}) =>
+                   <>
+                     <Antd.Input.TextArea
+                       style={ReactDOMRe.Style.make(~minHeight="80em", ())}
+                       value
+                       onBlur={_ => validate()}
+                       onChange={Helpers.handleChange(handleChange)}
+                     />
+                     <Warning error />
+                   </>
+                 }
+               />
+               <Antd.Form.Item>
+                 <Antd.Button _type=`primary onClick=onSubmit>
+                   {"Submit" |> Utils.ste}
+                 </Antd.Button>
+               </Antd.Form.Item>
+             </Div>
+             <Div flex={`num(1.)}>
+               <NotebookMarkdown
+                 blocks={NotebookMarkdown.markdownToBlocks(
+                   reform.state.values.body,
+                 )}
+                 notebookRedux
+               />
+             </Div>
+           </Div>
+         </FC__PageCard.BodyPadding>;
+       }}
+    </Form.Provider>;
   };
 };
 
-let formFields = (state: Form.state, send, getFieldState) =>
-  <FormFields state send getFieldState />;
+module Create = {
+  [@react.component]
+  let make = (~channelId: string) => {
+    let (mutate, result, _) = NotebookCreateMutation.Mutation.use();
+
+    let reform =
+      Form.use(
+        ~validationStrategy=OnDemand,
+        ~schema,
+        ~onSubmit=
+          ({state}) => {
+            mutate(
+              ~variables=
+                NotebookCreateMutation.Query.make(
+                  ~input={
+                    "channelId": channelId |> E.J.fromString,
+                    "name": state.values.name |> E.J.fromString,
+                    "body": state.values.body |> E.J.fromString,
+                  },
+                  (),
+                )##variables,
+              ~refetchQueries=[|"getNotebooks"|],
+              (),
+            )
+            |> ignore;
+
+            None;
+          },
+        ~initialState={name: "", body: ""},
+        (),
+      );
+
+    <FormComponent reform result channelId />;
+  };
+};
+
+module Edit = {
+  [@react.component]
+  let make = (~notebook: Types.notebook) => {
+    let (mutate, result, _) = NotebookUpdateMutation.Mutation.use();
+
+    let reform =
+      Form.use(
+        ~validationStrategy=OnDemand,
+        ~schema,
+        ~onSubmit=
+          ({state}) => {
+            mutate(
+              ~variables=
+                NotebookUpdateMutation.Query.make(
+                  ~id=notebook.id,
+                  ~input={
+                    "name": state.values.name |> E.J.fromString,
+                    "body": state.values.body |> E.J.fromString,
+                  },
+                  (),
+                )##variables,
+              ~refetchQueries=[|"getNotebook"|],
+              (),
+            )
+            |> ignore;
+
+            None;
+          },
+        ~initialState={name: notebook.name, body: notebook.body},
+        (),
+      );
+
+    <FormComponent reform result channelId={notebook.channelId} />;
+  };
+};

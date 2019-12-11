@@ -1,8 +1,8 @@
-[@bs.config {jsx: 3}];
-
 module Query = [%graphql
   {|
-            mutation channelMembershipDelete($input: ChannelMembershipDeleteInput!) {
+            mutation channelMembershipDelete(
+                $input: ChannelMembershipDeleteInput!
+            ) {
                 channelMembershipDelete(input: $input) {
                  agentId
                 }

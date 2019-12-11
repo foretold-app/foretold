@@ -1,117 +1,105 @@
-[@bs.config {jsx: 3}];
+open BsReform;
 
-open Antd;
+module FormConfig = [%lenses type state = {email: string}];
 
-module Config = {
-  type field(_) =
-    | Email: field(string);
+module Form = ReForm.Make(FormConfig);
 
-  type state = {email: string};
-
-  let get: type value. (state, field(value)) => value =
-    (state, field) =>
-      switch (field) {
-      | Email => state.email
-      };
-
-  let set: type value. (state, field(value), value) => state =
-    (state, field, value) =>
-      switch (field) {
-      | Email => {...state, email: value}
-      };
-};
-
-module Form = ReFormNext.Make(Config);
-
-let withForm = (channelId, email, mutation, innerComponentFn) =>
-  Form.make(
-    ~initialState={email: email},
-    ~onSubmitFail=ignore,
-    ~onSubmit=
+let schema =
+  Form.Validation.Schema([|
+    Email(Email),
+    Custom(
+      Email,
       values =>
-        InvitationCreate.mutate(
-          mutation,
-          values.state.values.email,
-          channelId,
-        ),
-    ~schema={
-      Form.Validation.Schema([|Email(Email)|]);
-    },
-    innerComponentFn,
-  )
-  |> E.React2.el;
+        Js.String.length(values.email) > 64
+          ? ReSchema.Error("Keep it short!") : Valid,
+    ),
+    Custom(
+      Email,
+      values =>
+        Js.String.length(values.email) < 3
+          ? Error("The name too short.") : Valid,
+    ),
+  |]);
 
-let fields = (form: Form.state, send, onSubmit, getFieldState) => {
-  let stateEmail: Form.fieldState = getFieldState(Form.Field(Email));
-
-  let error = state =>
-    switch (state) {
-    | Form.Error(s) => <AntdAlert message=s type_="warning" />
-    | _ => <Null />
+module FormComponent = {
+  [@react.component]
+  let make =
+      (
+        ~reform: Form.api,
+        ~result: ReasonApolloHooks.Mutation.controledVariantResult('a),
+      ) => {
+    let onSubmit = event => {
+      ReactEvent.Synthetic.preventDefault(event);
+      reform.submit();
     };
 
-  let isFormValid =
-    switch (stateEmail) {
-    | Form.Valid => true
-    | Form.Pristine => false
-    | _ => false
-    };
-
-  <Antd.Form onSubmit={e => onSubmit()}>
-    <Antd.Form.Item label={"Email*" |> Utils.ste}>
-      <AntdInput
-        value={form.values.email}
-        onChange={ReForm.Helpers.handleDomFormChange(e =>
-          send(Form.FieldChangeValue(Email, e))
-        )}
-      />
-      {error(stateEmail)}
-    </Antd.Form.Item>
-    <Antd.Form.Item>
-      <Button
-        _type=`primary
-        onClick={_ => onSubmit()}
-        icon=Antd.IconName.usergroupAdd
-        disabled={!isFormValid}>
-        {"Email an Invitation" |> Utils.ste}
-      </Button>
-    </Antd.Form.Item>
-  </Antd.Form>;
+    <Form.Provider value=reform>
+      {switch (result) {
+       | Error(_error) => <p> {"Something went wrong..." |> Utils.ste} </p>
+       | Data(_) => <AntdAlert message=Lang.memberInvited type_="success" />
+       | _ =>
+         <Antd.Form onSubmit>
+           <Form.Field
+             field=FormConfig.Email
+             render={({handleChange, error, value}) =>
+               <Antd.Form.Item label={"Email*" |> Utils.ste}>
+                 <Antd.Input
+                   value
+                   onChange={Helpers.handleChange(handleChange)}
+                 />
+                 <Warning error />
+               </Antd.Form.Item>
+             }
+           />
+           <Antd.Form.Item>
+             <Antd.Button
+               _type=`primary onClick=onSubmit icon=Antd.IconName.usergroupAdd>
+               {"Email an Invitation" |> Utils.ste}
+             </Antd.Button>
+           </Antd.Form.Item>
+         </Antd.Form>
+       }}
+    </Form.Provider>;
+  };
 };
 
-module CMutationForm =
-  MutationForm.Make({
-    type queryType = InvitationCreate.Query.t;
-  });
+module Create = {
+  [@react.component]
+  let make = (~channelId) => {
+    let (mutate, result, _) = InvitationCreate.Mutation.use();
+
+    let reform =
+      Form.use(
+        ~validationStrategy=OnDemand,
+        ~schema,
+        ~onSubmit=
+          ({state}) => {
+            mutate(
+              ~variables=
+                InvitationCreate.Query.make(
+                  ~input={
+                    "email": state.values.email,
+                    "channelId": channelId,
+                  },
+                  (),
+                )##variables,
+              (),
+            )
+            |> ignore;
+
+            None;
+          },
+        ~initialState={email: ""},
+        (),
+      );
+
+    <FormComponent reform result />;
+  };
+};
 
 [@react.component]
 let make = (~channelId: string) => {
   <SLayout head={SLayout.Header.textDiv("Invite Member")}>
-    <FC.PageCard.BodyPadding>
-      {InvitationCreate.withMutation((mutation, data) =>
-         withForm(
-           channelId,
-           "",
-           mutation,
-           ({send, state, getFieldState}) => {
-             let form =
-               fields(state, send, () => send(Form.Submit), getFieldState);
-
-             let onSuccess = _ =>
-               <>
-                 <AntdAlert message=Lang.memberInvited type_="success" />
-                 form
-               </>;
-
-             CMutationForm.showWithLoading2(
-               ~result=data.result,
-               ~form,
-               ~onSuccess,
-               (),
-             );
-           },
-         )
-       )}
-    </FC.PageCard.BodyPadding>
+    <FC.PageCard.BodyPadding> <Create channelId /> </FC.PageCard.BodyPadding>
   </SLayout>;
 };

@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 module Columns = {
   type record = Types.channel;
   type column = Table.column(Types.channel);

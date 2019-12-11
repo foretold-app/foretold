@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 open Utils;
 
 let documentationUrl = "https://docs.foretold.io/";

@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 module UrlToAuth0Tokens = {
   // Always use fresh RegExp objects
   let matchAccessToken = () => [%re "/access_token=([^\$&]+)/g"];

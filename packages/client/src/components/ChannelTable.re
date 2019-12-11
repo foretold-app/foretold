@@ -45,7 +45,8 @@ module Columns = {
     Table.Column.make(
       ~name="Curation" |> Utils.ste,
       ~render=
-        (channel: record) => <> <Curated channel /> <Curated channel /> </>,
+        (channel: record) =>
+          <> <Curated channel /> <IsArchived channel /> </>,
       ~show=(channel: record) => channel.isCurated || channel.isArchived,
       (),
     );

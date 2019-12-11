@@ -41,7 +41,7 @@ module FieldString = {
             onChange={BsReform.Helpers.handleChange(handleChange)}
             onBlur={_ => validate()}
           />
-          <p> {error->Belt.Option.getWithDefault("") |> Utils.ste} </p>
+          <Warning error />
         </Antd.Form.Item>
       }
     />;

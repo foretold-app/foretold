@@ -121,10 +121,7 @@ module FormComponent = {
                             onBlur={_ => validate()}
                             onChange={Helpers.handleChange(handleChange)}
                           />
-                          <p>
-                            {error->Belt.Option.getWithDefault("")
-                             |> Utils.ste}
-                          </p>
+                          <Warning error />
                         </Antd.Form.Item>
                       }
                     />,

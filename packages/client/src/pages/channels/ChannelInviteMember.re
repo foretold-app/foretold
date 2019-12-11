@@ -47,13 +47,7 @@ module FormComponent = {
                    value
                    onChange={Helpers.handleChange(handleChange)}
                  />
-                 {E.React2.showIf(
-                    error->Belt.Option.getWithDefault("") != "",
-                    <AntdAlert
-                      message={error->Belt.Option.getWithDefault("")}
-                      type_="warning"
-                    />,
-                  )}
+                 <Warning error />
                </Antd.Form.Item>
              }
            />

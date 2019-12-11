@@ -60,9 +60,7 @@ module FormComponent = {
                    onBlur={_ => validate()}
                    onChange={Helpers.handleChange(handleChange)}
                  />
-                 <p>
-                   {error->Belt.Option.getWithDefault("")->React.string}
-                 </p>
+                 <Warning error />
                </Antd.Form.Item>
              }
            />
@@ -78,9 +76,7 @@ module FormComponent = {
                        onBlur={_ => validate()}
                        onChange={Helpers.handleChange(handleChange)}
                      />
-                     <p>
-                       {error->Belt.Option.getWithDefault("")->React.string}
-                     </p>
+                     <Warning error />
                    </>
                  }
                />

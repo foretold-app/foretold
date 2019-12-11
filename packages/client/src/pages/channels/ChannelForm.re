@@ -61,7 +61,7 @@ module FormComponent = {
                    value
                    onChange={Helpers.handleChange(handleChange)}
                  />
-                 <p> {error->Belt.Option.getWithDefault("") |> Utils.ste} </p>
+                 <Warning error />
                </Antd.Form.Item>
              }
            />
@@ -76,7 +76,7 @@ module FormComponent = {
                    style={ReactDOMRe.Style.make(~minHeight="30em", ())}
                    onChange={Helpers.handleChange(handleChange)}
                  />
-                 <p> {error->Belt.Option.getWithDefault("") |> Utils.ste} </p>
+                 <Warning error />
                </Antd.Form.Item>
              }
            />
@@ -88,7 +88,7 @@ module FormComponent = {
                    checked={value == "TRUE"}
                    onChange={e => handleChange(e ? "TRUE" : "FALSE")}
                  />
-                 <p> {error->Belt.Option.getWithDefault("") |> Utils.ste} </p>
+                 <Warning error />
                </Antd.Form.Item>
              }
            />
@@ -102,9 +102,7 @@ module FormComponent = {
                       checked={value == "TRUE"}
                       onChange={e => handleChange(e ? "TRUE" : "FALSE")}
                     />
-                    <p>
-                      {error->Belt.Option.getWithDefault("") |> Utils.ste}
-                    </p>
+                    <Warning error />
                   </Antd.Form.Item>
                 }
               />,

@@ -2431,20 +2431,20 @@ bs-css@11.0.0:
   dependencies:
     emotion "^10.0.7"
 
-bs-ken@0.0.6:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/bs-ken/-/bs-ken-0.0.6.tgz#d1490da4536c2f9545bafc4bed11fde4e5bfbc18"
-  integrity sha512-ji+fWNM8brkUoT+QoGqdStj2I2LEieSaiOo+jax9rpmedn7pgPUrFCYMZkh5d0zoBWdM0GZnfRjeshPkvM44uA==
+bs-ken@0.0.7:
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/bs-ken/-/bs-ken-0.0.7.tgz#274dbef74a9f6eaecda5633e3fe18dfafc73fb51"
+  integrity sha512-wIrTrI9fuAQf55Z6dPf+ntSO58K0oMA8U5c8skga/w7QFdOMnjBqQx1ydmN14GoZjM47D5gZTkK+v1yAsd56OA==
   dependencies:
     "@glennsl/bs-jest" "^0.4.2"
     "@glennsl/bs-json" "^3.0.0"
     "@ncthbrt/re-secure-random-string" "^2.0.0"
     bs-platform "^4.0.8"
     gentype "^1.6.1"
-    lodash "^4.17.11"
+    lodash "^4.17.15"
     parcel "^1.12.3"
     ramda "^0.26.1"
-    rationale "^0.1.10"
+    rationale "^0.2.0"
 
 bs-moment@0.4.4, bs-moment@^0.4.4:
   version "0.4.4"
@@ -7642,10 +7642,10 @@ range-parser@~1.2.1:
   resolved "https://registry.yarnpkg.com/range-parser/-/range-parser-1.2.1.tgz#3cf37023d199e1c24d1a55b84800c2f3e6468031"
   integrity sha512-Hrgsx+orqoygnmhFbKaHE6c296J+HTAQXoxEF6gNupROmmGJRoyzfG3ccAveqCBrwr/2yxQ5BVd/GTl5agOwSg==
 
-rationale@0.1.10, rationale@^0.1.10:
-  version "0.1.10"
-  resolved "https://registry.yarnpkg.com/rationale/-/rationale-0.1.10.tgz#a14567d3eea7facaba0ed35d68ef2127fdd861d7"
-  integrity sha512-WMBpRHHjhY4AA8BtboQsA5voL2dQXhbtX0C/F4HYOGFZDZz5gbUfZVs22Sc4FqyvpJoT/1A+PhcpOvefnKKxJQ==
+rationale@0.2.0, rationale@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/rationale/-/rationale-0.2.0.tgz#555ed4f3cc7cd0245faeac041d3769f1857e4f3d"
+  integrity sha512-Pd8w5Inv1JhTfRyx03zs486CEAn6UKXvvOtxVRLsewngsBSffo3MQwUKYS75L/8vPt98wmf7iaZROx362/f7Bw==
 
 rc-align@^2.4.0, rc-align@^2.4.1:
   version "2.4.5"

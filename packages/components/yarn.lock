@@ -4994,10 +4994,10 @@ range-parser@~1.2.0:
   resolved "https://registry.yarnpkg.com/range-parser/-/range-parser-1.2.0.tgz#f49be6b487894ddc40dcc94a322f611092e00d5e"
   integrity sha1-9JvmtIeJTdxA3MlKMi9hEJLgDV4=
 
-rationale@0.1.10:
-  version "0.1.10"
-  resolved "https://registry.yarnpkg.com/rationale/-/rationale-0.1.10.tgz#a14567d3eea7facaba0ed35d68ef2127fdd861d7"
-  integrity sha512-WMBpRHHjhY4AA8BtboQsA5voL2dQXhbtX0C/F4HYOGFZDZz5gbUfZVs22Sc4FqyvpJoT/1A+PhcpOvefnKKxJQ==
+rationale@0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/rationale/-/rationale-0.2.0.tgz#555ed4f3cc7cd0245faeac041d3769f1857e4f3d"
+  integrity sha512-Pd8w5Inv1JhTfRyx03zs486CEAn6UKXvvOtxVRLsewngsBSffo3MQwUKYS75L/8vPt98wmf7iaZROx362/f7Bw==
 
 rc-align@^2.4.0:
   version "2.4.5"

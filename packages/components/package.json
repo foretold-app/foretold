@@ -28,7 +28,7 @@
         "@foretold/guesstimator": "1.0.1",
         "lodash": "4.17.15",
         "moment": "2.24.0",
-        "rationale": "0.1.10",
+        "rationale": "0.2.0",
         "rc-menu": "7.4.20",
         "rc-dropdown": "2.4.1",
         "bs-platform": "5.0.6",

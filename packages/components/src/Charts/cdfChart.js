@@ -60,10 +60,10 @@ class CdfChart extends React.Component {
    * @returns {*}
    */
   render() {
-    return <div
-      id={this.state.divId}
-      style={this.props.width ? { width: this.props.width + "px" } : {}}
-    />
+    return React.createElement("div", {
+      id: this.state.divId,
+      style: this.props.width ? { width: this.props.width + "px" } : {}
+    });
   }
 }
 

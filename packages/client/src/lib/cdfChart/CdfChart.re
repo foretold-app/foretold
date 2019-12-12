@@ -1,4 +1,4 @@
-[@bs.module "./cdfChart.js"]
+[@bs.module "@foretold/components/src/Charts/cdfChart.js"]
 external cdfChart: ReasonReact.reactClass = "default";
 
 type data = {

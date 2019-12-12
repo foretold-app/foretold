@@ -100,7 +100,10 @@ let make =
       <div className=Styles.sections>
         <div className=Styles.element> logo </div>
         <ul className=Styles.items>
-          {links->Belt.Array.map(item => <li> item </li>) |> ReasonReact.array}
+          {links->Belt.Array.mapWithIndex((index, item) =>
+             <li key={"footer-li-" ++ string_of_int(index)}> item </li>
+           )
+           |> ReasonReact.array}
         </ul>
       </div>
     </div>

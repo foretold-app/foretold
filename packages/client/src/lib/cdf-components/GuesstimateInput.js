@@ -111,8 +111,7 @@ export class GuesstimateInput extends React.Component {
     } else if (values.length === 1) {
       this.props.onUpdate([[1], values, false]);
     } else {
-      const min = this.props.min;
-      const max = this.props.max;
+      const { min, max } = this.props;
       this.props.onUpdate(toCdf(values, min, max));
     }
 

@@ -1,5 +1,9 @@
 import _ from 'lodash';
 
+/**
+ * @param value
+ * @returns {number[]}
+ */
 export function formatData(value) {
   return value
     .replace(/[\[\]]/g, '')

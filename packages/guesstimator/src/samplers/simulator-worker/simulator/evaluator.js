@@ -44,15 +44,24 @@ math.import(Filters, { override: true });
 // Multimodals
 math.import(Multimodals, { override: true });
 
-// All of jStat's functions are impure as they require sampling on pure inputs.
-export const STOCHASTIC_FUNCTIONS = ['pickRandom', 'randomInt', 'random'].concat(Object.keys(Distributions))
+// All of jStat's functions are impure
+// as they require sampling on pure inputs.
+export const STOCHASTIC_FUNCTIONS = ['pickRandom', 'randomInt', 'random']
+  .concat(Object.keys(Distributions))
   .concat(Object.keys(ImpureConstructs))
   .concat(Object.keys(Multimodals));
 
+/**
+ * @todo: Rename to "evaluate"
+ * @param text
+ * @param sampleCount
+ * @param inputs
+ * @returns {*}
+ * @constructor
+ */
 export function Evaluate(text, sampleCount, inputs) {
   try {
     const compiled = math.compile(text);
-
     return evaluate(compiled, inputs, sampleCount, text);
   } catch ({ message }) {
     if (message.startsWith('Unexpected end of expression')) {
@@ -68,6 +77,11 @@ export function Evaluate(text, sampleCount, inputs) {
   }
 }
 
+/**
+ * @param inputs
+ * @param i
+ * @returns {{}}
+ */
 function sampleInputs(inputs, i) {
   const sample = {};
   for (let key of Object.keys(inputs)) {
@@ -76,21 +90,31 @@ function sampleInputs(inputs, i) {
   return sample;
 }
 
+/**
+ * @param compiled
+ * @param inputs
+ * @param n
+ * @param text
+ * @returns {{values: [], errors: [{rawError: *, type: number}]}}
+ */
 function evaluate(compiled, inputs, n, text) {
   let values = [];
   let errors = [];
   let anyNotFiltered = false;
 
-  for (var i = 0; i < n; i++) {
+  for (let i = 0; i < n; i++) {
     const sampledInputs = sampleInputs(inputs, i);
     const someInputFiltered = _.some(sampledInputs, val => _.isEqual(val, SAMPLE_FILTERED));
     let newSample = NaN;
-    try {
-      newSample = someInputFiltered ? SAMPLE_FILTERED : compiled.eval(sampledInputs);
 
+    try {
+      newSample = someInputFiltered
+        ? SAMPLE_FILTERED
+        : compiled.eval(sampledInputs);
     } catch (rawError) {
       const isUnexpectedTypeError = rawError.message.includes('Unexpected type of argument in function');
       const containsFilterFn = _.some(Object.keys(Filters), f => text.includes(f));
+
       if (isUnexpectedTypeError && containsFilterFn) {
         newSample = SAMPLE_FILTERED;
       } else {
@@ -126,9 +150,18 @@ function evaluate(compiled, inputs, n, text) {
 
   errors = _.uniq(errors);
 
-  return anyNotFiltered ? { values, errors } : {
-    values: [], errors: [...errors, {
-      type: SAMPLING_ERROR, subType: ALL_SAMPLES_FILTERED_ERROR
-    }]
-  };
+  return anyNotFiltered
+    ? {
+      values,
+      errors,
+    }
+    : {
+      values: [],
+      errors: [
+        ...errors, {
+          type: SAMPLING_ERROR,
+          subType: ALL_SAMPLES_FILTERED_ERROR
+        },
+      ]
+    };
 }

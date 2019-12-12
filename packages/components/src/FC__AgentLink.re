@@ -79,8 +79,7 @@ module SubItem = {
         {owner
          |> FC__E.O.React.fmapOrNull(owner =>
               <div className=Styles.ownerAvatarOuter>
-                <FC__Link
-                  onClick={Agent.onClick(agent)} className=Styles.ownerAvatar>
+                <div className=Styles.ownerAvatar>
                   <FC__Avatar
                     width=0.8
                     src={
@@ -88,7 +87,7 @@ module SubItem = {
                       |> Rationale.Option.default(BotDefaultImage.botDefault)
                     }
                   />
-                </FC__Link>
+                </div>
               </div>
             )}
       </div>

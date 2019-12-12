@@ -1,16 +1,27 @@
 import React from 'react';
 import chart from "./cdfChartd3"
 
+/**
+ * @param min
+ * @param max
+ * @returns {number}
+ */
 function getRandomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-// Example input: {xs: [50,100,300,400,500,600], ys: [0.1, 0.4, 0.6, 0.7,0.8, 0.9]}}
+/**
+ * Example input:
+ * {
+ * xs: [50,100,300,400,500,600],
+ * ys: [0.1, 0.4, 0.6, 0.7,0.8, 0.9]}
+ * }
+ */
 class CdfChart extends React.Component {
   constructor(props){
-    super(props)
+    super(props);
     this.state = {
       divId: "chart-" + getRandomInt(0,100000)
     }
@@ -24,8 +35,10 @@ class CdfChart extends React.Component {
     this.drawChart();
   }
 
+  /**
+   * TODO: Fix for log when minX is 0;
+   */
   drawChart() {
-    // TODO: Fix for log when minX is 0;
     var _chart = chart()
       .svgHeight(this.props.height)
       .maxX(this.props.maxX)

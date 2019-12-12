@@ -49,7 +49,7 @@ function chart() {
 
     var linePath, areaPath;
     var dataPoints = [
-      getDatapoints('primary')
+      getDatapoints('primary'),
     ];
 
     //Scales
@@ -58,7 +58,8 @@ function chart() {
     var xMin = d3.min(attrs.data.primary.xs);
     var xMax = d3.max(attrs.data.primary.xs);
     if (attrs.scale === 'linear') {
-      xScale = d3.scaleLinear().domain([attrs.minX || xMin, attrs.maxX || xMax])
+      xScale = d3.scaleLinear()
+        .domain([attrs.minX || xMin, attrs.maxX || xMax])
         .range([0, calc.chartWidth]);
     } else {
       xScale = d3.scaleLog()
@@ -68,8 +69,7 @@ function chart() {
 
     var yMin = d3.min(attrs.data.primary.ys);
     var yMax = d3.max(attrs.data.primary.ys);
-    var yScale = d3.scaleLinear().domain([yMin, yMax])
-      .range([calc.chartHeight, 0]);
+    var yScale = d3.scaleLinear().domain([yMin, yMax]).range([calc.chartHeight, 0]);
 
     //Axis generator
     var xAxis = d3.axisBottom(xScale).ticks(5);
@@ -78,8 +78,8 @@ function chart() {
       xAxis
         .ticks(5)
         .tickFormat(d => {
-          return d3.format(".1f")(d);
-        });
+          return d3.format(".1f")(d)
+        })
     }
 
     //Line generator
@@ -103,15 +103,17 @@ function chart() {
     //Add hover text
     var hoverText = container.patternify({
       tag: 'div',
-      selector: 'hover-text',
+      selector: 'hover-text'
     });
+
     var hoverTextY = hoverText.patternify({
       tag: 'div',
-      selector: 'hover-text-y',
+      selector: 'hover-text-y'
     });
+
     var hoverTextX = hoverText.patternify({
       tag: 'div',
-      selector: 'hover-text-x',
+      selector: 'hover-text-x'
     });
 
     //Add svg
@@ -124,10 +126,7 @@ function chart() {
     //Add container g element
     var chart = svg
       .patternify({ tag: 'g', selector: 'chart' })
-      .attr(
-        'transform',
-        'translate(' + calc.chartLeftMargin + ',' + calc.chartTopMargin + ')',
-      );
+      .attr('transform', 'translate(' + calc.chartLeftMargin + ',' + calc.chartTopMargin + ')');
 
     //Add axis
     chart.patternify({ tag: 'g', selector: 'axis' })
@@ -144,7 +143,7 @@ function chart() {
       .attr('d', area)
       .attr('fill', (d, i) => areaColor(i))
       .attr('opacity', (d, i) => {
-        return i === 0 ? 0.7 : 1;
+        return i === 0 ? 0.7 : 1
       });
 
     //Draw line
@@ -158,7 +157,7 @@ function chart() {
         .attr('d', line)
         .attr('id', (d, i) => 'line-' + (i + 1))
         .attr('opacity', (d, i) => {
-          return i === 0 ? 0.7 : 1;
+          return i === 0 ? 0.7 : 1
         })
         .attr('fill', 'none');
     }
@@ -192,10 +191,11 @@ function chart() {
       .attr('pointer-events', 'all')
       .on('mouseover', mouseover)
       .on('mousemove', mouseover)
-      .on('mouseout', mouseout);
+      .on('mouseout', mouseout)
 
     // Smoothly handle data updating
     updateData = function () {
+
     };
 
     getData = function () {
@@ -227,6 +227,10 @@ function chart() {
       hoverLine.attr('opacity', 0)
     }
 
+    /**
+     * @param key
+     * @returns {[]}
+     */
     function getDatapoints(key) {
       var dt = [];
       var data = attrs.data[key];
@@ -242,6 +246,11 @@ function chart() {
       return dt;
     }
 
+    /**
+     * @param path
+     * @param xCoord
+     * @returns {number}
+     */
     function getCircleYCoord(path, xCoord) {
       var beginning = 0,
         end = path.node().getTotalLength(),
@@ -254,15 +263,15 @@ function chart() {
         if ((target === end || target === beginning) && pos.x !== xCoord) {
           break;
         }
+        //position found
         if (pos.x > xCoord) end = target;
         else if (pos.x < xCoord) beginning = target;
-        else break; //position found
+        else break;
       }
 
       return pos.y;
     }
 
-    // Util functions
     d3.select(window).on('resize.' + attrs.id, function () {
       var containerRect = container.node().getBoundingClientRect();
       if (containerRect.width > 0) attrs.svgWidth = containerRect.width;
@@ -285,7 +294,6 @@ function chart() {
       }
       return i;
     });
-
     selection.exit().remove();
     selection = selection.enter().append(elementTag).merge(selection);
     selection.attr('class', selector);

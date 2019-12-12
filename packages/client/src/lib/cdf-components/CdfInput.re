@@ -178,10 +178,13 @@ module BotsSelect = {
         value={state.asAgent}
         onChange={e => send(UpdateAsAgent(e))}
         className=Styles.fullWidth>
-        <Antd.Select.Option value=""> {name |> ste} </Antd.Select.Option>
+        <Antd.Select.Option value="" key="bot--1">
+          {name |> ste}
+        </Antd.Select.Option>
         {bots
-         |> Array.map((bot: Types.bot) =>
+         |> Array.mapi((index, bot: Types.bot) =>
               <Antd.Select.Option
+                key={"bot" ++ string_of_int(index)}
                 value={
                   bot.agent
                   |> E.O.fmap((agent: Types.agent) => agent.id)

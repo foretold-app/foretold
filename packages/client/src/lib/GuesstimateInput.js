@@ -3,7 +3,7 @@ import _ from "lodash";
 import { Input } from "antd";
 
 import { Guesstimator } from '@foretold/guesstimator';
-import { Samples, Cdf } from "../../../../cdf";
+import { Samples, Cdf } from "@foretold/cdf";
 
 /**
  *

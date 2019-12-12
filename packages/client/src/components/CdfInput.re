@@ -80,7 +80,7 @@ module CompetitorTypeSelect = {
 
 module DataTypeSelect = {
   [@react.component]
-  let short = (~state, ~send) =>
+  let make = (~state, ~send) =>
     <Antd.Select
       value={state.dataType}
       onChange={e => send(UpdateDataType(e))}
@@ -90,20 +90,6 @@ module DataTypeSelect = {
       </Antd.Select.Option>
       <Antd.Select.Option value="PERCENTAGE_FLOAT">
         {"Predicted Percentage Chance" |> ste}
-      </Antd.Select.Option>
-    </Antd.Select>;
-
-  [@react.component]
-  let make = (~state, ~send) =>
-    <Antd.Select
-      value={state.dataType}
-      onChange={e => send(UpdateDataType(e))}
-      className=Styles.fullWidth>
-      <Antd.Select.Option value="FLOAT_CDF">
-        {"Distribution" |> ste}
-      </Antd.Select.Option>
-      <Antd.Select.Option value="FLOAT_POINT">
-        {"Exact Value" |> ste}
       </Antd.Select.Option>
     </Antd.Select>;
 };
@@ -157,8 +143,8 @@ let getValueFromState = (state): MeasurementValue.t =>
       state.unresolvableResolution
       |> MeasurementValue.UnresolvableResolution.fromString,
     )
-  | "COMMENT" =>
-    `Comment(state.comment |> MeasurementValue.Comment.fromString)
+  | "COMMENT"
+  | _ => `Comment(state.comment |> MeasurementValue.Comment.fromString)
   };
 
 module BotsSelect = {
@@ -200,7 +186,7 @@ module BotsSelect = {
 };
 
 module ValueInput = {
-  let floatPoint = (measurable: Types.measurable, send) => {
+  let guesstimateInput = (measurable: Types.measurable, send) => {
     let toGuesstimateInputs = ((ys, xs)): GuesstimateInput.input => {
       "name": "AG",
       "xs": xs,
@@ -227,10 +213,16 @@ module ValueInput = {
       min={measurable.min}
       max={measurable.max}
       inputs
-      onUpdate={event =>
+      onUpdate={(event, sampler) =>
         {
           let (ys, xs, hasLimitError) = event;
           let asGroup: FloatCdf.t = {xs, ys};
+
+          switch (sampler##isRangeDistribution) {
+          | true => send(UpdateDataType("FLOAT_CDF"))
+          | _ => send(UpdateDataType("FLOAT_POINT"))
+          };
+
           send(UpdateHasLimitError(hasLimitError));
           send(UpdateFloatPdf(asGroup));
         }
@@ -343,7 +335,7 @@ module ValueInputMapper = {
             styles=[
               Css.(style([width(Css.Calc.(`percent(100.0) - `em(2.2)))])),
             ]>
-            {ValueInput.floatPoint(measurable, send)}
+            {ValueInput.guesstimateInput(measurable, send)}
           </Div>
           <Div float=`left styles=[Css.(style([width(`em(2.2))]))]>
             <span
@@ -427,18 +419,14 @@ module Main = {
       ) => {
     let isValid = getIsValid(state);
 
-    let getDataTypeSelect =
+    let dataTypeSelect =
       switch (state.competitorType, measurable.valueType) {
-      | ("OBJECTIVE", `FLOAT | `DATE) =>
-        <div className=Styles.select> <DataTypeSelect state send /> </div>
       | ("OBJECTIVE", `PERCENTAGE) =>
-        <div className=Styles.select>
-          <DataTypeSelect.short state send />
-        </div>
+        <div className=Styles.select> <DataTypeSelect state send /> </div>
       | _ => <Null />
       };
 
-    let getBotSelect =
+    let botSelect =
       switch (bots) {
       | Some([||])
       | None => <Null />
@@ -468,7 +456,7 @@ module Main = {
         <div className=Styles.select>
           <CompetitorTypeSelect isOwner=isCreator state send measurable />
         </div>
-        getDataTypeSelect
+        dataTypeSelect
         <ValueInputMapper state measurable send loggedUser />
         <Antd.Input.TextArea
           value={state.description}
@@ -478,7 +466,7 @@ module Main = {
             send(UpdateDescription(value));
           }}
         />
-        {Primary.User.show(loggedUser, getBotSelect)}
+        {Primary.User.show(loggedUser, botSelect)}
         <div className=Styles.submitButton>
           <Antd.Button
             _type=`primary onClick={_ => onSubmit()} disabled={!isValid}>
@@ -500,7 +488,7 @@ let make =
       ~measurable: Types.measurable,
       ~bots: option(array(Types.bot)),
       ~loggedUser: Types.user,
-      ~defaultValueText="sdfsdf",
+      ~defaultValueText="",
     ) => {
   let competitorTypeInitValue =
     Primary.CompetitorType.competitorTypeInitValue(

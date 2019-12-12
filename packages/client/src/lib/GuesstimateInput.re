@@ -5,8 +5,16 @@ type input = {
   "ys": array(float),
 };
 
-let fn = (a: (array(float), array(float), bool)) => ();
-let fn2 = (a: string) => ();
+type sampler = {
+  .
+  "isRangeDistribution": bool,
+  "referenceName": string,
+  "displayName": string,
+  "types": array(string),
+};
+
+let onUpdate = (_a: (array(float), array(float), bool), _b: sampler) => ();
+let onChange = (_a: string) => ();
 
 [@bs.module "./GuesstimateInput.js"]
 external guesstimateInput: ReasonReact.reactClass = "GuesstimateInput";
@@ -18,8 +26,8 @@ let make =
       ~min=None,
       ~max=None,
       ~inputs: array(input)=[||],
-      ~onUpdate=fn,
-      ~onChange=fn2,
+      ~onUpdate=onUpdate,
+      ~onChange=onChange,
       ~focusOnRender=true,
       ~children=<Null />,
     ) =>

@@ -49,7 +49,7 @@ async function update(_root, args, _context, _info) {
  * @param {Models.AgentID} args.id
  * @param {Schema.Context} _context
  * @param {object} _info
- * @returns {Promise<Models.User>}
+ * @returns {Promise<boolean>}
  */
 async function subscribe(_root, args, _context, _info) {
   const agentId = _.get(args, 'agentId', null);
@@ -62,7 +62,7 @@ async function subscribe(_root, args, _context, _info) {
  * @param {Models.AgentID} args.id
  * @param {Schema.Context} _context
  * @param {object} _info
- * @returns {Promise<Models.User>}
+ * @returns {Promise<boolean>}
  */
 async function unsubscribe(_root, args, _context, _info) {
   const agentId = _.get(args, 'agentId', null);

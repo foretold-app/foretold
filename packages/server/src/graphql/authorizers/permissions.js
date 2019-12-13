@@ -162,6 +162,14 @@ const rules = {
       currentAgentIsAuthenticated,
       preferenceIsOwnedByCurrentAgent,
     ),
+    subscribe: and(
+      currentAgentIsAuthenticated,
+      preferenceIsOwnedByCurrentAgent,
+    ),
+    unsubscribe: and(
+      currentAgentIsAuthenticated,
+      preferenceIsOwnedByCurrentAgent,
+    ),
     seriesCreate: and(
       currentAgentIsAuthenticated,
       or(

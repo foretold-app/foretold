@@ -1,5 +1,5 @@
 const { DataBase } = require('./data-base');
-const { Params, Query, Data } = require('./classes');
+const { Params, Query, Data, Options } = require('./classes');
 
 const { PreferenceModel } = require('../models-abstract');
 
@@ -23,6 +23,30 @@ class PreferencesData extends DataBase {
     const query = new Query();
     const data = new Data({ agentId });
     return this.upsertOne(params, query, data);
+  }
+
+  /**
+   * @public
+   * @param {Models.AgentID} agentId
+   * @return {Promise<*>}
+   */
+  async subscribe(agentId) {
+    const params = new Params({ agentId });
+    const data = new Data({ stopAllEmails: false });
+    const options = new Options();
+    return this.updateOne(params, data, options);
+  }
+
+  /**
+   * @public
+   * @param {Models.AgentID} agentId
+   * @return {Promise<*>}
+   */
+  async unsubscribe(agentId) {
+    const params = new Params({ agentId });
+    const data = new Data({ stopAllEmails: true });
+    const options = new Options();
+    return this.updateOne(params, data, options);
   }
 }
 

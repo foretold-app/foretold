@@ -80,7 +80,11 @@ class MailHelper {
   /**
    * @protected
    * @docs https://nodemailer.com/message/list-headers/
-   * @returns {{help: string, unsubscribe: {comment: string, url: string}, subscribe: *[]}}
+   * @returns {{
+   *  help: string,
+   *  unsubscribe: {comment: string, url: string},
+   *  subscribe: *[]
+   * }}
    */
   _ListHeaders() {
     return {

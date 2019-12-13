@@ -1,5 +1,8 @@
+const assert = require('assert');
+
 const { DataBase } = require('./data-base');
 const { Params, Query, Data, Options } = require('./classes');
+const logger = require('../lib/log');
 
 const { PreferenceModel } = require('../models-abstract');
 
@@ -11,6 +14,7 @@ class PreferencesData extends DataBase {
   constructor() {
     super();
     this.model = new PreferenceModel();
+    this.log = logger.module('PreferencesData');
   }
 
   /**
@@ -19,6 +23,7 @@ class PreferencesData extends DataBase {
    * @return {Promise<*>}
    */
   async getOneByAgentId(agentId) {
+    assert(!!agentId, 'Agent ID is required.');
     const params = new Params({ agentId });
     const query = new Query();
     const data = new Data({ agentId });
@@ -28,25 +33,39 @@ class PreferencesData extends DataBase {
   /**
    * @public
    * @param {Models.AgentID} agentId
-   * @return {Promise<*>}
+   * @return {Promise<boolean>}
    */
   async subscribe(agentId) {
-    const params = new Params({ agentId });
-    const data = new Data({ stopAllEmails: false });
-    const options = new Options();
-    return this.updateOne(params, data, options);
+    try {
+      assert(!!agentId, 'Agent ID is required.');
+      const params = new Params({ agentId });
+      const data = new Data({ stopAllEmails: false });
+      const options = new Options();
+      await this.updateOne(params, data, options);
+      return true;
+    } catch (e) {
+      this.log.error(e);
+      return false;
+    }
   }
 
   /**
    * @public
    * @param {Models.AgentID} agentId
-   * @return {Promise<*>}
+   * @return {Promise<boolean>}
    */
   async unsubscribe(agentId) {
-    const params = new Params({ agentId });
-    const data = new Data({ stopAllEmails: true });
-    const options = new Options();
-    return this.updateOne(params, data, options);
+    try {
+      assert(!!agentId, 'Agent ID is required.');
+      const params = new Params({ agentId });
+      const data = new Data({ stopAllEmails: true });
+      const options = new Options();
+      await this.updateOne(params, data, options);
+      return true;
+    } catch (e) {
+      this.log.error(e);
+      return false;
+    }
   }
 }
 

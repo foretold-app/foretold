@@ -5592,6 +5592,22 @@
               "deprecationReason": null
             },
             {
+              "name": "body",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String3to131072",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "createdAt",
               "description": null,
               "args": [],
@@ -5656,22 +5672,6 @@
               "deprecationReason": null
             },
             {
-              "name": "body",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String3to131072",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "owner",
               "description": null,
               "args": [],
@@ -5711,6 +5711,16 @@
         },
         {
           "kind": "SCALAR",
+          "name": "String3to131072",
+          "description": "A special custom scalar type for a String3to131072",
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "SCALAR",
           "name": "AgentId",
           "description": "A special custom scalar type for a AgentId",
           "fields": null,
@@ -5723,16 +5733,6 @@
           "kind": "SCALAR",
           "name": "ChannelId",
           "description": "A special custom scalar type for a ChannelId",
-          "fields": null,
-          "inputFields": null,
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "SCALAR",
-          "name": "String3to131072",
-          "description": "A special custom scalar type for a String3to131072",
           "fields": null,
           "inputFields": null,
           "interfaces": null,
@@ -7143,6 +7143,60 @@
               "type": {
                 "kind": "OBJECT",
                 "name": "Preference",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "unsubscribe",
+              "description": null,
+              "args": [
+                {
+                  "name": "agentId",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "AgentId",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "subscribe",
+              "description": null,
+              "args": [
+                {
+                  "name": "agentId",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "AgentId",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
                 "ofType": null
               },
               "isDeprecated": false,

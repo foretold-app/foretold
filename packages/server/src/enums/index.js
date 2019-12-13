@@ -21,6 +21,7 @@ const { NOTIFICATION_ERROR_REASON } = require('./notification-error-reason');
 const { NOTIFICATION_TYPE } = require('./notification-type');
 const { TEMPLATE_NAME } = require('./template-name');
 const { TOKEN_TYPE } = require('./token-type');
+const { TEMPLATE_TYPE } = require('./template-type');
 
 module.exports = {
   MARKET_TYPE,
@@ -40,4 +41,5 @@ module.exports = {
   NOTIFICATION_TYPE,
   TEMPLATE_NAME,
   TOKEN_TYPE,
+  TEMPLATE_TYPE,
 };

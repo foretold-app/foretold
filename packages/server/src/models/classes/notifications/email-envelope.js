@@ -12,21 +12,44 @@ class EmailEnvelope {
    * @param {string} options.to
    */
   constructor(options = {}) {
-    assert(!!options.subject, 'Subject is required for Email Envelope.');
-    assert(!!options.body, 'Body is required for Email Envelope.');
+    const subject = _.get(options, 'subject');
+    const body = _.get(options, 'body');
+    const replacements = _.get(options, 'replacements') || {};
+    const to = _.get(options, 'to') || '';
 
-    this.subject = options.subject;
-    this.body = options.body;
-    this.replacements = options.replacements;
-    this.to = options.to;
+    assert(!!subject, 'Subject is required.');
+    assert(!!body, 'Body is required.');
+    assert(_.isString(subject), 'Subject is not a string.');
+    assert(_.isString(body), 'Body is not a string.');
+
+    this.subject = subject;
+    this.body = body;
+    this.replacements = replacements;
+    this.to = to;
   }
 
-  setTo(to) {
-    this.to = to;
+  /**
+   * @public
+   * @param {string | null} recipient
+   * @returns {EmailEnvelope}
+   */
+  setRecipient(recipient) {
+    this.to = recipient;
     return this;
   }
 
   /**
+   * @public
+   * @param {string} outerTemplate
+   * @returns {EmailEnvelope}
+   */
+  setOuterTemplate(outerTemplate) {
+    this.body = Mustache.render(outerTemplate, { innerTemplate: this.body });
+    return this;
+  }
+
+  /**
+   * @public
    * @param {object} replacements
    * @return {EmailEnvelope}
    */

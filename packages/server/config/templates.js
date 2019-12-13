@@ -6,7 +6,20 @@ const { TEMPLATE_TYPE } = require('../src/enums');
  * This is why if you had decided to return to DB you would have needed
  * to migrate this data on DB table.
  */
+/**
+ * @todo: To rename "envelopeTemplate" into something yet.
+ */
 module.exports = [
+  {
+    name: TEMPLATE_NAME.EMAIL_OUTER_TEMPLATE,
+    type: TEMPLATE_TYPE.EMAIL_ENVELOPE,
+    envelopeTemplate: {
+      outerTemplate: '{{{ innerTemplate }}}'
+        + '<hr /> '
+        + '<a href="{{{ unsubscribe.link }}}">Unsubscribe</a> |'
+        + '<a href="{{{ subscribe.link }}}">Subscribe</a>.',
+    },
+  },
   {
     name: TEMPLATE_NAME.MEASURABLE_STATE_IS_CHANGED,
     type: TEMPLATE_TYPE.EMAIL,

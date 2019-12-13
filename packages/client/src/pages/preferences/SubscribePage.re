@@ -3,11 +3,11 @@ let make = (~loggedUser: Types.user) => {
   let agentId = Primary.Agent.AgentId.make(loggedUser.agentId);
   let (mutate, result, _) = Subscribe.Mutation.use();
 
-  <SLayout head={SLayout.Header.textDiv("Subscribe")}>
+  <SLayout head={SLayout.Header.textDiv(Lang.subscribePageCardTitle)}>
     <FC.PageCard.BodyPadding>
       {switch (result) {
-       | Error(_error) => <p> {"Something went wrong..." |> Utils.ste} </p>
-       | Data(_) => <p> {"You are subscribed." |> Utils.ste} </p>
+       | Error(_error) => <p> {Lang.networkError |> Utils.ste} </p>
+       | Data(_) => <p> {Lang.sucSubscribing |> Utils.ste} </p>
        | Loading(_) => <Spin />
        | _ =>
          mutate(

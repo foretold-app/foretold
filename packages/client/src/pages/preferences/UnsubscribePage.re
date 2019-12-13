@@ -3,11 +3,11 @@ let make = (~loggedUser: Types.user) => {
   let agentId = Primary.Agent.AgentId.make(loggedUser.agentId);
   let (mutate, result, _) = Unsubscribe.Mutation.use();
 
-  <SLayout head={SLayout.Header.textDiv("Unsubscribe")}>
+  <SLayout head={SLayout.Header.textDiv(Lang.unsubscribePageCardTitle)}>
     <FC.PageCard.BodyPadding>
       {switch (result) {
-       | Error(_error) => <p> {"Something went wrong..." |> Utils.ste} </p>
-       | Data(_) => <p> {"You are unsubscribed." |> Utils.ste} </p>
+       | Error(_error) => <p> {Lang.networkError |> Utils.ste} </p>
+       | Data(_) => <p> {Lang.sucUnsubscribing |> Utils.ste} </p>
        | Loading(_) => <Spin />
        | _ =>
          mutate(

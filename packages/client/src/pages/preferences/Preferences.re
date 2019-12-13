@@ -27,7 +27,7 @@ module FormComponent = {
 
     <Form.Provider value=reform>
       {switch (result) {
-       | Error(_error) => <p> {"Something went wrong..." |> Utils.ste} </p>
+       | Error(_error) => <p> {Lang.networkError |> Utils.ste} </p>
        | Data(_) => <p> {"Prefereces are saved." |> Utils.ste} </p>
        | _ =>
          <Antd.Form onSubmit>

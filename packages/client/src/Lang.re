@@ -7,3 +7,5 @@ let unsubscribePageCardTitle = "Unsubscribe";
 let networkError = "Something went wrong...";
 let sucSubscribing = "You are subscribed.";
 let sucUnsubscribing = "You are unsubscribed.";
+let unsubscribing = "Unsubscribing...";
+let subscribing = "Subscribing...";

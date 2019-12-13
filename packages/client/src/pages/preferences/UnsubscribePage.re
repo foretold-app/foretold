@@ -17,7 +17,7 @@ let make = (~loggedUser: Types.user) => {
          )
          |> ignore;
 
-         <p> {"Unsubscribing..." |> Utils.ste} </p>;
+         <p> {Lang.unsubscribing |> Utils.ste} </p>;
        }}
     </FC.PageCard.BodyPadding>
   </SLayout>;

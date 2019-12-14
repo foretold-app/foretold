@@ -1,6 +1,11 @@
 export var Sampler = {
+  /**
+   * @param formatted
+   * @param n
+   * @returns {{values: *}}
+   */
   sample(formatted, n) {
-    return Promise.resolve({ values: formatted.data });
+    return { values: formatted.data };
   }
 };
 

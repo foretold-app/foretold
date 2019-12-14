@@ -1,4 +1,5 @@
-// We use an empty object here instead of a more meaningful object to play well with mathjs under the hood.
+// We use an empty object here instead of a more meaningful object
+// to play well with mathjs under the hood.
 export const SAMPLE_FILTERED = { filtered: true };
 
 const filterLessThan = (val, min) => val < min ? SAMPLE_FILTERED : val;

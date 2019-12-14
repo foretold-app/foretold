@@ -1,5 +1,9 @@
 export var Sampler = {
+  /**
+   * @param formatted
+   * @returns {{values: [], errors: []}}
+   */
   sample(formatted) {
-    return Promise.resolve({ values: [], errors: [] });
+    return { values: [], errors: [] };
   }
 };

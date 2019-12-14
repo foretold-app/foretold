@@ -88,5 +88,5 @@ export function find(referenceName) {
 
 export const samplerTypes = {
   find: referenceName => find(referenceName),
-  all
+  all,
 };

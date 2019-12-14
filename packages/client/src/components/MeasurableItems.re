@@ -101,13 +101,7 @@ let questionLink = (~m: Types.measurable) =>
 let creatorLink = (~m: Types.measurable) =>
   m.creator
   |> E.O.fmap((agent: Types.agent) =>
-       <Link
-         linkType={
-           Internal(Agent({agentId: agent.id, subPage: AgentUpdates}))
-         }
-         className=Shared.Item.item>
-         <AgentLink agent />
-       </Link>
+       <div className=Shared.Item.item> <AgentLink agent /> </div>
      );
 
 let editLink = (~m: Types.measurable) =>

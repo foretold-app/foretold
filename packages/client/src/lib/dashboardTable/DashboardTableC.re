@@ -77,7 +77,16 @@ module DashboardTableToTable = {
   };
 };
 
-let tableJsonString = {| { "columns": [{"id":"1", "name": "Name", "columnType": "String"},{"id":"2", "name": "Description", "columnType": "String"}], "data": [{"1": "Thing1", "2":"This is a long description"},{"1":"Thing2"}] } |};
+let tableJsonString = {|{
+    "columns":  [
+        {"id":"1", "name": "Name", "columnType": "String"},
+        {"id":"2", "name": "Description", "columnType": "String"}
+    ],
+    "data": [
+        {"1": "Thing1", "2":"This is a long description"},
+        {"1":"Thing2"}
+     ]
+}|};
 let tableJson: Js.Json.t = Json.parseOrRaise(tableJsonString);
 
 [@react.component]

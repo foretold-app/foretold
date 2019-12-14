@@ -3,7 +3,7 @@ import _ from "lodash";
 import { Input } from "antd";
 
 import { Guesstimator } from '@foretold/guesstimator';
-import { Samples, Cdf } from "../../../../cdf";
+import { Samples, Cdf } from "@foretold/cdf";
 
 /**
  *
@@ -92,12 +92,15 @@ export class GuesstimateInput extends React.Component {
     const text = event.target.value;
 
     let [_error, item] = Guesstimator.parse({ text });
+    const { parsedInput } = item;
+    const { guesstimateType } = parsedInput;
 
-    const parsedInput = item.parsedInput;
-    const value = new Guesstimator({ parsedInput }).sample(
+    const guesstimator = new Guesstimator({ parsedInput });
+    const value = guesstimator.sample(
       this.props.sampleCount,
       this.state.inputs,
     );
+    const samplerType = guesstimator.samplerType();
 
     const values = _.filter(value.values, _.isFinite);
 
@@ -106,15 +109,17 @@ export class GuesstimateInput extends React.Component {
       items: values,
     });
 
+    let update;
     if (values.length === 0) {
-      this.props.onUpdate([[], [], false]);
+      update = [[], [], false];
     } else if (values.length === 1) {
-      this.props.onUpdate([[1], values, false]);
+      update = [[1], values, false];
     } else {
       const { min, max } = this.props;
-      this.props.onUpdate(toCdf(values, min, max));
+      update = toCdf(values, min, max);
     }
 
+    this.props.onUpdate(update, samplerType);
     this.props.onChange(text);
   }
 

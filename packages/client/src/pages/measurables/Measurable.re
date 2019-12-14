@@ -2,15 +2,12 @@ open Style.Grid;
 
 module Styles = {
   open Css;
-
   let header =
     style(
       [padding2(~v=`em(1.5), ~h=`em(1.5))]
       @ FC.Base.BaseStyles.fullWidthFloatLeft,
     );
-
   let link = style([marginTop(em(1.))]);
-
   let description = style([paddingTop(`em(1.5))]);
 };
 

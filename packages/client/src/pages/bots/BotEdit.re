@@ -1,8 +1,3 @@
-module CMutationForm =
-  MutationForm.Make({
-    type queryType = BotUpdate.Query.t;
-  });
-
 [@react.component]
 let make = (~pageParams: Types.pageParams, ~loggedUser: Types.user) => {
   let botId = pageParams.id;

@@ -12,6 +12,7 @@ export const Funct = {
   types: ['FUNCTION'],
   displayName: 'Function',
   sampler: FunctionSampler,
+  isRangeDistribution: false,
 };
 
 export const DistributionNormal = {
@@ -27,22 +28,23 @@ export const DistributionPoint = {
   types: ['DISTRIBUTION', 'POINT'],
   displayName: 'Point',
   sampler: DistributionPointSampler,
+  isRangeDistribution: false,
 };
 
 export const DistributionLognormal = {
   referenceName: 'LOGNORMAL',
   types: ['DISTRIBUTION', 'LOGNORMAL'],
   displayName: 'LogNormal',
-  isRangeDistribution: true,
   sampler: DistributionLognormalSampler,
+  isRangeDistribution: true,
 };
 
 export const DistributionBeta = {
   referenceName: 'BETA',
   types: ['DISTRIBUTION', 'BETA'],
   displayName: 'Beta',
-  isRangeDistribution: false,
   sampler: DistributionBetaSampler,
+  isRangeDistribution: false,
 };
 
 
@@ -50,16 +52,16 @@ export const DistributionUniform = {
   referenceName: 'UNIFORM',
   types: ['DISTRIBUTION', 'UNIFORM'],
   displayName: 'Uniform',
-  isRangeDistribution: true,
   sampler: DistributionUniformSampler,
+  isRangeDistribution: true,
 };
 
 export const Data = {
   referenceName: 'DATA',
   types: ['DATA'],
   displayName: 'Data',
-  isRangeDistribution: false,
   sampler: DataSampler,
+  isRangeDistribution: false,
 };
 
 // Change to null Guesstimate for sampler
@@ -67,7 +69,8 @@ export const None = {
   referenceName: 'NONE',
   types: [],
   displayName: 'NONE',
-  sampler: NoneSampler
+  sampler: NoneSampler,
+  isRangeDistribution: false,
 };
 
 const all = [

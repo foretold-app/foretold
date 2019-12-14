@@ -1,10 +1,5 @@
 open Rationale.Function.Infix;
 
-module CMutationForm =
-  MutationForm.Make({
-    type queryType = ChannelUpdate.Query.t;
-  });
-
 [@react.component]
 let make = (~channelId: string) => {
   let loadChannel = ChannelGet.getChannelByIdAsComponent(~id=channelId);

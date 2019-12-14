@@ -29,10 +29,15 @@ function chart() {
   var updateData, getData, clearLines;
 
   //Main chart object
-  var main = function () {
+  var main = function main() {
     //Drawing containers
     var container = d3.select(attrs.container);
-    // TODO: This takes a lot of computation, is quite slow at scale.
+
+    if (container.node() === null) {
+      d3.select(window).on('resize.' + attrs.id, null);
+      return;
+    }
+
     var containerRect = container.node().getBoundingClientRect();
     if (containerRect.width > 0) attrs.svgWidth = containerRect.width;
 
@@ -191,7 +196,7 @@ function chart() {
       .attr('pointer-events', 'all')
       .on('mouseover', mouseover)
       .on('mousemove', mouseover)
-      .on('mouseout', mouseout)
+      .on('mouseout', mouseout);
 
     // Smoothly handle data updating
     updateData = function () {
@@ -272,12 +277,9 @@ function chart() {
       return pos.y;
     }
 
-    d3.select(window).on('resize.' + attrs.id, function () {
-      var containerRect = container.node().getBoundingClientRect();
-      if (containerRect.width > 0) attrs.svgWidth = containerRect.width;
-      main();
-    });
   };
+
+  d3.select(window).on('resize.' + attrs.id, main);
 
   d3.selection.prototype.patternify = function (params) {
     var container = this;
@@ -327,14 +329,14 @@ function chart() {
   };
 
   // returns lines data as array. Each item in the array is a single line.
-  main.getData = function () {
+  main.getData = function getData() {
     if (typeof getData === 'function') {
       return getData();
     }
   };
 
   // clears all lines and session data
-  main.clearLines = function () {
+  main.clearLines = function clearLines() {
     if (typeof clearLines === 'function') {
       clearLines();
     }
@@ -342,7 +344,7 @@ function chart() {
   };
 
   // Run  visual
-  main.render = function () {
+  main.render = function render() {
     main();
     return main;
   };

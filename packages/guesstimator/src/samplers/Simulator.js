@@ -4,8 +4,6 @@ import {
 } from './simulator-worker/simulator/evaluator';
 import _ from 'lodash';
 
-const MIN_SAMPLES_PER_WINDOW = 100;
-
 function GCD(a, b) {
   return !b ? a : GCD(b, a % b);
 }
@@ -15,8 +13,7 @@ function LCM(a, b) {
 }
 
 export function simulate(expr, inputs, maxSamples) {
-  const s = Evaluate(expr, maxSamples, inputs);
-  return s;
+  return Evaluate(expr, maxSamples, inputs);
 }
 
 const hasStochasticFunction = text => _.some(STOCHASTIC_FUNCTIONS, e => text.indexOf(e) !== -1);

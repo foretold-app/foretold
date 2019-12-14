@@ -3,14 +3,16 @@ import _ from "lodash";
 import { Input } from "antd";
 
 import { Guesstimator } from '@foretold/guesstimator';
-import { Samples, Cdf } from "../../../../cdf";
+import { Samples, Cdf } from "@foretold/cdf";
 
 /**
- * @param {number} ratio
- * @return {string}
+ *
+ * @param {number} minValue
+ * @param {number} maxValue
+ * @returns {string}
  */
 const minMaxRatio = (minValue, maxValue) => {
-  if (minValue === 0 || maxValue === 0){
+  if (minValue === 0 || maxValue === 0) {
     return "SMALL"
   }
   const ratio = maxValue / minValue;
@@ -42,60 +44,82 @@ const ratioSize = samples => {
  */
 const toCdf = (values, min, max) => {
   const samples = new Samples(values);
+
   const ratioSize$ = ratioSize(samples);
   const width = ratioSize$ === "SMALL" ? 20 : 1;
 
-  const cdf = samples.toCdf({ size: 1000, width, min, max});
+  const cdf = samples.toCdf({ size: 1000, width, min, max });
   return [cdf.ys, cdf.xs, ratioSize$ === "LARGE"];
 };
 
 export class GuesstimateInput extends React.Component {
   /**
    * @param props
+   * @param props.onUpdate
+   * @param props.onChange
+   * @param {{name: string, xs: number[], ys: number[]}[]} props.inputs
+   * @param props.focusOnRender
+   * @param {number} props.sampleCount
+   * @param {number} props.min
+   * @param {number} props.max
    */
   constructor(props) {
     super(props);
-    this.state = { value: '', items: [], inputs: {}};
-    this.handleChange = this.handleChange.bind(this);
+    this.state = {
+      value: '',
+      items: [],
+      inputs: {},
+    };
     this.textInput = React.createRef();
   }
 
   componentDidMount() {
-    let dict = {}
+    const dict = {};
     this.props.inputs.forEach(element => {
-      let cdf = (new Cdf(element.xs, element.ys)).sample(10000);
-      dict[element.name] = cdf;
-    })
-    this.setState({inputs:dict});
+      dict[element.name] = new Cdf(element.xs, element.ys).sample(10000);
+    });
+    this.setState({ inputs: dict });
+
     if (this.props.focusOnRender) {
       this.textInput.focus();
     }
   }
 
+  /**
+   * @param event
+   */
   handleChange(event) {
     const text = event.target.value;
 
     let [_error, item] = Guesstimator.parse({ text });
-    let parsedInput = item.parsedInput;
-    let value = (new Guesstimator({ parsedInput: parsedInput })).sample(this.props.sampleCount, this.state.inputs);
-    let values = _.filter(value.values, _.isFinite);
+    const { parsedInput } = item;
+    const { guesstimateType } = parsedInput;
 
-    if (!!values) {
-      this.setState({ value: event.target.value, items: values });
-    } else {
-      this.setState({ value: event.target.value, items: [] });
-    }
+    const guesstimator = new Guesstimator({ parsedInput });
+    const value = guesstimator.sample(
+      this.props.sampleCount,
+      this.state.inputs,
+    );
+    const samplerType = guesstimator.samplerType();
 
-    if (!values || values.length === 0) {
-      this.props.onUpdate([[], [], false]);
+    const values = _.filter(value.values, _.isFinite);
+
+    this.setState({
+      value: event.target.value,
+      items: values,
+    });
+
+    let update;
+    if (values.length === 0) {
+      update = [[], [], false];
     } else if (values.length === 1) {
-      this.props.onUpdate([[1], values, false]);
+      update = [[1], values, false];
     } else {
-      const min = this.props.min;
-      const max = this.props.max;
-      this.props.onUpdate(toCdf(values, min, max));
+      const { min, max } = this.props;
+      update = toCdf(values, min, max);
     }
 
+    this.props.onUpdate(update, samplerType);
     this.props.onChange(text);
   }
 
@@ -104,7 +128,7 @@ export class GuesstimateInput extends React.Component {
       type="text"
       placeholder="10 to 100"
       value={this.state.value}
-      onChange={this.handleChange}
+      onChange={event => this.handleChange(event)}
       ref={input => this.textInput = input}
     />;
   }

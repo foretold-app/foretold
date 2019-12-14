@@ -9,6 +9,8 @@ type state = {
   dataType: string,
   // ---> 3, Measurement.value
   floatCdf: FloatCdf.t,
+  floatCdfAndPoint: FloatCdf.t,
+  cdfType: string,
   percentage: float,
   binary: bool,
   unresolvableResolution: string,
@@ -33,7 +35,9 @@ A normal distribution with a mean of 5 and a standard deviation of 2.";
 
 type action =
   // -> Measurement.value
-  | UpdateFloatPdf(FloatCdf.t)
+  | UpdateFloatCdf(FloatCdf.t)
+  | UpdateFloatCdfAndPoint(FloatCdf.t)
+  | UpdateCdfType(string)
   | UpdateHasLimitError(bool)
   | UpdatePercentage(float)
   | UpdateBinary(bool)
@@ -80,7 +84,7 @@ module CompetitorTypeSelect = {
 
 module DataTypeSelect = {
   [@react.component]
-  let short = (~state, ~send) =>
+  let make = (~state, ~send) =>
     <Antd.Select
       value={state.dataType}
       onChange={e => send(UpdateDataType(e))}
@@ -92,26 +96,14 @@ module DataTypeSelect = {
         {"Predicted Percentage Chance" |> ste}
       </Antd.Select.Option>
     </Antd.Select>;
-
-  [@react.component]
-  let make = (~state, ~send) =>
-    <Antd.Select
-      value={state.dataType}
-      onChange={e => send(UpdateDataType(e))}
-      className=Styles.fullWidth>
-      <Antd.Select.Option value="FLOAT_CDF">
-        {"Distribution" |> ste}
-      </Antd.Select.Option>
-      <Antd.Select.Option value="FLOAT_POINT">
-        {"Exact Value" |> ste}
-      </Antd.Select.Option>
-    </Antd.Select>;
 };
 
 let getIsValid = (state): bool => {
   switch (state.dataType) {
   | "FLOAT_CDF" => E.A.length(state.floatCdf.xs) > 1
-  | "FLOAT_POINT" => E.A.length(state.floatCdf.xs) == 1
+  | "FLOAT_CDF_AND_POINT" =>
+    E.A.length(state.floatCdfAndPoint.xs) > 1
+    || E.A.length(state.floatCdfAndPoint.xs) == 1
   | "PERCENTAGE_FLOAT" => true
   | "BINARY_BOOL" => true
   | "UNRESOLVABLE_RESOLUTION" => true
@@ -126,6 +118,7 @@ let getDataTypeAsString = (competitorType, measurable: Types.measurable) => {
   | ("UNRESOLVED", _) => "UNRESOLVABLE_RESOLUTION"
   | ("OBJECTIVE", `PERCENTAGE) => "BINARY_BOOL"
   | ("COMPETITIVE", `PERCENTAGE) => "PERCENTAGE_FLOAT"
+  | ("OBJECTIVE", _) => "FLOAT_CDF_AND_POINT"
   | _ => "FLOAT_CDF"
   };
 };
@@ -140,25 +133,31 @@ let getCompetitorTypeFromString = (str): Types.competitorType =>
   };
 
 let getValueFromState = (state): MeasurementValue.t =>
-  switch (state.dataType) {
-  | "FLOAT_CDF" =>
+  switch (state.dataType, state.cdfType) {
+  | ("FLOAT_CDF", _) =>
     `FloatCdf(
       MeasurementValue.FloatCdf.fromArrays(
         state.floatCdf |> (e => (e.ys, e.xs)),
       ),
     )
-  | "FLOAT_POINT" =>
-    let point = Array.unsafe_get(state.floatCdf.xs, 0);
+  | ("FLOAT_CDF_AND_POINT", "POINT") =>
+    let point = Array.unsafe_get(state.floatCdfAndPoint.xs, 0);
     `FloatPoint(point);
-  | "PERCENTAGE_FLOAT" => `Percentage(state.percentage)
-  | "BINARY_BOOL" => `Binary(state.binary)
-  | "UNRESOLVABLE_RESOLUTION" =>
+  | ("FLOAT_CDF_AND_POINT", "CDF") =>
+    `FloatCdf(
+      MeasurementValue.FloatCdf.fromArrays(
+        state.floatCdfAndPoint |> (e => (e.ys, e.xs)),
+      ),
+    )
+  | ("PERCENTAGE_FLOAT", _) => `Percentage(state.percentage)
+  | ("BINARY_BOOL", _) => `Binary(state.binary)
+  | ("UNRESOLVABLE_RESOLUTION", _) =>
     `UnresolvableResolution(
       state.unresolvableResolution
       |> MeasurementValue.UnresolvableResolution.fromString,
     )
-  | "COMMENT" =>
-    `Comment(state.comment |> MeasurementValue.Comment.fromString)
+  | ("COMMENT", _)
+  | _ => `Comment(state.comment |> MeasurementValue.Comment.fromString)
   };
 
 module BotsSelect = {
@@ -178,10 +177,13 @@ module BotsSelect = {
         value={state.asAgent}
         onChange={e => send(UpdateAsAgent(e))}
         className=Styles.fullWidth>
-        <Antd.Select.Option value=""> {name |> ste} </Antd.Select.Option>
+        <Antd.Select.Option value="" key="bot--1">
+          {name |> ste}
+        </Antd.Select.Option>
         {bots
-         |> Array.map((bot: Types.bot) =>
+         |> Array.mapi((index, bot: Types.bot) =>
               <Antd.Select.Option
+                key={"bot" ++ string_of_int(index)}
                 value={
                   bot.agent
                   |> E.O.fmap((agent: Types.agent) => agent.id)
@@ -197,14 +199,15 @@ module BotsSelect = {
 };
 
 module ValueInput = {
-  let floatPoint = (measurable: Types.measurable, send) => {
+  module Distributions = {
     let toGuesstimateInputs = ((ys, xs)): GuesstimateInput.input => {
       "name": "AG",
       "xs": xs,
       "ys": ys,
     };
 
-    let input: option(GuesstimateInput.input) =
+    let input =
+        (measurable: Types.measurable): option(GuesstimateInput.input) =>
       measurable.previousAggregate
       |> E.O.bind(_, agg =>
            switch (agg.value) {
@@ -216,25 +219,54 @@ module ValueInput = {
            }
          );
 
-    let inputs = input |> E.O.fmap(r => [|r|]) |> E.O.default([||]);
+    let inputs = measurable =>
+      input(measurable) |> E.O.fmap(r => [|r|]) |> E.O.default([||]);
 
-    <GuesstimateInput
-      focusOnRender=true
-      sampleCount=30000
-      min={measurable.min}
-      max={measurable.max}
-      inputs
-      onUpdate={event =>
-        {
-          let (ys, xs, hasLimitError) = event;
-          let asGroup: FloatCdf.t = {xs, ys};
-          send(UpdateHasLimitError(hasLimitError));
-          send(UpdateFloatPdf(asGroup));
+    let floatCdf = (measurable: Types.measurable, send) => {
+      <GuesstimateInput
+        focusOnRender=true
+        sampleCount=30000
+        min={measurable.min}
+        max={measurable.max}
+        inputs={inputs(measurable)}
+        onUpdate={(event, _sampler) =>
+          {
+            let (ys, xs, hasLimitError) = event;
+            let asGroup: FloatCdf.t = {xs, ys};
+            send(UpdateCdfType("POINT"));
+            send(UpdateHasLimitError(hasLimitError));
+            send(UpdateFloatCdf(asGroup));
+          }
+          |> ignore
         }
-        |> ignore
-      }
-      onChange={text => send(UpdateValueText(text))}
-    />;
+        onChange={text => send(UpdateValueText(text))}
+      />;
+    };
+
+    let floatCdfAndPoint = (measurable: Types.measurable, send) => {
+      <GuesstimateInput
+        focusOnRender=true
+        sampleCount=30000
+        min={measurable.min}
+        max={measurable.max}
+        onUpdate={(event, sampler) =>
+          {
+            let (ys, xs, hasLimitError) = event;
+            let asGroup: FloatCdf.t = {xs, ys};
+
+            switch (sampler##isRangeDistribution) {
+            | true => send(UpdateCdfType("CDF"))
+            | _ => send(UpdateCdfType("POINT"))
+            };
+
+            send(UpdateHasLimitError(hasLimitError));
+            send(UpdateFloatCdfAndPoint(asGroup));
+          }
+          |> ignore
+        }
+        onChange={text => send(UpdateValueText(text))}
+      />;
+    };
   };
 
   let boolean = (binaryValue, send) =>
@@ -313,11 +345,9 @@ module ValueInput = {
 module ValueInputMapper = {
   open Style.Grid;
 
-  [@react.component]
-  let make = (~state, ~measurable, ~send, ~loggedUser) =>
-    switch (state.dataType) {
-    | "FLOAT_CDF"
-    | "FLOAT_POINT" =>
+  module DistributionInput = {
+    [@react.component]
+    let make = (~state, ~measurable, ~children) =>
       <>
         <h4 className=Styles.label>
           {(
@@ -340,7 +370,7 @@ module ValueInputMapper = {
             styles=[
               Css.(style([width(Css.Calc.(`percent(100.0) - `em(2.2)))])),
             ]>
-            {ValueInput.floatPoint(measurable, send)}
+            children
           </Div>
           <Div float=`left styles=[Css.(style([width(`em(2.2))]))]>
             <span
@@ -357,7 +387,21 @@ module ValueInputMapper = {
         <div className=Styles.inputBox>
           <h4 className=Styles.label> {"Reasoning" |> ste} </h4>
         </div>
-      </>
+      </>;
+  };
+
+  [@react.component]
+  let make = (~state, ~measurable, ~send, ~loggedUser) =>
+    switch (state.dataType) {
+    | "FLOAT_CDF" =>
+      <DistributionInput state measurable>
+        {ValueInput.Distributions.floatCdf(measurable, send)}
+      </DistributionInput>
+
+    | "FLOAT_CDF_AND_POINT" =>
+      <DistributionInput state measurable>
+        {ValueInput.Distributions.floatCdfAndPoint(measurable, send)}
+      </DistributionInput>
 
     | "BINARY_BOOL" =>
       <>
@@ -424,28 +468,19 @@ module Main = {
       ) => {
     let isValid = getIsValid(state);
 
-    let getDataTypeSelect =
+    let dataTypeSelect =
       switch (state.competitorType, measurable.valueType) {
-      | ("OBJECTIVE", `FLOAT | `DATE) =>
-        <div className=Styles.select> <DataTypeSelect state send /> </div>
       | ("OBJECTIVE", `PERCENTAGE) =>
-        <div className=Styles.select>
-          <DataTypeSelect.short state send />
-        </div>
+        <div className=Styles.select> <DataTypeSelect state send /> </div>
       | _ => <Null />
       };
 
-    let getBotSelect =
+    let botSelect =
       switch (bots) {
       | Some([||])
       | None => <Null />
       | Some(bots) => <BotsSelect state send bots loggedUser />
       };
-
-    // CompetitorTypeSelect --> CompetitorType
-    // DataTypeSelect --> DataType
-    // ValueInputMapper --> [ FloatPoint, Binary, Percentage,
-    //                        UnresolvableResolution, Comment ]
 
     <div className=Styles.form>
       <div className=Styles.chartSection>
@@ -465,7 +500,7 @@ module Main = {
         <div className=Styles.select>
           <CompetitorTypeSelect isOwner=isCreator state send measurable />
         </div>
-        getDataTypeSelect
+        dataTypeSelect
         <ValueInputMapper state measurable send loggedUser />
         <Antd.Input.TextArea
           value={state.description}
@@ -475,7 +510,7 @@ module Main = {
             send(UpdateDescription(value));
           }}
         />
-        {Primary.User.show(loggedUser, getBotSelect)}
+        {Primary.User.show(loggedUser, botSelect)}
         <div className=Styles.submitButton>
           <Antd.Button
             _type=`primary onClick={_ => onSubmit()} disabled={!isValid}>
@@ -497,7 +532,7 @@ let make =
       ~measurable: Types.measurable,
       ~bots: option(array(Types.bot)),
       ~loggedUser: Types.user,
-      ~defaultValueText="sdfsdf",
+      ~defaultValueText="",
     ) => {
   let competitorTypeInitValue =
     Primary.CompetitorType.competitorTypeInitValue(
@@ -505,7 +540,11 @@ let make =
       ~state=measurable.state,
     );
 
-  let (floatCdf, setFloatPdf) = React.useState(() => FloatCdf.empty);
+  let (floatCdf, setFloatCdf) = React.useState(() => FloatCdf.empty);
+  let (floatCdfAndPoint, setFloatCdfAndPoint) =
+    React.useState(() => FloatCdf.empty);
+  let (cdfType, setCdfType) = React.useState(() => "CDF");
+
   let (percentage, setPercentage) = React.useState(() => 50.);
   let (binary, setBinary) = React.useState(() => true);
   let (unresolvableResolution, setUnresolvableResolution) =
@@ -525,6 +564,8 @@ let make =
   let state = {
     // Values
     floatCdf,
+    floatCdfAndPoint,
+    cdfType,
     percentage,
     binary,
     unresolvableResolution,
@@ -546,9 +587,12 @@ let make =
 
   let send = action => {
     switch (action) {
-    | UpdateFloatPdf((floatCdf: FloatCdf.t)) =>
-      onUpdate(floatCdf);
-      setFloatPdf(_ => floatCdf);
+    | UpdateFloatCdf((floatCdf: FloatCdf.t)) => setFloatCdf(_ => floatCdf)
+
+    | UpdateFloatCdfAndPoint((floatCdfAndPoint: FloatCdf.t)) =>
+      setFloatCdfAndPoint(_ => floatCdfAndPoint)
+
+    | UpdateCdfType((cdfType: string)) => setCdfType(_ => cdfType)
 
     | UpdateHasLimitError((hasLimitError: bool)) =>
       setHasLimitError(_ => hasLimitError)

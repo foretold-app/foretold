@@ -1,15 +1,17 @@
 import { jStat } from 'jstat';
 import Sampling from 'discrete-sampling';
 
-const bernoulli = p => Sampling.Bernoulli(p)
-  .draw();
-const binomial = (n, p) => Sampling.Binomial(n, p)
-  .draw();
-const poisson = (lambda) => Sampling.Poisson(lambda)
-  .draw();
-const negBinomial = (r, p) => Sampling.NegBinomial(r, p)
-  .draw();
+const bernoulli = p => Sampling.Bernoulli(p).draw();
+const binomial = (n, p) => Sampling.Binomial(n, p).draw();
+const poisson = (lambda) => Sampling.Poisson(lambda).draw();
+const negBinomial = (r, p) => Sampling.NegBinomial(r, p).draw();
 
+/**
+ * @param min
+ * @param max
+ * @param mode
+ * @returns {number|*}
+ */
 function triangular(min, max, mode = (min + max) / 2) {
   const u = Math.random();
   if (u < (mode - min) / (max - min)) {
@@ -19,8 +21,13 @@ function triangular(min, max, mode = (min + max) / 2) {
   }
 }
 
-// Source:
-// http://www.mhnederlof.nl/doubletriangular.html
+/**
+ * Source: http://www.mhnederlof.nl/doubletriangular.html
+ * @param min
+ * @param max
+ * @param mode
+ * @returns {number|*}
+ */
 function doubleTriangular(min, max, mode = (min + max) / 2) {
   const u = Math.random();
   if (u <= 0.5) {
@@ -30,8 +37,15 @@ function doubleTriangular(min, max, mode = (min + max) / 2) {
   }
 }
 
-// Source:
-// https://en.wikipedia.org/wiki/Beta_distribution#Transformations
+/**
+ * Source: https://en.wikipedia.org/wiki/Beta_distribution#Transformations
+ * @param min
+ * @param max
+ * @param mode
+ * @param lambda
+ * @returns {*}
+ * @constructor
+ */
 function PERT(min, max, mode = (min + max) / 2, lambda = 4) {
   const width = max - min;
   const a = 1 + lambda * ((mode - min) / width);
@@ -55,6 +69,7 @@ export const Distributions = {
   weibull: jStat.weibull.sample,
   uniform: jStat.uniform.sample,
   gamma: jStat.gamma.sample,
+
   triangular,
   doubleTriangular,
   PERT,

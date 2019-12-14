@@ -15,6 +15,11 @@ export const formatters = [
   Data
 ];
 
+/**
+ * @param g
+ * @returns {*}
+ * @private
+ */
 export function _matchingFormatter(g) {
   for (let formatter of formatters) {
     if (formatter.matches(g)) {
@@ -24,8 +29,12 @@ export function _matchingFormatter(g) {
   return Null;
 }
 
-// General formatting that applies to everything.  After it goes through
-// this stage, a specific formatter gets applied.
+/**
+ * General formatting that applies to everything.  After it goes through
+ * this stage, a specific formatter gets applied.
+ * @param guesstimate
+ * @returns {{data: *, guesstimateType: *, text: *}}
+ */
 export function prepare(guesstimate) {
   return {
     text: (guesstimate.input || guesstimate.text),
@@ -34,6 +43,10 @@ export function prepare(guesstimate) {
   };
 }
 
+/**
+ * @param g
+ * @returns {*}
+ */
 export function parse(g) {
   const i = prepare(g);
   const formatter = _matchingFormatter(i);

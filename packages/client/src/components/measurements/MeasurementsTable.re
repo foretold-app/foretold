@@ -179,7 +179,7 @@ module Helpers = {
     | _ => None
     };
 
-  let measurerLink = (~measurement: measurement): ReasonReact.reactElement => {
+  let measurerLink = (~measurement: measurement) => {
     let aLink = measurement.agent |> E.O.fmap(agent => <AgentLink agent />);
 
     let judgementStyle =

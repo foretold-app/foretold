@@ -11,6 +11,9 @@ export const item = {
     return !_.isEmpty(text.slice(1)) ? {} : { type: 1, subType: 2 };
   },
   format({ text }) {
-    return {guesstimateType: 'FUNCTION', text: (shorthandIntoLognormalFormattingStep(text)).slice(1)};
+    return {
+      guesstimateType: 'FUNCTION',
+      text: (shorthandIntoLognormalFormattingStep(text)).slice(1)
+    };
   },
 };

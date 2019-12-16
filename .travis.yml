@@ -27,9 +27,5 @@ install:
 script:
   - printenv
   - docker run main yarn packages/build
-  - docker run main yarn server/test:ci
-  - docker run main yarn server/lint:ci
-  - docker run main yarn guesstimator/test:ci
-  - docker run main yarn cdf/test:ci
-  - docker run main yarn bots/test:ci
-  - docker run main yarn prediction-analysis/test:ci
+  - docker run main yarn packages/test
+  - docker run main yarn packages/lint

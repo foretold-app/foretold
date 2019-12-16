@@ -292,7 +292,6 @@ export namespace Layers {
       isAdmin?: boolean;
       agentId?: Models.AgentID;
       measuredByAgentId?: Models.AgentID;
-      measurableIds?: Models.MeasurementId[];
       transaction?: object;
       lock?: boolean;
       skipLocked?: boolean;
@@ -310,6 +309,7 @@ export namespace Layers {
       notTaggedByAgent?: Models.AgentID;
       notificationId?: Models.NotificationID;
       ownerId?: Models.AgentID;
+      measurableIds?: Models.MeasurableID[];
 
       competitorType?: string;
       type?: string;
@@ -324,7 +324,8 @@ export namespace Layers {
       notAuth0AccessToken?: boolean;
       isNotEmailVerified?: boolean;
 
-      findInDateRange?: object; // @todo: Object? Give definition!
+      // @todo: Object? Give definition!
+      findInDateRange?: object;
       withinMeasurables?: withinMeasurables | null;
       withinPublicChannels?: withinPublicChannels | null;
       withinJoinedChannels?: withinJoinedChannels | null;
@@ -423,6 +424,7 @@ export namespace Layers {
       seriesId?: Models.SeriesID;
       creatorId?: Models.AgentID;
       ownerId?: Models.AgentID;
+      measurableIds?: Models.MeasurableID[];
 
       isArchived?: string[];
       types?: string[];

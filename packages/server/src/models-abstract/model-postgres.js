@@ -362,7 +362,7 @@ class ModelPostgres extends Model {
       where[this.and].push({
         id: {
           [this.in]: filter.measurableIds,
-        }
+        },
       });
     }
 

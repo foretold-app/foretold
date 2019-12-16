@@ -20,14 +20,21 @@ module Styles = {
 
 [@react.component]
 let make =
-    (~cdf: FC__Types.Dist.t, ~minX=None, ~maxX=None, ~color=`hex("7e9db7")) => {
+    (
+      ~cdf: FC__Types.Dist.t,
+      ~minX=None,
+      ~maxX=None,
+      ~width=200,
+      ~height=40,
+      ~color=`hex("7e9db7"),
+    ) => {
   let pdf = cdf |> FC__Types.Dist.toPdf;
 
   <div className={Styles.graph(color)}>
     <div className=Styles.textOverlay> <FC__CdfChart__StatSummary cdf /> </div>
     <FC__CdfChart__Base
-      width=200
-      height=40
+      width
+      height
       ?minX
       ?maxX
       marginBottom=0

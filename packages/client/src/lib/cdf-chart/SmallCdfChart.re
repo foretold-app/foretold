@@ -1,10 +1,3 @@
-open Utils;
-
-let foo = {
-  "xs": [|50., 100., 300., 400., 500., 600.|],
-  "ys": [|0.1, 0.4, 0.6, 0.7, 0.8, 0.9|],
-};
-
 module Styles = {
   open Css;
   let graph = chartColor =>

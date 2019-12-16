@@ -55,6 +55,7 @@ module FloatCdf = {
       <Div flex={`num(1.)}> dist </Div>
     </Div>;
   };
+
   // We basically never change these, so they should generally stay constant.
   let make =
     React.memoCustomCompareProps(make, (next, current) =>
@@ -144,6 +145,7 @@ module MeasurementShow = {
           competitorType={measurement.competitorType}
         />
       | Ok(`UnresolvableResolution(_)) => <UnresolvableResolution />
+      | Ok(`Percentage(r)) => <Percentage value=r />
       | Ok(`Binary(r)) => <Binary value=r />
       | _ => <Null />
       }

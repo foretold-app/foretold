@@ -1,4 +1,3 @@
-open E;
 open Utils;
 
 type state = {
@@ -157,6 +156,13 @@ let getValueFromState = (state): MeasurementValue.t =>
     )
   | ("COMMENT", _)
   | _ => `Comment(state.comment |> MeasurementValue.Comment.fromString)
+  };
+
+let getValueTextFromState = state =>
+  switch (state.dataType) {
+  | "FLOAT_CDF" => state.valueText
+  | "FLOAT_CDF_AND_POINT" => state.valueText
+  | _ => ""
   };
 
 module BotsSelect = {
@@ -623,12 +629,13 @@ let make =
 
   let onSubmit = () => {
     let value = getValueFromState(state);
+    let valueText = getValueTextFromState(state);
 
     onSubmit((
       value,
       getCompetitorTypeFromString(state.competitorType),
       state.description,
-      state.valueText,
+      valueText,
       state.asAgent,
     ));
 

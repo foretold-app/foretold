@@ -79,13 +79,18 @@ function chart() {
     //Axis generator
     var xAxis = d3.axisBottom(xScale).ticks(5);
 
-    if (attrs.scale === 'log') {
-      xAxis
-        .ticks(5)
-        .tickFormat(d => {
-          return d3.format(".1f")(d)
-        })
-    }
+         xAxis
+            .ticks(5)
+            .tickFormat(d => {
+                  if(Math.abs(d)<1){
+                    return(d3.format(".2")(d))
+
+                  }else{
+                      var prefix = d3.formatPrefix(".0", d)
+                        return(prefix(d))
+                  }
+            })  
+
 
     //Line generator
     var line = d3.line()

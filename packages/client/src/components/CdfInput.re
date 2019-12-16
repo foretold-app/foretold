@@ -141,8 +141,7 @@ let getValueFromState = (state): MeasurementValue.t =>
       ),
     )
   | ("FLOAT_CDF_AND_POINT", "POINT") =>
-    let point = Array.unsafe_get(state.floatCdfAndPoint.xs, 0);
-    `FloatPoint(point);
+    `FloatPoint(Array.unsafe_get(state.floatCdfAndPoint.xs, 0))
   | ("FLOAT_CDF_AND_POINT", "CDF") =>
     `FloatCdf(
       MeasurementValue.FloatCdf.fromArrays(
@@ -484,17 +483,30 @@ module Main = {
 
     <div className=Styles.form>
       <div className=Styles.chartSection>
-        {E.A.length(state.floatCdf.xs) > 1
-           ? <LargeCdfChart
-               data={
-                 state.floatCdf
-                 |> (e => (e.xs, e.ys))
-                 |> MeasurementValue.FloatCdf.fromArrays
-                 |> MeasurementValue.toPdf
-                 |> MeasurementValue.FloatCdf.toJs
-               }
-             />
-           : <div />}
+        {switch (state.dataType, state.cdfType) {
+         | ("FLOAT_CDF", _) when E.A.length(state.floatCdf.xs) > 1 =>
+           <LargeCdfChart
+             data={
+               state.floatCdf
+               |> (e => (e.xs, e.ys))
+               |> MeasurementValue.FloatCdf.fromArrays
+               |> MeasurementValue.toPdf
+               |> MeasurementValue.FloatCdf.toJs
+             }
+           />
+         | ("FLOAT_CDF_AND_POINT", "CDF")
+             when E.A.length(state.floatCdfAndPoint.xs) > 1 =>
+           <LargeCdfChart
+             data={
+               state.floatCdfAndPoint
+               |> (e => (e.xs, e.ys))
+               |> MeasurementValue.FloatCdf.fromArrays
+               |> MeasurementValue.toPdf
+               |> MeasurementValue.FloatCdf.toJs
+             }
+           />
+         | _ => <Null />
+         }}
       </div>
       <div className=Styles.inputSection>
         <div className=Styles.select>
@@ -643,7 +655,7 @@ let make =
 
   <Style.BorderedBox>
     {switch (data.result) {
-     | Loading => "Loading" |> ste
+     | Loading => <Spin />
      | Error(e) => <> {"Error: " ++ e##message |> ste} block </>
      | Data(_) => "Form submitted successfully." |> ste |> E.React2.inH2
      | NotCalled => block

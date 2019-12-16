@@ -1,6 +1,6 @@
-const index = require('./urls');
+const index = require('./client-urls');
 
-describe('Urls Lib', () => {
+describe('Client Urls Lib', () => {
   it('returns an object', () => {
     expect(index).toBeInstanceOf(Object);
   });

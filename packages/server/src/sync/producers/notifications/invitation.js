@@ -1,8 +1,8 @@
 const assert = require('assert');
 const _ = require('lodash');
 
-const { getChannelLink } = require('../../../lib/urls');
-const { getAgentLink } = require('../../../lib/urls');
+const { getChannelLink } = require('../../../lib/client-urls');
+const { getAgentLink } = require('../../../lib/client-urls');
 
 const { Producer } = require('../producer');
 const { ProducerNotifications } = require('./producer-notifications');

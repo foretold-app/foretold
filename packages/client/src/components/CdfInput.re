@@ -1,4 +1,3 @@
-open E;
 open Utils;
 
 type state = {
@@ -8,8 +7,8 @@ type state = {
   // --> 2
   dataType: string,
   // ---> 3, Measurement.value
-  floatCdf: FloatCdf.t,
-  floatCdfAndPoint: FloatCdf.t,
+  floatCdf: FC__Types.Dist.t,
+  floatCdfAndPoint: FC__Types.Dist.t,
   cdfType: string,
   percentage: float,
   binary: bool,
@@ -35,8 +34,8 @@ A normal distribution with a mean of 5 and a standard deviation of 2.";
 
 type action =
   // -> Measurement.value
-  | UpdateFloatCdf(FloatCdf.t)
-  | UpdateFloatCdfAndPoint(FloatCdf.t)
+  | UpdateFloatCdf(FC__Types.Dist.t)
+  | UpdateFloatCdfAndPoint(FC__Types.Dist.t)
   | UpdateCdfType(string)
   | UpdateHasLimitError(bool)
   | UpdatePercentage(float)
@@ -141,8 +140,7 @@ let getValueFromState = (state): MeasurementValue.t =>
       ),
     )
   | ("FLOAT_CDF_AND_POINT", "POINT") =>
-    let point = Array.unsafe_get(state.floatCdfAndPoint.xs, 0);
-    `FloatPoint(point);
+    `FloatPoint(Array.unsafe_get(state.floatCdfAndPoint.xs, 0))
   | ("FLOAT_CDF_AND_POINT", "CDF") =>
     `FloatCdf(
       MeasurementValue.FloatCdf.fromArrays(
@@ -158,6 +156,13 @@ let getValueFromState = (state): MeasurementValue.t =>
     )
   | ("COMMENT", _)
   | _ => `Comment(state.comment |> MeasurementValue.Comment.fromString)
+  };
+
+let getValueTextFromState = state =>
+  switch (state.dataType) {
+  | "FLOAT_CDF" => state.valueText
+  | "FLOAT_CDF_AND_POINT" => state.valueText
+  | _ => ""
   };
 
 module BotsSelect = {
@@ -232,7 +237,7 @@ module ValueInput = {
         onUpdate={(event, _sampler) =>
           {
             let (ys, xs, hasLimitError) = event;
-            let asGroup: FloatCdf.t = {xs, ys};
+            let asGroup: FC__Types.Dist.t = {xs, ys};
             send(UpdateCdfType("POINT"));
             send(UpdateHasLimitError(hasLimitError));
             send(UpdateFloatCdf(asGroup));
@@ -252,7 +257,7 @@ module ValueInput = {
         onUpdate={(event, sampler) =>
           {
             let (ys, xs, hasLimitError) = event;
-            let asGroup: FloatCdf.t = {xs, ys};
+            let asGroup: FC__Types.Dist.t = {xs, ys};
 
             switch (sampler##isRangeDistribution) {
             | true => send(UpdateCdfType("CDF"))
@@ -484,17 +489,14 @@ module Main = {
 
     <div className=Styles.form>
       <div className=Styles.chartSection>
-        {E.A.length(state.floatCdf.xs) > 1
-           ? <LargeCdfChart
-               data={
-                 state.floatCdf
-                 |> (e => (e.xs, e.ys))
-                 |> MeasurementValue.FloatCdf.fromArrays
-                 |> MeasurementValue.toPdf
-                 |> MeasurementValue.FloatCdf.toJs
-               }
-             />
-           : <div />}
+        {switch (state.dataType, state.cdfType) {
+         | ("FLOAT_CDF", _) when E.A.length(state.floatCdf.xs) > 1 =>
+           <FC__CdfChart__Large cdf={state.floatCdf} />
+         | ("FLOAT_CDF_AND_POINT", "CDF")
+             when E.A.length(state.floatCdfAndPoint.xs) > 1 =>
+           <FC__CdfChart__Large cdf={state.floatCdfAndPoint} />
+         | _ => <Null />
+         }}
       </div>
       <div className=Styles.inputSection>
         <div className=Styles.select>
@@ -540,9 +542,9 @@ let make =
       ~state=measurable.state,
     );
 
-  let (floatCdf, setFloatCdf) = React.useState(() => FloatCdf.empty);
+  let (floatCdf, setFloatCdf) = React.useState(() => FC__Types.Dist.empty);
   let (floatCdfAndPoint, setFloatCdfAndPoint) =
-    React.useState(() => FloatCdf.empty);
+    React.useState(() => FC__Types.Dist.empty);
   let (cdfType, setCdfType) = React.useState(() => "CDF");
 
   let (percentage, setPercentage) = React.useState(() => 50.);
@@ -587,9 +589,10 @@ let make =
 
   let send = action => {
     switch (action) {
-    | UpdateFloatCdf((floatCdf: FloatCdf.t)) => setFloatCdf(_ => floatCdf)
+    | UpdateFloatCdf((floatCdf: FC__Types.Dist.t)) =>
+      setFloatCdf(_ => floatCdf)
 
-    | UpdateFloatCdfAndPoint((floatCdfAndPoint: FloatCdf.t)) =>
+    | UpdateFloatCdfAndPoint((floatCdfAndPoint: FC__Types.Dist.t)) =>
       setFloatCdfAndPoint(_ => floatCdfAndPoint)
 
     | UpdateCdfType((cdfType: string)) => setCdfType(_ => cdfType)
@@ -626,12 +629,13 @@ let make =
 
   let onSubmit = () => {
     let value = getValueFromState(state);
+    let valueText = getValueTextFromState(state);
 
     onSubmit((
       value,
       getCompetitorTypeFromString(state.competitorType),
       state.description,
-      state.valueText,
+      valueText,
       state.asAgent,
     ));
 
@@ -643,7 +647,7 @@ let make =
 
   <Style.BorderedBox>
     {switch (data.result) {
-     | Loading => "Loading" |> ste
+     | Loading => <Spin />
      | Error(e) => <> {"Error: " ++ e##message |> ste} block </>
      | Data(_) => "Form submitted successfully." |> ste |> E.React2.inH2
      | NotCalled => block

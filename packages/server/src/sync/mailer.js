@@ -1,7 +1,7 @@
 const assert = require('assert');
 const _ = require('lodash');
 
-const { MailHelper } = require('../lib/mails/mail-helper');
+const { EmailSender } = require('../lib/mails/email-sender');
 
 class Mailer {
   constructor(envelope = {}) {
@@ -21,7 +21,7 @@ class Mailer {
   }
 
   async main() {
-    const mailHelper = new MailHelper({
+    const mailHelper = new EmailSender({
       to: this.to,
       template: this.body,
       subject: this.subject,

@@ -8,7 +8,7 @@ const logger = require('../../lib/log');
 
 const log = logger.module('lib/mails/mail-helper');
 
-class MailHelper {
+class EmailSender {
   /**
    * @param {string} [authToken]
    * @param {object} [replacements]
@@ -81,11 +81,13 @@ class MailHelper {
    * @private
    */
   _getHtml() {
+    // {{{ }}}
     const htmlFirstLevel = Mustache.render(
       this.template,
       this.replacements,
     );
 
+    // <% %>
     const partials = null;
     const tags = ['<%', '%>'];
     const htmlSecondLevel = Mustache.render(
@@ -184,5 +186,5 @@ class MailHelper {
 }
 
 module.exports = {
-  MailHelper,
+  EmailSender,
 };

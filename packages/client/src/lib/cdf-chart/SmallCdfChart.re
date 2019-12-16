@@ -28,7 +28,7 @@ let make =
       ~color=`hex("7e9db7"),
     ) =>
   <div className={Styles.graph(color)}>
-    <CdfChart
+    <FC__CdfChart__Base
       width
       height
       ?minX

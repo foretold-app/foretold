@@ -8,8 +8,8 @@ type state = {
   // --> 2
   dataType: string,
   // ---> 3, Measurement.value
-  floatCdf: FloatCdf.t,
-  floatCdfAndPoint: FloatCdf.t,
+  floatCdf: FC__Types.Dist.t,
+  floatCdfAndPoint: FC__Types.Dist.t,
   cdfType: string,
   percentage: float,
   binary: bool,
@@ -35,8 +35,8 @@ A normal distribution with a mean of 5 and a standard deviation of 2.";
 
 type action =
   // -> Measurement.value
-  | UpdateFloatCdf(FloatCdf.t)
-  | UpdateFloatCdfAndPoint(FloatCdf.t)
+  | UpdateFloatCdf(FC__Types.Dist.t)
+  | UpdateFloatCdfAndPoint(FC__Types.Dist.t)
   | UpdateCdfType(string)
   | UpdateHasLimitError(bool)
   | UpdatePercentage(float)
@@ -231,7 +231,7 @@ module ValueInput = {
         onUpdate={(event, _sampler) =>
           {
             let (ys, xs, hasLimitError) = event;
-            let asGroup: FloatCdf.t = {xs, ys};
+            let asGroup: FC__Types.Dist.t = {xs, ys};
             send(UpdateCdfType("POINT"));
             send(UpdateHasLimitError(hasLimitError));
             send(UpdateFloatCdf(asGroup));
@@ -251,7 +251,7 @@ module ValueInput = {
         onUpdate={(event, sampler) =>
           {
             let (ys, xs, hasLimitError) = event;
-            let asGroup: FloatCdf.t = {xs, ys};
+            let asGroup: FC__Types.Dist.t = {xs, ys};
 
             switch (sampler##isRangeDistribution) {
             | true => send(UpdateCdfType("CDF"))
@@ -485,26 +485,10 @@ module Main = {
       <div className=Styles.chartSection>
         {switch (state.dataType, state.cdfType) {
          | ("FLOAT_CDF", _) when E.A.length(state.floatCdf.xs) > 1 =>
-           <LargeCdfChart
-             data={
-               state.floatCdf
-               |> (e => (e.xs, e.ys))
-               |> MeasurementValue.FloatCdf.fromArrays
-               |> MeasurementValue.toPdf
-               |> MeasurementValue.FloatCdf.toJs
-             }
-           />
+           <FC__CdfChart__Large cdf={state.floatCdf} />
          | ("FLOAT_CDF_AND_POINT", "CDF")
              when E.A.length(state.floatCdfAndPoint.xs) > 1 =>
-           <LargeCdfChart
-             data={
-               state.floatCdfAndPoint
-               |> (e => (e.xs, e.ys))
-               |> MeasurementValue.FloatCdf.fromArrays
-               |> MeasurementValue.toPdf
-               |> MeasurementValue.FloatCdf.toJs
-             }
-           />
+           <FC__CdfChart__Large cdf={state.floatCdfAndPoint} />
          | _ => <Null />
          }}
       </div>
@@ -552,9 +536,9 @@ let make =
       ~state=measurable.state,
     );
 
-  let (floatCdf, setFloatCdf) = React.useState(() => FloatCdf.empty);
+  let (floatCdf, setFloatCdf) = React.useState(() => FC__Types.Dist.empty);
   let (floatCdfAndPoint, setFloatCdfAndPoint) =
-    React.useState(() => FloatCdf.empty);
+    React.useState(() => FC__Types.Dist.empty);
   let (cdfType, setCdfType) = React.useState(() => "CDF");
 
   let (percentage, setPercentage) = React.useState(() => 50.);
@@ -599,9 +583,10 @@ let make =
 
   let send = action => {
     switch (action) {
-    | UpdateFloatCdf((floatCdf: FloatCdf.t)) => setFloatCdf(_ => floatCdf)
+    | UpdateFloatCdf((floatCdf: FC__Types.Dist.t)) =>
+      setFloatCdf(_ => floatCdf)
 
-    | UpdateFloatCdfAndPoint((floatCdfAndPoint: FloatCdf.t)) =>
+    | UpdateFloatCdfAndPoint((floatCdfAndPoint: FC__Types.Dist.t)) =>
       setFloatCdfAndPoint(_ => floatCdfAndPoint)
 
     | UpdateCdfType((cdfType: string)) => setCdfType(_ => cdfType)

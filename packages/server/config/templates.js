@@ -16,8 +16,8 @@ module.exports = [
     envelopeTemplate: {
       outerTemplate: '{{{ innerTemplate }}}'
         + '<hr /> '
-        + '<a href="{{{ unsubscribe.link }}}">Unsubscribe</a> |'
-        + '<a href="{{{ subscribe.link }}}">Subscribe</a>.',
+        + '<a href="<% unsubscribe.link %>">Unsubscribe</a> |'
+        + '<a href="<% subscribe.link %>">Subscribe</a>.',
     },
   },
   {

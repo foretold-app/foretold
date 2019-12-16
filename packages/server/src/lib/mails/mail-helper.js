@@ -81,7 +81,21 @@ class MailHelper {
    * @private
    */
   _getHtml() {
-    return Mustache.render(this.template, this._getReplacements());
+    const htmlFirstLevel = Mustache.render(
+      this.template,
+      this.replacements,
+    );
+
+    const partials = null;
+    const tags = ['<%', '%>'];
+    const htmlSecondLevel = Mustache.render(
+      htmlFirstLevel,
+      this._getReplacements(),
+      partials,
+      tags,
+    );
+
+    return htmlSecondLevel;
   }
 
   /**
@@ -93,7 +107,6 @@ class MailHelper {
    */
   _getReplacements() {
     return {
-      ...this.replacements,
       subscribe: {
         link: this._getSubscribeLink(),
       },

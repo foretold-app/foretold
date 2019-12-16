@@ -19,7 +19,8 @@ class Params {
       seriesId: (v) => _.isString(v) || utils.none(v),
       email: (v) => _.isString(v) || utils.none(v),
       channelId: (v) => _.isString(v) || utils.none(v),
-      isEmailVerified: (v) => _.isBoolean(v) || utils.none(v),
+      isEmailVerified: (v) => _.isArray(v) || utils.none(v),
+      isNotEmailVerified: (v) => _.isBoolean(v) || utils.none(v),
     };
     utils.extend(this.constructor.name, params, list, this);
     utils.test(this.constructor.name, list, this);

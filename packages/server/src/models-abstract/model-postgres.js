@@ -458,7 +458,7 @@ class ModelPostgres extends Model {
       });
     }
 
-    if (filter.isEmailVerified) {
+    if (!!filter.isEmailVerified) {
       where[this.and].push({
         isEmailVerified: {
           [this.in]: filter.isEmailVerified,

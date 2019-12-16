@@ -44,7 +44,8 @@ class EmailEnvelope {
    * @returns {EmailEnvelope}
    */
   setOuterTemplate(outerTemplate) {
-    this.body = Mustache.render(outerTemplate, { innerTemplate: this.body });
+    const view = { innerTemplate: this.body };
+    this.body = Mustache.render(outerTemplate, view);
     return this;
   }
 

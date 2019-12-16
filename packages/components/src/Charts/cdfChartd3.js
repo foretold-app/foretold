@@ -83,23 +83,18 @@ function chart() {
     xAxis
       .ticks(5)
       .tickFormat(d => {
-        	if(Math.abs(d)<1){
-            return(d3.format(".2")(d))
-
-          }else if(xMin>1000 && xMax<3000){
+        	if (Math.abs(d)<1) {
+            return d3.format(".2")(d);
+          } else if (xMin>1000 && xMax<3000) {
             // Condition which identifies years; 2019, 2020,2021. 
-            return(d3.format(".0")(d))
-
-          }else{
-            var prefix = d3.formatPrefix(".0", d)
-            output = prefix(d)
-            output = output.replace("G","B")
-            return(output)
+            return d3.format(".0")(d);
+          } else {
+            var prefix = d3.formatPrefix(".0", d);
+            output = prefix(d);
+            output = output.replace("G","B");
+            return output;
           }
-
       });
-    
-    
 
     //Line generator
     var line = d3.line()

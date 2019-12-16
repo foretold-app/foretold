@@ -1,5 +1,5 @@
-const assert = require('assert');
 const _ = require('lodash');
+const assert = require('assert');
 
 const { Producer } = require('../producer');
 
@@ -13,17 +13,31 @@ class ProducerNotifications extends Producer {
 
   /**
    * @param {object} replacements
-   * @param {object} to
+   * @param {string | null} recipient
    * @return {Promise<Models.Notification>}
    * @protected
    */
-  async _queueEmail(replacements = {}, to = null) {
-    const template = await this._getTemplate();
+  async _queueEmail(replacements = {}, recipient = null) {
+    const template = await this._getTemplate(this.templateName);
+    const outerTemplate = await this._getOuterTemplate();
+
     const emailEnvelope = new Producer.EmailEnvelope(template.envelopeTemplate);
     const emailEnvelope$ = emailEnvelope
-      .instanceFactory(replacements)
-      .setTo(to);
+      .setRecipient(recipient)
+      .setOuterTemplate(outerTemplate)
+      .instanceFactory(replacements);
+
     return this._createEmailNotification(emailEnvelope$);
+  }
+
+  /**
+   * @returns {Promise<string>}
+   * @protected
+   */
+  async _getOuterTemplate() {
+    const name = Producer.TEMPLATE_NAME.EMAIL_OUTER_TEMPLATE;
+    const outerTemplate = await this._getTemplate(name);
+    return _.get(outerTemplate, 'envelopeTemplate.outerTemplate') || '';
   }
 
   /**
@@ -61,7 +75,7 @@ class ProducerNotifications extends Producer {
    * @protected
    */
   async _assignNotification(agent, notification) {
-    assert(!!notification.id, 'Notification ID is required');
+    assert(!!_.get(notification, 'id'), 'Notification ID is required');
 
     const data = {
       agentId: _.get(agent, 'id', null),

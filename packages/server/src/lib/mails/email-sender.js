@@ -8,7 +8,7 @@ const logger = require('../../lib/log');
 
 const log = logger.module('lib/mails/mail-helper');
 
-class MailHelper {
+class EmailSender {
   /**
    * @param {string} [authToken]
    * @param {object} [replacements]
@@ -30,7 +30,6 @@ class MailHelper {
     this.template = template;
     this.to = to;
     this.subject = subject;
-    this.html = Mustache.render(template, replacements);
 
     this.config = emailConfig;
     this.gateway = new SmtpGateways(emailConfig).getDefault();
@@ -49,7 +48,7 @@ class MailHelper {
   main(
     target = this.to,
     subject = this.subject,
-    contentHtml = this.html,
+    contentHtml = this._getHtml(),
   ) {
     log.trace('______sendMail____');
 
@@ -59,7 +58,7 @@ class MailHelper {
       html: contentHtml,
       from: this.from,
       generateTextFromHTML: true,
-      list: this._ListHeaders(),
+      list: this._listHeaders(),
     };
 
     log.trace('mailOptions.body', JSON.stringify(mailOptions));
@@ -78,18 +77,64 @@ class MailHelper {
   }
 
   /**
+   * @returns {string}
+   * @private
+   */
+  _getHtml() {
+    // {{{ }}}
+    const htmlFirstLevel = Mustache.render(
+      this.template,
+      this.replacements,
+    );
+
+    // <% %>
+    const partials = null;
+    const tags = ['<%', '%>'];
+    const htmlSecondLevel = Mustache.render(
+      htmlFirstLevel,
+      this._getReplacements(),
+      partials,
+      tags,
+    );
+
+    return htmlSecondLevel;
+  }
+
+  /**
+   * @returns {{
+   *  subscribe: {link: string},
+   *  unsubscribe: {link: string}
+   * }}
+   * @private
+   */
+  _getReplacements() {
+    return {
+      subscribe: {
+        link: this._getSubscribeLink(),
+      },
+      unsubscribe: {
+        link: this._getUnsubscribeLink(),
+      },
+    };
+  }
+
+  /**
    * @protected
    * @docs https://nodemailer.com/message/list-headers/
-   * @returns {{help: string, unsubscribe: {comment: string, url: string}, subscribe: *[]}}
+   * @returns {{
+   *  help: string,
+   *  unsubscribe: {comment: string, url: string},
+   *  subscribe: {url: string, comment: string}[]
+   * }}
    */
-  _ListHeaders() {
+  _listHeaders() {
     return {
       // List-Help: <mailto:admin@example.com?subject=help>
       help: this._compileStr(this.config.emailHelp),
 
       // List-Unsubscribe: <http://example.com> (Comment)
       unsubscribe: {
-        url: this._compileStr(this.config.unsubscribeLink),
+        url: this._getUnsubscribeLink(),
         comment: this._compileStr(this.config.unsubscribeComment),
       },
 
@@ -98,11 +143,27 @@ class MailHelper {
       subscribe: [
         // this._compileStr(this.config.subscribeEmail),
         {
-          url: this._compileStr(this.config.subscribeLink),
+          url: this._getSubscribeLink(),
           comment: this._compileStr(this.config.subscribeComment),
         },
       ],
     };
+  }
+
+  /**
+   * @returns {string}
+   * @private
+   */
+  _getSubscribeLink() {
+    return this._compileStr(this.config.subscribeLink);
+  }
+
+  /**
+   * @returns {string}
+   * @private
+   */
+  _getUnsubscribeLink() {
+    return this._compileStr(this.config.unsubscribeLink);
   }
 
   /**
@@ -125,5 +186,5 @@ class MailHelper {
 }
 
 module.exports = {
-  MailHelper,
+  EmailSender,
 };

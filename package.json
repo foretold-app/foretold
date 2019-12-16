@@ -18,7 +18,8 @@
     "packages/build": "cd packages/guesstimator && yarn build && cd ../.. && cd packages/components && yarn build && cd ../.. && cd packages/prediction-analysis && yarn build && cd ../.. && cd packages/client && yarn build-t && cd ../..",
     "packages/clean": "cd packages/guesstimator && yarn clean && cd ../.. && cd packages/components && yarn clean && cd ../.. && cd packages/prediction-analysis && yarn clean && cd ../.. && cd packages/client && yarn clean && cd ../..",
     "packages/remove": "rm -rf ./packages/client/node_modules && rm -rf ./packages/components/node_modules && rm -rf ./packages/prediction-analysis/node_modules && rm -rf ./packages/guesstimator/node_modules",
-    "packages/test": "yarn guesstimator/test:ci && yarn cdf/test:ci && yarn bots/test:ci && yarn prediction-analysis/test:ci",
+    "packages/test": "yarn server/test:ci && yarn guesstimator/test:ci && yarn cdf/test:ci && yarn bots/test:ci && yarn prediction-analysis/test:ci",
+    "packages/lint": "yarn server/lint:ci",
 
     "server/db:create": "cd packages/server && yarn db:create && cd ../..",
     "server/db:migrate": "cd packages/server && yarn db:migrate cd ../..",

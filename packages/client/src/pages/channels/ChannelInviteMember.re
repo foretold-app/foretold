@@ -35,7 +35,7 @@ module FormComponent = {
 
     <Form.Provider value=reform>
       {switch (result) {
-       | Error(_error) => <p> {"Something went wrong..." |> Utils.ste} </p>
+       | Error(_error) => <p> {Lang.networkError |> Utils.ste} </p>
        | Data(_) => <AntdAlert message=Lang.memberInvited type_="success" />
        | _ =>
          <Antd.Form onSubmit>

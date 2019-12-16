@@ -45,9 +45,9 @@ let make = () => {
         | (Profile, Some(loggedUser)) =>
           <FillWithSidebar> <Profile loggedUser /> </FillWithSidebar>
         | (Subscribe, Some(loggedUser)) =>
-          <FillWithSidebar> <Preferences loggedUser /> </FillWithSidebar>
+          <FillWithSidebar> <SubscribePage loggedUser /> </FillWithSidebar>
         | (Unsubscribe, Some(loggedUser)) =>
-          <FillWithSidebar> <Preferences loggedUser /> </FillWithSidebar>
+          <FillWithSidebar> <UnsubscribePage loggedUser /> </FillWithSidebar>
         | (EntityShow(id), Some(_)) =>
           <FillWithSidebar>
             <EntityShow pageParams={id: id} />

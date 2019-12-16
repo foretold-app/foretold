@@ -150,7 +150,7 @@ class Emails extends Consumer {
 
   /**
    * @param {Models.NotificationStatus} notificationStatus
-   * @return {Promise<Models.AgentPreference | null>}
+   * @return {Promise<Models.Preference | null>}
    * @protected
    */
   async _getPreferences(notificationStatus) {
@@ -177,7 +177,7 @@ class Emails extends Consumer {
   }
 
   /**
-   * @param {Models.AgentPreference} agentPreferences
+   * @param {Models.Preference} agentPreferences
    * @param {Models.User} user
    * @return {Promise<boolean>}
    * @protected

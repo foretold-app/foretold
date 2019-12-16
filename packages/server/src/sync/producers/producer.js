@@ -76,12 +76,14 @@ class Producer {
   }
 
   /**
+   * @param {string} [name]
    * @return {Promise<Models.Template>}
    * @protected
    */
-  async _getTemplate() {
-    assert(!!this.templateName, 'Template Name is required');
-    const params = { name: this.templateName };
+  async _getTemplate(name = this.templateName) {
+    assert(!!name, 'Template Name is required');
+
+    const params = { name };
     const template = await this.templates.getOne(params);
 
     assert(!!_.get(template, 'name'), 'Template name is required');

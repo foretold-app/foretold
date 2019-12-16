@@ -514,6 +514,22 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.preferences.update,
       },
 
+      unsubscribe: {
+        type: graphql.GraphQLBoolean,
+        args: {
+          agentId: { type: graphql.GraphQLNonNull(types.scalars.agentId) },
+        },
+        resolve: resolvers.preferences.unsubscribe,
+      },
+
+      subscribe: {
+        type: graphql.GraphQLBoolean,
+        args: {
+          agentId: { type: graphql.GraphQLNonNull(types.scalars.agentId) },
+        },
+        resolve: resolvers.preferences.subscribe,
+      },
+
       globalSettingUpdate: {
         type: types.globalSettings.globalSetting,
         args: {

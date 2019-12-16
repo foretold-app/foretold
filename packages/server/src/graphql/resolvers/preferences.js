@@ -9,12 +9,12 @@ const { Data } = require('../../data/classes');
 
 /**
  * @param {object | null} root
- * @param {object} args
- * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _args
+ * @param {Schema.Context} _context
+ * @param {object} _info
  * @returns {Promise<*>}
  */
-async function getOne(root, args, context, info) {
+async function getOne(root, _args, _context, _info) {
   const agentId = _.get(root, 'id', null);
 
   const params = new Params({ agentId });
@@ -25,7 +25,7 @@ async function getOne(root, args, context, info) {
 }
 
 /**
- * @param {*} root
+ * @param {*} _root
  * @param {object} args
  * @param {Models.PreferenceID} args.id
  * @param {object} args.input
@@ -33,7 +33,7 @@ async function getOne(root, args, context, info) {
  * @param {object} _info
  * @returns {Promise<Models.User>}
  */
-async function update(root, args, _context, _info) {
+async function update(_root, args, _context, _info) {
   const id = _.get(args, 'id', null);
 
   const params = new Params({ id });
@@ -43,7 +43,35 @@ async function update(root, args, _context, _info) {
   return new PreferencesData().updateOne(params, data, options);
 }
 
+/**
+ * @param {*} _root
+ * @param {object} args
+ * @param {Models.AgentID} args.id
+ * @param {Schema.Context} _context
+ * @param {object} _info
+ * @returns {Promise<boolean>}
+ */
+async function subscribe(_root, args, _context, _info) {
+  const agentId = _.get(args, 'agentId', null);
+  return new PreferencesData().subscribe(agentId);
+}
+
+/**
+ * @param {*} _root
+ * @param {object} args
+ * @param {Models.AgentID} args.id
+ * @param {Schema.Context} _context
+ * @param {object} _info
+ * @returns {Promise<boolean>}
+ */
+async function unsubscribe(_root, args, _context, _info) {
+  const agentId = _.get(args, 'agentId', null);
+  return new PreferencesData().unsubscribe(agentId);
+}
+
 module.exports = {
   getOne,
   update,
+  subscribe,
+  unsubscribe,
 };

@@ -258,6 +258,11 @@ module Agent = {
 
   let toAgentId = (json: Js.Json.t): Types.agentId => json |> E.J.toString;
 
+  module AgentId = {
+    type t = Js.Json.t;
+    let make = (agentId: string): t => Js.Json.string(agentId);
+  };
+
   let name = (a: t): option(string) =>
     switch (a.agentType) {
     | Some(Bot(b)) => b.name

@@ -10,7 +10,8 @@ const { measurementValueValidation } = require('./measurements');
 const { measurableStateValidation } = require('./measurements');
 const { measurementTypeValidation } = require('./measurements');
 const { setContextBot } = require('./bots');
-const { setContextPreference } = require('./preferences');
+const { setContextPreferenceFromId } = require('./preferences');
+const { setContextPreferenceFromAgentId } = require('./preferences');
 const { setContextUser } = require('./users');
 const { authenticationInputValidation } = require('./authentications');
 
@@ -59,21 +60,21 @@ const middlewares = {
 
   Channel: {
     permissions: async (resolve, root, args, context, info) => {
-      context = _.cloneDeep(context);
-      await setContextChannelByRoot(root, args, context, info);
-      await setContextChannelMemberships(root, args, context, info);
-      await setContextChannelMembershipsAdmins(root, args, context, info);
-      return resolve(root, args, context, info);
+      const context$ = _.cloneDeep(context);
+      await setContextChannelByRoot(root, args, context$, info);
+      await setContextChannelMemberships(root, args, context$, info);
+      await setContextChannelMembershipsAdmins(root, args, context$, info);
+      return resolve(root, args, context$, info);
     },
   },
 
   ChannelsMembership: {
     permissions: async (resolve, root, args, context, info) => {
-      context = _.cloneDeep(context);
-      await setContextChannel(root, args, context, info);
-      await setContextChannelMemberships(root, args, context, info);
-      await setContextChannelMembershipsAdmins(root, args, context, info);
-      return resolve(root, args, context, info);
+      const context$ = _.cloneDeep(context);
+      await setContextChannel(root, args, context$, info);
+      await setContextChannelMemberships(root, args, context$, info);
+      await setContextChannelMembershipsAdmins(root, args, context$, info);
+      return resolve(root, args, context$, info);
     },
   },
 
@@ -191,7 +192,17 @@ const middlewares = {
     },
 
     preferenceUpdate: async (resolve, root, args, context, info) => {
-      await setContextPreference(root, args, context, info);
+      await setContextPreferenceFromId(root, args, context, info);
+      return resolve(root, args, context, info);
+    },
+
+    subscribe: async (resolve, root, args, context, info) => {
+      await setContextPreferenceFromAgentId(root, args, context, info);
+      return resolve(root, args, context, info);
+    },
+
+    unsubscribe: async (resolve, root, args, context, info) => {
+      await setContextPreferenceFromAgentId(root, args, context, info);
       return resolve(root, args, context, info);
     },
 

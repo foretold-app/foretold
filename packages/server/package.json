@@ -23,7 +23,7 @@
     "lint": "eslint src --max-warnings 267",
     "lint:ci": "eslint src --max-warnings 267 --quiet",
     "lint-table": "eslint src --format table",
-    "lint-codeframe": "eslint src --format codeframe",
+    "lint:cf": "eslint src --format codeframe",
     "lint-fix": "eslint src --fix",
     "serve": "node ./src/index.js",
     "db:create": "sequelize db:create",

@@ -76,6 +76,7 @@
     "reason-apollo": "0.18.0",
     "reason-apollo-hooks": "2.4.0",
     "react-apollo-hooks": "0.5.0",
+    "react-apollo": "2.5.8",
     "@baransu/graphql_ppx_re": "0.4.0",
     "lenses-ppx": "4.0.0",
     "react": "16.11.0",

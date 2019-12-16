@@ -8105,7 +8105,7 @@ react-apollo-hooks@0.5.0:
   dependencies:
     lodash "^4.17.11"
 
-react-apollo@^2.5.8:
+react-apollo@2.5.8, react-apollo@^2.5.8:
   version "2.5.8"
   resolved "https://registry.yarnpkg.com/react-apollo/-/react-apollo-2.5.8.tgz#c7a593b027efeefdd8399885e0ac6bec3b32623c"
   integrity sha512-60yOQrnNosxU/tRbOxGDaYNLFcOKmQqxHPhxyvKTlGIaF/rRCXQRKixUgWVffpEupSHHD7psY5k5ZOuZsdsSGQ==

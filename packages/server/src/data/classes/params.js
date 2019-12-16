@@ -15,6 +15,7 @@ class Params {
       name: (v) => _.isString(v) || utils.none(v),
       auth0Id: (v) => _.isString(v) || utils.none(v),
       measurableId: (v) => _.isString(v) || utils.none(v),
+      measurableIds: (v) => _.isArray(v) || utils.none(v),
       competitorType: (v) => _.isString(v) || _.isArray(v) || utils.none(v),
       seriesId: (v) => _.isString(v) || utils.none(v),
       email: (v) => _.isString(v) || utils.none(v),

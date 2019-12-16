@@ -92,6 +92,7 @@ let tableJson: Js.Json.t = Json.parseOrRaise(tableJsonString);
 [@react.component]
 let make = (~tableJson=tableJson, ~editor: DashboardTableEditor.editor) => {
   let tableJson = React.useMemo(_ => DashboardTable.Json.decode(tableJson));
+
   switch (tableJson) {
   | Ok(table) =>
     MeasurablesGet.component(

@@ -74,23 +74,21 @@ function chart() {
 
     var yMin = d3.min(attrs.data.primary.ys);
     var yMax = d3.max(attrs.data.primary.ys);
-    var yScale = d3.scaleLinear().domain([yMin, yMax]).range([calc.chartHeight, 0]);
+    var yScale = d3.scaleLinear().domain([yMin, yMax])
+      .range([calc.chartHeight, 0]);
 
     //Axis generator
     var xAxis = d3.axisBottom(xScale).ticks(5);
 
-         xAxis
-            .ticks(5)
-            .tickFormat(d => {
-                  if(Math.abs(d)<1){
-                    return(d3.format(".2")(d))
-
-                  }else{
-                      var prefix = d3.formatPrefix(".0", d)
-                        return(prefix(d))
-                  }
-            })  
-
+    xAxis
+      .ticks(5)
+      .tickFormat(d => {
+        if (Math.abs(d) < 1) {
+          return d3.format(".2")(d);
+        } else {
+          return d3.formatPrefix(".0", d)(d);
+        }
+      });
 
     //Line generator
     var line = d3.line()
@@ -136,7 +134,10 @@ function chart() {
     //Add container g element
     var chart = svg
       .patternify({ tag: 'g', selector: 'chart' })
-      .attr('transform', 'translate(' + calc.chartLeftMargin + ',' + calc.chartTopMargin + ')');
+      .attr(
+        'transform',
+        'translate(' + calc.chartLeftMargin + ',' + calc.chartTopMargin + ')',
+      );
 
     //Add axis
     chart.patternify({ tag: 'g', selector: 'axis' })
@@ -324,7 +325,7 @@ function chart() {
   main.attrs = attrs;
 
   //Exposed update functions
-  main.data = function (value) {
+  main.data = function data(value) {
     if (!arguments.length) return attrs.data;
     attrs.data = value;
     if (typeof updateData === 'function') {

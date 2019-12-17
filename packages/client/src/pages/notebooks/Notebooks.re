@@ -64,12 +64,15 @@ let make = (~channelId: string) => {
 
     let isFound = Array.length(items) > 0;
 
+    let table =
+      switch (channelId) {
+      | "" => <NotebooksTable items />
+      | _ => <NotebooksTable items columns=NotebooksTable.Columns.short />
+      };
+
     let body =
       switch (reducerParams.response, isFound) {
-      | (Success(_), true) =>
-        <FC.PageCard.Body>
-          <NotebooksTable items channelId />
-        </FC.PageCard.Body>
+      | (Success(_), true) => <FC.PageCard.Body> table </FC.PageCard.Body>
       | (Success(_), false) => <NothingToShow />
       | _ => <Spin />
       };

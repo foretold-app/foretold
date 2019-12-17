@@ -2,6 +2,18 @@ module Columns = {
   type record = Types.notebook;
   type column = Table.column(record);
 
+  let channel =
+    Table.Column.make(
+      ~name="Community" |> Utils.ste,
+      ~render=
+        (r: record) =>
+          <Link linkType={Internal(ChannelShow(r.channelId))}>
+            {r.channel.name |> Utils.ste}
+          </Link>,
+      ~flex=2,
+      (),
+    );
+
   let name =
     Table.Column.make(
       ~name="Name" |> Utils.ste,
@@ -29,15 +41,15 @@ module Columns = {
              )
           |> E.O.default("")
           |> Utils.ste,
-      ~flex=1,
       (),
     );
 
-  let all = [|name, owner, time|];
+  let all = [|channel, name, owner, time|];
+  let short = [|name, owner, time|];
 };
 
 [@react.component]
-let make = (~items, ~columns=Columns.all, ~channelId: string) => {
+let make = (~items, ~columns=Columns.all) => {
   let onRowClb = (notebook: Types.notebook) => {
     Routing.Url.push(ChannelNotebook(notebook.channelId, notebook.id));
   };

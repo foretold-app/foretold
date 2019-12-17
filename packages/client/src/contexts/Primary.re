@@ -393,6 +393,16 @@ module Channel = {
     permissions,
   };
 
+  let toChannel = (channel: Js.t('a)) => {
+    make(
+      ~id=channel##id,
+      ~name=channel##name,
+      ~isArchived=channel##isArchived,
+      ~isPublic=channel##isPublic,
+      (),
+    );
+  };
+
   let getGlobalChannel = (): t =>
     make(
       ~id="home",
@@ -921,6 +931,7 @@ module Notebook = {
         ~createdAt: Js.Json.t,
         ~updatedAt: Js.Json.t,
         ~owner: Js.t('a),
+        ~channel: Js.t('b),
         (),
       )
       : t => {
@@ -932,6 +943,7 @@ module Notebook = {
     createdAt: toCreatedAt(createdAt),
     updatedAt: toUpdatedAt(updatedAt),
     owner: AgentType.toAgent(owner),
+    channel: Channel.toChannel(channel),
   };
 
   let convertJsObject = m => {
@@ -944,6 +956,7 @@ module Notebook = {
       ~createdAt=m##createdAt,
       ~updatedAt=m##updatedAt,
       ~owner=m##owner,
+      ~channel=m##channel,
       (),
     );
   };

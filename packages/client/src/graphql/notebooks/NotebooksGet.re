@@ -32,6 +32,12 @@ module Query = [%graphql
               channelId
               createdAt
               updatedAt
+              channel {
+                id
+                name @bsDecoder(fn: "E.J.toString")
+                isArchived
+                isPublic
+              }
               owner {
                 id
                 name

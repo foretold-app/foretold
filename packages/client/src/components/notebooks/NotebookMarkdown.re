@@ -45,7 +45,7 @@ let make = (~blocks: blocks, ~notebookRedux: NotebookRedux.t) => {
         {blocks
          |> E.A.fmap(e =>
               switch (e) {
-              | Markdown(str) => <ReactMarkdown source=str />
+              | Markdown(str) => <Markdown source=str />
               | Json(json) =>
                 <div
                   className=Css.(

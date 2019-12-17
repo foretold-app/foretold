@@ -6,7 +6,7 @@ let make = (~markdown) => {
         <FC.PageCard>
           <FC.PageCard.Body>
             <FC.PageCard.BodyPadding>
-              <ReactMarkdown source=markdown />
+              <Markdown source=markdown />
             </FC.PageCard.BodyPadding>
           </FC.PageCard.Body>
         </FC.PageCard>

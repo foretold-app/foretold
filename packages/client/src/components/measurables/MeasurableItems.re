@@ -75,7 +75,7 @@ let description = (~m: Types.measurable) =>
   switch (m.labelCustom) {
   | Some("")
   | None => None
-  | Some(text) => Some(<ReactMarkdown source=text />)
+  | Some(text) => Some(<Markdown source=text />)
   };
 
 let endpointResponse = (~m: Types.measurable) =>

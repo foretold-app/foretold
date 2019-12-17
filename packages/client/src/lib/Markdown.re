@@ -54,5 +54,5 @@ module Styles = {
 
 [@react.component]
 let make = (~source, ~supportForetoldJs=false) => {
-  <ReactMarkdown source />;
+  <ReactMarkdown source={Js.String.trim(source)} />;
 };

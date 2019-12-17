@@ -1,7 +1,7 @@
 const actions = require('./actions');
 const consumers = require('./consumers');
 const { Mailer } = require('./mailer');
-const { GitHubApi } = require('../lib/github/git-hub-api');
+const { GitHubApi } = require('./github/git-hub-api');
 const logger = require('../lib/log');
 
 const log = logger.module('sync/listeners');

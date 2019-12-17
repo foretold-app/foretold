@@ -14,7 +14,7 @@ const users = [
   },
   {
     name: "Paul Smith"
-  }
+  },
 ];
 
 const bots = [
@@ -33,7 +33,7 @@ const bots = [
   {
     name: "Bot 4",
     competitorType: "AGGREGATION",
-  }
+  },
 ];
 
 const measurables = [
@@ -56,7 +56,7 @@ const measurables = [
   {
     name: "Rating of usefulness of Georgia",
     valueType: "FLOAT"
-  }
+  },
 ];
 
 module.exports = {
@@ -101,6 +101,7 @@ module.exports = {
       let user = _.sample(allUsers);
       let agent = await user.getAgent();
       let measurable = _.sample(allMeasurables);
+
       const u = await models.Measurement.create({
         agentId: agent.id,
         measurableId: measurable.id,
@@ -114,16 +115,17 @@ module.exports = {
       let bot = _.sample(allBots);
       let agent = await bot.getAgent();
       let measurable = _.sample(allMeasurables);
+
       const u = await models.Measurement.create({
         agentId: agent.id,
         measurableId: measurable.id,
         isAggregation: false,
         competitorType: "COMPETITIVE",
         value: { trio: { p25: 12.5, p50: 43.5, p75: 130.5 } },
-      })
+      });
     }
   },
 
   down: async () => {
-  }
+  },
 };

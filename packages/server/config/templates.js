@@ -2,12 +2,13 @@ const { TEMPLATE_NAME } = require('../src/enums');
 const { TEMPLATE_TYPE } = require('../src/enums');
 
 /**
+ *
  * Do not forget that this file is used as a stub of DB table "Templates".
  * This is why if you had decided to return to DB you would have needed
  * to migrate this data on DB table.
- */
-/**
+ *
  * @todo: To rename "envelopeTemplate" into something yet.
+ *
  */
 module.exports = [
   {

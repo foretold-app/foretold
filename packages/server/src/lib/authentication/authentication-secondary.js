@@ -1,5 +1,3 @@
-const _ = require('lodash');
-
 const { Jwt } = require('../jwt');
 const { Auth0 } = require('../auth0');
 

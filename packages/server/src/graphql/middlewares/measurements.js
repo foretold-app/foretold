@@ -9,7 +9,7 @@ const { Comment } = require('@foretold/measurement-value');
 const { MEASURABLE_STATE } = require('../../enums');
 const { MEASUREMENT_COMPETITOR_TYPE } = require('../../enums');
 const { MEASURABLE_VALUE_TYPE } = require('../../enums');
-const lang = require('../../lang');
+const lang = require('../../../config/lang');
 
 /**
  * @param {*} root

@@ -2,7 +2,7 @@ const { AuthenticationError } = require('apollo-server');
 
 const jwt = require('jsonwebtoken');
 
-const config = require('../config');
+const config = require('../../config/config');
 
 class Jwt {
   constructor() {

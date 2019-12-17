@@ -29,7 +29,6 @@ class KenFacade {
    * @returns {{subject: string, property: string}}
    */
   names(subjectId, propertyId) {
-
     const subjects = this.db.findThing(subjectId);
     const subjectsFacts = subjects
       ? subjects.propertyIdFacts(this.NAME)

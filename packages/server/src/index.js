@@ -3,7 +3,7 @@ const cors = require('cors');
 const express = require('express');
 const bodyParser = require('body-parser-graphql');
 
-const config = require('./config');
+const config = require('../config/config');
 const { runJobs, runListeners } = require('./sync');
 const { events, emitter } = require('./sync');
 const { apolloServer } = require('./graphql/apollo-server');
@@ -81,7 +81,7 @@ app.use(cors());
 
 {
   // Supporting of GitHub integration
-  const { app: subApp } = require('./lib/github/app');
+  const { app: subApp } = require('./sync/github/app');
   app.use('/hooks', subApp);
 }
 

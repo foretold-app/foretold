@@ -1,10 +1,12 @@
 # Prediction Analysis Library
 
-This is a [ReasonML](https://reasonml.github.io/) library to organize and score predictions.
+This is a [ReasonML](https://reasonml.github.io/) library to organize 
+and score predictions.
 
-## MeasurementValue
+## Measurement Value
 
-There are several kinds of values relevant for predictions used in Foretold. Below are the most complicated.
+There are several kinds of values relevant for predictions used in Foretold. 
+Below are the most complicated.
 
 ### Cdf
 
@@ -12,9 +14,13 @@ There are several kinds of values relevant for predictions used in Foretold. Bel
 
 ## PredictionResolutionGroup
 
-A "Prediction Resolution Group" is a group of measurements needed to score a particular prediction. This always requires a prediction and a resolution of similar types. Some scores also require a market prediction as well.
+A "Prediction Resolution Group" is a group of measurements needed to score a 
+particular prediction. This always requires a prediction and a resolution of 
+similar types. Some scores also require a market prediction as well.
 
 ## PredictionResolutionOverTime
 
-A "Prediction Resolution Over Time" is a group of measurements needed to score a user's predictions over a period of time. This is done by making a bunch of Prediction Resolution Groups, scoring those, and taking the average user score over a specific period.
-
+A "Prediction Resolution Over Time" is a group of measurements needed to 
+score a user's predictions over a period of time. This is done by making 
+a bunch of Prediction Resolution Groups, scoring those, and taking the average 
+user score over a specific period.

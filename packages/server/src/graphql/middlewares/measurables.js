@@ -2,7 +2,7 @@ const _ = require('lodash');
 
 const { MeasurablesData } = require('../../data');
 const { Params } = require('../../data/classes');
-const { measurableEmptyName } = require('../../lang');
+const { measurableEmptyName } = require('../../../config/lang');
 const logger = require('../../lib/log');
 
 const log = logger.module('middlewares/measurables');

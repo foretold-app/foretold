@@ -1,5 +1,5 @@
 const auth0 = require('auth0');
-const config = require('../config');
+const config = require('../../config/config');
 
 class Auth0 {
   constructor() {

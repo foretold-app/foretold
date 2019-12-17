@@ -1,7 +1,7 @@
 const assert = require('assert');
 const _ = require('lodash');
 
-const { getMeasurableLinkWithToken } = require('../../../lib/client-urls');
+const { getMeasurableLinkWithToken } = require('../../../../config/client-urls');
 const { MEASUREMENT_COMPETITOR_TYPE } = require('../../../enums');
 
 const { ProducerNotifications } = require('./producer-notifications');

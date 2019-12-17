@@ -8,6 +8,7 @@ class MeasurementValue {
   }
 
   /**
+   * @todo: To move a "require" upper.
    * @param input
    * @returns {*}
    */

@@ -1,6 +1,6 @@
-const { FeedItem } = require('./feed-item');
-const { FeedItemGeneric } = require('./feed-item-generic');
-const { FeedItemMeasurable } = require('./feed-item-measurable');
+const { FeedItem } = require('./feed-items/feed-item');
+const { FeedItemGeneric } = require('./feed-items/feed-item-generic');
+const { FeedItemMeasurable } = require('./feed-items/feed-item-measurable');
 
 module.exports = {
   FeedItem,

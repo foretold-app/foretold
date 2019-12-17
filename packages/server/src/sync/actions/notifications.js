@@ -1,7 +1,7 @@
 const moment = require('moment');
 
 const { sendNotificationToSlack } = require('../../lib/slack');
-const { clientUrl } = require('../../lib/client-urls');
+const { clientUrl } = require('../../../config/client-urls');
 
 class Notifications {
   /**

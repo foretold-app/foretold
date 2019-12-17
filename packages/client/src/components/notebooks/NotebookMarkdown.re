@@ -37,17 +37,17 @@ let markdownToBlocks = (str: string): blocks => {
 
 [@react.component]
 let make = (~blocks: blocks, ~notebookRedux: NotebookRedux.t) => {
-  let head = (~channelId: option(string), ~paginationPage, ()) => ReasonReact.null;
-
   <Div flexDirection=`row>
     <Div flex={`num(5.)}>
       <div className=Markdown.Styles.all>
         {blocks
-         |> E.A.fmap(e =>
+         |> E.A.fmapi((key, e) =>
               switch (e) {
-              | Markdown(str) => <Markdown source=str />
+              | Markdown(str) =>
+                <Markdown source=str key={"nb-" ++ string_of_int(key)} />
               | Json(json) =>
                 <div
+                  key={"nb-" ++ string_of_int(key)}
                   className=Css.(
                     style([
                       marginTop(`em(1.0)),

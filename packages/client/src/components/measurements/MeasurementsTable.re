@@ -124,7 +124,7 @@ module Helpers = {
     | Some(description) =>
       Some(
         <div className=Styles.descriptionStyle>
-          <ReactMarkdown source=description />
+          <Markdown source=description />
         </div>,
       )
     };

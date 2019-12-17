@@ -383,7 +383,7 @@ module ValueInputMapper = {
               <FC.HelpDropdown
                 content=FC.HelpDropdown.{
                   headerContent: "Distribution Editor" |> ste,
-                  bodyContent: <ReactMarkdown source=tutorialSource />,
+                  bodyContent: <Markdown source=tutorialSource />,
                 }
               />
             </span>

@@ -62,6 +62,7 @@ function chart() {
 
     var xMin = d3.min(attrs.data.primary.xs);
     var xMax = d3.max(attrs.data.primary.xs);
+
     if (attrs.scale === 'linear') {
       xScale = d3.scaleLinear()
         .domain([attrs.minX || xMin, attrs.maxX || xMax])
@@ -74,26 +75,25 @@ function chart() {
 
     var yMin = d3.min(attrs.data.primary.ys);
     var yMax = d3.max(attrs.data.primary.ys);
-    var yScale = d3.scaleLinear().domain([yMin, yMax])
+
+    var yScale = d3.scaleLinear()
+      .domain([yMin, yMax])
       .range([calc.chartHeight, 0]);
 
     //Axis generator
-    var xAxis = d3.axisBottom(xScale).ticks(5);
-
-    xAxis
+    var xAxis = d3.axisBottom(xScale)
       .ticks(5)
       .tickFormat(d => {
-        	if (Math.abs(d)<1) {
-            return d3.format(".2")(d);
-          } else if (xMin>1000 && xMax<3000) {
-            // Condition which identifies years; 2019, 2020,2021. 
-            return d3.format(".0")(d);
-          } else {
-            var prefix = d3.formatPrefix(".0", d);
-            output = prefix(d);
-            output = output.replace("G","B");
-            return output;
-          }
+        if (Math.abs(d) < 1) {
+          return d3.format(".2")(d);
+        } else if (xMin > 1000 && xMax < 3000) {
+          // Condition which identifies years; 2019, 2020,2021.
+          return d3.format(".0")(d);
+        } else {
+          var prefix = d3.formatPrefix(".0", d);
+          var output = prefix(d);
+          return output.replace("G", "B");
+        }
       });
 
     //Line generator
@@ -280,6 +280,7 @@ function chart() {
         if ((target === end || target === beginning) && pos.x !== xCoord) {
           break;
         }
+
         //position found
         if (pos.x > xCoord) end = target;
         else if (pos.x < xCoord) beginning = target;

@@ -5,5 +5,5 @@
 let make = (~channel: Types.channel) =>
   channel.description
   |> E.O.React.fmapOrNull(description =>
-       <ReactMarkdown source={Utils.truncateByWords(description)} />
+       <Markdown source={Utils.truncateByWords(description)} />
      );

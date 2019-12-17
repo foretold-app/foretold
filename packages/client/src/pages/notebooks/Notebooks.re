@@ -20,26 +20,25 @@ let pagination =
   <Div>
     <Providers.AppContext.Consumer>
       ...{({loggedUser}) =>
-        Primary.User.authorized(
-          loggedUser,
-          <Div
-            float=`left
-            styles=[
-              Css.style([
-                FC.PageCard.HeaderRow.Styles.itemTopPadding,
-                FC.PageCard.HeaderRow.Styles.itemBottomPadding,
-              ]),
-            ]>
-            <FC.Base.Button
-              variant=FC.Base.Button.Primary
-              size=FC.Base.Button.Small
-              onClick={e =>
-                LinkType.onClick(Internal(ChannelAddNotebook(channelId)), e)
-              }>
-              {"New Notebook" |> Utils.ste}
-            </FC.Base.Button>
-          </Div>,
-        )
+        <Div
+          float=`left
+          styles=[
+            Css.style([
+              FC.PageCard.HeaderRow.Styles.itemTopPadding,
+              FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+            ]),
+          ]>
+          <FC.Base.Button
+            variant=FC.Base.Button.Primary
+            size=FC.Base.Button.Small
+            onClick={e =>
+              LinkType.onClick(Internal(ChannelAddNotebook(channelId)), e)
+            }>
+            {"New Notebook" |> Utils.ste}
+          </FC.Base.Button>
+        </Div>
+        |> Primary.User.authorized(loggedUser)
+        |> E.React2.showIf(channelId != "")
       }
     </Providers.AppContext.Consumer>
     <Div
@@ -66,13 +65,12 @@ let make = (~channelId: string) => {
     let isFound = Array.length(items) > 0;
 
     let body =
-      switch (reducerParams.response) {
-      | Success(_) =>
-        isFound
-          ? <FC.PageCard.Body>
-              <NotebooksTable items channelId />
-            </FC.PageCard.Body>
-          : <NothingToShow />
+      switch (reducerParams.response, isFound) {
+      | (Success(_), true) =>
+        <FC.PageCard.Body>
+          <NotebooksTable items channelId />
+        </FC.PageCard.Body>
+      | (Success(_), false) => <NothingToShow />
       | _ => <Spin />
       };
 

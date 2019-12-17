@@ -39,7 +39,8 @@ module Columns = {
 [@react.component]
 let make = (~items, ~columns=Columns.all, ~channelId: string) => {
   let onRowClb = (notebook: Types.notebook) => {
-    Routing.Url.push(ChannelNotebook(channelId, notebook.id));
+    Routing.Url.push(ChannelNotebook(notebook.channelId, notebook.id));
   };
+
   Table.fromColumns(columns, items, ~onRowClb=Some(onRowClb), ());
 };

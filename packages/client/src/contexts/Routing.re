@@ -157,8 +157,6 @@ module Route = {
     | ["c", channelId, "new"] => Channel({channelId, subPage: NewMeasurable})
     | ["c", channelId, "edit"] => Channel({channelId, subPage: Settings})
     | ["c", channelId, "members"] => Channel({channelId, subPage: Members})
-    | ["c", channelId, "notebooks"] =>
-      Channel({channelId: getChannelId(channelId), subPage: Notebooks})
     | ["c", channelId, "activity"] =>
       Channel({channelId: getChannelId(channelId), subPage: FeedItems})
     | ["c", channelId, "scoring", "questions"] =>
@@ -183,6 +181,8 @@ module Route = {
       })
 
     // Notebooks
+    | ["c", channelId, "notebooks"] =>
+      Channel({channelId: getChannelId(channelId), subPage: Notebooks})
     | ["c", channelId, "n", notebookId, "details"] =>
       Channel({
         channelId: getChannelId(channelId),

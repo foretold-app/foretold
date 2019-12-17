@@ -40,19 +40,16 @@ let make = (tabSelected: Routing.ChannelPage.tab, channel: Types.channel) =>
          ++ "Members",
        ),
      )}
-    {E.React2.showIf(
-       channel.id != "home",
-       tab(
-         tabSelected == Notebooks,
-         tabToInternalUrl(channel.id, Notebooks),
-         (
-           channel.notebooksCount
-           |> E.O.fmap(string_of_int)
-           |> E.O.fmap(e => e ++ " ")
-           |> E.O.default("")
-         )
-         ++ "Notebooks",
-       ),
+    {tab(
+       tabSelected == Notebooks,
+       tabToInternalUrl(channel.id, Notebooks),
+       (
+         channel.notebooksCount
+         |> E.O.fmap(string_of_int)
+         |> E.O.fmap(e => e ++ " ")
+         |> E.O.default("")
+       )
+       ++ "Notebooks",
      )}
     {E.React2.showIf(
        channel.id != "home",

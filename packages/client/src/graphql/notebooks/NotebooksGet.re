@@ -32,6 +32,12 @@ module Query = [%graphql
               channelId
               createdAt
               updatedAt
+              channel {
+                id
+                name @bsDecoder(fn: "E.J.toString")
+                isArchived
+                isPublic
+              }
               owner {
                 id
                 name
@@ -79,8 +85,9 @@ let queryDirection = (~channelId=?, ~ownerId=?, ~pageLimit, ~direction, ()) => {
   };
 };
 
+// @todo: Fix "no-cache"
 let componentMaker = (query, innerComponentFn) =>
-  <QueryComponent variables=query##variables>
+  <QueryComponent variables=query##variables fetchPolicy="no-cache">
     ...{o =>
       o.result
       |> HttpResponse.fromApollo

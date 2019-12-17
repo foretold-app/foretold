@@ -10,6 +10,8 @@ module FormConfig = [%lenses
 
 module Form = ReForm.Make(FormConfig);
 
+type result('a) = ReasonApolloHooks.Mutation.controledVariantResult('a);
+
 let schema =
   Form.Validation.Schema([|
     Custom(
@@ -20,24 +22,19 @@ let schema =
     Custom(
       Body,
       values =>
-        Js.String.length(values.name) < 3 ? Error(Lang.atLeast3) : Valid,
+        Js.String.length(values.body) < 3 ? Error(Lang.atLeast3) : Valid,
     ),
   |]);
 
 let onSuccess = channelId => {
-  Routing.Url.push(ChannelNotebooks(channelId));
-
-  <Null />;
+  Utils.setTimeout(_ => Routing.Url.push(ChannelNotebooks(channelId)), 1000)
+  |> ignore;
+  ();
 };
 
 module FormComponent = {
   [@react.component]
-  let make =
-      (
-        ~channelId: string,
-        ~reform: Form.api,
-        ~result: ReasonApolloHooks.Mutation.controledVariantResult('a),
-      ) => {
+  let make = (~reform: Form.api, ~result: result('a)) => {
     let onSubmit = event => {
       ReactEvent.Synthetic.preventDefault(event);
       reform.submit();
@@ -46,7 +43,7 @@ module FormComponent = {
     <Form.Provider value=reform>
       {switch (result) {
        | Error(_error) => <p> {Lang.networkError |> Utils.ste} </p>
-       | Data(_) => onSuccess(channelId)
+       | Data(_) => <Spin />
        | _ =>
          let notebookRedux = NotebookRedux.reducer();
 
@@ -125,6 +122,14 @@ module Create = {
               ~refetchQueries=[|"getNotebooks"|],
               (),
             )
+            |> Js.Promise.then_((result: result('a)) => {
+                 Js.log2("result", result);
+                 switch (result) {
+                 | Data(_) => onSuccess(channelId)
+                 | _ => ()
+                 };
+                 Js.Promise.resolve();
+               })
             |> ignore;
 
             None;
@@ -133,7 +138,7 @@ module Create = {
         (),
       );
 
-    <FormComponent reform result channelId />;
+    <FormComponent reform result />;
   };
 };
 
@@ -161,6 +166,13 @@ module Edit = {
               ~refetchQueries=[|"getNotebook"|],
               (),
             )
+            |> Js.Promise.then_((result: result('a)) => {
+                 switch (result) {
+                 | Data(_) => onSuccess(notebook.channelId)
+                 | _ => ()
+                 };
+                 Js.Promise.resolve();
+               })
             |> ignore;
 
             None;
@@ -169,6 +181,6 @@ module Edit = {
         (),
       );
 
-    <FormComponent reform result channelId={notebook.channelId} />;
+    <FormComponent reform result />;
   };
 };

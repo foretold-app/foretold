@@ -288,6 +288,7 @@ and notebook = {
   createdAt: option(MomentRe.Moment.t),
   updatedAt: option(MomentRe.Moment.t),
   owner: agent,
+  channel,
 }
 
 and pageParams = {id: string};

@@ -29,7 +29,7 @@ module LoadedAndSelected = {
 
   let measurablePage = (t: loadedAndSelected) =>
     <MeasurablePage
-      id={t.selectedMeasurable.id}
+      measurable={t.selectedMeasurable}
       key={t.selectedMeasurable.id}
     />;
 

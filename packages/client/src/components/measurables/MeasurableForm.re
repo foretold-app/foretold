@@ -499,8 +499,6 @@ module Create = {
 };
 
 module Edit = {
-  let onSuccess' = response => onSuccess(response##measurableUpdate);
-
   [@react.component]
   let make = (~id, ~measurable: Types.measurable) => {
     let (mutate, result, _) = MeasurableUpdate.Mutation.use();
@@ -565,13 +563,6 @@ module Edit = {
               |],
               (),
             )
-            |> Js.Promise.then_((result: result('a)) => {
-                 switch (result) {
-                 | Data(data) => onSuccess'(data)
-                 | _ => ()
-                 };
-                 Js.Promise.resolve();
-               })
             |> ignore;
 
             None;

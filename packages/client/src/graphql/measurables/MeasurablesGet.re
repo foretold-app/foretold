@@ -62,6 +62,11 @@ let toMeasurable = m => {
          )
        );
 
+  let allowMutations =
+    m##permissions##mutations##allow |> E.A.O.concatSome |> E.A.to_list;
+
+  let permissions = Primary.Permissions.make(allowMutations);
+
   Primary.Measurable.make(
     ~id=m##id,
     ~name=m##name,
@@ -89,6 +94,7 @@ let toMeasurable = m => {
     ~outcome,
     ~previousAggregate,
     ~recentMeasurement,
+    ~permissions=Some(permissions),
     (),
   );
 };
@@ -217,6 +223,11 @@ module Query = [%graphql
                   binary
                   unresolvableResolution
                   comment
+                }
+              }
+              permissions {
+                mutations {
+                  allow
                 }
               }
             }

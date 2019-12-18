@@ -42,7 +42,7 @@ let make = (~pageParams: Types.pageParams) => {
            selectWithPaginationParams.response,
            selectWithPaginationParams.selection,
          ) {
-         | (_, Some(measurable)) => <MeasurablePage id={measurable.id} />
+         | (_, Some(measurable)) => <MeasurablePage measurable />
          | (Success(connection), None) =>
            <MeasurableIndexTable
              measurables={connection.edges}

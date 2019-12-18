@@ -79,7 +79,7 @@ let make = (~channelId: string, ~seriesId: string) => {
          selectWithPaginationParams.response,
          selectWithPaginationParams.selection,
        ) {
-       | (_, Some(measurable)) => <MeasurablePage id={measurable.id} />
+       | (_, Some(measurable)) => <MeasurablePage measurable />
        | (Success(connection), None) =>
          <MeasurablesSeriesTable
            measurables={connection.edges}

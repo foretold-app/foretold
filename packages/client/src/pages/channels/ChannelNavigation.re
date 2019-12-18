@@ -10,8 +10,7 @@ let make = (~channelPage: Routing.ChannelPage.t) => {
        // Measurables
        | Measurables(searchParams) =>
          <MeasurableIndex channelId searchParams />
-       | Measurable(measurableId) =>
-         <ChannelMeasurable channelId={Some(channelId)} measurableId />
+       | Measurable(measurableId) => <ChannelMeasurable measurableId />
        | NewMeasurable => <MeasurableNew channelId />
 
        // Leaderboards
@@ -27,11 +26,11 @@ let make = (~channelPage: Routing.ChannelPage.t) => {
 
        // Series
        | NewSeries => <SeriesNew channelId />
-       | Series(id) => <SeriesPage id channelId />
+       | Series(seriesId) => <SeriesPage seriesId channelId />
 
        // Notebooks
-       | Notebook(id) => <NotebookPage channelId notebookId=id />
-       | NotebookDetails(id) => <NotebookPage channelId notebookId=id />
+       | Notebook(notebookId) => <NotebookPage channelId notebookId />
+       | NotebookDetails(notebookId) => <NotebookPage channelId notebookId />
        | Notebooks => <Notebooks channelId />
        | AddNotebook => <NotebookCreate channelId />
 

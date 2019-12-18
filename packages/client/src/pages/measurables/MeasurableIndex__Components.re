@@ -35,11 +35,8 @@ module LoadedAndSelected = {
       key={t.selectedMeasurable.id}
     />;
 
-  let body2 = (t: t) =>
-    <MeasurableBottomSection
-      measurableId={t.selectedMeasurable.id}
-      channelId={Some(t.selectedMeasurable.channelId)}
-    />;
+  let measurableBottomSection = (t: t) =>
+    <MeasurableBottomSection measurable={t.selectedMeasurable} />;
 };
 
 module LoadedAndUnselected = {
@@ -149,7 +146,7 @@ let toLayoutInput =
       {<SLayout head={LoadedAndSelected.header(l, send)} isFluid=true>
          {LoadedAndSelected.body(l)}
        </SLayout>}
-      {LoadedAndSelected.body2(l)}
+      {LoadedAndSelected.measurableBottomSection(l)}
     </>
 
   | WithoutChannel(_) =>

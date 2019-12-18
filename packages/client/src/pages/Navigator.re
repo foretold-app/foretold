@@ -41,9 +41,10 @@ let make = () => {
         | (Preferences, Some(loggedUser)) =>
           <FillWithSidebar> <Preferences loggedUser /> </FillWithSidebar>
 
-        | (MeasurableEdit(id), Some(_)) =>
+        // Measurables
+        | (MeasurableEdit(measurableId), Some(_)) =>
           <FillWithSidebar>
-            <MeasurableEdit pageParams={id: id} />
+            <MeasurableEditPage pageParams={id: measurableId} />
           </FillWithSidebar>
 
         // Bots
@@ -55,9 +56,9 @@ let make = () => {
           </FillWithSidebar>
 
         // Entities
-        | (EntityShow(id), Some(_)) =>
+        | (EntityShow(entityId), Some(_)) =>
           <FillWithSidebar>
-            <EntityShow pageParams={id: id} />
+            <EntityShow pageParams={id: entityId} />
           </FillWithSidebar>
         | (EntityIndex, Some(_)) =>
           <FillWithSidebar> <EntityIndex /> </FillWithSidebar>

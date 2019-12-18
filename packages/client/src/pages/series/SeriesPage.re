@@ -48,8 +48,8 @@ let load2Queries = (channelId, seriesId, itemsPerPage, fn) =>
      );
 
 [@react.component]
-let make = (~channelId: string, ~id: string) => {
-  let loadData = load2Queries(channelId, id, 50);
+let make = (~channelId: string, ~seriesId: string) => {
+  let loadData = load2Queries(channelId, seriesId, 50);
 
   loadData(((selectWithPaginationParams, channel, series)) =>
     <SLayout

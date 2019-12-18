@@ -14,7 +14,9 @@ let reducer = () => {
     React.useReducer(
       (_, action) =>
         switch (action) {
-        | SelectMeasurableId(id) => {selectedMeasurableId: Some(id)}
+        | SelectMeasurableId(measurableId) => {
+            selectedMeasurableId: Some(measurableId),
+          }
         | DeselectMeasurableId => {selectedMeasurableId: None}
         },
       {selectedMeasurableId: None},

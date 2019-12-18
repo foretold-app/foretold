@@ -5,10 +5,12 @@ let make = (~notebookRedux: NotebookRedux.t) => {
       MeasurableGet.component(~id=measurableId)
       |> E.F.apply((measurable: Types.measurable) => {
            let head = (~channelId: option(string), ~paginationPage, ()) => ReasonReact.null;
+
            let defaultValueText =
              measurable.recentMeasurement
              |> E.O.bind(_, (r: Types.measurement) => r.valueText)
              |> E.O.default("");
+
            <div>
              <SLayout
                head={head(~channelId=None, ~paginationPage=E.React2.null, ())}
@@ -23,11 +25,7 @@ let make = (~notebookRedux: NotebookRedux.t) => {
                  />
                </FC.PageCard.Body>
              </SLayout>
-             <MeasurableBottomSection
-               measurableId={measurable.id}
-               channelId=None
-               key={measurable.id}
-             />
+             <MeasurableBottomSection measurable key={measurable.id} />
            </div>;
          }),
     )

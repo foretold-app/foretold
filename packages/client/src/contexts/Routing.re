@@ -139,12 +139,12 @@ module Route = {
     | ["profile"] => Profile
     | ["preferences"] => Preferences
     | ["entities"] => EntityIndex
-    | ["entities", ...id] => EntityShow(String.concat("/", id))
+    | ["entities", ...entityId] => EntityShow(String.concat("/", entityId))
     | ["communities", "new"] => ChannelNew
     | ["communities"] => ChannelIndex
     | ["bots", "new"] => BotCreate
-    | ["bots", id, "edit"] => BotEdit(id)
-    | ["measurables", id, "edit"] => MeasurableEdit(id)
+    | ["bots", botId, "edit"] => BotEdit(botId)
+    | ["measurables", measurableId, "edit"] => MeasurableEdit(measurableId)
 
     // Channels
     | ["c"] => ChannelIndex
@@ -257,9 +257,9 @@ module Url = {
     | Profile => "/profile/"
     | Preferences => "/preferences/"
     | BotCreate => "/bots/new"
-    | BotEdit(id) => "/bots/" ++ id ++ "/edit"
+    | BotEdit(botId) => "/bots/" ++ botId ++ "/edit"
     | EntityIndex => "/entities"
-    | EntityShow(id) => "/entities/" ++ id
+    | EntityShow(entityId) => "/entities/" ++ entityId
 
     // Agents
     | AgentIndex => "/agents"

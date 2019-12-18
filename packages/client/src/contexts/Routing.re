@@ -144,7 +144,6 @@ module Route = {
     | ["communities"] => ChannelIndex
     | ["bots", "new"] => BotCreate
     | ["bots", botId, "edit"] => BotEdit(botId)
-    | ["measurables", measurableId, "edit"] => MeasurableEdit(measurableId)
 
     // Channels
     | ["c"] => ChannelIndex
@@ -229,7 +228,6 @@ module Url = {
     | SeriesShow(string, string)
     | MeasurableShow(string, string)
     | SeriesNew(string)
-    | MeasurableEdit(string)
     | ChannelEdit(string)
     | ChannelMembers(string)
     | ChannelFeedItems(string)
@@ -251,11 +249,13 @@ module Url = {
 
   let toString = (r: t) =>
     switch ((r: t)) {
-    | Home => "/"
-    | Privacy => "/privacy_policy"
-    | Terms => "/terms_and_conditions"
+    // Members
     | Profile => "/profile/"
     | Preferences => "/preferences/"
+    | Subscribe => "/subscribe"
+    | Unsubscribe => "/unsubscribe"
+
+    // Bots
     | BotCreate => "/bots/new"
     | BotEdit(botId) => "/bots/" ++ botId ++ "/edit"
     | EntityIndex => "/entities"
@@ -290,20 +290,24 @@ module Url = {
       "/c/" ++ channelId ++ "/scoring/members"
     | ChannelAddMember(channelId) => "/c/" ++ channelId ++ "/add"
     | ChannelInviteMember(channelId) => "/c/" ++ channelId ++ "/invite"
-
-    | MeasurableEdit(measurableId) =>
-      "/measurables/" ++ measurableId ++ "/edit"
-    | MeasurableNew(channelId) => "/c/" ++ channelId ++ "/new"
-    | SeriesNew(channelId) => "/c/" ++ channelId ++ "/s/new"
-    | SeriesShow(channelId, id) => "/c/" ++ channelId ++ "/s/" ++ id
     | ChannelNotebook(channelId, notebookId) =>
       "/c/" ++ channelId ++ "/n/" ++ notebookId
     | ChannelNotebookDetails(channelId, notebookId) =>
       "/c/" ++ channelId ++ "/n/" ++ notebookId ++ "/details"
+
+    // Measurables
+    | MeasurableNew(channelId) => "/c/" ++ channelId ++ "/new"
     | MeasurableShow(channelId, measurableId) =>
       "/c/" ++ channelId ++ "/m/" ++ measurableId
-    | Subscribe => "/subscribe"
-    | Unsubscribe => "/unsubscribe"
+
+    // Series
+    | SeriesNew(channelId) => "/c/" ++ channelId ++ "/s/new"
+    | SeriesShow(channelId, id) => "/c/" ++ channelId ++ "/s/" ++ id
+
+    // Statis pages
+    | Home => "/"
+    | Privacy => "/privacy_policy"
+    | Terms => "/terms_and_conditions"
     | Login => "/login"
     | Unknown => "/"
     };
@@ -312,8 +316,13 @@ module Url = {
 
   let fromChannelPage = (channelPage: ChannelPage.t) =>
     switch (channelPage.subPage) {
+    // Measurables
     | Measurables(_) => ChannelShow(channelPage.channelId)
     | NewMeasurable => MeasurableNew(channelPage.channelId)
+    | Measurable(measurableId) =>
+      MeasurableShow(channelPage.channelId, measurableId)
+
+    // Other
     | Members => ChannelMembers(channelPage.channelId)
     | Notebooks => ChannelNotebooks(channelPage.channelId)
     | FeedItems => ChannelFeedItems(channelPage.channelId)
@@ -325,8 +334,6 @@ module Url = {
     | Settings => ChannelEdit(channelPage.channelId)
     | NewSeries => SeriesNew(channelPage.channelId)
     | Series(seriesId) => SeriesShow(channelPage.channelId, seriesId)
-    | Measurable(measurableId) =>
-      MeasurableShow(channelPage.channelId, measurableId)
     | _ => Unknown
     };
 };

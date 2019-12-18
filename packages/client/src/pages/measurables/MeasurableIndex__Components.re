@@ -3,9 +3,7 @@ open Style.Grid;
 open MeasurableIndex__Logic;
 
 module LoadedAndSelected = {
-  open MeasurableIndex__Logic.LoadedAndSelected;
-
-  let header = (t: t, send: Reducer.Types.send) =>
+  let header = (t: loadedAndSelected, send: Reducer.Types.send) =>
     <>
       <Div
         float=`left
@@ -29,19 +27,17 @@ module LoadedAndSelected = {
       </Div>
     </>;
 
-  let body = (t: t) =>
+  let measurablePage = (t: loadedAndSelected) =>
     <MeasurablePage
       id={t.selectedMeasurable.id}
       key={t.selectedMeasurable.id}
     />;
 
-  let measurableBottomSection = (t: t) =>
+  let measurableBottomSection = (t: loadedAndSelected) =>
     <MeasurableBottomSection measurable={t.selectedMeasurable} />;
 };
 
 module LoadedAndUnselected = {
-  open MeasurableIndex__Logic.LoadedAndUnselected;
-
   let stateLink = (state, text, num: int, isActive) =>
     <FC.Tab2
       isActive
@@ -57,7 +53,7 @@ module LoadedAndUnselected = {
 
   let header =
       (
-        t: t,
+        t: loadedAndUnselected,
         stats: measurablesStateStatsQuery,
         query: MeasurableQueryIndex.query,
       ) =>
@@ -107,7 +103,7 @@ module LoadedAndUnselected = {
       </Div>
     </Div>;
 
-  let body = (t: t) => {
+  let measurableIndexTable = (t: loadedAndUnselected) => {
     let measurables =
       (
         switch (t.reducerParams.response) {
@@ -138,13 +134,13 @@ let toLayoutInput =
   | LoadedAndUnselected(l) =>
     <SLayout
       head={LoadedAndUnselected.header(l, stats, selectedState)} isFluid=true>
-      {LoadedAndUnselected.body(l)}
+      {LoadedAndUnselected.measurableIndexTable(l)}
     </SLayout>
 
   | LoadedAndSelected(l) =>
     <>
       {<SLayout head={LoadedAndSelected.header(l, send)} isFluid=true>
-         {LoadedAndSelected.body(l)}
+         {LoadedAndSelected.measurablePage(l)}
        </SLayout>}
       {LoadedAndSelected.measurableBottomSection(l)}
     </>

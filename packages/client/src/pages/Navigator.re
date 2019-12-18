@@ -41,12 +41,6 @@ let make = () => {
         | (Preferences, Some(loggedUser)) =>
           <FillWithSidebar> <Preferences loggedUser /> </FillWithSidebar>
 
-        // Measurables
-        | (MeasurableEdit(measurableId), Some(_)) =>
-          <FillWithSidebar>
-            <MeasurableEditPage pageParams={id: measurableId} />
-          </FillWithSidebar>
-
         // Bots
         | (BotCreate, Some(loggedUser)) =>
           <FillWithSidebar> <BotCreate loggedUser /> </FillWithSidebar>

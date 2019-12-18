@@ -31,26 +31,15 @@ module Tabs = {
           isActive={tab == Details} onClick={_ => switchTab(Details)}>
           {"Details" |> Utils.ste}
         </TabButton>
-        <Providers.AppContext.Consumer>
-          ...{({loggedUser}) =>
-            switch (loggedUser) {
-            | Some(loggedUser) =>
-              <TabButton
-                isActive={tab == Edit} onClick={_ => switchTab(Edit)}>
-                {"Edit" |> Utils.ste}
-              </TabButton>
-              |> E.React2.showIf(
-                   measurable.creator
-                   |> E.O.fmap((creator: Types.agent) =>
-                        loggedUser.agentId == creator.id
-                      )
-                   |> E.O.default(false),
-                 )
-
-            | _ => <Null />
-            }
-          }
-        </Providers.AppContext.Consumer>
+        {<TabButton isActive={tab == Edit} onClick={_ => switchTab(Edit)}>
+           {"Edit" |> Utils.ste}
+         </TabButton>
+         |> E.React2.showIf(
+              Primary.Permissions.can(
+                `MEASURABLE_UPDATE,
+                measurable.permissions,
+              ),
+            )}
       </Div>
       <Div>
         <Div
@@ -85,6 +74,7 @@ let make = (~measurable: Types.measurable) => {
       }
       head
     />
+
   | Details =>
     <SLayout
       head={head(
@@ -108,6 +98,7 @@ let make = (~measurable: Types.measurable) => {
         </Style.Grid.Div>
       </FC.PageCard.Body>
     </SLayout>
+
   | Edit =>
     <SLayout
       head={head(

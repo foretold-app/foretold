@@ -11,7 +11,7 @@ let make = (~channelPage: Routing.ChannelPage.t) => {
          <MeasurableIndex channelId searchParams />
        | Measurable(measurableId) =>
          <ChannelMeasurable channelId={Some(channelId)} measurableId />
-       | Series(id) => <SeriesShow id channelId />
+       | Series(id) => <SeriesPage id channelId />
        | NewMeasurable => <MeasurableNew channelId />
        | Members => <ChannelMembers channelId channel />
        | FeedItems => <FeedItems channelId={Some(channelId)} />

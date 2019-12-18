@@ -33,7 +33,7 @@ let make = () => {
         | (Agent(agentPage), _) => <AgentNavigation agentPage />
         | (AgentIndex, _) => <AgentIndex />
         | (Profile, Some(loggedUser)) =>
-          <FillWithSidebar> <Profile loggedUser /> </FillWithSidebar>
+          <FillWithSidebar> <ProfileEdit loggedUser /> </FillWithSidebar>
         | (Subscribe, Some(loggedUser)) =>
           <FillWithSidebar> <SubscribePage loggedUser /> </FillWithSidebar>
         | (Unsubscribe, Some(loggedUser)) =>

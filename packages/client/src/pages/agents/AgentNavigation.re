@@ -56,8 +56,9 @@ let make = (~agentPage: Routing.AgentPage.t) => {
      | AgentMeasurables => <AgentMeasurables pageParams={id: agentId} />
      | AgentBots => <AgentBots pageParams={id: agentId} />
      | AgentCommunities => <AgentCommunities agentId />
-     | AgentUpdates => <FeedItems agentId={Some(agentId)} />
+     | AgentUpdates => <FeedItemsIndex agentId={Some(agentId)} />
      | AgentScores => <AgentScores agentId={Some(agentId)} />
+     | _ => <NotFoundPage />
      }}
   </FillWithSidebar>;
 };

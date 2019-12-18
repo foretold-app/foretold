@@ -13,7 +13,7 @@ let make = (~channelPage: Routing.ChannelPage.t) => {
        | Measurable(measurableId) =>
          <ChannelMeasurable channelId={Some(channelId)} measurableId />
        | NewMeasurable => <MeasurableNew channelId />
-       | FeedItems => <FeedItems channelId={Some(channelId)} />
+       | FeedItems => <FeedItemsIndex channelId={Some(channelId)} />
 
        // Leaderboards
        | Leaderboard(ByMeasurable) =>

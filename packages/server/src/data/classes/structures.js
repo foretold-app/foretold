@@ -2,7 +2,7 @@ const _ = require('lodash');
 const assert = require('assert');
 
 /**
- * Look at these literals as on structures.
+ * Look at these literals as on the structures.
  */
 
 /**
@@ -64,6 +64,8 @@ module.exports.withinMeasurables = (states, channelId) => {
   if (!!states) {
     assert(_.isArray(states), 'States should be an array.');
   }
+
+  // @todo: Is it shadowed logic?
   if (!_.size(states) && !channelId) {
     return null;
   }

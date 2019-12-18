@@ -8,6 +8,9 @@ const { Filter } = require('../../data/classes');
 const { Params } = require('../../data/classes');
 const { Data } = require('../../data/classes');
 const { Query } = require('../../data/classes');
+const { structures } = require('../../data/classes');
+
+const { HOME_CHANNEL_ID } = require('../../../config/well-known');
 
 /**
  * @param {*} _root
@@ -58,15 +61,24 @@ async function update(root, args, _context, _info) {
  * @returns {Promise<*>}
  */
 async function all(_root, args, context, _info) {
-  /** @type {Models.AgentID} */
+  /** @type {Models.AgentID | null} */
   const ownerId = _.get(args, 'ownerId', null);
-  /** @type {Models.ChannelID} */
+  /** @type {Models.ChannelID | null} */
   const channelId = _.get(args, 'channelId', null);
 
+  /** @type {boolean | null} */
   const isAdmin = _.get(context, 'agent.isAdmin', null);
+  /** @type {Models.AgentID | null} */
   const currentAgentId = _.get(context, 'agent.id', null);
 
-  const filter = new Filter({ ownerId, channelId });
+  /**
+   * @todo: search tag: "withinJoinedChannelsByChannelId"
+   * @type {Layers.withinJoinedChannels | null}
+   */
+  const withinJoinedChannels = channelId === HOME_CHANNEL_ID && !!currentAgentId
+    ? structures.withinJoinedChannelsByChannelId(currentAgentId) : null;
+
+  const filter = new Filter({ ownerId, channelId, withinJoinedChannels });
   const pagination = new Pagination(args);
   const options = new Options({ isAdmin, currentAgentId });
 

@@ -68,9 +68,8 @@ async function primaryPointScore(root, _args, _context, _info) {
 
   if (response) {
     return response.score;
-  } else {
-    return response;
   }
+  return response;
 }
 
 /**

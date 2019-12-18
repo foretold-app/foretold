@@ -1,11 +1,16 @@
 const _ = require('lodash');
 
 /**
+ * @todo: But in programing language, “predicate” just means
+ * @todo: a function that return true or false.
+ */
+
+/**
  * @param {*} root
  * @param {object} _args
  * @param {Schema.Context} _context
  * @param {object} _info
- * @return {string | undefined}
+ * @return {string | null}
  */
 const agentIdFromRootId = (root, _args, _context, _info) => {
   return _.get(root, 'id', null);
@@ -16,7 +21,7 @@ const agentIdFromRootId = (root, _args, _context, _info) => {
  * @param {object} _args
  * @param {Schema.Context} context
  * @param {object} _info
- * @return {string | undefined}
+ * @return {string | null}
  */
 const agentIdFromContext = (_root, _args, context, _info) => {
   return _.get(context, 'userAsObject.agentId', null);
@@ -27,7 +32,7 @@ const agentIdFromContext = (_root, _args, context, _info) => {
  * @param {object} _args
  * @param {Schema.Context} _context
  * @param {object} _info
- * @return {string | undefined}
+ * @return {string | null}
  */
 const agentIdFromRootAgentId = (root, _args, _context, _info) => {
   return _.get(root, 'agentId', null);

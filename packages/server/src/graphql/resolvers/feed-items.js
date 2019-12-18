@@ -29,13 +29,22 @@ const { HOME_CHANNEL_ID } = require('../../../config/well-known');
  * @returns {Promise<*>}
  */
 async function all(_root, args, context, _info) {
-  /** @type {string} */
+  /** @type {Models.ChannelID | null} */
   const channelId = _.get(args, 'channelId', null);
-  /** @type {string} */
+  /** @type {Models.AgentID | null} */
   const agentId = _.get(args, 'agentId', null);
-  /** @type {string} */
+  /** @type {Models.AgentID | null} */
   const currentAgentId = _.get(context, 'agent.id', null);
 
+  /**
+   * @todo: It was the hardest mind trap. How to
+   * @todo: name this piece of the code?
+   * @todo: isRequesterAuthorizedAndWantsToSeeHomePage?
+   * @todo: Either to create a "predicate" function
+   * @todo: and leave condition here?
+   * @todo: search tag: "withinJoinedChannelsByChannelId"
+   * @type {Layers.withinJoinedChannels | null}
+   */
   const withinJoinedChannels = channelId === HOME_CHANNEL_ID && !!currentAgentId
     ? structures.withinJoinedChannelsByChannelId(currentAgentId) : null;
 

@@ -429,7 +429,7 @@ export namespace Layers {
       isArchived?: string[];
       types?: string[];
       sentAt?: string[];
-      notificationId?: string[];
+      notificationId?: Models.NotificationID[];
       competitorType?: string[];
       states?: string[];
       attemptCounterMax?: number;

@@ -9,6 +9,8 @@ const { Options } = require('../../data/classes');
 const { Query } = require('../../data/classes');
 const { structures } = require('../../data/classes');
 
+const { HOME_CHANNEL_ID } = require('../../../config/well-known');
+
 /**
  *
  * These is a tiny difference in a sense of "filter" and "restrictions"
@@ -36,8 +38,11 @@ async function all(root, args, context, _info) {
   const channelId = _.get(args, 'channelId', null);
   const currentAgentId = _.get(context, 'agent.id', null);
 
-  const withinJoinedChannels =
-    (_.isEmpty(channelId) && !_.isEmpty(currentAgentId))
+  /**
+   * @todo: search tag: "withinJoinedChannelsByChannelId"
+   * @type {Layers.withinJoinedChannels | null}
+   */
+  const withinJoinedChannels = channelId === HOME_CHANNEL_ID && !!currentAgentId
     ? structures.withinJoinedChannelsByChannelId(currentAgentId) : null;
 
   const filter = new Filter({
@@ -50,10 +55,11 @@ async function all(root, args, context, _info) {
     isArchived: _.get(args, 'isArchived', null),
   });
   const pagination = new Pagination(args);
+
+  // @todo: move to filter "measuredByAgentId"
   const options = new Options({
     isAdmin: _.get(context, 'agent.isAdmin', null),
     agentId: currentAgentId,
-    // @todo: move to filter
     measuredByAgentId: _.get(args, 'measuredByAgentId', null),
   });
 

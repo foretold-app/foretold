@@ -15,39 +15,46 @@ let make = () => {
     ...{({loggedUser}) => {
       let routeComponent =
         switch (route, loggedUser) {
+        // Statis Pages
         | (Privacy, _) =>
           <StaticPageInCard markdown=StaticMarkdown.privacyPolicy />
         | (Terms, _) =>
           <StaticPageInCard markdown=StaticMarkdown.termsAndConditions />
         | (Login, _) => <Login />
 
+        // Channels
         | (Channel(channel), _) => <ChannelNavigation channelPage=channel />
         | (ChannelIndex, _) =>
           <FillWithSidebar> <ChannelIndex /> </FillWithSidebar>
         | (ChannelNew, Some(_)) =>
           <FillWithSidebar> <ChannelNew /> </FillWithSidebar>
 
+        // Members
         | (Agent(agentPage), _) => <AgentNavigation agentPage />
         | (AgentIndex, _) => <AgentIndex />
-
-        | (Preferences, Some(loggedUser)) =>
-          <FillWithSidebar> <Preferences loggedUser /> </FillWithSidebar>
-        | (MeasurableEdit(id), Some(_)) =>
-          <FillWithSidebar>
-            <MeasurableEdit pageParams={id: id} />
-          </FillWithSidebar>
-        | (BotCreate, Some(loggedUser)) =>
-          <FillWithSidebar> <BotCreate loggedUser /> </FillWithSidebar>
-        | (BotEdit(botId), Some(loggedUser)) =>
-          <FillWithSidebar>
-            <BotEdit pageParams={id: botId} loggedUser />
-          </FillWithSidebar>
         | (Profile, Some(loggedUser)) =>
           <FillWithSidebar> <Profile loggedUser /> </FillWithSidebar>
         | (Subscribe, Some(loggedUser)) =>
           <FillWithSidebar> <SubscribePage loggedUser /> </FillWithSidebar>
         | (Unsubscribe, Some(loggedUser)) =>
           <FillWithSidebar> <UnsubscribePage loggedUser /> </FillWithSidebar>
+        | (Preferences, Some(loggedUser)) =>
+          <FillWithSidebar> <Preferences loggedUser /> </FillWithSidebar>
+
+        | (MeasurableEdit(id), Some(_)) =>
+          <FillWithSidebar>
+            <MeasurableEdit pageParams={id: id} />
+          </FillWithSidebar>
+
+        // Bots
+        | (BotCreate, Some(loggedUser)) =>
+          <FillWithSidebar> <BotCreate loggedUser /> </FillWithSidebar>
+        | (BotEdit(botId), Some(loggedUser)) =>
+          <FillWithSidebar>
+            <BotEdit pageParams={id: botId} loggedUser />
+          </FillWithSidebar>
+
+        // Entities
         | (EntityShow(id), Some(_)) =>
           <FillWithSidebar>
             <EntityShow pageParams={id: id} />

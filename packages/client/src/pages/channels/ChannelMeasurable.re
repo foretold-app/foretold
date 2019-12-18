@@ -1,7 +1,7 @@
 [@react.component]
 let make = (~measurableId: string, ~channelId: option(string)) => {
   <>
-    <SLayout isFluid=true> <Measurable id=measurableId /> </SLayout>
+    <SLayout isFluid=true> <MeasurablePage id=measurableId /> </SLayout>
     <MeasurableBottomSection measurableId channelId />
   </>;
 };

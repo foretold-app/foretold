@@ -30,7 +30,10 @@ module LoadedAndSelected = {
     </>;
 
   let body = (t: t) =>
-    <Measurable id={t.selectedMeasurable.id} key={t.selectedMeasurable.id} />;
+    <MeasurablePage
+      id={t.selectedMeasurable.id}
+      key={t.selectedMeasurable.id}
+    />;
 
   let body2 = (t: t) =>
     <MeasurableBottomSection

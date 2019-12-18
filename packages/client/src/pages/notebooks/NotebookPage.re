@@ -13,6 +13,7 @@ type tab =
   | Edit
   | Details;
 
+// @todo: Adds to Server "iAmOwner" as in the measurables
 module ShowIfSameUser = {
   [@react.component]
   let make = (~agentId, ~children) => {
@@ -33,47 +34,44 @@ module Tabs = {
 
   [@react.component]
   let make = (~switchTab, ~tab, ~notebook: Types.notebook) => {
-    <Providers.AppContext.Consumer>
-      ...{({loggedUser}) =>
-        <Div
-          styles=[
-            Css.style([
-              Css.maxWidth(`px(682)),
-              Css.marginLeft(`auto),
-              Css.marginRight(`auto),
-            ]),
-          ]>
-          <Div
-            styles=[
-              Css.style([
-                FC.Base.BaseStyles.floatRight,
-                Css.paddingTop(`em(0.2)),
-              ]),
-            ]>
-            <TabButton isActive={tab == Show} onClick={_ => switchTab(Show)}>
-              {"Notebook" |> Utils.ste}
-            </TabButton>
-            <TabButton
-              isActive={tab == Details} onClick={_ => switchTab(Details)}>
-              {"Markdown" |> Utils.ste}
-            </TabButton>
-            <ShowIfSameUser agentId={notebook.ownerId}>
-              <TabButton
-                isActive={tab == Edit} onClick={_ => switchTab(Edit)}>
-                {"Edit" |> Utils.ste}
-              </TabButton>
-            </ShowIfSameUser>
-          </Div>
-        </Div>
-      }
-    </Providers.AppContext.Consumer>;
+    <Div
+      styles=[
+        Css.style([
+          Css.maxWidth(`px(682)),
+          Css.marginLeft(`auto),
+          Css.marginRight(`auto),
+        ]),
+      ]>
+      <Div
+        styles=[
+          Css.style([
+            FC.Base.BaseStyles.floatRight,
+            Css.paddingTop(`em(0.2)),
+          ]),
+        ]>
+        <TabButton isActive={tab == Show} onClick={_ => switchTab(Show)}>
+          {"Notebook" |> Utils.ste}
+        </TabButton>
+        <TabButton
+          isActive={tab == Details} onClick={_ => switchTab(Details)}>
+          {"Markdown" |> Utils.ste}
+        </TabButton>
+        <ShowIfSameUser agentId={notebook.ownerId}>
+          <TabButton isActive={tab == Edit} onClick={_ => switchTab(Edit)}>
+            {"Edit" |> Utils.ste}
+          </TabButton>
+        </ShowIfSameUser>
+      </Div>
+    </Div>;
   };
 };
 
 [@react.component]
-let make = (~channelId: string, ~notebookId: string) => {
+let make = (~notebookId: string) => {
   let (tab, setTab) = React.useState(() => Show);
+
   let notebookRedux = NotebookRedux.reducer();
+
   let switchTab = tabToSwitch => {
     setTab(_ => tabToSwitch);
     notebookRedux.dispatch(DeselectMeasurableId);
@@ -129,6 +127,7 @@ let make = (~channelId: string, ~notebookId: string) => {
               </Div>
             )}
       </Div>
+
     | _ => <NotFoundPage />
     }
   );

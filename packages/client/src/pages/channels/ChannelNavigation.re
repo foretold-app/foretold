@@ -29,8 +29,8 @@ let make = (~channelPage: Routing.ChannelPage.t) => {
        | Series(seriesId) => <SeriesPage seriesId channelId />
 
        // Notebooks
-       | Notebook(notebookId) => <NotebookPage channelId notebookId />
-       | NotebookDetails(notebookId) => <NotebookPage channelId notebookId />
+       | Notebook(notebookId) => <NotebookPage notebookId />
+       | NotebookDetails(notebookId) => <NotebookPage notebookId />
        | Notebooks => <Notebooks channelId />
        | AddNotebook => <NotebookCreate channelId />
 

@@ -13,7 +13,6 @@ let make = (~channelPage: Routing.ChannelPage.t) => {
        | Measurable(measurableId) =>
          <ChannelMeasurable channelId={Some(channelId)} measurableId />
        | NewMeasurable => <MeasurableNew channelId />
-       | FeedItems => <FeedItemsIndex channelId={Some(channelId)} />
 
        // Leaderboards
        | Leaderboard(ByMeasurable) =>
@@ -26,8 +25,6 @@ let make = (~channelPage: Routing.ChannelPage.t) => {
        | AddMember => <ChannelAddMember channelId />
        | InviteMember => <ChannelInviteMember channelId />
 
-       | Settings => <ChannelEdit channelId />
-
        // Series
        | NewSeries => <SeriesNew channelId />
        | Series(id) => <SeriesPage id channelId />
@@ -38,7 +35,10 @@ let make = (~channelPage: Routing.ChannelPage.t) => {
        | Notebooks => <Notebooks channelId />
        | AddNotebook => <NotebookCreate channelId />
 
-       | Unknown => "Tab is not found" |> Utils.ste
+       // Other
+       | Settings => <ChannelEdit channelId />
+       | FeedItems => <FeedItemsIndex channelId={Some(channelId)} />
+       | Unknown => <NotFoundPage />
        }}
     </Channel>;
 

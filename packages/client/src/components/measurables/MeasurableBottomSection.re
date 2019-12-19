@@ -117,7 +117,10 @@ let make = (~measurable: Types.measurable) => {
               Css.marginLeft(`em(1.0)),
             ]),
           ]>
-          <MeasurableEdit measurableId={measurable.id} />
+          <MeasurableEdit
+            measurableId={measurable.id}
+            key={"measurable-edit-" ++ measurable.id}
+          />
         </Style.Grid.Div>
       </FC.PageCard.Body>
     </SLayout>

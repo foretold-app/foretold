@@ -34,7 +34,10 @@ module LoadedAndSelected = {
     />;
 
   let measurableBottomSection = (t: loadedAndSelected) =>
-    <MeasurableBottomSection measurable={t.selectedMeasurable} />;
+    <MeasurableBottomSection
+      measurable={t.selectedMeasurable}
+      key={"measurable-bottom-section" ++ t.selectedMeasurable.id}
+    />;
 };
 
 module LoadedAndUnselected = {

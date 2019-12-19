@@ -75,7 +75,8 @@ module FormComponent = {
     <Form.Provider value=reform>
       {switch (result) {
        | Error(_error) => <p> {Lang.networkError |> Utils.ste} </p>
-       | Data(_) => <Spin />
+       | Loading(_) => <Spin />
+       | Data(_) => Lang.measurableIsSaved |> Utils.ste
        | _ =>
          <Providers.AppContext.Consumer>
            ...{({loggedUser}) =>
@@ -560,6 +561,7 @@ module Edit = {
                 "getAgent",
                 "getMeasurable",
                 "getMeasurements",
+                "getMeasurables",
               |],
               (),
             )

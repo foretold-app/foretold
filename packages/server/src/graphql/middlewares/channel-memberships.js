@@ -6,6 +6,7 @@ const logger = require('../../lib/log');
 const log = logger.module('middlewares/channel-memberships');
 
 /**
+ * @todo: To fix "||" a joined logic.
  * @param {object | null} root
  * @param {object} args
  * @param {Schema.Context} context
@@ -22,6 +23,7 @@ async function setContextChannelMemberships(root, args, context, _info) {
   const agentId = _.get(context, 'agent.id', null);
 
   const compoundId = { agentId, channelId };
+
   log.trace('\x1b[36m ---> \x1b[0m Middleware '
     + '(setContextChannelMemberships)', compoundId);
 
@@ -29,7 +31,7 @@ async function setContextChannelMemberships(root, args, context, _info) {
     const channelMembership = await new ChannelMembershipsData()
       .getOne(compoundId);
     context.channelMembership = channelMembership;
-    context.channelMembershipsRole = _.get(channelMembership, 'role');
+    context.channelMembershipsRole = _.get(channelMembership, 'role', null);
   } else {
     context.channelMembership = null;
     context.channelMembershipsRole = null;
@@ -37,6 +39,7 @@ async function setContextChannelMemberships(root, args, context, _info) {
 }
 
 /**
+ * @todo: To fix "||" a joined logic.
  * @param {object | null} root
  * @param {object} args
  * @param {Schema.Context} context
@@ -55,8 +58,8 @@ async function setContextChannelMembershipsAdmins(root, args, context, _info) {
     + '(channelMembershipsAdmins)', channelId);
 
   if (!!channelId) {
-    context.channelMembershipsAdmins
-      = await new ChannelMembershipsData().getAllOnlyAdmins({ channelId });
+    context.channelMembershipsAdmins = await new ChannelMembershipsData()
+      .getAllOnlyAdmins({ channelId });
   } else {
     context.channelMembershipsAdmins = null;
   }

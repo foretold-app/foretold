@@ -18,6 +18,9 @@ const { authenticationInputValidation } = require('./authentications');
 /**
  * Do not try to use DRY principle here.
  * Just read each section as it is.
+ *
+ * Be super-careful! Remember that a bunch of middlewares is run synchronously.
+ * But each "middleware" works asynchronously.
  */
 const middlewares = {
   Bot: {
@@ -49,15 +52,18 @@ const middlewares = {
     },
   },
 
+  // Copy context here (temporary solution)
   Measurable: {
     permissions: async (resolve, root, args, context, info) => {
-      await setContextMeasurableByRoot(root, args, context, info);
-      await setContextChannel(root, args, context, info);
-      await setContextChannelMemberships(root, args, context, info);
-      return resolve(root, args, context, info);
+      const context$ = _.cloneDeep(context);
+      await setContextMeasurableByRoot(root, args, context$, info);
+      await setContextChannel(root, args, context$, info);
+      await setContextChannelMemberships(root, args, context$, info);
+      return resolve(root, args, context$, info);
     },
   },
 
+  // Copy context here (temporary solution)
   Channel: {
     permissions: async (resolve, root, args, context, info) => {
       const context$ = _.cloneDeep(context);
@@ -68,6 +74,7 @@ const middlewares = {
     },
   },
 
+  // Copy context here (temporary solution)
   ChannelsMembership: {
     permissions: async (resolve, root, args, context, info) => {
       const context$ = _.cloneDeep(context);

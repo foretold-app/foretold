@@ -5,6 +5,7 @@ const logger = require('../../lib/log');
 const log = logger.module('authorizers/bots');
 
 /**
+ * @todo: To fix "||" a joined logic.
  * @param {object} root
  * @param {string} root.userId
  * @param {object} args

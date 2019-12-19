@@ -35,9 +35,7 @@ let make =
           </FC.Table.Cell>
         </FC.Table.HeaderRow>
         {measurables
-         |> E.A.fmap((m: Types.measurable) => {
-              let iAmOwner = m.iAmOwner == Some(true);
-
+         |> E.A.fmap((m: Types.measurable) =>
               <FC.Table.Row onClick={_e => onSelect(m)} key={m.id}>
                 <FC.Table.Cell
                   flex={`num(3.)}
@@ -80,10 +78,9 @@ let make =
                    )}
                   {MeasurableItems.measurements(~m) |> E.O.React.defaultNull}
                   {MeasurableItems.measurers(~m) |> E.O.React.defaultNull}
-                  {E.React2.showIf(iAmOwner, MeasurableItems.editLink(~m))}
                 </FC.Table.Cell>
-              </FC.Table.Row>;
-            })
+              </FC.Table.Row>
+            )
          |> ReasonReact.array}
       </>
     : <NothingToShow />;

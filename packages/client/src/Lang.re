@@ -10,3 +10,4 @@ let sucUnsubscribing = "You are unsubscribed.";
 let unsubscribing = "Unsubscribing...";
 let subscribing = "Subscribing...";
 let preferencesAreSaved = "Prefereces are saved.";
+let measurableIsSaved = "Measurable is saved.";

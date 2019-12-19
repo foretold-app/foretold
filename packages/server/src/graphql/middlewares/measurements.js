@@ -61,6 +61,7 @@ async function measurableStateValidation(root, args, context, _info) {
 async function measurementTypeValidation(root, args, context, _info) {
   const inputValue = _.get(args, ['input', 'value'], null);
   const type = _.get(context, 'measurable.valueType', '');
+
   if (!type) throw new Error(lang.measurableValueType());
 
   const value = MeasurementValue.factory(inputValue);

@@ -8,6 +8,7 @@ const logger = require('../../lib/log');
 const log = logger.module('middlewares/measurables');
 
 /**
+ * @todo: To fix "||" a joined logic.
  * @param {object | null} root
  * @param {object} args
  * @param {object} context

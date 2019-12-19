@@ -52,10 +52,10 @@ function getAll(rulesPart) {
    * @returns {Promise<*>}
    */
   return async (root, args, context, info) => {
-    const mutations = await (getList(rulesPart.Mutation))(
+    const mutations = await getList(rulesPart.Mutation)(
       root, args, context, info,
     );
-    const queries = await (getList(rulesPart.Query))(
+    const queries = await getList(rulesPart.Query)(
       root, args, context, info,
     );
     return {
@@ -73,7 +73,7 @@ function getAll(rulesPart) {
  * @returns {Promise<*>}
  */
 async function availableAll(root, args, context, info) {
-  return getAll(rules)(root, args, context, info);
+  return getAll(rules())(root, args, context, info);
 }
 
 /**
@@ -85,7 +85,7 @@ async function availableAll(root, args, context, info) {
  * @returns {Promise<*>}
  */
 async function availableChannelPermissions(root, args, context, info) {
-  return getAll(rulesChannel)(root, args, context, info);
+  return getAll(rulesChannel())(root, args, context, info);
 }
 
 /**
@@ -98,7 +98,7 @@ async function availableChannelPermissions(root, args, context, info) {
 async function availableChannelMembershipsPermissions(
   root, args, context, info,
 ) {
-  return getAll(rulesChannelMemberships)(root, args, context, info);
+  return getAll(rulesChannelMemberships())(root, args, context, info);
 }
 
 /**
@@ -109,7 +109,7 @@ async function availableChannelMembershipsPermissions(
  * @returns {Promise<*>}
  */
 async function availableMeasurablesPermissions(root, args, context, info) {
-  return getAll(rulesMeasurables)(root, args, context, info);
+  return getAll(rulesMeasurables())(root, args, context, info);
 }
 
 /**
@@ -120,7 +120,7 @@ async function availableMeasurablesPermissions(root, args, context, info) {
  * @returns {Promise<*>}
  */
 async function availableBotsPermissions(root, args, context, info) {
-  return getAll(rulesBots)(root, args, context, info);
+  return getAll(rulesBots())(root, args, context, info);
 }
 
 module.exports = {

@@ -6,6 +6,7 @@ const logger = require('../../lib/log');
 const log = logger.module('middlewares/channels');
 
 /**
+ * @todo: To fix "||" a joined logic.
  * @param {object | null} root
  * @param {{ channelId: string }} args
  * @param {object} context

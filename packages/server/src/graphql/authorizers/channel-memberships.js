@@ -98,6 +98,7 @@ function channelHasMultipleAdminsRule(_root, _args, context, _info) {
 }
 
 /**
+ * @todo: To fix "_.get(root, 'agentId')".
  * @param {*} root
  * @param {object} args
  * @param {Schema.Context} context
@@ -105,16 +106,16 @@ function channelHasMultipleAdminsRule(_root, _args, context, _info) {
  * @return {boolean}
  */
 function membershipBelongsToCurrentAgentRule(root, args, context, _info) {
-  const objectAgentId = _.get(args, 'input.agentId')
+  const membershipAgentId = _.get(args, 'input.agentId')
     || _.get(root, 'agentId');
-  const subjectAgentId = _.get(context, 'agent.id');
+  const currentAgentId = _.get(context, 'agent.id');
 
-  const result = !!objectAgentId && objectAgentId === subjectAgentId;
+  const result = !!membershipAgentId && membershipAgentId === currentAgentId;
 
   log.trace(
     '\x1b[33m Rule Channel Memberships '
     + '(membershipBelongsToCurrentAgentRule) objectAgentId = '
-    + `"${objectAgentId}", subjectAgentId = "${subjectAgentId}", `
+    + `"${membershipAgentId}", subjectAgentId = "${currentAgentId}", `
     + `result = "${result}".\x1b[0m`,
   );
 
@@ -122,6 +123,7 @@ function membershipBelongsToCurrentAgentRule(root, args, context, _info) {
 }
 
 /**
+ * @todo: To fix "_.get(root, 'role')".
  * @param {*} root
  * @param {object} args
  * @param {Schema.Context} context

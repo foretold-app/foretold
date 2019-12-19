@@ -27,7 +27,7 @@ module Functor =
     |> E.O.default(Js.Json.array([||]))
     |> (e => Interface.Graph.fromJson(e));
 
-  let itemUrl = id => Routing.Url.toString(EntityShow(id));
+  let itemUrl = entityId => Routing.Url.toString(EntityShow(entityId));
 
   let findName = propertyId =>
     graph

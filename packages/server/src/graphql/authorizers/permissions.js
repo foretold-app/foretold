@@ -1,7 +1,4 @@
-const _ = require('lodash');
-const {
-  shield, allow, and, or, not,
-} = require('graphql-shield');
+const { shield, allow, and, or, not } = require('graphql-shield');
 
 const { currentAgentIsAuthenticated } = require('./agents');
 const { currentAgentIsApplicationAdmin } = require('./agents');
@@ -29,7 +26,7 @@ const currentAgentIsApplicationAdminOrChannelAdmin = or(
   currentAgentIsChannelAdmin,
 );
 
-const rulesChannel = {
+const rulesChannel = () => ({
   Query: {},
   Mutation: {
     channelUpdate: and(
@@ -57,9 +54,9 @@ const rulesChannel = {
       currentAgentIsApplicationAdminOrChannelAdmin,
     ),
   },
-};
+});
 
-const rulesChannelMemberships = {
+const rulesChannelMemberships = () => ({
   Query: {},
   Mutation: {
     channelMembershipDelete: and(
@@ -80,9 +77,9 @@ const rulesChannelMemberships = {
       ),
     ),
   },
-};
+});
 
-const rulesMeasurables = {
+const rulesMeasurables = () => ({
   Query: {},
   Mutation: {
     measurementCreate: and(
@@ -110,9 +107,9 @@ const rulesMeasurables = {
       measurableIsOwnedByCurrentAgent,
     ),
   },
-};
+});
 
-const rulesBots = {
+const rulesBots = () => ({
   Query: {},
   Mutation: {
     botUpdate: and(
@@ -120,9 +117,9 @@ const rulesBots = {
       botBelongsToCurrentUser,
     ),
   },
-};
+});
 
-const rulesInvitations = {
+const rulesInvitations = () => ({
   Query: {},
   Mutation: {
     invitationCreate: and(
@@ -130,9 +127,9 @@ const rulesInvitations = {
       currentAgentIsApplicationAdminOrChannelAdmin,
     ),
   },
-};
+});
 
-const rules = {
+const rules = () => ({
   Bot: {
     token: botBelongsToCurrentUser,
   },
@@ -195,11 +192,11 @@ const rules = {
     ...rulesChannelMemberships.Mutation,
     ...rulesInvitations.Mutation,
   },
-};
+});
 
 function getPermissions() {
   return shield(
-    _.cloneDeep(rules),
+    rules(),
     { debug: false },
   );
 }

@@ -5,6 +5,8 @@ const logger = require('../../lib/log');
 const log = logger.module('authorizers/bots');
 
 /**
+ * @todo: To fix "||" a joined logic.
+ * @todo: To fix "_.get(root, 'userId', null)".
  * @param {object} root
  * @param {string} root.userId
  * @param {object} args
@@ -16,6 +18,7 @@ function botBelongsToCurrentUserRule(root, args, context, _info) {
   const botUserId = _.get(root, 'userId', null)
     || _.get(context, 'bot.userId', null);
   const userId = _.get(context, 'user.id', null);
+
   const result = !!botUserId && botUserId === userId;
 
   log.trace(

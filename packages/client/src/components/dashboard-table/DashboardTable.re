@@ -41,7 +41,7 @@ module Row = {
     t
     |> E.A.fmap(r =>
          switch (r) {
-         | MeasurableId(id) => Some(id)
+         | MeasurableId(measurableId) => Some(measurableId)
          | _ => None
          }
        )

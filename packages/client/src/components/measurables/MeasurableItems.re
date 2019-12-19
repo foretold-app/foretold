@@ -104,15 +104,6 @@ let creatorLink = (~m: Types.measurable) =>
        <div className=Shared.Item.item> <AgentLink agent /> </div>
      );
 
-let editLink = (~m: Types.measurable) =>
-  <div className=Shared.Item.item>
-    <Link
-      linkType={Internal(MeasurableEdit(m.id))}
-      className={Shared.Item.itemButton(NORMAL)}>
-      {"Edit" |> ste}
-    </Link>
-  </div>;
-
 let channelLink = (~m: Types.measurable) =>
   <div className=Shared.Item.item>
     <Link

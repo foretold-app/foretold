@@ -15,7 +15,14 @@ module ReducerConfig = {
       (),
     );
 
-  let isEqual = (a: itemType, b: itemType) => a.id == b.id;
+  let isEqual = (a: itemType, b: itemType) => {
+    let result =
+      switch (a.updatedAt, b.updatedAt) {
+      | (Some(a), Some(b)) => MomentRe.Moment.isSame(a, b)
+      | _ => false
+      };
+    result;
+  };
 };
 
 module Reducer = PaginationFunctor.Make(ReducerConfig);
@@ -28,38 +35,32 @@ type channelQuery = HttpResponse.t(channel);
 type measurablesStateStatsQuery =
   HttpResponse.t(option(MeasurablesStateStatsGet.stats));
 
-module LoadedAndSelected = {
-  type t = {
-    reducerParams,
-    channel,
-    seriesCollection,
-    itemState: Reducer.Types.itemSelected,
-    selectedMeasurable: ReducerConfig.itemType,
-  };
+type loadedAndSelected = {
+  reducerParams,
+  channel,
+  seriesCollection,
+  itemState: Reducer.Types.itemSelected,
+  selectedMeasurable: ReducerConfig.itemType,
 };
 
-module LoadedAndUnselected = {
-  type t = {
-    reducerParams,
-    channel,
-    seriesCollection,
-  };
+type loadedAndUnselected = {
+  reducerParams,
+  channel,
+  seriesCollection,
 };
 
-module WithChannelButNotQuery = {
-  type t = {
-    reducerParams,
-    channel,
-    seriesQuery,
-  };
+type withChannelButNotQuery = {
+  reducerParams,
+  channel,
+  seriesQuery,
 };
 
 type state =
   | WithoutChannel(channelQuery)
   | InvalidIndexError(channel)
-  | WithChannelButNotQuery(WithChannelButNotQuery.t)
-  | LoadedAndUnselected(LoadedAndUnselected.t)
-  | LoadedAndSelected(LoadedAndSelected.t);
+  | WithChannelButNotQuery(withChannelButNotQuery)
+  | LoadedAndUnselected(loadedAndUnselected)
+  | LoadedAndSelected(loadedAndSelected);
 
 type input = {
   reducerParams,
@@ -112,5 +113,6 @@ let make = (input: input) =>
       reducerParams: input.reducerParams,
       seriesQuery: input.seriesQuery,
     })
+
   | _ => WithoutChannel(input.channelQuery)
   };

@@ -4,6 +4,9 @@ const request = require('request');
 const crypto = require('crypto');
 
 const config = require('../../../config/config');
+const logger = require('../../lib/log');
+
+const log = logger.module('git-hup-api');
 
 class GitHubApi {
   /**
@@ -22,17 +25,17 @@ class GitHubApi {
       && !!this.token && !!this.webhookSecret;
 
     this.hookUrl = `${this.serverURL}/hooks`;
-    this.gitHubRepoUrl
-      = `${this.apiURL}/repos/${this.repoOwner}/${this.repoName}`;
+    this.gitHubRepoUrl = `${this.apiURL}/repos/${this.repoOwner}`
+      + `/${this.repoName}`;
     this.gitHubHooksUrl = `${this.gitHubRepoUrl}/hooks`;
 
-    if (!this.repoOwner) console.warn('GitHub repo owner is not set.');
-    if (!this.repoName) console.warn('GitHub repo name is not set.');
+    if (!this.repoOwner) log.warn('GitHub repo owner is not set.');
+    if (!this.repoName) log.warn('GitHub repo name is not set.');
     if (!this.token) {
-      console.warn('GitHub personal access token is not set, '
+      log.warn('GitHub personal access token is not set, '
         + 'see https://github.com/settings/tokens.');
     }
-    if (!this.webhookSecret) console.warn('GitHub webhook secret is not set.');
+    if (!this.webhookSecret) log.warn('GitHub webhook secret is not set.');
   }
 
   /**
@@ -43,7 +46,7 @@ class GitHubApi {
     await this._checkIfAllIsReady();
 
     if (await this._checkUrl()) {
-      console.warn('GitHub web hook is already added.');
+      log.warn('GitHub web hook is already added.');
       return false;
     }
 
@@ -58,6 +61,7 @@ class GitHubApi {
         insecure_ssl: '1',
       },
     };
+
     const url = this.gitHubHooksUrl;
     return this._query(url, 'POST', hook);
   }
@@ -74,22 +78,22 @@ class GitHubApi {
     const file = _.find(files, ['filename', 'data.json'])
       || _.find(files, ['filename', 'Data.json']);
     if (!file) {
-      console.warn('GitHub "data.json" file is not found.');
+      log.warn('GitHub "data.json" file is not found.');
       return false;
     }
 
     const contentsUrl = _.get(file, 'contents_url');
-    console.log('GitHub contents_url', contentsUrl);
+    log.trace('GitHub contents_url', contentsUrl);
     const contents = await this._query(contentsUrl);
     if (!contents) {
-      console.warn('GitHub "data.json" content file is not found.');
+      log.warn('GitHub "data.json" content file is not found.');
       return false;
     }
 
     const downloadUrl = _.get(contents, 'download_url');
-    console.log('GitHub download_url', downloadUrl);
+    log.trace('GitHub download_url', downloadUrl);
     if (!downloadUrl) {
-      console.warn('GitHub download url is not found.');
+      log.warn('GitHub download url is not found.');
       return false;
     }
     return this._query(downloadUrl);
@@ -132,6 +136,7 @@ class GitHubApi {
       json: true,
       followAllRedirects: true,
     };
+
     return new Promise((resolve, reject) => {
       request(options, (error, response, responseBody) => {
         if (!!error) return reject(error);

@@ -43,7 +43,7 @@ class Trigger {
 
     const merged = _.get(this.webhook, 'pull_request.merged');
     if (merged !== true) {
-      console.warn('PullRequest is not merged yet.');
+      log.warn('PullRequest is not merged yet.');
       return false;
     }
     log.trace('PullRequest is merged.');
@@ -51,7 +51,7 @@ class Trigger {
 
     const pullRequestNumber = _.get(this.webhook, 'number');
     if (!pullRequestNumber) {
-      console.warn('Pull Request number is required.');
+      log.warn('Pull Request number is required.');
       return false;
     }
 
@@ -60,7 +60,7 @@ class Trigger {
       log.trace('Data.json content', dataJson);
       await this.globalSetting.updateEntityGraph(dataJson);
     } else {
-      console.warn('Data.json file is not found '
+      log.warn('Data.json file is not found '
         + `in the PR "${pullRequestNumber}".`);
     }
 

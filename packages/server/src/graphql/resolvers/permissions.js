@@ -18,7 +18,7 @@ async function all(root, args, context, info) {
  * @param {object} info
  * @returns {Promise<*>}
  */
-async function channelPermissions(root, args, context, info) {
+async function channelsPermissions(root, args, context, info) {
   return authorizers.availableChannelPermissions(root, args, context, info);
 }
 
@@ -60,7 +60,7 @@ async function botsPermissions(root, args, context, info) {
 module.exports = {
   all,
   botsPermissions,
-  channelPermissions,
+  channelsPermissions,
   measurablesPermissions,
   channelMembershipsPermissions,
 };

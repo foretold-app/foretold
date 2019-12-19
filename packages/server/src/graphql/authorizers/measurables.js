@@ -5,6 +5,9 @@ const logger = require('../../lib/log');
 const log = logger.module('authorizers/measurables');
 
 /**
+ * @todo: To fix ".get(context, 'measurable.creatorId', null)".
+ * @todo: Either from a context or from a root. And everywhere should be
+ * @todo: the same.
  * @param {object} root
  * @param {object} args
  * @param {Schema.Context} context
@@ -31,6 +34,7 @@ function measurableIsOwnedByCurrentAgentRule(root, args, context, _info) {
 }
 
 /**
+ * @todo: To think about "_.get(context, 'measurable.isArchived', null)".
  * @param {object} root
  * @param {object} args
  * @param {Schema.Context} context

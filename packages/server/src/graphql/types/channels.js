@@ -29,7 +29,7 @@ const channel = new graphql.GraphQLObjectType({
 
     permissions: {
       type: graphql.GraphQLNonNull(require('./permissions').permissions),
-      resolve: resolvers.permissions.channelPermissions,
+      resolve: resolvers.permissions.channelsPermissions,
     },
 
     creator: {

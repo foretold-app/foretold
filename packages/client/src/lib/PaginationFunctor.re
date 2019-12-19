@@ -407,6 +407,7 @@ module Make = (Config: Config) => {
     };
 
     let innerComponentFn = response => {
+      // @todo: Fix this. Use hooks somehow.
       if (!HttpResponse.isEq(state.response, response, compareItems)) {
         send(UpdateResponse(response));
       };

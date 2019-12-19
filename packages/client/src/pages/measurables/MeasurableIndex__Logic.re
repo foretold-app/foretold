@@ -15,7 +15,14 @@ module ReducerConfig = {
       (),
     );
 
-  let isEqual = (a: itemType, b: itemType) => a.id == b.id;
+  let isEqual = (a: itemType, b: itemType) => {
+    let result =
+      switch (a.updatedAt, b.updatedAt) {
+      | (Some(a), Some(b)) => MomentRe.Moment.isSame(a, b)
+      | _ => false
+      };
+    result;
+  };
 };
 
 module Reducer = PaginationFunctor.Make(ReducerConfig);

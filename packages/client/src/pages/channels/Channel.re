@@ -97,15 +97,14 @@ let make =
   module Headers = {
     [@react.component]
     let make = () => {
-      let topOption = Routing.ChannelPage.SubPage.toTab(channelPage.subPage);
-      let secondLevel = channel => ChannelTabs.make(topOption, channel);
+      let tabSelected = Routing.ChannelPage.SubPage.toTab(channelPage.subPage);
 
       switch (channel) {
       | Some(channel) =>
         <>
           <FC.GroupHeader> <Top channel /> </FC.GroupHeader>
           <FC.GroupHeader.SubHeader>
-            {secondLevel(channel)}
+            <ChannelTabs tabSelected channel />
           </FC.GroupHeader.SubHeader>
         </>
       | _ => <div />

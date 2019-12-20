@@ -16,8 +16,8 @@ let tabToInternalUrl = (channelId, tabSelected: ChannelPage.tab): Url.t => {
   channelPage |> Url.fromChannelPage;
 };
 
-// @todo: To make a component.
-let make = (tabSelected: Routing.ChannelPage.tab, channel: Types.channel) =>
+[@react.component]
+let make = (~tabSelected: Routing.ChannelPage.tab, ~channel: Types.channel) =>
   <>
     {tab(
        tabSelected == Measurables,

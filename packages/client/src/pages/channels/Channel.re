@@ -13,11 +13,14 @@ let make =
   module TopOrdinaryChannel = {
     [@react.component]
     let make = (~channel: Types.channel) => {
-      let joinButton = channelId =>
-        E.React2.showIf(
-          Primary.Permissions.can(`JOIN_CHANNEL, channel.permissions),
-          <SimpleHeader.JoinChannel channelId />,
-        );
+      module JoinButton = {
+        [@react.component]
+        let make = (~channelId) =>
+          E.React2.showIf(
+            Primary.Permissions.can(`JOIN_CHANNEL, channel.permissions),
+            <SimpleHeader.JoinChannel channelId />,
+          );
+      };
 
       module LeaveButton = {
         [@react.component]
@@ -42,7 +45,7 @@ let make =
         </Div>
         <Div float=`right>
           {channel.myRole === Some(`NONE)
-             ? joinButton(channel.id)
+             ? <JoinButton channelId=channel.id />
              : <>
                  <SimpleHeader.NewMeasurable channelId={channel.id} />
                  <LeaveButton channelId={channel.id} />

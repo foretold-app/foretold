@@ -262,7 +262,7 @@ module Make = (Config: Config) => {
         className={Styles.header(~isDisabled=!canMove(params))}
         onClick={_ => canMove(params) ? params.send(action) : ()}
         disabled={!canMove(params)}>
-        <Icon.Icon icon={facesRight ? "CHEVRON_RIGHT" : "CHEVRON_LEFT"} />
+        <Icon icon={facesRight ? "CHEVRON_RIGHT" : "CHEVRON_LEFT"} />
       </div>;
 
     let pageButton' = buttonType =>

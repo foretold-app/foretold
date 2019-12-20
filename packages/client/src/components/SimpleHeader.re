@@ -1,3 +1,4 @@
+// @todo: To make a component.
 let newMeasurable = channelId => {
   <FC__Button
     variant=FC__Button.Primary
@@ -9,6 +10,7 @@ let newMeasurable = channelId => {
   </FC__Button>;
 };
 
+// @todo: To make a component.
 let leaveChannel = (channelId: string) =>
   <ChannelLeave.Mutation>
     ...{(mutation, _) =>
@@ -23,6 +25,7 @@ let leaveChannel = (channelId: string) =>
     }
   </ChannelLeave.Mutation>;
 
+// @todo: To make a component.
 let joinChannel = channelId =>
   <ChannelJoin.Mutation>
     ...{(mutation, _) =>

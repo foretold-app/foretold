@@ -70,12 +70,3 @@ module Columns = {
 [@react.component]
 let make = (~feedItems, ~columns=Columns.all) =>
   Table.fromColumns(columns, feedItems, ());
-
-module Jsx2 = {
-  let make = (~feedItems, ~columns=Columns.all, children) =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(~feedItems, ~columns, ()),
-      children,
-    );
-};

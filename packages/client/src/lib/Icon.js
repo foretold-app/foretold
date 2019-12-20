@@ -18,6 +18,7 @@ import { lock } from 'react-icons-kit/icomoon/lock';
 import { chevronDown } from 'react-icons-kit/fa/chevronDown';
 import { emailUnread } from 'react-icons-kit/ionicons/emailUnread';
 import { u26FA as tent } from 'react-icons-kit/noto_emoji_regular/u26FA';
+import { ic_content_copy } from 'react-icons-kit/md/ic_content_copy';
 
 let types = {
   'HOME': home,
@@ -39,6 +40,7 @@ let types = {
   'CHEVRON_DOWN': chevronDown,
   'THIN_RIGHT': thinRight,
   'EMAIL_UNREAD': emailUnread,
+  'COPY': ic_content_copy,
 };
 
 export class Icon extends React.Component {

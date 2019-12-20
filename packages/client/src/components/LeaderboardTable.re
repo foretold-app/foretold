@@ -254,12 +254,3 @@ module Columns = {
 [@react.component]
 let make = (~items, ~columns=Columns.measurables) =>
   Table.fromColumns(columns, items, ());
-
-module Jsx2 = {
-  let make = (~items, ~columns=Columns.measurables, children) =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(~items, ~columns, ()),
-      children,
-    );
-};

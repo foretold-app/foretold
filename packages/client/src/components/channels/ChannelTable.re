@@ -63,12 +63,3 @@ let make = (~agentId=None, ~isArchived=?) =>
     channels =>
     Table.fromColumns(Columns.all, channels, ())
   );
-
-module Jsx2 = {
-  let make = (~agentId=None, ~isArchived=?, children) =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(~agentId, ~isArchived?, ()),
-      children,
-    );
-};

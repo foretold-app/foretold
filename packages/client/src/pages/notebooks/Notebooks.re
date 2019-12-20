@@ -15,6 +15,7 @@ module ReducerConfig = {
 
 module Reducer = PaginationFunctor.Make(ReducerConfig);
 
+// @todo: To make a component.
 let pagination =
     (reducerParams: Reducer.Types.reducerParams, channelId: string) =>
   <Div>

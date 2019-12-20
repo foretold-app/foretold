@@ -86,11 +86,15 @@ module FullPage = {
   };
 };
 
+// @todo: To make a component.
 let channelBack = (~onClick, ()) =>
   <FC__Button onClick size=FC__Button.Small>
-    {"< Back" |> Utils.ste}
+    <Antd_Tooltip title={Lang.backButtonTip |> Utils.ste} placement=`bottom>
+      {"< Back" |> Utils.ste}
+    </Antd_Tooltip>
   </FC__Button>;
 
+// @todo: To make a component.
 let channelLink = (c: Types.channel) =>
   <Link linkType={Internal(ChannelShow(c.id))} className=Styles.channelText>
     {switch (c.id) {
@@ -103,16 +107,20 @@ let channelLink = (c: Types.channel) =>
      }}
   </Link>;
 
+// @todo: To make a component.
 let channelEditLink = (c: Types.channel) =>
   <Link linkType={Internal(ChannelEdit(c.id))} className=Styles.headerText>
     {"edit" |> ste}
   </Link>;
 
-let seriesHead = (channel: Types.channel, seriesName) =>
-  <div className=Styles.seriesText>
-    <Icon.Icon icon="LAYERS" />
-    {seriesName |> ste}
-  </div>;
+module SeriesHead = {
+  [@react.component]
+  let make = (~seriesName) =>
+    <div className=Styles.seriesText>
+      <Icon icon="LAYERS" />
+      {seriesName |> ste}
+    </div>;
+};
 
 [@react.component]
 let make = (~head=ReasonReact.null, ~isFluid=false, ~children=<Null />) => {

@@ -86,6 +86,7 @@ module FullPage = {
   };
 };
 
+// @todo: To make a component.
 let channelBack = (~onClick, ()) =>
   <FC__Button onClick size=FC__Button.Small>
     <Antd_Tooltip title={Lang.backButtonTip |> Utils.ste} placement=`bottom>
@@ -93,6 +94,7 @@ let channelBack = (~onClick, ()) =>
     </Antd_Tooltip>
   </FC__Button>;
 
+// @todo: To make a component.
 let channelLink = (c: Types.channel) =>
   <Link linkType={Internal(ChannelShow(c.id))} className=Styles.channelText>
     {switch (c.id) {
@@ -105,6 +107,7 @@ let channelLink = (c: Types.channel) =>
      }}
   </Link>;
 
+// @todo: To make a component.
 let channelEditLink = (c: Types.channel) =>
   <Link linkType={Internal(ChannelEdit(c.id))} className=Styles.headerText>
     {"edit" |> ste}

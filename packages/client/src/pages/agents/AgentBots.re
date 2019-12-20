@@ -6,6 +6,7 @@ module Styles = {
   let paddingRight = [paddingRight(`em(1.))] |> style;
 };
 
+// @todo: To make a component.
 let title =
   <FC.Base.Div float=`left>
     <FC.PageCard.HeaderRow.Title>
@@ -13,6 +14,7 @@ let title =
     </FC.PageCard.HeaderRow.Title>
   </FC.Base.Div>;
 
+// @todo: To make a component.
 let agentSection = (agent: Types.agent) =>
   switch (agent.agentType) {
   | Some(User(_)) =>
@@ -93,8 +95,6 @@ module Columns = {
     editColumn,
   |];
 };
-
-type pageParams = {id: string};
 
 [@react.component]
 let make = (~pageParams: Types.pageParams) => {

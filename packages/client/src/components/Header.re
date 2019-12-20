@@ -75,9 +75,11 @@ module StylesDropdown = {
 
 let action = StylesDropdown.action;
 
+// @todo: To make a component.
 let link = (linkType: LinkType.linkType, str) =>
   <Link linkType className=action> {str |> ste} </Link>;
 
+// @todo: To make a component.
 let userDropdown = agentId =>
   <div className=StylesDropdown.actions>
     {link(Internal(Agent({agentId, subPage: AgentUpdates})), "My Profile")}
@@ -90,6 +92,7 @@ let userDropdown = agentId =>
     <div className=StylesDropdown.clear />
   </div>;
 
+// @todo: To make a component.
 let header = (loggedUser: Types.user) =>
   switch (loggedUser.agent) {
   | Some((agent: Types.agent)) =>

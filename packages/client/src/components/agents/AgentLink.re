@@ -55,12 +55,3 @@ let make = (~agent: Types.agent) =>
   |> E.O.React.fmapOrNull(agent =>
        <FC__AgentLink agent className=agentLinkStyle />
      );
-
-module Jsx2 = {
-  let make = (~agent, children) =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(~agent, ()),
-      children,
-    );
-};

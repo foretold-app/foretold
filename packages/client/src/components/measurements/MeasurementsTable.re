@@ -37,6 +37,8 @@ module Styles = {
 
 module Helpers = {
   open Css;
+
+  // @todo: To make a component.
   let smallDistribution =
       (
         ~measurement: measurement,
@@ -77,6 +79,7 @@ module Helpers = {
     | _ => None
     };
 
+  // @todo: To make a component.
   let statSummary = (measurement: measurement): option(React.element) =>
     switch (measurement.value) {
     | Ok(`FloatCdf(r)) =>
@@ -108,6 +111,7 @@ module Helpers = {
     | _ => None
     };
 
+  // @todo: To make a component.
   let getValueText = (measurement: measurement): React.element =>
     <div className=Styles.secondaryText>
       {measurement.valueText
@@ -117,6 +121,7 @@ module Helpers = {
        |> Utils.ste}
     </div>;
 
+  // @todo: To make a component.
   let getDescription = (~m: measurement): option(React.element) => {
     switch (m.description) {
     | None
@@ -130,6 +135,7 @@ module Helpers = {
     };
   };
 
+  // @todo: To make a component.
   let relevantAt = (~m: measurement): option(React.element) =>
     m.relevantAt
     |> E.O.fmap(d =>
@@ -179,6 +185,7 @@ module Helpers = {
     | _ => None
     };
 
+  // @todo: To make a component.
   let measurerLink = (~measurement: measurement) => {
     let aLink = measurement.agent |> E.O.fmap(agent => <AgentLink agent />);
 
@@ -214,6 +221,7 @@ module Helpers = {
 
 let stringOfFloat = Js.Float.toPrecisionWithPrecision(_, ~digits=3);
 
+// @todo: To make a component.
 let getItems = (measurementsList: list(measurement), ~makeItem) => {
   let _bounds = Helpers.bounds(measurementsList |> E.A.of_list);
   measurementsList
@@ -235,6 +243,7 @@ let getItems = (measurementsList: list(measurement), ~makeItem) => {
   |> ReasonReact.array;
 };
 
+// @todo: To make a component.
 let getItemsSorted = (measurementsList: list(measurement), ~makeItem) => {
   let _bounds = Helpers.bounds(measurementsList |> E.A.of_list);
 
@@ -244,6 +253,7 @@ let getItemsSorted = (measurementsList: list(measurement), ~makeItem) => {
   |> ReasonReact.array;
 };
 
+// @todo: To make a component.
 let getMeasurableLink = (m: measurement) => {
   switch (m.measurable) {
   | None => "" |> ste
@@ -368,6 +378,7 @@ let getPredictionDistributionColumn = bounds =>
     (),
   );
 
+// ?
 let bottomSubRowFn =
   Some(
     (measurement: Types.measurement) =>
@@ -375,6 +386,8 @@ let bottomSubRowFn =
       |> E.O.fmap((c: React.element) => [|FC.Table.Row.textSection(c)|]),
   );
 
+
+// @todo: To make a component.
 let make =
     (
       ~measurementsList: list(measurement),

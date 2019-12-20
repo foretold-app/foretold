@@ -9,6 +9,7 @@ let name = (page: Routing.AgentPage.SubPage.t) =>
   | AgentScores => "Scores"
   };
 
+// @todo: To make a component.
 let tab = (agentId, currentPage, selectedPage) => {
   let isActive = currentPage == selectedPage;
   <FC.Tab
@@ -20,6 +21,7 @@ let tab = (agentId, currentPage, selectedPage) => {
   </FC.Tab>;
 };
 
+// @todo: To make a component.
 let tabs = (page: Routing.AgentPage.t, agent: Types.agent) => {
   let agentId = page.agentId;
   let subPage = page.subPage;

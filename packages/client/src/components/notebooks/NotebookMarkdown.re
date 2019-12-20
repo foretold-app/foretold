@@ -17,6 +17,7 @@ let reducerToEditor =
 type block =
   | Markdown(string)
   | Json(Js.Json.t);
+
 type blocks = array(block);
 
 let markdownToBlocks = (str: string): blocks => {

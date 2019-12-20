@@ -1,11 +1,13 @@
 open Utils;
 open Routing;
 
+// @todo: To make a component.
 let tab = (isActive, interalUrl, str) =>
   <FC.Tab isActive onClick={LinkType.onClick(Internal(interalUrl))}>
     {str |> ste}
   </FC.Tab>;
 
+// @todo: To make a component.
 let tabToInternalUrl = (channelId, tabSelected: ChannelPage.tab): Url.t => {
   let channelPage: ChannelPage.t = {
     channelId,
@@ -14,6 +16,7 @@ let tabToInternalUrl = (channelId, tabSelected: ChannelPage.tab): Url.t => {
   channelPage |> Url.fromChannelPage;
 };
 
+// @todo: To make a component.
 let make = (tabSelected: Routing.ChannelPage.tab, channel: Types.channel) =>
   <>
     {tab(

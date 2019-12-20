@@ -40,6 +40,7 @@ let headerCellPadding =
     ])
   );
 
+// @todo: To make a component.
 let fromColumns =
     (
       columns: array(column('a)),

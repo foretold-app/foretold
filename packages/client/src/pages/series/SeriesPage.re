@@ -38,6 +38,7 @@ module Styles = {
     ]);
 };
 
+// @todo: To make a component.
 let load2Queries = (channelId, seriesId, itemsPerPage, fn) =>
   ((a, b, c) => (a, b, c) |> fn)
   |> E.F.flatten3Callbacks(

@@ -1,6 +1,7 @@
 open Utils;
 open Belt.Result;
 
+// @todo: To make a component.
 let apolloResponseToResult = (result: ReasonApolloTypes.queryResponse('a)) =>
   switch (result) {
   | Loading => Error(<div> <Spin /> </div>)

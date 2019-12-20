@@ -46,8 +46,6 @@ module Styles = {
       lineHeight(`em(1.56)),
       fontSize(`em(1.1)),
     ]);
-
-  let description = style([paddingTop(`em(1.5))]);
 };
 
 module DateItem = {
@@ -122,14 +120,11 @@ module LinkMeasurable = {
 
 module Description = {
   [@react.component]
-  let make = (~measurable: Types.measurable) =>
+  let make = (~measurable: Types.measurable, ~styles=[]) =>
     switch (measurable.labelCustom) {
     | Some("")
     | None => <Null />
-    | Some(text) =>
-      <FC__Div styles=[Styles.description]>
-        <Markdown source=text />
-      </FC__Div>
+    | Some(text) => <FC__Div styles> <Markdown source=text /> </FC__Div>
     };
 };
 
@@ -195,7 +190,7 @@ module Measurements = {
         "Number of Predictions: " ++ string_of_int(count) |> ste;
       <AntdPopover content=popoverContent trigger=`hover placement=`top>
         <div className=Shared.Item.item>
-          <Icon.Icon icon="BULB" />
+          <Icon icon="BULB" />
           {count |> string_of_int |> ste}
         </div>
       </AntdPopover>;
@@ -210,7 +205,7 @@ module Measurers = {
     | None => <Null />
     | Some(count) =>
       <div className=Shared.Item.item>
-        <Icon.Icon icon="PEOPLE" />
+        <Icon icon="PEOPLE" />
         {count |> string_of_int |> ste}
       </div>
     };
@@ -219,13 +214,25 @@ module Measurers = {
 module Id = {
   [@react.component]
   let make = (~measurable: Types.measurable) =>
-    <Link
-      className=Styles.link2
-      linkType={
-        Internal(MeasurableShow(measurable.channelId, measurable.id))
-      }>
-      {measurable.id |> Utils.ste}
-    </Link>;
+    <>
+      <Link
+        className=Styles.link2
+        linkType={
+          Internal(MeasurableShow(measurable.channelId, measurable.id))
+        }>
+        {measurable.id |> Utils.ste}
+      </Link>
+      <CopyToClipboard
+        text={measurable.id}
+        onCopy={_ =>
+          Antd_Notification.info({
+            "message": Lang.copiedMessage |> Utils.ste,
+            "description": Lang.copiedDescription |> Utils.ste,
+          })
+        }>
+        <Antd.Button icon=Antd.IconName.copy shape=`circle _type=`link />
+      </CopyToClipboard>
+    </>;
 };
 
 module Series = {
@@ -238,7 +245,7 @@ module Series = {
            <div className=Shared.Item.item>
              <Link
                linkType={Internal(SeriesShow(measurable.channelId, r.id))}>
-               <Icon.Icon icon="LAYERS" />
+               <Icon icon="LAYERS" />
                {name |> ste}
              </Link>
            </div>
@@ -253,7 +260,9 @@ module ExpectedResolutionDate = {
   [@react.component]
   let make = (~measurable: Types.measurable) =>
     <div className=Shared.Item.item>
-      {"Resolves on " ++ (measurable.expectedResolutionDate |> formatDate) |> ste}
+      {"Resolves on "
+       ++ (measurable.expectedResolutionDate |> formatDate)
+       |> ste}
     </div>;
 };
 

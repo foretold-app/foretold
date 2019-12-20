@@ -113,7 +113,7 @@ let header = (loggedUser: Types.user) =>
               Css.opacity(0.4),
             ]),
           ]>
-          <Icon.Icon icon="CHEVRON_DOWN" />
+          <Icon icon="CHEVRON_DOWN" />
         </Div>
         {loggedUser.picture
          |> E.O.React.fmapOrNull((picture: string) =>

@@ -347,7 +347,7 @@ module Channel = {
       <span className>
         {channel.isPublic
            ? <span className=Styles.hash> {"#" |> ste} </span>
-           : <span className=Styles.lock> <Icon.Icon icon="LOCK" /> </span>}
+           : <span className=Styles.lock> <Icon icon="LOCK" /> </span>}
       </span>
       <span> {channel.name |> ste} </span>
     </span>;
@@ -355,7 +355,7 @@ module Channel = {
   let presentGlobal = (~className="", ~symbolClassName=Styles.globeList, ()) =>
     <span>
       <span className>
-        <span className=symbolClassName> <Icon.Icon icon="HOME" /> </span>
+        <span className=symbolClassName> <Icon icon="HOME" /> </span>
       </span>
       <span> {"Home" |> ste} </span>
     </span>;

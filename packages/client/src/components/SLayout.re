@@ -114,7 +114,7 @@ module SeriesHead = {
   [@react.component]
   let make = (~seriesName) =>
     <div className=Styles.seriesText>
-      <Icon.Icon icon="LAYERS" />
+      <Icon icon="LAYERS" />
       {seriesName |> ste}
     </div>;
 };

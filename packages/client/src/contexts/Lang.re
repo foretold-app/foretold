@@ -11,3 +11,5 @@ let unsubscribing = "Unsubscribing...";
 let subscribing = "Subscribing...";
 let preferencesAreSaved = "Prefereces are saved.";
 let measurableIsSaved = "Measurable is saved.";
+let copiedMessage = "Copied";
+let copiedDescription = "The ID of the measurable was copied.";

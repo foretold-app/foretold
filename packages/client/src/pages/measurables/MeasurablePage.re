@@ -8,6 +8,8 @@ module Styles = {
       @ FC.Base.BaseStyles.fullWidthFloatLeft,
     );
   let link = style([marginTop(em(1.))]);
+
+  let description = style([paddingTop(`em(1.5))]);
 };
 
 [@react.component]
@@ -29,7 +31,7 @@ let make = (~measurable) => {
           <MeasurableItems.QuestionLink measurable />
         </Div>
       </Div>
-      <MeasurableItems.Description measurable />
+      <MeasurableItems.Description measurable styles=[Styles.description] />
     </Div>
     <MeasurementForm
       measurable

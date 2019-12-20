@@ -30,7 +30,7 @@ let make = (~series: SeriesCollectionGet.series) => {
     className=Styles.card
     onClick={_e => Routing.Url.push(SeriesShow("general", series.id))}>
     <span className=Styles.heading>
-      <Icon.Icon icon="LAYERS" />
+      <Icon icon="LAYERS" />
       {series.name |> E.O.default("") |> ste}
     </span>
     {series.description

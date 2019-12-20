@@ -13,6 +13,7 @@ module Query = [%graphql
           resolutionEndpointResponse
           labelSubject
           labelProperty
+          iAmOwner
           state
           labelOnDate @bsDecoder(fn: "E.J.O.toMoment")
           stateUpdatedAt @bsDecoder(fn: "E.J.O.toMoment")
@@ -141,6 +142,7 @@ let toMeasurable = (m): Types.measurable => {
     ~min=m##min,
     ~max=m##max,
     ~series,
+    ~iAmOwner=Some(m##iAmOwner),
     ~previousAggregate,
     ~permissions=Some(permissions),
     ~recentMeasurement,

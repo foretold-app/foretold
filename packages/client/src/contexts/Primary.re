@@ -673,8 +673,8 @@ module CompetitorType = {
     | _ => "COMPETITIVE"
     };
 
-  let toSelection = (t: t) =>
-    switch (t) {
+  let toSelection = (competitorType: t) =>
+    switch (competitorType) {
     | `COMPETITIVE =>
       <Antd.Select.Option value="COMPETITIVE">
         {"Predict" |> ste}

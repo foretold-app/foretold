@@ -79,6 +79,7 @@
     "react-apollo": "2.5.8",
     "@baransu/graphql_ppx_re": "0.4.0",
     "lenses-ppx": "4.0.0",
+    "react-copy-to-clipboard": "5.0.2",
     "react": "16.11.0",
     "react-dom": "16.11.0",
     "reschema": "^1.3.0",

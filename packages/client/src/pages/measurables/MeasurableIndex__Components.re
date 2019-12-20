@@ -27,12 +27,14 @@ module LoadedAndSelected = {
       </Div>
     </>;
 
+  // @todo: To make a component.
   let measurablePage = (t: loadedAndSelected) =>
     <MeasurablePage
       measurable={t.selectedMeasurable}
       key={t.selectedMeasurable.id}
     />;
 
+  // @todo: To make a component.
   let measurableBottomSection = (t: loadedAndSelected) =>
     <MeasurableBottomSection
       measurable={t.selectedMeasurable}
@@ -41,6 +43,7 @@ module LoadedAndSelected = {
 };
 
 module LoadedAndUnselected = {
+  // @todo: To make a component.
   let stateLink = (state, text, num: int, isActive) =>
     <FC.Tab2
       isActive
@@ -54,6 +57,7 @@ module LoadedAndUnselected = {
       {text |> ste}
     </FC.Tab2>;
 
+  // @todo: To make a component.
   let header =
       (
         t: loadedAndUnselected,
@@ -106,6 +110,7 @@ module LoadedAndUnselected = {
       </Div>
     </Div>;
 
+  // @todo: To make a component.
   let measurableIndexTable = (t: loadedAndUnselected) => {
     let measurables =
       (
@@ -126,6 +131,7 @@ module LoadedAndUnselected = {
   };
 };
 
+// @todo: To make a component.
 let toLayoutInput =
     (
       send: Reducer.Types.send,

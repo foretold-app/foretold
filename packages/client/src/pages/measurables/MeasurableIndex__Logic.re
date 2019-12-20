@@ -68,6 +68,8 @@ type input = {
   seriesQuery,
 };
 
+
+// @todo: To make a component.
 let make = (input: input) =>
   switch (
     input.reducerParams.itemState,

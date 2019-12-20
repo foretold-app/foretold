@@ -10,7 +10,7 @@ let make = _ => {
       let warning = email =>
         <FC__Alert type_=`warning>
           <span className=Styles.icon>
-            <Icon.Icon icon="EMAIL_UNREAD" />
+            <Icon icon="EMAIL_UNREAD" />
           </span>
           {"Please verify your email address, \""
            ++ email
@@ -21,7 +21,7 @@ let make = _ => {
       let warningNoEmail =
         <FC__Alert type_=`warning>
           <span className=Styles.icon>
-            <Icon.Icon icon="EMAIL_UNREAD" />
+            <Icon icon="EMAIL_UNREAD" />
           </span>
           {"Please verify your email address. " |> Utils.ste}
         </FC__Alert>;

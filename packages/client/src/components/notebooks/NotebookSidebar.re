@@ -1,3 +1,4 @@
+// @todo: To make a component.
 let make = (~notebookRedux: NotebookRedux.t) => {
   switch (notebookRedux.state.selectedMeasurableId) {
   | Some(measurableId) =>

@@ -8,6 +8,7 @@ module Styles = {
       @ FC.Base.BaseStyles.fullWidthFloatLeft,
     );
   let link = style([marginTop(em(1.))]);
+
   let description = style([paddingTop(`em(1.5))]);
 };
 
@@ -18,24 +19,19 @@ let make = (~measurable) => {
       <Div flexDirection=`row>
         <Div flex={`num(3.)}>
           <FC.PageCard.H1>
-            {MeasurableItems.link(~m=measurable)}
+            <MeasurableItems.LinkMeasurable measurable />
           </FC.PageCard.H1>
           <StatusDisplay measurable />
         </Div>
         <Div flex={`num(1.)}>
-          {MeasurableItems.series(~m=measurable, ()) |> E.O.React.defaultNull}
-          {MeasurableItems.creatorLink(~m=measurable) |> E.O.React.defaultNull}
-          {MeasurableItems.resolutionEndpoint(~m=measurable)
-           |> E.O.React.defaultNull}
-          {MeasurableItems.endpointResponse(~m=measurable)
-           |> E.O.React.defaultNull}
-          {MeasurableItems.questionLink(~m=measurable)}
+          <MeasurableItems.Series measurable />
+          <MeasurableItems.CreatorLink measurable />
+          <MeasurableItems.ResolutionEndpoint measurable />
+          <MeasurableItems.EndpointResponse measurable />
+          <MeasurableItems.QuestionLink measurable />
         </Div>
       </Div>
-      {MeasurableItems.description(~m=measurable)
-       |> E.O.React.fmapOrNull(d =>
-            <Div styles=[Styles.description]> d </Div>
-          )}
+      <MeasurableItems.Description measurable styles=[Styles.description] />
     </Div>
     <MeasurementForm
       measurable

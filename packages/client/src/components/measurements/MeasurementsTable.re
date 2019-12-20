@@ -247,7 +247,7 @@ let getItemsSorted = (measurementsList: list(measurement), ~makeItem) => {
 let getMeasurableLink = (m: measurement) => {
   switch (m.measurable) {
   | None => "" |> ste
-  | Some(measurable) => <Items.LinkMeasurable m=measurable />
+  | Some(measurable) => <Items.LinkMeasurable measurable />
   };
 };
 

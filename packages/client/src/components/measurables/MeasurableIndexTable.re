@@ -35,8 +35,9 @@ let make =
           </FC.Table.Cell>
         </FC.Table.HeaderRow>
         {measurables
-         |> E.A.fmap((m: Types.measurable) =>
-              <FC.Table.Row onClick={_e => onSelect(m)} key={m.id}>
+         |> E.A.fmap((measurable: Types.measurable) =>
+              <FC.Table.Row
+                onClick={_e => onSelect(measurable)} key={measurable.id}>
                 <FC.Table.Cell
                   flex={`num(3.)}
                   className=Css.(
@@ -44,18 +45,18 @@ let make =
                   )>
                   <div className=Styles.mainColumn>
                     <div className=Styles.mainColumnTop>
-                      <MeasurableItems.LinkMeasurable m />
+                      <MeasurableItems.LinkMeasurable measurable />
                     </div>
                   </div>
                   <div className=Styles.rightColumn>
-                    <StatusDisplay measurable=m />
+                    <StatusDisplay measurable />
                   </div>
                 </FC.Table.Cell>
                 <FC.Table.Cell
                   flex={`num(1.5)}
                   className=Css.(style([paddingTop(`em(0.5))]))>
                   <MeasurementItems.ResolutionOrRecentAggregation
-                    measurable=m
+                    measurable
                     xMin=None
                     xMax=None
                   />
@@ -65,18 +66,18 @@ let make =
                   className=Css.(style([paddingTop(`em(0.5))]))>
                   {E.React2.showIf(
                      channelId == Some("home"),
-                     <MeasurableItems.ChannelLink m />,
+                     <MeasurableItems.ChannelLink measurable />,
                    )}
                   {E.React2.showIf(
                      showExtraData,
-                     <MeasurableItems.Series m />,
+                     <MeasurableItems.Series measurable />,
                    )}
                   {E.React2.showIf(
                      showExtraData,
-                     <MeasurableItems.CreatorLink m />,
+                     <MeasurableItems.CreatorLink measurable />,
                    )}
-                  <MeasurableItems.Measurements m />
-                  <MeasurableItems.Measurers m />
+                  <MeasurableItems.Measurements measurable />
+                  <MeasurableItems.Measurers measurable />
                 </FC.Table.Cell>
               </FC.Table.Row>
             )

@@ -100,19 +100,19 @@ let make = (~measurable: Types.measurable) => {
           ]>
           <FC__Div>
             <h4> {"Question Id:" |> Utils.ste} </h4>
-            <div> <MeasurableItems.Id m=measurable /> </div>
+            <div> <MeasurableItems.Id measurable /> </div>
           </FC__Div>
           <FC__Div styles=[Styles.block]>
             <h4> {"Name:" |> Utils.ste} </h4>
-            <MeasurableItems.LinkMeasurable m=measurable />
+            <MeasurableItems.LinkMeasurable measurable />
           </FC__Div>
           <FC__Div styles=[Styles.block]>
             <h4> {"Desciption:" |> Utils.ste} </h4>
-            <MeasurableItems.Description m=measurable />
+            <MeasurableItems.Description measurable />
           </FC__Div>
           <FC__Div styles=[Styles.block]>
             <h4> {"Owner:" |> Utils.ste} </h4>
-            <div> <MeasurableItems.CreatorLink m=measurable /> </div>
+            <div> <MeasurableItems.CreatorLink measurable /> </div>
           </FC__Div>
         </Style.Grid.Div>
       </FC.PageCard.Body>

@@ -53,8 +53,13 @@ module Styles = {
 module DateItem = {
   [@react.component]
   let make =
-      (~m: Types.measurable, ~showOn=true, ~onStyle=Styles.dateOnStyle, ()) =>
-    switch (m.labelOnDate |> E.O.fmap(E.M.goFormat_simple), showOn) {
+      (
+        ~measurable: Types.measurable,
+        ~showOn=true,
+        ~onStyle=Styles.dateOnStyle,
+        (),
+      ) =>
+    switch (measurable.labelOnDate |> E.O.fmap(E.M.goFormat_simple), showOn) {
     | (None, _) => <Null />
     | (Some(e), true) =>
       [|
@@ -71,7 +76,7 @@ module DateItem = {
 
 module LinkName = {
   [@react.component]
-  let make = (~m: Types.measurable) =>
+  let make = (~measurable: Types.measurable) =>
     <Providers.AppContext.Consumer>
       ...{context => {
         module Config = {
@@ -81,16 +86,16 @@ module LinkName = {
         module MeasurableEntityLinks = MeasurableEntityLinks.Functor(Ken);
         <>
           {MeasurableEntityLinks.nameEntityLink(
-             ~m,
+             ~m=measurable,
              ~className=Shared.TagLink.item,
            )
            |> E.O.React.defaultNull}
           {MeasurableEntityLinks.propertyEntityLink(
-             ~m,
+             ~m=measurable,
              ~className=Shared.TagLink.property,
            )
            |> E.O.React.defaultNull}
-          {<DateItem m />}
+          <DateItem measurable />
         </>;
       }}
     </Providers.AppContext.Consumer>;
@@ -98,25 +103,27 @@ module LinkName = {
 
 module LinkMeasurable = {
   [@react.component]
-  let make = (~m: Types.measurable) => {
-    switch (m.labelSubject, m.labelProperty) {
+  let make = (~measurable: Types.measurable) => {
+    switch (measurable.labelSubject, measurable.labelProperty) {
     | (Some(""), Some(""))
     | (None, _)
     | (_, None) =>
       <Link
         className=Styles.nameLink
-        linkType={Internal(MeasurableShow(m.channelId, m.id))}>
-        {m.name |> ste}
+        linkType={
+          Internal(MeasurableShow(measurable.channelId, measurable.id))
+        }>
+        {measurable.name |> ste}
       </Link>
-    | (Some(_), Some(_)) => <LinkName m />
+    | (Some(_), Some(_)) => <LinkName measurable />
     };
   };
 };
 
 module Description = {
   [@react.component]
-  let make = (~m: Types.measurable) =>
-    switch (m.labelCustom) {
+  let make = (~measurable: Types.measurable) =>
+    switch (measurable.labelCustom) {
     | Some("")
     | None => <Null />
     | Some(text) =>
@@ -128,10 +135,10 @@ module Description = {
 
 module EndpointResponse = {
   [@react.component]
-  let make = (~m: Types.measurable) =>
+  let make = (~measurable: Types.measurable) =>
     switch (
-      m.resolutionEndpoint |> E.O.default(""),
-      m.resolutionEndpointResponse,
+      measurable.resolutionEndpoint |> E.O.default(""),
+      measurable.resolutionEndpointResponse,
     ) {
     | ("", _) => <Null />
     | (_, Some(r)) =>
@@ -142,18 +149,20 @@ module EndpointResponse = {
 
 module QuestionLink = {
   [@react.component]
-  let make = (~m: Types.measurable) =>
+  let make = (~measurable: Types.measurable) =>
     <Link
       className=Shared.Item.item
-      linkType={Internal(MeasurableShow(m.channelId, m.id))}>
+      linkType={
+        Internal(MeasurableShow(measurable.channelId, measurable.id))
+      }>
       {"Link to This Question" |> Utils.ste}
     </Link>;
 };
 
 module CreatorLink = {
   [@react.component]
-  let make = (~m: Types.measurable) =>
-    m.creator
+  let make = (~measurable: Types.measurable) =>
+    measurable.creator
     |> E.O.fmap((agent: Types.agent) =>
          <div className=Shared.Item.item> <AgentLink agent /> </div>
        )
@@ -162,12 +171,12 @@ module CreatorLink = {
 
 module ChannelLink = {
   [@react.component]
-  let make = (~m: Types.measurable) =>
+  let make = (~measurable: Types.measurable) =>
     <div className=Shared.Item.item>
       <Link
-        linkType={Internal(ChannelShow(m.channelId))}
+        linkType={Internal(ChannelShow(measurable.channelId))}
         className=Shared.Item.item>
-        {switch (m.channel) {
+        {switch (measurable.channel) {
          | Some(channel) => "#" ++ channel.name |> ste
          | _ => "#channel" |> ste
          }}
@@ -177,8 +186,8 @@ module ChannelLink = {
 
 module Measurements = {
   [@react.component]
-  let make = (~m: Types.measurable) =>
-    switch (m.measurementCount) {
+  let make = (~measurable: Types.measurable) =>
+    switch (measurable.measurementCount) {
     | Some(0) => <Null />
     | None => <Null />
     | Some(count) =>
@@ -195,8 +204,8 @@ module Measurements = {
 
 module Measurers = {
   [@react.component]
-  let make = (~m: Types.measurable) =>
-    switch (m.measurerCount) {
+  let make = (~measurable: Types.measurable) =>
+    switch (measurable.measurerCount) {
     | Some(0) => <Null />
     | None => <Null />
     | Some(count) =>
@@ -209,23 +218,26 @@ module Measurers = {
 
 module Id = {
   [@react.component]
-  let make = (~m: Types.measurable) =>
+  let make = (~measurable: Types.measurable) =>
     <Link
       className=Styles.link2
-      linkType={Internal(MeasurableShow(m.channelId, m.id))}>
-      {m.id |> Utils.ste}
+      linkType={
+        Internal(MeasurableShow(measurable.channelId, measurable.id))
+      }>
+      {measurable.id |> Utils.ste}
     </Link>;
 };
 
 module Series = {
   [@react.component]
-  let make = (~m: Types.measurable) => {
-    m.series
+  let make = (~measurable: Types.measurable) => {
+    measurable.series
     |> E.O.fmap((r: Types.series) =>
          switch (r.name) {
          | Some(name) =>
            <div className=Shared.Item.item>
-             <Link linkType={Internal(SeriesShow(m.channelId, r.id))}>
+             <Link
+               linkType={Internal(SeriesShow(measurable.channelId, r.id))}>
                <Icon.Icon icon="LAYERS" />
                {name |> ste}
              </Link>
@@ -239,16 +251,16 @@ module Series = {
 
 module ExpectedResolutionDate = {
   [@react.component]
-  let make = (~m: Types.measurable) =>
+  let make = (~measurable: Types.measurable) =>
     <div className=Shared.Item.item>
-      {"Resolves on " ++ (m.expectedResolutionDate |> formatDate) |> ste}
+      {"Resolves on " ++ (measurable.expectedResolutionDate |> formatDate) |> ste}
     </div>;
 };
 
 module ResolutionEndpoint = {
   [@react.component]
-  let make = (~m: Types.measurable) =>
-    switch (m.resolutionEndpoint |> E.O.default("")) {
+  let make = (~measurable: Types.measurable) =>
+    switch (measurable.resolutionEndpoint |> E.O.default("")) {
     | "" => <Null />
     | text =>
       <div className=Shared.Item.item> {"Endpoint: " ++ text |> ste} </div>
@@ -257,14 +269,14 @@ module ResolutionEndpoint = {
 
 module ArchiveButton = {
   [@react.component]
-  let make = (~m: Types.measurable) =>
+  let make = (~measurable: Types.measurable) =>
     <MeasurableArchive.Mutation>
       ...{(mutation, _) =>
         <div className=Shared.Item.item>
           <div
             className={Shared.Item.itemButton(DANGER)}
             onClick={e => {
-              MeasurableArchive.mutate(mutation, m.id);
+              MeasurableArchive.mutate(mutation, measurable.id);
               ReactEvent.Synthetic.stopPropagation(e);
             }}>
             {"Archive" |> ste}
@@ -276,14 +288,14 @@ module ArchiveButton = {
 
 module UnArchiveButton = {
   [@react.component]
-  let make = (~m: Types.measurable) =>
+  let make = (~measurable: Types.measurable) =>
     <MeasurableUnarchive.Mutation>
       ...{(mutation, _) =>
         <div className=Shared.Item.item>
           <div
             className={Shared.Item.itemButton(DANGER)}
             onClick={e => {
-              MeasurableUnarchive.mutate(mutation, m.id);
+              MeasurableUnarchive.mutate(mutation, measurable.id);
               ReactEvent.Synthetic.stopPropagation(e);
             }}>
             {"Unarchive" |> ste}
@@ -293,5 +305,6 @@ module UnArchiveButton = {
     </MeasurableUnarchive.Mutation>;
 };
 
-let archiveOption = (~m: Types.measurable) =>
-  m.isArchived == Some(true) ? <UnArchiveButton m /> : <ArchiveButton m />;
+let archiveOption = (~measurable: Types.measurable) =>
+  measurable.isArchived == Some(true)
+    ? <UnArchiveButton measurable /> : <ArchiveButton measurable />;

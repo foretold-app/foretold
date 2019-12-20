@@ -17,19 +17,19 @@ let make = (~measurable) => {
       <Div flexDirection=`row>
         <Div flex={`num(3.)}>
           <FC.PageCard.H1>
-            <MeasurableItems.LinkMeasurable m=measurable />
+            <MeasurableItems.LinkMeasurable measurable />
           </FC.PageCard.H1>
           <StatusDisplay measurable />
         </Div>
         <Div flex={`num(1.)}>
-          <MeasurableItems.Series m=measurable />
-          <MeasurableItems.CreatorLink m=measurable />
-          <MeasurableItems.ResolutionEndpoint m=measurable />
-          <MeasurableItems.EndpointResponse m=measurable />
-          <MeasurableItems.QuestionLink m=measurable />
+          <MeasurableItems.Series measurable />
+          <MeasurableItems.CreatorLink measurable />
+          <MeasurableItems.ResolutionEndpoint measurable />
+          <MeasurableItems.EndpointResponse measurable />
+          <MeasurableItems.QuestionLink measurable />
         </Div>
       </Div>
-      <MeasurableItems.Description m=measurable />
+      <MeasurableItems.Description measurable />
     </Div>
     <MeasurementForm
       measurable

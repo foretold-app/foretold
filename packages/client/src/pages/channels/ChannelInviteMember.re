@@ -99,7 +99,7 @@ module Create = {
 
 [@react.component]
 let make = (~channelId: string) => {
-  <SLayout head={SLayout.Header.textDiv("Invite Member")}>
+  <SLayout head={<SLayout.TextDiv text="Invite Member" />}>
     <FC.PageCard.BodyPadding> <Create channelId /> </FC.PageCard.BodyPadding>
   </SLayout>;
 };

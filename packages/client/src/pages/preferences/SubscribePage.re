@@ -3,7 +3,7 @@ let make = (~loggedUser: Types.user) => {
   let agentId = Primary.Agent.AgentId.make(loggedUser.agentId);
   let (mutate, result, _) = Subscribe.Mutation.use();
 
-  <SLayout head={SLayout.Header.textDiv(Lang.subscribePageCardTitle)}>
+  <SLayout head={<SLayout.TextDiv text=Lang.subscribePageCardTitle />}>
     <FC.PageCard.BodyPadding>
       {switch (result) {
        | Error(_error) => <p> {Lang.networkError |> Utils.ste} </p>

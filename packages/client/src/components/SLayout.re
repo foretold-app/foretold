@@ -43,14 +43,17 @@ module Styles = {
 };
 
 module Header = {
-  let textDiv = text =>
-    <FC__PageCard.HeaderRow.Title>
-      {text |> ste}
-    </FC__PageCard.HeaderRow.Title>;
-
   [@react.component]
   let make = (~children=<Null />) =>
     <FC.PageCard.HeaderRow> children </FC.PageCard.HeaderRow>;
+};
+
+module TextDiv = {
+  [@react.component]
+  let make = (~text) =>
+    <FC__PageCard.HeaderRow.Title>
+      {text |> ste}
+    </FC__PageCard.HeaderRow.Title>;
 };
 
 module LayoutConfig = {

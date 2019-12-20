@@ -88,8 +88,8 @@ module FullPage = {
 
 let channelBack = (~onClick, ()) =>
   <FC__Button onClick size=FC__Button.Small>
-    <Antd_Tooltip title={"Back to a table" |> Utils.ste} placement=`bottom>
-      {"< Back 2" |> Utils.ste}
+    <Antd_Tooltip title={Lang.backButtonTip |> Utils.ste} placement=`bottom>
+      {"< Back" |> Utils.ste}
     </Antd_Tooltip>
   </FC__Button>;
 

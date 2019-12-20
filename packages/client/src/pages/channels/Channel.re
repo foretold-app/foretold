@@ -10,90 +10,108 @@ let make =
     ) => {
   let channelId = channelPage.channelId;
 
-  let topOrdinaryChannel = (channel: Types.channel) => {
-    let joinButton = channelId =>
-      E.React2.showIf(
-        Primary.Permissions.can(`JOIN_CHANNEL, channel.permissions),
-        SimpleHeader.joinChannel(channelId),
-      );
+  module TopOrdinaryChannel = {
+    [@react.component]
+    let make = (~channel: Types.channel) => {
+      let joinButton = channelId =>
+        E.React2.showIf(
+          Primary.Permissions.can(`JOIN_CHANNEL, channel.permissions),
+          <SimpleHeader.JoinChannel channelId />,
+        );
 
-    let leaveButton = channelId =>
-      E.React2.showIf(
-        Primary.Permissions.can(`LEAVE_CHANNEL, channel.permissions),
-        SimpleHeader.leaveChannel(channelId),
-      );
-    <>
+      module LeaveButton = {
+        [@react.component]
+        let make = (~channelId) =>
+          E.React2.showIf(
+            Primary.Permissions.can(`LEAVE_CHANNEL, channel.permissions),
+            <SimpleHeader.LeaveChannel channelId />,
+          );
+      };
+
+      <>
+        <Div float=`left flexDirection=`column>
+          <Div flex={`num(1.0)}> <ChannelLink channel /> </Div>
+          {channel.description
+           |> E.O.React.fmapOrNull(source =>
+                <Div
+                  flex={`num(1.0)}
+                  styles=[Css.(style([marginTop(`em(0.5))]))]>
+                  <Markdown source />
+                </Div>
+              )}
+        </Div>
+        <Div float=`right>
+          {channel.myRole === Some(`NONE)
+             ? joinButton(channel.id)
+             : <>
+                 <SimpleHeader.NewMeasurable channelId={channel.id} />
+                 <LeaveButton channelId={channel.id} />
+               </>}
+        </Div>
+      </>;
+    };
+  };
+
+  module TopGlobalChannel = {
+    [@react.component]
+    let make = (~channel) => {
       <Div float=`left flexDirection=`column>
         <Div flex={`num(1.0)}> <ChannelLink channel /> </Div>
         {channel.description
          |> E.O.React.fmapOrNull(source =>
               <Div
                 flex={`num(1.0)}
-                styles=[Css.(style([marginTop(`em(0.5))]))]>
+                styles=[
+                  Css.(
+                    style([
+                      marginTop(`em(0.5)),
+                      selector(
+                        "p",
+                        [
+                          marginBottom(`zero),
+                          color(FC.Base.Colors.textDark),
+                        ],
+                      ),
+                    ])
+                  ),
+                ]>
                 <Markdown source />
               </Div>
             )}
-      </Div>
-      <Div float=`right>
-        {channel.myRole === Some(`NONE)
-           ? joinButton(channel.id)
-           : <>
-               {SimpleHeader.newMeasurable(channel.id)}
-               {leaveButton(channel.id)}
-             </>}
-      </Div>
-    </>;
-  };
-
-// @todo:
-  let topGlobalChannel = channel => {
-    <Div float=`left flexDirection=`column>
-      <Div flex={`num(1.0)}> <ChannelLink channel /> </Div>
-      {channel.description
-       |> E.O.React.fmapOrNull(source =>
-            <Div
-              flex={`num(1.0)}
-              styles=[
-                Css.(
-                  style([
-                    marginTop(`em(0.5)),
-                    selector(
-                      "p",
-                      [marginBottom(`zero), color(FC.Base.Colors.textDark)],
-                    ),
-                  ])
-                ),
-              ]>
-              <Markdown source />
-            </Div>
-          )}
-    </Div>;
-  };
-
-  let top = channel =>
-    switch (channelId) {
-    | "" => topGlobalChannel(channel)
-    | _ => topOrdinaryChannel(channel)
+      </Div>;
     };
+  };
 
-  let headers = () => {
-    let topOption = Routing.ChannelPage.SubPage.toTab(channelPage.subPage);
-    let secondLevel = channel => ChannelTabs.make(topOption, channel);
+  module Top = {
+    [@react.component]
+    let make = (~channel) =>
+      switch (channelId) {
+      | "" => <TopGlobalChannel channel />
+      | _ => <TopOrdinaryChannel channel />
+      };
+  };
 
-    switch (channel) {
-    | Some(channel) =>
-      <>
-        <FC.GroupHeader> {top(channel)} </FC.GroupHeader>
-        <FC.GroupHeader.SubHeader>
-          {secondLevel(channel)}
-        </FC.GroupHeader.SubHeader>
-      </>
-    | _ => <div />
+  module Headers = {
+    [@react.component]
+    let make = () => {
+      let topOption = Routing.ChannelPage.SubPage.toTab(channelPage.subPage);
+      let secondLevel = channel => ChannelTabs.make(topOption, channel);
+
+      switch (channel) {
+      | Some(channel) =>
+        <>
+          <FC.GroupHeader> <Top channel /> </FC.GroupHeader>
+          <FC.GroupHeader.SubHeader>
+            {secondLevel(channel)}
+          </FC.GroupHeader.SubHeader>
+        </>
+      | _ => <div />
+      };
     };
   };
 
   <FillWithSidebar channelId={Some(channelId)}>
-    {headers()}
+    <Headers />
     children
   </FillWithSidebar>;
 };

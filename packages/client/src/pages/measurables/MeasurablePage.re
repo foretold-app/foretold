@@ -23,7 +23,7 @@ let make = (~measurable) => {
           <StatusDisplay measurable />
         </Div>
         <Div flex={`num(1.)}>
-          {MeasurableItems.series(~m=measurable, ()) |> E.O.React.defaultNull}
+          {MeasurableItems.series(~m=measurable) |> E.O.React.defaultNull}
           {MeasurableItems.creatorLink(~m=measurable) |> E.O.React.defaultNull}
           {MeasurableItems.resolutionEndpoint(~m=measurable)
            |> E.O.React.defaultNull}

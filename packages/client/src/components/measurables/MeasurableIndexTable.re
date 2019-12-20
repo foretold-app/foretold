@@ -69,7 +69,7 @@ let make =
                    )}
                   {E.React2.showIf(
                      showExtraData,
-                     MeasurableItems.series(~m, ~channelId, ())
+                     MeasurableItems.series(~m)
                      |> E.O.React.defaultNull,
                    )}
                   {E.React2.showIf(

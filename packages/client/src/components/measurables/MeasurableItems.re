@@ -1,25 +1,55 @@
 open Utils;
-open ReactMarkdown;
-open Style.Grid;
 
 /**
- * Using <Components /> style in React.js is preferable then
- * functions. Try first of all to create new component.
+ * @todo:  Using <Components /> style in React.js is preferable then
+ * @todo:  functions. Try first of all to create new component.
  **/
 
 let formatDate = e =>
   e |> E.O.fmap(E.M.format(E.M.format_simple)) |> E.O.default("");
 
-let dateOnStyle =
-  Css.(
+module Styles = {
+  open Css;
+  let link =
+    style([
+      fontSize(`em(1.0)),
+      marginRight(`px(18)),
+      color(`hex("bbb")),
+      selector(
+        " a",
+        [color(`hex("aaa")), selector(":hover", [color(hex("333"))])],
+      ),
+    ]);
+  let link2 =
+    style([
+      fontSize(`em(1.0)),
+      color(`hex("777")),
+      selector(
+        " a",
+        [color(`hex("aaa")), selector(":hover", [color(hex("333"))])],
+      ),
+    ]);
+
+  let nameLink =
+    style([
+      fontSize(`em(1.)),
+      color(`hex("333")),
+      selector(
+        " a",
+        [color(`hex("aaa")), selector(":hover", [color(hex("333"))])],
+      ),
+    ]);
+
+  let dateOnStyle =
     style([
       marginLeft(`em(0.2)),
       lineHeight(`em(1.56)),
       fontSize(`em(1.1)),
-    ])
-  );
+    ]);
+};
 
-let dateItem = (~m: Types.measurable, ~showOn=true, ~onStyle=dateOnStyle, ()) =>
+let dateItem =
+    (~m: Types.measurable, ~showOn=true, ~onStyle=Styles.dateOnStyle, ()) =>
   switch (m.labelOnDate |> E.O.fmap(E.M.goFormat_simple), showOn) {
   | (None, _) => None
   | (Some(e), true) =>
@@ -61,12 +91,15 @@ let linkName = (~m: Types.measurable) =>
   </Providers.AppContext.Consumer>;
 
 let link = (~m: Types.measurable) => {
-  open Css;
-  let name = style([fontSize(`em(1.)), color(`hex("333"))]);
   switch (m.labelSubject, m.labelProperty) {
   | (Some(""), Some(""))
   | (None, _)
-  | (_, None) => <span className=name> {m.name |> ste} </span>
+  | (_, None) =>
+    <Link
+      className=Styles.nameLink
+      linkType={Internal(MeasurableShow(m.channelId, m.id))}>
+      {m.name |> ste}
+    </Link>
   | (Some(_), Some(_)) => linkName(~m)
   };
 };
@@ -146,10 +179,14 @@ let measurers = (~m: Types.measurable) =>
     )
   };
 
-let id = (~m: Types.measurable, ()) =>
-  <div className=Shared.Item.id> {"ID:  " ++ m.id |> Utils.ste} </div>;
+let id = (~m: Types.measurable) =>
+  <Link
+    className=Styles.link2
+    linkType={Internal(MeasurableShow(m.channelId, m.id))}>
+    {m.id |> Utils.ste}
+  </Link>;
 
-let series = (~m: Types.measurable, ~channelId=None, ()) => {
+let series = (~m: Types.measurable) => {
   m.series
   |> E.O.bind(_, r =>
        switch (r.name) {

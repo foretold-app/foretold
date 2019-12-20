@@ -24,7 +24,7 @@ let make =
       );
     <>
       <Div float=`left flexDirection=`column>
-        <Div flex={`num(1.0)}> {channelLink(channel)} </Div>
+        <Div flex={`num(1.0)}> <ChannelLink channel /> </Div>
         {channel.description
          |> E.O.React.fmapOrNull(source =>
               <Div
@@ -45,9 +45,10 @@ let make =
     </>;
   };
 
+// @todo:
   let topGlobalChannel = channel => {
     <Div float=`left flexDirection=`column>
-      <Div flex={`num(1.0)}> {channelLink(channel)} </Div>
+      <Div flex={`num(1.0)}> <ChannelLink channel /> </Div>
       {channel.description
        |> E.O.React.fmapOrNull(source =>
             <Div

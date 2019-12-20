@@ -89,32 +89,32 @@ module FullPage = {
   };
 };
 
-// @todo: To make a component.
-let channelBack = (~onClick, ()) =>
-  <FC__Button onClick size=FC__Button.Small>
-    <Antd_Tooltip title={Lang.backButtonTip |> Utils.ste} placement=`bottom>
-      {"< Back" |> Utils.ste}
-    </Antd_Tooltip>
-  </FC__Button>;
+module ChannelBack = {
+  [@react.component]
+  let make = (~onClick, ()) =>
+    <FC__Button onClick size=FC__Button.Small>
+      <Antd_Tooltip title={Lang.backButtonTip |> Utils.ste} placement=`bottom>
+        {"< Back" |> Utils.ste}
+      </Antd_Tooltip>
+    </FC__Button>;
+};
 
-// @todo: To make a component.
-let channelLink = (c: Types.channel) =>
-  <Link linkType={Internal(ChannelShow(c.id))} className=Styles.channelText>
-    {switch (c.id) {
-     | "home" =>
-       Primary.Channel.presentGlobal(
-         ~symbolClassName=Primary.Channel.Styles.globe,
-         (),
-       )
-     | _ => c |> Primary.Channel.present
-     }}
-  </Link>;
-
-// @todo: To make a component.
-let channelEditLink = (c: Types.channel) =>
-  <Link linkType={Internal(ChannelEdit(c.id))} className=Styles.headerText>
-    {"edit" |> ste}
-  </Link>;
+module ChannelLink = {
+  [@react.component]
+  let make = (~channel: Types.channel) =>
+    <Link
+      linkType={Internal(ChannelShow(channel.id))}
+      className=Styles.channelText>
+      {switch (channel.id) {
+       | "home" =>
+         Primary.Channel.presentGlobal(
+           ~symbolClassName=Primary.Channel.Styles.globe,
+           (),
+         )
+       | _ => channel |> Primary.Channel.present
+       }}
+    </Link>;
+};
 
 module SeriesHead = {
   [@react.component]

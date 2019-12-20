@@ -61,12 +61,11 @@ let make =
                    |> E.O.React.defaultNull}
                 </div>
                 <div className=Styles.column>
-                  {MeasurableItems.dateItem(~m, ~showOn=false, ())
-                   |> E.O.React.defaultNull}
+                  <MeasurableItems.DateItem m showOn=false />
                 </div>
                 <div className=Styles.column>
-                  {MeasurableItems.measurements(~m) |> E.O.React.defaultNull}
-                  {MeasurableItems.measurers(~m) |> E.O.React.defaultNull}
+                  <MeasurableItems.Measurements m />
+                  <MeasurableItems.Measurers m />
                 </div>
                 <div className=Styles.column>
                   <StatusDisplay measurable=m />

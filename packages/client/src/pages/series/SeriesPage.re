@@ -55,21 +55,17 @@ let make = (~channelId: string, ~seriesId: string) => {
     <SLayout
       head={
         switch (channel, series, selectWithPaginationParams.selection) {
-        | (
-            Success(channel),
-            Some((series: Types.series)),
-            Some(_selection),
-          ) =>
+        | (Success(_), Some((series: Types.series)), Some(_selection)) =>
           <>
-            {SLayout.seriesHead(channel, series.name |> E.O.default(""))}
+            <SLayout.SeriesHead seriesName={series.name |> E.O.default("")} />
             {Reducer.Components.deselectButton(
                selectWithPaginationParams.send,
              )}
             {Reducer.Components.correctButtonDuo(selectWithPaginationParams)}
           </>
-        | (Success(channel), Some((series: Types.series)), None) =>
+        | (Success(_), Some((series: Types.series)), None) =>
           <>
-            {SLayout.seriesHead(channel, series.name |> E.O.default(""))}
+            <SLayout.SeriesHead seriesName={series.name |> E.O.default("")} />
             {Reducer.Components.correctButtonDuo(selectWithPaginationParams)}
           </>
         | _ => <div />

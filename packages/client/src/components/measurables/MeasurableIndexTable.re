@@ -44,7 +44,7 @@ let make =
                   )>
                   <div className=Styles.mainColumn>
                     <div className=Styles.mainColumnTop>
-                      {MeasurableItems.link(~m)}
+                      <MeasurableItems.LinkMeasurable m />
                     </div>
                   </div>
                   <div className=Styles.rightColumn>
@@ -65,19 +65,18 @@ let make =
                   className=Css.(style([paddingTop(`em(0.5))]))>
                   {E.React2.showIf(
                      channelId == Some("home"),
-                     MeasurableItems.channelLink(~m),
+                     <MeasurableItems.ChannelLink m />,
                    )}
                   {E.React2.showIf(
                      showExtraData,
-                     MeasurableItems.series(~m)
-                     |> E.O.React.defaultNull,
+                     <MeasurableItems.Series m />,
                    )}
                   {E.React2.showIf(
                      showExtraData,
-                     MeasurableItems.creatorLink(~m) |> E.O.React.defaultNull,
+                     <MeasurableItems.CreatorLink m />,
                    )}
-                  {MeasurableItems.measurements(~m) |> E.O.React.defaultNull}
-                  {MeasurableItems.measurers(~m) |> E.O.React.defaultNull}
+                  <MeasurableItems.Measurements m />
+                  <MeasurableItems.Measurers m />
                 </FC.Table.Cell>
               </FC.Table.Row>
             )

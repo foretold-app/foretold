@@ -4,6 +4,11 @@ type tab =
   | Details
   | Edit;
 
+module Styles = {
+  open Css;
+  let block = style([marginTop(`em(1.))]);
+};
+
 module Tabs = {
   open Style.Grid;
   open FC;
@@ -93,8 +98,28 @@ let make = (~measurable: Types.measurable) => {
               Css.marginLeft(`em(1.0)),
             ]),
           ]>
-          <h4> {"Question Id:" |> Utils.ste} </h4>
-          {measurable.id |> Utils.ste}
+          <FC__Div>
+            <h4> {"Question Id:" |> Utils.ste} </h4>
+            {measurable.id |> Utils.ste}
+          </FC__Div>
+          <FC__Div styles=[Styles.block]>
+            <h4> {"Name:" |> Utils.ste} </h4>
+            {measurable.name |> Utils.ste}
+          </FC__Div>
+          <FC__Div styles=[Styles.block]>
+            <h4> {"Desciption:" |> Utils.ste} </h4>
+            {measurable.labelSubject
+             |> E.O.default("(none)")
+             |> E.S.default("(none)")
+             |> Utils.ste}
+          </FC__Div>
+          <FC__Div styles=[Styles.block]>
+            <h4> {"Owner:" |> Utils.ste} </h4>
+            <div>
+              {MeasurableItems.creatorLink(~m=measurable)
+               |> E.O.React.defaultNull}
+            </div>
+          </FC__Div>
         </Style.Grid.Div>
       </FC.PageCard.Body>
     </SLayout>

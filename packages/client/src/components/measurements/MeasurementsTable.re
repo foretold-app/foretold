@@ -103,7 +103,7 @@ module Helpers = {
       };
   };
 
-  module GetValueText = {
+  module ValueText = {
     [@react.component]
     let make = (~measurement: measurement) =>
       <div className=Styles.secondaryText>
@@ -115,7 +115,7 @@ module Helpers = {
       </div>;
   };
 
-  module GetDescription = {
+  module Description = {
     [@react.component]
     let make = (~m: measurement) => {
       switch (m.description) {
@@ -220,46 +220,13 @@ module Helpers = {
   };
 };
 
-let stringOfFloat = Js.Float.toPrecisionWithPrecision(_, ~digits=3);
-
-// @todo: To make a component.
-let getItems = (measurementsList: list(measurement), ~makeItem) => {
-  let _bounds = Helpers.bounds(measurementsList |> E.A.of_list);
-  measurementsList
-  |> E.L.fmap((m: measurement) => {
-       let inside = makeItem(m, _bounds);
-
-       switch (m.description) {
-       | Some(description) =>
-         <FC.Table.Row
-           bottomSubRow={
-             [|FC.Table.Row.textSection(<Helpers.GetDescription m />)|]
-             |> ReasonReact.array
-           }>
-           inside
-         </FC.Table.Row>
-       | None => <FC.Table.Row> inside </FC.Table.Row>
-       };
-     })
-  |> E.A.of_list
-  |> ReasonReact.array;
-};
-
-// @todo: To make a component.
-let getItemsSorted = (measurementsList: list(measurement), ~makeItem) => {
-  let _bounds = Helpers.bounds(measurementsList |> E.A.of_list);
-
-  measurementsList
-  |> E.L.fmap((measurement: measurement) => makeItem(measurement, _bounds))
-  |> E.A.of_list
-  |> ReasonReact.array;
-};
-
-// @todo: To make a component.
-let getMeasurableLink = (m: measurement) => {
-  switch (m.measurable) {
-  | None => "" |> ste
-  | Some(measurable) => <Items.LinkMeasurable measurable />
+module MeasurableLink = {
+  [@react.component]
+  let make = (~measurement: measurement) => {
+    switch (measurement.measurable) {
+    | None => "" |> ste
+    | Some(measurable) => <Items.LinkMeasurable measurable />
+    };
   };
 };
 
@@ -283,7 +250,7 @@ let predictionTextColumn =
     ~flex=3,
     ~render=
       (measurement: Types.measurement) =>
-        <div> <Helpers.GetValueText measurement /> </div>,
+        <div> <Helpers.ValueText measurement /> </div>,
     (),
   );
 
@@ -311,7 +278,7 @@ let measurableColumn =
   Table.Column.make(
     ~name="Measurable" |> ste,
     ~render=
-      (measurement: Types.measurement) => getMeasurableLink(measurement),
+      (measurement: Types.measurement) => <MeasurableLink measurement />,
     ~flex=5,
     (),
   );
@@ -384,7 +351,9 @@ let bottomSubRowFn =
     (measurement: Types.measurement) =>
       switch (measurement.description) {
       | Some(d) =>
-        Some([|FC.Table.Row.textSection(<Helpers.GetDescription m=measurement />)|])
+        Some([|
+          FC.Table.Row.textSection(<Helpers.Description m=measurement />),
+        |])
       | _ => None
       },
   );

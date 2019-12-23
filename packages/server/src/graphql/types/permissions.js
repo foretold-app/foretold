@@ -5,12 +5,12 @@ const permissionQueries = new graphql.GraphQLObjectType({
   fields: () => ({
     allow: {
       type: graphql.GraphQLNonNull(
-        graphql.GraphQLList(require('./queries').queries),
+        graphql.GraphQLList(require('./enums/queries').queries),
       ),
     },
     deny: {
       type: graphql.GraphQLNonNull(
-        graphql.GraphQLList(require('./queries').queries),
+        graphql.GraphQLList(require('./enums/queries').queries),
       ),
     },
   }),
@@ -21,12 +21,12 @@ const permissionMutations = new graphql.GraphQLObjectType({
   fields: () => ({
     allow: {
       type: graphql.GraphQLNonNull(
-        graphql.GraphQLList(require('./mutations').mutations),
+        graphql.GraphQLList(require('./enums/mutations').mutations),
       ),
     },
     deny: {
       type: graphql.GraphQLNonNull(
-        graphql.GraphQLList(require('./mutations').mutations),
+        graphql.GraphQLList(require('./enums/mutations').mutations),
       ),
     },
   }),

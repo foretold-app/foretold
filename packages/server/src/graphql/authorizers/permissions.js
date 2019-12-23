@@ -26,7 +26,7 @@ const currentAgentIsApplicationAdminOrChannelAdmin = or(
   currentAgentIsChannelAdmin,
 );
 
-const rulesChannel = () => ({
+const rulesChannels = () => ({
   Query: {},
   Mutation: {
     channelUpdate: and(
@@ -94,17 +94,26 @@ const rulesMeasurables = () => ({
     ),
     measurableArchive: and(
       currentAgentIsAuthenticated,
-      measurableIsOwnedByCurrentAgent,
+      or(
+        currentAgentIsApplicationAdminOrChannelAdmin,
+        measurableIsOwnedByCurrentAgent,
+      ),
       not(measurableIsArchived),
     ),
     measurableUnarchive: and(
       currentAgentIsAuthenticated,
-      measurableIsOwnedByCurrentAgent,
+      or(
+        currentAgentIsApplicationAdminOrChannelAdmin,
+        measurableIsOwnedByCurrentAgent,
+      ),
       measurableIsArchived,
     ),
     measurableUpdate: and(
       currentAgentIsAuthenticated,
-      measurableIsOwnedByCurrentAgent,
+      or(
+        currentAgentIsApplicationAdminOrChannelAdmin,
+        measurableIsOwnedByCurrentAgent,
+      ),
     ),
   },
 });
@@ -144,7 +153,7 @@ const rules = () => ({
   Query: {
     '*': and(allow, rateLimit),
 
-    ...rulesInvitations.Query,
+    ...rulesInvitations().Query,
   },
   Mutation: {
     '*': and(currentAgentIsAuthenticated, rateLimit),
@@ -186,11 +195,11 @@ const rules = () => ({
     ),
     globalSettingUpdate: currentAgentIsApplicationAdmin,
 
-    ...rulesBots.Mutation,
-    ...rulesMeasurables.Mutation,
-    ...rulesChannel.Mutation,
-    ...rulesChannelMemberships.Mutation,
-    ...rulesInvitations.Mutation,
+    ...rulesBots().Mutation,
+    ...rulesMeasurables().Mutation,
+    ...rulesChannels().Mutation,
+    ...rulesChannelMemberships().Mutation,
+    ...rulesInvitations().Mutation,
   },
 });
 
@@ -205,7 +214,7 @@ module.exports = {
   rules,
 
   rulesBots,
-  rulesChannel,
+  rulesChannels,
   rulesMeasurables,
   rulesChannelMemberships,
 

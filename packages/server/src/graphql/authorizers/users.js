@@ -5,6 +5,7 @@ const logger = require('../../lib/log');
 const log = logger.module('authorizers/users');
 
 /**
+ * @todo: Rapair This
  * @param {function} predicateAgentId
  * @return {function(*=, *=, *=, *=): boolean}
  */

@@ -22,6 +22,7 @@ let title =
     opacity(0.8),
     fontWeight(`num(500)),
   ]);
+
 let description =
   style([
     paddingTop(`em(1.)),

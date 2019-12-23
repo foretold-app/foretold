@@ -1,5 +1,3 @@
-type column = Table.column(Types.agent);
-
 [@react.component]
 let make = (~channelId: string) => {
   let addToChannelLink = (agentId: string, channelId: string) =>
@@ -17,21 +15,21 @@ let make = (~channelId: string) => {
       }
     </ChannelMembershipCreate.Mutation>;
 
-  let agentColumn =
+  let agent =
     Table.Column.make(
       ~name="Member" |> Utils.ste,
       ~render=(agent: Types.agent) => <AgentLink agent />,
       (),
     );
 
-  let inviteColumn =
+  let invite =
     Table.Column.make(
       ~name="Invite" |> Utils.ste,
       ~render=(agent: Types.agent) => addToChannelLink(agent.id, channelId),
       (),
     );
 
-  let all: array(column) = [|agentColumn, inviteColumn|];
+  let all = [|agent, invite|];
 
   let title =
     <FC.Base.Div float=`left>

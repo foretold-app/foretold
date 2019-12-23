@@ -31,7 +31,7 @@ let filterColums = (columns, rows) => {
 
 module Column = {
   let make =
-      (~name, ~render, ~flex=1, ~show=_ => true, ~help=None, ()): column('b) => {
+      (~name, ~render, ~flex=1, ~show=_ => true, ~help=None, ()) => {
     name,
     help,
     render,
@@ -41,13 +41,7 @@ module Column = {
 };
 
 [@react.component]
-let make =
-    (
-      ~columns: array(column('a)),
-      ~rows: array('a),
-      ~bottomSubRowFn=None,
-      ~onRowClb=None,
-    ) => {
+let make = (~columns, ~rows, ~bottomSubRowFn=None, ~onRowClb=None) => {
   let columns' = filterColums(columns, rows);
 
   <FC__Table>

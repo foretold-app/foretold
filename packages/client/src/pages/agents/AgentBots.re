@@ -39,7 +39,7 @@ module AgentSection = {
 module Columns = {
   type column = Table.column(Types.bot);
 
-  let nameColumn =
+  let name =
     Table.Column.make(
       ~name="Name" |> ste,
       ~render=
@@ -57,7 +57,7 @@ module Columns = {
       (),
     );
 
-  let descriptionColumn =
+  let description =
     Table.Column.make(
       ~name="Description" |> ste,
       ~render=
@@ -66,7 +66,7 @@ module Columns = {
       (),
     );
 
-  let tokenColumn =
+  let token =
     Table.Column.make(
       ~name="Token" |> ste,
       ~render=
@@ -78,7 +78,7 @@ module Columns = {
       (),
     );
 
-  let editColumn =
+  let edit =
     Table.Column.make(
       ~name="Edit" |> ste,
       ~render=
@@ -92,12 +92,7 @@ module Columns = {
       (),
     );
 
-  let all: array(column) = [|
-    nameColumn,
-    descriptionColumn,
-    tokenColumn,
-    editColumn,
-  |];
+  let all = [|name, description, token, edit|];
 };
 
 [@react.component]

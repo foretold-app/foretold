@@ -1,8 +1,13 @@
+type editor = {
+  onSelect: string => unit,
+  selectedId: option(string),
+};
+
 module DashboardTableToTable = {
   let toColumn =
       (
         measurables: array(Primary.Measurable.t),
-        editor: DashboardTableEditor.editor,
+        editor: editor,
         index: int,
         column: DashboardTable.Column.t,
       )
@@ -68,7 +73,7 @@ module DashboardTableToTable = {
       (
         table: DashboardTable.Table.t,
         measurables: array(Primary.Measurable.t),
-        editor: DashboardTableEditor.editor,
+        editor: editor,
       ) => {
     let columns =
       table.columns
@@ -87,10 +92,11 @@ let tableJsonString = {|{
         {"1":"Thing2"}
      ]
 }|};
+
 let tableJson: Js.Json.t = Json.parseOrRaise(tableJsonString);
 
 [@react.component]
-let make = (~tableJson=tableJson, ~editor: DashboardTableEditor.editor) => {
+let make = (~tableJson=tableJson, ~editor: editor) => {
   let tableJson = React.useMemo(_ => DashboardTable.Json.decode(tableJson));
 
   switch (tableJson) {

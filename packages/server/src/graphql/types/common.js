@@ -73,11 +73,9 @@ const order = new graphql.GraphQLInputObjectType({
   }),
 });
 
-const orderList = new graphql.GraphQLList(order);
-
 module.exports = {
   isMe,
-  orderList,
+  order,
   iAmOwner,
   isArchived,
   iAmOwnerByUserId,

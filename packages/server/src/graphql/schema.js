@@ -124,7 +124,7 @@ const schema = new graphql.GraphQLSchema({
             ),
           },
           minPredictionCountTotal: { type: graphql.GraphQLInt },
-          order: { type: types.common.orderList },
+          order: { type: new graphql.GraphQLList(types.common.order) },
         },
         resolve: resolvers.agentMeasurables.all,
       },

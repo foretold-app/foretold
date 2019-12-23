@@ -43,8 +43,8 @@ let make = () => {
       module Ken = KenTools.Functor(Config);
       module Columns = ColumnsFunctor(Ken);
 
-      <SLayout head={SLayout.Header.textDiv("All Entities")}>
-        {Table.fromColumns(Columns.all, Ken.dataSource, ())}
+      <SLayout head={<SLayout.TextDiv text="All Entities" />}>
+        <Table columns=Columns.all rows=Ken.dataSource />
       </SLayout>;
     }}
   </Providers.AppContext.Consumer>;

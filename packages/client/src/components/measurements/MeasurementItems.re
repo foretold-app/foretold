@@ -1,9 +1,5 @@
 open Style.Grid;
 
-/**
- * Using <Components /> style in React.js is preferable then
- * functions. Try first of all to create new component.
- **/
 module FloatPoint = {
   [@react.component]
   let make = (~value: float) => {

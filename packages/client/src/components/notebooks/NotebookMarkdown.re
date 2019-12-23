@@ -9,7 +9,7 @@ type code = {
 type renderers = {. "code": code => ReasonReact.reactElement};
 
 let reducerToEditor =
-    (notebookReducer: NotebookRedux.t): DashboardTableEditor.editor => {
+    (notebookReducer: NotebookRedux.t): DashboardTableC.editor => {
   onSelect: r => notebookReducer.dispatch(SelectMeasurableId(r)),
   selectedId: notebookReducer.state.selectedMeasurableId,
 };

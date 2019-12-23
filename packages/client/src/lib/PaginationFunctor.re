@@ -253,8 +253,9 @@ module Make = (Config: Config) => {
       | Page
       | Item;
 
+    // @todo:
     let deselectButton = send =>
-      SLayout.channelBack(~onClick=_ => send(Types.Deselect), ());
+      <SLayout.ChannelBack onClick={_ => send(Types.Deselect)} />;
 
     let pageButton' =
         (facesRight: bool, action, canMove, params: Types.reducerParams) =>

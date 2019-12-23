@@ -6,42 +6,46 @@ module Styles = {
   let paddingRight = [paddingRight(`em(1.))] |> style;
 };
 
-// @todo: To make a component.
-let title =
-  <FC.Base.Div float=`left>
-    <FC.PageCard.HeaderRow.Title>
-      {"Bots" |> Utils.ste}
-    </FC.PageCard.HeaderRow.Title>
-  </FC.Base.Div>;
+module Title = {
+  [@react.component]
+  let make = () =>
+    <FC.Base.Div float=`left>
+      <FC.PageCard.HeaderRow.Title>
+        {"Bots" |> Utils.ste}
+      </FC.PageCard.HeaderRow.Title>
+    </FC.Base.Div>;
+};
 
-// @todo: To make a component.
-let agentSection = (agent: Types.agent) =>
-  switch (agent.agentType) {
-  | Some(User(_)) =>
-    <>
-      {E.React2.showIf(
-         agent.isMe,
-         <Div float=`right>
-           <Antd.Button
-             onClick={_ => Routing.Url.push(BotCreate)} _type=`primary>
-             {"New Bot" |> ste}
-           </Antd.Button>
-         </Div>,
-       )}
-    </>
-  | _ => E.React2.null
-  };
+module AgentSection = {
+  [@react.component]
+  let make = (~agent: Types.agent) =>
+    switch (agent.agentType) {
+    | Some(User(_)) =>
+      <>
+        {E.React2.showIf(
+           agent.isMe,
+           <Div float=`right>
+             <Antd.Button
+               onClick={_ => Routing.Url.push(BotCreate)} _type=`primary>
+               {"New Bot" |> ste}
+             </Antd.Button>
+           </Div>,
+         )}
+      </>
+    | _ => E.React2.null
+    };
+};
 
 module Columns = {
   type column = Table.column(Types.bot);
 
-  let nameColumn =
+  let name =
     Table.Column.make(
       ~name="Name" |> ste,
       ~render=
         (bot: Types.bot) =>
           switch (bot.name, bot.agent) {
-          | (Some(name), Some(agent)) =>
+          | (Some(_), Some(agent)) =>
             <Link
               linkType={
                 Internal(Agent({agentId: agent.id, subPage: AgentUpdates}))
@@ -53,7 +57,7 @@ module Columns = {
       (),
     );
 
-  let descriptionColumn =
+  let description =
     Table.Column.make(
       ~name="Description" |> ste,
       ~render=
@@ -62,7 +66,7 @@ module Columns = {
       (),
     );
 
-  let tokenColumn =
+  let token =
     Table.Column.make(
       ~name="Token" |> ste,
       ~render=
@@ -74,7 +78,7 @@ module Columns = {
       (),
     );
 
-  let editColumn =
+  let edit =
     Table.Column.make(
       ~name="Edit" |> ste,
       ~render=
@@ -88,12 +92,7 @@ module Columns = {
       (),
     );
 
-  let all: array(column) = [|
-    nameColumn,
-    descriptionColumn,
-    tokenColumn,
-    editColumn,
-  |];
+  let all = [|name, description, token, edit|];
 };
 
 [@react.component]
@@ -104,7 +103,7 @@ let make = (~pageParams: Types.pageParams) => {
       let showBots = bots =>
         Array.length(bots) > 0
           ? <FC.PageCard.Body>
-              {Table.fromColumns(Columns.all, bots, ())}
+              <Table columns=Columns.all rows=bots />
             </FC.PageCard.Body>
           : <NothingToShow />;
 
@@ -116,14 +115,14 @@ let make = (~pageParams: Types.pageParams) => {
 
       let head =
         <div>
-          title
+          <Title />
           <FC.Base.Div
             float=`right
             className={Css.style([
               FC.PageCard.HeaderRow.Styles.itemTopPadding,
               FC.PageCard.HeaderRow.Styles.itemBottomPadding,
             ])}>
-            {agentSection(agent)}
+            <AgentSection agent />
           </FC.Base.Div>
         </div>;
 

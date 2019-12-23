@@ -212,7 +212,8 @@ module A = {
   /* TODO: Is there a better way of doing this? */
   let uniq = r => asList(L.uniq, r);
 
-  /* TODO: Is -1 still the indicator that this is false (as is true with js findIndex)? Wasn't sure. */
+  // @todo: Is -1 still the indicator that this is false (as is true with
+  // @todo: js findIndex)? Wasn't sure.
   let findIndex = (e, i) =>
     Js.Array.findIndex(e, i)
     |> (
@@ -278,7 +279,8 @@ module FloatCdf = {
   };
   let empty: t = {xs: [||], ys: [||]};
 
-  // TODO: This isn't actually a floatCDF< but instead a MeasurementValue.FloatCDF which is confusingly different.
+  // @todo: This isn't actually a floatCDF< but
+  // @todo: instead a MeasurementValue.FloatCDF which is confusingly different.
   let firstAbove = (min: float, t: MeasurementValue.FloatCdf.t) =>
     Belt.Map.findFirstBy(t, (k, _v) => k > min);
 

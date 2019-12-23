@@ -119,7 +119,7 @@ let make = (~loggedUser: Types.user) => {
     |> E.O.fmap((r: Types.preference) => r.enableExperimentalFeatures)
     |> E.O.default(true);
 
-  <SLayout head={SLayout.Header.textDiv("Preferences")}>
+  <SLayout head={<SLayout.TextDiv text="Preferences" />}>
     <FC.PageCard.BodyPadding>
       <Edit id stopAllEmails enableExperimentalFeatures />
     </FC.PageCard.BodyPadding>

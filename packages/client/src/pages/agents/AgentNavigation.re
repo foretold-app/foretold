@@ -17,9 +17,6 @@ module Top = {
             }
           )
           |> E.O.default("");
-
-        let secondLevel = AgentTabs.tabs(agentPage, agent);
-
         <>
           <FC.GroupHeader>
             <Div flexDirection=`column>
@@ -38,7 +35,9 @@ module Top = {
               </Div>
             </Div>
           </FC.GroupHeader>
-          <FC.GroupHeader.SubHeader> secondLevel </FC.GroupHeader.SubHeader>
+          <FC.GroupHeader.SubHeader>
+            <AgentTabs.Tabs agentPage agent />
+          </FC.GroupHeader.SubHeader>
         </>;
       | _ => <Null />
       }

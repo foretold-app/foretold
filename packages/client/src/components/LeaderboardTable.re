@@ -30,7 +30,6 @@ module Columns = {
           r.agent
           |> E.O.fmap((agent: Types.agent) => <AgentLink agent />)
           |> E.O.default("Member" |> Utils.ste),
-      ~flex=1,
       (),
     );
 
@@ -46,7 +45,6 @@ module Columns = {
                </Link>
              )
           |> E.O.default("Community" |> Utils.ste),
-      ~flex=1,
       (),
     );
 
@@ -59,7 +57,6 @@ module Columns = {
           |> E.O.fmap(E.Float.with3DigitsPrecision)
           |> E.O.default("")
           |> Utils.ste,
-      ~flex=1,
       (),
     );
 
@@ -79,7 +76,6 @@ module Columns = {
           |> E.O.fmap(E.Float.with3DigitsPrecision)
           |> E.O.default("")
           |> Utils.ste,
-      ~flex=1,
       (),
     );
 
@@ -100,7 +96,6 @@ module Columns = {
           |> E.O.fmap(E.Float.with2DigitsPrecision)
           |> E.O.default("")
           |> Utils.ste,
-      ~flex=1,
       (),
     );
 
@@ -121,7 +116,6 @@ module Columns = {
           |> E.O.fmap(E.Float.with3DigitsPrecision)
           |> E.O.default("")
           |> Utils.ste,
-      ~flex=1,
       (),
     );
 
@@ -140,7 +134,6 @@ module Columns = {
           |> E.O.fmap(E.Float.with3DigitsPrecision)
           |> E.O.default("")
           |> Utils.ste,
-      ~flex=1,
       (),
     );
 
@@ -153,7 +146,6 @@ module Columns = {
           |> E.O.fmap(E.I.toString)
           |> E.O.default("")
           |> Utils.ste,
-      ~flex=1,
       (),
     );
 
@@ -166,7 +158,6 @@ module Columns = {
           |> E.O.fmap(E.I.toString)
           |> E.O.default("")
           |> Utils.ste,
-      ~flex=1,
       (),
     );
 
@@ -179,20 +170,17 @@ module Columns = {
           |> E.O.fmap(MomentRe.Moment.format("LLL"))
           |> E.O.default("")
           |> Utils.ste,
-      ~flex=1,
       (),
     );
 
   let getMeasurement = measurement => {
     let bounds = MeasurementsTable.Helpers.bounds([|measurement|]);
-    MeasurementsTable.Helpers.smallDistribution(
-      ~measurement,
-      ~bounds,
-      ~width=75,
-      ~height=30,
-      (),
-    )
-    |> E.O.default("" |> Utils.ste);
+    <MeasurementsTable.Helpers.SmallDistribution
+      measurement
+      bounds
+      width=75
+      height=30
+    />;
   };
 
   let competitiveMeasurement =
@@ -203,7 +191,6 @@ module Columns = {
           r.competitiveMeasurement
           |> E.O.fmap(getMeasurement)
           |> E.O.default("" |> Utils.ste),
-      ~flex=1,
       (),
     );
 
@@ -215,7 +202,6 @@ module Columns = {
           r.aggregationMeasurement
           |> E.O.fmap(getMeasurement)
           |> E.O.default("" |> Utils.ste),
-      ~flex=1,
       (),
     );
 
@@ -253,4 +239,4 @@ module Columns = {
 
 [@react.component]
 let make = (~items, ~columns=Columns.measurables) =>
-  Table.fromColumns(columns, items, ());
+  <Table columns rows=items />;

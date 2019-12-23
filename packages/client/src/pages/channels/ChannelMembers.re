@@ -35,7 +35,7 @@ let removeFromChannel = (agentId, channelId) =>
 module Columns = {
   type column = Table.column(Types.channelMembership);
 
-  let agentColumn =
+  let agent =
     Table.Column.make(
       ~name="Member" |> Utils.ste,
       ~render=
@@ -48,7 +48,7 @@ module Columns = {
       (),
     );
 
-  let roleColumn =
+  let role =
     Table.Column.make(
       ~name="Role" |> Utils.ste,
       ~render=
@@ -66,74 +66,72 @@ module Columns = {
       (),
     );
 
-  let roleChangeColumn: string => column =
-    channelId =>
-      Table.Column.make(
-        ~name="Change Role" |> Utils.ste,
-        ~render=
-          (membership: Types.channelMembership) =>
-            <div>
-              {switch (membership.role, membership.agent) {
-               | (`VIEWER, Some(agent)) =>
-                 E.React2.showIf(
-                   Primary.Permissions.can(
-                     `CHANNEL_MEMBERSHIP_ROLE_UPDATE,
-                     membership.permissions,
-                   ),
-                   changeRoleAction(
-                     agent.id,
-                     channelId,
-                     `ADMIN,
-                     "Change to Admin",
-                   ),
-                 )
-               | (`ADMIN, Some(agent)) =>
-                 E.React2.showIf(
-                   Primary.Permissions.can(
-                     `CHANNEL_MEMBERSHIP_ROLE_UPDATE,
-                     membership.permissions,
-                   ),
-                   changeRoleAction(
-                     agent.id,
-                     channelId,
-                     `VIEWER,
-                     "Change to Member",
-                   ),
-                 )
-               | _ => <div />
-               }}
-            </div>,
-        (),
-      );
+  let roleChange = channelId =>
+    Table.Column.make(
+      ~name="Change Role" |> Utils.ste,
+      ~render=
+        (membership: Types.channelMembership) =>
+          <div>
+            {switch (membership.role, membership.agent) {
+             | (`VIEWER, Some(agent)) =>
+               E.React2.showIf(
+                 Primary.Permissions.can(
+                   `CHANNEL_MEMBERSHIP_ROLE_UPDATE,
+                   membership.permissions,
+                 ),
+                 changeRoleAction(
+                   agent.id,
+                   channelId,
+                   `ADMIN,
+                   "Change to Admin",
+                 ),
+               )
+             | (`ADMIN, Some(agent)) =>
+               E.React2.showIf(
+                 Primary.Permissions.can(
+                   `CHANNEL_MEMBERSHIP_ROLE_UPDATE,
+                   membership.permissions,
+                 ),
+                 changeRoleAction(
+                   agent.id,
+                   channelId,
+                   `VIEWER,
+                   "Change to Member",
+                 ),
+               )
+             | _ => <div />
+             }}
+          </div>,
+      (),
+    );
 
-  let removeFromChannelColumn: string => column =
-    channelId =>
-      Table.Column.make(
-        ~name="Remove" |> Utils.ste,
-        ~render=
-          (membership: Types.channelMembership) =>
-            switch (
-              membership.agent,
-              Primary.Permissions.can(
-                `CHANNEL_MEMBERSHIP_DELETE,
-                membership.permissions,
-              ),
-            ) {
-            | (Some(agent), true) => removeFromChannel(agent.id, channelId)
-            | _ => <Null />
-            },
-        (),
-      );
+  let removeFromChannel = channelId =>
+    Table.Column.make(
+      ~name="Remove" |> Utils.ste,
+      ~render=
+        (membership: Types.channelMembership) =>
+          switch (
+            membership.agent,
+            Primary.Permissions.can(
+              `CHANNEL_MEMBERSHIP_DELETE,
+              membership.permissions,
+            ),
+          ) {
+          | (Some(agent), true) => removeFromChannel(agent.id, channelId)
+          | _ => <Null />
+          },
+      (),
+    );
 
   let all = (channelId: string, channel: Types.channel) => {
     switch (channel.myRole) {
     | Some(`ADMIN) => [|
-        agentColumn,
-        roleColumn,
-        roleChangeColumn(channelId),
-        removeFromChannelColumn(channelId),
+        agent,
+        role,
+        roleChange(channelId),
+        removeFromChannel(channelId),
       |]
-    | _ => [|agentColumn, roleColumn|]
+    | _ => [|agent, role|]
     };
   };
 };
@@ -192,7 +190,7 @@ let succesFn = (~channelId: string, ~channel: Types.channel, ~memberships) => {
     };
 
   let table =
-    Table.fromColumns(Columns.all(channelId, channel), memberships, ());
+    <Table columns={Columns.all(channelId, channel)} rows=memberships />;
 
   <SLayout head> <FC.PageCard.Body> table </FC.PageCard.Body> </SLayout>;
 };

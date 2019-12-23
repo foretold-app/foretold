@@ -6,7 +6,6 @@ const { Binary, Percentage } = require('@foretold/measurement-value');
 const { UnresolvableResolution } = require('@foretold/measurement-value');
 const { Comment } = require('@foretold/measurement-value');
 
-const { MEASURABLE_STATE } = require('../../enums');
 const { MEASUREMENT_COMPETITOR_TYPE } = require('../../enums');
 const { MEASURABLE_VALUE_TYPE } = require('../../enums');
 const lang = require('../../../config/lang');
@@ -28,23 +27,17 @@ async function measurementValueValidation(root, args, _context, _info) {
 /**
  * @param {*} root
  * @param {object} args
- * @param {Schema.Context} context
+ * @param {Schema.Context} _context
  * @param {object} _info
  * @return {Promise<boolean>}
  */
-async function measurableStateValidation(root, args, context, _info) {
+async function measurementCompetitorTypeValidation(
+  root, args, _context, _info,
+) {
   const measurementType = _.get(args, 'input.competitorType', null);
   const isCompetitive
     = MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE === measurementType;
-
-  const measurableState = _.get(context, 'measurable.state', '');
-  const isMeasurableAvailable = [
-    MEASURABLE_STATE.OPEN,
-    MEASURABLE_STATE.JUDGEMENT_PENDING,
-  ].includes(measurableState);
-
   if (!isCompetitive) return true;
-  if (!isMeasurableAvailable) throw new Error(lang.measurableIsNotOpen());
 
   return true;
 }
@@ -58,7 +51,7 @@ async function measurableStateValidation(root, args, context, _info) {
  * @param {object} _info
  * @return {Promise<boolean>}
  */
-async function measurementTypeValidation(root, args, context, _info) {
+async function measurementValueTypeValidation(root, args, context, _info) {
   const inputValue = _.get(args, ['input', 'value'], null);
   const type = _.get(context, 'measurable.valueType', '');
 
@@ -81,7 +74,7 @@ async function measurementTypeValidation(root, args, context, _info) {
 }
 
 module.exports = {
-  measurableStateValidation,
   measurementValueValidation,
-  measurementTypeValidation,
+  measurementValueTypeValidation,
+  measurementCompetitorTypeValidation,
 };

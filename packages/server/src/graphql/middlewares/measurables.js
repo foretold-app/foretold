@@ -3,7 +3,10 @@ const _ = require('lodash');
 const { MeasurablesData } = require('../../data');
 const { Params } = require('../../data/classes');
 const { measurableEmptyName } = require('../../../config/lang');
+const { measurableIsNotOpen } = require('../../../config/lang');
 const logger = require('../../lib/log');
+
+const { MEASURABLE_STATE } = require('../../enums');
 
 const log = logger.module('middlewares/measurables');
 
@@ -64,8 +67,26 @@ async function measurableNameValidation(root, args, _context, _info) {
   return true;
 }
 
+/**
+ * @param {*} root
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @param {object} _info
+ * @return {Promise<boolean>}
+ */
+async function measurableStateValidation(root, args, context, _info) {
+  const measurableState = _.get(context, 'measurable.state', '');
+  const isMeasurableAvailable = [
+    MEASURABLE_STATE.OPEN,
+    MEASURABLE_STATE.JUDGEMENT_PENDING,
+  ].includes(measurableState);
+  if (!isMeasurableAvailable) throw new Error(measurableIsNotOpen());
+  return true;
+}
+
 module.exports = {
   measurableNameValidation,
   setContextMeasurable,
   setContextMeasurableByRoot,
+  measurableStateValidation,
 };

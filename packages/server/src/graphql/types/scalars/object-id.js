@@ -6,7 +6,7 @@ const PATTERN = '^/[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F
 
 function createObjectId(name) {
   return new graphql.GraphQLScalarType({
-    name: name,
+    name,
     description: `A special custom scalar type for a ${name}`,
 
     serialize: function serialize(d) {

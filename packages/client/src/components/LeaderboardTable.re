@@ -253,4 +253,4 @@ module Columns = {
 
 [@react.component]
 let make = (~items, ~columns=Columns.measurables) =>
-  Table.fromColumns(columns, items, ());
+  <Table columns rows=items />;

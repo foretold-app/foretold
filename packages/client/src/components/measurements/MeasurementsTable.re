@@ -386,7 +386,6 @@ let bottomSubRowFn =
       |> E.O.fmap((c: React.element) => [|FC.Table.Row.textSection(c)|]),
   );
 
-
 // @todo: To make a component.
 let make =
     (
@@ -418,12 +417,11 @@ let make =
 
   measurementsList' |> E.L.length > 0
     ? <FC.PageCard.Body>
-        {Table.fromColumns(
-           all,
-           measurementsList' |> Array.of_list,
-           ~bottomSubRowFn,
-           (),
-         )}
+        <Table
+          columns=all
+          rows={measurementsList' |> Array.of_list}
+          bottomSubRowFn
+        />
       </FC.PageCard.Body>
     : <NothingToShow />;
 };
@@ -462,12 +460,11 @@ let makeExtended =
 
   measurementsList' |> E.L.length > 0
     ? <FC.PageCard.Body>
-        {Table.fromColumns(
-           all,
-           measurementsList' |> Array.of_list,
-           ~bottomSubRowFn,
-           (),
-         )}
+        <Table
+          columns=all
+          rows={measurementsList' |> Array.of_list}
+          bottomSubRowFn
+        />
       </FC.PageCard.Body>
     : <NothingToShow />;
 };

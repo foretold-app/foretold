@@ -192,7 +192,7 @@ let succesFn = (~channelId: string, ~channel: Types.channel, ~memberships) => {
     };
 
   let table =
-    Table.fromColumns(Columns.all(channelId, channel), memberships, ());
+    <Table columns={Columns.all(channelId, channel)} rows=memberships />;
 
   <SLayout head> <FC.PageCard.Body> table </FC.PageCard.Body> </SLayout>;
 };

@@ -44,7 +44,7 @@ let make = () => {
       module Columns = ColumnsFunctor(Ken);
 
       <SLayout head={<SLayout.TextDiv text="All Entities" />}>
-        {Table.fromColumns(Columns.all, Ken.dataSource, ())}
+        <Table columns=Columns.all rows=Ken.dataSource />
       </SLayout>;
     }}
   </Providers.AppContext.Consumer>;

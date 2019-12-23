@@ -6,6 +6,22 @@ type column('a) = {
   show: 'a => bool,
 };
 
+let headerCellStyles =
+  Css.[
+    paddingTop(`em(0.2)),
+    paddingBottom(`em(0.2)),
+    fontSize(`em(0.9)),
+  ];
+
+let headerCellPadding =
+  Css.(
+    style([
+      paddingTop(`em(0.3)),
+      paddingBottom(`em(0.4)),
+      background(`hex("000000")),
+    ])
+  );
+
 let filterColums = (columns, rows) => {
   columns
   |> Js.Array.filter(column =>
@@ -24,30 +40,13 @@ module Column = {
   };
 };
 
-let headerCellStyles =
-  Css.[
-    paddingTop(`em(0.2)),
-    paddingBottom(`em(0.2)),
-    fontSize(`em(0.9)),
-  ];
-
-let headerCellPadding =
-  Css.(
-    style([
-      paddingTop(`em(0.3)),
-      paddingBottom(`em(0.4)),
-      background(`hex("000000")),
-    ])
-  );
-
-// @todo: To make a component.
-let fromColumns =
+[@react.component]
+let make =
     (
-      columns: array(column('a)),
-      rows: array('a),
-      ~bottomSubRowFn: option('a => option(array(ReasonReact.reactElement)))=None,
-      ~onRowClb: option('a => unit)=None,
-      (),
+      ~columns: array(column('a)),
+      ~rows: array('a),
+      ~bottomSubRowFn=None,
+      ~onRowClb=None,
     ) => {
   let columns' = filterColums(columns, rows);
 

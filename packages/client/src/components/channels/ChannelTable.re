@@ -61,5 +61,5 @@ let make = (~agentId=None, ~isArchived=?) =>
     ~isArchived?,
     ~sortFn=ChannelsGet.sortCurated,
     channels =>
-    Table.fromColumns(Columns.all, channels, ())
+    <Table columns=Columns.all rows=channels />
   );

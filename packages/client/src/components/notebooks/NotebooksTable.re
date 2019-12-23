@@ -54,5 +54,5 @@ let make = (~items, ~columns=Columns.all) => {
     Routing.Url.push(ChannelNotebook(notebook.channelId, notebook.id));
   };
 
-  Table.fromColumns(columns, items, ~onRowClb=Some(onRowClb), ());
+  <Table columns rows=items onRowClb={Some(onRowClb)} />;
 };

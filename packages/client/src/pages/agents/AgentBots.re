@@ -108,7 +108,7 @@ let make = (~pageParams: Types.pageParams) => {
       let showBots = bots =>
         Array.length(bots) > 0
           ? <FC.PageCard.Body>
-              {Table.fromColumns(Columns.all, bots, ())}
+              <Table columns=Columns.all rows=bots />
             </FC.PageCard.Body>
           : <NothingToShow />;
 

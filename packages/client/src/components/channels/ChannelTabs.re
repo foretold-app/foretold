@@ -9,7 +9,6 @@ module Tab = {
     </FC.Tab>;
 };
 
-// @todo: To make a component.
 let tabToInternalUrl = (channelId, tabSelected: ChannelPage.tab): Url.t => {
   let channelPage: ChannelPage.t = {
     channelId,

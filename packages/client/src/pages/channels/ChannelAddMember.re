@@ -50,7 +50,7 @@ let make = (~channelId: string) => {
            }
          );
 
-    Table.fromColumns(all, dataSource, ());
+    <Table columns=all rows=dataSource />;
   };
 
   let onError = e => <Error e />;

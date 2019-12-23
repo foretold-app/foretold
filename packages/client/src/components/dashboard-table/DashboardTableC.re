@@ -73,7 +73,7 @@ module DashboardTableToTable = {
     let columns =
       table.columns
       |> Belt.Array.mapWithIndex(_, toColumn(measurables, editor));
-    Table.fromColumns(columns, table.rows, ());
+    <Table columns rows={table.rows} />;
   };
 };
 

@@ -33,7 +33,7 @@ module FormComponent = {
 
     <Form.Provider value=reform>
       {switch (result) {
-       | Error(_error) => <p> {Lang.networkError |> Utils.ste} </p>
+       | Error(_error) => <Sorry />
        | Data(_) => <p> {"Series are created." |> Utils.ste} </p>
        | _ =>
          <Antd.Form onSubmit>

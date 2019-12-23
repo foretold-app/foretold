@@ -74,7 +74,7 @@ module FormComponent = {
 
     <Form.Provider value=reform>
       {switch (result) {
-       | Error(_error) => <p> {Lang.networkError |> Utils.ste} </p>
+       | Error(_error) => <Sorry />
        | Loading(_) => <Spin />
        | Data(_) => Lang.measurableIsSaved |> Utils.ste
        | _ =>

@@ -39,7 +39,6 @@ module.exports = {
         unique: true,
       });
 
-      await queryInterface.dropTable('Notebooks');
       await queryInterface.sequelize.query('COMMIT');
     } catch (e) {
       console.error('Migration Down Error', e);

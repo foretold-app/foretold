@@ -395,45 +395,47 @@ let make =
     : <NothingToShow />;
 };
 
-let makeExtended =
-    (
-      ~measurementsList: list(measurement),
-      ~measurableValueType: Types.valueType,
-      (),
-    ) => {
-  let bounds = Helpers.bounds(measurementsList |> E.A.of_list);
+module Extended = {
+  [@react.component]
+  let make =
+      (
+        ~measurementsList: list(measurement),
+        ~measurableValueType: Types.valueType,
+      ) => {
+    let bounds = Helpers.bounds(measurementsList |> E.A.of_list);
 
-  let all =
-    switch (measurableValueType) {
-    | `FLOAT => [|
-        agent,
-        getPredictionDistribution(bounds),
-        predictionValue,
-        predictionText,
-        logScore(),
-        score(),
-        time,
-      |]
-    | `PERCENTAGE => [|
-        agent,
-        getPredictionDistribution(bounds),
-        predictionValue,
-        logScore(),
-        score(),
-        time,
-      |]
-    | `DATE => Js.Exn.raiseError("Date not supported ")
-    };
+    let all =
+      switch (measurableValueType) {
+      | `FLOAT => [|
+          agent,
+          getPredictionDistribution(bounds),
+          predictionValue,
+          predictionText,
+          logScore(),
+          score(),
+          time,
+        |]
+      | `PERCENTAGE => [|
+          agent,
+          getPredictionDistribution(bounds),
+          predictionValue,
+          logScore(),
+          score(),
+          time,
+        |]
+      | `DATE => Js.Exn.raiseError("Date not supported ")
+      };
 
-  let measurementsList' = measurementsList;
+    let measurementsList' = measurementsList;
 
-  measurementsList' |> E.L.length > 0
-    ? <FC.PageCard.Body>
-        <Table
-          columns=all
-          rows={measurementsList' |> Array.of_list}
-          bottomSubRowFn
-        />
-      </FC.PageCard.Body>
-    : <NothingToShow />;
+    measurementsList' |> E.L.length > 0
+      ? <FC.PageCard.Body>
+          <Table
+            columns=all
+            rows={measurementsList' |> Array.of_list}
+            bottomSubRowFn
+          />
+        </FC.PageCard.Body>
+      : <NothingToShow />;
+  };
 };

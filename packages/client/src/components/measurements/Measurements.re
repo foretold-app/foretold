@@ -36,11 +36,7 @@ module Body = {
          switch (measurable.state) {
          | Some(`JUDGED)
          | Some(`CLOSED_AS_UNRESOLVED) =>
-           MeasurementsTable.makeExtended(
-             ~measurableValueType,
-             ~measurementsList,
-             (),
-           )
+           <MeasurementsTable.Extended measurableValueType measurementsList />
          | _ => <MeasurementsTable measurementsList measurableValueType />
          };
        | _ => <Spin />

@@ -44,7 +44,7 @@ module FormComponent = {
 
     <Form.Provider value=reform>
       {switch (result) {
-       | Error(_error) => <p> {Lang.networkError |> Utils.ste} </p>
+       | Error(_error) => <Sorry />
        | Data(_) => <p> {"Profile is updated." |> Utils.ste} </p>
        | _ =>
          <Antd.Form onSubmit>

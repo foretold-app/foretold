@@ -6,7 +6,7 @@ let make = (~loggedUser: Types.user) => {
   <SLayout head={SLayout.Header.textDiv(Lang.unsubscribePageCardTitle)}>
     <FC.PageCard.BodyPadding>
       {switch (result) {
-       | Error(_error) => <p> {Lang.networkError |> Utils.ste} </p>
+       | Error(_error) => <Sorry />
        | Data(_) => <p> {Lang.sucUnsubscribing |> Utils.ste} </p>
        | Loading(_) => <Spin />
        | _ =>

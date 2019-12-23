@@ -230,9 +230,7 @@ module MeasurableLink = {
   };
 };
 
-type column = Table.column(Types.measurement);
-
-let predictionValueColumn =
+let predictionValue =
   Table.Column.make(
     ~name="Prediction" |> ste,
     ~flex=5,
@@ -242,7 +240,7 @@ let predictionValueColumn =
     (),
   );
 
-let predictionTextColumn =
+let predictionText =
   Table.Column.make(
     ~name={
       "Input Text" |> ste;
@@ -254,7 +252,7 @@ let predictionTextColumn =
     (),
   );
 
-let agentColumn =
+let agent =
   Table.Column.make(
     ~name="Member" |> ste,
     ~flex=5,
@@ -264,7 +262,7 @@ let agentColumn =
     (),
   );
 
-let timeColumn =
+let time =
   Table.Column.make(
     ~name="Time" |> ste,
     ~flex=5,
@@ -274,7 +272,7 @@ let timeColumn =
     (),
   );
 
-let measurableColumn =
+let measurable =
   Table.Column.make(
     ~name="Measurable" |> ste,
     ~render=
@@ -283,7 +281,7 @@ let measurableColumn =
     (),
   );
 
-let scoreColumn = _ =>
+let score = _ =>
   Table.Column.make(
     ~name={
       "Relative Score" |> ste;
@@ -307,7 +305,7 @@ let scoreColumn = _ =>
     (),
   );
 
-let logScoreColumn = _ =>
+let logScore = _ =>
   Table.Column.make(
     ~name="Log Score" |> ste,
     ~help=
@@ -329,7 +327,7 @@ let logScoreColumn = _ =>
     (),
   );
 
-let getPredictionDistributionColumn = bounds =>
+let getPredictionDistribution = bounds =>
   Table.Column.make(
     ~name="Distribution" |> ste,
     ~flex=7,
@@ -369,17 +367,17 @@ let make =
   let all =
     switch (measurableValueType) {
     | `FLOAT => [|
-        agentColumn,
-        getPredictionDistributionColumn(bounds),
-        predictionValueColumn,
-        predictionTextColumn,
-        timeColumn,
+        agent,
+        getPredictionDistribution(bounds),
+        predictionValue,
+        predictionText,
+        time,
       |]
     | `PERCENTAGE => [|
-        agentColumn,
-        getPredictionDistributionColumn(bounds),
-        predictionValueColumn,
-        timeColumn,
+        agent,
+        getPredictionDistribution(bounds),
+        predictionValue,
+        time,
       |]
     | `DATE => Js.Exn.raiseError("Date not supported ")
     };
@@ -408,21 +406,21 @@ let makeExtended =
   let all =
     switch (measurableValueType) {
     | `FLOAT => [|
-        agentColumn,
-        getPredictionDistributionColumn(bounds),
-        predictionValueColumn,
-        predictionTextColumn,
-        logScoreColumn(),
-        scoreColumn(),
-        timeColumn,
+        agent,
+        getPredictionDistribution(bounds),
+        predictionValue,
+        predictionText,
+        logScore(),
+        score(),
+        time,
       |]
     | `PERCENTAGE => [|
-        agentColumn,
-        getPredictionDistributionColumn(bounds),
-        predictionValueColumn,
-        logScoreColumn(),
-        scoreColumn(),
-        timeColumn,
+        agent,
+        getPredictionDistribution(bounds),
+        predictionValue,
+        logScore(),
+        score(),
+        time,
       |]
     | `DATE => Js.Exn.raiseError("Date not supported ")
     };

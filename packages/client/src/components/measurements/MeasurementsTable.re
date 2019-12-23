@@ -38,25 +38,23 @@ module Styles = {
 module Helpers = {
   open Css;
 
-  // @todo: To make a component.
-  let smallDistribution =
-      (
-        ~measurement: measurement,
-        ~bounds: (float, float),
-        ~width=230,
-        ~height=38,
-        (),
-      )
-      : option(React.element) =>
-    switch (measurement.value) {
-    | Ok(`FloatCdf(r)) =>
-      let (minX, maxX) = bounds;
-      r
-      |> MeasurementValue.toPdf
-      |> MeasurementValue.FloatCdf.toJs
-      |> (
-        data =>
-          Some(
+  module SmallDistribution = {
+    [@react.component]
+    let make =
+        (
+          ~measurement: measurement,
+          ~bounds: (float, float),
+          ~width=230,
+          ~height=38,
+        ) =>
+      switch (measurement.value) {
+      | Ok(`FloatCdf(r)) =>
+        let (minX, maxX) = bounds;
+        r
+        |> MeasurementValue.toPdf
+        |> MeasurementValue.FloatCdf.toJs
+        |> (
+          data =>
             <SmallCdfChart
               minX={Some(minX)}
               maxX={Some(maxX)}
@@ -67,80 +65,81 @@ module Helpers = {
                 measurement.competitorType == `AGGREGATION
                   ? `hex("b1b9c6") : `hex("487192")
               }
-            />,
-          )
-      );
-    | Ok(`FloatPoint(r)) =>
-      Some(
+            />
+        );
+      | Ok(`FloatPoint(r)) =>
         <div className=Styles.result>
           {r |> E.Float.with3DigitsPrecision |> ste}
-        </div>,
-      )
-    | _ => None
-    };
+        </div>
+      | _ => <Null />
+      };
+  };
 
-  // @todo: To make a component.
-  let statSummary = (measurement: measurement): option(React.element) =>
-    switch (measurement.value) {
-    | Ok(`FloatCdf(r)) =>
-      r
-      |> MeasurementValue.FloatCdf.toJs
-      |> FC.Base.Types.Dist.fromJson
-      |> (cdf => Some(<FC__CdfChart__StatSummary cdf showMean=false />))
-    | Ok(`FloatPoint(r)) => Some(<FC__NumberShower precision=8 number=r />)
-    | Ok(`Percentage(r)) =>
-      Some(
+  module StatSummary = {
+    [@react.component]
+    let make = (~measurement: measurement) =>
+      switch (measurement.value) {
+      | Ok(`FloatCdf(r)) =>
+        r
+        |> MeasurementValue.FloatCdf.toJs
+        |> FC.Base.Types.Dist.fromJson
+        |> (cdf => <FC__CdfChart__StatSummary cdf showMean=false />)
+      | Ok(`FloatPoint(r)) => <FC__NumberShower precision=8 number=r />
+      | Ok(`Percentage(r)) =>
         <span className=Styles.percentage>
           <FC__PercentageShower precision=8 percentage=r />
-        </span>,
-      )
-    | Ok(`Binary(r)) =>
-      Some(
+        </span>
+      | Ok(`Binary(r)) =>
         <span className=Styles.result>
           {(r ? "Yes" : "No") |> Utils.ste}
-        </span>,
-      )
-    | Ok(`UnresolvableResolution(r)) =>
-      Some(
+        </span>
+      | Ok(`UnresolvableResolution(r)) =>
         <span className=Styles.result>
           {r
            |> MeasurementValue.UnresolvableResolution.toPublicString
            |> Utils.ste}
-        </span>,
-      )
-    | _ => None
-    };
+        </span>
+      | _ => <Null />
+      };
+  };
 
-  // @todo: To make a component.
-  let getValueText = (measurement: measurement): React.element =>
-    <div className=Styles.secondaryText>
-      {measurement.valueText
-       |> E.O.bind(_, r => r == "" ? None : Some(r))
-       |> E.O.fmap(r => {|"|} ++ r ++ {|"|})
-       |> E.O.default("")
-       |> Utils.ste}
-    </div>;
+  module GetValueText = {
+    [@react.component]
+    let make = (~measurement: measurement) =>
+      <div className=Styles.secondaryText>
+        {measurement.valueText
+         |> E.O.bind(_, r => r == "" ? None : Some(r))
+         |> E.O.fmap(r => {|"|} ++ r ++ {|"|})
+         |> E.O.default("")
+         |> Utils.ste}
+      </div>;
+  };
 
-  // @todo: To make a component.
-  let getDescription = (~m: measurement): option(React.element) => {
-    switch (m.description) {
-    | None
-    | Some("") => None
-    | Some(description) =>
-      Some(
+  module GetDescription = {
+    [@react.component]
+    let make = (~m: measurement) => {
+      switch (m.description) {
+      | None
+      | Some("") => <Null />
+      | Some(description) =>
         <div className=Styles.descriptionStyle>
           <Markdown source=description />
-        </div>,
-      )
+        </div>
+      };
     };
   };
 
-  // @todo: To make a component.
-  let relevantAt = (~m: measurement): option(React.element) =>
-    m.relevantAt
-    |> E.O.fmap(d =>
-         <div className=Styles.date> {d |> E.M.goFormat_standard |> ste} </div>
-       );
+  module RelevantAt = {
+    [@react.component]
+    let make = (~m: measurement) =>
+      m.relevantAt
+      |> E.O.fmap(d =>
+           <div className=Styles.date>
+             {d |> E.M.goFormat_standard |> ste}
+           </div>
+         )
+      |> E.O.default(<Null />);
+  };
 
   let getFloatCdf = (e: Belt.Result.t(MeasurementValue.t, string)) =>
     switch (e) {
@@ -185,36 +184,38 @@ module Helpers = {
     | _ => None
     };
 
-  // @todo: To make a component.
-  let measurerLink = (~measurement: measurement) => {
-    let aLink = measurement.agent |> E.O.fmap(agent => <AgentLink agent />);
+  module MeasurerLink = {
+    [@react.component]
+    let make = (~measurement: measurement) => {
+      let aLink = measurement.agent |> E.O.fmap(agent => <AgentLink agent />);
 
-    let judgementStyle =
-      style([
-        selector(
-          " h3",
-          [
-            color(`rgba((55, 47, 68, 0.85))),
-            marginBottom(`px(0)),
-            fontSize(`em(1.15)),
-            fontWeight(`num(800)),
-          ],
-        ),
-        selector(" a", [fontSize(`em(0.9))]),
-      ]);
+      let judgementStyle =
+        style([
+          selector(
+            " h3",
+            [
+              color(`rgba((55, 47, 68, 0.85))),
+              marginBottom(`px(0)),
+              fontSize(`em(1.15)),
+              fontWeight(`num(800)),
+            ],
+          ),
+          selector(" a", [fontSize(`em(0.9))]),
+        ]);
 
-    let isJudge = Primary.Measurement.isJudgement(measurement);
+      let isJudge = Primary.Measurement.isJudgement(measurement);
 
-    if (isJudge) {
-      <div className=judgementStyle>
-        {"Resolution" |> ste |> E.React2.inH3}
-        {switch (aLink) {
-         | Some(name) => <> name </>
-         | None => E.React2.null
-         }}
-      </div>;
-    } else {
-      aLink |> E.O.React.defaultNull;
+      if (isJudge) {
+        <div className=judgementStyle>
+          {"Resolution" |> ste |> E.React2.inH3}
+          {switch (aLink) {
+           | Some(name) => <> name </>
+           | None => E.React2.null
+           }}
+        </div>;
+      } else {
+        aLink |> E.O.React.defaultNull;
+      };
     };
   };
 };
@@ -228,11 +229,12 @@ let getItems = (measurementsList: list(measurement), ~makeItem) => {
   |> E.L.fmap((m: measurement) => {
        let inside = makeItem(m, _bounds);
 
-       switch (Helpers.getDescription(~m)) {
+       switch (m.description) {
        | Some(description) =>
          <FC.Table.Row
            bottomSubRow={
-             [|FC.Table.Row.textSection(description)|] |> ReasonReact.array
+             [|FC.Table.Row.textSection(<Helpers.GetDescription m />)|]
+             |> ReasonReact.array
            }>
            inside
          </FC.Table.Row>
@@ -269,9 +271,7 @@ let predictionValueColumn =
     ~flex=5,
     ~render=
       (measurement: Types.measurement) =>
-        <div>
-          {Helpers.statSummary(measurement) |> E.O.React.defaultNull}
-        </div>,
+        <div> <Helpers.StatSummary measurement /> </div>,
     (),
   );
 
@@ -283,7 +283,7 @@ let predictionTextColumn =
     ~flex=3,
     ~render=
       (measurement: Types.measurement) =>
-        <div> {Helpers.getValueText(measurement)} </div>,
+        <div> <Helpers.GetValueText measurement /> </div>,
     (),
   );
 
@@ -292,7 +292,8 @@ let agentColumn =
     ~name="Member" |> ste,
     ~flex=5,
     ~render=
-      (measurement: Types.measurement) => Helpers.measurerLink(~measurement),
+      (measurement: Types.measurement) =>
+        <Helpers.MeasurerLink measurement />,
     (),
   );
 
@@ -302,7 +303,7 @@ let timeColumn =
     ~flex=5,
     ~render=
       (measurement: Types.measurement) =>
-        Helpers.relevantAt(~m=measurement) |> E.O.React.defaultNull,
+        <Helpers.RelevantAt m=measurement />,
     (),
   );
 
@@ -367,8 +368,7 @@ let getPredictionDistributionColumn = bounds =>
     ~flex=7,
     ~render=
       (measurement: Types.measurement) =>
-        Helpers.smallDistribution(~measurement, ~bounds, ())
-        |> E.O.React.defaultNull,
+        <Helpers.SmallDistribution measurement bounds />,
     ~show=
       (measurement: Types.measurement) =>
         switch (measurement.measurable) {
@@ -382,16 +382,18 @@ let getPredictionDistributionColumn = bounds =>
 let bottomSubRowFn =
   Some(
     (measurement: Types.measurement) =>
-      Helpers.getDescription(~m=measurement)
-      |> E.O.fmap((c: React.element) => [|FC.Table.Row.textSection(c)|]),
+      switch (measurement.description) {
+      | Some(d) =>
+        Some([|FC.Table.Row.textSection(<Helpers.GetDescription m=measurement />)|])
+      | _ => None
+      },
   );
 
-// @todo: To make a component.
+[@react.component]
 let make =
     (
       ~measurementsList: list(measurement),
       ~measurableValueType: Types.valueType,
-      (),
     ) => {
   let bounds = Helpers.bounds(measurementsList |> E.A.of_list);
 

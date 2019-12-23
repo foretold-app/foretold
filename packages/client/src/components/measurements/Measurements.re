@@ -41,8 +41,7 @@ module Body = {
              ~measurementsList,
              (),
            )
-         | _ =>
-           MeasurementsTable.make(~measurementsList, ~measurableValueType, ())
+         | _ => <MeasurementsTable measurementsList measurableValueType />
          };
        | _ => <Spin />
        }}

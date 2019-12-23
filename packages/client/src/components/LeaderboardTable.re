@@ -185,14 +185,12 @@ module Columns = {
 
   let getMeasurement = measurement => {
     let bounds = MeasurementsTable.Helpers.bounds([|measurement|]);
-    MeasurementsTable.Helpers.smallDistribution(
-      ~measurement,
-      ~bounds,
-      ~width=75,
-      ~height=30,
-      (),
-    )
-    |> E.O.default("" |> Utils.ste);
+    <MeasurementsTable.Helpers.SmallDistribution
+      measurement
+      bounds
+      width=75
+      height=30
+    />;
   };
 
   let competitiveMeasurement =

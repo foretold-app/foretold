@@ -1,11 +1,13 @@
 open Utils;
 open Routing;
 
-// @todo: To make a component.
-let tab = (isActive, interalUrl, str) =>
-  <FC.Tab isActive onClick={LinkType.onClick(Internal(interalUrl))}>
-    {str |> ste}
-  </FC.Tab>;
+module Tab = {
+  [@react.component]
+  let make = (~isActive, ~interalUrl, ~str) =>
+    <FC.Tab isActive onClick={LinkType.onClick(Internal(interalUrl))}>
+      {str |> ste}
+    </FC.Tab>;
+};
 
 // @todo: To make a component.
 let tabToInternalUrl = (channelId, tabSelected: ChannelPage.tab): Url.t => {
@@ -19,55 +21,59 @@ let tabToInternalUrl = (channelId, tabSelected: ChannelPage.tab): Url.t => {
 [@react.component]
 let make = (~tabSelected: Routing.ChannelPage.tab, ~channel: Types.channel) =>
   <>
-    {tab(
-       tabSelected == Measurables,
-       tabToInternalUrl(channel.id, Measurables),
-       "Questions",
-     )}
-    {tab(
-       tabSelected == Updates,
-       tabToInternalUrl(channel.id, Updates),
-       "Activity",
-     )}
+    <Tab
+      isActive={tabSelected == Measurables}
+      interalUrl={tabToInternalUrl(channel.id, Measurables)}
+      str="Questions"
+    />
+    <Tab
+      isActive={tabSelected == Updates}
+      interalUrl={tabToInternalUrl(channel.id, Updates)}
+      str="Activity"
+    />
     {E.React2.showIf(
        channel.id != "home",
-       tab(
-         tabSelected == Members,
-         tabToInternalUrl(channel.id, Members),
-         (
-           channel.membershipCount
-           |> E.O.fmap(string_of_int)
-           |> E.O.fmap(e => e ++ " ")
-           |> E.O.default("")
-         )
-         ++ "Members",
-       ),
+       <Tab
+         isActive={tabSelected == Members}
+         interalUrl={tabToInternalUrl(channel.id, Members)}
+         str={
+           (
+             channel.membershipCount
+             |> E.O.fmap(string_of_int)
+             |> E.O.fmap(e => e ++ " ")
+             |> E.O.default("")
+           )
+           ++ "Members"
+         }
+       />,
      )}
-    {tab(
-       tabSelected == Notebooks,
-       tabToInternalUrl(channel.id, Notebooks),
-       (
-         channel.notebooksCount
-         |> E.O.fmap(string_of_int)
-         |> E.O.fmap(e => e ++ " ")
-         |> E.O.default("")
-       )
-       ++ "Notebooks",
-     )}
+    <Tab
+      isActive={tabSelected == Notebooks}
+      interalUrl={tabToInternalUrl(channel.id, Notebooks)}
+      str={
+        (
+          channel.notebooksCount
+          |> E.O.fmap(string_of_int)
+          |> E.O.fmap(e => e ++ " ")
+          |> E.O.default("")
+        )
+        ++ "Notebooks"
+      }
+    />
     {E.React2.showIf(
        channel.id != "home",
-       tab(
-         tabSelected == Leaderboard,
-         tabToInternalUrl(channel.id, Leaderboard),
-         "Scores",
-       ),
+       <Tab
+         isActive={tabSelected == Leaderboard}
+         interalUrl={tabToInternalUrl(channel.id, Leaderboard)}
+         str="Scores"
+       />,
      )}
     {E.React2.showIf(
        channel.myRole === Some(`ADMIN),
-       tab(
-         tabSelected == Options,
-         tabToInternalUrl(channel.id, Options),
-         "Settings",
-       ),
+       <Tab
+         isActive={tabSelected == Options}
+         interalUrl={tabToInternalUrl(channel.id, Options)}
+         str="Settings"
+       />,
      )}
   </>;

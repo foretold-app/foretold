@@ -66,11 +66,7 @@ module Styles = {
 module CompetitorTypeSelect = {
   [@react.component]
   let make = (~isOwner, ~state, ~send, ~measurable: Types.measurable) => {
-    let options =
-      Primary.CompetitorType.availableSelections(
-        ~isOwner,
-        ~state=measurable.state,
-      );
+    let options = Primary.CompetitorType.availableSelections(~measurable);
 
     <Antd.Select
       value={state.competitorType}

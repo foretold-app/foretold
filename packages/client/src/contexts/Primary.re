@@ -48,11 +48,20 @@ module MeasurableState = {
 
 module ChannelMembershipRole = {
   type t = channelMembershipRole;
-  let toString = (t: t) =>
-    switch (t) {
+
+  let toString = (channelMembershipRole: t) =>
+    switch (channelMembershipRole) {
     | `ADMIN => "Admin"
     | `VIEWER => "Member"
     };
+
+  let isAdmin = channel => {
+    let role = channel |> E.O.fmap(channel => channel.myRole);
+    switch (role) {
+    | Some(Some(`ADMIN)) => true
+    | _ => false
+    };
+  };
 };
 
 module Cursor = {
@@ -112,17 +121,18 @@ module Connection = {
     | Before(Types.cursor)
     | After(Types.cursor);
 
-  let hasNextPage = (t: t('a)) => t.pageInfo.hasNextPage;
-  let hasPreviousPage = (t: t('a)) => t.pageInfo.hasPreviousPage;
+  let hasNextPage = (connection: t('a)) => connection.pageInfo.hasNextPage;
+  let hasPreviousPage = (connection: t('a)) =>
+    connection.pageInfo.hasPreviousPage;
 
-  let nextPageDirection = (t: t('a)) =>
-    switch (hasNextPage(t), t.pageInfo.endCursor) {
+  let nextPageDirection = (connection: t('a)) =>
+    switch (hasNextPage(connection), connection.pageInfo.endCursor) {
     | (true, Some(endCursor)) => Some(After(endCursor))
     | _ => None
     };
 
-  let lastPageDirection = (t: t('a)) =>
-    switch (hasPreviousPage(t), t.pageInfo.startCursor) {
+  let lastPageDirection = (connection: t('a)) =>
+    switch (hasPreviousPage(connection), connection.pageInfo.startCursor) {
     | (true, Some(startCursor)) => Some(Before(startCursor))
     | _ => None
     };
@@ -131,7 +141,7 @@ module Connection = {
 module Permissions = {
   type t = Types.permissions;
 
-  let make = (a: list(permission)): t => {allow: a};
+  let make = (permissions: list(permission)): t => {allow: permissions};
 
   let can = (permission: permission, permissions: option(t)): bool =>
     switch (permissions) {
@@ -219,8 +229,8 @@ module Bot = {
   type t = Types.bot;
 
   module CompetitorType = {
-    let toString = (c: Types.competitorType) =>
-      switch (c) {
+    let toString = (competitorType: Types.competitorType) =>
+      switch (competitorType) {
       | `AGGREGATION => "Aggregation"
       | `COMPETITIVE => "Prediction"
       | `OBJECTIVE => "Resolution"
@@ -263,18 +273,18 @@ module Agent = {
     let make = (agentId: string): t => Js.Json.string(agentId);
   };
 
-  let name = (a: t): option(string) =>
-    switch (a.agentType) {
+  let name = (agent: t): option(string) =>
+    switch (agent.agentType) {
     | Some(Bot(b)) => b.name
     | Some(User(u)) => Some(u.name)
     | None => None
     };
 
-  let firstMembership = (t: t) =>
-    t.channelMemberships |> E.A.O.defaultEmpty |> E.A.get(_, 0);
+  let firstMembership = (agent: t) =>
+    agent.channelMemberships |> E.A.O.defaultEmpty |> E.A.get(_, 0);
 
-  let firstChannel = (t: t) =>
-    t |> firstMembership |> E.O.bind(_, r => r.channel);
+  let firstChannel = (agent: t) =>
+    agent |> firstMembership |> E.O.bind(_, r => r.channel);
 
   let make =
       (
@@ -445,10 +455,11 @@ module Series = {
 module Measurement = {
   type t = Types.measurement;
 
-  let isJudgement = (m: t) => m.competitorType == `OBJECTIVE;
+  let isJudgement = (measurement: t) =>
+    measurement.competitorType == `OBJECTIVE;
 
-  let valueSuggestsJudgement = (m: t) =>
-    switch (m.value) {
+  let valueSuggestsJudgement = (measurement: t) =>
+    switch (measurement.value) {
     | Ok(`FloatPoint(_)) => Some(true)
     | Ok(`UnresolvableResolution(_)) => Some(true)
     | Ok(`Binary(_)) => Some(true)
@@ -503,11 +514,11 @@ module Measurable = {
   type t = Types.measurable;
 
   let toStatus = (measurable: t) => {
-    let state = measurable.state |> E.O.toExn("Needs state from GraphQL");
-    state;
+    measurable.state |> E.O.toExn("Needs state from GraphQL");
   };
 
-  let isEqual = (a: t, b: t) => a.id == b.id;
+  let isEqual = (measurable1: t, measurable2: t) =>
+    measurable1.id == measurable2.id;
 
   let compare = (measurableA: t, measurableB: t) =>
     switch (
@@ -522,7 +533,7 @@ module Measurable = {
       MeasurableState.toInt(a) > MeasurableState.toInt(b) ? (-1) : 1
     };
 
-  let stableSort = m => E.A.stableSortBy(m, compare);
+  let stableSort = measurable => E.A.stableSortBy(measurable, compare);
 
   let valueTypeToStr = (valueType: valueType): string =>
     switch (valueType) {
@@ -636,8 +647,8 @@ module FeedItem = {
 
 module CompetitorType = {
   type t = competitorType;
-  let toString = e =>
-    switch (e) {
+  let toString = competitorType =>
+    switch (competitorType) {
     | `AGGREGATION => "Aggregation"
     | `COMPETITIVE => "Competitive"
     | `OBJECTIVE => "Objective"
@@ -655,9 +666,11 @@ module CompetitorType = {
     | _ => Js.Exn.raiseError("Invalid Competitor Type: " ++ str)
     };
 
-  let availableInputs =
-      (~isOwner: bool, ~state: option(Types.measurableState)) => {
-    switch (isOwner, state) {
+  let availableInputs = (~measurable: Types.measurable) => {
+    let isAdmin = ChannelMembershipRole.isAdmin(measurable.channel);
+    let iAmOwner = measurable.iAmOwner |> E.O.toBool;
+
+    switch (iAmOwner || isAdmin, measurable.state) {
     | (true, Some(`JUDGED)) => [|`COMMENT, `OBJECTIVE, `UNRESOLVED|]
     | (true, _) => [|`COMMENT, `COMPETITIVE, `OBJECTIVE, `UNRESOLVED|]
     | (false, Some(`JUDGED)) => [|`COMMENT|]
@@ -694,9 +707,8 @@ module CompetitorType = {
     | `AGGREGATION => E.React2.null
     };
 
-  let availableSelections =
-      (~isOwner: bool, ~state: option(Types.measurableState)) =>
-    availableInputs(~isOwner, ~state) |> E.A.fmap(toSelection);
+  let availableSelections = (~measurable) =>
+    availableInputs(~measurable) |> E.A.fmap(toSelection);
 };
 
 module GlobalSetting = {
@@ -946,17 +958,17 @@ module Notebook = {
     channel: Channel.toChannel(channel),
   };
 
-  let convertJsObject = m => {
+  let convertJsObject = notebook => {
     convertJs(
-      ~id=m##id,
-      ~name=m##name,
-      ~body=m##body,
-      ~ownerId=m##ownerId,
-      ~channelId=m##channelId,
-      ~createdAt=m##createdAt,
-      ~updatedAt=m##updatedAt,
-      ~owner=m##owner,
-      ~channel=m##channel,
+      ~id=notebook##id,
+      ~name=notebook##name,
+      ~body=notebook##body,
+      ~ownerId=notebook##ownerId,
+      ~channelId=notebook##channelId,
+      ~createdAt=notebook##createdAt,
+      ~updatedAt=notebook##updatedAt,
+      ~owner=notebook##owner,
+      ~channel=notebook##channel,
       (),
     );
   };

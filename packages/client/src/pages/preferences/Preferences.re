@@ -27,7 +27,7 @@ module FormComponent = {
 
     <Form.Provider value=reform>
       {switch (result) {
-       | Error(_error) => <p> {Lang.networkError |> Utils.ste} </p>
+       | Error(_error) => <Sorry />
        | Data(_) => <p> {Lang.preferencesAreSaved |> Utils.ste} </p>
        | _ =>
          <Antd.Form onSubmit>
@@ -119,7 +119,7 @@ let make = (~loggedUser: Types.user) => {
     |> E.O.fmap((r: Types.preference) => r.enableExperimentalFeatures)
     |> E.O.default(true);
 
-  <SLayout head={SLayout.Header.textDiv("Preferences")}>
+  <SLayout head={<SLayout.TextDiv text="Preferences" />}>
     <FC.PageCard.BodyPadding>
       <Edit id stopAllEmails enableExperimentalFeatures />
     </FC.PageCard.BodyPadding>

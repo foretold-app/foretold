@@ -75,61 +75,73 @@ module StylesDropdown = {
 
 let action = StylesDropdown.action;
 
-// @todo: To make a component.
-let link = (linkType: LinkType.linkType, str) =>
-  <Link linkType className=action> {str |> ste} </Link>;
+module LinkHeader = {
+  [@react.component]
+  let make = (~linkType: LinkType.linkType, ~str) =>
+    <Link linkType className=action> {str |> ste} </Link>;
+};
 
-// @todo: To make a component.
-let userDropdown = agentId =>
-  <div className=StylesDropdown.actions>
-    {link(Internal(Agent({agentId, subPage: AgentUpdates})), "My Profile")}
-    {link(Internal(Agent({agentId, subPage: AgentBots})), "My Bots")}
-    {link(Internal(Profile), "User Settings")}
-    {link(Internal(Preferences), "User Preferences")}
-    {link(Internal(ChannelNew), "Make a New Community")}
-    {link(External(feedbackUrl), "Feedback")}
-    {link(Action(_ => Auth.Actions.logout()), "Logout")}
-    <div className=StylesDropdown.clear />
-  </div>;
+module UserDropdown = {
+  [@react.component]
+  let make = (~agentId) =>
+    <div className=StylesDropdown.actions>
+      <LinkHeader
+        linkType={Internal(Agent({agentId, subPage: AgentUpdates}))}
+        str="My Profile"
+      />
+      <LinkHeader
+        linkType={Internal(Agent({agentId, subPage: AgentBots}))}
+        str="My Bots"
+      />
+      <LinkHeader linkType={Internal(Profile)} str="User Settings" />
+      <LinkHeader linkType={Internal(Preferences)} str="User Preferences" />
+      <LinkHeader linkType={Internal(ChannelNew)} str="Make a New Community" />
+      <LinkHeader linkType={External(feedbackUrl)} str="Feedback" />
+      <LinkHeader linkType={Action(_ => Auth.Actions.logout())} str="Logout" />
+      <div className=StylesDropdown.clear />
+    </div>;
+};
 
-// @todo: To make a component.
-let header = (loggedUser: Types.user) =>
-  switch (loggedUser.agent) {
-  | Some((agent: Types.agent)) =>
-    <AntdDropdown
-      overlay={userDropdown(agent.id)}
-      overlayClassName=StylesDropdown.dropdown>
-      <Div styles=[Css.style([Css.color(`hex("61738d"))])]>
-        <Div float=`left styles=[Css.style([Css.marginLeft(`em(0.2))])]>
-          {switch (agent.name) {
-           | Some("")
-           | None => "Please add a Username on the Profile page" |> ste
-           | Some(name) => name |> ste
-           }}
+module Header = {
+  [@react.component]
+  let make = (~loggedUser: Types.user) =>
+    switch (loggedUser.agent) {
+    | Some((agent: Types.agent)) =>
+      <AntdDropdown
+        overlay={<UserDropdown agentId={agent.id} />}
+        overlayClassName=StylesDropdown.dropdown>
+        <Div styles=[Css.style([Css.color(`hex("61738d"))])]>
+          <Div float=`left styles=[Css.style([Css.marginLeft(`em(0.2))])]>
+            {switch (agent.name) {
+             | Some("")
+             | None => "Please add a Username on the Profile page" |> ste
+             | Some(name) => name |> ste
+             }}
+          </Div>
+          <Div
+            float=`left
+            styles=[
+              Css.style([
+                Css.marginLeft(`em(0.3)),
+                Css.fontSize(`em(0.7)),
+                Css.opacity(0.4),
+              ]),
+            ]>
+            <Icon icon="CHEVRON_DOWN" />
+          </Div>
+          {loggedUser.picture
+           |> E.O.React.fmapOrNull((picture: string) =>
+                <Div
+                  float=`left
+                  styles=[Css.style([Css.marginLeft(`em(0.45))])]>
+                  <FC.Base.Avatar src=picture width=1.5 />
+                </Div>
+              )}
         </Div>
-        <Div
-          float=`left
-          styles=[
-            Css.style([
-              Css.marginLeft(`em(0.3)),
-              Css.fontSize(`em(0.7)),
-              Css.opacity(0.4),
-            ]),
-          ]>
-          <Icon icon="CHEVRON_DOWN" />
-        </Div>
-        {loggedUser.picture
-         |> E.O.React.fmapOrNull((picture: string) =>
-              <Div
-                float=`left
-                styles=[Css.style([Css.marginLeft(`em(0.45))])]>
-                <FC.Base.Avatar src=picture width=1.5 />
-              </Div>
-            )}
-      </Div>
-    </AntdDropdown>
-  | None => <Null />
-  };
+      </AntdDropdown>
+    | None => <Null />
+    };
+};
 
 [@react.component]
 let make = (~loggedUser: option(Types.user)) => {
@@ -152,7 +164,7 @@ let make = (~loggedUser: option(Types.user)) => {
     <Div float=`left> <VerificationWarning /> </Div>
     <Div float=`right>
       {switch (loggedUser) {
-       | Some(loggedUser) => header(loggedUser)
+       | Some(loggedUser) => <Header loggedUser />
        | None =>
          <Link
            linkType={Action(_e => Auth0Client.triggerLoginScreen())}

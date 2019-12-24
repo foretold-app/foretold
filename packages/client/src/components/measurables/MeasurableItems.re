@@ -1,10 +1,5 @@
 open Utils;
 
-/**
- * @todo:  Using <Components /> style in React.js is preferable then
- * @todo:  functions. Try first of all to create new component.
- **/
-
 let formatDate = e =>
   e |> E.O.fmap(E.M.format(E.M.format_simple)) |> E.O.default("");
 
@@ -313,7 +308,3 @@ module UnArchiveButton = {
       }
     </MeasurableUnarchive.Mutation>;
 };
-
-let archiveOption = (~measurable: Types.measurable) =>
-  measurable.isArchived == Some(true)
-    ? <UnArchiveButton measurable /> : <ArchiveButton measurable />;

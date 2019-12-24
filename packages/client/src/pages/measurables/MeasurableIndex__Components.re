@@ -26,20 +26,6 @@ module LoadedAndSelected = {
         {Reducer.Components.paginationItem(t.reducerParams)}
       </Div>
     </>;
-
-  // @todo: To make a component.
-  let measurablePage = (t: loadedAndSelected) =>
-    <MeasurablePage
-      measurable={t.selectedMeasurable}
-      key={t.selectedMeasurable.id}
-    />;
-
-  // @todo: To make a component.
-  let measurableBottomSection = (t: loadedAndSelected) =>
-    <MeasurableBottomSection
-      measurable={t.selectedMeasurable}
-      key={"measurable-bottom-section" ++ t.selectedMeasurable.id}
-    />;
 };
 
 module LoadedAndUnselected = {
@@ -148,10 +134,16 @@ let toLayoutInput =
 
   | LoadedAndSelected(l) =>
     <>
-      {<SLayout head={LoadedAndSelected.header(l, send)} isFluid=true>
-         {LoadedAndSelected.measurablePage(l)}
-       </SLayout>}
-      {LoadedAndSelected.measurableBottomSection(l)}
+      <SLayout head={LoadedAndSelected.header(l, send)} isFluid=true>
+        <MeasurablePage
+          measurable={l.selectedMeasurable}
+          key={l.selectedMeasurable.id}
+        />
+      </SLayout>
+      <MeasurableBottomSection
+        measurable={l.selectedMeasurable}
+        key={"measurable-bottom-section" ++ l.selectedMeasurable.id}
+      />
     </>
 
   | WithoutChannel(_) =>

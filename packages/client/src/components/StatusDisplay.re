@@ -1,4 +1,5 @@
-let statusShow = (~measurable: Types.measurable) =>
+[@react.component]
+let make = (~measurable: Types.measurable) =>
   switch (
     Primary.Measurable.toStatus(measurable),
     measurable.expectedResolutionDate,
@@ -19,6 +20,3 @@ let statusShow = (~measurable: Types.measurable) =>
     Js.log("Missing data in statusShow");
     <Null />;
   };
-
-[@react.component]
-let make = (~measurable: Types.measurable) => statusShow(~measurable);

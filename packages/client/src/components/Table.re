@@ -6,24 +6,6 @@ type column('a) = {
   show: 'a => bool,
 };
 
-let filterColums = (columns, rows) => {
-  columns
-  |> Js.Array.filter(column =>
-       rows |> Js.Array.find(column.show) |> E.O.toBool
-     );
-};
-
-module Column = {
-  let make =
-      (~name, ~render, ~flex=1, ~show=_ => true, ~help=None, ()): column('b) => {
-    name,
-    help,
-    render,
-    flex,
-    show,
-  };
-};
-
 let headerCellStyles =
   Css.[
     paddingTop(`em(0.2)),
@@ -40,15 +22,26 @@ let headerCellPadding =
     ])
   );
 
-// @todo: To make a component.
-let fromColumns =
-    (
-      columns: array(column('a)),
-      rows: array('a),
-      ~bottomSubRowFn: option('a => option(array(ReasonReact.reactElement)))=None,
-      ~onRowClb: option('a => unit)=None,
-      (),
-    ) => {
+let filterColums = (columns, rows) => {
+  columns
+  |> Js.Array.filter(column =>
+       rows |> Js.Array.find(column.show) |> E.O.toBool
+     );
+};
+
+module Column = {
+  let make =
+      (~name, ~render, ~flex=1, ~show=_ => true, ~help=None, ()) => {
+    name,
+    help,
+    render,
+    flex,
+    show,
+  };
+};
+
+[@react.component]
+let make = (~columns, ~rows, ~bottomSubRowFn=None, ~onRowClb=None) => {
   let columns' = filterColums(columns, rows);
 
   <FC__Table>

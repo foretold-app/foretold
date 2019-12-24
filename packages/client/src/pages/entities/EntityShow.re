@@ -34,7 +34,7 @@ let display = id => {
 
 [@react.component]
 let make = (~pageParams: Types.pageParams) => {
-  <SLayout head={SLayout.Header.textDiv(pageParams.id)}>
+  <SLayout head={<SLayout.TextDiv text={pageParams.id} />}>
     <FC.PageCard.BodyPadding>
       {display(pageParams.id)}
     </FC.PageCard.BodyPadding>

@@ -69,4 +69,4 @@ module Columns = {
 
 [@react.component]
 let make = (~feedItems, ~columns=Columns.all) =>
-  Table.fromColumns(columns, feedItems, ());
+  <Table columns rows=feedItems />;

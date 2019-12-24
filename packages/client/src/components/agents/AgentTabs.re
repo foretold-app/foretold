@@ -9,31 +9,56 @@ let name = (page: Routing.AgentPage.SubPage.t) =>
   | AgentScores => "Scores"
   };
 
-// @todo: To make a component.
-let tab = (agentId, currentPage, selectedPage) => {
-  let isActive = currentPage == selectedPage;
-  <FC.Tab
-    isActive
-    onClick={LinkType.onClick(
-      Internal(Agent({agentId, subPage: selectedPage})),
-    )}>
-    {name(selectedPage) |> ste}
-  </FC.Tab>;
+module Tab = {
+  [@react.component]
+  let make = (~agentId, ~subPage, ~selectedPage) => {
+    let isActive = subPage == selectedPage;
+    <FC.Tab
+      isActive
+      onClick={LinkType.onClick(
+        Internal(Agent({agentId, subPage: selectedPage})),
+      )}>
+      {name(selectedPage) |> ste}
+    </FC.Tab>;
+  };
 };
 
-// @todo: To make a component.
-let tabs = (page: Routing.AgentPage.t, agent: Types.agent) => {
-  let agentId = page.agentId;
-  let subPage = page.subPage;
+module Tabs = {
+  [@react.component]
+  let make = (~agentPage: Routing.AgentPage.t, ~agent: Types.agent) => {
+    let agentId = agentPage.agentId;
+    let subPage = agentPage.subPage;
 
-  switch (agent.agentType) {
-  | Some(User(_)) =>
-    <>
-      {tab(agentId, subPage, AgentUpdates)}
-      {tab(agentId, subPage, AgentCommunities)}
-      {tab(agentId, subPage, AgentBots)}
-      {tab(agentId, subPage, AgentScores)}
-    </>
-  | _ => <> {tab(agentId, subPage, AgentUpdates)} </>
+    switch (agent.agentType) {
+    | Some(User(_)) =>
+      <>
+        <Tab
+          agentId
+          subPage
+          selectedPage=Routing.AgentPage.SubPage.AgentUpdates
+        />
+        <Tab
+          agentId
+          subPage
+          selectedPage=Routing.AgentPage.SubPage.AgentCommunities
+        />
+        <Tab
+          agentId
+          subPage
+          selectedPage=Routing.AgentPage.SubPage.AgentBots
+        />
+        <Tab
+          agentId
+          subPage
+          selectedPage=Routing.AgentPage.SubPage.AgentScores
+        />
+      </>
+    | _ =>
+      <Tab
+        agentId
+        subPage
+        selectedPage=Routing.AgentPage.SubPage.AgentUpdates
+      />
+    };
   };
 };

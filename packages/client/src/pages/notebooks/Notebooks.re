@@ -15,44 +15,45 @@ module ReducerConfig = {
 
 module Reducer = PaginationFunctor.Make(ReducerConfig);
 
-// @todo: To make a component.
-let pagination =
-    (reducerParams: Reducer.Types.reducerParams, channelId: string) =>
-  <Div>
-    <Providers.AppContext.Consumer>
-      ...{({loggedUser}) =>
-        <Div
-          float=`left
-          styles=[
-            Css.style([
-              FC.PageCard.HeaderRow.Styles.itemTopPadding,
-              FC.PageCard.HeaderRow.Styles.itemBottomPadding,
-            ]),
-          ]>
-          <FC.Base.Button
-            variant=FC.Base.Button.Primary
-            size=FC.Base.Button.Small
-            onClick={e =>
-              LinkType.onClick(Internal(ChannelAddNotebook(channelId)), e)
-            }>
-            {"New Notebook" |> Utils.ste}
-          </FC.Base.Button>
-        </Div>
-        |> Primary.User.authorized(loggedUser)
-        |> E.React2.showIf(channelId != "")
-      }
-    </Providers.AppContext.Consumer>
-    <Div
-      float=`right
-      styles=[
-        Css.style([
-          FC.PageCard.HeaderRow.Styles.itemTopPadding,
-          FC.PageCard.HeaderRow.Styles.itemBottomPadding,
-        ]),
-      ]>
-      {Reducer.Components.paginationPage(reducerParams)}
-    </Div>
-  </Div>;
+module Pagination = {
+  [@react.component]
+  let make = (~reducerParams: Reducer.Types.reducerParams, ~channelId: string) =>
+    <Div>
+      <Providers.AppContext.Consumer>
+        ...{({loggedUser}) =>
+          <Div
+            float=`left
+            styles=[
+              Css.style([
+                FC.PageCard.HeaderRow.Styles.itemTopPadding,
+                FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+              ]),
+            ]>
+            <FC.Base.Button
+              variant=FC.Base.Button.Primary
+              size=FC.Base.Button.Small
+              onClick={e =>
+                LinkType.onClick(Internal(ChannelAddNotebook(channelId)), e)
+              }>
+              {"New Notebook" |> Utils.ste}
+            </FC.Base.Button>
+          </Div>
+          |> Primary.User.authorized(loggedUser)
+          |> E.React2.showIf(channelId != "")
+        }
+      </Providers.AppContext.Consumer>
+      <Div
+        float=`right
+        styles=[
+          Css.style([
+            FC.PageCard.HeaderRow.Styles.itemTopPadding,
+            FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+          ]),
+        ]>
+        {Reducer.Components.paginationPage(reducerParams)}
+      </Div>
+    </Div>;
+};
 
 [@react.component]
 let make = (~channelId: string) => {
@@ -78,7 +79,7 @@ let make = (~channelId: string) => {
       | _ => <Spin />
       };
 
-    let head = pagination(reducerParams, channelId);
+    let head = <Pagination reducerParams channelId />;
 
     <SLayout head> body </SLayout>;
   };

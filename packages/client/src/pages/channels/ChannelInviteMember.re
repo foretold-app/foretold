@@ -35,7 +35,7 @@ module FormComponent = {
 
     <Form.Provider value=reform>
       {switch (result) {
-       | Error(_error) => <p> {Lang.networkError |> Utils.ste} </p>
+       | Error(_error) => <Sorry />
        | Data(_) => <AntdAlert message=Lang.memberInvited type_="success" />
        | _ =>
          <Antd.Form onSubmit>
@@ -99,7 +99,7 @@ module Create = {
 
 [@react.component]
 let make = (~channelId: string) => {
-  <SLayout head={SLayout.Header.textDiv("Invite Member")}>
+  <SLayout head={<SLayout.TextDiv text="Invite Member" />}>
     <FC.PageCard.BodyPadding> <Create channelId /> </FC.PageCard.BodyPadding>
   </SLayout>;
 };

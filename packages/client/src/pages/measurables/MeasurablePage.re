@@ -33,10 +33,6 @@ let make = (~measurable) => {
       </Div>
       <MeasurableItems.Description measurable styles=[Styles.description] />
     </Div>
-    <MeasurementForm
-      measurable
-      measurableId={measurable.id}
-      isCreator={measurable.iAmOwner == Some(true)}
-    />
+    <MeasurementForm measurable key={measurable.id} />
   </>;
 };

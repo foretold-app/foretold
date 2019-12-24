@@ -547,6 +547,7 @@ module Measurable = {
     | "FLOAT" => `FLOAT
     | "PERCENTAGE" => `PERCENTAGE
     | "DATE" => `DATE
+    | _ => Js.Exn.raiseError("Invalid Value Type: " ++ valueType)
     };
 
   let toMinMaxDescription = (measurable: t) => {
@@ -668,8 +669,7 @@ module CompetitorType = {
 
   let availableInputs = (~measurable: Types.measurable) => {
     let isAdmin = ChannelMembershipRole.isAdmin(measurable.channel);
-    let iAmOwner = measurable.iAmOwner |> E.O.toBool;
-
+    let iAmOwner = measurable.iAmOwner |> E.Bool.O.toBool;
     switch (iAmOwner || isAdmin, measurable.state) {
     | (true, Some(`JUDGED)) => [|`COMMENT, `OBJECTIVE, `UNRESOLVED|]
     | (true, _) => [|`COMMENT, `COMPETITIVE, `OBJECTIVE, `UNRESOLVED|]
@@ -678,13 +678,15 @@ module CompetitorType = {
     };
   };
 
-  let competitorTypeInitValue =
-      (~isOwner: bool, ~state: option(Types.measurableState)) =>
-    switch (isOwner, state) {
+  let competitorTypeInitValue = (~measurable: Types.measurable) => {
+    let isAdmin = ChannelMembershipRole.isAdmin(measurable.channel);
+    let iAmOwner = measurable.iAmOwner |> E.Bool.O.toBool;
+    switch (iAmOwner || isAdmin, measurable.state) {
     | (true, Some(`JUDGED)) => "OBJECTIVE"
     | (false, Some(`JUDGED)) => "COMMENT"
     | _ => "COMPETITIVE"
     };
+  };
 
   let toSelection = (competitorType: t) =>
     switch (competitorType) {

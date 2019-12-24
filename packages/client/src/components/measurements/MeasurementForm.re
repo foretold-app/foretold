@@ -1,11 +1,5 @@
 [@react.component]
-let make =
-    (
-      ~measurable: Types.measurable,
-      ~measurableId: string,
-      ~isCreator: bool,
-      ~defaultValueText="",
-    ) => {
+let make = (~measurable: Types.measurable, ~defaultValueText="") => {
   <Providers.AppContext.Consumer>
     ...{({loggedUser}) =>
       switch (loggedUser) {
@@ -20,7 +14,7 @@ let make =
               ) =>
                 MeasurementCreate.mutate(
                   mutation,
-                  measurableId,
+                  measurable.id,
                   value,
                   competitorType,
                   description,
@@ -30,7 +24,6 @@ let make =
               }
               bots={loggedUser.bots}
               data
-              isCreator
               loggedUser
             />
           }

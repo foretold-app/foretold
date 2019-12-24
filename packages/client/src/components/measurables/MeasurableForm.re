@@ -35,7 +35,7 @@ let schema =
     Custom(
       Name,
       values =>
-        Js.String.length(values.name) > 64
+        Js.String.length(values.name) > 512
           ? ReSchema.Error("Keep it short!") : Valid,
     ),
     Custom(

@@ -408,7 +408,7 @@ module Create = {
             let input =
               state.values.showDescriptionDate == "TRUE"
                 ? {
-                  "name": state.values.name,
+                  "name": state.values.name |> E.J.fromString,
                   "labelCustom": Some(state.values.labelCustom),
                   "labelProperty": Some(state.values.labelProperty),
                   "expectedResolutionDate":
@@ -430,7 +430,7 @@ module Create = {
                       ? None : Some(state.values.max |> float_of_string),
                 }
                 : {
-                  "name": state.values.name,
+                  "name": state.values.name |> E.J.fromString,
                   "labelCustom": Some(state.values.labelCustom),
                   "labelProperty": Some(state.values.labelProperty),
                   "expectedResolutionDate":
@@ -526,7 +526,7 @@ module Edit = {
                 MeasurableUpdate.Query.make(
                   ~id,
                   ~input={
-                    "name": state.values.name,
+                    "name": state.values.name |> E.J.fromString,
                     "labelCustom":
                       state.values.labelCustom |> Rationale.Option.some,
                     "labelProperty":

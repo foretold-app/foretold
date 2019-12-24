@@ -123,7 +123,7 @@ let toMeasurable = (m): Types.measurable => {
 
   Primary.Measurable.make(
     ~id=m##id,
-    ~name=m##name,
+    ~name=m##name |> E.J.toString,
     ~channelId=m##channelId,
     ~labelCustom=m##labelCustom,
     ~resolutionEndpoint=m##resolutionEndpoint,

@@ -70,7 +70,7 @@ let toMeasurable = m => {
 
   Primary.Measurable.make(
     ~id=m##id,
-    ~name=m##name,
+    ~name=m##name |> E.J.toString,
     ~channelId=m##channelId,
     ~channel,
     ~isArchived=Some(m##isArchived),

@@ -8,6 +8,9 @@ module.exports = {
         'Notebooks_name_ownerId_unique',
       );
 
+      // @todo: We forget to change name of the index.
+      // @todo: It should be named as "Notebooks_unique" or similar.
+
       await queryInterface.addIndex('Notebooks', [
         'name', 'ownerId', 'channelId',
       ], {
@@ -31,6 +34,10 @@ module.exports = {
         'Notebooks',
         'Notebooks_name_ownerId_unique',
       );
+
+      // @todo: Here first of all we should have to remove
+      // @todo: duplicates and only then to create another
+      // @todo: unique index.
 
       await queryInterface.addIndex('Notebooks', [
         'name', 'ownerId',

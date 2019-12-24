@@ -557,7 +557,7 @@ module Edit = {
                   },
                   (),
                 )##variables,
-              ~refetchQueries=[|"getMeasurables"|],
+              ~refetchQueries=[|"getMeasurables", "getMeasurable"|],
               (),
             )
             |> ignore;

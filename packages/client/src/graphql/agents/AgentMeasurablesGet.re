@@ -9,7 +9,7 @@ let toNode = (marketType, finalComparisonMeasurement, node) => {
   let measurable =
     Primary.Measurable.make(
       ~id=measurable##id,
-      ~name=measurable##name,
+      ~name=measurable##name |> E.J.toString,
       ~channelId=measurable##channelId,
       (),
     );

@@ -25,7 +25,7 @@ let toMeasurement = (measurement): Types.measurement => {
       Some(
         Primary.Measurable.make(
           ~id=measurable##id,
-          ~name=measurable##name,
+          ~name=measurable##name |> E.J.toString,
           ~channelId=measurable##channelId,
           ~valueType=measurable##valueType,
           (),

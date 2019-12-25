@@ -234,6 +234,7 @@ module Bot = {
       | `AGGREGATION => "Aggregation"
       | `COMPETITIVE => "Prediction"
       | `OBJECTIVE => "Resolution"
+      | _ => Js.Exn.raiseError("Invalid Competitor Type")
       };
   };
 
@@ -419,7 +420,9 @@ module Channel = {
       ~name="Home",
       ~description=
         Some(
-          "Home lists questions and activity from communities you have joined. To see the list of all public communities, click [here](/communities).",
+          "Home lists questions and activity from communities you have joined. "
+          ++ "To see the list of all public communities, click "
+          ++ "[here](/communities).",
         ),
       ~isArchived=false,
       ~isPublic=true,

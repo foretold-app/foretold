@@ -36,8 +36,7 @@ let make = (~pageParams: Types.pageParams) => {
               {Reducer.Components.correctButtonDuo(selectWithPaginationParams)}
             </>
           }
-        }
-        isFluid=false>
+        }>
         {switch (
            selectWithPaginationParams.response,
            selectWithPaginationParams.selection,

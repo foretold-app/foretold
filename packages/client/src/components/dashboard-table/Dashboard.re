@@ -11,7 +11,7 @@ module Styles = {
 let make = () => {
   let (text, setText) = React.useState(() => "");
 
-  <SLayout isFluid=true>
+  <SLayout container=`fluid>
     <FC.PageCard.Body>
       <div className=Styles.padding>
         <Antd.Input.TextArea

@@ -128,13 +128,14 @@ let toLayoutInput =
   switch (state) {
   | LoadedAndUnselected(l) =>
     <SLayout
-      head={LoadedAndUnselected.header(l, stats, selectedState)} isFluid=true>
+      head={LoadedAndUnselected.header(l, stats, selectedState)}
+      container=`fluid>
       {LoadedAndUnselected.measurableIndexTable(l)}
     </SLayout>
 
   | LoadedAndSelected(l) =>
     <>
-      <SLayout head={LoadedAndSelected.header(l, send)} isFluid=true>
+      <SLayout head={LoadedAndSelected.header(l, send)} container=`fluid>
         <MeasurablePage
           measurable={l.selectedMeasurable}
           key={l.selectedMeasurable.id}
@@ -147,14 +148,12 @@ let toLayoutInput =
     </>
 
   | WithoutChannel(_) =>
-    <SLayout head=E.React2.null isFluid=true> {"No channel." |> ste} </SLayout>
+    <SLayout container=`fluid> {"No channel." |> ste} </SLayout>
 
   | InvalidIndexError(_) =>
-    <SLayout head=E.React2.null isFluid=true>
-      {"Item Not Valid" |> ste}
-    </SLayout>
+    <SLayout container=`fluid> {"Item Not Valid" |> ste} </SLayout>
 
   | WithChannelButNotQuery(_c) =>
-    <SLayout head=E.React2.null isFluid=true> <Spin /> </SLayout>
+    <SLayout container=`fluid> <Spin /> </SLayout>
   };
 };

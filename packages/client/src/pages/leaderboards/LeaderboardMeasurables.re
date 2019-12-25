@@ -60,7 +60,7 @@ let make =
         (),
       );
 
-    <SLayout head isFluid=true> body </SLayout>;
+    <SLayout head container=`fluid> body </SLayout>;
   };
 
   <Reducer

@@ -3,5 +3,5 @@ let make = (~title="Communities") => {
   let head = <SLayout.TextDiv text=title />;
   let body = <ChannelTable isArchived=[|Some(`FALSE)|] />;
 
-  <SLayout head isFluid=false> body </SLayout>;
+  <SLayout head> body </SLayout>;
 };

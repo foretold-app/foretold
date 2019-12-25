@@ -87,7 +87,7 @@ let make = (~measurable: Types.measurable) => {
         ~paginationPage=E.React2.null,
         (),
       )}
-      isFluid=true>
+      container=`fluid>
       <FC.PageCard.Body>
         <Style.Grid.Div
           float=`left
@@ -125,7 +125,7 @@ let make = (~measurable: Types.measurable) => {
         ~paginationPage=E.React2.null,
         (),
       )}
-      isFluid=true>
+      container=`fluid>
       <FC.PageCard.Body>
         <Style.Grid.Div
           float=`left

@@ -11,7 +11,7 @@ let make = (~notebookRedux: NotebookRedux.t) => {
              |> E.O.default("");
 
            <div>
-             <SLayout isFluid=true>
+             <SLayout container=`none>
                <FC.PageCard.Body>
                  <MeasurementForm
                    measurable

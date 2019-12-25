@@ -1,6 +1,6 @@
 [@react.component]
 let make = () => {
-  <SLayout isFluid=true>
+  <SLayout container=`fluid>
     <Center> {"Sorry, but the page is not found :(" |> Utils.ste} </Center>
   </SLayout>;
 };

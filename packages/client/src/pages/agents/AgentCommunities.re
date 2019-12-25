@@ -14,5 +14,5 @@ let make = (~agentId: string) => {
       </FC.Base.Div>
     </div>;
 
-  <SLayout head isFluid=false> body </SLayout>;
+  <SLayout head> body </SLayout>;
 };

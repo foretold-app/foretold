@@ -81,7 +81,7 @@ let make = (~notebookId: string) => {
     | Some(notebook) =>
       <Div flexDirection=`row styles=[Styles.full]>
         <Div flex={`num(5.)}>
-          <SLayout isFluid=true>
+          <SLayout container=`fluid>
             <Div flexDirection=`column>
               <Div flex={`num(1.)}> <Tabs switchTab tab notebook /> </Div>
               <Div flex={`num(1.)}>

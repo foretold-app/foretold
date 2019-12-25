@@ -59,7 +59,7 @@ module Tabs = {
 
 module Inner = {
   [@react.component]
-  let make = (~measurable) => {
+  let make = (~measurable, ~block=`none) => {
     let (tab, setTab) = React.useState(() => Measurements);
 
     let switchTab = tabToSwitch => setTab(_ => tabToSwitch);
@@ -67,7 +67,7 @@ module Inner = {
       <Tabs switchTab paginationPage tab measurable />;
 
     switch (tab) {
-    | Measurements => <Measurements measurableId={measurable.id} head />
+    | Measurements => <Measurements measurableId={measurable.id} head block />
 
     | Scores =>
       <LeaderboardMeasurables

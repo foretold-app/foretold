@@ -21,7 +21,11 @@ let make = (~notebookRedux: NotebookRedux.t) => {
                </FC.PageCard.Body>
              </SLayout>
              <SLayout.Container container=`fluidLeft>
-               <MeasurableBottomSection.Inner measurable key={measurable.id} />
+               <MeasurableBottomSection.Inner
+                 measurable
+                 key={measurable.id}
+                 block=`inside
+               />
              </SLayout.Container>
            </div>;
          }),

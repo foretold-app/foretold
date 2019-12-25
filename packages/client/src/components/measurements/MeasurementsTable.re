@@ -320,13 +320,13 @@ let logScore = _ =>
     (),
   );
 
-let getPredictionDistribution = bounds =>
+let getPredictionDistribution = (~bounds, ~width=230, ()) =>
   Table.Column.make(
     ~name="Distribution" |> Utils.ste,
     ~flex=7,
     ~render=
       (measurement: Types.measurement) =>
-        <Helpers.SmallDistribution measurement bounds />,
+        <Helpers.SmallDistribution measurement bounds width />,
     ~show=
       (measurement: Types.measurement) =>
         switch (measurement.measurable) {
@@ -350,6 +350,7 @@ let bottomSubRowFn =
   );
 
 type columns = [ | `none | `extended];
+type block = [ | `none | `inside];
 
 [@react.component]
 let make =
@@ -357,42 +358,69 @@ let make =
       ~measurementsList: list(Types.measurement),
       ~measurableValueType: Types.valueType,
       ~colums: columns=`none,
+      ~block: block=`none,
     ) => {
   let bounds = Helpers.bounds(measurementsList |> E.A.of_list);
 
   let all =
-    switch (colums, measurableValueType) {
-    | (`none, `FLOAT) => [|
+    switch (colums, block, measurableValueType) {
+    | (`none, `none, `FLOAT) => [|
         agent,
-        getPredictionDistribution(bounds),
+        getPredictionDistribution(~bounds, ()),
         predictionValue,
         predictionText,
         time,
       |]
-    | (`extended, `FLOAT) => [|
+    | (`none, `none, `PERCENTAGE) => [|
         agent,
-        getPredictionDistribution(bounds),
+        getPredictionDistribution(~bounds, ()),
+        predictionValue,
+        time,
+      |]
+    | (`extended, `none, `FLOAT) => [|
+        agent,
+        getPredictionDistribution(~bounds, ()),
         predictionValue,
         predictionText,
         logScore(),
         score(),
         time,
       |]
-    | (`none, `PERCENTAGE) => [|
+    | (`extended, `none, `PERCENTAGE) => [|
         agent,
-        getPredictionDistribution(bounds),
-        predictionValue,
-        time,
-      |]
-    | (`extended, `PERCENTAGE) => [|
-        agent,
-        getPredictionDistribution(bounds),
+        getPredictionDistribution(~bounds, ()),
         predictionValue,
         logScore(),
         score(),
         time,
       |]
-    | _ => Js.Exn.raiseError("Date not supported ")
+    | (`none, `inside, `FLOAT) => [|
+        agent,
+        getPredictionDistribution(~bounds, ~width=150, ()),
+        predictionText,
+        time,
+      |]
+    | (`none, `inside, `PERCENTAGE) => [|
+        agent,
+        getPredictionDistribution(~bounds, ~width=150, ()),
+        time,
+      |]
+    | (`extended, `inside, `FLOAT) => [|
+        agent,
+        getPredictionDistribution(~bounds, ~width=150, ()),
+        predictionText,
+        logScore(),
+        score(),
+        time,
+      |]
+    | (`extended, `inside, `PERCENTAGE) => [|
+        agent,
+        getPredictionDistribution(~bounds, ~width=150, ()),
+        logScore(),
+        score(),
+        time,
+      |]
+    | _ => Js.Exn.raiseError("Date not supported")
     };
 
   let measurementsList' = measurementsList;

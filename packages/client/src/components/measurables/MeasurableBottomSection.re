@@ -57,91 +57,100 @@ module Tabs = {
   };
 };
 
-[@react.component]
-let make = (~measurable: Types.measurable) => {
-  let (tab, setTab) = React.useState(() => Measurements);
+module Inner = {
+  [@react.component]
+  let make = (~measurable) => {
+    let (tab, setTab) = React.useState(() => Measurements);
 
-  let switchTab = tabToSwitch => setTab(_ => tabToSwitch);
-  let head = (~channelId: option(string), ~paginationPage, ()) =>
-    <Tabs switchTab paginationPage tab measurable />;
+    let switchTab = tabToSwitch => setTab(_ => tabToSwitch);
+    let head = (~channelId: option(string), ~paginationPage, ()) =>
+      <Tabs switchTab paginationPage tab measurable />;
 
-  switch (tab) {
-  | Measurements => <Measurements measurableId={measurable.id} head />
-  | Scores =>
-    <LeaderboardMeasurables
-      channelId={Some(measurable.channelId)}
-      measurableId={Some(measurable.id)}
-      columns=LeaderboardTable.Columns.measurables'
-      finalComparisonMeasurement={
-        measurable.state == Some(`JUDGED)
-          ? Some(`LAST_OBJECTIVE_MEASUREMENT)
-          : Some(`LAST_AGGREGATE_MEASUREMENT)
-      }
-      head
-    />
+    switch (tab) {
+    | Measurements => <Measurements measurableId={measurable.id} head />
+    | Scores =>
+      <LeaderboardMeasurables
+        channelId={Some(measurable.channelId)}
+        measurableId={Some(measurable.id)}
+        columns=LeaderboardTable.Columns.measurables'
+        finalComparisonMeasurement={
+          measurable.state == Some(`JUDGED)
+            ? Some(`LAST_OBJECTIVE_MEASUREMENT)
+            : Some(`LAST_AGGREGATE_MEASUREMENT)
+        }
+        head
+      />
 
-  | Details =>
-    <SLayout
-      head={head(
-        ~channelId=Some(measurable.channelId),
-        ~paginationPage=E.React2.null,
-        (),
-      )}
-      container=`fluid>
-      <FC.PageCard.Body>
-        <Style.Grid.Div
-          float=`left
-          styles=[
-            Css.style([
-              FC.PageCard.HeaderRow.Styles.itemTopPadding,
-              FC.PageCard.HeaderRow.Styles.itemBottomPadding,
-              Css.marginLeft(`em(1.0)),
-            ]),
-          ]>
-          <FC__Div>
-            <h4> {"Question Id:" |> Utils.ste} </h4>
-            <div> <MeasurableItems.Id measurable /> </div>
-          </FC__Div>
-          <FC__Div styles=[Styles.block]>
-            <h4> {"Name:" |> Utils.ste} </h4>
-            <MeasurableItems.LinkMeasurable measurable />
-          </FC__Div>
-          <FC__Div styles=[Styles.block]>
-            <h4> {"Desciption:" |> Utils.ste} </h4>
-            <MeasurableItems.Description measurable />
-          </FC__Div>
-          <FC__Div styles=[Styles.block]>
-            <h4> {"Owner:" |> Utils.ste} </h4>
-            <div> <MeasurableItems.CreatorLink measurable /> </div>
-          </FC__Div>
-        </Style.Grid.Div>
-      </FC.PageCard.Body>
-    </SLayout>
+    | Details =>
+      <SLayout
+        head={head(
+          ~channelId=Some(measurable.channelId),
+          ~paginationPage=E.React2.null,
+          (),
+        )}
+        container=`none>
+        <FC.PageCard.Body>
+          <Style.Grid.Div
+            float=`left
+            styles=[
+              Css.style([
+                FC.PageCard.HeaderRow.Styles.itemTopPadding,
+                FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+                Css.marginLeft(`em(1.0)),
+              ]),
+            ]>
+            <FC__Div>
+              <h4> {"Question Id:" |> Utils.ste} </h4>
+              <div> <MeasurableItems.Id measurable /> </div>
+            </FC__Div>
+            <FC__Div styles=[Styles.block]>
+              <h4> {"Name:" |> Utils.ste} </h4>
+              <MeasurableItems.LinkMeasurable measurable />
+            </FC__Div>
+            <FC__Div styles=[Styles.block]>
+              <h4> {"Desciption:" |> Utils.ste} </h4>
+              <MeasurableItems.Description measurable />
+            </FC__Div>
+            <FC__Div styles=[Styles.block]>
+              <h4> {"Owner:" |> Utils.ste} </h4>
+              <div> <MeasurableItems.CreatorLink measurable /> </div>
+            </FC__Div>
+          </Style.Grid.Div>
+        </FC.PageCard.Body>
+      </SLayout>
 
-  | Edit =>
-    <SLayout
-      head={head(
-        ~channelId=Some(measurable.channelId),
-        ~paginationPage=E.React2.null,
-        (),
-      )}
-      container=`fluid>
-      <FC.PageCard.Body>
-        <Style.Grid.Div
-          float=`left
-          styles=[
-            Css.style([
-              FC.PageCard.HeaderRow.Styles.itemTopPadding,
-              FC.PageCard.HeaderRow.Styles.itemBottomPadding,
-              Css.marginLeft(`em(1.0)),
-            ]),
-          ]>
-          <MeasurableEdit
-            measurableId={measurable.id}
-            key={"measurable-edit-" ++ measurable.id}
-          />
-        </Style.Grid.Div>
-      </FC.PageCard.Body>
-    </SLayout>
+    | Edit =>
+      <SLayout
+        head={head(
+          ~channelId=Some(measurable.channelId),
+          ~paginationPage=E.React2.null,
+          (),
+        )}
+        container=`none>
+        <FC.PageCard.Body>
+          <Style.Grid.Div
+            float=`left
+            styles=[
+              Css.style([
+                FC.PageCard.HeaderRow.Styles.itemTopPadding,
+                FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+                Css.marginLeft(`em(1.0)),
+              ]),
+            ]>
+            <MeasurableEdit
+              measurableId={measurable.id}
+              key={"measurable-edit-" ++ measurable.id}
+            />
+          </Style.Grid.Div>
+        </FC.PageCard.Body>
+      </SLayout>
+    };
   };
+};
+
+[@react.component]
+let make = (~measurable) => {
+  <SLayout.Container container=`fluid>
+    <Inner measurable />
+  </SLayout.Container>;
 };

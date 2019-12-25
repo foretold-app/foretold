@@ -1,6 +1,6 @@
 open Utils;
 
-type container = [ | `fixedWidth | `fluid | `none];
+type container = [ | `fixedWidth | `fluid | `none | `fluidLeft];
 
 module Styles = {
   open Css;
@@ -30,6 +30,7 @@ module Styles = {
     switch (container) {
     | `fixedWidth => style([maxWidth(`px(1170)), margin(`auto)])
     | `fluid => style([paddingLeft(`em(2.0)), paddingRight(`em(2.0))])
+    | `fluidLeft => style([paddingRight(`em(2.0))])
     | `none => style([])
     };
 
@@ -96,6 +97,12 @@ module SeriesHead = {
     </div>;
 };
 
+module Container = {
+  [@react.component]
+  let make = (~container=`fixedWidth, ~children) =>
+    <div className={Styles.container(container)}> children </div>;
+};
+
 [@react.component]
 let make =
     (~head=ReasonReact.null, ~container=`fixedWidth, ~children=<Null />) => {
@@ -110,12 +117,12 @@ let make =
         @ FC.Base.BaseStyles.fullWidthFloatLeft,
       )
     )>
-    <div className={Styles.container(container)}>
+    <Container container>
       <FC.PageCard>
         {head != ReasonReact.null
            ? <FC.PageCard.HeaderRow> head </FC.PageCard.HeaderRow> : head}
         <FC.PageCard.Body> children </FC.PageCard.Body>
       </FC.PageCard>
-    </div>
+    </Container>
   </FC.Base.Div>;
 };

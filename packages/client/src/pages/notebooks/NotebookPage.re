@@ -3,8 +3,7 @@ open Style.Grid;
 module Styles = {
   open Css;
   let full = style([float(`left), width(`percent(100.))]);
-  let sidebarOutside =
-    style([background(`hex("f0f2f5")), paddingLeft(`em(1.0))]);
+  let sidebarOutside = style([background(`hex("f0f2f5"))]);
   let sidebar = style([position(`sticky), top(`em(2.0)), float(`left)]);
 };
 

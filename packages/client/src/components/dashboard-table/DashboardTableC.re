@@ -97,6 +97,7 @@ let tableJson: Js.Json.t = Json.parseOrRaise(tableJsonString);
 
 [@react.component]
 let make = (~tableJson=tableJson, ~editor: editor) => {
+  // @todo: Does this "memo" work on each time of rendering?
   let tableJson = React.useMemo(_ => DashboardTable.Json.decode(tableJson));
 
   switch (tableJson) {

@@ -222,6 +222,8 @@ module Columns = {
     time,
   |];
 
+  let notebooks = [|agent, timeAveragedScore2, timeActivityRatio|];
+
   let members = [|
     agent,
     totalScore,

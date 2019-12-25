@@ -59,7 +59,12 @@ module Tabs = {
 
 module Inner = {
   [@react.component]
-  let make = (~measurable, ~block=`none) => {
+  let make =
+      (
+        ~measurable,
+        ~block=`none,
+        ~leaderboardColumns=LeaderboardTable.Columns.measurables',
+      ) => {
     let (tab, setTab) = React.useState(() => Measurements);
 
     let switchTab = tabToSwitch => setTab(_ => tabToSwitch);
@@ -73,7 +78,7 @@ module Inner = {
       <LeaderboardMeasurables
         channelId={Some(measurable.channelId)}
         measurableId={Some(measurable.id)}
-        columns=LeaderboardTable.Columns.measurables'
+        columns=leaderboardColumns
         finalComparisonMeasurement={
           measurable.state == Some(`JUDGED)
             ? Some(`LAST_OBJECTIVE_MEASUREMENT)

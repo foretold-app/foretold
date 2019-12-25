@@ -25,6 +25,7 @@ let make = (~notebookRedux: NotebookRedux.t) => {
                  measurable
                  key={measurable.id}
                  block=`inside
+                 leaderboardColumns=LeaderboardTable.Columns.notebooks
                />
              </SLayout.Container>
            </div>;

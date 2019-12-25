@@ -565,6 +565,12 @@ module Measurable = {
     };
   };
 
+  let iCanEdit = (~measurable: Types.measurable) => {
+    let isAdmin = ChannelMembershipRole.isAdmin(measurable.channel);
+    let iAmOwner = measurable.iAmOwner |> E.Bool.O.toBool;
+    isAdmin || iAmOwner;
+  };
+
   let make =
       (
         ~id,
@@ -668,9 +674,7 @@ module CompetitorType = {
     };
 
   let availableInputs = (~measurable: Types.measurable) => {
-    let isAdmin = ChannelMembershipRole.isAdmin(measurable.channel);
-    let iAmOwner = measurable.iAmOwner |> E.Bool.O.toBool;
-    switch (iAmOwner || isAdmin, measurable.state) {
+    switch (Measurable.iCanEdit(~measurable), measurable.state) {
     | (true, Some(`JUDGED)) => [|`COMMENT, `OBJECTIVE, `UNRESOLVED|]
     | (true, _) => [|`COMMENT, `COMPETITIVE, `OBJECTIVE, `UNRESOLVED|]
     | (false, Some(`JUDGED)) => [|`COMMENT|]
@@ -679,9 +683,7 @@ module CompetitorType = {
   };
 
   let competitorTypeInitValue = (~measurable: Types.measurable) => {
-    let isAdmin = ChannelMembershipRole.isAdmin(measurable.channel);
-    let iAmOwner = measurable.iAmOwner |> E.Bool.O.toBool;
-    switch (iAmOwner || isAdmin, measurable.state) {
+    switch (Measurable.iCanEdit(~measurable), measurable.state) {
     | (true, Some(`JUDGED)) => "OBJECTIVE"
     | (false, Some(`JUDGED)) => "COMMENT"
     | _ => "COMPETITIVE"

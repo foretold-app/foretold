@@ -45,6 +45,10 @@ type permission = [
   | `SERIES_CREATE
   | `USER_UPDATE
   | `GLOBAL_SETTING_UPDATE
+  | `INVITATION_CREATE
+  | `PREFERENCE_UPDATE
+  | `SUBSCRIBE
+  | `UNSUBSCRIBE
 ];
 
 type marketType = [ | `MARKET | `NON_MARKET];

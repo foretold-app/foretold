@@ -26,13 +26,16 @@ async function measurementValueValidation(root, args, _context, _info) {
 }
 
 /**
+ * Before split this function onto logic functions think twice.
  * @param {*} root
  * @param {object} args
  * @param {Schema.Context} context
  * @param {object} _info
  * @return {Promise<boolean>}
  */
-async function measurableStateValidation(root, args, context, _info) {
+async function competitiveMeasurementCanBeAddedToOpenMeasurable(
+  root, args, context, _info,
+) {
   const measurementType = _.get(args, 'input.competitorType', null);
   const isCompetitive
     = MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE === measurementType;
@@ -58,7 +61,7 @@ async function measurableStateValidation(root, args, context, _info) {
  * @param {object} _info
  * @return {Promise<boolean>}
  */
-async function measurementTypeValidation(root, args, context, _info) {
+async function measurementValueTypeValidation(root, args, context, _info) {
   const inputValue = _.get(args, ['input', 'value'], null);
   const type = _.get(context, 'measurable.valueType', '');
 
@@ -81,7 +84,7 @@ async function measurementTypeValidation(root, args, context, _info) {
 }
 
 module.exports = {
-  measurableStateValidation,
   measurementValueValidation,
-  measurementTypeValidation,
+  measurementValueTypeValidation,
+  competitiveMeasurementCanBeAddedToOpenMeasurable,
 };

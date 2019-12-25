@@ -3,7 +3,7 @@ const changeCase = require('change-case');
 
 const { rules } = require('./permissions');
 const { rulesChannelMemberships } = require('./permissions');
-const { rulesChannel } = require('./permissions');
+const { rulesChannels } = require('./permissions');
 const { rulesMeasurables } = require('./permissions');
 const { rulesBots } = require('./permissions');
 
@@ -85,7 +85,7 @@ async function availableAll(root, args, context, info) {
  * @returns {Promise<*>}
  */
 async function availableChannelPermissions(root, args, context, info) {
-  return getAll(rulesChannel())(root, args, context, info);
+  return getAll(rulesChannels())(root, args, context, info);
 }
 
 /**

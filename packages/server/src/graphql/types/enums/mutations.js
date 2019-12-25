@@ -20,6 +20,10 @@ const mutations = new graphql.GraphQLEnumType({
     BOT_CREATE: { value: 'BOT_CREATE' },
     BOT_UPDATE: { value: 'BOT_UPDATE' },
     GLOBAL_SETTING_UPDATE: { value: 'GLOBAL_SETTING_UPDATE' },
+    PREFERENCE_UPDATE: { value: 'PREFERENCE_UPDATE' },
+    SUBSCRIBE: { value: 'SUBSCRIBE' },
+    UNSUBSCRIBE: { value: 'UNSUBSCRIBE' },
+    INVITATION_CREATE: { value: 'INVITATION_CREATE' },
   },
 });
 

@@ -78,7 +78,11 @@ module Query = [%graphql
               node{
                   id
                   createdAt @bsDecoder(fn: "E.J.toMoment")
-                  timeAverageScore (marketType: $marketType, startAt: AGENT_MEASUREMENT_CREATION_TIME, finalComparisonMeasurement: $finalComparisonMeasurement) {
+                  timeAverageScore (
+                    marketType: $marketType
+                    startAt: AGENT_MEASUREMENT_CREATION_TIME
+                    finalComparisonMeasurement: $finalComparisonMeasurement
+                  ) {
                     score
                     timeActivityRatio
                   }

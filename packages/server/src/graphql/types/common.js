@@ -1,14 +1,7 @@
 const graphql = require('graphql');
-const { GraphQLInputInt } = require('graphql-input-number');
 
 const resolvers = require('../resolvers');
-const { cursor } = require('./scalars');
-
-const int500 = GraphQLInputInt({
-  name: 'Int500',
-  min: 1,
-  max: 500,
-});
+const { cursor, int500 } = require('./scalars');
 
 const iAmOwner = {
   type: graphql.GraphQLNonNull(graphql.GraphQLBoolean),
@@ -73,16 +66,12 @@ const order = new graphql.GraphQLInputObjectType({
   }),
 });
 
-const orderList = new graphql.GraphQLList(order);
-
 module.exports = {
   isMe,
-  orderList,
+  order,
   iAmOwner,
   isArchived,
   iAmOwnerByUserId,
   connectionArguments,
   pageInfoConnection,
-
-  int500,
 };

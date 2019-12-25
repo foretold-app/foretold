@@ -65,17 +65,14 @@ module Styles = {
 
 module CompetitorTypeSelect = {
   [@react.component]
-  let make = (~isOwner, ~state, ~send, ~measurable: Types.measurable) => {
-    let options =
-      Primary.CompetitorType.availableSelections(
-        ~isOwner,
-        ~state=measurable.state,
-      );
+  let make = (~state, ~send, ~measurable: Types.measurable) => {
+    let options = Primary.CompetitorType.availableSelections(~measurable);
 
     <Antd.Select
       value={state.competitorType}
       className=Styles.fullWidth
-      onChange={e => send(UpdateCompetitorType(e))}>
+      onChange={e => send(UpdateCompetitorType(e))}
+      key={"competitor-type-select" ++ measurable.id}>
       {options |> ReasonReact.array}
     </Antd.Select>;
   };
@@ -464,7 +461,6 @@ module Main = {
   let make =
       (
         ~state: state,
-        ~isCreator: bool,
         ~send,
         ~onSubmit,
         ~measurable: Types.measurable,
@@ -500,7 +496,7 @@ module Main = {
       </div>
       <div className=Styles.inputSection>
         <div className=Styles.select>
-          <CompetitorTypeSelect isOwner=isCreator state send measurable />
+          <CompetitorTypeSelect state send measurable />
         </div>
         dataTypeSelect
         <ValueInputMapper state measurable send loggedUser />
@@ -529,7 +525,6 @@ let make =
     (
       ~data: MeasurementCreate.Mutation.renderPropObj,
       ~onUpdate=_ => (),
-      ~isCreator=false,
       ~onSubmit=_ => (),
       ~measurable: Types.measurable,
       ~bots: option(array(Types.bot)),
@@ -537,10 +532,7 @@ let make =
       ~defaultValueText="",
     ) => {
   let competitorTypeInitValue =
-    Primary.CompetitorType.competitorTypeInitValue(
-      ~isOwner=isCreator,
-      ~state=measurable.state,
-    );
+    Primary.CompetitorType.competitorTypeInitValue(~measurable);
 
   let (floatCdf, setFloatCdf) = React.useState(() => FC__Types.Dist.empty);
   let (floatCdfAndPoint, setFloatCdfAndPoint) =
@@ -642,8 +634,7 @@ let make =
     ();
   };
 
-  let block =
-    <Main state isCreator send onSubmit measurable bots loggedUser />;
+  let block = <Main state send onSubmit measurable bots loggedUser />;
 
   <Style.BorderedBox>
     {switch (data.result) {

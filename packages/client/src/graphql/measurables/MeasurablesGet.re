@@ -25,6 +25,7 @@ let toMeasurable = m => {
            ~name=channel##name |> E.J.toString,
            ~isArchived=channel##isArchived,
            ~isPublic=channel##isPublic,
+           ~myRole=Some(channel##myRole),
            (),
          )
        );
@@ -142,6 +143,7 @@ module Query = [%graphql
                 description
                 isPublic
                 isArchived
+                myRole
               }
               labelCustom
               resolutionEndpoint

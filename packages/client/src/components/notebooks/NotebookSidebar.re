@@ -19,8 +19,6 @@ let make = (~notebookRedux: NotebookRedux.t) => {
                <FC.PageCard.Body>
                  <MeasurementForm
                    measurable
-                   measurableId={measurable.id}
-                   isCreator=false
                    defaultValueText
                    key={measurable.id}
                  />

@@ -1,3 +1,5 @@
+const { GraphQLInputInt } = require('graphql-input-number');
+
 const cursor = require('./cursor');
 const jwt = require('./jwt');
 const { createObjectId } = require('./object-id');
@@ -21,6 +23,12 @@ const string3to4K = createLimitedString(3, 4 * 1024);
 const string0to128K = createLimitedString(0, 128 * 1024);
 const string3to128K = createLimitedString(3, 128 * 1024);
 
+const int500 = GraphQLInputInt({
+  name: 'Int500',
+  min: 1,
+  max: 500,
+});
+
 module.exports = {
   cursor,
   jwt,
@@ -42,4 +50,6 @@ module.exports = {
 
   string0to128K,
   string3to128K,
+
+  int500,
 };

@@ -63,7 +63,7 @@ module Query = [%graphql
         $measurableState: [measurableState]
         $competitorType: [competitorType!]
      ) {
-        measurements: measurements(
+        measurements (
             measurableId: $measurableId
             agentId: $agentId
             channelId: $channelId

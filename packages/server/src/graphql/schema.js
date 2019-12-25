@@ -124,7 +124,7 @@ const schema = new graphql.GraphQLSchema({
             ),
           },
           minPredictionCountTotal: { type: graphql.GraphQLInt },
-          order: { type: types.common.orderList },
+          order: { type: new graphql.GraphQLList(types.common.order) },
         },
         resolve: resolvers.agentMeasurables.all,
       },
@@ -290,7 +290,7 @@ const schema = new graphql.GraphQLSchema({
           input: {
             type: graphql.GraphQLNonNull(
               types.measurables.measurableCreateInput,
-            )
+            ),
           },
         },
         resolve: resolvers.measurables.create,
@@ -302,7 +302,7 @@ const schema = new graphql.GraphQLSchema({
           input: {
             type: graphql.GraphQLNonNull(
               types.series.seriesCreateInput,
-            )
+            ),
           },
         },
         resolve: resolvers.series.create,
@@ -417,7 +417,8 @@ const schema = new graphql.GraphQLSchema({
         args: {
           input: {
             type: graphql.GraphQLNonNull(
-              types.channelMemberships.channelMembershipDeleteInput,),
+              types.channelMemberships.channelMembershipDeleteInput,
+            ),
           },
         },
         resolve: resolvers.channelMemberships.remove,

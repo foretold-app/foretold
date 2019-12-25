@@ -76,15 +76,16 @@ module Inner = {
 
     | Scores =>
       <LeaderboardMeasurables
-        channelId={Some(measurable.channelId)}
-        measurableId={Some(measurable.id)}
+        head
+        container=`none
         columns=leaderboardColumns
         finalComparisonMeasurement={
           measurable.state == Some(`JUDGED)
             ? Some(`LAST_OBJECTIVE_MEASUREMENT)
             : Some(`LAST_AGGREGATE_MEASUREMENT)
         }
-        head
+        measurableId={Some(measurable.id)}
+        channelId={Some(measurable.channelId)}
       />
 
     | Details =>

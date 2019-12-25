@@ -68,6 +68,7 @@ module Inner = {
 
     switch (tab) {
     | Measurements => <Measurements measurableId={measurable.id} head />
+
     | Scores =>
       <LeaderboardMeasurables
         channelId={Some(measurable.channelId)}

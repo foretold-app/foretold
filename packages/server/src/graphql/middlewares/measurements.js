@@ -6,6 +6,7 @@ const { Binary, Percentage } = require('@foretold/measurement-value');
 const { UnresolvableResolution } = require('@foretold/measurement-value');
 const { Comment } = require('@foretold/measurement-value');
 
+const { MEASURABLE_STATE } = require('../../enums');
 const { MEASUREMENT_COMPETITOR_TYPE } = require('../../enums');
 const { MEASURABLE_VALUE_TYPE } = require('../../enums');
 const lang = require('../../../config/lang');
@@ -25,19 +26,28 @@ async function measurementValueValidation(root, args, _context, _info) {
 }
 
 /**
+ * Before split this function onto logic functions think twice.
  * @param {*} root
  * @param {object} args
- * @param {Schema.Context} _context
+ * @param {Schema.Context} context
  * @param {object} _info
  * @return {Promise<boolean>}
  */
-async function measurementCompetitorTypeValidation(
-  root, args, _context, _info,
+async function competitiveMeasurementCanBeAddedToOpenMeasurable(
+  root, args, context, _info,
 ) {
   const measurementType = _.get(args, 'input.competitorType', null);
   const isCompetitive
     = MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE === measurementType;
+
+  const measurableState = _.get(context, 'measurable.state', '');
+  const isMeasurableAvailable = [
+    MEASURABLE_STATE.OPEN,
+    MEASURABLE_STATE.JUDGEMENT_PENDING,
+  ].includes(measurableState);
+
   if (!isCompetitive) return true;
+  if (!isMeasurableAvailable) throw new Error(lang.measurableIsNotOpen());
 
   return true;
 }
@@ -76,5 +86,5 @@ async function measurementValueTypeValidation(root, args, context, _info) {
 module.exports = {
   measurementValueValidation,
   measurementValueTypeValidation,
-  measurementCompetitorTypeValidation,
+  competitiveMeasurementCanBeAddedToOpenMeasurable,
 };

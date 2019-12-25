@@ -6,15 +6,15 @@ const { setContextChannelMembershipsAdmins } = require('./channel-memberships');
 const { setContextMeasurable } = require('./measurables');
 const { setContextMeasurableByRoot } = require('./measurables');
 const { measurableNameValidation } = require('./measurables');
-const { measurableStateValidation } = require('./measurables');
 const { measurementValueValidation } = require('./measurements');
-const { measurementCompetitorTypeValidation } = require('./measurements');
 const { measurementValueTypeValidation } = require('./measurements');
 const { setContextBot } = require('./bots');
 const { setContextPreferenceFromId } = require('./preferences');
 const { setContextPreferenceFromAgentId } = require('./preferences');
 const { setContextUser } = require('./users');
 const { authenticationInputValidation } = require('./authentications');
+const { competitiveMeasurementCanBeAddedToOpenMeasurable }
+  = require('./measurements');
 
 /**
  * Do not try to use DRY principle here.
@@ -110,11 +110,14 @@ const middlewares = {
 
     measurementCreate: async (resolve, root, args, context, info) => {
       await measurementValueValidation(root, args, context, info);
-      await measurementCompetitorTypeValidation(root, args, context, info);
       await measurementValueTypeValidation(root, args, context, info);
 
-      await setContextMeasurable(root, args, context, info);
-      await measurableStateValidation(root, args, context, info);
+      {
+        await setContextMeasurable(root, args, context, info);
+        await competitiveMeasurementCanBeAddedToOpenMeasurable(
+          root, args, context, info,
+        );
+      }
 
       await setContextChannel(root, args, context, info);
       await setContextChannelMemberships(root, args, context, info);

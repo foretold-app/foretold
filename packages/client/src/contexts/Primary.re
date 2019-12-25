@@ -234,7 +234,7 @@ module Bot = {
       | `AGGREGATION => "Aggregation"
       | `COMPETITIVE => "Prediction"
       | `OBJECTIVE => "Resolution"
-      | _ => Js.Exn.raiseError("Invalid Competitor Type: " ++ e)
+      | _ => Js.Exn.raiseError("Invalid Competitor Type")
       };
   };
 

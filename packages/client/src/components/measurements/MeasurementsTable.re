@@ -1,10 +1,3 @@
-open Utils;
-open MomentRe;
-
-type measurement = Types.measurement;
-type measurable = Types.measurable;
-module Items = MeasurableItems;
-
 module Styles = {
   open Css;
 
@@ -36,13 +29,11 @@ module Styles = {
 };
 
 module Helpers = {
-  open Css;
-
   module SmallDistribution = {
     [@react.component]
     let make =
         (
-          ~measurement: measurement,
+          ~measurement: Types.measurement,
           ~bounds: (float, float),
           ~width=230,
           ~height=38,
@@ -69,7 +60,7 @@ module Helpers = {
         );
       | Ok(`FloatPoint(r)) =>
         <div className=Styles.result>
-          {r |> E.Float.with3DigitsPrecision |> ste}
+          {r |> E.Float.with3DigitsPrecision |> Utils.ste}
         </div>
       | _ => <Null />
       };
@@ -77,7 +68,7 @@ module Helpers = {
 
   module StatSummary = {
     [@react.component]
-    let make = (~measurement: measurement) =>
+    let make = (~measurement: Types.measurement) =>
       switch (measurement.value) {
       | Ok(`FloatCdf(r)) =>
         r
@@ -105,7 +96,7 @@ module Helpers = {
 
   module ValueText = {
     [@react.component]
-    let make = (~measurement: measurement) =>
+    let make = (~measurement: Types.measurement) =>
       <div className=Styles.secondaryText>
         {measurement.valueText
          |> E.O.bind(_, r => r == "" ? None : Some(r))
@@ -117,7 +108,7 @@ module Helpers = {
 
   module Description = {
     [@react.component]
-    let make = (~m: measurement) => {
+    let make = (~m: Types.measurement) => {
       switch (m.description) {
       | None
       | Some("") => <Null />
@@ -131,11 +122,11 @@ module Helpers = {
 
   module RelevantAt = {
     [@react.component]
-    let make = (~m: measurement) =>
+    let make = (~m: Types.measurement) =>
       m.relevantAt
       |> E.O.fmap(d =>
            <div className=Styles.date>
-             {d |> E.M.goFormat_standard |> ste}
+             {d |> E.M.goFormat_standard |> Utils.ste}
            </div>
          )
       |> E.O.default(<Null />);
@@ -147,7 +138,7 @@ module Helpers = {
     | _ => None
     };
 
-  let bounds = (measurements: Js_array.t(measurement)) => {
+  let bounds = (measurements: Js_array.t(Types.measurement)) => {
     let itemBounds =
       measurements
       |> E.A.keepMap(_, r => getFloatCdf(r.value))
@@ -171,7 +162,7 @@ module Helpers = {
     (min, max);
   };
 
-  let toChartMeasurement = (measurement: measurement) =>
+  let toChartMeasurement = (measurement: Types.measurement) =>
     switch (measurement.value) {
     | Ok(`FloatCdf(r)) =>
       switch (
@@ -186,28 +177,30 @@ module Helpers = {
 
   module MeasurerLink = {
     [@react.component]
-    let make = (~measurement: measurement) => {
+    let make = (~measurement: Types.measurement) => {
       let aLink = measurement.agent |> E.O.fmap(agent => <AgentLink agent />);
 
       let judgementStyle =
-        style([
-          selector(
-            " h3",
-            [
-              color(`rgba((55, 47, 68, 0.85))),
-              marginBottom(`px(0)),
-              fontSize(`em(1.15)),
-              fontWeight(`num(800)),
-            ],
-          ),
-          selector(" a", [fontSize(`em(0.9))]),
-        ]);
+        Css.(
+          style([
+            selector(
+              " h3",
+              [
+                color(`rgba((55, 47, 68, 0.85))),
+                marginBottom(`px(0)),
+                fontSize(`em(1.15)),
+                fontWeight(`num(800)),
+              ],
+            ),
+            selector(" a", [fontSize(`em(0.9))]),
+          ])
+        );
 
       let isJudge = Primary.Measurement.isJudgement(measurement);
 
       if (isJudge) {
         <div className=judgementStyle>
-          {"Resolution" |> ste |> E.React2.inH3}
+          {"Resolution" |> Utils.ste |> E.React2.inH3}
           {switch (aLink) {
            | Some(name) => <> name </>
            | None => E.React2.null
@@ -222,17 +215,17 @@ module Helpers = {
 
 module MeasurableLink = {
   [@react.component]
-  let make = (~measurement: measurement) => {
+  let make = (~measurement: Types.measurement) => {
     switch (measurement.measurable) {
-    | None => "" |> ste
-    | Some(measurable) => <Items.LinkMeasurable measurable />
+    | None => "" |> Utils.ste
+    | Some(measurable) => <MeasurableItems.LinkMeasurable measurable />
     };
   };
 };
 
 let predictionValue =
   Table.Column.make(
-    ~name="Prediction" |> ste,
+    ~name="Prediction" |> Utils.ste,
     ~flex=5,
     ~render=
       (measurement: Types.measurement) =>
@@ -243,7 +236,7 @@ let predictionValue =
 let predictionText =
   Table.Column.make(
     ~name={
-      "Input Text" |> ste;
+      "Input Text" |> Utils.ste;
     },
     ~flex=3,
     ~render=
@@ -254,7 +247,7 @@ let predictionText =
 
 let agent =
   Table.Column.make(
-    ~name="Member" |> ste,
+    ~name="Member" |> Utils.ste,
     ~flex=5,
     ~render=
       (measurement: Types.measurement) =>
@@ -264,7 +257,7 @@ let agent =
 
 let time =
   Table.Column.make(
-    ~name="Time" |> ste,
+    ~name="Time" |> Utils.ste,
     ~flex=5,
     ~render=
       (measurement: Types.measurement) =>
@@ -274,7 +267,7 @@ let time =
 
 let measurable =
   Table.Column.make(
-    ~name="Measurable" |> ste,
+    ~name="Measurable" |> Utils.ste,
     ~render=
       (measurement: Types.measurement) => <MeasurableLink measurement />,
     ~flex=5,
@@ -284,14 +277,14 @@ let measurable =
 let score = _ =>
   Table.Column.make(
     ~name={
-      "Relative Score" |> ste;
+      "Relative Score" |> Utils.ste;
     },
     ~help=
       Some({
-        headerContent: "Relative Score" |> ste,
+        headerContent: "Relative Score" |> Utils.ste,
         bodyContent:
           "The difference between the log error for this predictions vs. the log score for the most recent aggregate prediction."
-          |> ste,
+          |> Utils.ste,
       }),
     ~render=
       (measurement: Types.measurement) =>
@@ -307,13 +300,13 @@ let score = _ =>
 
 let logScore = _ =>
   Table.Column.make(
-    ~name="Log Score" |> ste,
+    ~name="Log Score" |> Utils.ste,
     ~help=
       Some({
-        headerContent: "Log Score" |> ste,
+        headerContent: "Log Score" |> Utils.ste,
         bodyContent:
           "The absolute log error of the forecast vs. the most recent resolution."
-          |> ste,
+          |> Utils.ste,
       }),
     ~render=
       (measurement: Types.measurement) =>
@@ -329,7 +322,7 @@ let logScore = _ =>
 
 let getPredictionDistribution = bounds =>
   Table.Column.make(
-    ~name="Distribution" |> ste,
+    ~name="Distribution" |> Utils.ste,
     ~flex=7,
     ~render=
       (measurement: Types.measurement) =>
@@ -356,30 +349,50 @@ let bottomSubRowFn =
       },
   );
 
+type columns = [ | `none | `extended];
+
 [@react.component]
 let make =
     (
-      ~measurementsList: list(measurement),
+      ~measurementsList: list(Types.measurement),
       ~measurableValueType: Types.valueType,
+      ~colums: columns=`none,
     ) => {
   let bounds = Helpers.bounds(measurementsList |> E.A.of_list);
 
   let all =
-    switch (measurableValueType) {
-    | `FLOAT => [|
+    switch (colums, measurableValueType) {
+    | (`none, `FLOAT) => [|
         agent,
         getPredictionDistribution(bounds),
         predictionValue,
         predictionText,
         time,
       |]
-    | `PERCENTAGE => [|
+    | (`extended, `FLOAT) => [|
+        agent,
+        getPredictionDistribution(bounds),
+        predictionValue,
+        predictionText,
+        logScore(),
+        score(),
+        time,
+      |]
+    | (`none, `PERCENTAGE) => [|
         agent,
         getPredictionDistribution(bounds),
         predictionValue,
         time,
       |]
-    | `DATE => Js.Exn.raiseError("Date not supported ")
+    | (`extended, `PERCENTAGE) => [|
+        agent,
+        getPredictionDistribution(bounds),
+        predictionValue,
+        logScore(),
+        score(),
+        time,
+      |]
+    | _ => Js.Exn.raiseError("Date not supported ")
     };
 
   let measurementsList' = measurementsList;
@@ -393,49 +406,4 @@ let make =
         />
       </FC.PageCard.Body>
     : <NothingToShow />;
-};
-
-module Extended = {
-  [@react.component]
-  let make =
-      (
-        ~measurementsList: list(measurement),
-        ~measurableValueType: Types.valueType,
-      ) => {
-    let bounds = Helpers.bounds(measurementsList |> E.A.of_list);
-
-    let all =
-      switch (measurableValueType) {
-      | `FLOAT => [|
-          agent,
-          getPredictionDistribution(bounds),
-          predictionValue,
-          predictionText,
-          logScore(),
-          score(),
-          time,
-        |]
-      | `PERCENTAGE => [|
-          agent,
-          getPredictionDistribution(bounds),
-          predictionValue,
-          logScore(),
-          score(),
-          time,
-        |]
-      | `DATE => Js.Exn.raiseError("Date not supported ")
-      };
-
-    let measurementsList' = measurementsList;
-
-    measurementsList' |> E.L.length > 0
-      ? <FC.PageCard.Body>
-          <Table
-            columns=all
-            rows={measurementsList' |> Array.of_list}
-            bottomSubRowFn
-          />
-        </FC.PageCard.Body>
-      : <NothingToShow />;
-  };
 };

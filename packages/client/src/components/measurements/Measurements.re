@@ -36,7 +36,11 @@ module Body = {
          switch (measurable.state) {
          | Some(`JUDGED)
          | Some(`CLOSED_AS_UNRESOLVED) =>
-           <MeasurementsTable.Extended measurableValueType measurementsList />
+           <MeasurementsTable
+             measurementsList
+             measurableValueType
+             colums=`extended
+           />
          | _ => <MeasurementsTable measurementsList measurableValueType />
          };
        | _ => <Spin />

@@ -58,8 +58,6 @@ module Table = {
     t.rows |> E.A.fmap(Row.measurableIds) |> E.A.uniq |> E.A.concatMany;
 };
 
-let rows: Row.ts = [|[|String("sdf")|]|];
-
 module Json = {
   let decode = (j: Js.Json.t): Belt.Result.t(Table.t, string) => {
     let decodeField = (tt, fieldName, json) =>

@@ -3,6 +3,10 @@ module ReducerConfig = {
   type callFnParams = (option(string), option(string));
 
   let getId = (e: itemType) => e.id;
+
+  let getBackLink = (e: itemType) => "";
+  let getCurrentLink = (e: itemType) => "";
+
   let callFn = ((channelId, agentId): callFnParams) =>
     AgentChannelsGet.component(~channelId, ~agentId, ());
 

@@ -9,6 +9,9 @@ module type Config = {
   let isEqual: (itemType, itemType) => bool;
   let getId: itemType => string;
 
+  let getBackLink: itemType => string;
+  let getCurrentLink: itemType => string;
+
   let callFn:
     (
       callFnParams,
@@ -401,6 +404,20 @@ module Make = (Config: Config) => {
       };
       ();
     };
+
+    React.useEffect(_ => {
+      switch (state) {
+      | {itemState: ItemUnselected} =>
+        ReasonReact.Router.replace("/c/492f6dd8-2500-4c6e-878b-274ebf0e0faf#!m");
+        Js.log("Sets Back link :: ItemUnselected");
+
+      | {itemState: ItemSelected(itemSelected)} =>
+        ReasonReact.Router.replace("/c/492f6dd8-2500-4c6e-878b-274ebf0e0faf/m/a7746a67-7db2-4c07-aafb-b3d9c1a99c17#!m");
+        Js.log("Sets Back link :: ItemSelected");
+      };
+
+      None;
+    });
 
     let innerComponentFn = response => {
       // @todo: Fix this. Use hooks somehow.

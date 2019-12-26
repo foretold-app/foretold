@@ -6,12 +6,10 @@ let make = () => {
     );
 
   ReasonReact.Router.watchUrl(url => {
-
     let reg = () => [%re "/!m$/g"];
-    switch(reg() |> Js.Re.exec(url.hash)){
-    | Some(_) => ()
-    | _ =>
-    setRoute(_ => url |> Routing.Route.fromUrl);
+    switch (reg() |> Js.Re.exec(url.hash)) {
+    | Some(_) => Js.log("I am going to change the url"); ();
+    | _ => setRoute(_ => url |> Routing.Route.fromUrl)
     };
     ();
   })

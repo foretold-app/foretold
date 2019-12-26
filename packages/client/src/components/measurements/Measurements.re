@@ -3,6 +3,10 @@ module ReducerConfig = {
   type callFnParams = string;
 
   let getId = (e: itemType) => e.id;
+
+  let getBackLink = (e: itemType) => "";
+  let getCurrentLink = (e: itemType) => "";
+
   let callFn = (measurableId: callFnParams) =>
     MeasurementsGet.component(~measurableId=Some(measurableId), ());
 

@@ -4,6 +4,9 @@ module Config = {
 
   let getId = (e: Types.measurable) => e.id;
 
+  let getBackLink = (e: itemType) => "";
+  let getCurrentLink = (e: itemType) => "";
+
   let callFn = (seriesId: callFnParams) =>
     MeasurablesGet.component(
       ~seriesId=Some(seriesId),

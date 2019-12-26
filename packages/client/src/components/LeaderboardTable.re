@@ -161,18 +161,6 @@ module Columns = {
       (),
     );
 
-  let time =
-    Table.Column.make(
-      ~name="Time" |> Utils.ste,
-      ~render=
-        (r: record) =>
-          r.createdAt
-          |> E.O.fmap(MomentRe.Moment.format("LLL"))
-          |> E.O.default("")
-          |> Utils.ste,
-      (),
-    );
-
   let getMeasurement = measurement => {
     let bounds = MeasurementsTable.Helpers.bounds([|measurement|]);
     <MeasurementsTable.Helpers.SmallDistribution
@@ -211,7 +199,6 @@ module Columns = {
     timeAveragedScore2,
     timeActivityRatio,
     predictionCount,
-    time,
   |];
 
   let measurables' = [|
@@ -219,8 +206,9 @@ module Columns = {
     timeAveragedScore2,
     timeActivityRatio,
     predictionCount,
-    time,
   |];
+
+  let notebooks = [|agent, timeAveragedScore2, timeActivityRatio|];
 
   let members = [|
     agent,

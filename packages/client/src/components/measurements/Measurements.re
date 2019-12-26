@@ -17,9 +17,10 @@ module Body = {
   [@react.component]
   let make =
       (
-        ~reducerParams: Reducer.Types.reducerParams,
-        ~measurable: Types.measurable,
         ~head,
+        ~block,
+        ~measurable: Types.measurable,
+        ~reducerParams: Reducer.Types.reducerParams,
       ) => {
     <SLayout
       head={head(
@@ -36,8 +37,14 @@ module Body = {
          switch (measurable.state) {
          | Some(`JUDGED)
          | Some(`CLOSED_AS_UNRESOLVED) =>
-           <MeasurementsTable.Extended measurableValueType measurementsList />
-         | _ => <MeasurementsTable measurementsList measurableValueType />
+           <MeasurementsTable
+             measurementsList
+             measurableValueType
+             colums=`extended
+             block
+           />
+         | _ =>
+           <MeasurementsTable measurementsList measurableValueType block />
          };
        | _ => <Spin />
        }}
@@ -46,12 +53,14 @@ module Body = {
 };
 
 [@react.component]
-let make = (~measurableId: string, ~head) => {
+let make = (~measurableId, ~head, ~block=`none) => {
   MeasurableGet.component(~id=measurableId)
   |> E.F.apply((measurable: Types.measurable) =>
        <Reducer
          callFnParams={measurable.id}
-         subComponent={reducerParams => <Body reducerParams measurable head />}
+         subComponent={reducerParams =>
+           <Body reducerParams measurable head block />
+         }
        />
      );
 };

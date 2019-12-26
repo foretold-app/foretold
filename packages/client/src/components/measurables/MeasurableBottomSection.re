@@ -59,7 +59,12 @@ module Tabs = {
 
 module Inner = {
   [@react.component]
-  let make = (~measurable) => {
+  let make =
+      (
+        ~measurable,
+        ~block=`none,
+        ~leaderboardColumns=LeaderboardTable.Columns.measurables',
+      ) => {
     let (tab, setTab) = React.useState(() => Measurements);
 
     let switchTab = tabToSwitch => setTab(_ => tabToSwitch);
@@ -67,20 +72,20 @@ module Inner = {
       <Tabs switchTab paginationPage tab measurable />;
 
     switch (tab) {
-    | Measurements => <Measurements measurableId={measurable.id} head />
+    | Measurements => <Measurements measurableId={measurable.id} head block />
 
     | Scores =>
       <LeaderboardMeasurables
-        channelId={Some(measurable.channelId)}
-        measurableId={Some(measurable.id)}
-        columns=LeaderboardTable.Columns.measurables'
+        head
+        container=`none
+        columns=leaderboardColumns
         finalComparisonMeasurement={
           measurable.state == Some(`JUDGED)
             ? Some(`LAST_OBJECTIVE_MEASUREMENT)
             : Some(`LAST_AGGREGATE_MEASUREMENT)
         }
-        head
-        container=`none
+        measurableId={Some(measurable.id)}
+        channelId={Some(measurable.channelId)}
       />
 
     | Details =>

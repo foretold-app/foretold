@@ -42,9 +42,7 @@ let make = (~channelPage: Routing.ChannelPage.t) => {
     </Channel>;
 
   let errorFn = _ =>
-    <Channel channelPage channel=None>
-      <SLayout> <div> {"No channel." |> Utils.ste} </div> </SLayout>
-    </Channel>;
+    <Channel channelPage channel=None> <NotFoundPage /> </Channel>;
 
   let loadingFn = () =>
     <Channel channelPage channel=None>

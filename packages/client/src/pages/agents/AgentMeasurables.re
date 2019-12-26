@@ -42,6 +42,7 @@ let make = (~pageParams: Types.pageParams) => {
            selectWithPaginationParams.selection,
          ) {
          | (_, Some(measurable)) => <MeasurablePage measurable />
+
          | (Success(connection), None) =>
            <MeasurableIndexTable
              measurables={connection.edges}
@@ -53,6 +54,7 @@ let make = (~pageParams: Types.pageParams) => {
                )
              }
            />
+
          | _ => <div />
          }}
       </SLayout>

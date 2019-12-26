@@ -20,6 +20,7 @@ import { emailUnread } from 'react-icons-kit/ionicons/emailUnread';
 import { u26FA as tent } from 'react-icons-kit/noto_emoji_regular/u26FA';
 import { ic_content_copy } from 'react-icons-kit/md/ic_content_copy';
 import { magicWand } from 'react-icons-kit/icomoon/magicWand';
+import { pacman } from 'react-icons-kit/icomoon/pacman';
 
 let types = {
   'HOME': home,
@@ -43,6 +44,7 @@ let types = {
   'EMAIL_UNREAD': emailUnread,
   'COPY': ic_content_copy,
   'MAGIC_WAND': magicWand,
+  'PACMAN': pacman,
 };
 
 export class Icon extends React.Component {

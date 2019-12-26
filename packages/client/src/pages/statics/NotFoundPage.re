@@ -1,6 +1,10 @@
 [@react.component]
 let make = () => {
   <SLayout container=`fluid>
-    <Center> {"Sorry, but the page is not found :(" |> Utils.ste} </Center>
+    <Center>
+      <Icon icon="PACMAN" size="2em" />
+      <p />
+      {Lang.pageIsNotFound |> Utils.ste}
+    </Center>
   </SLayout>;
 };

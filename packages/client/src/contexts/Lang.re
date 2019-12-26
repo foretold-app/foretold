@@ -15,3 +15,4 @@ let measurableIsSaved = "Question is saved.";
 let copiedMessage = "Copied";
 let copiedDescription = "The question ID was copied.";
 let backButtonTip = "Back";
+let pageIsNotFound = "Sorry, but the page is not found.";

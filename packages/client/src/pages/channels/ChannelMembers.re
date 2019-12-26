@@ -195,8 +195,7 @@ let succesFn = (~channelId: string, ~channel: Types.channel, ~memberships) => {
   <SLayout head> <FC.PageCard.Body> table </FC.PageCard.Body> </SLayout>;
 };
 
-let errorFn = _ =>
-  <SLayout> <div> {"No channel." |> Utils.ste} </div> </SLayout>;
+let errorFn = _ => <NotFoundPage />;
 
 let loadingFn = _ => <SLayout> <Spin /> </SLayout>;
 

@@ -109,18 +109,16 @@ const middlewares = {
     },
 
     measurementCreate: async (resolve, root, args, context, info) => {
-      await measurementValueValidation(root, args, context, info);
-      await measurementValueTypeValidation(root, args, context, info);
-
-      {
-        await setContextMeasurable(root, args, context, info);
-        await competitiveMeasurementCanBeAddedToOpenMeasurable(
-          root, args, context, info,
-        );
-      }
-
+      await setContextMeasurable(root, args, context, info);
       await setContextChannel(root, args, context, info);
       await setContextChannelMemberships(root, args, context, info);
+
+      await measurementValueValidation(root, args, context, info);
+      await measurementValueTypeValidation(root, args, context, info);
+      await competitiveMeasurementCanBeAddedToOpenMeasurable(
+        root, args, context, info,
+      );
+
       return resolve(root, args, context, info);
     },
 

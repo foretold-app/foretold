@@ -80,6 +80,7 @@ module Inner = {
             : Some(`LAST_AGGREGATE_MEASUREMENT)
         }
         head
+        container=`none
       />
 
     | Details =>

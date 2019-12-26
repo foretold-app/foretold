@@ -3,8 +3,7 @@ open Style.Grid;
 module Styles = {
   open Css;
   let full = style([float(`left), width(`percent(100.))]);
-  let sidebarOutside =
-    style([background(`hex("f0f2f5")), paddingLeft(`em(1.0))]);
+  let sidebarOutside = style([background(`hex("f0f2f5"))]);
   let sidebar = style([position(`sticky), top(`em(2.0)), float(`left)]);
 };
 
@@ -82,7 +81,7 @@ let make = (~notebookId: string) => {
     | Some(notebook) =>
       <Div flexDirection=`row styles=[Styles.full]>
         <Div flex={`num(5.)}>
-          <SLayout isFluid=true>
+          <SLayout container=`fluid>
             <Div flexDirection=`column>
               <Div flex={`num(1.)}> <Tabs switchTab tab notebook /> </Div>
               <Div flex={`num(1.)}>

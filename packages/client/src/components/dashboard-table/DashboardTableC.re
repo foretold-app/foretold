@@ -97,6 +97,7 @@ let tableJson: Js.Json.t = Json.parseOrRaise(tableJsonString);
 
 [@react.component]
 let make = (~tableJson=tableJson, ~editor: editor) => {
+  // @todo: Does this "memo" work on each time of rendering?
   let tableJson = React.useMemo(_ => DashboardTable.Json.decode(tableJson));
 
   switch (tableJson) {
@@ -109,7 +110,7 @@ let make = (~tableJson=tableJson, ~editor: editor) => {
         e =>
           e
           |> HttpResponse.fmap(
-               (r: Client.Primary.Connection.t(Client.Primary.Measurable.t)) =>
+               (r: Primary.Connection.t(Primary.Measurable.t)) =>
                DashboardTableToTable.run(table, r.edges, editor)
              )
           |> HttpResponse.withReactDefaults,

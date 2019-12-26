@@ -57,7 +57,7 @@ let make = (~channelId=None, ~agentId=None) => {
 
     let head = isFound ? pagination(reducerParams) : <Null />;
 
-    <SLayout head isFluid=true> body </SLayout>;
+    <SLayout head container=`fluid> body </SLayout>;
   };
 
   <Reducer itemsPerPage=20 callFnParams=(channelId, agentId) subComponent />;

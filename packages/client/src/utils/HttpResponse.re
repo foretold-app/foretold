@@ -45,8 +45,8 @@ let isSuccess = (result: t('a)) =>
 let withReactDefaults = (result: t(ReasonReact.reactElement)) =>
   switch (result) {
   | Success(response) => response
-  | Error(e) => <div> {"Error: " ++ e |> Utils.ste} </div>
-  | Loading => <div> {"Loading..." |> Utils.ste} </div>
+  | Error(e) => <Sorry />
+  | Loading => <Spin />
   };
 
 let merge2 = (a: t('a), b: t('b)) =>

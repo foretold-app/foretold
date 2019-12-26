@@ -31,6 +31,7 @@ let make =
       ~head=Leaderboard.head(~subTab=ByMeasurable),
       ~columns=LeaderboardTable.Columns.measurables,
       ~finalComparisonMeasurement=None,
+      ~container=`fluid,
     ) => {
   let subComponent = (reducerParams: Reducer.Types.reducerParams) => {
     let items =
@@ -60,7 +61,7 @@ let make =
         (),
       );
 
-    <SLayout head isFluid=true> body </SLayout>;
+    <SLayout head container> body </SLayout>;
   };
 
   <Reducer

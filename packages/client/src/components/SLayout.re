@@ -1,5 +1,7 @@
 open Utils;
 
+type container = [ | `fixedWidth | `fluid | `none | `fluidLeft];
+
 module Styles = {
   open Css;
 
@@ -24,10 +26,13 @@ module Styles = {
       float(`left),
     ]);
 
-  let container = isFluid =>
-    isFluid
-      ? style([paddingLeft(`em(2.0)), paddingRight(`em(2.0))])
-      : style([maxWidth(`px(1170)), margin(`auto)]);
+  let container = (container: container) =>
+    switch (container) {
+    | `fixedWidth => style([maxWidth(`px(1170)), margin(`auto)])
+    | `fluid => style([paddingLeft(`em(2.0)), paddingRight(`em(2.0))])
+    | `fluidLeft => style([paddingRight(`em(2.0))])
+    | `none => style([])
+    };
 
   let backHover = style([fontSize(`em(1.3))]);
 
@@ -54,39 +59,6 @@ module TextDiv = {
     <FC__PageCard.HeaderRow.Title>
       {text |> ste}
     </FC__PageCard.HeaderRow.Title>;
-};
-
-module LayoutConfig = {
-  type t = {
-    head: ReasonReact.reactElement,
-    body: ReasonReact.reactElement,
-    isFluid: bool,
-  };
-  let make = (~head, ~body, ~isFluid=false, ()) => {head, body, isFluid};
-};
-
-module FullPage = {
-  [@react.component]
-  let make = ({head, body, isFluid}: LayoutConfig.t) => {
-    <FC.Base.Div
-      className=Css.(
-        style(
-          [
-            marginTop(`em(1.)),
-            width(`percent(100.)),
-            boxSizing(`borderBox),
-          ]
-          @ FC.Base.BaseStyles.fullWidthFloatLeft,
-        )
-      )>
-      <div className={Styles.container(isFluid)}>
-        <FC.PageCard>
-          <FC.PageCard.HeaderRow> head </FC.PageCard.HeaderRow>
-          <FC.PageCard.Body> body </FC.PageCard.Body>
-        </FC.PageCard>
-      </div>
-    </FC.Base.Div>;
-  };
 };
 
 module ChannelBack = {
@@ -125,8 +97,15 @@ module SeriesHead = {
     </div>;
 };
 
+module Container = {
+  [@react.component]
+  let make = (~container=`fixedWidth, ~children) =>
+    <div className={Styles.container(container)}> children </div>;
+};
+
 [@react.component]
-let make = (~head=ReasonReact.null, ~isFluid=false, ~children=<Null />) => {
+let make =
+    (~head=ReasonReact.null, ~container=`fixedWidth, ~children=<Null />) => {
   <FC.Base.Div
     className=Css.(
       style(
@@ -138,12 +117,12 @@ let make = (~head=ReasonReact.null, ~isFluid=false, ~children=<Null />) => {
         @ FC.Base.BaseStyles.fullWidthFloatLeft,
       )
     )>
-    <div className={Styles.container(isFluid)}>
+    <Container container>
       <FC.PageCard>
         {head != ReasonReact.null
            ? <FC.PageCard.HeaderRow> head </FC.PageCard.HeaderRow> : head}
         <FC.PageCard.Body> children </FC.PageCard.Body>
       </FC.PageCard>
-    </div>
+    </Container>
   </FC.Base.Div>;
 };

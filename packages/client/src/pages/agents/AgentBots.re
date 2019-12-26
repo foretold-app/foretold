@@ -126,7 +126,7 @@ let make = (~pageParams: Types.pageParams) => {
           </FC.Base.Div>
         </div>;
 
-      <SLayout head isFluid=false> body </SLayout>;
+      <SLayout head> body </SLayout>;
     | _ => <SLayout> <NothingToShow /> </SLayout>
     }
   );

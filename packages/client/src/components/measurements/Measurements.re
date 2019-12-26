@@ -27,7 +27,7 @@ module Body = {
         ~paginationPage=Reducer.Components.paginationPage(reducerParams),
         (),
       )}
-      isFluid=true>
+      container=`none>
       {switch (reducerParams.response) {
        | Success(connection) =>
          let measurementsList = connection.edges |> Array.to_list;

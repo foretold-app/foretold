@@ -3223,7 +3223,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "String",
+                  "name": "String3to512",
                   "ofType": null
                 }
               },
@@ -3232,7 +3232,7 @@
             },
             {
               "name": "labelSubject",
-              "description": null,
+              "description": "Description of a question's entity",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -3244,7 +3244,7 @@
             },
             {
               "name": "labelOnDate",
-              "description": null,
+              "description": "Description of a question's date",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -3256,7 +3256,7 @@
             },
             {
               "name": "labelProperty",
-              "description": null,
+              "description": "Description of a question's property",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -3268,7 +3268,7 @@
             },
             {
               "name": "labelCustom",
-              "description": null,
+              "description": "Description of a question",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -3601,6 +3601,16 @@
           ],
           "inputFields": null,
           "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "SCALAR",
+          "name": "String3to512",
+          "description": "A special custom scalar type for a String3to512",
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
           "enumValues": null,
           "possibleTypes": null
         },
@@ -7554,7 +7564,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "String",
+                  "name": "String3to512",
                   "ofType": null
                 }
               },
@@ -7562,7 +7572,37 @@
             },
             {
               "name": "labelCustom",
-              "description": null,
+              "description": "Description of a question",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "labelSubject",
+              "description": "Description of a question's entity",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "labelOnDate",
+              "description": "Description of a question's date",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Date",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "labelProperty",
+              "description": "Description of a question's property",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -7585,6 +7625,20 @@
               "defaultValue": null
             },
             {
+              "name": "channelId",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
               "name": "expectedResolutionDate",
               "description": null,
               "type": {
@@ -7601,50 +7655,6 @@
                 "kind": "SCALAR",
                 "name": "String",
                 "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "labelSubject",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "labelOnDate",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Date",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "labelProperty",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "channelId",
-              "description": null,
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
               },
               "defaultValue": null
             },
@@ -7904,7 +7914,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "String",
+                  "name": "String3to512",
                   "ofType": null
                 }
               },
@@ -7912,7 +7922,7 @@
             },
             {
               "name": "labelCustom",
-              "description": null,
+              "description": "Description of a question",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -7921,16 +7931,32 @@
               "defaultValue": null
             },
             {
-              "name": "channelId",
-              "description": null,
+              "name": "labelSubject",
+              "description": "Description of a question's entity",
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "labelOnDate",
+              "description": "Description of a question's date",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Date",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "labelProperty",
+              "description": "Description of a question's property",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
               },
               "defaultValue": null
             },
@@ -7949,6 +7975,20 @@
               "defaultValue": null
             },
             {
+              "name": "channelId",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
               "name": "expectedResolutionDate",
               "description": null,
               "type": {
@@ -7960,36 +8000,6 @@
             },
             {
               "name": "resolutionEndpoint",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "labelSubject",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "labelOnDate",
-              "description": null,
-              "type": {
-                "kind": "SCALAR",
-                "name": "Date",
-                "ofType": null
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "labelProperty",
               "description": null,
               "type": {
                 "kind": "SCALAR",

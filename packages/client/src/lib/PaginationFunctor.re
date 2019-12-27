@@ -348,43 +348,29 @@ module Make = (Config: Config) => {
 
     let send = action =>
       switch (itemState, action) {
-      | (ItemUnselected, NextPage)
-      | (ItemDeselected, NextPage) =>
+      | (ItemUnselected | ItemDeselected, NextPage) =>
         setPageConfig(_ => ItemUnselected.nextPage(state));
-        ();
 
-      | (ItemUnselected, LastPage)
-      | (ItemDeselected, LastPage) =>
+      | (ItemUnselected | ItemDeselected, LastPage) =>
         setPageConfig(_ => ItemUnselected.lastPage(state));
-        ();
 
-      | (ItemUnselected, SelectIndex(i))
-      | (ItemDeselected, SelectIndex(i)) =>
+      | (ItemUnselected | ItemDeselected, SelectIndex(i)) =>
         ItemUnselected.selectIndex(i, itemsPerPage)
-        |> E.O.fmap(itemState => {
-             setItemState(_ => itemState);
-             ();
-           })
+        |> E.O.fmap(itemState => setItemState(_ => itemState))
         |> ignore;
-        ();
 
       | (ItemSelected(_), Deselect) =>
         setItemState(_ => ItemDeselected);
-        ();
 
       | (ItemSelected(itemSelected), NextSelection) =>
-        switch (ItemSelected.nextSelection(itemsPerPage, itemSelected)) {
-        | Some(itemState) => setItemState(_ => itemState)
-        | _ => ()
-        };
-        ();
+        ItemSelected.nextSelection(itemsPerPage, itemSelected)
+        |> E.O.fmap(itemState => setItemState(_ => itemState))
+        |> ignore
 
       | (ItemSelected(itemSelected), LastSelection) =>
-        switch (ItemSelected.lastSelection(itemsPerPage, itemSelected)) {
-        | Some(itemState) => setItemState(_ => itemState)
-        | _ => ()
-        };
-        ();
+        ItemSelected.lastSelection(itemsPerPage, itemSelected)
+        |> E.O.fmap(itemState => setItemState(_ => itemState))
+        |> ignore
 
       | _ => ()
       };

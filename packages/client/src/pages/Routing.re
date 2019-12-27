@@ -96,6 +96,12 @@ let getChannelId = (channelId: string): string =>
   | _ => channelId
   };
 
+let setChannelId = (channelId: string): string =>
+  switch (channelId) {
+  | "" => "home"
+  | _ => channelId
+  };
+
 module Route = {
   type t =
     | Home
@@ -278,31 +284,38 @@ module Url = {
     // Channels
     | ChannelNew => "/communities/" ++ "new"
     | ChannelIndex => "/communities"
-    | ChannelShow(channelId) => "/c/" ++ channelId
-    | ChannelEdit(channelId) => "/c/" ++ channelId ++ "/edit"
-    | ChannelNotebooks(channelId) => "/c/" ++ channelId ++ "/notebooks"
-    | ChannelAddNotebook(channelId) => "/c/" ++ channelId ++ "/notebooks/add"
-    | ChannelMembers(channelId) => "/c/" ++ channelId ++ "/members"
-    | ChannelFeedItems(channelId) => "/c/" ++ channelId ++ "/activity"
+    | ChannelShow(channelId) => "/c/" ++ setChannelId(channelId)
+    | ChannelEdit(channelId) => "/c/" ++ setChannelId(channelId) ++ "/edit"
+    | ChannelNotebooks(channelId) =>
+      "/c/" ++ setChannelId(channelId) ++ "/notebooks"
+    | ChannelAddNotebook(channelId) =>
+      "/c/" ++ setChannelId(channelId) ++ "/notebooks/add"
+    | ChannelMembers(channelId) =>
+      "/c/" ++ setChannelId(channelId) ++ "/members"
+    | ChannelFeedItems(channelId) =>
+      "/c/" ++ setChannelId(channelId) ++ "/activity"
     | ChannelLeaderboard(channelId, ByMeasurable) =>
-      "/c/" ++ channelId ++ "/scoring/questions"
+      "/c/" ++ setChannelId(channelId) ++ "/scoring/questions"
     | ChannelLeaderboard(channelId, ByMember) =>
-      "/c/" ++ channelId ++ "/scoring/members"
-    | ChannelAddMember(channelId) => "/c/" ++ channelId ++ "/add"
-    | ChannelInviteMember(channelId) => "/c/" ++ channelId ++ "/invite"
+      "/c/" ++ setChannelId(channelId) ++ "/scoring/members"
+    | ChannelAddMember(channelId) =>
+      "/c/" ++ setChannelId(channelId) ++ "/add"
+    | ChannelInviteMember(channelId) =>
+      "/c/" ++ setChannelId(channelId) ++ "/invite"
     | ChannelNotebook(channelId, notebookId) =>
-      "/c/" ++ channelId ++ "/n/" ++ notebookId
+      "/c/" ++ setChannelId(channelId) ++ "/n/" ++ notebookId
     | ChannelNotebookDetails(channelId, notebookId) =>
-      "/c/" ++ channelId ++ "/n/" ++ notebookId ++ "/details"
+      "/c/" ++ setChannelId(channelId) ++ "/n/" ++ notebookId ++ "/details"
 
     // Measurables
-    | MeasurableNew(channelId) => "/c/" ++ channelId ++ "/new"
+    | MeasurableNew(channelId) => "/c/" ++ setChannelId(channelId) ++ "/new"
     | MeasurableShow(channelId, measurableId) =>
-      "/c/" ++ channelId ++ "/m/" ++ measurableId
+      "/c/" ++ setChannelId(channelId) ++ "/m/" ++ measurableId
 
     // Series
-    | SeriesNew(channelId) => "/c/" ++ channelId ++ "/s/new"
-    | SeriesShow(channelId, id) => "/c/" ++ channelId ++ "/s/" ++ id
+    | SeriesNew(channelId) => "/c/" ++ setChannelId(channelId) ++ "/s/new"
+    | SeriesShow(channelId, id) =>
+      "/c/" ++ setChannelId(channelId) ++ "/s/" ++ id
 
     // Statis pages
     | Home => "/"

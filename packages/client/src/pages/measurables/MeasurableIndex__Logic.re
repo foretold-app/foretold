@@ -6,10 +6,30 @@ module ReducerConfig = {
     states: option(array(Types.measurableState)),
   };
 
-  let getId = (params: itemType) => params.id;
+  let getId = (itemType: itemType) => itemType.id;
 
-  let getBackLink = (e: itemType) => "";
-  let getCurrentLink = (e: itemType) => "";
+  let onItemDeselected = (params: callFnParams) => {
+      let st =
+        params.states
+        |> MeasurableQueryIndex.make
+        |> MeasurableQueryIndex.toUrlParams;
+      let channelLink = Routing.Url.toString(ChannelShow(params.channelId));
+      ReasonReact.Router.replace(channelLink ++ st ++ "#!");
+    ();
+  };
+
+  let onItemSelected = (measurable: option(itemType)) => {
+    switch (measurable) {
+    | Some(measurable) =>
+      let measurableLink =
+        Routing.Url.toString(
+          MeasurableShow(measurable.channelId, measurable.id),
+        );
+      ReasonReact.Router.replace(measurableLink ++ "#!");
+    | _ => ()
+    };
+    ();
+  };
 
   let callFn = (params: callFnParams) =>
     MeasurablesGet.component(
@@ -19,10 +39,10 @@ module ReducerConfig = {
     );
 
   let isEqual = (a: itemType, b: itemType) => {
-    switch (a.updatedAt, b.updatedAt) {
-    | (Some(a), Some(b)) => MomentRe.Moment.isSame(a, b)
-    | _ => false
-    };
+      switch (a.updatedAt, b.updatedAt) {
+      | (Some(a), Some(b)) => MomentRe.Moment.isSame(a, b)
+      | _ => false
+      };
   };
 };
 
@@ -99,6 +119,12 @@ let make = (input: input) =>
 
   | (
       ItemUnselected(_),
+      Success(channel),
+      Success(seriesCollection),
+      Success(_),
+    )
+  | (
+      ItemDeselected(_),
       Success(channel),
       Success(seriesCollection),
       Success(_),

@@ -4,8 +4,8 @@ module ReducerConfig = {
 
   let getId = (e: itemType) => e.id;
 
-  let getBackLink = (e: itemType) => "";
-  let getCurrentLink = (e: itemType) => "";
+  let onItemDeselected = _ => ();
+  let onItemSelected = (_: option(itemType)) => ();
 
   let callFn = (measurableId: callFnParams) =>
     MeasurementsGet.component(~measurableId=Some(measurableId), ());

@@ -9,8 +9,8 @@ module type Config = {
   let isEqual: (itemType, itemType) => bool;
   let getId: itemType => string;
 
-  let getBackLink: itemType => string;
-  let getCurrentLink: itemType => string;
+  let onItemDeselected: callFnParams => unit;
+  let onItemSelected: option(itemType) => unit;
 
   let callFn:
     (
@@ -31,6 +31,7 @@ module Make = (Config: Config) => {
 
     type itemState =
       | ItemUnselected
+      | ItemDeselected
       | ItemSelected(itemSelected);
 
     type connection = Primary.Connection.t(Config.itemType);
@@ -66,8 +67,6 @@ module Make = (Config: Config) => {
   module ItemSelected = {
     type t = Types.itemSelected;
 
-    let deselect = (_, _) => Types.ItemUnselected;
-
     let nextSelection = (itemsPerPage: int, itemSelected: t) =>
       E.BoundedInt.increment(itemSelected.selectedIndex, itemsPerPage)
       <$> (
@@ -78,23 +77,6 @@ module Make = (Config: Config) => {
       E.BoundedInt.decrement(itemSelected.selectedIndex, itemsPerPage)
       <$> (
         selectedIndex => Types.ItemSelected({selectedIndex: selectedIndex})
-      );
-
-    let newState = (itemsPerPage: int, itemSelected: t, action: Types.action) =>
-      (
-        switch (action) {
-        | Deselect => Some((a, b) => deselect(a, b) |> E.O.some)
-        | NextSelection => Some(nextSelection)
-        | LastSelection => Some(lastSelection)
-        | _ => None
-        }
-      )
-      |> (
-        e =>
-          switch (e) {
-          | Some(fn) => fn(itemsPerPage, itemSelected)
-          | None => None
-          }
       );
   };
 
@@ -177,7 +159,7 @@ module Make = (Config: Config) => {
 
   module ItemUnselected = {
     open Types;
-    let changePage = (state: Types.state, pageDirection) =>
+    let changePage = (state: Types.state, pageDirection): pageConfig =>
       state.response
       |> HttpResponse.fmap((r: Primary.Connection.t('a)) =>
            pageDirection(r) |> E.O.fmap(d => {direction: d})
@@ -185,7 +167,7 @@ module Make = (Config: Config) => {
       |> HttpResponse.flattenDefault(None, a => a)
       |> E.O.default(state.pageConfig);
 
-    let nextPage = state =>
+    let nextPage = (state): pageConfig =>
       changePage(state, Primary.Connection.nextPageDirection);
 
     let lastPage = (state): pageConfig =>
@@ -194,15 +176,6 @@ module Make = (Config: Config) => {
     let selectIndex = (i, itemsPerPage) =>
       E.BoundedInt.make(i, itemsPerPage)
       <$> (selectedIndex => ItemSelected({selectedIndex: selectedIndex}));
-
-    let newState = (itemsPerPage, state, action) =>
-      switch (action) {
-      | NextPage => Some((ItemUnselected, nextPage(state)))
-      | LastPage => Some((ItemUnselected, lastPage(state)))
-      | SelectIndex(i) =>
-        selectIndex(i, itemsPerPage) |> E.O.fmap(r => (r, state.pageConfig))
-      | _ => None
-      };
   };
 
   module Components = {
@@ -366,63 +339,69 @@ module Make = (Config: Config) => {
   [@react.component]
   let make =
       (~itemsPerPage=20, ~callFnParams: Config.callFnParams, ~subComponent) => {
-    let (state, setState) =
-      React.useState(() =>
-        {
-          itemState: ItemUnselected,
-          response: Loading,
-          pageConfig: {
-            direction: None,
-          },
-        }
-      );
+    let (itemState, setItemState) = React.useState(() => ItemUnselected);
+    let (response, setResponse) = React.useState(() => HttpResponse.Loading);
+    let (pageConfig, setPageConfig) =
+      React.useState(() => {direction: None});
 
-    let send = (action: action) => {
-      switch (action) {
-      | UpdateResponse(response) =>
-        setState(_ =>
-          {response, itemState: state.itemState, pageConfig: state.pageConfig}
-        )
+    let state = {itemState, response, pageConfig};
 
-      | _ =>
-        let newState =
-          switch (state) {
-          | {itemState: ItemUnselected} =>
-            ItemUnselected.newState(itemsPerPage, state, action)
+    let send = action =>
+      switch (itemState, action) {
+      | (ItemUnselected, NextPage)
+      | (ItemDeselected, NextPage) =>
+        setPageConfig(_ => ItemUnselected.nextPage(state));
+        ();
 
-          | {itemState: ItemSelected(itemSelected)} =>
-            ItemSelected.newState(itemsPerPage, itemSelected, action)
-            |> E.O.fmap(itemState => (itemState, state.pageConfig))
-          };
+      | (ItemUnselected, LastPage)
+      | (ItemDeselected, LastPage) =>
+        setPageConfig(_ => ItemUnselected.lastPage(state));
+        ();
 
-        switch (newState) {
-        | Some((itemState, pageConfig)) =>
-          setState(_ => {response: state.response, itemState, pageConfig})
+      | (ItemUnselected, SelectIndex(i))
+      | (ItemDeselected, SelectIndex(i)) =>
+        ItemUnselected.selectIndex(i, itemsPerPage)
+        |> E.O.fmap(itemState => {
+             setItemState(_ => itemState);
+             ();
+           })
+        |> ignore;
+        ();
 
-        | None => ()
+      | (ItemSelected(_), Deselect) =>
+        setItemState(_ => ItemDeselected);
+        ();
+
+      | (ItemSelected(itemSelected), NextSelection) =>
+        switch (ItemSelected.nextSelection(itemsPerPage, itemSelected)) {
+        | Some(itemState) => setItemState(_ => itemState)
+        | _ => ()
         };
-      };
-      ();
-    };
+        ();
 
-    React.useEffect(_ => {
-      switch (state) {
-      | {itemState: ItemUnselected} =>
-        ReasonReact.Router.replace("/c/492f6dd8-2500-4c6e-878b-274ebf0e0faf#!m");
-        Js.log("Sets Back link :: ItemUnselected");
+      | (ItemSelected(itemSelected), LastSelection) =>
+        switch (ItemSelected.lastSelection(itemsPerPage, itemSelected)) {
+        | Some(itemState) => setItemState(_ => itemState)
+        | _ => ()
+        };
+        ();
 
-      | {itemState: ItemSelected(itemSelected)} =>
-        ReasonReact.Router.replace("/c/492f6dd8-2500-4c6e-878b-274ebf0e0faf/m/a7746a67-7db2-4c07-aafb-b3d9c1a99c17#!m");
-        Js.log("Sets Back link :: ItemSelected");
+      | _ => ()
       };
 
+    React.useEffect(() => {
+      switch (itemState) {
+      | ItemDeselected => Config.onItemDeselected(callFnParams)
+      | ItemSelected(_) => Config.onItemSelected(State.selection(state))
+      | _ => ()
+      };
       None;
     });
 
     let innerComponentFn = response => {
       // @todo: Fix this. Use hooks somehow.
       if (!HttpResponse.isEq(state.response, response, compareItems)) {
-        send(UpdateResponse(response));
+        setResponse(_ => response);
       };
 
       subComponent({

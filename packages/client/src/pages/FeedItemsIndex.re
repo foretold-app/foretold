@@ -6,8 +6,8 @@ module ReducerConfig = {
 
   let getId = (e: itemType) => e.id;
 
-  let getBackLink = (e: itemType) => "";
-  let getCurrentLink = (e: itemType) => "";
+  let onItemDeselected = _ => ();
+  let onItemSelected = (_: option(itemType)) => ();
 
   let callFn = ((channelId, agentId): callFnParams) =>
     FeedItemsGet.component2(~channelId, ~agentId);

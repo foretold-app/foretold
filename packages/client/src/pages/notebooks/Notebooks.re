@@ -5,6 +5,10 @@ module ReducerConfig = {
   type callFnParams = string;
 
   let getId = (e: itemType) => e.id;
+
+  let onItemDeselected = _ => ();
+  let onItemSelected = (_: option(itemType)) => ();
+
   let callFn = (channelId: callFnParams) =>
     NotebooksGet.component(~channelId);
 

@@ -24,7 +24,7 @@ module Main = {
 let make = () => {
   let url = ReasonReact.Router.dangerouslyGetInitialUrl();
 
-  let clearUrl = url => {
+  let clearUrl = (url: ReasonReact.Router.url) => {
     let remove = [|
       "access_token",
       "scope",

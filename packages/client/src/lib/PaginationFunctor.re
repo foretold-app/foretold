@@ -9,6 +9,9 @@ module type Config = {
   let isEqual: (itemType, itemType) => bool;
   let getId: itemType => string;
 
+  let onItemDeselected: callFnParams => unit;
+  let onItemSelected: option(itemType) => unit;
+
   let callFn:
     (
       callFnParams,
@@ -28,6 +31,7 @@ module Make = (Config: Config) => {
 
     type itemState =
       | ItemUnselected
+      | ItemDeselected
       | ItemSelected(itemSelected);
 
     type connection = Primary.Connection.t(Config.itemType);
@@ -60,155 +64,122 @@ module Make = (Config: Config) => {
     };
   };
 
-  module Reducers = {
-    module ItemSelected = {
-      type t = Types.itemSelected;
+  module ItemSelected = {
+    type t = Types.itemSelected;
 
-      let deselect = (_, _) => Types.ItemUnselected;
+    let nextSelection = (itemsPerPage: int, itemSelected: t) =>
+      E.BoundedInt.increment(itemSelected.selectedIndex, itemsPerPage)
+      <$> (
+        selectedIndex => Types.ItemSelected({selectedIndex: selectedIndex})
+      );
 
-      let nextSelection = (itemsPerPage: int, itemSelected: t) =>
-        E.BoundedInt.increment(itemSelected.selectedIndex, itemsPerPage)
-        <$> (
-          selectedIndex => Types.ItemSelected({selectedIndex: selectedIndex})
-        );
+    let lastSelection = (itemsPerPage: int, itemSelected: t) =>
+      E.BoundedInt.decrement(itemSelected.selectedIndex, itemsPerPage)
+      <$> (
+        selectedIndex => Types.ItemSelected({selectedIndex: selectedIndex})
+      );
+  };
 
-      let lastSelection = (itemsPerPage: int, itemSelected: t) =>
-        E.BoundedInt.decrement(itemSelected.selectedIndex, itemsPerPage)
-        <$> (
-          selectedIndex => Types.ItemSelected({selectedIndex: selectedIndex})
-        );
+  module State = {
+    type t = Types.state;
 
-      let newState =
-          (itemsPerPage: int, itemSelected: t, action: Types.action) =>
-        (
-          switch (action) {
-          | Deselect => Some((a, b) => deselect(a, b) |> E.O.some)
-          | NextSelection => Some(nextSelection)
-          | LastSelection => Some(lastSelection)
-          | _ => None
-          }
-        )
-        |> (
-          e =>
-            switch (e) {
-            | Some(fn) => fn(itemsPerPage, itemSelected)
-            | None => None
-            }
-        );
-    };
+    let selection = (state: t) =>
+      switch (state.itemState, state.response) {
+      | (ItemSelected({selectedIndex}), Success(m)) =>
+        E.A.get(m.edges, selectedIndex)
+      | _ => None
+      };
+  };
 
-    module State = {
-      type t = Types.state;
+  module ReducerParams = {
+    type t = Types.reducerParams;
 
-      let selection = (state: t) =>
-        switch (state.itemState, state.response) {
-        | (ItemSelected({selectedIndex}), Success(m)) =>
-          E.A.get(m.edges, selectedIndex)
-        | _ => None
-        };
-    };
+    let pageIndex = (reducerParams: t) =>
+      switch (reducerParams.itemState) {
+      | ItemSelected(r) => Some(r.selectedIndex)
+      | ItemUnselected(_) => None
+      };
 
-    module ReducerParams = {
-      type t = Types.reducerParams;
+    let canDecrementPage = (reducerParams: t) =>
+      reducerParams.response
+      |> HttpResponse.fmap((r: Types.connection) =>
+           Primary.Connection.hasPreviousPage(r)
+         )
+      |> HttpResponse.flattenDefault(false, a => a);
 
-      let pageIndex = (reducerParams: t) =>
-        switch (reducerParams.itemState) {
-        | ItemSelected(r) => Some(r.selectedIndex)
-        | ItemUnselected(_) => None
-        };
+    let canIncrementPage = (reducerParams: t) =>
+      reducerParams.response
+      |> HttpResponse.fmap((r: Types.connection) =>
+           Primary.Connection.hasNextPage(r)
+         )
+      |> HttpResponse.flattenDefault(false, a => a);
 
-      let canDecrementPage = (reducerParams: t) =>
-        reducerParams.response
-        |> HttpResponse.fmap((r: Types.connection) =>
-             Primary.Connection.hasPreviousPage(r)
-           )
-        |> HttpResponse.flattenDefault(false, a => a);
+    let itemExistsAtIndex = (reducerParams: t, index) =>
+      switch (reducerParams.response) {
+      | Success(r) => index < E.A.length(r.edges) && index >= 0
+      | _ => false
+      };
 
-      let canIncrementPage = (reducerParams: t) =>
-        reducerParams.response
-        |> HttpResponse.fmap((r: Types.connection) =>
-             Primary.Connection.hasNextPage(r)
-           )
-        |> HttpResponse.flattenDefault(false, a => a);
+    let canDecrementSelection = (reducerParams: t) =>
+      reducerParams
+      |> pageIndex
+      |> E.O.fmap(r => itemExistsAtIndex(reducerParams, r - 1))
+      |> E.O.default(false);
 
-      let itemExistsAtIndex = (reducerParams: t, index) =>
-        switch (reducerParams.response) {
-        | Success(r) => index < E.A.length(r.edges) && index >= 0
-        | _ => false
-        };
+    let canIncrementSelection = (reducerParams: t) =>
+      reducerParams
+      |> pageIndex
+      |> E.O.fmap(r => itemExistsAtIndex(reducerParams, r + 1))
+      |> E.O.default(false);
 
-      let canDecrementSelection = (reducerParams: t) =>
-        reducerParams
-        |> pageIndex
-        |> E.O.fmap(r => itemExistsAtIndex(reducerParams, r - 1))
-        |> E.O.default(false);
+    let totalItems = (reducerParams: t) =>
+      switch (reducerParams.response) {
+      | Success(m) => m.total
+      | _ => None
+      };
 
-      let canIncrementSelection = (reducerParams: t) =>
-        reducerParams
-        |> pageIndex
-        |> E.O.fmap(r => itemExistsAtIndex(reducerParams, r + 1))
-        |> E.O.default(false);
+    let lowerBoundIndex = (reducerParams: t) =>
+      switch (reducerParams.response) {
+      | Success(m) => m.pageInfo.startCursor |> E.O.fmap(Primary.Cursor.toInt)
+      | _ => None
+      };
 
-      let totalItems = (reducerParams: t) =>
-        switch (reducerParams.response) {
-        | Success(m) => m.total
-        | _ => None
-        };
+    let upperBoundIndex = (reducerParams: t) =>
+      switch (reducerParams.response) {
+      | Success(m) => m.pageInfo.endCursor |> E.O.fmap(Primary.Cursor.toInt)
+      | _ => None
+      };
 
-      let lowerBoundIndex = (reducerParams: t) =>
-        switch (reducerParams.response) {
-        | Success(m) =>
-          m.pageInfo.startCursor |> E.O.fmap(Primary.Cursor.toInt)
-        | _ => None
-        };
+    let selectionIndex = (reducerParams: t) =>
+      switch (pageIndex(reducerParams), lowerBoundIndex(reducerParams)) {
+      | (Some(page), Some(lower)) => Some(page + lower)
+      | _ => None
+      };
+  };
 
-      let upperBoundIndex = (reducerParams: t) =>
-        switch (reducerParams.response) {
-        | Success(m) => m.pageInfo.endCursor |> E.O.fmap(Primary.Cursor.toInt)
-        | _ => None
-        };
+  module ItemUnselected = {
+    open Types;
+    let changePage = (state: Types.state, pageDirection): pageConfig =>
+      state.response
+      |> HttpResponse.fmap((r: Primary.Connection.t('a)) =>
+           pageDirection(r) |> E.O.fmap(d => {direction: d})
+         )
+      |> HttpResponse.flattenDefault(None, a => a)
+      |> E.O.default(state.pageConfig);
 
-      let selectionIndex = (reducerParams: t) =>
-        switch (pageIndex(reducerParams), lowerBoundIndex(reducerParams)) {
-        | (Some(page), Some(lower)) => Some(page + lower)
-        | _ => None
-        };
-    };
+    let nextPage = (state): pageConfig =>
+      changePage(state, Primary.Connection.nextPageDirection);
 
-    module ItemUnselected = {
-      open Types;
-      let changePage = (state: Types.state, pageDirection) =>
-        state.response
-        |> HttpResponse.fmap((r: Primary.Connection.t('a)) =>
-             pageDirection(r) |> E.O.fmap(d => {direction: d})
-           )
-        |> HttpResponse.flattenDefault(None, a => a)
-        |> E.O.default(state.pageConfig);
+    let lastPage = (state): pageConfig =>
+      changePage(state, Primary.Connection.lastPageDirection);
 
-      let nextPage = state =>
-        changePage(state, Primary.Connection.nextPageDirection);
-
-      let lastPage = (state): pageConfig =>
-        changePage(state, Primary.Connection.lastPageDirection);
-
-      let selectIndex = (i, itemsPerPage) =>
-        E.BoundedInt.make(i, itemsPerPage)
-        <$> (selectedIndex => ItemSelected({selectedIndex: selectedIndex}));
-
-      let newState = (itemsPerPage, state, action) =>
-        switch (action) {
-        | NextPage => Some((ItemUnselected, nextPage(state)))
-        | LastPage => Some((ItemUnselected, lastPage(state)))
-        | SelectIndex(i) =>
-          selectIndex(i, itemsPerPage)
-          |> E.O.fmap(r => (r, state.pageConfig))
-        | _ => None
-        };
-    };
+    let selectIndex = (i, itemsPerPage) =>
+      E.BoundedInt.make(i, itemsPerPage)
+      <$> (selectedIndex => ItemSelected({selectedIndex: selectedIndex}));
   };
 
   module Components = {
-    open Reducers.ReducerParams;
+    open ReducerParams;
 
     module Styles = {
       open Css;
@@ -368,56 +339,62 @@ module Make = (Config: Config) => {
   [@react.component]
   let make =
       (~itemsPerPage=20, ~callFnParams: Config.callFnParams, ~subComponent) => {
-    let (state, setState) =
-      React.useState(() =>
-        {
-          itemState: ItemUnselected,
-          response: Loading,
-          pageConfig: {
-            direction: None,
-          },
-        }
-      );
+    let (itemState, setItemState) = React.useState(() => ItemUnselected);
+    let (response, setResponse) = React.useState(() => HttpResponse.Loading);
+    let (pageConfig, setPageConfig) =
+      React.useState(() => {direction: None});
 
-    let send = (action: action) => {
-      switch (action) {
-      | UpdateResponse(response) =>
-        setState(_ =>
-          {response, itemState: state.itemState, pageConfig: state.pageConfig}
-        )
+    let state = {itemState, response, pageConfig};
 
-      | _ =>
-        let newState =
-          switch (state) {
-          | {itemState: ItemUnselected} =>
-            Reducers.ItemUnselected.newState(itemsPerPage, state, action)
+    let send = action =>
+      switch (itemState, action) {
+      | (ItemUnselected | ItemDeselected, NextPage) =>
+        setPageConfig(_ => ItemUnselected.nextPage(state));
 
-          | {itemState: ItemSelected(itemSelected)} =>
-            Reducers.ItemSelected.newState(itemsPerPage, itemSelected, action)
-            |> E.O.fmap(itemState => (itemState, state.pageConfig))
-          };
+      | (ItemUnselected | ItemDeselected, LastPage) =>
+        setPageConfig(_ => ItemUnselected.lastPage(state));
 
-        switch (newState) {
-        | Some((itemState, pageConfig)) =>
-          setState(_ => {response: state.response, itemState, pageConfig})
+      | (ItemUnselected | ItemDeselected, SelectIndex(i)) =>
+        ItemUnselected.selectIndex(i, itemsPerPage)
+        |> E.O.fmap(itemState => setItemState(_ => itemState))
+        |> ignore;
 
-        | None => ()
-        };
+      | (ItemSelected(_), Deselect) =>
+        setItemState(_ => ItemDeselected);
+
+      | (ItemSelected(itemSelected), NextSelection) =>
+        ItemSelected.nextSelection(itemsPerPage, itemSelected)
+        |> E.O.fmap(itemState => setItemState(_ => itemState))
+        |> ignore
+
+      | (ItemSelected(itemSelected), LastSelection) =>
+        ItemSelected.lastSelection(itemsPerPage, itemSelected)
+        |> E.O.fmap(itemState => setItemState(_ => itemState))
+        |> ignore
+
+      | _ => ()
       };
-      ();
-    };
+
+    React.useEffect(() => {
+      switch (itemState) {
+      | ItemDeselected => Config.onItemDeselected(callFnParams)
+      | ItemSelected(_) => Config.onItemSelected(State.selection(state))
+      | _ => ()
+      };
+      None;
+    });
 
     let innerComponentFn = response => {
       // @todo: Fix this. Use hooks somehow.
       if (!HttpResponse.isEq(state.response, response, compareItems)) {
-        send(UpdateResponse(response));
+        setResponse(_ => response);
       };
 
       subComponent({
         itemsPerPage,
         itemState: state.itemState,
         response: state.response,
-        selection: Reducers.State.selection(state),
+        selection: State.selection(state),
         send,
       });
     };

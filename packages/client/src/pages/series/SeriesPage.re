@@ -4,6 +4,9 @@ module Config = {
 
   let getId = (e: Types.measurable) => e.id;
 
+  let onItemDeselected = _ => ();
+  let onItemSelected = (_: option(itemType)) => ();
+
   let callFn = (seriesId: callFnParams) =>
     MeasurablesGet.component(
       ~seriesId=Some(seriesId),
@@ -77,6 +80,7 @@ let make = (~channelId: string, ~seriesId: string) => {
          selectWithPaginationParams.selection,
        ) {
        | (_, Some(measurable)) => <MeasurablePage measurable />
+
        | (Success(connection), None) =>
          <MeasurablesSeriesTable
            measurables={connection.edges}
@@ -85,6 +89,7 @@ let make = (~channelId: string, ~seriesId: string) => {
              Reducer.Components.sendSelectItem(selectWithPaginationParams, id)
            }
          />
+
        | _ => <div />
        }}
     </SLayout>

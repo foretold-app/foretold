@@ -7,6 +7,10 @@ module ReducerConfig = {
   );
 
   let getId = (e: itemType) => e.id;
+
+  let onItemDeselected = _ => ();
+  let onItemSelected = (_: option(itemType)) => ();
+
   let callFn =
       ((channelId, measurableId, finalComparisonMeasurement): callFnParams) =>
     AgentMeasurablesGet.component(

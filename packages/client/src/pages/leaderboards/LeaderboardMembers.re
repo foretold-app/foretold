@@ -3,6 +3,10 @@ module ReducerConfig = {
   type callFnParams = (option(string), option(string));
 
   let getId = (e: itemType) => e.id;
+
+  let onItemDeselected = _ => ();
+  let onItemSelected = (_: option(itemType)) => ();
+
   let callFn = ((channelId, agentId): callFnParams) =>
     AgentChannelsGet.component(~channelId, ~agentId, ());
 

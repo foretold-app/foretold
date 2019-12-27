@@ -3,6 +3,10 @@ module ReducerConfig = {
   type callFnParams = string;
 
   let getId = (e: itemType) => e.id;
+
+  let onItemDeselected = _ => ();
+  let onItemSelected = (_: option(itemType)) => ();
+
   let callFn = (measurableId: callFnParams) =>
     MeasurementsGet.component(~measurableId=Some(measurableId), ());
 

@@ -147,8 +147,7 @@ let toLayoutInput =
       />
     </>
 
-  | WithoutChannel(_) =>
-    <SLayout container=`fluid> {"No channel." |> ste} </SLayout>
+  | WithoutChannel(_) => <NotFoundPage />
 
   | InvalidIndexError(_) =>
     <SLayout container=`fluid> {"Item Not Valid" |> ste} </SLayout>

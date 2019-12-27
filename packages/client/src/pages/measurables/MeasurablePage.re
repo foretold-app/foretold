@@ -13,7 +13,7 @@ module Styles = {
 };
 
 [@react.component]
-let make = (~measurable) => {
+let make = (~measurable: Types.measurable) => {
   <>
     <Div styles=[Styles.header]>
       <Div flexDirection=`row>

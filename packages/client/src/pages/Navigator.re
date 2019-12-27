@@ -1,15 +1,22 @@
+let redirectionCount: string = "";
+
 [@react.component]
 let make = () => {
   let (route, setRoute) =
     React.useState(() =>
       ReasonReact.Router.dangerouslyGetInitialUrl() |> Routing.Route.fromUrl
     );
-
-  ReasonReact.Router.watchUrl(url => {
-    setRoute(_ => url |> Routing.Route.fromUrl);
-    ();
-  })
-  |> ignore;
+  let (_watcher, _setWatcher) =
+    React.useState(() =>
+      ReasonReact.Router.watchUrl(url => {
+        let reg = () => [%re "/!$/g"];
+        switch (reg() |> Js.Re.exec(url.hash)) {
+        | Some(_) => ()
+        | _ => setRoute(_ => url |> Routing.Route.fromUrl)
+        };
+        ();
+      })
+    );
 
   <Providers.AppContext.Consumer>
     ...{({loggedUser}) => {

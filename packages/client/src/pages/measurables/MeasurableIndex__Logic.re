@@ -6,7 +6,30 @@ module ReducerConfig = {
     states: option(array(Types.measurableState)),
   };
 
-  let getId = (params: itemType) => params.id;
+  let getId = (itemType: itemType) => itemType.id;
+
+  let onItemDeselected = (params: callFnParams) => {
+    let st =
+      params.states
+      |> MeasurableQueryIndex.make
+      |> MeasurableQueryIndex.toUrlParams;
+    let channelLink = Routing.Url.toString(ChannelShow(params.channelId));
+    ReasonReact.Router.replace(channelLink ++ st ++ "#!");
+    ();
+  };
+
+  let onItemSelected = (measurable: option(itemType)) => {
+    switch (measurable) {
+    | Some(measurable) =>
+      let measurableLink =
+        Routing.Url.toString(
+          MeasurableShow(measurable.channelId, measurable.id),
+        );
+      ReasonReact.Router.replace(measurableLink ++ "#!");
+    | _ => ()
+    };
+    ();
+  };
 
   let callFn = (params: callFnParams) =>
     MeasurablesGet.component(
@@ -16,12 +39,10 @@ module ReducerConfig = {
     );
 
   let isEqual = (a: itemType, b: itemType) => {
-    let result =
-      switch (a.updatedAt, b.updatedAt) {
-      | (Some(a), Some(b)) => MomentRe.Moment.isSame(a, b)
-      | _ => false
-      };
-    result;
+    switch (a.updatedAt, b.updatedAt) {
+    | (Some(a), Some(b)) => MomentRe.Moment.isSame(a, b)
+    | _ => false
+    };
   };
 };
 
@@ -68,7 +89,6 @@ type input = {
   seriesQuery,
 };
 
-
 // @todo: To make a component.
 let make = (input: input) =>
   switch (
@@ -98,7 +118,7 @@ let make = (input: input) =>
     }
 
   | (
-      ItemUnselected(_),
+      ItemUnselected(_) | ItemDeselected(_),
       Success(channel),
       Success(seriesCollection),
       Success(_),

@@ -9,12 +9,12 @@ module ReducerConfig = {
   let getId = (itemType: itemType) => itemType.id;
 
   let onItemDeselected = (params: callFnParams) => {
-      let st =
-        params.states
-        |> MeasurableQueryIndex.make
-        |> MeasurableQueryIndex.toUrlParams;
-      let channelLink = Routing.Url.toString(ChannelShow(params.channelId));
-      ReasonReact.Router.replace(channelLink ++ st ++ "#!");
+    let st =
+      params.states
+      |> MeasurableQueryIndex.make
+      |> MeasurableQueryIndex.toUrlParams;
+    let channelLink = Routing.Url.toString(ChannelShow(params.channelId));
+    ReasonReact.Router.replace(channelLink ++ st ++ "#!");
     ();
   };
 
@@ -39,10 +39,10 @@ module ReducerConfig = {
     );
 
   let isEqual = (a: itemType, b: itemType) => {
-      switch (a.updatedAt, b.updatedAt) {
-      | (Some(a), Some(b)) => MomentRe.Moment.isSame(a, b)
-      | _ => false
-      };
+    switch (a.updatedAt, b.updatedAt) {
+    | (Some(a), Some(b)) => MomentRe.Moment.isSame(a, b)
+    | _ => false
+    };
   };
 };
 
@@ -118,13 +118,7 @@ let make = (input: input) =>
     }
 
   | (
-      ItemUnselected(_),
-      Success(channel),
-      Success(seriesCollection),
-      Success(_),
-    )
-  | (
-      ItemDeselected(_),
+      ItemUnselected(_) | ItemDeselected(_),
       Success(channel),
       Success(seriesCollection),
       Success(_),

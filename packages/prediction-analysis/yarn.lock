@@ -904,6 +904,15 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
+"@foretold/cdf@1.0.14":
+  version "1.0.14"
+  resolved "https://registry.yarnpkg.com/@foretold/cdf/-/cdf-1.0.14.tgz#a6b77a1fa211e3b5b8b3f75fbe1979499287eb89"
+  integrity sha512-Dfo9g2lJbNmJNL8dYnUjmrnOlTQXWJaadys0iuSxO2UNF0Y60RdRIllESviy/Qx2Pbzrkds5E7M4DncpMNPu8Q==
+  dependencies:
+    lodash "4.17.15"
+    parcel "1.12.3"
+    pdfast "0.2.0"
+
 "@glennsl/bs-jest@0.4.9":
   version "0.4.9"
   resolved "https://registry.yarnpkg.com/@glennsl/bs-jest/-/bs-jest-0.4.9.tgz#a23af2668dda05947ce9c043fd5a7b295e91cef7"
@@ -1948,10 +1957,15 @@ command-exists@^1.2.6:
   resolved "https://registry.yarnpkg.com/command-exists/-/command-exists-1.2.8.tgz#715acefdd1223b9c9b37110a149c6392c2852291"
   integrity sha512-PM54PkseWbiiD/mMsbvW351/u+dafwTJ0ye2qB60G1aGQP9j3xK2gmMDc+R34L3nDtx4qMCitXT75mkbkGJDLw==
 
-commander@^2.11.0, commander@^2.19.0, commander@^2.20.0, commander@~2.20.0:
+commander@^2.11.0, commander@^2.19.0, commander@^2.20.0:
   version "2.20.0"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.0.tgz#d58bb2b5c1ee8f87b0d340027e9e94e222c5a422"
   integrity sha512-7j2y+40w61zy6YC2iRNpUe/NwhNyoXrYpHMrSunaMG64nRnaf96zO/KMQR4OyN/UnE5KLyEBnKHd4aG3rskjpQ==
+
+commander@~2.20.3:
+  version "2.20.3"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.3.tgz#fd485e84c03eb4881c20722ba48035e8531aeb33"
+  integrity sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==
 
 component-emitter@^1.2.1:
   version "1.3.0"
@@ -3010,9 +3024,9 @@ growly@^1.3.0:
   integrity sha1-8QdIy+dq+WS3yWyTxrzCivEgwIE=
 
 handlebars@^4.1.2:
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/handlebars/-/handlebars-4.2.0.tgz#57ce8d2175b9bbb3d8b3cf3e4217b1aec8ddcb2e"
-  integrity sha512-Kb4xn5Qh1cxAKvQnzNWZ512DhABzyFNmsaJf3OAkWNa4NkaqWcNI8Tao8Tasi0/F4JD9oyG0YxuFyvyR57d+Gw==
+  version "4.5.3"
+  resolved "https://registry.yarnpkg.com/handlebars/-/handlebars-4.5.3.tgz#5cf75bd8714f7605713511a56be7c349becb0482"
+  integrity sha512-3yPecJoJHK/4c6aZhSvxOyG4vJKDshV36VHp0iVCDVh7o9w2vwi3NSnL2MMPj3YdduqaBcu7cGbggJQM0br9xA==
   dependencies:
     neo-async "^2.6.0"
     optimist "^0.6.1"
@@ -4908,6 +4922,69 @@ parcel-bundler@1.12.3:
     v8-compile-cache "^2.0.0"
     ws "^5.1.1"
 
+parcel@1.12.3:
+  version "1.12.3"
+  resolved "https://registry.yarnpkg.com/parcel/-/parcel-1.12.3.tgz#1f1341589380f20be924f1dd67c7fed193b346ec"
+  integrity sha512-j9XCVLeol9qZvGemRKt2z8bptbXq9LVy8/IzjqWQKMiKd8DR0NpDAlRHV0zyF72/J/UUTsdsrhnw6UGo9nGI+Q==
+  dependencies:
+    "@babel/code-frame" "^7.0.0 <7.4.0"
+    "@babel/core" "^7.0.0 <7.4.0"
+    "@babel/generator" "^7.0.0 <7.4.0"
+    "@babel/parser" "^7.0.0 <7.4.0"
+    "@babel/plugin-transform-flow-strip-types" "^7.0.0 <7.4.0"
+    "@babel/plugin-transform-modules-commonjs" "^7.0.0 <7.4.0"
+    "@babel/plugin-transform-react-jsx" "^7.0.0 <7.4.0"
+    "@babel/preset-env" "^7.0.0 <7.4.0"
+    "@babel/runtime" "^7.0.0 <7.4.0"
+    "@babel/template" "^7.0.0 <7.4.0"
+    "@babel/traverse" "^7.0.0 <7.4.0"
+    "@babel/types" "^7.0.0 <7.4.0"
+    "@iarna/toml" "^2.2.0"
+    "@parcel/fs" "^1.11.0"
+    "@parcel/logger" "^1.11.0"
+    "@parcel/utils" "^1.11.0"
+    "@parcel/watcher" "^1.12.0"
+    "@parcel/workers" "^1.11.0"
+    ansi-to-html "^0.6.4"
+    babylon-walk "^1.0.2"
+    browserslist "^4.1.0"
+    chalk "^2.1.0"
+    clone "^2.1.1"
+    command-exists "^1.2.6"
+    commander "^2.11.0"
+    cross-spawn "^6.0.4"
+    css-modules-loader-core "^1.1.0"
+    cssnano "^4.0.0"
+    deasync "^0.1.14"
+    dotenv "^5.0.0"
+    dotenv-expand "^4.2.0"
+    fast-glob "^2.2.2"
+    filesize "^3.6.0"
+    get-port "^3.2.0"
+    htmlnano "^0.2.2"
+    is-glob "^4.0.0"
+    is-url "^1.2.2"
+    js-yaml "^3.10.0"
+    json5 "^1.0.1"
+    micromatch "^3.0.4"
+    mkdirp "^0.5.1"
+    node-forge "^0.7.1"
+    node-libs-browser "^2.0.0"
+    opn "^5.1.0"
+    postcss "^7.0.11"
+    postcss-value-parser "^3.3.1"
+    posthtml "^0.11.2"
+    posthtml-parser "^0.4.0"
+    posthtml-render "^1.1.3"
+    resolve "^1.4.0"
+    semver "^5.4.1"
+    serialize-to-js "^1.1.1"
+    serve-static "^1.12.4"
+    source-map "0.6.1"
+    terser "^3.7.3"
+    v8-compile-cache "^2.0.0"
+    ws "^5.1.1"
+
 parse-asn1@^5.0.0:
   version "5.1.5"
   resolved "https://registry.yarnpkg.com/parse-asn1/-/parse-asn1-5.1.5.tgz#003271343da58dc94cace494faef3d2147ecea0e"
@@ -4995,6 +5072,11 @@ pbkdf2@^3.0.3:
     ripemd160 "^2.0.1"
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
+
+pdfast@0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/pdfast/-/pdfast-0.2.0.tgz#8cbc556e1bf2522177787c0de2e0d4373ba885c9"
+  integrity sha1-jLxVbhvyUiF3eHwN4uDUNzuohck=
 
 performance-now@^2.1.0:
   version "2.1.0"
@@ -6551,11 +6633,11 @@ typedarray@^0.0.6:
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
 uglify-js@^3.1.4:
-  version "3.6.0"
-  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.6.0.tgz#704681345c53a8b2079fb6cec294b05ead242ff5"
-  integrity sha512-W+jrUHJr3DXKhrsS7NUVxn3zqMOFn0hL/Ei6v0anCIMoKC93TjcflTagwIHLW7SfMFfiQuktQyFVCFHGUE0+yg==
+  version "3.7.3"
+  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.7.3.tgz#f918fce9182f466d5140f24bb0ff35c2d32dcc6a"
+  integrity sha512-7tINm46/3puUA4hCkKYo4Xdts+JDaVC9ZPRcG8Xw9R4nhO/gZgUM3TENq8IF4Vatk8qCig4MzP/c8G4u2BkVQg==
   dependencies:
-    commander "~2.20.0"
+    commander "~2.20.3"
     source-map "~0.6.1"
 
 uncss@^0.17.0:

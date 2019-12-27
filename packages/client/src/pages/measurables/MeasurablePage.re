@@ -14,13 +14,6 @@ module Styles = {
 
 [@react.component]
 let make = (~measurable: Types.measurable) => {
-//  React.useEffect(_ => {
-//    Js.log("2");
-//    ReasonReact.Router.replace(
-//      "/c/" ++ measurable.channelId ++ "/m/" ++ measurable.id ++ "#!m",
-//    );
-//    None;
-//  });
   <>
     <Div styles=[Styles.header]>
       <Div flexDirection=`row>

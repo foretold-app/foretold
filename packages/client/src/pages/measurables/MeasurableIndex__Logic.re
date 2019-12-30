@@ -14,8 +14,7 @@ module ReducerConfig = {
       |> MeasurableQueryIndex.make
       |> MeasurableQueryIndex.toUrlParams;
     let channelLink = Routing.Url.toString(ChannelShow(params.channelId));
-    ReasonReact.Router.replace(channelLink ++ st ++ "#!");
-    ();
+    History.append(channelLink ++ st);
   };
 
   let onItemSelected = (measurable: option(itemType)) => {
@@ -25,7 +24,7 @@ module ReducerConfig = {
         Routing.Url.toString(
           MeasurableShow(measurable.channelId, measurable.id),
         );
-      ReasonReact.Router.replace(measurableLink ++ "#!");
+      History.append(measurableLink);
     | _ => ()
     };
     ();

@@ -8,6 +8,7 @@ external onReplaceState: (event => unit) => unit = "onReplaceState";
 external onPushState: (event => unit) => unit = "onPushState";
 [@bs.module "./history.js"]
 external onPopState: (event => unit) => unit = "onPopState";
+
 [@bs.module "./history.js"]
 external pushState: (state, string, string) => unit = "pushState";
 [@bs.module "./history.js"]

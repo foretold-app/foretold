@@ -6,17 +6,21 @@ let make = () => {
     React.useState(() =>
       ReasonReact.Router.dangerouslyGetInitialUrl() |> Routing.Route.fromUrl
     );
-  let (_watcher, _setWatcher) =
-    React.useState(() =>
-      ReasonReact.Router.watchUrl(url => {
-        let reg = () => [%re "/!$/g"];
-        switch (reg() |> Js.Re.exec(url.hash)) {
-        | Some(_) => ()
-        | _ => setRoute(_ => url |> Routing.Route.fromUrl)
-        };
-        ();
-      })
-    );
+
+  React.useState(() => {
+    History.onPushState(event => {
+      let miss = History.miss(event);
+      if (!miss) {
+        let url = ReasonReact.Router.dangerouslyGetInitialUrl();
+        setRoute(_ => url |> Routing.Route.fromUrl);
+      };
+    });
+    History.onPopState(_ => {
+      let url = ReasonReact.Router.dangerouslyGetInitialUrl();
+      setRoute(_ => url |> Routing.Route.fromUrl);
+    });
+  })
+  |> ignore;
 
   <Providers.AppContext.Consumer>
     ...{({loggedUser}) => {

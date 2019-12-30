@@ -1,40 +1,47 @@
-const _wr = function (type) {
+function wrapper(type) {
   const orig = history[type];
-  return function () {
-    const rv = orig.apply(this, arguments);
+  return function (state, title, path) {
+    const rv = orig.apply(this, [state, title, path]);
     const e = new Event(type);
-    e.arguments = arguments;
+    e.state = state;
     window.dispatchEvent(e);
     return rv;
   };
-};
+}
 
-history.pushState = _wr('pushState');
-history.replaceState = _wr('replaceState');
+history.pushState = wrapper('pushState');
+history.replaceState = wrapper('replaceState');
 
 function onReplaceState(clb) {
-  window.addEventListener('replaceState', function(e) {
-    console.debug('replaceState');
-    clb();
+  window.addEventListener('replaceState', function (event) {
+    clb(event);
   });
 }
 
 function onPushState(clb) {
-  window.addEventListener('pushState', function(e) {
-    console.debug('pushState');
-    clb();
+  window.addEventListener('pushState', function (event) {
+    clb(event);
   });
 }
 
 function onPopState(clb) {
-  window.addEventListener('popstate', function(e) {
-    console.debug('popstate');
-    clb();
+  window.addEventListener('popstate', function (event) {
+    clb(event);
   });
+}
+
+function pushState(state, title, path) {
+  history.pushState(state, title, path);
+}
+
+function replaceState(state, title, path) {
+  history.replaceState(state, title, path);
 }
 
 module.exports = {
   onReplaceState,
   onPushState,
   onPopState,
+  pushState,
+  replaceState,
 };

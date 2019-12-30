@@ -71,7 +71,7 @@ let make = () => {
         | (_, _) => <Home />
         };
 
-      <> routeComponent <Redirect route loggedUser /> </>;
+      <> routeComponent <Redirect route /> </>;
     }}
   </Providers.AppContext.Consumer>;
 };

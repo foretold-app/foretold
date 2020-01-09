@@ -16,9 +16,9 @@ module.exports = {
       for (const table of tables) {
         for (const column of columns) {
           await queryInterface.sequelize.query(
-            `UPDATE "${table}" ` +
-            `SET "${column}" = NOW() ` +
-            `WHERE "${column}" IS NULL`,
+            `UPDATE "${table}" `
+            + `SET "${column}" = NOW() `
+            + `WHERE "${column}" IS NULL`,
           );
           await queryInterface.sequelize.query(
             `ALTER TABLE "${table}" ALTER COLUMN "${column}" SET NOT NULL`,
@@ -37,8 +37,6 @@ module.exports = {
   down: async function (queryInterface) {
     try {
       await queryInterface.sequelize.query('BEGIN');
-
-      const tables = ['Mutexes'];
 
       // Nullable
       for (const table of tables) {

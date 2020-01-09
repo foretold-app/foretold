@@ -1,8 +1,8 @@
-const events = require('../sync/events');
-const emitter = require('../sync/emitter');
+const events = require('./events');
+const emitter = require('./emitter');
 const logger = require('../lib/log');
 
-const log = logger.module('data/agent-measurables-data');
+const log = logger.module('sync/hooks');
 
 /**
  * Try to keep all "sync" hooks in one place.

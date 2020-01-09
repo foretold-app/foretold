@@ -16,7 +16,12 @@ module.exports = {
       for (const table of tables) {
         for (const column of columns) {
           await queryInterface.sequelize.query(
-            `ALTER TABLE "${table}" ALTER COLUMN "${column}" DROP NOT NULL`,
+            `UPDATE "${table}" ` +
+            `SET "${column}" = NOW() ` +
+            `WHERE "${column}" IS NULL`,
+          );
+          await queryInterface.sequelize.query(
+            `ALTER TABLE "${table}" ALTER COLUMN "${column}" SET NOT NULL`,
           );
         }
       }
@@ -39,7 +44,7 @@ module.exports = {
       for (const table of tables) {
         for (const column of columns) {
           await queryInterface.sequelize.query(
-            `ALTER TABLE "${table}" ALTER COLUMN "${column}" SET NOT NULL`,
+            `ALTER TABLE "${table}" ALTER COLUMN "${column}" DROP NOT NULL`,
           );
         }
       }

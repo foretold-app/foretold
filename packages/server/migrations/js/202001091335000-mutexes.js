@@ -7,22 +7,14 @@ module.exports = {
         'Mutexes',
         'Mutexes_name_agentId_unique',
       );
-      await queryInterface.removeConstraint(
+      await queryInterface.removeIndex(
         'Mutexes',
-        'Mutexes_agentId_fkey',
+        'Mutexes_name_unique',
       );
 
-      await queryInterface.changeColumn('Mutexes', 'agentId', {
-        type: Sequelize.UUID,
-        allowNull: true,
-      });
-      await queryInterface.changeColumn('Mutexes', 'agentId', {
-        type: Sequelize.UUID,
-        references: {
-          model: 'Agents',
-          key: 'id',
-        },
-      });
+      await queryInterface.sequelize.query(
+        'ALTER TABLE "Mutexes" ALTER COLUMN "agentId" SET NOT NULL',
+      );
 
       // agentId = null
       await queryInterface.addIndex('Mutexes', ['name'], {
@@ -51,7 +43,7 @@ module.exports = {
     }
   },
 
-  down: async function (queryInterface, Sequelize) {
+  down: async function (queryInterface) {
     try {
       await queryInterface.sequelize.query('BEGIN');
 
@@ -67,23 +59,10 @@ module.exports = {
         'Mutexes',
         'Mutexes_name_agentId_unique',
       );
-      await queryInterface.removeConstraint(
-        'Mutexes',
-        'Mutexes_agentId_fkey',
-      );
 
-      await queryInterface.changeColumn('Mutexes', 'agentId', {
-        type: Sequelize.UUID,
-        references: {
-          model: 'Agents',
-          key: 'id',
-        },
-        allowNull: false,
-      });
-      await queryInterface.addIndex('Mutexes', ['name', 'agentId'], {
-        name: 'Mutexes_name_agentId_unique',
-        unique: true,
-      });
+      await queryInterface.sequelize.query(
+        'ALTER TABLE "Mutexes" ALTER COLUMN "agentId" DROP NOT NULL',
+      );
 
       await queryInterface.sequelize.query('COMMIT');
     } catch (e) {

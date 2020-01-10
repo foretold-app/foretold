@@ -8,7 +8,6 @@ const logger = require('../lib/log');
 const { Model } = require('./model');
 const { ResponseAll } = require('./classes');
 
-
 /**
  * @abstract
  * @implements {Layers.AbstractModelsLayer.AbstractModel}
@@ -151,7 +150,7 @@ class ModelPostgres extends Model {
   _measurablesInPublicAndJoinedChannels(agentId, name = '') {
     assert(!!agentId, 'Agent ID is required.');
     return `(
-      /* Measurables in Public and Joined Channels (${name}) */
+      /* M͟e͟a͟s͟u͟r͟a͟b͟l͟e͟s͟ ͟i͟n͟ ͟P͟u͟b͟l͟i͟c͟ ͟a͟n͟d͟ ͟J͟o͟i͟n͟e͟d͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${name}) */
       WITH channelIds AS (${this._publicAndJoinedChannels(agentId, name)})
       SELECT "Measurables"."id" FROM "Measurables"
       WHERE "Measurables"."channelId" IN (SELECT id FROM channelIds)
@@ -176,7 +175,7 @@ class ModelPostgres extends Model {
    */
   _measurablesInPublicChannels(name = '') {
     return `(
-      /* Measurables in Public Channels (${name}) */
+      /* M͟e͟a͟s͟u͟r͟a͟b͟l͟e͟s͟ ͟i͟n͟ ͟P͟u͟b͟l͟i͟c͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${name}) */
       WITH channelIds AS (${this._publicChannels(name)})
       SELECT "Measurables"."id" FROM "Measurables"
       WHERE "Measurables"."channelId" IN (SELECT id FROM channelIds)
@@ -215,7 +214,7 @@ class ModelPostgres extends Model {
     const where = cond.length > 0 ? `WHERE (${cond.join(' AND ')})` : '';
 
     return `(
-      /* Within Measurables (${name}) */
+      /* W͟i͟t͟h͟i͟n͟ ͟M͟e͟a͟s͟u͟r͟a͟b͟l͟e͟s͟ (${name}) */
       SELECT "id" FROM "Measurables"
       ${where}
     )`;

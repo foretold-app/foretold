@@ -1,4 +1,3 @@
-const Sequelize = require('sequelize');
 const moment = require('moment');
 
 const { MEASURABLE_STATE } = require('../enums');
@@ -146,42 +145,6 @@ module.exports = (sequelize, DataTypes) => {
    */
   Measurable.prototype.unarchive = async function unarchive() {
     await this.update({ isArchived: false });
-  };
-
-  /**
-   * @return {Promise<Models.Measurable>}
-   */
-  Measurable.prototype.open = async function open() {
-    await this.updateState(MEASURABLE_STATE.OPEN);
-  };
-
-  /**
-   * @return {Promise<Models.Measurable>}
-   */
-  Measurable.prototype.judged = async function judged() {
-    await this.updateState(MEASURABLE_STATE.JUDGED);
-  };
-
-  /**
-   * @return {Promise<Models.Measurable>}
-   */
-  Measurable.prototype.judgementPending = async function judgementPending() {
-    await this.updateState(MEASURABLE_STATE.JUDGEMENT_PENDING);
-  };
-
-  /**
-   * @return {Promise<Models.Measurable>}
-   */
-  Measurable.prototype.closedAsUnresolved = async function closedAsUnresolved() {
-    await this.updateState(MEASURABLE_STATE.CLOSED_AS_UNRESOLVED);
-  };
-
-  /**
-   * @param {string} state
-   * @return {Promise<Models.Measurable>}
-   */
-  Measurable.prototype.updateState = async function updateState(state) {
-    await this.update({ state, stateUpdatedAt: Sequelize.fn('now') });
   };
 
   /**

@@ -54,6 +54,8 @@ class Filter {
       notAuth0AccessToken: (v) => _.isBoolean(v) || utils.none(v),
       isNotEmailVerified: (v) => _.isBoolean(v) || utils.none(v),
       ownerId: (v) => _.isString(v) || utils.none(v),
+      needsToBePending: (v) => _.isBoolean(v) || utils.none(v),
+      needsResolutionResponse: (v) => _.isBoolean(v) || utils.none(v),
     };
     utils.extend(this.constructor.name, filter, list, this);
     utils.test(this.constructor.name, list, this);

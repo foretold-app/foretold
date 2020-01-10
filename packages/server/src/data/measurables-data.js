@@ -43,31 +43,6 @@ class MeasurablesData extends DataBase {
   }
 
   /**
-   * @public
-   * @return {Promise<Models.Measurable[]>}
-   */
-  async needsToBePending() {
-    return this.model.needsToBePending();
-  }
-
-  /**
-   * @public
-   * @return {Promise<Models.Measurable[]>}
-   */
-  async needsResolutionResponse() {
-    return this.model.needsResolutionResponse();
-  }
-
-  /**
-   * @public
-   * @param {Models.Measurable} measurable
-   * @return {Promise<Models.Measurable>}
-   */
-  async processResolution(measurable) {
-    return this.model.processResolution(measurable);
-  }
-
-  /**
    * @param {Models.ChannelID} channelId
    * @return {Promise<*>}
    */
@@ -91,11 +66,11 @@ class MeasurablesData extends DataBase {
   }
 
   /**
-   * @return {Promise<null|boolean|number>}
+   * @return {Promise<null|number>}
    */
   async resolutionEndpointResponse(measurable) {
     const endpoint = measurable.resolutionEndpoint;
-    if (!endpoint) return false;
+    if (!endpoint) return null;
 
     try {
       const response = await fetch(endpoint);

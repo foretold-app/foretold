@@ -23,43 +23,9 @@ class Filter {
    * @param {Layers.DataSourceLayer.filter} [filter]
    */
   constructor(filter = {}) {
-    const list = {
-      agentId: (v) => _.isString(v) || utils.none(v),
-      attemptCounterMax: (v) => _.isNumber(v) || utils.none(v),
-      channelId: (v) => _.isString(v) || utils.none(v),
-      competitorType: (v) => _.isArray(v) || utils.none(v),
-      creatorId: (v) => _.isString(v) || utils.none(v),
-      email: (v) => _.isString(v) || utils.none(v),
-      excludeChannelId: (v) => _.isString(v) || utils.none(v),
-      findInDateRange: (v) => _.isObject(v) || utils.none(v),
-      id: (v) => _.isString(v) || utils.none(v),
-      isArchived: (v) => _.isArray(v) || utils.none(v),
-      isEmailVerified: (v) => _.isArray(v) || utils.none(v),
-      isNotEmailVerified: (v) => _.isBoolean(v) || utils.none(v),
-      measurableId: (v) => _.isString(v) || utils.none(v),
-      measurableIds: (v) => _.isArray(v) || utils.none(v),
-      minNumberOfPredictions: (v) => _.isNumber(v) || utils.none(v),
-      minNumberOfQuestionsScored: (v) => _.isNumber(v) || utils.none(v),
-      minPredictionCountTotal: (v) => _.isNumber(v) || utils.none(v),
-      needsResolutionResponse: (v) => _.isBoolean(v) || utils.none(v),
-      needsToBePending: (v) => _.isBoolean(v) || utils.none(v),
-      notAuth0AccessToken: (v) => _.isBoolean(v) || utils.none(v),
-      notTaggedByAgent: (v) => _.isString(v) || utils.none(v),
-      notificationId: (v) => _.isString(v) || utils.none(v),
-      ownerId: (v) => _.isString(v) || utils.none(v),
-      sentAt: (v) => _.isString(v) || _.isObject(v) || utils.none(v),
-      seriesId: (v) => _.isString(v) || utils.none(v),
-      states: (v) => _.isArray(v) || utils.none(v),
-      status: (v) => _.isString(v) || utils.none(v),
-      type: (v) => _.isString(v) || utils.none(v),
-      types: (v) => _.isArray(v) || utils.none(v),
-      userId: (v) => _.isString(v) || utils.none(v),
-      withinJoinedChannels: (v) => _.isObject(v) || utils.none(v),
-      withinMeasurables: (v) => _.isObject(v) || utils.none(v),
-    };
-    utils.extend(this.constructor.name, filter, list, this);
-    utils.test(this.constructor.name, list, this);
-    utils.diff(this.constructor.name, filter, list);
+    utils.extend(this.constructor.name, filter, Filter.LIST, this);
+    utils.test(this.constructor.name, Filter.LIST, this);
+    utils.diff(this.constructor.name, filter, Filter.LIST);
   }
 
   /**
@@ -77,6 +43,44 @@ class Filter {
     utils.inspect(this);
   }
 }
+
+const list = {
+  agentId: (v) => _.isString(v) || utils.none(v),
+  attemptCounterMax: (v) => _.isNumber(v) || utils.none(v),
+  channelId: (v) => _.isString(v) || utils.none(v),
+  competitorType: (v) => _.isArray(v) || utils.none(v),
+  creatorId: (v) => _.isString(v) || utils.none(v),
+  email: (v) => _.isString(v) || utils.none(v),
+  excludeChannelId: (v) => _.isString(v) || utils.none(v),
+  findInDateRange: (v) => _.isObject(v) || utils.none(v),
+  id: (v) => _.isString(v) || utils.none(v),
+  isArchived: (v) => _.isArray(v) || utils.none(v),
+  isEmailVerified: (v) => _.isArray(v) || utils.none(v),
+  isNotEmailVerified: (v) => _.isBoolean(v) || utils.none(v),
+  measurableId: (v) => _.isString(v) || utils.none(v),
+  measurableIds: (v) => _.isArray(v) || utils.none(v),
+  minNumberOfPredictions: (v) => _.isNumber(v) || utils.none(v),
+  minNumberOfQuestionsScored: (v) => _.isNumber(v) || utils.none(v),
+  minPredictionCountTotal: (v) => _.isNumber(v) || utils.none(v),
+  needsResolutionResponse: (v) => _.isBoolean(v) || utils.none(v),
+  needsToBePending: (v) => _.isBoolean(v) || utils.none(v),
+  notAuth0AccessToken: (v) => _.isBoolean(v) || utils.none(v),
+  notTaggedByAgent: (v) => _.isString(v) || utils.none(v),
+  notificationId: (v) => _.isString(v) || utils.none(v),
+  ownerId: (v) => _.isString(v) || utils.none(v),
+  sentAt: (v) => _.isString(v) || _.isObject(v) || utils.none(v),
+  seriesId: (v) => _.isString(v) || utils.none(v),
+  states: (v) => _.isArray(v) || utils.none(v),
+  status: (v) => _.isString(v) || utils.none(v),
+  type: (v) => _.isString(v) || utils.none(v),
+  types: (v) => _.isArray(v) || utils.none(v),
+  userId: (v) => _.isString(v) || utils.none(v),
+  withinJoinedChannels: (v) => _.isObject(v) || utils.none(v),
+  withinMeasurables: (v) => _.isObject(v) || utils.none(v),
+};
+
+Filter.LIST = list;
+Filter.KEYS = Object.keys(list);
 
 module.exports = {
   Filter,

@@ -77,6 +77,7 @@ const list = {
   userId: (v) => _.isString(v) || utils.none(v),
   withinJoinedChannels: (v) => _.isObject(v) || utils.none(v),
   withinMeasurables: (v) => _.isObject(v) || utils.none(v),
+  role: (v) => _.isString(v) || utils.none(v),
 };
 
 Filter.LIST = list;

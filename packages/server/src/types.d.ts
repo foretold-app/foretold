@@ -324,6 +324,7 @@ export namespace Layers {
       isNotEmailVerified?: boolean;
       needsToBePending?: boolean;
       needsResolutionResponse?: boolean;
+      role?: string;
 
       // @todo: Object? Give definition!
       findInDateRange?: object;
@@ -444,6 +445,7 @@ export namespace Layers {
       isNotEmailVerified?: boolean;
       needsToBePending?: boolean;
       needsResolutionResponse?: boolean;
+      role?: string;
 
       withinMeasurables?: withinMeasurables | null;
       withinPublicChannels?: withinPublicChannels | null;

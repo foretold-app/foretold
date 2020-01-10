@@ -5,6 +5,8 @@ const { UsersData } = require('../../data/users-data');
 const { AgentsData } = require('../../data/agents-data');
 const { TokensData } = require('../../data/tokens-data');
 
+const { Params } = require('../../data/classes');
+
 const {
   NotAuthenticatedError,
   TokenIsInvalidError,
@@ -89,7 +91,7 @@ class AuthenticationSecondary {
       throw new NoAgentIdError();
     }
 
-    const agent = await this.agents.getOne({ id: agentId });
+    const agent = await this.agents.getOne(new Params({ id: agentId }));
     if (!agent) {
       throw new NotAuthenticatedError();
     }

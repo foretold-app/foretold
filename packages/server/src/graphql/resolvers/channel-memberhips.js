@@ -5,6 +5,8 @@ const { ChannelMembershipsData } = require('../../data');
 const { Pagination } = require('../../data/classes');
 const { Options } = require('../../data/classes');
 const { Filter } = require('../../data/classes');
+const { Params } = require('../../data/classes');
+const { Data } = require('../../data/classes');
 
 /**
  * @param {*} _root
@@ -20,15 +22,15 @@ async function create(_root, args, context) {
   const input = _.get(args, 'input') || {};
   const inviterAgentId = _.get(context, 'agent.id', null);
 
-  return new ChannelMembershipsData().upsertOne({
+  return new ChannelMembershipsData().upsertOne(new Params({
     channelId: input.channelId,
     agentId: input.agentId,
-  }, {}, {
+  }), {}, new Data({
     channelId: input.channelId,
     agentId: input.agentId,
     inviterAgentId,
     role: input.role,
-  });
+  }));
 }
 
 /**
@@ -43,14 +45,14 @@ async function create(_root, args, context) {
 async function update(_root, args) {
   const input = _.get(args, 'input') || {};
 
-  return new ChannelMembershipsData().updateOne({
+  return new ChannelMembershipsData().updateOne(new Params({
     channelId: input.channelId,
     agentId: input.agentId,
-  }, {
+  }), new Data({
     channelId: input.channelId,
     agentId: input.agentId,
     role: input.role,
-  });
+  }));
 }
 
 /**
@@ -63,10 +65,10 @@ async function update(_root, args) {
  */
 async function remove(_root, args) {
   const input = _.get(args, 'input') || {};
-  return new ChannelMembershipsData().deleteOne({
+  return new ChannelMembershipsData().deleteOne(new Params({
     channelId: input.channelId,
     agentId: input.agentId,
-  });
+  }));
 }
 
 /**
@@ -151,10 +153,10 @@ async function myRole(root, _args, context, _info) {
   const channelId = _.get(root, 'id', null);
   const agentId = _.get(context, 'agent.id', null);
 
-  return new ChannelMembershipsData().getOneOnlyRole({
+  return new ChannelMembershipsData().getOneOnlyRole(new Params({
     channelId,
     agentId,
-  });
+  }));
 }
 
 /**
@@ -167,9 +169,9 @@ async function myRole(root, _args, context, _info) {
 async function membershipCount(root, _args, _context, _info) {
   const channelId = _.get(root, 'id', null);
 
-  return new ChannelMembershipsData().getCount({
+  return new ChannelMembershipsData().getCount(new Params({
     channelId,
-  });
+  }));
 }
 
 module.exports = {

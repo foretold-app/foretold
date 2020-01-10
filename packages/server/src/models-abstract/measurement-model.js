@@ -5,6 +5,8 @@ const { MEASUREMENT_COMPETITOR_TYPE } = require('../enums');
 
 const { ModelPostgres } = require('./model-postgres');
 
+const { Params } = require('../data/classes');
+
 /**
  * @implements {Layers.AbstractModelsLayer.AbstractModel}
  */
@@ -134,7 +136,7 @@ class MeasurementModel extends ModelPostgres {
    */
   async getLatest({ measurable, agentId } = {}) {
     const measurableId = measurable.id;
-    return this.getOne({ measurableId, agentId });
+    return this.getOne(new Params({ measurableId, agentId }));
   }
 }
 

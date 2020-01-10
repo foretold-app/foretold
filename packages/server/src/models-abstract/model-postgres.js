@@ -968,6 +968,7 @@ class ModelPostgres extends Model {
       const klass = asserts[key];
       const object = input[key];
       if (object === undefined) continue;
+      if (_.isEmpty(object)) continue;
       if (!(object instanceof klass)) {
         this.log.warn(new Error(`"${key}" is not ${key} class.`));
       }

@@ -22,6 +22,7 @@ const { DataBase } = require('./data-base');
 const { MeasurementsData } = require('./measurements-data');
 const { MeasurablesData } = require('./measurables-data');
 const { Filter } = require('./classes');
+const { Params } = require('./classes');
 
 const log = logger.module('data/agent-measurables-data');
 
@@ -301,7 +302,7 @@ class AgentMeasurablesData extends DataBase {
    * @returns {Promise<*>}
    */
   async _getMeasurable(measurableId) {
-    return this.measurables.getOne(new Filter({
+    return this.measurables.getOne(new Params({
       id: measurableId,
     }));
   }

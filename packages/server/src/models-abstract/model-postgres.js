@@ -598,23 +598,6 @@ class ModelPostgres extends Model {
   }
 
   /**
-   * @protected
-   * @param {*[]} [list]
-   * @return {*[]}
-   */
-  _getBooleansOfList(list = []) {
-    return list.map((item) => {
-      if (item === 'TRUE') {
-        return true;
-      }
-      if (item === 'FALSE') {
-        return false;
-      }
-      return item;
-    });
-  }
-
-  /**
    * @public
    * @param {Layers.AbstractModelsLayer.data} [data]
    * @param {Layers.AbstractModelsLayer.restrictions} [_restrictions]
@@ -750,33 +733,6 @@ class ModelPostgres extends Model {
   }
 
   /**
-   * @param pagination
-   * @returns {[any, any][]}
-   * @private
-   */
-  _getDefaultOrder(pagination) {
-    return pagination.getOrder()
-      .map((item) => ([item.field, item.direction]));
-  }
-
-  /**
-   * @return {*[] | null}
-   * @private
-   */
-  _getOrder() {
-    return [['createdAt', 'DESC']];
-  }
-
-  /**
-   *
-   * @return {{include: Sequelize.literal|*[]} | null}
-   * @private
-   */
-  _getAttributes() {
-    return null;
-  }
-
-  /**
    * @public
    * @param {Layers.AbstractModelsLayer.params} [params]
    * @param {Layers.AbstractModelsLayer.query} [query]
@@ -896,6 +852,50 @@ class ModelPostgres extends Model {
    */
   async rollback(transaction) {
     return transaction.rollback();
+  }
+
+  /**
+   * @protected
+   * @param {*[]} [list]
+   * @return {*[]}
+   */
+  _getBooleansOfList(list = []) {
+    return list.map((item) => {
+      if (item === 'TRUE') {
+        return true;
+      }
+      if (item === 'FALSE') {
+        return false;
+      }
+      return item;
+    });
+  }
+
+  /**
+   * @param pagination
+   * @returns {[any, any][]}
+   * @private
+   */
+  _getDefaultOrder(pagination) {
+    return pagination.getOrder()
+      .map((item) => ([item.field, item.direction]));
+  }
+
+  /**
+   * @return {*[] | null}
+   * @private
+   */
+  _getOrder() {
+    return [['createdAt', 'DESC']];
+  }
+
+  /**
+   *
+   * @return {{include: Sequelize.literal|*[]} | null}
+   * @private
+   */
+  _getAttributes() {
+    return null;
   }
 
   /**

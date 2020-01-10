@@ -1,12 +1,12 @@
 const _ = require('lodash');
 const moment = require('moment');
+const { MEASUREMENT_VALUE } = require('@foretold/measurement-value/enums');
 
 const { MeasurablesData } = require('../../data');
 const { MeasurementsData } = require('../../data');
 
 const { MEASUREMENT_COMPETITOR_TYPE } = require('../../enums');
 const { MEASURABLE_STATE } = require('../../enums');
-const { MEASUREMENT_VALUE } = require('../../enums');
 
 const { Pagination } = require('../../data/classes');
 const { Filter } = require('../../data/classes');
@@ -40,15 +40,19 @@ class MeasurablesStateMachine {
       const measurables = await this._getMeasurablesToPending(transaction);
 
       for (const measurable of measurables) {
-        const result = !!(await this._judgementPending(
-          measurable,
-          transaction,
-        ));
+        try {
+          const result = !!(await this._judgementPending(
+            measurable,
+            transaction,
+          ));
 
-        log.trace(
-          `\x1b[35mMeasurable ID = "${_.get(measurable, 'id')}", `
-          + `Result = "${result}".\x1b[0m`,
-        );
+          log.trace(
+            `\x1b[35mMeasurable ID = "${_.get(measurable, 'id')}", `
+            + `Result = "${result}".\x1b[0m`,
+          );
+        } catch (err) {
+          log.error(err.message);
+        }
       }
 
       await this.measurables.commit(transaction);
@@ -79,15 +83,19 @@ class MeasurablesStateMachine {
       );
 
       for (const measurable of measurables) {
-        const result = !!(await this._processResolution(
-          measurable,
-          transaction,
-        ));
+        try {
+          const result = !!(await this._processResolution(
+            measurable,
+            transaction,
+          ));
 
-        log.trace(
-          `\x1b[35mMeasurable ID = "${_.get(measurable, 'id')}", `
-          + `Result = "${result}".\x1b[0m`,
-        );
+          log.trace(
+            `\x1b[35mMeasurable ID = "${_.get(measurable, 'id')}", `
+            + `Result = "${result}".\x1b[0m`,
+          );
+        } catch (err) {
+          log.error(err.message);
+        }
       }
 
       await this.measurables.commit(transaction);
@@ -159,7 +167,7 @@ class MeasurablesStateMachine {
       measurable,
     );
 
-    if (asFloat) {
+    if (asFloat != null) {
       const measurement = new Data({
         agentId: measurable.creatorId,
         competitorType: MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE,
@@ -168,10 +176,12 @@ class MeasurablesStateMachine {
           [MEASUREMENT_VALUE.floatPoint]: asFloat,
         },
       });
-      await this.measurements.createOne(measurement);
-
-      await this._judged(measurable, transaction);
+      const options = new Options({ transaction });
+      await this.measurements.createOne(measurement, options);
     }
+
+    // Judge even there is no correct response.
+    await this._judged(measurable, transaction);
 
     return asFloat != null;
   }

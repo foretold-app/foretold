@@ -350,7 +350,7 @@ class ModelPostgres extends Model {
 
     this.applyAbstracts(where, filter);
 
-    if (filter.isArchived) {
+    if (!!filter.isArchived) {
       where[this.and].push({
         isArchived: {
           [this.in]: this._getBooleansOfList(filter.isArchived),
@@ -466,7 +466,7 @@ class ModelPostgres extends Model {
       });
     }
 
-    if (filter.isNotEmailVerified) {
+    if (!!filter.isNotEmailVerified) {
       where[this.and].push({
         [this.or]: [
           { isEmailVerified: false },
@@ -475,7 +475,7 @@ class ModelPostgres extends Model {
       });
     }
 
-    if (filter.notAuth0AccessToken) {
+    if (!!filter.notAuth0AccessToken) {
       where[this.and].push({
         auth0AccessToken: {
           [this.not]: null,
@@ -511,7 +511,7 @@ class ModelPostgres extends Model {
       });
     }
 
-    if (filter.attemptCounterMax) {
+    if (_.isNumber(filter.attemptCounterMax)) {
       where[this.and].push({
         attemptCounter: {
           [this.lt]: filter.attemptCounterMax,

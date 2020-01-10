@@ -97,14 +97,15 @@ class MeasurableModel extends ModelPostgres {
 
     if (!!filter.needsResolutionResponse) {
       where[this.and].push({
-        where: {
-          state: MEASURABLE_STATE.JUDGEMENT_PENDING,
-          resolutionEndpoint: {
-            [this.not]: null,
-          },
-          expectedResolutionDate: {
-            [this.lt]: this.fn('now'),
-          },
+        state: MEASURABLE_STATE.JUDGEMENT_PENDING,
+        resolutionEndpoint: {
+          [this.and]: [
+            { [this.not]: null },
+            { [this.not]: '' },
+          ],
+        },
+        expectedResolutionDate: {
+          [this.lt]: this.fn('now'),
         },
       });
     }

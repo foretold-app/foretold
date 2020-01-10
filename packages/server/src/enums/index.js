@@ -15,7 +15,7 @@ const {
   MEASUREMENT_COMPETITOR_TYPE,
 } = require('./measurement-competitor-type');
 const {
-  UNRESOLVABLE_RESOLUTIONS
+  UNRESOLVABLE_RESOLUTIONS,
 } = require('./measurement-unresolvable-resolutions');
 const { NOTIFICATION_ERROR_REASON } = require('./notification-error-reason');
 const { NOTIFICATION_TYPE } = require('./notification-type');

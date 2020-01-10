@@ -52,9 +52,8 @@ class DataBase {
    * @return {Promise<*>}
    */
   async createOne(data = {}, options = {}) {
-    const option$ = this._getModelOptions(options);
-    const restrictions = this._getModelRestrictions(options);
-    return this.model.createOne(data, restrictions, option$);
+    const { option$, restriction$ } = this._getOptionsRestrictions(options);
+    return this.model.createOne(data, restriction$, option$);
   }
 
   /**
@@ -65,9 +64,8 @@ class DataBase {
    * @return {Promise<*>}
    */
   async getOne(params = {}, query = {}, options = {}) {
-    const option$ = this._getModelOptions(options);
-    const restrictions = this._getModelRestrictions(options);
-    return this.model.getOne(params, query, restrictions, option$);
+    const { restriction$, option$ } = this._getOptionsRestrictions(options);
+    return this.model.getOne(params, query, restriction$, option$);
   }
 
   /**
@@ -79,9 +77,8 @@ class DataBase {
    * @return {Promise<*>}
    */
   async getCount(params = {}, query = {}, options = {}) {
-    const option$ = this._getModelOptions(options);
-    const restrictions = this._getModelRestrictions(options);
-    return this.model.getCount(params, query, restrictions, option$);
+    const { restriction$, option$ } = this._getOptionsRestrictions(options);
+    return this.model.getCount(params, query, restriction$, option$);
   }
 
   /**
@@ -92,9 +89,8 @@ class DataBase {
    * @return {Promise<*>}
    */
   async updateOne(params = {}, data = {}, options = {}) {
-    const option$ = this._getModelOptions(options);
-    const restrictions = this._getModelRestrictions(options);
-    return this.model.updateOne(params, data, restrictions, option$);
+    const { restriction$, option$ } = this._getOptionsRestrictions(options);
+    return this.model.updateOne(params, data, restriction$, option$);
   }
 
   /**
@@ -105,9 +101,8 @@ class DataBase {
    * @return {Promise<*>}
    */
   async deleteOne(params = {}, query = {}, options = {}) {
-    const option$ = this._getModelOptions(options);
-    const restrictions = this._getModelRestrictions(options);
-    return this.model.deleteOne(params, query, restrictions, option$);
+    const { restriction$, option$ } = this._getOptionsRestrictions(options);
+    return this.model.deleteOne(params, query, restriction$, option$);
   }
 
   /**
@@ -119,10 +114,9 @@ class DataBase {
    * @return {Promise<{data: Models.Model[], total: number}>}
    */
   async getConnection(filter = {}, pagination = {}, options = {}) {
-    const option$ = this._getModelOptions(options);
-    const restrictions = this._getModelRestrictions(options);
+    const { restriction$, option$ } = this._getOptionsRestrictions(options);
     return this.model.getAllWithConnections(
-      filter, pagination, restrictions, option$,
+      filter, pagination, restriction$, option$,
     );
   }
 
@@ -133,9 +127,8 @@ class DataBase {
    * @param {Layers.DataSourceLayer.options} [options]
    */
   async getAll(filter = {}, pagination = {}, options = {}) {
-    const option$ = this._getModelOptions(options);
-    const restrictions = this._getModelRestrictions(options);
-    return this.model.getAll(filter, pagination, restrictions, option$);
+    const { restriction$, option$ } = this._getOptionsRestrictions(options);
+    return this.model.getAll(filter, pagination, restriction$, option$);
   }
 
   /**
@@ -147,9 +140,8 @@ class DataBase {
    * @return {Promise<*>}
    */
   async upsertOne(params = {}, query = {}, data = {}, options = {}) {
-    const option$ = this._getModelOptions(options);
-    const restrictions = this._getModelRestrictions(options);
-    return this.model.upsertOne(params, query, data, restrictions, option$);
+    const { restriction$, option$ } = this._getOptionsRestrictions(options);
+    return this.model.upsertOne(params, query, data, restriction$, option$);
   }
 
   /**
@@ -158,8 +150,26 @@ class DataBase {
    * @return {Promise<*>}
    */
   async lock(options = {}) {
-    const option$ = this._getModelOptions(options);
+    const { option$ } = this._getOptionsRestrictions(options);
     return this.model.lock(option$);
+  }
+
+  /**
+   * @protected
+   * @param {Layers.DataSourceLayer.options} [options]
+   * @return {{
+   *  option$: Layers.AbstractModelsLayer.options,
+   *  restriction$: Layers.AbstractModelsLayer.restrictions,
+   * }}
+   */
+  _getOptionsRestrictions(options = {}) {
+    const {
+      separatedOptions,
+      separatedRestrictions,
+    } = this._separateDataOptions(options);
+    const option$ = this._getModelOptions(separatedOptions);
+    const restriction$ = this._getModelRestrictions(separatedRestrictions);
+    return { option$, restriction$ };
   }
 
   /**
@@ -242,6 +252,17 @@ class DataBase {
       measurableId: true,
       agentId: currentAgentId,
     };
+  }
+
+  /**
+   * @protected
+   * @param {Layers.DataSourceLayer.options} [options]
+   * @return {{separatedOptions: Object, separatedRestrictions: Object}}
+   */
+  _separateDataOptions(options = {}) {
+    const separatedOptions = _.omit(options, Restrictions.KEYS);
+    const separatedRestrictions = _.omit(options, Options.KEYS);
+    return { separatedOptions, separatedRestrictions };
   }
 }
 

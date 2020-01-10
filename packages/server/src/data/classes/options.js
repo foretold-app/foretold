@@ -10,14 +10,14 @@ class Options {
    */
   constructor(options = {}) {
     const list = {
-      transaction: (v) => _.isObject(v) || utils.none(v),
       lock: (v) => _.isBoolean(v) || utils.none(v),
       skipLocked: (v) => _.isBoolean(v) || utils.none(v),
+      transaction: (v) => _.isObject(v) || utils.none(v),
 
-      isAdmin: (v) => _.isBoolean(v) || utils.none(v),
       agentId: (v) => _.isString(v) || utils.none(v),
-      measuredByAgentId: (v) => _.isString(v) || utils.none(v),
       currentAgentId: (v) => _.isString(v) || utils.none(v),
+      isAdmin: (v) => _.isBoolean(v) || utils.none(v),
+      measuredByAgentId: (v) => _.isString(v) || utils.none(v),
     };
 
     utils.extend(this.constructor.name, options, list, this);

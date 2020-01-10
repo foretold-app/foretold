@@ -6,7 +6,16 @@ const models = require('../models');
 const logger = require('../lib/log');
 
 const { Model } = require('./model');
+
+const { Options } = require('./classes');
+const { Restrictions } = require('./classes');
 const { ResponseAll } = require('./classes');
+
+const { Data } = require('../data/classes');
+const { Filter } = require('../data/classes');
+const { Pagination } = require('../data/classes');
+const { Params } = require('../data/classes');
+const { Query } = require('../data/classes');
 
 /**
  * @abstract
@@ -46,11 +55,12 @@ class ModelPostgres extends Model {
   /**
    * @public
    * @param {Layers.AbstractModelsLayer.data} [data]
-   * @param {Layers.AbstractModelsLayer.restrictions} [_restrictions]
+   * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
    * @param {Layers.AbstractModelsLayer.options} [options]
    * @return {Promise.<object>}
    */
-  async createOne(data = {}, _restrictions = {}, options = {}) {
+  async createOne(data = {}, restrictions = {}, options = {}) {
+    this._assertInput({ data, restrictions, options });
     return this.model.create(data, options);
   }
 
@@ -58,11 +68,13 @@ class ModelPostgres extends Model {
    * @public
    * @param {Layers.AbstractModelsLayer.params} [params]
    * @param {Layers.AbstractModelsLayer.data} [data]
-   * @param {Layers.AbstractModelsLayer.restrictions} [_restrictions]
+   * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
    * @param {Layers.AbstractModelsLayer.options} [options]
    * @return {Promise.<object>}
    */
-  async updateOne(params = {}, data = {}, _restrictions = {}, options = {}) {
+  async updateOne(params = {}, data = {}, restrictions = {}, options = {}) {
+    this._assertInput({ params, data, restrictions, options });
+
     const findCond = { where: { ...params } };
     const updateCond = {};
     this._extendConditions(findCond, options);
@@ -77,11 +89,12 @@ class ModelPostgres extends Model {
    * @public
    * @param {Layers.AbstractModelsLayer.params} [params]
    * @param {Layers.AbstractModelsLayer.data} [data]
-   * @param {Layers.AbstractModelsLayer.restrictions} [_restrictions]
+   * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
    * @param {Layers.AbstractModelsLayer.options} [options]
    * @return {boolean}
    */
-  async updateAll(params = {}, data = {}, _restrictions = {}, options = {}) {
+  async updateAll(params = {}, data = {}, restrictions = {}, options = {}) {
+    this._assertInput({ params, data, restrictions, options });
     const cond = { where: { ...params } };
     this._extendConditions(cond, options);
     return !!(await this.model.update(data, cond));
@@ -101,6 +114,7 @@ class ModelPostgres extends Model {
     restrictions = {},
     options = {},
   ) {
+    this._assertInput({ filter, pagination, restrictions, options });
     const where = {};
 
     if ('inspect' in filter) filter.inspect();
@@ -137,6 +151,7 @@ class ModelPostgres extends Model {
     restrictions = {},
     options = {},
   ) {
+    this._assertInput({ filter, pagination, restrictions, options });
     const where = {};
     const include = [];
 
@@ -187,6 +202,7 @@ class ModelPostgres extends Model {
    * @return {Promise<Models.Model>}
    */
   async getOne(params = {}, query = {}, restrictions = {}, options = {}) {
+    this._assertInput({ params, query, restrictions, options });
     const cond = await this.getPredicated(params, query, restrictions, options);
     return this.model.findOne(cond);
   }
@@ -200,6 +216,7 @@ class ModelPostgres extends Model {
    * @return {Promise<Models.Model>}
    */
   async getCount(params = {}, query = {}, restrictions = {}, options = {}) {
+    this._assertInput({ params, query, restrictions, options });
     const cond = await this.getPredicated(params, query, restrictions, options);
     return this.model.count(cond);
   }
@@ -218,6 +235,7 @@ class ModelPostgres extends Model {
     restrictions = {},
     options = {},
   ) {
+    this._assertInput({ params, query, restrictions, options });
     const where = { ...params };
     const sort = query.sort === 1 ? 'ASC' : 'DESC';
     const order = [['createdAt', sort]];
@@ -264,6 +282,7 @@ class ModelPostgres extends Model {
    * @return {Promise<Models.Model>}
    */
   async deleteOne(params, query, restrictions, options) {
+    this._assertInput({ params, query, restrictions, options });
     const entity = await this.getOne(params, query, restrictions, options);
     if (entity) {
       const where = { ...params };
@@ -905,6 +924,7 @@ class ModelPostgres extends Model {
    * @returns {Promise<*>}
    */
   async _lockTable(name, options = {}) {
+    this._assertInput({ options });
     const cond = {};
     this._extendConditions(cond, options);
     await this.sequelize.query(`SET LOCAL lock_timeout = '3s'`, cond);
@@ -927,6 +947,31 @@ class ModelPostgres extends Model {
       cond.skipLocked = options.skipLocked;
     }
     return cond;
+  }
+
+  /**
+   * @todo: It is a temporary solution. Just to clean the application.
+   * @param input
+   * @protected
+   */
+  _assertInput(input = {}) {
+    const asserts = {
+      data: Data,
+      filter: Filter,
+      options: Options,
+      pagination: Pagination,
+      params: Params,
+      query: Query,
+      restrictions: Restrictions,
+    };
+    for (const key in asserts) {
+      const klass = asserts[key];
+      const object = input[key];
+      if (object === undefined) continue;
+      if (!(object instanceof klass)) {
+        this.log.warn(new Error(`"${key}" is not ${key} class.`));
+      }
+    }
   }
 }
 

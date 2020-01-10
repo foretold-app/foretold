@@ -44,180 +44,260 @@ class ModelPostgres extends Model {
   }
 
   /**
-   * @protected
-   * @todo: see this._publicAndJoinedChannels()
-   * @param {Models.AgentID} [agentId]
-   * @param {string} [name]
-   * @return {Sequelize.literal}
+   * @public
+   * @param {Layers.AbstractModelsLayer.data} [data]
+   * @param {Layers.AbstractModelsLayer.restrictions} [_restrictions]
+   * @param {Layers.AbstractModelsLayer.options} [options]
+   * @return {Promise.<object>}
    */
-  _publicAndJoinedChannelsLiteral(agentId, name = '') {
-    return this.literal(this._publicAndJoinedChannels(agentId, name));
+  async createOne(data = {}, _restrictions = {}, options = {}) {
+    return this.model.create(data, options);
   }
 
   /**
-   * @protected
-   * @param {Models.AgentID} [agentId]
-   * @param {string} [name]
-   * @return {string}
+   * @public
+   * @param {Layers.AbstractModelsLayer.params} [params]
+   * @param {Layers.AbstractModelsLayer.data} [data]
+   * @param {Layers.AbstractModelsLayer.restrictions} [_restrictions]
+   * @param {Layers.AbstractModelsLayer.options} [options]
+   * @return {Promise.<object>}
    */
-  _publicAndJoinedChannels(agentId, name = '') {
-    assert(!!agentId, 'Agent ID is required.');
-    return `(
-      /* P͟u͟b͟l͟i͟c͟ ͟a͟n͟d͟ ͟J͟o͟i͟n͟e͟d͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${name}) */
-      SELECT "Channels"."id" FROM "Channels"
-      LEFT OUTER JOIN
-        "ChannelMemberships"
-        ON "Channels".id = "ChannelMemberships"."channelId"
-        AND "ChannelMemberships"."agentId" = '${agentId}'
-      WHERE
-        "ChannelMemberships"."agentId" IS NOT NULL
-        OR "Channels"."isPublic" = TRUE
-    )`;
+  async updateOne(params = {}, data = {}, _restrictions = {}, options = {}) {
+    const findCond = { where: { ...params } };
+    const updateCond = {};
+    this._extendConditions(findCond, options);
+    this._extendConditions(updateCond, options);
+
+    const entity = await this.model.findOne(findCond);
+    if (!!entity) await entity.update(data, updateCond);
+    return entity;
   }
 
   /**
-   * @protected
-   * @para {string} [name]
-   * @return {Sequelize.literal}
+   * @public
+   * @param {Layers.AbstractModelsLayer.params} [params]
+   * @param {Layers.AbstractModelsLayer.data} [data]
+   * @param {Layers.AbstractModelsLayer.restrictions} [_restrictions]
+   * @param {Layers.AbstractModelsLayer.options} [options]
+   * @return {boolean}
    */
-  _publicChannelsLiteral(name = '') {
-    return this.literal(this._publicChannels(name));
+  async updateAll(params = {}, data = {}, _restrictions = {}, options = {}) {
+    const cond = { where: { ...params } };
+    this._extendConditions(cond, options);
+    return !!(await this.model.update(data, cond));
   }
 
   /**
-   * @protected
-   * @param {string} [name]
-   * @return {string}
+   * @public
+   * @param {Layers.AbstractModelsLayer.filter} filter
+   * @param {Layers.AbstractModelsLayer.pagination} [pagination]
+   * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
+   * @param {Layers.AbstractModelsLayer.options} [options]
+   * @return {Promise<*[]>}
    */
-  _publicChannels(name = '') {
-    return `(
-      /* P͟u͟b͟l͟i͟c͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${name}) */
-      SELECT "Channels"."id" FROM "Channels"
-      WHERE "Channels"."isPublic" = TRUE
-    )`;
+  async getAll(
+    filter = {},
+    pagination = {},
+    restrictions = {},
+    options = {},
+  ) {
+    const where = {};
+
+    if ('inspect' in filter) filter.inspect();
+    if ('inspect' in pagination) pagination.inspect();
+    if ('inspect' in restrictions) restrictions.inspect();
+
+    this.applyRestrictions(where, restrictions);
+    this.applyFilter(where, filter);
+
+    const cond = {
+      limit: pagination.limit,
+      offset: pagination.offset,
+      where,
+    };
+
+    this._extendConditions(cond, options);
+
+    return this.model.findAll(cond);
   }
 
   /**
-   * @todo: Rename to "withinJoinedChannels" + "Literal"?
-   * @protected
-   * @param {Models.AgentID} [agentId]
-   * @param {string} [name]
-   * @return {Sequelize.literal}
+   * @todo: This is an anisotropy when pagination is defined {}
+   * @todo: instead of pagination = new Pagination().
+   * @public
+   * @param {Layers.AbstractModelsLayer.filter} [filter]
+   * @param {Layers.AbstractModelsLayer.pagination} [pagination]
+   * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
+   * @param {Layers.AbstractModelsLayer.options} [options]
+   * @return {Promise<{data: Models.Model[], total: number}>}
    */
-  _joinedChannelsLiteral(agentId, name = '') {
-    return this.literal(this._joinedChannels(agentId, name));
-  }
+  async getAllWithConnections(
+    filter = {},
+    pagination = {},
+    restrictions = {},
+    options = {},
+  ) {
+    const where = {};
+    const include = [];
 
-  /**
-   * @todo: Rename to "withinJoinedChannels"?
-   * @protected
-   * @param {Models.AgentID} [agentId]
-   * @param {string} [name]
-   * @return {string}
-   */
-  _joinedChannels(agentId, name = '') {
-    assert(!!agentId, 'Agent ID is required.');
-    return `(
-      /* J͟o͟i͟n͟e͟d͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${name}) */
-      SELECT "Channels"."id" FROM "Channels"
-      LEFT OUTER JOIN
-        "ChannelMemberships"
-        ON "Channels".id = "ChannelMemberships"."channelId"
-        AND "ChannelMemberships"."agentId" = '${agentId}'
-      WHERE
-        "ChannelMemberships"."agentId" IS NOT NULL
-    )`;
-  }
+    if ('inspect' in filter) filter.inspect();
+    if ('inspect' in pagination) pagination.inspect();
+    if ('inspect' in restrictions) restrictions.inspect();
 
-  /**
-   * @protected
-   * @param {Models.AgentID} [agentId]
-   * @param {string} [name]
-   * @return {Sequelize.literal}
-   */
-  _measurablesInPublicAndJoinedChannelsLiteral(agentId, name = '') {
-    return this.literal(
-      this._measurablesInPublicAndJoinedChannels(agentId, name),
+    this.applyRestrictions(where, restrictions);
+    this.applyRestrictionsIncluding(include, restrictions);
+    this.applyFilter(where, filter);
+
+    const cond = { where, include };
+    this._extendConditions(cond, options);
+
+    /** @type {number} */
+    const total = await this.model.count(cond);
+    const { limit, offset } = pagination.getPagination2();
+
+    const order = pagination.isOrderSet()
+      ? this._getDefaultOrder(pagination)
+      : this._getOrder();
+
+    const findCond = {
+      ...cond,
+      limit,
+      offset,
+      order,
+      attributes: this._getAttributes(),
+    };
+
+    /** @type {Models.Model[]} */
+    const data = await this.model.findAll(findCond);
+
+    return new ResponseAll(
+      data,
+      total,
+      offset,
+      filter.getSpacedLimit(),
     );
   }
 
   /**
-   * @protected
-   * @param {Models.AgentID} [agentId]
-   * @param {string} [name]
-   * @return {string}
+   * @public
+   * @param {Layers.AbstractModelsLayer.params} [params]
+   * @param {Layers.AbstractModelsLayer.query} [query]
+   * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
+   * @param {Layers.AbstractModelsLayer.options} [options]
+   * @return {Promise<Models.Model>}
    */
-  _measurablesInPublicAndJoinedChannels(agentId, name = '') {
-    assert(!!agentId, 'Agent ID is required.');
-    return `(
-      /* M͟e͟a͟s͟u͟r͟a͟b͟l͟e͟s͟ ͟i͟n͟ ͟P͟u͟b͟l͟i͟c͟ ͟a͟n͟d͟ ͟J͟o͟i͟n͟e͟d͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${name}) */
-      WITH channelIds AS (${this._publicAndJoinedChannels(agentId, name)})
-      SELECT "Measurables"."id" FROM "Measurables"
-      WHERE "Measurables"."channelId" IN (SELECT id FROM channelIds)
-    )`;
+  async getOne(params = {}, query = {}, restrictions = {}, options = {}) {
+    const cond = await this.getPredicated(params, query, restrictions, options);
+    return this.model.findOne(cond);
   }
 
   /**
-   * @protected
-   * @param {string} [name]
-   * @return {Sequelize.literal}
+   * @public
+   * @param {Layers.AbstractModelsLayer.params} [params]
+   * @param {Layers.AbstractModelsLayer.query} [query]
+   * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
+   * @param {Layers.AbstractModelsLayer.options} [options]
+   * @return {Promise<Models.Model>}
    */
-  _measurablesInPublicChannelsLiteral(name = '') {
-    return this.literal(
-      this._measurablesInPublicChannels(name),
-    );
+  async getCount(params = {}, query = {}, restrictions = {}, options = {}) {
+    const cond = await this.getPredicated(params, query, restrictions, options);
+    return this.model.count(cond);
   }
 
   /**
-   * @protected
-   * @param {string} [name]
-   * @return {string}
+   * @public
+   * @param {Layers.AbstractModelsLayer.params} [params]
+   * @param {Layers.AbstractModelsLayer.query} [query]
+   * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
+   * @param {Layers.AbstractModelsLayer.options} [options]
+   * @return {Promise<*>}
    */
-  _measurablesInPublicChannels(name = '') {
-    return `(
-      /* M͟e͟a͟s͟u͟r͟a͟b͟l͟e͟s͟ ͟i͟n͟ ͟P͟u͟b͟l͟i͟c͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${name}) */
-      WITH channelIds AS (${this._publicChannels(name)})
-      SELECT "Measurables"."id" FROM "Measurables"
-      WHERE "Measurables"."channelId" IN (SELECT id FROM channelIds)
-    )`;
+  async getPredicated(
+    params = {},
+    query = {},
+    restrictions = {},
+    options = {},
+  ) {
+    const where = { ...params };
+    const sort = query.sort === 1 ? 'ASC' : 'DESC';
+    const order = [['createdAt', sort]];
+    const distinct = !!query.distinct ? true : null;
+    const col = !!query.col ? query.col : null;
+
+    if ('inspect' in params) params.inspect();
+    if ('inspect' in restrictions) restrictions.inspect();
+
+    this.applyRestrictions(where, restrictions);
+
+    const cond = {
+      where,
+      order,
+      distinct,
+      col,
+    };
+
+    this._extendConditions(cond, options);
+
+    return cond;
   }
 
   /**
-   * @protected
-   * @param {string[]} statesIn
-   * @param {Models.ChannelID} channelIdIn
-   * @param {string} [name]
-   * @return {Sequelize.literal}
+   * @public
+   * @param {Layers.AbstractModelsLayer.params} [params]
+   * @param {Layers.AbstractModelsLayer.query} [query]
+   * @param {Layers.AbstractModelsLayer.data} data
+   * @param {Layers.AbstractModelsLayer.restrictions} restrictions
+   * @param {Layers.AbstractModelsLayer.options} options
+   * @return {Promise<Models.Model>}
    */
-  _withinMeasurablesLiteral(statesIn, channelIdIn, name = '') {
-    return this.literal(
-      this._withinMeasurables(statesIn, channelIdIn, name),
-    );
+  async upsertOne(params, query, data, restrictions, options) {
+    return await this.getOne(params, query, restrictions, options)
+      || await this.createOne(data, restrictions, options);
   }
 
   /**
-   * @protected
-   * @param {string[] | null} statesIn
-   * @param {Models.ChannelID | null} channelIdIn
-   * @param {string} [name]
-   * @return {string}
+   * @public
+   * @param {Layers.AbstractModelsLayer.params} [params]
+   * @param {Layers.AbstractModelsLayer.query} [query]
+   * @param {Layers.AbstractModelsLayer.restrictions} restrictions
+   * @param {Layers.AbstractModelsLayer.options} options
+   * @return {Promise<Models.Model>}
    */
-  _withinMeasurables(statesIn, channelIdIn, name = '') {
-    const cond = [];
-    const states = _.isArray(statesIn)
-      ? statesIn.map((state) => `'${state}'`)
-        .join(', ') : [];
+  async deleteOne(params, query, restrictions, options) {
+    const entity = await this.getOne(params, query, restrictions, options);
+    if (entity) {
+      const where = { ...params };
+      const cond = { where };
+      this._extendConditions(cond, options);
+      await this.model.destroy(cond);
+    }
+    return entity;
+  }
 
-    if (states.length > 0) cond.push(`("state" IN (${states}))`);
-    if (!!channelIdIn) cond.push(`("channelId" = '${channelIdIn}')`);
+  /**
+   * @public
+   * @return {Promise<*>}
+   */
+  async getTransaction() {
+    return this.sequelize.transaction();
+  }
 
-    const where = cond.length > 0 ? `WHERE (${cond.join(' AND ')})` : '';
+  /**
+   * @public
+   * @param {object} transaction
+   * @return {Promise<*>}
+   */
+  async commit(transaction) {
+    return transaction.commit();
+  }
 
-    return `(
-      /* W͟i͟t͟h͟i͟n͟ ͟M͟e͟a͟s͟u͟r͟a͟b͟l͟e͟s͟ (${name}) */
-      SELECT "id" FROM "Measurables"
-      ${where}
-    )`;
+  /**
+   * @public
+   * @param {object} transaction
+   * @return {Promise<*>}
+   */
+  async rollback(transaction) {
+    return transaction.rollback();
   }
 
   /**
@@ -598,260 +678,180 @@ class ModelPostgres extends Model {
   }
 
   /**
-   * @public
-   * @param {Layers.AbstractModelsLayer.data} [data]
-   * @param {Layers.AbstractModelsLayer.restrictions} [_restrictions]
-   * @param {Layers.AbstractModelsLayer.options} [options]
-   * @return {Promise.<object>}
+   * @protected
+   * @todo: see this._publicAndJoinedChannels()
+   * @param {Models.AgentID} [agentId]
+   * @param {string} [name]
+   * @return {Sequelize.literal}
    */
-  async createOne(data = {}, _restrictions = {}, options = {}) {
-    return this.model.create(data, options);
+  _publicAndJoinedChannelsLiteral(agentId, name = '') {
+    return this.literal(this._publicAndJoinedChannels(agentId, name));
   }
 
   /**
-   * @public
-   * @param {Layers.AbstractModelsLayer.params} [params]
-   * @param {Layers.AbstractModelsLayer.data} [data]
-   * @param {Layers.AbstractModelsLayer.restrictions} [_restrictions]
-   * @param {Layers.AbstractModelsLayer.options} [options]
-   * @return {Promise.<object>}
+   * @protected
+   * @param {Models.AgentID} [agentId]
+   * @param {string} [name]
+   * @return {string}
    */
-  async updateOne(params = {}, data = {}, _restrictions = {}, options = {}) {
-    const findCond = { where: { ...params } };
-    const updateCond = {};
-    this._extendConditions(findCond, options);
-    this._extendConditions(updateCond, options);
-
-    const entity = await this.model.findOne(findCond);
-    if (!!entity) await entity.update(data, updateCond);
-    return entity;
+  _publicAndJoinedChannels(agentId, name = '') {
+    assert(!!agentId, 'Agent ID is required.');
+    return `(
+      /* P͟u͟b͟l͟i͟c͟ ͟a͟n͟d͟ ͟J͟o͟i͟n͟e͟d͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${name}) */
+      SELECT "Channels"."id" FROM "Channels"
+      LEFT OUTER JOIN
+        "ChannelMemberships"
+        ON "Channels".id = "ChannelMemberships"."channelId"
+        AND "ChannelMemberships"."agentId" = '${agentId}'
+      WHERE
+        "ChannelMemberships"."agentId" IS NOT NULL
+        OR "Channels"."isPublic" = TRUE
+    )`;
   }
 
   /**
-   * @public
-   * @param {Layers.AbstractModelsLayer.params} [params]
-   * @param {Layers.AbstractModelsLayer.data} [data]
-   * @param {Layers.AbstractModelsLayer.restrictions} [_restrictions]
-   * @param {Layers.AbstractModelsLayer.options} [options]
-   * @return {boolean}
+   * @protected
+   * @para {string} [name]
+   * @return {Sequelize.literal}
    */
-  async updateAll(params = {}, data = {}, _restrictions = {}, options = {}) {
-    const cond = { where: { ...params } };
-    this._extendConditions(cond, options);
-    return !!(await this.model.update(data, cond));
+  _publicChannelsLiteral(name = '') {
+    return this.literal(this._publicChannels(name));
   }
 
   /**
-   * @public
-   * @param {Layers.AbstractModelsLayer.filter} filter
-   * @param {Layers.AbstractModelsLayer.pagination} [pagination]
-   * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
-   * @param {Layers.AbstractModelsLayer.options} [options]
-   * @return {Promise<*[]>}
+   * @protected
+   * @param {string} [name]
+   * @return {string}
    */
-  async getAll(
-    filter = {},
-    pagination = {},
-    restrictions = {},
-    options = {},
-  ) {
-    const where = {};
-
-    if ('inspect' in filter) filter.inspect();
-    if ('inspect' in pagination) pagination.inspect();
-    if ('inspect' in restrictions) restrictions.inspect();
-
-    this.applyRestrictions(where, restrictions);
-    this.applyFilter(where, filter);
-
-    const cond = {
-      limit: pagination.limit,
-      offset: pagination.offset,
-      where,
-    };
-
-    this._extendConditions(cond, options);
-
-    return this.model.findAll(cond);
+  _publicChannels(name = '') {
+    return `(
+      /* P͟u͟b͟l͟i͟c͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${name}) */
+      SELECT "Channels"."id" FROM "Channels"
+      WHERE "Channels"."isPublic" = TRUE
+    )`;
   }
 
   /**
-   * @todo: This is an anisotropy when pagination is defined {}
-   * @todo: instead of pagination = new Pagination().
-   * @public
-   * @param {Layers.AbstractModelsLayer.filter} [filter]
-   * @param {Layers.AbstractModelsLayer.pagination} [pagination]
-   * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
-   * @param {Layers.AbstractModelsLayer.options} [options]
-   * @return {Promise<{data: Models.Model[], total: number}>}
+   * @todo: Rename to "withinJoinedChannels" + "Literal"?
+   * @protected
+   * @param {Models.AgentID} [agentId]
+   * @param {string} [name]
+   * @return {Sequelize.literal}
    */
-  async getAllWithConnections(
-    filter = {},
-    pagination = {},
-    restrictions = {},
-    options = {},
-  ) {
-    const where = {};
-    const include = [];
+  _joinedChannelsLiteral(agentId, name = '') {
+    return this.literal(this._joinedChannels(agentId, name));
+  }
 
-    if ('inspect' in filter) filter.inspect();
-    if ('inspect' in pagination) pagination.inspect();
-    if ('inspect' in restrictions) restrictions.inspect();
+  /**
+   * @todo: Rename to "withinJoinedChannels"?
+   * @protected
+   * @param {Models.AgentID} [agentId]
+   * @param {string} [name]
+   * @return {string}
+   */
+  _joinedChannels(agentId, name = '') {
+    assert(!!agentId, 'Agent ID is required.');
+    return `(
+      /* J͟o͟i͟n͟e͟d͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${name}) */
+      SELECT "Channels"."id" FROM "Channels"
+      LEFT OUTER JOIN
+        "ChannelMemberships"
+        ON "Channels".id = "ChannelMemberships"."channelId"
+        AND "ChannelMemberships"."agentId" = '${agentId}'
+      WHERE
+        "ChannelMemberships"."agentId" IS NOT NULL
+    )`;
+  }
 
-    this.applyRestrictions(where, restrictions);
-    this.applyRestrictionsIncluding(include, restrictions);
-    this.applyFilter(where, filter);
-
-    const cond = { where, include };
-    this._extendConditions(cond, options);
-
-    /** @type {number} */
-    const total = await this.model.count(cond);
-    const { limit, offset } = pagination.getPagination2();
-
-    const order = pagination.isOrderSet()
-      ? this._getDefaultOrder(pagination)
-      : this._getOrder();
-
-    const findCond = {
-      ...cond,
-      limit,
-      offset,
-      order,
-      attributes: this._getAttributes(),
-    };
-
-    /** @type {Models.Model[]} */
-    const data = await this.model.findAll(findCond);
-
-    return new ResponseAll(
-      data,
-      total,
-      offset,
-      filter.getSpacedLimit(),
+  /**
+   * @protected
+   * @param {Models.AgentID} [agentId]
+   * @param {string} [name]
+   * @return {Sequelize.literal}
+   */
+  _measurablesInPublicAndJoinedChannelsLiteral(agentId, name = '') {
+    return this.literal(
+      this._measurablesInPublicAndJoinedChannels(agentId, name),
     );
   }
 
   /**
-   * @public
-   * @param {Layers.AbstractModelsLayer.params} [params]
-   * @param {Layers.AbstractModelsLayer.query} [query]
-   * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
-   * @param {Layers.AbstractModelsLayer.options} [options]
-   * @return {Promise<Models.Model>}
+   * @protected
+   * @param {Models.AgentID} [agentId]
+   * @param {string} [name]
+   * @return {string}
    */
-  async getOne(params = {}, query = {}, restrictions = {}, options = {}) {
-    const cond = await this.getPredicated(params, query, restrictions, options);
-    return this.model.findOne(cond);
+  _measurablesInPublicAndJoinedChannels(agentId, name = '') {
+    assert(!!agentId, 'Agent ID is required.');
+    return `(
+      /* M͟e͟a͟s͟u͟r͟a͟b͟l͟e͟s͟ ͟i͟n͟ ͟P͟u͟b͟l͟i͟c͟ ͟a͟n͟d͟ ͟J͟o͟i͟n͟e͟d͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${name}) */
+      WITH channelIds AS (${this._publicAndJoinedChannels(agentId, name)})
+      SELECT "Measurables"."id" FROM "Measurables"
+      WHERE "Measurables"."channelId" IN (SELECT id FROM channelIds)
+    )`;
   }
 
   /**
-   * @public
-   * @param {Layers.AbstractModelsLayer.params} [params]
-   * @param {Layers.AbstractModelsLayer.query} [query]
-   * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
-   * @param {Layers.AbstractModelsLayer.options} [options]
-   * @return {Promise<Models.Model>}
+   * @protected
+   * @param {string} [name]
+   * @return {Sequelize.literal}
    */
-  async getCount(params = {}, query = {}, restrictions = {}, options = {}) {
-    const cond = await this.getPredicated(params, query, restrictions, options);
-    return this.model.count(cond);
+  _measurablesInPublicChannelsLiteral(name = '') {
+    return this.literal(
+      this._measurablesInPublicChannels(name),
+    );
   }
 
   /**
-   * @public
-   * @param {Layers.AbstractModelsLayer.params} [params]
-   * @param {Layers.AbstractModelsLayer.query} [query]
-   * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
-   * @param {Layers.AbstractModelsLayer.options} [options]
-   * @return {Promise<*>}
+   * @protected
+   * @param {string} [name]
+   * @return {string}
    */
-  async getPredicated(
-    params = {},
-    query = {},
-    restrictions = {},
-    options = {},
-  ) {
-    const where = { ...params };
-    const sort = query.sort === 1 ? 'ASC' : 'DESC';
-    const order = [['createdAt', sort]];
-    const distinct = !!query.distinct ? true : null;
-    const col = !!query.col ? query.col : null;
-
-    if ('inspect' in params) params.inspect();
-    if ('inspect' in restrictions) restrictions.inspect();
-
-    this.applyRestrictions(where, restrictions);
-
-    const cond = {
-      where,
-      order,
-      distinct,
-      col,
-    };
-
-    this._extendConditions(cond, options);
-
-    return cond;
+  _measurablesInPublicChannels(name = '') {
+    return `(
+      /* M͟e͟a͟s͟u͟r͟a͟b͟l͟e͟s͟ ͟i͟n͟ ͟P͟u͟b͟l͟i͟c͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${name}) */
+      WITH channelIds AS (${this._publicChannels(name)})
+      SELECT "Measurables"."id" FROM "Measurables"
+      WHERE "Measurables"."channelId" IN (SELECT id FROM channelIds)
+    )`;
   }
 
   /**
-   * @public
-   * @param {Layers.AbstractModelsLayer.params} [params]
-   * @param {Layers.AbstractModelsLayer.query} [query]
-   * @param {Layers.AbstractModelsLayer.data} data
-   * @param {Layers.AbstractModelsLayer.restrictions} restrictions
-   * @param {Layers.AbstractModelsLayer.options} options
-   * @return {Promise<Models.Model>}
+   * @protected
+   * @param {string[]} statesIn
+   * @param {Models.ChannelID} channelIdIn
+   * @param {string} [name]
+   * @return {Sequelize.literal}
    */
-  async upsertOne(params, query, data, restrictions, options) {
-    return await this.getOne(params, query, restrictions, options)
-      || await this.createOne(data, restrictions, options);
+  _withinMeasurablesLiteral(statesIn, channelIdIn, name = '') {
+    return this.literal(
+      this._withinMeasurables(statesIn, channelIdIn, name),
+    );
   }
 
   /**
-   * @public
-   * @param {Layers.AbstractModelsLayer.params} [params]
-   * @param {Layers.AbstractModelsLayer.query} [query]
-   * @param {Layers.AbstractModelsLayer.restrictions} restrictions
-   * @param {Layers.AbstractModelsLayer.options} options
-   * @return {Promise<Models.Model>}
+   * @protected
+   * @param {string[] | null} statesIn
+   * @param {Models.ChannelID | null} channelIdIn
+   * @param {string} [name]
+   * @return {string}
    */
-  async deleteOne(params, query, restrictions, options) {
-    const entity = await this.getOne(params, query, restrictions, options);
-    if (entity) {
-      const where = { ...params };
-      const cond = { where };
-      this._extendConditions(cond, options);
-      await this.model.destroy(cond);
-    }
-    return entity;
-  }
+  _withinMeasurables(statesIn, channelIdIn, name = '') {
+    const cond = [];
+    const states = _.isArray(statesIn)
+      ? statesIn.map((state) => `'${state}'`)
+        .join(', ') : [];
 
-  /**
-   * @public
-   * @return {Promise<*>}
-   */
-  async getTransaction() {
-    return this.sequelize.transaction();
-  }
+    if (states.length > 0) cond.push(`("state" IN (${states}))`);
+    if (!!channelIdIn) cond.push(`("channelId" = '${channelIdIn}')`);
 
-  /**
-   * @public
-   * @param {object} transaction
-   * @return {Promise<*>}
-   */
-  async commit(transaction) {
-    return transaction.commit();
-  }
+    const where = cond.length > 0 ? `WHERE (${cond.join(' AND ')})` : '';
 
-  /**
-   * @public
-   * @param {object} transaction
-   * @return {Promise<*>}
-   */
-  async rollback(transaction) {
-    return transaction.rollback();
+    return `(
+      /* W͟i͟t͟h͟i͟n͟ ͟M͟e͟a͟s͟u͟r͟a͟b͟l͟e͟s͟ (${name}) */
+      SELECT "id" FROM "Measurables"
+      ${where}
+    )`;
   }
 
   /**

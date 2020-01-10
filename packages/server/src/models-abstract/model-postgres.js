@@ -900,6 +900,7 @@ class ModelPostgres extends Model {
   }
 
   /**
+   * @protected
    * @param {string} name
    * @param {Layers.AbstractModelsLayer.options} options
    * @returns {Promise<*>}

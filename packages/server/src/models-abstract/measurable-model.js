@@ -36,6 +36,8 @@ class MeasurableModel extends ModelPostgres {
   }
 
   /**
+   * @public
+   * @todo: To use "applyFilter" to use "transactions" later.
    * @param {string} channelId
    * @return {Promise<*>}
    */
@@ -46,28 +48,6 @@ class MeasurableModel extends ModelPostgres {
         state: MEASURABLE_STATE.OPEN,
       },
     });
-  }
-
-  /**
-   * @return {*[]}
-   * @private
-   */
-  _getOrder() {
-    return [
-      [this.sequelize.col('stateOrder'), 'ASC'],
-      ['createdAt', 'DESC'],
-    ];
-  }
-
-  /**
-   *
-   * @return {{include: Sequelize.literal|*[]}}
-   * @private
-   */
-  _getAttributes() {
-    return {
-      include: [this._getStateOrderField()],
-    };
   }
 
   /**
@@ -111,6 +91,28 @@ class MeasurableModel extends ModelPostgres {
     }
 
     return where;
+  }
+
+  /**
+   * @return {*[]}
+   * @private
+   */
+  _getOrder() {
+    return [
+      [this.sequelize.col('stateOrder'), 'ASC'],
+      ['createdAt', 'DESC'],
+    ];
+  }
+
+  /**
+   *
+   * @return {{include: Sequelize.literal|*[]}}
+   * @private
+   */
+  _getAttributes() {
+    return {
+      include: [this._getStateOrderField()],
+    };
   }
 }
 

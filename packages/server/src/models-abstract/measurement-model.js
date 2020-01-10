@@ -55,6 +55,7 @@ class MeasurementModel extends ModelPostgres {
 
   /**
    * @public
+   * @todo: To use "applyFilter" to use "transactions" later.
    * @param {Models.MeasurableID | null} measurableId
    * @returns {Promise<Model>}
    */
@@ -79,6 +80,7 @@ class MeasurementModel extends ModelPostgres {
 
   /**
    * @public
+   * @todo: To use "applyFilter" to use "transactions" later.
    * @param {Models.MeasurableID | null} measurableId
    * @param {Models.AgentID | null} agentId
    * @param {Date} relevantAt
@@ -103,6 +105,7 @@ class MeasurementModel extends ModelPostgres {
 
   /**
    * @public
+   * @todo: To use "applyFilter" to use "transactions" later.
    * @param {Models.MeasurableID | null} measurableId
    * @param {Models.AgentID | null} agentId
    * @returns {Promise<Model>}
@@ -124,6 +127,7 @@ class MeasurementModel extends ModelPostgres {
 
   /**
    * @public
+   * @todo: To use "applyFilter" to use "transactions" later.
    * @param {Models.Measurable} measurable
    * @param {Models.AgentID | null} agentId
    * @return {Promise<Models.Model>}

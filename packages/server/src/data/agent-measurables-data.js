@@ -117,10 +117,10 @@ class AgentMeasurablesData extends DataBase {
     if (!measurable) return undefined;
 
     // Use of Parameters
-    const resolutionMeasurement
-      = (params.finalComparisonMeasurement === LAST_OBJECTIVE_MEASUREMENT)
-      ? recentResult
-      : _.last(_.sortBy(allAggregations, r => r.relevantAt));
+    const resolutionMeasurement =
+      (params.finalComparisonMeasurement === LAST_OBJECTIVE_MEASUREMENT)
+        ? recentResult
+        : _.last(_.sortBy(allAggregations, (r) => r.relevantAt));
 
     if (!resolutionMeasurement) return undefined;
 

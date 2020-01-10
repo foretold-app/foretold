@@ -40,10 +40,10 @@ class MeasurablesStateMachine {
       const measurables = await this._getMeasurablesToPending(transaction);
 
       for (const measurable of measurables) {
-        const result = await this._judgementPending(
+        const result = !!(await this._judgementPending(
           measurable,
           transaction,
-        );
+        ));
 
         log.trace(
           `\x1b[35mMeasurable ID = "${_.get(measurable, 'id')}", `
@@ -79,10 +79,10 @@ class MeasurablesStateMachine {
       );
 
       for (const measurable of measurables) {
-        const result = await this._processResolution(
+        const result = !!(await this._processResolution(
           measurable,
           transaction,
-        );
+        ));
 
         log.trace(
           `\x1b[35mMeasurable ID = "${_.get(measurable, 'id')}", `
@@ -128,7 +128,9 @@ class MeasurablesStateMachine {
   async _getMeasurablesToPending(transaction) {
     const filter = new Filter({ needsToBePending: true });
     const pagination = new Pagination({ limit: 100 });
-    const options = new Options({ transaction, lock: true, skipLocked: true });
+    const options = new Options({
+      transaction, lock: true, skipLocked: true, isAdmin: true,
+    });
     return this.measurables.getAll(filter, pagination, options);
   }
 
@@ -140,7 +142,9 @@ class MeasurablesStateMachine {
   async _getMeasurablesToResolutionResponse(transaction) {
     const filter = new Filter({ needsResolutionResponse: true });
     const pagination = new Pagination({ limit: 100 });
-    const options = new Options({ transaction, lock: true, skipLocked: true });
+    const options = new Options({
+      transaction, lock: true, skipLocked: true, isAdmin: true,
+    });
     return this.measurables.getAll(filter, pagination, options);
   }
 

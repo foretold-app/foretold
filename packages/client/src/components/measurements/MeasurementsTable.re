@@ -126,7 +126,7 @@ module Helpers = {
       m.relevantAt
       |> E.O.fmap(d =>
            <div className=Styles.date>
-             {d |> E.M.goFormat_standard |> Utils.ste}
+             {d |> MomentRe.Moment.fromNow(~withoutSuffix=None) |> Utils.ste}
            </div>
          )
       |> E.O.default(<Null />);

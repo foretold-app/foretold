@@ -55,7 +55,7 @@ module Columns = {
         (r: record) =>
           r.createdAt
           |> E.O.fmap((createdAt: MomentRe.Moment.t) =>
-               createdAt |> MomentRe.Moment.format("LLL")
+               createdAt |> MomentRe.Moment.fromNow(~withoutSuffix=None)
              )
           |> E.O.default("")
           |> Utils.ste,

@@ -104,16 +104,13 @@ module Helpers = {
   module ValueText = {
     [@react.component]
     let make = (~measurement: Types.measurement) =>
-      <Antd.Input
-        readOnly=true
-        className=Styles.inputText
-        value={
-          measurement.valueText
-          |> E.O.bind(_, r => r == "" ? None : Some(r))
-          |> E.O.fmap(r => {|"|} ++ r ++ {|"|})
-          |> E.O.default("")
-        }
-      />;
+      measurement.valueText
+      |> E.O.bind(_, r => r == "" ? None : Some(r))
+      |> E.O.fmap(r => {|"|} ++ r ++ {|"|})
+      |> E.O.fmap(r =>
+           <Antd.Input readOnly=true className=Styles.inputText value=r />
+         )
+      |> E.O.React.defaultNull;
   };
 
   module Description = {

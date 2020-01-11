@@ -11,7 +11,9 @@ module FloatPoint = {
 
     <Div flexDirection=`column>
       <Div flex={`num(1.)}>
-        <div className=mainText> {value |> E.Float.toFixed |> Utils.ste} </div>
+        <div className=mainText>
+          {value |> E.Float.with2DigitsPrecision |> Utils.ste}
+        </div>
       </Div>
     </Div>;
   };

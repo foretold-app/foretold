@@ -336,12 +336,12 @@ let getPredictionDistribution = (~bounds, ~width=230, ()) =>
     (),
   );
 
-// ?
 let bottomSubRowFn =
   Some(
     (measurement: Types.measurement) =>
       switch (measurement.description) {
-      | Some(d) =>
+      | Some("") => None
+      | Some(_) =>
         Some([|
           FC.Table.Row.textSection(<Helpers.Description m=measurement />),
         |])

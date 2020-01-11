@@ -101,19 +101,21 @@ module Columns = {
 
   let timeActivityRatio =
     Table.Column.make(
-      ~name="Fraction of Time Active" |> Utils.ste,
+      ~name="Percent of Time Active" |> Utils.ste,
       ~help=
         Some({
-          headerContent: "Fraction of Time Active" |> Utils.ste,
+          headerContent: "Percent of Time Active" |> Utils.ste,
           bodyContent:
-            "The fraction of the question's open time when the agent was forecasting."
+            "The percentage of the question's open time when the agent was forecasting."
             |> Utils.ste,
         }),
       ~render=
         (r: record) =>
           r.timeAverageScore
           |> E.O.fmap((r: Types.timeAverageScore) => r.timeActivityRatio)
+          |> E.O.fmap(e => e *. 100.)
           |> E.O.fmap(E.Float.with3DigitsPrecision)
+          |> E.O.fmap(e => e ++ "%")
           |> E.O.default("")
           |> Utils.ste,
       (),

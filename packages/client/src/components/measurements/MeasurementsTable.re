@@ -300,7 +300,7 @@ let score = _ =>
            )
         |> E.O.default("")
         |> Utils.ste,
-    ~flex=5,
+    ~flex=3,
     (),
   );
 
@@ -322,7 +322,7 @@ let logScore = _ =>
            )
         |> E.O.default("")
         |> Utils.ste,
-    ~flex=5,
+    ~flex=3,
     (),
   );
 

@@ -30,22 +30,6 @@ let make = (~tabSelected: Routing.ChannelPage.tab, ~channel: Types.channel) =>
       interalUrl={tabToInternalUrl(channel.id, Updates)}
       str="Activity"
     />
-    {E.React2.showIf(
-       channel.id != "home",
-       <Tab
-         isActive={tabSelected == Members}
-         interalUrl={tabToInternalUrl(channel.id, Members)}
-         str={
-           (
-             channel.membershipCount
-             |> E.O.fmap(string_of_int)
-             |> E.O.fmap(e => e ++ " ")
-             |> E.O.default("")
-           )
-           ++ "Members"
-         }
-       />,
-     )}
     <Tab
       isActive={tabSelected == Notebooks}
       interalUrl={tabToInternalUrl(channel.id, Notebooks)}
@@ -65,6 +49,22 @@ let make = (~tabSelected: Routing.ChannelPage.tab, ~channel: Types.channel) =>
          isActive={tabSelected == Leaderboard}
          interalUrl={tabToInternalUrl(channel.id, Leaderboard)}
          str="Scores"
+       />,
+     )}
+    {E.React2.showIf(
+       channel.id != "home",
+       <Tab
+         isActive={tabSelected == Members}
+         interalUrl={tabToInternalUrl(channel.id, Members)}
+         str={
+           (
+             channel.membershipCount
+             |> E.O.fmap(string_of_int)
+             |> E.O.fmap(e => e ++ " ")
+             |> E.O.default("")
+           )
+           ++ "Members"
+         }
        />,
      )}
     {E.React2.showIf(

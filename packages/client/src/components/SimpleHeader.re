@@ -36,7 +36,7 @@ module JoinChannel = {
         <FC__Button
           variant=FC__Button.Primary
           isDisabled=false
-          size=FC__Button.(Medium)
+          size=FC__Button.(Small)
           className=FC.GroupHeader.Styles.actionButtonPosition
           onClick={_ => ChannelJoin.mutate(mutation, channelId)}>
           {"Join Community" |> Utils.ste}

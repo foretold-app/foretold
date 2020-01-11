@@ -26,6 +26,7 @@ class AgentModel extends ModelPostgres {
 
   /**
    * @todo: Use ORM opportunities to join tables.
+   * @todo: No, do not this ORM for this.
    * @protected
    * @param {Models.ChannelID} channelId
    * @return {string}

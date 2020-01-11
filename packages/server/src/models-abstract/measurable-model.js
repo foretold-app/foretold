@@ -1,13 +1,7 @@
-const {
-  MEASUREMENT_VALUE,
-} = require('@foretold/measurement-value/enums/measurement-value');
-
-
 const models = require('../models');
 const { MEASURABLE_STATE } = require('../enums');
 
 const { ModelPostgres } = require('./model-postgres');
-const { MEASUREMENT_COMPETITOR_TYPE } = require('../enums');
 
 /**
  * @implements {Layers.AbstractModelsLayer.AbstractModel}
@@ -43,43 +37,7 @@ class MeasurableModel extends ModelPostgres {
 
   /**
    * @public
-   * @return {Promise<Models.Measurable[]>}
-   */
-  async needsToBePending() {
-    return this.model.findAll({
-      where: {
-        state: MEASURABLE_STATE.OPEN,
-        [this.or]: [
-          {
-            expectedResolutionDate: {
-              [this.lt]: this.fn('now'),
-            },
-          },
-          { expectedResolutionDate: null },
-        ],
-      },
-    });
-  }
-
-  /**
-   * @public
-   * @return {Promise<Models.Measurable[]>}
-   */
-  async needsResolutionResponse() {
-    return this.model.findAll({
-      where: {
-        state: MEASURABLE_STATE.JUDGEMENT_PENDING,
-        resolutionEndpoint: {
-          [this.not]: null,
-        },
-        expectedResolutionDate: {
-          [this.lt]: this.fn('now'),
-        },
-      },
-    });
-  }
-
-  /**
+   * @todo: To use "applyFilter" to use "transactions" later.
    * @param {string} channelId
    * @return {Promise<*>}
    */
@@ -93,26 +51,46 @@ class MeasurableModel extends ModelPostgres {
   }
 
   /**
-   * @todo: implement client for this code
-   * @todo: do not remove
-   * @todo: Do we really need it if we have hooks?
-   * @param {Models.Measurable} measurable
-   * @return {Promise<Models.Measurable>}
+   * @protected
+   * @param {object} [where]
+   * @param {Layers.AbstractModelsLayer.filter} [filter]
+   * @param {Models.AgentID} [filter.userId]
    */
-  async processResolution(measurable) {
-    const asFloat = await measurable.resolutionEndpointResponse;
-    if (asFloat) {
-      await this.sequelize.models.Measurement.create({
-        agentId: measurable.creatorId,
-        competitorType: MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE,
-        measurableId: measurable.id,
-        value: {
-          [MEASUREMENT_VALUE.floatPoint]: asFloat,
+  applyFilter(where = {}, filter = {}) {
+    super.applyFilter(where, filter);
+
+    if (!!filter.needsToBePending) {
+      where[this.and].push({
+        state: MEASURABLE_STATE.OPEN,
+        [this.or]: [
+          {
+            expectedResolutionDate: {
+              [this.lt]: this.fn('now'),
+            },
+          },
+          {
+            expectedResolutionDate: null,
+          },
+        ],
+      });
+    }
+
+    if (!!filter.needsResolutionResponse) {
+      where[this.and].push({
+        state: MEASURABLE_STATE.JUDGEMENT_PENDING,
+        resolutionEndpoint: {
+          [this.and]: [
+            { [this.not]: null },
+            { [this.not]: '' },
+          ],
+        },
+        expectedResolutionDate: {
+          [this.lt]: this.fn('now'),
         },
       });
-      await measurable.judged();
     }
-    return measurable;
+
+    return where;
   }
 
   /**

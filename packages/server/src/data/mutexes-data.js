@@ -16,6 +16,7 @@ class MutexesData extends DataBase {
   }
 
   /**
+   * @public
    * @param {Models.AgentID} agentId
    * @param {string} name
    * @returns {Promise<*>}
@@ -35,7 +36,7 @@ class MutexesData extends DataBase {
 
       const found = await this.getOne(params, query, options);
 
-      if (found && this.expired(found)) {
+      if (found && this.isExpired(found)) {
         await this.deleteOne(params, query, options);
         created = await this.createOne(data, options);
       }
@@ -54,18 +55,20 @@ class MutexesData extends DataBase {
   }
 
   /**
+   * @private
    * @param mutex
    * @returns {boolean}
    */
-  expired(mutex) {
-    return this.age(mutex) > MutexesData.MUTEX_TTL_MIN;
+  isExpired(mutex) {
+    return this.ageInMinutes(mutex) > MutexesData.MUTEX_TTL_MIN;
   }
 
   /**
+   * @private
    * @param mutex
    * @returns {number}
    */
-  age(mutex) {
+  ageInMinutes(mutex) {
     const updatedAt = moment(mutex.get('createdAt'));
     const diff = moment().diff(updatedAt);
     const duration = moment.duration(diff);
@@ -73,6 +76,7 @@ class MutexesData extends DataBase {
   }
 
   /**
+   * @public
    * @param {Models.AgentID} agentId
    * @param {string} mutexId
    * @returns {Promise<*>}

@@ -20,8 +20,8 @@
     "test": "jest --watch",
     "test:cv": "jest --coverage --forceExit",
     "test:ci": "jest --forceExit",
-    "lint": "eslint src --max-warnings 262",
-    "lint:ci": "eslint src --max-warnings 262 --quiet",
+    "lint": "eslint src --max-warnings 245",
+    "lint:ci": "eslint src --max-warnings 245 --quiet",
     "lint-table": "eslint src --format table",
     "lint:cf": "eslint src --format codeframe",
     "lint-fix": "eslint src --fix",
@@ -122,6 +122,7 @@
     "rules": {
       "class-methods-use-this": 0,
       "no-extra-boolean-cast": 0,
+      "object-curly-newline": 0,
       "no-console": 0,
       "arrow-body-style": 0,
       "no-await-in-loop": 0,

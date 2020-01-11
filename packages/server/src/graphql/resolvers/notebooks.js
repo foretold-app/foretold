@@ -44,7 +44,7 @@ async function create(_root, args, context, _info) {
 async function update(root, args, _context, _info) {
   const id = _.get(args, 'id', null);
   const input = _.get(args, 'input') || {};
-  return new NotebooksData().updateOne({ id }, input);
+  return new NotebooksData().updateOne(new Params({ id }), input);
 }
 
 /**
@@ -116,7 +116,7 @@ async function one(_root, args, context, _info) {
  */
 async function count(root, _args, _context, _info) {
   const channelId = _.get(root, 'id', null);
-  return new NotebooksData().getCount({ channelId });
+  return new NotebooksData().getCount(new Params({ channelId }));
 }
 
 module.exports = {

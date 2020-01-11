@@ -158,6 +158,8 @@ const rules = () => ({
   Mutation: {
     '*': and(currentAgentIsAuthenticated, rateLimit),
 
+    mutexTake: currentAgentIsAuthenticated,
+    mutexFree: currentAgentIsAuthenticated,
     channelCreate: currentAgentIsAuthenticated,
     botCreate: currentAgentIsAuthenticated,
     userUpdate: and(

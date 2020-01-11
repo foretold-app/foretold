@@ -17,6 +17,7 @@ class ChannelModel extends ModelPostgres {
   /**
    * @public
    * @todo: To decline in use of "this.models".
+   * @todo: To use "applyFilter" to use "transactions" later.
    * @param {Models.ChannelID} channelId
    * @return {Promise<Model[]>}
    */

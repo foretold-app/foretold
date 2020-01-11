@@ -40,7 +40,7 @@ app.use(cors());
       next();
     } else {
       // @todo: fix it later
-      res.redirect('https://' + 'www.foretold.io' + req.url);
+      res.redirect(`https://www.foretold.io${req.url}`);
     }
   };
 

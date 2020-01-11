@@ -95,7 +95,6 @@ export namespace Models {
 
     getChannel(): Models.Channel;
 
-    judged(): void;
     set(name: string, value: any): Promise<any>;
   }
 
@@ -323,6 +322,9 @@ export namespace Layers {
       isEmailVerified?: boolean[];
       notAuth0AccessToken?: boolean;
       isNotEmailVerified?: boolean;
+      needsToBePending?: boolean;
+      needsResolutionResponse?: boolean;
+      role?: string;
 
       // @todo: Object? Give definition!
       findInDateRange?: object;
@@ -441,6 +443,9 @@ export namespace Layers {
       isEmailVerified?: boolean[];
       notAuth0AccessToken?: boolean;
       isNotEmailVerified?: boolean;
+      needsToBePending?: boolean;
+      needsResolutionResponse?: boolean;
+      role?: string;
 
       withinMeasurables?: withinMeasurables | null;
       withinPublicChannels?: withinPublicChannels | null;

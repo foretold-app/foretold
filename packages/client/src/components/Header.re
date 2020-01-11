@@ -1,8 +1,6 @@
 open Utils;
 open Style.Grid;
 
-let feedbackUrl = "https://feedback.foretold.io/";
-
 module Styles = {
   open Css;
   let outer =
@@ -53,7 +51,7 @@ module StylesDropdown = {
       maxWidth(`em(17.)),
     ]);
 
-  let actions = [maxWidth(`em(17.))] |> style;
+  let actions = [maxWidth(`em(15.))] |> style;
 
   let clear = [clear(`both)] |> style;
 
@@ -87,17 +85,15 @@ module UserDropdown = {
     <div className=StylesDropdown.actions>
       <LinkHeader
         linkType={Internal(Agent({agentId, subPage: AgentUpdates}))}
-        str="My Profile"
+        str="Profile"
       />
+      <LinkHeader linkType={Internal(Profile)} str="Settings" />
+      <LinkHeader linkType={Internal(Preferences)} str="Preferences" />
+      <LinkHeader linkType={Internal(ChannelNew)} str="New Community" />
       <LinkHeader
-        linkType={Internal(Agent({agentId, subPage: AgentBots}))}
-        str="My Bots"
+        linkType={Action(_ => Auth.Actions.logout())}
+        str="Logout"
       />
-      <LinkHeader linkType={Internal(Profile)} str="User Settings" />
-      <LinkHeader linkType={Internal(Preferences)} str="User Preferences" />
-      <LinkHeader linkType={Internal(ChannelNew)} str="Make a New Community" />
-      <LinkHeader linkType={External(feedbackUrl)} str="Feedback" />
-      <LinkHeader linkType={Action(_ => Auth.Actions.logout())} str="Logout" />
       <div className=StylesDropdown.clear />
     </div>;
 };

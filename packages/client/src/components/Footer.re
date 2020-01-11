@@ -1,7 +1,6 @@
 open Utils;
 
 let documentationUrl = "https://docs.foretold.io/";
-let feedbackUrl = "https://feedback.foretold.io/";
 
 [@react.component]
 let make = () => {
@@ -11,7 +10,6 @@ let make = () => {
       <Link linkType={External(documentationUrl)}>
         {"Documentation" |> ste}
       </Link>,
-      <Link linkType={External(feedbackUrl)}> {"Feedback" |> ste} </Link>,
       <Link linkType={Internal(Terms)}>
         {"Terms and Conditions" |> ste}
       </Link>,

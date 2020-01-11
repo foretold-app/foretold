@@ -6,10 +6,23 @@ type code = {
 
 module Styles = {
   open Css;
+
   let all =
     style([
+      selector("h1, h2, h3, h4, h5", [lineHeight(`em(1.4))]),
       selector(
-        "h1, h2, h3, h4, h5, p, blockquote, code",
+        "pre",
+        [
+          background(`hex("f4f6f9")),
+          borderRadius(`px(3)),
+          paddingTop(`em(0.6)),
+          paddingBottom(`em(0.6)),
+          marginTop(`em(1.)),
+          marginBottom(`em(1.)),
+        ],
+      ),
+      selector(
+        "h1, h2, h3, h4, h5, p, blockquote, pre",
         [
           maxWidth(`px(682)),
           marginLeft(`auto),

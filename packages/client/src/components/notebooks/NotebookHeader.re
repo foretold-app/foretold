@@ -14,6 +14,7 @@ module Styles = {
   let h1 =
     style([
       fontSize(`em(1.9)),
+      lineHeight(`em(1.3)),
       color(`hex("192D44")),
       marginBottom(`em(0.5)),
       FC__Settings.FontWeights.heavy,

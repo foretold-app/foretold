@@ -42,7 +42,7 @@ let isCuratedCompare = (a: Types.channel, b: Types.channel) =>
   a.isCurated > b.isCurated ? (-1) : 1;
 
 let nameCompare = (a: Types.channel, b: Types.channel) =>
-  (-1) * String.compare(a.name, b.name);
+  String.compare(a.name, b.name);
 
 let sortAsc = (arr: array(Types.channel)) => {
   Array.sort(nameCompare, arr);

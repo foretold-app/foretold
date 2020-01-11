@@ -51,11 +51,6 @@ module DashboardTableToTable = {
                       xMax={domain.xMax}
                       measurable
                     />
-                    <MeasurementItems.AgentPrediction
-                      measurable
-                      xMin={domain.xMin}
-                      xMax={domain.xMax}
-                    />
                   </div>;
                 | None =>
                   <FC__Alert type_=`warning>

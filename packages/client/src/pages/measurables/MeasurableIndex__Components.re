@@ -81,16 +81,6 @@ module LoadedAndUnselected = {
                 r.closedTotal,
                 query.state == Some([|`JUDGED, `CLOSED_AS_UNRESOLVED|]),
               )}
-             <FC__Button
-               variant=FC__Button.Primary
-               isDisabled=false
-               size=FC__Button.(Small)
-               className=Css.(style([marginLeft(`em(1.5))]))
-               onClick={e =>
-                 LinkType.onClick(Internal(MeasurableNew(channelId)), e)
-               }>
-               {"New Question" |> Utils.ste}
-             </FC__Button>
            </Div>
          | _ => "Error" |> ste
          }}
@@ -103,6 +93,16 @@ module LoadedAndUnselected = {
             FC.PageCard.HeaderRow.Styles.itemBottomPadding,
           ]),
         ]>
+        <FC__Button
+          variant=FC__Button.Primary
+          isDisabled=false
+          size=FC__Button.(Small)
+          className=Css.(style([marginRight(`em(1.5))]))
+          onClick={e =>
+            LinkType.onClick(Internal(MeasurableNew(channelId)), e)
+          }>
+          {"New Question" |> Utils.ste}
+        </FC__Button>
         {Reducer.Components.paginationPage(t.reducerParams)}
       </Div>
     </Div>;

@@ -44,7 +44,7 @@ module Columns = {
       (),
     );
 
-  let all = [|channel, name, owner, time|];
+  let all = [|name, channel, owner, time|];
   let short = [|name, owner, time|];
 };
 

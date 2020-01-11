@@ -45,7 +45,7 @@ let make =
                   )>
                   <div className=Styles.mainColumn>
                     <div className=Styles.mainColumnTop>
-                      <MeasurableItems.LinkMeasurable measurable />
+                      <MeasurableItems.NameMeasurable measurable />
                     </div>
                   </div>
                   <div className=Styles.rightColumn>

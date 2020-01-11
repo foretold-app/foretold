@@ -64,5 +64,5 @@ let make = (~channelId=None, ~agentId=None) => {
     <SLayout head container=`fluid> body </SLayout>;
   };
 
-  <Reducer itemsPerPage=20 callFnParams=(channelId, agentId) subComponent />;
+  <Reducer itemsPerPage=40 callFnParams=(channelId, agentId) subComponent />;
 };

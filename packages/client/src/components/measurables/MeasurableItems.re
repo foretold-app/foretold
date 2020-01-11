@@ -113,6 +113,19 @@ module LinkMeasurable = {
   };
 };
 
+module NameMeasurable = {
+  [@react.component]
+  let make = (~measurable: Types.measurable) => {
+    switch (measurable.labelSubject, measurable.labelProperty) {
+    | (Some(""), Some(""))
+    | (None, _)
+    | (_, None) =>
+      <div className=Styles.nameLink> {measurable.name |> ste} </div>
+    | (Some(_), Some(_)) => <LinkName measurable />
+    };
+  };
+};
+
 module Description = {
   [@react.component]
   let make = (~measurable: Types.measurable, ~styles=[]) =>

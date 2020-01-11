@@ -160,6 +160,7 @@ let addMembersButtonSection = (channelId: string) =>
     </FC.Base.Button>
   </FC.Base.Div>;
 
+// Currently seems broken, so I removed it for now. Add to "SuccesFn" later when fixed.
 let inviteMemberButtonSection = (channelId: string) =>
   <FC.Base.Div
     float=`right
@@ -181,11 +182,7 @@ let succesFn = (~channelId: string, ~channel: Types.channel, ~memberships) => {
   let head =
     switch (channel.myRole) {
     | Some(`ADMIN) =>
-      <div>
-        {title()}
-        {inviteMemberButtonSection(channelId)}
-        {addMembersButtonSection(channelId)}
-      </div>
+      <div> {title()} {addMembersButtonSection(channelId)} </div>
     | _ => <div> {title()} </div>
     };
 

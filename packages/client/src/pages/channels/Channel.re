@@ -45,11 +45,8 @@ let make =
         </Div>
         <Div float=`right>
           {channel.myRole === Some(`NONE)
-             ? <JoinButton channelId=channel.id />
-             : <>
-                 <SimpleHeader.NewMeasurable channelId={channel.id} />
-                 <LeaveButton channelId={channel.id} />
-               </>}
+             ? <JoinButton channelId={channel.id} />
+             : <LeaveButton channelId={channel.id} />}
         </Div>
       </>;
     };
@@ -97,7 +94,8 @@ let make =
   module Headers = {
     [@react.component]
     let make = () => {
-      let tabSelected = Routing.ChannelPage.SubPage.toTab(channelPage.subPage);
+      let tabSelected =
+        Routing.ChannelPage.SubPage.toTab(channelPage.subPage);
 
       switch (channel) {
       | Some(channel) =>

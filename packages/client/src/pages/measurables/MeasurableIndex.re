@@ -18,6 +18,7 @@ let make = (~channelId: string, ~searchParams: MeasurableQueryIndex.query) => {
                 channelQuery,
                 seriesQuery,
               }),
+              channelId,
             )
           )
         )

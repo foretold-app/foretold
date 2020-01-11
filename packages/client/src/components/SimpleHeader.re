@@ -1,16 +1,3 @@
-module NewMeasurable = {
-  [@react.component]
-  let make = (~channelId) =>
-    <FC__Button
-      variant=FC__Button.Primary
-      isDisabled=false
-      size=FC__Button.(Medium)
-      className=FC.GroupHeader.Styles.actionButtonPosition
-      onClick={e => LinkType.onClick(Internal(MeasurableNew(channelId)), e)}>
-      {"New Question" |> Utils.ste}
-    </FC__Button>;
-};
-
 module LeaveChannel = {
   [@react.component]
   let make = (~channelId) =>

@@ -49,6 +49,7 @@ module LoadedAndUnselected = {
         t: loadedAndUnselected,
         stats: measurablesStateStatsQuery,
         query: MeasurableQueryIndex.query,
+        channelId,
       ) =>
     <Div>
       <Div float=`left>
@@ -80,6 +81,16 @@ module LoadedAndUnselected = {
                 r.closedTotal,
                 query.state == Some([|`JUDGED, `CLOSED_AS_UNRESOLVED|]),
               )}
+             <FC__Button
+               variant=FC__Button.Primary
+               isDisabled=false
+               size=FC__Button.(Small)
+               className=Css.(style([marginLeft(`em(1.5))]))
+               onClick={e =>
+                 LinkType.onClick(Internal(MeasurableNew(channelId)), e)
+               }>
+               {"New Question" |> Utils.ste}
+             </FC__Button>
            </Div>
          | _ => "Error" |> ste
          }}
@@ -124,11 +135,12 @@ let toLayoutInput =
       selectedState: MeasurableQueryIndex.query,
       stats: measurablesStateStatsQuery,
       state: state,
+      channelId: string,
     ) => {
   switch (state) {
   | LoadedAndUnselected(l) =>
     <SLayout
-      head={LoadedAndUnselected.header(l, stats, selectedState)}
+      head={LoadedAndUnselected.header(l, stats, selectedState, channelId)}
       container=`fluid>
       {LoadedAndUnselected.measurableIndexTable(l)}
     </SLayout>

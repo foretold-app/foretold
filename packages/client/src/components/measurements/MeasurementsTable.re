@@ -18,6 +18,13 @@ module Styles = {
   let secondaryText =
     style([fontSize(`em(0.9)), color(FC__Settings.accentBlue)]);
 
+  let inputText =
+    style([
+      fontSize(`em(0.8)),
+      color(FC__Settings.accentBlue),
+      maxWidth(`percent(90.)),
+    ]);
+
   let percentage = style([fontSize(`em(1.15))]);
 
   let result =
@@ -97,13 +104,16 @@ module Helpers = {
   module ValueText = {
     [@react.component]
     let make = (~measurement: Types.measurement) =>
-      <div className=Styles.secondaryText>
-        {measurement.valueText
-         |> E.O.bind(_, r => r == "" ? None : Some(r))
-         |> E.O.fmap(r => {|"|} ++ r ++ {|"|})
-         |> E.O.default("")
-         |> Utils.ste}
-      </div>;
+      <Antd.Input
+        readOnly=true
+        className=Styles.inputText
+        value={
+          measurement.valueText
+          |> E.O.bind(_, r => r == "" ? None : Some(r))
+          |> E.O.fmap(r => {|"|} ++ r ++ {|"|})
+          |> E.O.default("")
+        }
+      />;
   };
 
   module Description = {
@@ -226,29 +236,28 @@ module MeasurableLink = {
 let predictionValue =
   Table.Column.make(
     ~name="Prediction" |> Utils.ste,
-    ~flex=5,
+    ~flex=3,
     ~render=
       (measurement: Types.measurement) =>
         <div> <Helpers.StatSummary measurement /> </div>,
     (),
   );
-
+// /
 let predictionText =
   Table.Column.make(
     ~name={
       "Input Text" |> Utils.ste;
     },
-    ~flex=3,
+    ~flex=5,
     ~render=
-      (measurement: Types.measurement) =>
-        <div> <Helpers.ValueText measurement /> </div>,
+      (measurement: Types.measurement) => <Helpers.ValueText measurement />,
     (),
   );
 
 let agent =
   Table.Column.make(
     ~name="Member" |> Utils.ste,
-    ~flex=5,
+    ~flex=4,
     ~render=
       (measurement: Types.measurement) =>
         <Helpers.MeasurerLink measurement />,
@@ -258,7 +267,7 @@ let agent =
 let time =
   Table.Column.make(
     ~name="Time" |> Utils.ste,
-    ~flex=5,
+    ~flex=3,
     ~render=
       (measurement: Types.measurement) =>
         <Helpers.RelevantAt m=measurement />,
@@ -270,7 +279,7 @@ let measurable =
     ~name="Measurable" |> Utils.ste,
     ~render=
       (measurement: Types.measurement) => <MeasurableLink measurement />,
-    ~flex=5,
+    ~flex=4,
     (),
   );
 
@@ -323,7 +332,7 @@ let logScore = _ =>
 let getPredictionDistribution = (~bounds, ~width=230, ()) =>
   Table.Column.make(
     ~name="Distribution" |> Utils.ste,
-    ~flex=7,
+    ~flex=5,
     ~render=
       (measurement: Types.measurement) =>
         <Helpers.SmallDistribution measurement bounds width />,

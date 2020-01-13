@@ -83,7 +83,7 @@ module.exports = {
     for (let bot of bots) {
       let bb = {
         ...bot,
-        userId: allUsers[0].dataValues.id,
+        userId: allUsers[0].id,
         description: "sdf",
       };
       const b = await models.Bot.create(bb);

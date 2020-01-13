@@ -18,7 +18,7 @@ function runListeners() {
       listeners.emailConsumer);
     emitter.on(events.EVERY_MINUTE,
       listeners.updateUsers);
-    emitter.on(events.EVERY_TEN_MINUTES,
+    emitter.on(events.EVERY_HOUR,
       listeners.updateMaterializedViews);
     emitter.on(events.MAIL,
       listeners.mailer);

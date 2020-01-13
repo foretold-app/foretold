@@ -18,5 +18,7 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
+  ChannelAgent.removeAttribute('id');
+
   return ChannelAgent;
 };

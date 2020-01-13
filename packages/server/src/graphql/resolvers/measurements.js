@@ -253,8 +253,8 @@ async function latestAggregateByRootId(root, _args, context, _info) {
  * @returns {{data: *, dataType: *}}
  */
 function translateValue(r) {
-  let { data } = r.dataValues.value;
-  const { dataType } = r.dataValues.value;
+  let { data } = r.value;
+  const { dataType } = r.value;
   if (dataType === 'percentage') {
     data /= 100;
   }
@@ -272,7 +272,7 @@ function _marketLogScore({ prediction, aggregate, outcome }) {
     return { error: 'MeasurementScore Error: Missing needed data' };
   }
 
-  const { competitorType } = prediction.dataValues;
+  const { competitorType } = prediction;
 
   if (
     competitorType !== MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE
@@ -298,7 +298,7 @@ function _nonMarketLogScore({ prediction, outcome }) {
     return { error: '_nonMarketLogScore Error: Missing needed data' };
   }
 
-  const { competitorType } = prediction.dataValues;
+  const { competitorType } = prediction;
 
   if (
     competitorType !== MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE

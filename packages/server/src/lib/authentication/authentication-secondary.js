@@ -4,6 +4,7 @@ const { Auth0 } = require('../auth0');
 const { UsersData } = require('../../data/users-data');
 const { AgentsData } = require('../../data/agents-data');
 const { TokensData } = require('../../data/tokens-data');
+const { BotsData } = require('../../data/bots-data');
 
 const { Params } = require('../../data/classes');
 
@@ -20,6 +21,7 @@ class AuthenticationSecondary {
 
     this.users = new UsersData();
     this.agents = new AgentsData();
+    this.bots = new BotsData();
     this.tokens = new TokensData();
   }
 
@@ -96,8 +98,8 @@ class AuthenticationSecondary {
       throw new NotAuthenticatedError();
     }
 
-    const bot = await agent.getBot();
-    const user = await agent.getUser();
+    const bot = await this.bots.getOne(new Params({ agentId }));
+    const user = await this.users.getOne(new Params({ agentId }));
     const creator = bot || user;
 
     return {

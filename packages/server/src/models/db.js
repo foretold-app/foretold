@@ -11,7 +11,9 @@ const log = logger.module('models/db');
 
 const config = { ...configSrc };
 
-config.logging = (...rest) => log.trace(rest[0]);
+if (config.logging !== false) {
+  config.logging = (...rest) => log.trace(rest[0]);
+}
 
 function getDB() {
   const db = {};

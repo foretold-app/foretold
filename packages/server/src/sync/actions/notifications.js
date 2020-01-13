@@ -151,41 +151,12 @@ class Notifications {
   }
 
   /**
-   * @todo: temporary turned off
    * @protected
-   * @param {Models.Measurable} measurable
+   * @param {Models.Measurable} _measurable
    * @return {string[]}
    */
-  changedFields(measurable) {
+  changedFields(_measurable) {
     return [];
-    const fields = [
-      'name',
-      'labelCustom',
-      'valueType',
-      'createdAt',
-      'updatedAt',
-      'creatorId',
-      'resolutionEndpoint',
-      'state',
-      'stateUpdatedAt',
-      'labelSubject',
-      'labelOnDate',
-      'labelProperty',
-      'seriesId',
-      'channelId',
-      'isArchived',
-      'min',
-      'max',
-    ];
-    return fields
-      .filter((r) => measurable.get(r) !== measurable.previous(r))
-      .map((r) => ({
-        title: r,
-        short: false,
-        value:
-          `*From*: ${measurable.previous(r)} \n`
-          + `*To*:  ${measurable.get(r)}`,
-      }));
   }
 }
 

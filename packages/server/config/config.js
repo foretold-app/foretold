@@ -77,7 +77,7 @@ const conf = {
 };
 
 if (NODE_ENV === 'development') {
-  console.log('Config', conf);
+  console.log('Config', JSON.stringify(conf));
 }
 
 module.exports = conf;

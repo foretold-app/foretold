@@ -32,6 +32,7 @@ function init(db) {
   const notification = db.sequelize.import('./notification');
   const template = db.sequelize.import('./template');
   const globalSetting = db.sequelize.import('./global-setting');
+  const channelAgent = db.sequelize.import('./channel-agent');
 
   db.Agent = agent;
   db.AgentMeasurable = agentMeasurable;
@@ -53,25 +54,30 @@ function init(db) {
   db.Series = series;
   db.Token = token;
   db.Template = template;
+  db.ChannelAgent = channelAgent;
 
   const initList = [
     'Agent', 'Bot', 'ChannelMemberships', 'Channel', 'Measurable',
     'Series', 'User', 'Token', 'Preference',
     'NotificationStatus', 'FeedItem', 'Measurement',
     'AgentMeasurable', 'AgentChannel', 'Invitation', 'Mutex',
-    'Notebook',
+    'Notebook', 'ChannelAgent',
   ];
 
   // Associate All Models
   log.trace(' --- ');
+  const built = [];
+  const pass = [];
   initList.forEach((modelName) => {
     if (db[modelName].associate) {
-      log.trace(' > Build association for model:', modelName);
       db[modelName].associate(db);
+      built.push(modelName);
     } else {
-      log.trace(' > Pass association for model:', modelName);
+      pass.push(modelName);
     }
   });
+  log.trace(' > Build association:', built.join(', '));
+  log.trace(' > Pass association:', pass.join(', '));
   log.trace(' --- ');
 }
 

@@ -117,9 +117,9 @@ class ModelPostgres extends Model {
     this._assertInput({ filter, pagination, restrictions, options });
     const where = {};
 
-    if ('inspect' in filter) filter.inspect();
-    if ('inspect' in pagination) pagination.inspect();
-    if ('inspect' in restrictions) restrictions.inspect();
+    // if ('inspect' in filter) filter.inspect();
+    // if ('inspect' in pagination) pagination.inspect();
+    // if ('inspect' in restrictions) restrictions.inspect();
 
     this.applyRestrictions(where, restrictions);
     this.applyFilter(where, filter);
@@ -155,9 +155,9 @@ class ModelPostgres extends Model {
     const where = {};
     const include = [];
 
-    if ('inspect' in filter) filter.inspect();
-    if ('inspect' in pagination) pagination.inspect();
-    if ('inspect' in restrictions) restrictions.inspect();
+    // if ('inspect' in filter) filter.inspect();
+    // if ('inspect' in pagination) pagination.inspect();
+    // if ('inspect' in restrictions) restrictions.inspect();
 
     this.applyRestrictions(where, restrictions);
     this.applyRestrictionsIncluding(include, restrictions);
@@ -242,8 +242,8 @@ class ModelPostgres extends Model {
     const distinct = !!query.distinct ? true : null;
     const col = !!query.col ? query.col : null;
 
-    if ('inspect' in params) params.inspect();
-    if ('inspect' in restrictions) restrictions.inspect();
+    // if ('inspect' in params) params.inspect();
+    // if ('inspect' in restrictions) restrictions.inspect();
 
     this.applyRestrictions(where, restrictions);
 
@@ -933,6 +933,19 @@ class ModelPostgres extends Model {
 
   /**
    * @protected
+   * @param {string} name
+   * @param {Layers.AbstractModelsLayer.options} options
+   * @returns {Promise<*>}
+   */
+  async _updateMaterializedView(name, options = {}) {
+    this._assertInput({ options });
+    const cond = {};
+    this._extendConditions(cond, options);
+    return this.sequelize.query(`REFRESH MATERIALIZED VIEW "${name}"`, cond);
+  }
+
+  /**
+   * @protected
    * @param {object} cond
    * @param {Layers.AbstractModelsLayer.options} options
    */
@@ -945,6 +958,9 @@ class ModelPostgres extends Model {
     }
     if (_.has(options, 'skipLocked')) {
       cond.skipLocked = options.skipLocked;
+    }
+    if (_.has(options, 'raw')) {
+      cond.raw = options.raw;
     }
     return cond;
   }

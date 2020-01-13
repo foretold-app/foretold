@@ -2,27 +2,30 @@
 const _ = require('lodash');
 const moment = require('moment');
 const {
-  PredictionResolutionOverTime,
-  marketScore,
-  nonMarketScore,
+  PredictionResolutionOverTime
 } = require('@foretold/prediction-analysis');
+const { marketScore } = require('@foretold/prediction-analysis');
+const { nonMarketScore } = require('@foretold/prediction-analysis');
 
 // The first level of dependencies (..)
 const logger = require('../lib/log');
 const { AgentMeasurableModel } = require('../models-abstract');
 const { MEASUREMENT_COMPETITOR_TYPE } = require('../enums');
-const {
-  MARKET_TYPE,
-  START_AT,
-  FINAL_COMPARISON_MEASUREMENT,
-} = require('../enums');
+
+const { MARKET_TYPE } = require('../enums');
+const { START_AT } = require('../enums');
+const { FINAL_COMPARISON_MEASUREMENT } = require('../enums');
 
 // The second level (.)
 const { DataBase } = require('./data-base');
 const { MeasurementsData } = require('./measurements-data');
 const { MeasurablesData } = require('./measurables-data');
+
 const { Filter } = require('./classes');
 const { Params } = require('./classes');
+const { Query } = require('./classes');
+const { Pagination } = require('./classes');
+const { Options } = require('./classes');
 
 const log = logger.module('data/agent-measurables-data');
 
@@ -50,6 +53,30 @@ function timeActivityRatio({ initialTime, firstPredictionTime, endingTime }) {
   const _firstPredictionTime = toUnix(firstPredictionTime);
   const _endingTime = toUnix(endingTime);
   return (_endingTime - _firstPredictionTime) / (_endingTime - _initialTime);
+}
+
+/**
+ * @param v
+ * @returns {{data: *, dataType: *}}
+ */
+function translateValue(v) {
+  let { data } = v;
+  const { dataType } = v;
+  if (dataType === 'percentage') {
+    data /= 100;
+  }
+  return { data, dataType };
+}
+
+/**
+ * @param p
+ * @returns {{time: *, measurement: *}}
+ */
+function toOverTime(p) {
+  return {
+    time: toUnix(p.relevantAt),
+    measurement: translateValue(p.value),
+  };
 }
 
 /**
@@ -126,7 +153,7 @@ class AgentMeasurablesData extends DataBase {
 
     const startTime = (params.startAt === START_AT.QUESTION_CREATION_TIME)
       ? measurable.createdAt
-      : _.get(agentPredictions, '0.dataValues.relevantAt');
+      : _.get(agentPredictions, '0.relevantAt');
 
     const marketScoreType = params.marketType === MARKET_TYPE.MARKET
       ? marketScore
@@ -150,8 +177,8 @@ class AgentMeasurablesData extends DataBase {
 
     const _timeActivityRatio = timeActivityRatio({
       initialTime: measurable.createdAt,
-      firstPredictionTime: _.get(agentPredictions, '0.dataValues.relevantAt'),
-      endingTime: resolutionMeasurement.dataValues.relevantAt,
+      firstPredictionTime: _.get(agentPredictions, '0.relevantAt'),
+      endingTime: resolutionMeasurement.relevantAt,
     });
 
     return {
@@ -160,9 +187,9 @@ class AgentMeasurablesData extends DataBase {
       aggregations: allAggregations,
       recentResult,
       scoringStartTime: startTime,
-      scoringEndTime: resolutionMeasurement.dataValues.relevantAt,
+      scoringEndTime: resolutionMeasurement.relevantAt,
       measurableCreationTime: measurable.createdAt,
-      finalResolutionTime: resolutionMeasurement.dataValues.relevantAt,
+      finalResolutionTime: resolutionMeasurement.relevantAt,
       timeActivityRatio: _.round(_timeActivityRatio, 6),
       activeTimeDistribution: {
         finalX: distribution.finalX,
@@ -189,30 +216,6 @@ class AgentMeasurablesData extends DataBase {
       startTime,
     },
   ) {
-    /**
-     * @param v
-     * @returns {{data: *, dataType: *}}
-     */
-    function translateValue(v) {
-      let { data } = v;
-      const { dataType } = v;
-      if (dataType === 'percentage') {
-        data /= 100;
-      }
-      return { data, dataType };
-    }
-
-    /**
-     * @param p
-     * @returns {{time: *, measurement: *}}
-     */
-    function toOverTime(p) {
-      return {
-        time: toUnix(p.dataValues.relevantAt),
-        measurement: translateValue(p.dataValues.value),
-      };
-    }
-
     // Main Function
     if (!startTime) return undefined;
 
@@ -292,9 +295,10 @@ class AgentMeasurablesData extends DataBase {
    * @returns {Promise<*>}
    */
   async _getMeasurements(measurableId) {
-    return this.measurements.getAll(new Filter({
-      measurableId,
-    }));
+    const filter = new Filter({ measurableId });
+    const pagination = new Pagination();
+    const options = new Options({ raw: true });
+    return this.measurements.getAll(filter, pagination, options);
   }
 
   /**
@@ -302,9 +306,10 @@ class AgentMeasurablesData extends DataBase {
    * @returns {Promise<*>}
    */
   async _getMeasurable(measurableId) {
-    return this.measurables.getOne(new Params({
-      id: measurableId,
-    }));
+    const params = new Params({ id: measurableId });
+    const query = new Query();
+    const options = new Options({ raw: true });
+    return this.measurables.getOne(params, query, options);
   }
 }
 

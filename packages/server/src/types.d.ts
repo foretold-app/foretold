@@ -294,6 +294,7 @@ export namespace Layers {
       transaction?: object;
       lock?: boolean;
       skipLocked?: boolean;
+      raw?: boolean;
       currentAgentId?: Models.AgentID;
     };
     type filter = {
@@ -415,6 +416,7 @@ export namespace Layers {
       transaction?: object;
       lock?: boolean;
       skipLocked?: boolean;
+      raw?: boolean;
     };
     type filter = {
       agentId?: Models.AgentID;

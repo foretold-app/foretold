@@ -20,6 +20,7 @@ const list = {
   lock: (v) => _.isBoolean(v) || utils.none(v),
   skipLocked: (v) => _.isBoolean(v) || utils.none(v),
   transaction: (v) => _.isObject(v) || utils.none(v),
+  raw: (v) => _.isBoolean(v) || utils.none(v),
 };
 
 Options.LIST = list;

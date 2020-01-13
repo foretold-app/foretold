@@ -3,7 +3,10 @@ const _ = require('lodash');
 const { DataBase } = require('./data-base');
 const { AgentMeasurablesData } = require('./agent-measurables-data');
 const { MeasurablesData } = require('./measurables-data');
+
 const { Filter } = require('./classes');
+const { Pagination } = require('./classes');
+const { Options } = require('./classes');
 
 const { AgentChannelModel } = require('../models-abstract');
 
@@ -48,7 +51,8 @@ class AgentChannelsData extends DataBase {
 
     const sum = _.chain(primaryPointScores)
       .remove(_.isObject)
-      .map((r) => r.score).sum()
+      .map((r) => r.score)
+      .sum()
       .value();
 
     return sum;
@@ -60,7 +64,9 @@ class AgentChannelsData extends DataBase {
    */
   async _getMeasurables(channelId) {
     const filter = new Filter({ channelId });
-    return this.measurables.getAll(filter);
+    const pagination = new Pagination();
+    const options = new Options({ raw: true });
+    return this.measurables.getAll(filter, pagination, options);
   }
 }
 

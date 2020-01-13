@@ -155,6 +155,16 @@ class DataBase {
   }
 
   /**
+   * @public
+   * @param {Layers.DataSourceLayer.options} [options]
+   * @return {Promise<*>}
+   */
+  async updateMaterializedView(options = {}) {
+    const { option$ } = this._getOptionsRestrictions(options);
+    return this.model.updateMaterializedView(option$);
+  }
+
+  /**
    * @protected
    * @param {Layers.DataSourceLayer.options} [options]
    * @return {{

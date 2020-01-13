@@ -933,6 +933,19 @@ class ModelPostgres extends Model {
 
   /**
    * @protected
+   * @param {string} name
+   * @param {Layers.AbstractModelsLayer.options} options
+   * @returns {Promise<*>}
+   */
+  async _updateMaterializedView(name, options = {}) {
+    this._assertInput({ options });
+    const cond = {};
+    this._extendConditions(cond, options);
+    return this.sequelize.query(`REFRESH MATERIALIZED VIEW "${name}"`, cond);
+  }
+
+  /**
+   * @protected
    * @param {object} cond
    * @param {Layers.AbstractModelsLayer.options} options
    */

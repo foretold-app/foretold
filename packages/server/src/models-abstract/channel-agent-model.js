@@ -4,10 +4,10 @@ const { ModelPostgres } = require('./model-postgres');
 /**
  * @implements {Layers.AbstractModelsLayer.AbstractModel}
  */
-class AgentMeasurableModel extends ModelPostgres {
+class ChannelAgentModel extends ModelPostgres {
   constructor() {
     super({
-      model: models.AgentMeasurable,
+      model: models.ChannelAgent,
       sequelize: models.sequelize,
     });
   }
@@ -17,10 +17,10 @@ class AgentMeasurableModel extends ModelPostgres {
    * @returns {Promise<*>}
    */
   async updateMaterializedView(options) {
-    return this._updateMaterializedView('AgentMeasurables', options);
+    return this._updateMaterializedView('ChannelAgents', options);
   }
 }
 
 module.exports = {
-  AgentMeasurableModel,
+  ChannelAgentModel,
 };

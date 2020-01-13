@@ -11,6 +11,14 @@ class AgentChannelModel extends ModelPostgres {
       sequelize: models.sequelize,
     });
   }
+
+  /**
+   * @param {Layers.AbstractModelsLayer.options} options
+   * @returns {Promise<*>}
+   */
+  async updateMaterializedView(options) {
+    return this._updateMaterializedView('AgentChannels', options);
+  }
 }
 
 module.exports = {

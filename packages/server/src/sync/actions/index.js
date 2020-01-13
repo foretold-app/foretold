@@ -3,6 +3,7 @@ const { Notifications } = require('./notifications');
 const { Creators } = require('./creators');
 const { Invitations } = require('./invitations');
 const { UserUpdater } = require('./user-updater');
+const { MaterializedViewsUpdater } = require('./materialized-views-updater');
 
 module.exports = {
   MeasurablesStateMachine,
@@ -10,4 +11,5 @@ module.exports = {
   Creators,
   Invitations,
   UserUpdater,
+  MaterializedViewsUpdater,
 };

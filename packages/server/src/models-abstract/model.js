@@ -18,6 +18,12 @@ class Model {
     return Promise.reject(new Error('lock is not implemented.'));
   }
 
+  updateMaterializedView(_options) {
+    return Promise.reject(
+      new Error('updateMaterializedViews is not implemented.'),
+    );
+  }
+
   getAll(_filter, _pagination, _restrictions, _options) {
     return Promise.reject(new Error('getAll is not implemented.'));
   }

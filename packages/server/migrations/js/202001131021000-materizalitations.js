@@ -7,6 +7,7 @@ function sql(version = '') {
 }
 
 // It is a temporary solution.
+// Keywords: cache.
 
 module.exports = {
   up: async function (queryInterface) {

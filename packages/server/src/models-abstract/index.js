@@ -18,6 +18,7 @@ const { AgentMeasurableModel } = require('./agent-measurable-model');
 const { AgentChannelModel } = require('./agent-channel-model');
 const { MutexModel } = require('./mutex-model');
 const { NotebookModel } = require('./notebook-model');
+const { ChannelAgentModel } = require('./channel-agent-model');
 const { Model } = require('./model');
 
 module.exports = {
@@ -41,5 +42,6 @@ module.exports = {
   AgentChannelModel,
   MutexModel,
   NotebookModel,
+  ChannelAgentModel,
   Model,
 };

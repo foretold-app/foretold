@@ -6,6 +6,8 @@ const logger = require('../lib/log');
 
 const log = logger.module('sync/listeners');
 
+// @todo: To use one function to run main methods of classes.
+
 /**
  * @returns {Promise<boolean>}
  */
@@ -14,8 +16,8 @@ async function updateUsers() {
   log.trace(name);
 
   try {
-    const userUpdater = new actions.UserUpdater();
-    const result = await userUpdater.main();
+    const job = new actions.UserUpdater();
+    const result = await job.main();
     log.trace(name, 'all done', result);
   } catch (e) {
     console.error(name, e.message, e);
@@ -23,6 +25,25 @@ async function updateUsers() {
 
   return true;
 }
+
+/**
+ * @returns {Promise<boolean>}
+ */
+async function updateMaterializedViews() {
+  const name = 'Job::updateMaterializedViews';
+  log.trace(name);
+
+  try {
+    const job = new actions.MaterializedViewsUpdater();
+    const result = await job.main();
+    log.trace(name, 'all done', result);
+  } catch (e) {
+    console.error(name, e.message, e);
+  }
+
+  return true;
+}
+
 /**
  * @param {Models.User} user
  * @returns {Promise<boolean>}
@@ -32,8 +53,8 @@ async function updateUser(user) {
   log.trace(name);
 
   try {
-    const userUpdater = new actions.UserUpdater();
-    const result = await userUpdater.updateUser(user);
+    const job = new actions.UserUpdater();
+    const result = await job.updateUser(user);
     log.trace(name, 'all done', result);
   } catch (e) {
     console.error(name, e.message, e);
@@ -51,8 +72,8 @@ async function invitations(user) {
   log.trace(name);
 
   try {
-    const invitation$ = new actions.Invitations();
-    const result = await invitation$.transition(user);
+    const job = new actions.Invitations();
+    const result = await job.transition(user);
     log.trace(name, 'all done', result);
   } catch (e) {
     console.error(name, e.message, e);
@@ -70,8 +91,8 @@ async function createChannelMembership(channel) {
   log.trace(name);
 
   try {
-    const creators = new actions.Creators();
-    const result = await creators.createChannelMembership(channel);
+    const job = new actions.Creators();
+    const result = await job.createChannelMembership(channel);
     log.trace(name, 'all done', result);
   } catch (e) {
     console.error(name, e.message, e);
@@ -89,8 +110,8 @@ async function createBotAgent(bot) {
   log.trace(name);
 
   try {
-    const creators = new actions.Creators();
-    const result = await creators.createBotAgent(bot);
+    const job = new actions.Creators();
+    const result = await job.createBotAgent(bot);
     log.trace(name, 'all done', result);
   } catch (e) {
     console.error(name, e.message, e);
@@ -108,8 +129,8 @@ async function createUserAgent(user) {
   log.trace(name);
 
   try {
-    const creators = new actions.Creators();
-    const result = await creators.createUserAgent(user);
+    const job = new actions.Creators();
+    const result = await job.createUserAgent(user);
     log.trace(name, 'all done', result);
   } catch (e) {
     console.error(name, e.message, e);
@@ -127,8 +148,8 @@ async function checkMeasurable(measurable) {
   log.trace(name);
 
   try {
-    const creators = new actions.Creators();
-    const result = await creators.checkMeasurableState(measurable);
+    const job = new actions.Creators();
+    const result = await job.checkMeasurableState(measurable);
     log.trace(name, 'all done', result);
   } catch (e) {
     console.error(name, e.message, e);
@@ -146,8 +167,8 @@ async function checkMeasurement(measurement) {
   log.trace(name);
 
   try {
-    const creators = new actions.Creators();
-    const result = await creators.checkMeasurement(measurement);
+    const job = new actions.Creators();
+    const result = await job.checkMeasurement(measurement);
     log.trace(name, 'all done', result);
   } catch (e) {
     console.error(name, e.message, e);
@@ -165,8 +186,8 @@ async function measurableStateTransition(measurement) {
   log.trace(name);
 
   try {
-    const action = new actions.MeasurablesStateMachine();
-    const result = await action.measurableStateTransition(measurement);
+    const job = new actions.MeasurablesStateMachine();
+    const result = await job.measurableStateTransition(measurement);
     log.trace(name, 'all done', result);
   } catch (e) {
     console.error(name, e.message, e);
@@ -184,8 +205,8 @@ async function createNewMeasurables(series) {
   log.trace(name);
 
   try {
-    const creators = new actions.Creators();
-    const result = await creators.createMeasurables(series);
+    const job = new actions.Creators();
+    const result = await job.createMeasurables(series);
     log.trace(name, 'all done', result);
   } catch (e) {
     console.error(name, e.message, e);
@@ -203,8 +224,8 @@ async function newMeasurementSlackNotification(measurement) {
   log.trace(name);
 
   try {
-    const notifications = new actions.Notifications();
-    const result = await notifications.newMeasurementSlackNotification(
+    const job = new actions.Notifications();
+    const result = await job.newMeasurementSlackNotification(
       measurement,
     );
     log.trace(name, 'all done', result);
@@ -224,8 +245,8 @@ async function newMeasurableSlackNotification(measurable) {
   log.trace(name);
 
   try {
-    const notifications = new actions.Notifications();
-    const result = await notifications.newMeasurableSlackNotification(
+    const job = new actions.Notifications();
+    const result = await job.newMeasurableSlackNotification(
       measurable,
     );
     log.trace(name, 'all done', result);
@@ -265,8 +286,8 @@ async function toJudgementPendingTransition() {
   log.trace(name);
 
   try {
-    const reducer = new actions.MeasurablesStateMachine();
-    const result = await reducer.toJudgementPending();
+    const job = new actions.MeasurablesStateMachine();
+    const result = await job.toJudgementPending();
     log.trace(name, 'all done', result);
   } catch (e) {
     console.error(name, e.message, e);
@@ -283,8 +304,8 @@ async function toResolving() {
   log.trace(name);
 
   try {
-    const reducer = new actions.MeasurablesStateMachine();
-    const result = await reducer.toResolving();
+    const job = new actions.MeasurablesStateMachine();
+    const result = await job.toResolving();
     log.trace(name, 'all done', result);
   } catch (e) {
     console.error(name, e.message, e);
@@ -301,8 +322,8 @@ async function emailConsumer() {
   log.trace(name);
 
   try {
-    const consumer = new consumers.Emails();
-    const result = await consumer.main();
+    const job = new consumers.Emails();
+    const result = await job.main();
     log.trace(name, 'all done', result);
   } catch (e) {
     console.error(name, e.message, e);
@@ -320,7 +341,8 @@ async function mailer(envelop = {}) {
   log.trace(name);
 
   try {
-    const result = await new Mailer(envelop).main();
+    const job = new Mailer(envelop);
+    const result = await job.main();
     log.trace(name, 'all done', result);
   } catch (e) {
     console.error(name, e.message, e);
@@ -341,8 +363,8 @@ function listenFor(Producer) {
     log.trace(`Run listener: ${name}`);
 
     try {
-      const producer = new Producer(input);
-      const result = await producer.main();
+      const job = new Producer(input);
+      const result = await job.main();
       log.trace(name, 'all done', result);
     } catch (e) {
       console.error(name, e.message, e);
@@ -360,8 +382,8 @@ async function addGitHubWebHook() {
   log.trace(name);
 
   try {
-    const gitHubApi = new GitHubApi();
-    const result = await gitHubApi.addHook();
+    const job = new GitHubApi();
+    const result = await job.addHook();
     log.trace(name, 'all done', result);
   } catch (e) {
     console.error(name, e.message, e);
@@ -393,4 +415,5 @@ module.exports = {
   invitations,
   updateUser,
   updateUsers,
+  updateMaterializedViews,
 };

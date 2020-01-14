@@ -43,14 +43,23 @@ services:
       - DB_USERNAME=<change-me> # 6.1
       - DB_PASSWORD=<change-me> # 6.2
       - DB_DATABASE=<change-me> # 6.3
-      - DB_HOST=127.0.0.1 # 6.4
+      - DB_HOST=database # 6.4
       # - DB_USE_ENV_VARIABLE=DATABASE_URL # 6.5
-
     command: yarn start
+    expose:
+      - 80
     links:
       - database
 
   database:
     image: postgres:11
     environment:
-      - POSTGRES_PASSWORD=<change-me>
+      - POSTGRES_PASSWORD=<change-me> # 6.2
+
+  # Load Balancer
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    links:
+      - app

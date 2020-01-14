@@ -64,7 +64,7 @@ let make = (~cdf: FC__Types.Dist.t) => {
              <TextInput fullWidth=true />
            </Div>
            <Div styles=[flexRowItem]>
-             <Button variant=Button.Secondary> "Clear"->React.string </Button>>
+             <Button variant=Button.Secondary> "Clear"->React.string </Button>
            </Div>
          </Div>
        | FreeformTab => <TextInput fullWidth=true placeholder="5 to 50" />

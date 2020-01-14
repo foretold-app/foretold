@@ -12,8 +12,9 @@
 - Run `docker-compose restart app`.
 - Run `docker-compose logs --tail 100 -f app` to see application logs.
 - Run `docker-compose logs --tail 100 -f` to see all logs.
-- Open http://localhost/graphql to see the graphql browser. 
+- Open "http://localhost/graphql" to see the graphql browser. 
   Do not block "cookies".
+- Open "http://localhost" to see the application.
 - Now you could change some configuration in "docker.compose.override.yml".
   Then run `docker-compose up -d` to update the application.
 

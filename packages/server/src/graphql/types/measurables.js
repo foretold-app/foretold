@@ -74,16 +74,19 @@ const measurable = new graphql.GraphQLObjectType({
       resolve: resolvers.permissions.measurablesPermissions,
     },
 
+    // @todo: Do not use resolver. Use common interfaces of Data layer.
     series: {
       type: require('./series').series,
       resolve: resolver(models.Measurable.Series),
     },
 
+    // @todo: Do not use resolver. Use common interfaces of Data layer.
     creator: {
       type: require('./agents').agent,
       resolve: resolver(models.Measurable.Creator),
     },
 
+    // @todo: Do not use resolver. Use common interfaces of Data layer.
     channel: {
       type: require('./channels').channel,
       resolve: resolver(models.Measurable.Channel),

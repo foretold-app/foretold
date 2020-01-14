@@ -34,12 +34,14 @@ const bot = new graphql.GraphQLObjectType({
     },
 
     // @todo: security?
+    // @todo: Do not use resolver. Use common interfaces of Data layer.
     agent: {
       type: require('./agents').agent,
       resolve: resolver(models.Bot.Agent),
     },
 
     // @todo: security?
+    // @todo: Do not use resolver. Use common interfaces of Data layer.
     user: {
       type: require('./users').user,
       resolve: resolver(models.Bot.User),

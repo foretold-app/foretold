@@ -17,10 +17,14 @@ const notebook = new graphql.GraphQLObjectType({
     // @entity: creator-link
     ownerId: { type: graphql.GraphQLNonNull(scalars.agentId) },
     channelId: { type: graphql.GraphQLNonNull(scalars.channelId) },
+
+    // @todo: Do not use resolver. Use common interfaces of Data layer.
     owner: {
       type: graphql.GraphQLNonNull(require('./agents').agent),
       resolve: resolver(models.Notebook.Agent),
     },
+
+    // @todo: Do not use resolver. Use common interfaces of Data layer.
     channel: {
       type: graphql.GraphQLNonNull(require('./channels').channel),
       resolve: resolver(models.Notebook.Channel),

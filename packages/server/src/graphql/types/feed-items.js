@@ -39,6 +39,7 @@ const feedItem = new graphql.GraphQLObjectType({
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
 
+    // @todo: Do not use resolver. Use common interfaces of Data layer.
     channel: {
       type: graphql.GraphQLNonNull(require('./channels').channel),
       resolve: resolver(models.FeedItem.Channel),

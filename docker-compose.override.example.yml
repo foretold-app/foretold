@@ -3,6 +3,8 @@ version: "2"
 services:
 
   app:
+    volumes:
+      - ./packages:/opt/app/packages
     environment:
       # 1. Persistence
       # - PORT=80 # 1.1
@@ -49,9 +51,9 @@ services:
     command: yarn dev
 
   database:
-    environment:
-      - POSTGRES_PASSWORD=password # 6.2
     volumes:
       - ./.persistence/database-main:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=password # 6.2
     ports:
       - 31001:5432

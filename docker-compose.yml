@@ -45,7 +45,6 @@ services:
       - DB_DATABASE=<change-me> # 6.3
       - DB_HOST=database # 6.4
       # - DB_USE_ENV_VARIABLE=DATABASE_URL # 6.5
-
     command: yarn start
     links:
       - database

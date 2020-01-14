@@ -5,7 +5,7 @@
 - Create file "docker.compose.override.yml" from 
   "docker.compose.override.example.yml".
 - Run `docker-compose up -d --build`.
-- Run `docker-compose up -d --scale app=3`.
+- Run `docker-compose up -d --scale app=3` or `docker-compose scale app=3`.
 - Run `docker-compose ps` there should be containers in the Up state.
 - Run `docker-compose exec app yarn server/db:create` to create DB.
 - Run `docker-compose exec app yarn server/db:migrate` to migrate DB schema.

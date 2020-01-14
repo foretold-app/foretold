@@ -3,8 +3,8 @@ version: "2"
 services:
 
   app:
-    volumes:
-      - ./packages:/opt/app/packages
+#    volumes:
+#      - ./packages:/opt/app/packages
     environment:
       # 1. Persistence
       # - PORT=80 # 1.1

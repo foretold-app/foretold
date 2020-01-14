@@ -46,8 +46,6 @@ services:
       - DB_DATABASE=development # 6.3
       - DB_HOST=database # 6.4
       # - DB_USE_ENV_VARIABLE=DATABASE_URL # 6.5
-    ports:
-      - 80:80
     command: yarn dev
 
   database:
@@ -55,3 +53,7 @@ services:
       - ./.persistence/database-main:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD=password # 6.2
+
+  nginx:
+    ports:
+      - "80:4000"

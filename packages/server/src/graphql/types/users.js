@@ -35,13 +35,15 @@ const user = new graphql.GraphQLObjectType({
     agentId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     isMe: require('./common').isMe,
 
-    // security?
+    // @todo: security?
+    // @todo: Do not use resolver. Use common interfaces of Data layer.
     agent: {
       type: require('./agents').agent,
       resolve: resolver(models.User.Agent),
     },
 
-    // security?
+    // @todo: security?
+    // @todo: Do not use resolver. Use common interfaces of Data layer.
     bots: {
       type: graphql.GraphQLNonNull(graphql.GraphQLList(require('./bots').bot)),
       resolve: resolver(models.User.Bots),

@@ -23,18 +23,21 @@ const agent = new graphql.GraphQLObjectType({
     isAdmin: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
 
     // @todo: security
+    // @todo: Do not use resolver. Use common interfaces of Data layer.
     user: {
       type: require('./users').user,
       resolve: resolver(models.Agent.User),
     },
 
     // @todo: security
+    // @todo: Do not use resolver. Use common interfaces of Data layer.
     bot: {
       type: require('./bots').bot,
       resolve: resolver(models.Agent.Bot),
     },
 
     // @todo: security
+    // @todo: Do not use resolver. Use common interfaces of Data layer.
     preference: {
       type: require('./preferences').preference,
       resolve: require('../resolvers').preferences.getOne,

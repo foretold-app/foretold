@@ -5,6 +5,11 @@ const { InvitationsData } = require('../../data');
 const { ChannelMembershipsData } = require('../../data');
 const logger = require('../../lib/log');
 
+const { Params } = require('../../data/classes');
+const { Data } = require('../../data/classes');
+const { Query } = require('../../data/classes');
+const { Filter } = require('../../data/classes');
+
 const { INVITATION_STATUS } = require('../../enums');
 const { CHANNEL_MEMBERSHIP_TYPE } = require('../../enums');
 
@@ -31,10 +36,10 @@ class Invitations {
       assert(_.isString(email), 'Email should be a string.');
       assert(_.isString(agentId), 'Agent ID is required.');
 
-      const invitations = await this.invitations.getAll({
+      const invitations = await this.invitations.getAll(new Filter({
         email,
         status: INVITATION_STATUS.AWAITING,
-      });
+      }));
 
       const methodCreatedBy = CHANNEL_MEMBERSHIP_TYPE.ADDED_BY_EMAIL_BY_ADMIN;
 
@@ -44,21 +49,21 @@ class Invitations {
         const channelId = _.get(invitation, 'channelId', null);
         const inviterAgentId = _.get(invitation, 'inviterAgentId', null);
 
-        await this.invitations.updateOne({
+        await this.invitations.updateOne(new Params({
           id: invitation.id,
-        }, {
+        }), new Data({
           status: INVITATION_STATUS.ACCEPTED,
-        });
+        }));
 
-        await this.channelMemberships.upsertOne({
+        await this.channelMemberships.upsertOne(new Params({
           agentId,
           channelId,
-        }, {}, {
+        }), new Query(), new Data({
           agentId,
           channelId,
           inviterAgentId,
           methodCreatedBy,
-        });
+        }));
       }
 
       return true;

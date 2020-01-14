@@ -3,6 +3,7 @@ open BsReform;
 
 module FormConfig = [%lenses
   type state = {
+    id: string,
     name: string,
     body: string,
   }
@@ -34,7 +35,7 @@ let onSuccess = channelId => {
 
 module FormComponent = {
   [@react.component]
-  let make = (~reform: Form.api, ~result: result('a)) => {
+  let make = (~reform: Form.api, ~result: result('a), ~editing: bool) => {
     let onSubmit = event => {
       ReactEvent.Synthetic.preventDefault(event);
       reform.submit();
@@ -82,6 +83,12 @@ module FormComponent = {
                  <Antd.Button _type=`primary onClick=onSubmit>
                    {"Submit" |> Utils.ste}
                  </Antd.Button>
+                 {<div>
+                    <NotebookComponents.RemoveNotebookButton
+                      notebookId={reform.state.values.id}
+                    />
+                  </div>
+                  |> E.React2.showIf(editing)}
                </Antd.Form.Item>
              </Div>
              <Div flex={`num(1.)}>
@@ -135,11 +142,11 @@ module Create = {
 
             None;
           },
-        ~initialState={name: "", body: ""},
+        ~initialState={id: "", name: "", body: ""},
         (),
       );
 
-    <FormComponent reform result />;
+    <FormComponent reform result editing=false />;
   };
 };
 
@@ -157,7 +164,7 @@ module Edit = {
             mutate(
               ~variables=
                 NotebookUpdateMutation.Query.make(
-                  ~id=notebook.id,
+                  ~id=state.values.id,
                   ~input={
                     "name": state.values.name |> E.J.fromString,
                     "body": state.values.body |> E.J.fromString,
@@ -178,10 +185,14 @@ module Edit = {
 
             None;
           },
-        ~initialState={name: notebook.name, body: notebook.body},
+        ~initialState={
+          id: notebook.id,
+          name: notebook.name,
+          body: notebook.body,
+        },
         (),
       );
 
-    <FormComponent reform result />;
+    <FormComponent reform result editing=true />;
   };
 };

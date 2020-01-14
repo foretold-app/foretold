@@ -16,3 +16,4 @@ let copiedMessage = "Copied";
 let copiedDescription = "The question ID was copied.";
 let backButtonTip = "Back";
 let pageIsNotFound = "Sorry, but the page is not found.";
+let notebookRemove = "Are you sure delete this notebook?";

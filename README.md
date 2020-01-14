@@ -12,3 +12,4 @@
 
 After work
 - Run `docker-compose down` to remove all stuff.
+- Run `rm -rf ./.persistence` to remove application volumes.

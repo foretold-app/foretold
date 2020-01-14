@@ -9,3 +9,6 @@
 - Run `docker-compose exec app yarn server/db:create` to create DB
 - Run `docker-compose exec app yarn server/db:migrate` to migrate DB schema
 - Run `docker-compose logs --tail 100 -f app` to see application logs.
+
+After work
+- Run `docker-compose down` to remove all stuff.

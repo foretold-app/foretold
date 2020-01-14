@@ -43,7 +43,7 @@ services:
       - DB_USERNAME=<change-me> # 6.1
       - DB_PASSWORD=<change-me> # 6.2
       - DB_DATABASE=<change-me> # 6.3
-      - DB_HOST=127.0.0.1 # 6.4
+      - DB_HOST=database # 6.4
       # - DB_USE_ENV_VARIABLE=DATABASE_URL # 6.5
 
     command: yarn start
@@ -53,4 +53,4 @@ services:
   database:
     image: postgres:11
     environment:
-      - POSTGRES_PASSWORD=<change-me>
+      - POSTGRES_PASSWORD=<change-me> # 6.2

@@ -21,7 +21,7 @@ Noq you could change the code and the application will be reloaded. The DB saves
 its state into ".persistence" folder. Do not remove this folder if you want
 to save DB state.
 
-After work:
+After work when you want to remove all:
 - Run `docker-compose down` to remove all stuff.
 - Run `rm -rf ./.persistence` to remove application volumes.
 

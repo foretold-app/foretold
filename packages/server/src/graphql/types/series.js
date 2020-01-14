@@ -38,12 +38,14 @@ const series = new graphql.GraphQLObjectType({
     iAmOwner: require('./common').iAmOwner,
 
     // @todo: security?
+    // @todo: Do not use resolver. Use common interfaces of Data layer.
     creator: {
       type: require('./agents').agent,
       resolve: resolver(models.Series.Creator),
     },
 
     // @todo: security?
+    // @todo: Do not use resolver. Use common interfaces of Data layer.
     channel: {
       type: require('./channels').channel,
       resolve: resolver(models.Series.Channel),

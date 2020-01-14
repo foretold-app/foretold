@@ -124,21 +124,25 @@ const measurement = new graphql.GraphQLObjectType({
       resolve: require('../resolvers/measurements').scoreSet,
     },
 
+    // @todo: Do not use resolver. Use common interfaces of Data layer.
     measurable: {
       type: require('./measurables').measurable,
       resolve: resolver(models.Measurement.Measurable),
     },
 
+    // @todo: Do not use resolver. Use common interfaces of Data layer.
     agent: {
       type: require('./agents').agent,
       resolve: resolver(models.Measurement.Agent),
     },
 
+    // @todo: Do not use resolver. Use common interfaces of Data layer.
     taggedMeasurement: {
       type: measurement,
       resolve: resolver(models.Measurement.TaggedMeasurement),
     },
 
+    // @todo: Do not use resolver. Use common interfaces of Data layer.
     taggedBy: {
       type: graphql.GraphQLNonNull(graphql.GraphQLList(measurement)),
       resolve: resolver(models.Measurement.TaggedBy),

@@ -42,6 +42,7 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.users.one,
       },
 
+      // @todo: Do not use resolver. Use common interfaces of Data layer.
       users: {
         type: graphql.GraphQLNonNull(graphql.GraphQLList(types.users.user)),
         resolve: resolver(models.User),
@@ -199,6 +200,7 @@ const schema = new graphql.GraphQLSchema({
         args: {
           id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
         },
+        // @todo: Do not use resolver. Use common interfaces of Data layer.
         resolve: resolver(models.Agent),
       },
 

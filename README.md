@@ -3,7 +3,7 @@
 ## Run Docker Development Environment
 
 - Create file "docker.compose.override.yml" from 
-  "docker.compose.override.example.yml" and set up env vars and ports.
+  "docker.compose.override.example.yml" and set up env vars.
 - Run `docker-compose up -d --build`
 - Run `docker-compose ps` there should be containers in the Up state.
 - Run `docker-compose exec app yarn server/db:create` to create DB

@@ -15,8 +15,8 @@ services:
       - AUTH0_DOMAIN=example.auth0.com # 2.2 (change)
       - AUTH0_CLIENT_ID=someClientIDUpToFourtyChars # 2.3 (change)
       # 3. Main
-      - API_URL=http://localhost:31000/graphql # 3.1 (change)
-      - SERVER_URL=http://localhost:31000 # 3.1.1 (change)
+      - API_URL=http://localhost/graphql # 3.1 (change)
+      - SERVER_URL=http://localhost # 3.1.1 (change)
       # - CDF_COMBINE_SIZE=1000 # 3.2
       # - AGGR_SCHEDULE=0 * * * * # 3.3
       - SLACK_WEBHOOK_URL=<change-me> # 3.4  (change)
@@ -47,7 +47,7 @@ services:
       - DB_HOST=database # 6.4
       # - DB_USE_ENV_VARIABLE=DATABASE_URL # 6.5
     ports:
-      - 31000:80
+      - 80:80
     command: yarn dev
 
   database:
@@ -55,5 +55,3 @@ services:
       - ./.persistence/database-main:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD=password # 6.2
-    ports:
-      - 31001:5432

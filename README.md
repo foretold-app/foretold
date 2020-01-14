@@ -8,7 +8,12 @@
 - Run `docker-compose ps` there should be containers in the Up state.
 - Run `docker-compose exec app yarn server/db:create` to create DB
 - Run `docker-compose exec app yarn server/db:migrate` to migrate DB schema
+- Run `docker-compose restart app`
 - Run `docker-compose logs --tail 100 -f app` to see application logs.
+
+When you changed "docker.compose.override.yml" to run `docker-compose up -d`.
+
+Open http://localhost/graphql to see the graphql browser.
 
 Noq you could change the code and the application will be reloaded. The DB saves
 its state into ".persistence" folder. Do not remove this folder if you want

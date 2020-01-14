@@ -502,6 +502,14 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.notebooks.update,
       },
 
+      notebookDelete: {
+        type: types.notebooks.notebook,
+        args: {
+          id: { type: graphql.GraphQLNonNull(types.scalars.notebookId) },
+        },
+        resolve: resolvers.notebooks.remove,
+      },
+
       preferenceUpdate: {
         type: types.preferences.preference,
         args: {

@@ -270,7 +270,7 @@ class ModelPostgres extends Model {
    */
   async upsertOne(params, query, data, restrictions, options) {
     return await this.getOne(params, query, restrictions, options)
-      || await this.createOne(data, restrictions, options);
+      || this.createOne(data, restrictions, options);
   }
 
   /**

@@ -1,3 +1,4 @@
+// @todo: To make component.
 let changeRoleAction = (agentId, channelId, role, text) =>
   <ChannelMembershipRoleUpdate.Mutation>
     ...{(mutation, _) =>
@@ -18,6 +19,7 @@ let changeRoleAction = (agentId, channelId, role, text) =>
     }
   </ChannelMembershipRoleUpdate.Mutation>;
 
+// @todo: To make component.
 let removeFromChannel = (agentId, channelId) =>
   <ChannelMembershipDelete.Mutation>
     ...{(mutation, _) =>

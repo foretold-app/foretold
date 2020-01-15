@@ -5,6 +5,7 @@ services:
   app:
 #    volumes:
 #      - ./packages:/opt/app/packages
+#      - ./package.json:/opt/app/package.json
     environment:
       # 1. Persistence
       # - PORT=80 # 1.1
@@ -47,6 +48,8 @@ services:
       - DB_HOST=database # 6.4
       # - DB_USE_ENV_VARIABLE=DATABASE_URL # 6.5
     command: yarn dev
+    links:
+      - database
 
   database:
     volumes:
@@ -55,5 +58,7 @@ services:
       - POSTGRES_PASSWORD=password # 6.2
 
   nginx:
+    links:
+      - app
     ports:
       - "80:4000"

@@ -42,7 +42,18 @@
   "author": "Foretold",
   "license": "MIT",
   "dependencies": {
-    "lerna": "3.13.4",
-    "nodemon": "1.12.1"
+    "lerna": "3.20.2",
+    "nodemon": "2.0.2"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "packages/bots/*",
+      "packages/cdf/*",
+      "packages/client/*",
+      "packages/components/*",
+      "packages/guesstimator/*",
+      "*.spec.js"
+    ],
+    "delay": 50
   }
 }

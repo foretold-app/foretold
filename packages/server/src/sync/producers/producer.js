@@ -10,6 +10,8 @@ const { NotificationStatusesData } = require('../../data');
 const { TemplatesData } = require('../../data');
 const { FeedItemsData } = require('../../data');
 
+const { Options } = require('../../data/classes');
+
 const { TEMPLATE_NAME } = require('../../enums');
 const { NOTIFICATION_TYPE } = require('../../enums');
 const { EmailEnvelope } = require('../../models/classes/notifications');
@@ -101,7 +103,7 @@ class Producer {
    */
   async _getOptions() {
     const transaction = await this._getTransaction();
-    return { transaction };
+    return new Options({ transaction });
   }
 }
 

@@ -3,8 +3,10 @@ open BsReform;
 
 module FormConfig = [%lenses
   type state = {
+    id: string,
     name: string,
     body: string,
+    channelId: string,
   }
 ];
 
@@ -27,14 +29,13 @@ let schema =
   |]);
 
 let onSuccess = channelId => {
-  Utils.setTimeout(_ => Routing.Url.push(ChannelNotebooks(channelId)), 1000)
-  |> ignore;
+  Routing.Url.push(ChannelNotebooks(channelId));
   ();
 };
 
 module FormComponent = {
   [@react.component]
-  let make = (~reform: Form.api, ~result: result('a)) => {
+  let make = (~reform: Form.api, ~result: result('a), ~editing: bool) => {
     let onSubmit = event => {
       ReactEvent.Synthetic.preventDefault(event);
       reform.submit();
@@ -82,6 +83,20 @@ module FormComponent = {
                  <Antd.Button _type=`primary onClick=onSubmit>
                    {"Submit" |> Utils.ste}
                  </Antd.Button>
+                 {<div>
+                    <NotebookComponents.RemoveNotebookButton
+                      notebookId={reform.state.values.id}
+                      onCompleted={_ => {
+                        LinkType.onClick2(
+                          Internal(
+                            ChannelNotebooks(reform.state.values.channelId),
+                          ),
+                        );
+                        ();
+                      }}
+                    />
+                  </div>
+                  |> E.React2.showIf(editing)}
                </Antd.Form.Item>
              </Div>
              <Div flex={`num(1.)}>
@@ -114,17 +129,16 @@ module Create = {
               ~variables=
                 NotebookCreateMutation.Query.make(
                   ~input={
-                    "channelId": channelId |> E.J.fromString,
+                    "channelId": state.values.channelId |> E.J.fromString,
                     "name": state.values.name |> E.J.fromString,
                     "body": state.values.body |> E.J.fromString,
                   },
                   (),
                 )##variables,
-              ~refetchQueries=[|"getNotebooks"|],
+              ~refetchQueries=[|"getNotebooks", "getChannel"|],
               (),
             )
             |> Js.Promise.then_((result: result('a)) => {
-                 Js.log2("result", result);
                  switch (result) {
                  | Data(_) => onSuccess(channelId)
                  | _ => ()
@@ -135,11 +149,11 @@ module Create = {
 
             None;
           },
-        ~initialState={name: "", body: ""},
+        ~initialState={id: "", name: "", body: "", channelId},
         (),
       );
 
-    <FormComponent reform result />;
+    <FormComponent reform result editing=false />;
   };
 };
 
@@ -157,7 +171,7 @@ module Edit = {
             mutate(
               ~variables=
                 NotebookUpdateMutation.Query.make(
-                  ~id=notebook.id,
+                  ~id=state.values.id,
                   ~input={
                     "name": state.values.name |> E.J.fromString,
                     "body": state.values.body |> E.J.fromString,
@@ -178,10 +192,15 @@ module Edit = {
 
             None;
           },
-        ~initialState={name: notebook.name, body: notebook.body},
+        ~initialState={
+          id: notebook.id,
+          name: notebook.name,
+          body: notebook.body,
+          channelId: notebook.channelId,
+        },
         (),
       );
 
-    <FormComponent reform result />;
+    <FormComponent reform result editing=true />;
   };
 };

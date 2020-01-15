@@ -85,7 +85,6 @@ async function all(_root, args, context, _info) {
   return new NotebooksData().getConnection(filter, pagination, options);
 }
 
-
 /**
  * @param {*} _root
  * @param {object} args
@@ -119,10 +118,33 @@ async function count(root, _args, _context, _info) {
   return new NotebooksData().getCount(new Params({ channelId }));
 }
 
+
+/**
+ * @param {*} _root
+ * @param {object} args
+ * @param {Models.NotebookID} args.id
+ * @param {Schema.Context} context
+ * @param {object} _info
+ * @returns {Promise<Model>}
+ */
+async function remove(_root, args, context, _info) {
+  const id = _.get(args, 'id', null);
+
+  const isAdmin = _.get(context, 'agent.isAdmin', null);
+  const currentAgentId = _.get(context, 'agent.id', null);
+
+  const params = new Params({ id });
+  const query = new Query();
+  const options = new Options({ isAdmin, currentAgentId });
+
+  return new NotebooksData().deleteOne(params, query, options);
+}
+
 module.exports = {
   all,
   one,
   create,
   update,
   count,
+  remove,
 };

@@ -84,7 +84,9 @@ function channelHasMembershipWithCurrentAgentRule(
  * @return {boolean}
  */
 function channelHasMultipleAdminsRule(_root, _args, context, _info) {
-  const channelMembershipsAdmins = _.get(context, 'channelMembershipsAdmins');
+  const channelMembershipsAdmins = _.get(
+    context, 'channelMembershipsAdmins', null,
+  );
 
   const result = _.isArray(channelMembershipsAdmins)
     && _.size(channelMembershipsAdmins) > 1;
@@ -106,9 +108,9 @@ function channelHasMultipleAdminsRule(_root, _args, context, _info) {
  * @return {boolean}
  */
 function membershipBelongsToCurrentAgentRule(root, args, context, _info) {
-  const membershipAgentId = _.get(args, 'input.agentId')
-    || _.get(root, 'agentId');
-  const currentAgentId = _.get(context, 'agent.id');
+  const membershipAgentId = _.get(args, 'input.agentId', null)
+    || _.get(root, 'agentId', null);
+  const currentAgentId = _.get(context, 'agent.id', null);
 
   const result = !!membershipAgentId && membershipAgentId === currentAgentId;
 
@@ -131,9 +133,9 @@ function membershipBelongsToCurrentAgentRule(root, args, context, _info) {
  * @return {boolean}
  */
 function membershipHasAdminRoleRule(root, args, context, _info) {
-  const role = _.get(args, 'input.role')
-    || _.get(root, 'role')
-    || _.get(context, 'channelMembershipsRole');
+  const role = _.get(args, 'input.role', null)
+    || _.get(root, 'role', null)
+    || _.get(context, 'channelMembershipsRole', null);
 
   const result = !!role && role === CHANNEL_MEMBERSHIP_ROLES.ADMIN;
 

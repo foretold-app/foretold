@@ -6,8 +6,8 @@ type linkType =
 
 type t = linkType;
 
-let toString = (t): string =>
-  switch (t) {
+let toString = (linkType: t): string =>
+  switch (linkType) {
   | Internal(r) => r |> Routing.Url.toString
   | External(s) => s
   | Relative(s) => s
@@ -21,10 +21,18 @@ let handleStringUrlClick = (event: ReactEvent.Mouse.t, href) =>
     ReasonReact.Router.push(href);
   };
 
-let onClick = (t: t, event) =>
-  switch (t) {
+let onClick = (linkType: t, event) =>
+  switch (linkType) {
   | Action(action) => action(event)
-  | Internal(_) => handleStringUrlClick(event, t |> toString)
-  | Relative(_) => handleStringUrlClick(event, t |> toString)
+  | Internal(_)
+  | Relative(_) => handleStringUrlClick(event, linkType |> toString)
+  | External(_) => ()
+  };
+
+let onClick2 = (linkType: t) =>
+  switch (linkType) {
+  | Action(_) => ()
+  | Internal(_)
+  | Relative(_) => linkType |> toString |> ReasonReact.Router.push
   | External(_) => ()
   };

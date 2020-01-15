@@ -14,5 +14,5 @@ module Mutation = ReasonApollo.CreateMutation(Query);
 
 let mutate = (mutation: Mutation.apolloMutation, notebookId) => {
   let m = Query.make(~id=E.J.fromString(notebookId), ());
-  mutation(~variables=m##variables, ~refetchQueries=[||], ()) |> ignore;
+  mutation(~variables=m##variables, ~refetchQueries=[|"getNotebooks"|], ()) |> ignore;
 };

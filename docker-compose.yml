@@ -48,8 +48,6 @@ services:
     command: yarn start
     expose:
       - 80
-    links:
-      - database
 
   database:
     image: postgres:11
@@ -61,5 +59,3 @@ services:
     image: nginx:latest
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
-    links:
-      - app

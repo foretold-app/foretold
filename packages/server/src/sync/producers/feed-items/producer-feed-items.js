@@ -4,6 +4,9 @@ const _ = require('lodash');
 const { Producer } = require('../producer');
 const logger = require('../../../lib/log');
 
+const { Data } = require('../../../data/classes');
+const { Params } = require('../../../data/classes');
+
 const log = logger.module('sync/producers/feed-items');
 
 /**
@@ -48,7 +51,7 @@ class ProducerFeedItems extends Producer {
 
     try {
       /** @type {Models.Agent} */
-      const agent = await this.agents.getOne({ id: this.agentId });
+      const agent = await this.agents.getOne(new Params({ id: this.agentId }));
       assert(!!_.get(agent, 'id'), 'Agent ID is required.');
 
       const replacements = await this._getReplacements(agent);
@@ -134,7 +137,7 @@ class ProducerFeedItems extends Producer {
     );
     const feedItemBodyName = feedItem.getName();
     const body = { [feedItemBodyName]: feedItem };
-    const data = { body, channelId, agentId };
+    const data = new Data({ body, channelId, agentId });
     const options = await this._getOptions();
     return this.feedItems.createOne(data, options);
   }

@@ -131,7 +131,6 @@ module Create = {
               (),
             )
             |> Js.Promise.then_((result: result('a)) => {
-                 Js.log2("result", result);
                  switch (result) {
                  | Data(_) => onSuccess(channelId)
                  | _ => ()

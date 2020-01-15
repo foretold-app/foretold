@@ -6,6 +6,7 @@ module FormConfig = [%lenses
     id: string,
     name: string,
     body: string,
+    channelId: string,
   }
 ];
 
@@ -86,6 +87,14 @@ module FormComponent = {
                  {<div>
                     <NotebookComponents.RemoveNotebookButton
                       notebookId={reform.state.values.id}
+                      onCompleted={_ => {
+                        LinkType.onClick2(
+                          Internal(
+                            ChannelNotebooks(reform.state.values.channelId),
+                          ),
+                        );
+                        ();
+                      }}
                     />
                   </div>
                   |> E.React2.showIf(editing)}
@@ -121,7 +130,7 @@ module Create = {
               ~variables=
                 NotebookCreateMutation.Query.make(
                   ~input={
-                    "channelId": channelId |> E.J.fromString,
+                    "channelId": state.values.channelId |> E.J.fromString,
                     "name": state.values.name |> E.J.fromString,
                     "body": state.values.body |> E.J.fromString,
                   },
@@ -141,7 +150,7 @@ module Create = {
 
             None;
           },
-        ~initialState={id: "", name: "", body: ""},
+        ~initialState={id: "", name: "", body: "", channelId},
         (),
       );
 
@@ -188,6 +197,7 @@ module Edit = {
           id: notebook.id,
           name: notebook.name,
           body: notebook.body,
+          channelId: notebook.channelId,
         },
         (),
       );

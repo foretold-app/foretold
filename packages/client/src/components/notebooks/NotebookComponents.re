@@ -1,7 +1,7 @@
 module RemoveNotebookButton = {
   [@react.component]
-  let make = (~notebookId: string) => {
-    <NotebookDelete.Mutation onCompleted={_ => Js.log("ss")}>
+  let make = (~notebookId: string, ~onCompleted=_ => ()) => {
+    <NotebookDelete.Mutation onCompleted>
       ...{(mutation, result: NotebookDelete.Mutation.renderPropObj) =>
         <Antd.Popconfirm
           title={Lang.notebookRemove |> Utils.ste}

@@ -1,5 +1,3 @@
-let redirectionCount: string = "";
-
 [@react.component]
 let make = () => {
   let (route, setRoute) =

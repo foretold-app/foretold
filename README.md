@@ -28,3 +28,8 @@ After work when you want to remove all:
 
 Notes:
 - These command line instructions are for Linux based OS. 
+
+# Development
+- Use "idea-colors.icls" to colorize ReasonML code.
+- Use ReasonML plugin for IDEs.
+- Use "Rainbow Brackets" plugin for IDEs.

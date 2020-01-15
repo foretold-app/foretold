@@ -52,8 +52,6 @@
       "packages/client/*",
       "packages/components/*",
       "packages/guesstimator/*",
-      "*.bs.js",
-      "*.be",
       "*.spec.js"
     ],
     "delay": 50

@@ -5,6 +5,7 @@ services:
   app:
 #    volumes:
 #      - ./packages:/opt/app/packages
+#      - ./package.json:/opt/app/package.json
     environment:
       # 1. Persistence
       # - PORT=80 # 1.1

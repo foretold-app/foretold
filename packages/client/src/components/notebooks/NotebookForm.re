@@ -29,8 +29,7 @@ let schema =
   |]);
 
 let onSuccess = channelId => {
-  Utils.setTimeout(_ => Routing.Url.push(ChannelNotebooks(channelId)), 1000)
-  |> ignore;
+  Routing.Url.push(ChannelNotebooks(channelId));
   ();
 };
 
@@ -136,7 +135,7 @@ module Create = {
                   },
                   (),
                 )##variables,
-              ~refetchQueries=[|"getNotebooks"|],
+              ~refetchQueries=[|"getNotebooks", "getChannel"|],
               (),
             )
             |> Js.Promise.then_((result: result('a)) => {

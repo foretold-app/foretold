@@ -1,16 +1,17 @@
 import * as d3 from "d3";
 
 function chart() {
-  // Exposed variables.
+  // Id for event handlings.
   var attrs = {
-    // Id for event handlings.
     id: 'ID' + Math.floor(Math.random() * 1000000),
     svgWidth: 400,
     svgHeight: 400,
+
     marginTop: 5,
     marginBottom: 5,
     marginRight: 5,
     marginLeft: 5,
+
     container: 'body',
     minX: false,
     maxX: false,
@@ -25,34 +26,30 @@ function chart() {
     },
   };
 
-  // InnerFunctions which will update visuals.
-  var updateData, getData, clearLines;
-
-  // Main chart object
   var main = function main() {
-    // Drawing containers
+    // Drawing containers.
     var container = d3.select(attrs.container);
 
     if (container.node() === null) {
-      d3.select(window).on('resize.' + attrs.id, null);
       return;
     }
 
     var containerRect = container.node().getBoundingClientRect();
-    if (containerRect.width > 0) attrs.svgWidth = containerRect.width;
+    if (containerRect.width > 0) {
+      attrs.svgWidth = containerRect.width;
+    }
 
     // Calculated properties.
-    var calc = {};
     // id for event handlings.
+    var calc = {};
     calc.id = 'ID' + Math.floor(Math.random() * 1000000);
     calc.chartLeftMargin = attrs.marginLeft;
     calc.chartTopMargin = attrs.marginTop;
-    calc.chartWidth = attrs.svgWidth - attrs.marginRight - calc.chartLeftMargin;
-    calc.chartHeight = attrs.svgHeight - attrs.marginBottom - calc.chartTopMargin;
+    calc.chartWidth = attrs.svgWidth - attrs.marginRight - attrs.marginLeft;
+    calc.chartHeight = attrs.svgHeight - attrs.marginBottom - attrs.marginTop;
 
     var areaColor = d3.scaleOrdinal().range(attrs.areaColors);
 
-    var linePath, areaPath;
     var dataPoints = [getDatapoints('primary')];
 
     // Scales.
@@ -63,11 +60,18 @@ function chart() {
 
     if (attrs.scale === 'linear') {
       xScale = d3.scaleLinear()
-        .domain([attrs.minX || xMin, attrs.maxX || xMax])
+        .domain([
+          attrs.minX || xMin,
+          attrs.maxX || xMax
+        ])
         .range([0, calc.chartWidth]);
     } else {
       xScale = d3.scaleLog()
-        .base(attrs.logBase).domain([attrs.minX, attrs.maxX])
+        .base(attrs.logBase)
+        .domain([
+          attrs.minX,
+          attrs.maxX,
+        ])
         .range([0, calc.chartWidth]);
     }
 
@@ -75,7 +79,10 @@ function chart() {
     var yMax = d3.max(attrs.data.primary.ys);
 
     var yScale = d3.scaleLinear()
-      .domain([yMin, yMax])
+      .domain([
+        yMin,
+        yMax,
+      ])
       .range([calc.chartHeight, 0]);
 
     // Axis generator.
@@ -85,7 +92,7 @@ function chart() {
         if (Math.abs(d) < 1) {
           return d3.format(".2")(d);
         } else if (xMin > 1000 && xMax < 3000) {
-          // Condition which identifies years; 2019, 2020,2021.
+          // Condition which identifies years; 2019, 2020, 2021.
           return d3.format(".0")(d);
         } else {
           var prefix = d3.formatPrefix(".0", d);
@@ -112,26 +119,10 @@ function chart() {
       })
       .y0(calc.chartHeight);
 
-    // Add hover text.
-    var hoverText = container.patternify({
-      tag: 'div',
-      selector: 'hover-text'
-    });
-
-    var hoverTextY = hoverText.patternify({
-      tag: 'div',
-      selector: 'hover-text-y'
-    });
-
-    var hoverTextX = hoverText.patternify({
-      tag: 'div',
-      selector: 'hover-text-x'
-    });
-
     // Add svg.
     var svg = container
       .patternify({ tag: 'svg', selector: 'svg-chart-container' })
-      .attr('width', attrs.svgWidth)
+      .attr('width', "100%")
       .attr('height', attrs.svgHeight)
       .attr('pointer-events', 'none');
 
@@ -149,7 +140,7 @@ function chart() {
       .call(xAxis);
 
     // Draw area.
-    areaPath = chart
+    chart
       .patternify({
         tag: 'path',
         selector: 'area-path',
@@ -157,13 +148,11 @@ function chart() {
       })
       .attr('d', area)
       .attr('fill', (d, i) => areaColor(i))
-      .attr('opacity', (d, i) => {
-        return i === 0 ? 0.7 : 1
-      });
+      .attr('opacity', (d, i) => i === 0 ? 0.7 : 1);
 
     // Draw line.
     if (attrs.showDistributionLines) {
-      linePath = chart
+      chart
         .patternify({
           tag: 'path',
           selector: 'line-path',
@@ -199,7 +188,7 @@ function chart() {
       .attr('stroke', '#22313F');
 
     // Add drawing rectangle.
-    var drawRect = chart.patternify({ tag: 'rect', selector: 'mouse-rect' })
+    chart.patternify({ tag: 'rect', selector: 'mouse-rect' })
       .attr('width', calc.chartWidth)
       .attr('height', calc.chartHeight)
       .attr('fill', 'transparent')
@@ -208,14 +197,6 @@ function chart() {
       .on('mousemove', mouseover)
       .on('mouseout', mouseout);
 
-    // Smoothly handle data updating
-    updateData = function updateData() {
-
-    };
-
-    getData = function getData() {
-    };
-
     function mouseover() {
       var mouse = d3.mouse(this);
 
@@ -223,7 +204,6 @@ function chart() {
         .attr('x1', mouse[0])
         .attr('x2', mouse[0]);
 
-      var line = chart.select('#line-' + dataPoints.length);
       var range = [
         xScale(dataPoints[dataPoints.length - 1][0].x),
         xScale(
@@ -264,38 +244,7 @@ function chart() {
 
       return dt;
     }
-
-    /**
-     * @todo: To remove since it is obsolete.
-     * @param path
-     * @param xCoord
-     * @returns {number}
-     */
-    function getCircleYCoord(path, xCoord) {
-      var beginning = 0,
-        end = path.node().getTotalLength(),
-        target = null,
-        pos;
-
-      while (true) {
-        target = Math.floor((beginning + end) / 2);
-        pos = path.node().getPointAtLength(target);
-        if ((target === end || target === beginning) && pos.x !== xCoord) {
-          break;
-        }
-
-        //position found
-        if (pos.x > xCoord) end = target;
-        else if (pos.x < xCoord) beginning = target;
-        else break;
-      }
-
-      return pos.y;
-    }
-
   };
-
-  d3.select(window).on('resize.' + attrs.id, main);
 
   d3.selection.prototype.patternify = function patternify(params) {
     var container = this;
@@ -303,7 +252,7 @@ function chart() {
     var elementTag = params.tag;
     var data = params.data || [selector];
 
-    // Pattern in action
+    // Pattern in action.
     var selection = container.selectAll('.' + selector).data(data, (d, i) => {
       if (typeof d === 'object') {
         if (d.id) {
@@ -312,6 +261,7 @@ function chart() {
       }
       return i;
     });
+
     selection.exit().remove();
     selection = selection.enter().append(elementTag).merge(selection);
     selection.attr('class', selector);
@@ -319,17 +269,16 @@ function chart() {
   };
 
   // @todo: Do not do like that.
-  //Dynamic keys functions.
+  // Dynamic keys functions.
+  // Attach variables to main function.
   Object.keys(attrs).forEach((key) => {
-    // Attach variables to main function.
-    return (main[key] = function (_) {
-      var string = `attrs['${key}'] = _`;
+    main[key] = function (_) {
       if (!arguments.length) {
-        return eval(` attrs['${key}'];`);
+        return attrs[key];
       }
-      eval(string);
+      attrs[key] = _;
       return main;
-    });
+    };
   });
 
   //Set attrs as property.
@@ -339,25 +288,6 @@ function chart() {
   main.data = function data(value) {
     if (!arguments.length) return attrs.data;
     attrs.data = value;
-    if (typeof updateData === 'function') {
-      updateData();
-    }
-    return main;
-  };
-
-  // Returns lines data as array.
-  // Each item in the array is a single line.
-  main.getData = function getData() {
-    if (typeof getData === 'function') {
-      return getData();
-    }
-  };
-
-  // Clears all lines and session data.
-  main.clearLines = function clearLines() {
-    if (typeof clearLines === 'function') {
-      clearLines();
-    }
     return main;
   };
 

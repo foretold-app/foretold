@@ -24,7 +24,10 @@ function getRandomInt(min, max) {
  */
 function CdfChart(props) {
   const id = "chart-" + getRandomInt(0, 100000);
-  const [sized, { width }] = useSize(() => <div/>, { width: props.width });
+  const [sized, { width }] = useSize(
+    () => React.createElement("div"),
+    { width: props.width }
+  );
 
   useEffect(() => {
     const _chart = chart()
@@ -46,10 +49,14 @@ function CdfChart(props) {
 
   const style = !!props.width ? { width: props.width + "px" } : {};
 
-  return <div style={{ paddingLeft: "10px", paddingRight: "10px" }}>
-    {sized}
-    <div id={id} style={style}/>
-  </div>;
+  return React.createElement(
+    "div",
+    { style: { paddingLeft: "10px", paddingRight: "10px" } },
+    [
+      sized,
+      React.createElement("div", { id, style }),
+    ],
+  );
 }
 
 export default CdfChart;

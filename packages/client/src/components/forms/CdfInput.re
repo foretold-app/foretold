@@ -487,10 +487,10 @@ module Main = {
       <div className=Styles.chartSection>
         {switch (state.dataType, state.cdfType) {
          | ("FLOAT_CDF", _) when E.A.length(state.floatCdf.xs) > 1 =>
-           <FC__CdfChart__Large cdf={state.floatCdf} />
+           <FC__CdfChart__Large cdf={state.floatCdf} width=Some(0) />
          | ("FLOAT_CDF_AND_POINT", "CDF")
              when E.A.length(state.floatCdfAndPoint.xs) > 1 =>
-           <FC__CdfChart__Large cdf={state.floatCdfAndPoint} />
+           <FC__CdfChart__Large cdf={state.floatCdfAndPoint} width=Some(0) />
          | _ => <Null />
          }}
       </div>

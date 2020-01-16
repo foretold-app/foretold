@@ -22,7 +22,7 @@ let make =
     ) =>
   <div className={Styles.graph(color)}>
     <FC__CdfChart__Base
-      width
+      width=0
       height
       ?minX
       ?maxX

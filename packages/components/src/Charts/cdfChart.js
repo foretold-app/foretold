@@ -39,7 +39,7 @@ class CdfChart extends React.Component {
    * TODO: Fix for log when minX is 0;
    */
   drawChart() {
-    var _chart = chart()
+    const _chart = chart()
       .svgHeight(this.props.height)
       .maxX(this.props.maxX)
       .minX(this.props.minX)

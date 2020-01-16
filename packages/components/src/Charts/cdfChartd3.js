@@ -1,9 +1,9 @@
 import * as d3 from "d3";
 
 function chart() {
-  // Exposed variables
+  // Exposed variables.
   var attrs = {
-    // Id for event handlings
+    // Id for event handlings.
     id: 'ID' + Math.floor(Math.random() * 1000000),
     svgWidth: 400,
     svgHeight: 400,
@@ -25,12 +25,12 @@ function chart() {
     },
   };
 
-  //InnerFunctions which will update visuals
+  // InnerFunctions which will update visuals.
   var updateData, getData, clearLines;
 
-  //Main chart object
+  // Main chart object
   var main = function main() {
-    //Drawing containers
+    // Drawing containers
     var container = d3.select(attrs.container);
 
     if (container.node() === null) {
@@ -41,9 +41,9 @@ function chart() {
     var containerRect = container.node().getBoundingClientRect();
     if (containerRect.width > 0) attrs.svgWidth = containerRect.width;
 
-    //Calculated properties
+    // Calculated properties.
     var calc = {};
-    // id for event handlings
+    // id for event handlings.
     calc.id = 'ID' + Math.floor(Math.random() * 1000000);
     calc.chartLeftMargin = attrs.marginLeft;
     calc.chartTopMargin = attrs.marginTop;
@@ -53,11 +53,9 @@ function chart() {
     var areaColor = d3.scaleOrdinal().range(attrs.areaColors);
 
     var linePath, areaPath;
-    var dataPoints = [
-      getDatapoints('primary'),
-    ];
+    var dataPoints = [getDatapoints('primary')];
 
-    //Scales
+    // Scales.
     var xScale;
 
     var xMin = d3.min(attrs.data.primary.xs);
@@ -80,7 +78,7 @@ function chart() {
       .domain([yMin, yMax])
       .range([calc.chartHeight, 0]);
 
-    //Axis generator
+    // Axis generator.
     var xAxis = d3.axisBottom(xScale)
       .ticks(5)
       .tickFormat(d => {
@@ -96,7 +94,7 @@ function chart() {
         }
       });
 
-    //Line generator
+    // Line generator.
     var line = d3.line()
       .x(function (d, i) {
         return xScale(d.x);
@@ -114,7 +112,7 @@ function chart() {
       })
       .y0(calc.chartHeight);
 
-    //Add hover text
+    // Add hover text.
     var hoverText = container.patternify({
       tag: 'div',
       selector: 'hover-text'
@@ -130,14 +128,14 @@ function chart() {
       selector: 'hover-text-x'
     });
 
-    //Add svg
+    // Add svg.
     var svg = container
       .patternify({ tag: 'svg', selector: 'svg-chart-container' })
       .attr('width', attrs.svgWidth)
       .attr('height', attrs.svgHeight)
       .attr('pointer-events', 'none');
 
-    //Add container g element
+    // Add container g element.
     var chart = svg
       .patternify({ tag: 'g', selector: 'chart' })
       .attr(
@@ -145,12 +143,12 @@ function chart() {
         'translate(' + calc.chartLeftMargin + ',' + calc.chartTopMargin + ')',
       );
 
-    //Add axis
+    // Add axis.
     chart.patternify({ tag: 'g', selector: 'axis' })
       .attr('transform', 'translate(' + 0 + ',' + calc.chartHeight + ')')
       .call(xAxis);
 
-    //Draw area
+    // Draw area.
     areaPath = chart
       .patternify({
         tag: 'path',
@@ -163,7 +161,7 @@ function chart() {
         return i === 0 ? 0.7 : 1
       });
 
-    //Draw line
+    // Draw line.
     if (attrs.showDistributionLines) {
       linePath = chart
         .patternify({
@@ -200,7 +198,7 @@ function chart() {
       .attr('stroke-dasharray', '6 6')
       .attr('stroke', '#22313F');
 
-    //Add drawing rectangle
+    // Add drawing rectangle.
     var drawRect = chart.patternify({ tag: 'rect', selector: 'mouse-rect' })
       .attr('width', calc.chartWidth)
       .attr('height', calc.chartHeight)
@@ -211,11 +209,11 @@ function chart() {
       .on('mouseout', mouseout);
 
     // Smoothly handle data updating
-    updateData = function () {
+    updateData = function updateData() {
 
     };
 
-    getData = function () {
+    getData = function getData() {
     };
 
     function mouseover() {
@@ -228,7 +226,11 @@ function chart() {
       var line = chart.select('#line-' + dataPoints.length);
       var range = [
         xScale(dataPoints[dataPoints.length - 1][0].x),
-        xScale(dataPoints[dataPoints.length - 1][dataPoints[dataPoints.length - 1].length - 1].x)
+        xScale(
+          dataPoints
+            [dataPoints.length - 1]
+            [dataPoints[dataPoints.length - 1].length - 1].x,
+        ),
       ];
 
       var xValue = xScale.invert(mouse[0]).toFixed(2);
@@ -264,6 +266,7 @@ function chart() {
     }
 
     /**
+     * @todo: To remove since it is obsolete.
      * @param path
      * @param xCoord
      * @returns {number}
@@ -294,7 +297,7 @@ function chart() {
 
   d3.select(window).on('resize.' + attrs.id, main);
 
-  d3.selection.prototype.patternify = function (params) {
+  d3.selection.prototype.patternify = function patternify(params) {
     var container = this;
     var selector = params.selector;
     var elementTag = params.tag;
@@ -315,9 +318,10 @@ function chart() {
     return selection;
   };
 
-  //Dynamic keys functions
+  // @todo: Do not do like that.
+  //Dynamic keys functions.
   Object.keys(attrs).forEach((key) => {
-    // Attach variables to main function
+    // Attach variables to main function.
     return (main[key] = function (_) {
       var string = `attrs['${key}'] = _`;
       if (!arguments.length) {
@@ -328,10 +332,10 @@ function chart() {
     });
   });
 
-  //Set attrs as property
+  //Set attrs as property.
   main.attrs = attrs;
 
-  //Exposed update functions
+  //Exposed update functions.
   main.data = function data(value) {
     if (!arguments.length) return attrs.data;
     attrs.data = value;
@@ -341,14 +345,15 @@ function chart() {
     return main;
   };
 
-  // returns lines data as array. Each item in the array is a single line.
+  // Returns lines data as array.
+  // Each item in the array is a single line.
   main.getData = function getData() {
     if (typeof getData === 'function') {
       return getData();
     }
   };
 
-  // clears all lines and session data
+  // Clears all lines and session data.
   main.clearLines = function clearLines() {
     if (typeof clearLines === 'function') {
       clearLines();
@@ -356,7 +361,7 @@ function chart() {
     return main;
   };
 
-  // Run  visual
+  // Run visual.
   main.render = function render() {
     main();
     return main;

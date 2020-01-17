@@ -50,7 +50,7 @@ module FloatCdf = {
 
     <Div flexDirection=`row>
       <Div flex={`num(1.)}> stat </Div>
-      <Div flex={`num(1.)}> dist </Div>
+      <Div flex={`num(3.)}> dist </Div>
     </Div>;
   };
 

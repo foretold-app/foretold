@@ -1,5 +1,7 @@
-import React from 'react';
-import chart from "./cdfChartd3"
+import React, { useEffect } from 'react';
+import { useSize } from 'react-use';
+
+import chart from './cdfChartd3';
 
 /**
  * @param min
@@ -19,48 +21,45 @@ function getRandomInt(min, max) {
  * ys: [0.1, 0.4, 0.6, 0.7,0.8, 0.9]}
  * }
  */
-class CdfChart extends React.Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      divId: "chart-" + getRandomInt(0,100000)
-    }
-  }
+function CdfChart(props) {
+  const id = "chart-" + getRandomInt(0, 100000);
+  const [sized, { width }] = useSize(() => {
+    return React.createElement("div", {
+      key: "resizable-div",
+    });
+  }, {
+    width: props.width,
+  });
 
-  componentDidMount() {
-    this.drawChart();
-  }
-
-  componentDidUpdate() {
-    this.drawChart();
-  }
-
-  /**
-   * TODO: Fix for log when minX is 0;
-   */
-  drawChart() {
-    var _chart = chart()
-      .svgHeight(this.props.height)
-      .maxX(this.props.maxX)
-      .minX(this.props.minX)
-      .marginBottom(this.props.marginBottom || 15)
+  useEffect(() => {
+    chart()
+      .svgWidth(width)
+      .svgHeight(props.height)
+      .maxX(props.maxX)
+      .minX(props.minX)
+      .marginBottom(props.marginBottom || 15)
       .marginLeft(5)
       .marginRight(5)
-      .showDistributionLines(this.props.showDistributionLines)
       .marginTop(5)
-      .verticalLine(this.props.verticalLine)
-      .showVerticalLine(this.props.showVerticalLine)
-      .onHover(e => {})
-      .container("#" + this.state.divId);
-    _chart.data({primary: this.props.primaryDistribution}).render();
-  }
+      .showDistributionLines(props.showDistributionLines)
+      .verticalLine(props.verticalLine)
+      .showVerticalLine(props.showVerticalLine)
+      .container("#" + id)
+      .data({ primary: props.primaryDistribution }).render();
+  });
 
-  render() {
-    return React.createElement("div", {
-      id: this.state.divId,
-      style: this.props.width ? { width: this.props.width + "px" } : {}
-    });
-  }
+  const style = !!props.width ? { width: props.width + "px" } : {};
+  const key = id;
+
+  return React.createElement("div", {
+    style: {
+      paddingLeft: "10px",
+      paddingRight: "10px",
+    },
+  }, [
+    sized,
+    React.createElement("div", { id, style, key }),
+  ]);
 }
 
 export default CdfChart;

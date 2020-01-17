@@ -80,12 +80,16 @@
     "@baransu/graphql_ppx_re": "0.4.0",
     "lenses-ppx": "4.0.0",
     "react-copy-to-clipboard": "5.0.2",
-    "react": "16.11.0",
-    "react-dom": "16.11.0",
+    "react": "16.12.0",
+    "react-dom": "16.12.0",
     "reschema": "^1.3.0",
     "reason-react": "git+https://github.com/RomanGalochkin/reason-react.git#0.7.0.beta.0",
     "parcel-plugin-bundle-visualiser": "1.2.0",
     "parcel-plugin-html-externals": "0.1.2"
+  },
+  "alias": {
+    "react": "./node_modules/react",
+    "react-dom": "./node_modules/react-dom"
   },
   "externals": {
     "/env.js": false

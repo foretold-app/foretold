@@ -35,7 +35,10 @@ let make =
   <Providers.AppContext.Consumer>
     ...{context => {
       module Config = {
-        let globalSetting = context.globalSetting;
+        let entityGraph =
+          context.globalSetting
+          |> E.O.fmap((e: Types.globalSetting) => e.entityGraph)
+          |> E.O.default(None);
       };
       module Ken = KenTools.Functor(Config);
       module MeasurableEntityLinks = MeasurableEntityLinks.Functor(Ken);

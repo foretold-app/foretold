@@ -278,9 +278,11 @@ and connectionInputType('a) =
   ) =>
   'a
 
+and entityGraph = Js.Json.t
+
 and globalSetting = {
   id: string,
-  entityGraph: option(Js.Json.t),
+  entityGraph: option(entityGraph),
 }
 
 and notebook = {

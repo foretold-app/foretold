@@ -6,6 +6,7 @@ module type KenModule = {
   let itemUrl: string => string;
   let findName: string => option(string);
   let names: string => list(Graph_T.T.fact);
+  let subjectIdToDisplay: string => ReasonReact.reactElement;
   let findInstanceOfName: string => option(Graph_T.T.thingIdString);
   let things: array(t);
   let getName: t => string;
@@ -14,16 +15,11 @@ module type KenModule = {
   let dataSource: Js.Array.t(t);
 };
 
-module Functor =
-       (Config: {let globalSetting: option(Types.globalSetting);})
-       : KenModule => {
+module Functor = (Config: {let entityGraph: option(Js.Json.t);}) : KenModule => {
   type t = Graph_T.T.thing;
 
   let graph =
-    Config.globalSetting
-    |> E.O.fmap((globalSetting: Types.globalSetting) =>
-         globalSetting.entityGraph |> E.O.default(Js.Json.null)
-       )
+    Config.entityGraph
     |> E.O.default(Js.Json.array([||]))
     |> (e => Interface.Graph.fromJson(e));
 
@@ -75,4 +71,29 @@ module Functor =
   let withNames = E.A.filter(hasName);
 
   let dataSource = things |> withNames;
+
+  let subjectIdToDisplay = subjectId => {
+    subjectId
+    |> names
+    |> E.A.of_list
+    |> E.A.fmapi((i, r: BsKen.Graph_T.T.fact) =>
+         <div key={i |> string_of_int}>
+           {findName(r.propertyId)
+            |> E.O.default("no-name")
+            |> Utils.ste
+            |> E.React2.inH3}
+           BsKen.Graph_T.T.(
+             switch (r.value.valueType) {
+             | String(s) => s |> Utils.ste
+             | ThingId(s) =>
+               <Link linkType={Internal(EntityShow(s))}>
+                 {s |> Utils.ste}
+               </Link>
+             | _ => "no-name" |> Utils.ste
+             }
+           )
+         </div>
+       )
+    |> ReasonReact.array;
+  };
 };

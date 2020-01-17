@@ -87,7 +87,7 @@ function chart() {
 
     // Axis generator.
     var xAxis = d3.axisBottom(xScale)
-      .ticks(5)
+      .ticks(3)
       .tickFormat(d => {
         if (Math.abs(d) < 1) {
           return d3.format(".2")(d);

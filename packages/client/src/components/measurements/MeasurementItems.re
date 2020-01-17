@@ -27,7 +27,7 @@ module FloatCdf = {
         ~competitorType: Types.competitorType,
         ~valueText=None,
         ~width=150,
-        ~height=30,
+        ~height=35,
         ~xMin: option(float),
         ~xMax: option(float),
       ) => {

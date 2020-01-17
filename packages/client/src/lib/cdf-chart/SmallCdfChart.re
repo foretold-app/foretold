@@ -26,7 +26,7 @@ let make =
       height
       ?minX
       ?maxX
-      marginBottom=15
+      marginBottom=20
       showVerticalLine=false
       showDistributionLines=false
       primaryDistribution=data

@@ -1,5 +1,7 @@
 open BsKen;
 
+// TODO: This could really use some rethinking through. I find this pretty confusing at this point.
+
 module type KenModule = {
   type t = Graph_T.T.thing;
   let graph: Graph_Dirs.t;

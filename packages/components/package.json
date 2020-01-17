@@ -34,6 +34,7 @@
         "rc-menu": "7.4.20",
         "react": "16.12.0",
         "react-dom": "16.12.0",
+        "react-use": "13.19.0",
         "reason-apollo": "0.18.0",
         "reason-react": "git+https://github.com/RomanGalochkin/reason-react.git#0.7.0.beta.0"
     },

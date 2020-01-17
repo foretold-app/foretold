@@ -87,6 +87,10 @@
     "parcel-plugin-bundle-visualiser": "1.2.0",
     "parcel-plugin-html-externals": "0.1.2"
   },
+  "alias": {
+    "react": "./node_modules/react",
+    "react-dom": "./node_modules/react-dom"
+  },
   "externals": {
     "/env.js": false
   }

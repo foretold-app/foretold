@@ -8,8 +8,6 @@ let display = id => {
           |> E.O.default(None);
       };
       module Ken = KenTools.Functor(Config);
-      module MeasurableEntityLinks = MeasurableEntityLinks.Functor(Ken);
-
       Ken.subjectIdToDisplay(id);
     }}
   </Providers.AppContext.Consumer>;

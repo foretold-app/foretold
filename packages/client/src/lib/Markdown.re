@@ -4,6 +4,39 @@ type code = {
   "value": Js.nullable(string),
 };
 
+type link = {
+  .
+  "href": Js.nullable(string),
+  "children": Js.nullable(array(React.element)),
+};
+
+let foretoldJsRenderers = entityGraph => {
+  module Config = {
+    let entityGraph = entityGraph;
+  };
+  module Ken = KenTools.Functor(Config);
+  {
+    "link": (link: link) => {
+      switch (
+        Js.Nullable.toOption(link##href),
+        Js.Nullable.toOption(link##children),
+      ) {
+      | (Some(a), Some(b)) when Js.String.startsWith("@", a) =>
+        <AntdPopover
+          content={Ken.subjectIdToDisplay(a)} trigger=`hover placement=`top>
+          <a href=a>
+            {Ken.findName(a)
+             |> E.O.fmap(r => r |> Utils.ste)
+             |> E.O.default(b |> React.array)}
+          </a>
+        </AntdPopover>
+      | (Some(a), Some(b)) => <a href=a> {b |> React.array} </a>
+      | _ => React.null
+      };
+    },
+  };
+};
+
 module Styles = {
   open Css;
 
@@ -67,5 +100,16 @@ module Styles = {
 
 [@react.component]
 let make = (~source, ~supportForetoldJs=false) => {
-  <ReactMarkdown source={Js.String.trim(source)} />;
+  <Providers.AppContext.Consumer>
+    ...{context => {
+      let entityGraph =
+        context.globalSetting
+        |> E.O.fmap((e: Types.globalSetting) => e.entityGraph)
+        |> E.O.default(None);
+      <ReactMarkdown
+        source={Js.String.trim(source)}
+        renderers={foretoldJsRenderers(entityGraph)}
+      />;
+    }}
+  </Providers.AppContext.Consumer>;
 };

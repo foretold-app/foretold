@@ -24,7 +24,7 @@ let foretoldJsRenderers = entityGraph => {
       | (Some(a), Some(b)) when Js.String.startsWith("@", a) =>
         <AntdPopover
           content={Ken.subjectIdToDisplay(a)} trigger=`hover placement=`top>
-          <a href=a>
+          <a href={Ken.itemUrl(a)}>
             {Ken.findName(a)
              |> E.O.fmap(r => r |> Utils.ste)
              |> E.O.default(b |> React.array)}

@@ -12,6 +12,7 @@ const { setContextBot } = require('./bots');
 const { setContextPreferenceFromId } = require('./preferences');
 const { setContextPreferenceFromAgentId } = require('./preferences');
 const { setContextUser } = require('./users');
+const { setContextNotebook } = require('./notebooks');
 const { authenticationInputValidation } = require('./authentications');
 const { competitiveMeasurementCanBeAddedToOpenMeasurable }
   = require('./measurements');
@@ -102,6 +103,16 @@ const middlewares = {
   },
 
   Mutation: {
+    notebookDelete: async (resolve, root, args, context, info) => {
+      await setContextNotebook(root, args, context, info);
+      return resolve(root, args, context, info);
+    },
+
+    notebookUpdate: async (resolve, root, args, context, info) => {
+      await setContextNotebook(root, args, context, info);
+      return resolve(root, args, context, info);
+    },
+
     seriesCreate: async (resolve, root, args, context, info) => {
       await setContextChannel(root, args, context, info);
       await setContextChannelMemberships(root, args, context, info);

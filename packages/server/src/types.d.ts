@@ -249,6 +249,7 @@ export namespace Schema {
     channelMembership?: Models.ChannelMemberships;
     channelMembershipsAdmins?: Models.ChannelMemberships[];
     channelMembershipsRole?: Models.ChannelMembershipRole;
+    notebook?: Models.Notebook;
   }
 
   export interface ChannelsInput {

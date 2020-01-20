@@ -11,7 +11,7 @@ const log = logger.module('middlewares/channels');
  * @todo: To fix "||" a joined logic.
  * @param {object | null} root
  * @param {{ channelId: string }} args
- * @param {object} context
+ * @param {Schema.Context} context
  * @param {object} _info
  * @return {Promise<void>}
  */
@@ -28,7 +28,7 @@ async function setContextChannel(root, args, context, _info) {
     { channelId },
   );
 
-  if (channelId) {
+  if (!!channelId) {
     context.channel = await new ChannelsData().getOne(new Params({
       id: channelId,
     }));
@@ -40,7 +40,7 @@ async function setContextChannel(root, args, context, _info) {
 /**
  * @param {object | null} root
  * @param {object} args
- * @param {object} context
+ * @param {Schema.Context} context
  * @param {object} _info
  * @return {Promise<void>}
  */

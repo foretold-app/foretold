@@ -25,7 +25,6 @@ class MaterializedViewsUpdater {
     }
     return true;
   }
-
 }
 
 module.exports = {

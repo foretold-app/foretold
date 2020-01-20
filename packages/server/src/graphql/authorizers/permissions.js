@@ -19,6 +19,7 @@ const { preferenceIsOwnedByCurrentAgent } = require('./preferences');
 const { agentIdFromRootId } = require('./predicates');
 const { agentIdFromContext } = require('./predicates');
 const { agentIdFromRootAgentId } = require('./predicates');
+const { notebookIsOwnedByCurrentAgent } = require('./notebooks');
 const { rateLimit } = require('./rate-limit');
 
 const currentAgentIsApplicationAdminOrChannelAdmin = or(
@@ -138,6 +139,20 @@ const rulesInvitations = () => ({
   },
 });
 
+const rulesNotebooks = () => ({
+  Query: {},
+  Mutation: {
+    notebookDelete: and(
+      currentAgentIsAuthenticated,
+      notebookIsOwnedByCurrentAgent,
+    ),
+    notebookUpdate: and(
+      currentAgentIsAuthenticated,
+      notebookIsOwnedByCurrentAgent,
+    ),
+  },
+});
+
 const rules = () => ({
   Bot: {
     token: botBelongsToCurrentUser,
@@ -156,7 +171,11 @@ const rules = () => ({
     ...rulesInvitations().Query,
   },
   Mutation: {
-    '*': and(currentAgentIsAuthenticated, rateLimit),
+    '*': and(
+      currentAgentIsAuthenticated,
+      // @todo: To apply for other places too.
+      rateLimit,
+    ),
 
     mutexTake: currentAgentIsAuthenticated,
     mutexFree: currentAgentIsAuthenticated,
@@ -202,6 +221,7 @@ const rules = () => ({
     ...rulesChannels().Mutation,
     ...rulesChannelMemberships().Mutation,
     ...rulesInvitations().Mutation,
+    ...rulesNotebooks().Mutation,
   },
 });
 

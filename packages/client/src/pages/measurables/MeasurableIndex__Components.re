@@ -9,8 +9,8 @@ module LoadedAndSelected = {
         float=`left
         styles=[
           Css.style([
-            FC.PageCard.HeaderRow.Styles.itemTopPadding,
-            FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+            ForetoldComponents.PageCard.HeaderRow.Styles.itemTopPadding,
+            ForetoldComponents.PageCard.HeaderRow.Styles.itemBottomPadding,
           ]),
         ]>
         {Reducer.Components.deselectButton(send)}
@@ -19,8 +19,8 @@ module LoadedAndSelected = {
         float=`right
         styles=[
           Css.style([
-            FC.PageCard.HeaderRow.Styles.itemTopPadding,
-            FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+            ForetoldComponents.PageCard.HeaderRow.Styles.itemTopPadding,
+            ForetoldComponents.PageCard.HeaderRow.Styles.itemBottomPadding,
           ]),
         ]>
         {Reducer.Components.paginationItem(t.reducerParams)}
@@ -31,7 +31,7 @@ module LoadedAndSelected = {
 module LoadedAndUnselected = {
   // @todo: To make a component.
   let stateLink = (state, text, num: int, isActive) =>
-    <FC.Tab2
+    <ForetoldComponents.Tab2
       isActive
       number=num
       onClick={LinkType.onClick(
@@ -41,7 +41,7 @@ module LoadedAndUnselected = {
         ),
       )}>
       {text |> ste}
-    </FC.Tab2>;
+    </ForetoldComponents.Tab2>;
 
   // @todo: To make a component.
   let header =
@@ -59,8 +59,8 @@ module LoadedAndUnselected = {
              float=`left
              styles=[
                Css.style([
-                 FC.PageCard.HeaderRow.Styles.itemTopPadding,
-                 FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+                 ForetoldComponents.PageCard.HeaderRow.Styles.itemTopPadding,
+                 ForetoldComponents.PageCard.HeaderRow.Styles.itemBottomPadding,
                ]),
              ]>
              {stateLink(
@@ -89,20 +89,20 @@ module LoadedAndUnselected = {
         float=`right
         styles=[
           Css.style([
-            FC.PageCard.HeaderRow.Styles.itemTopPadding,
-            FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+            ForetoldComponents.PageCard.HeaderRow.Styles.itemTopPadding,
+            ForetoldComponents.PageCard.HeaderRow.Styles.itemBottomPadding,
           ]),
         ]>
-        {<FC__Button
-           variant=FC__Button.Primary
+        {<ForetoldComponents.Button
+           variant=ForetoldComponents.Button.Primary
            isDisabled=false
-           size=FC__Button.(Small)
+           size=ForetoldComponents.Button.(Small)
            className=Css.(style([marginRight(`em(1.5))]))
            onClick={e =>
              LinkType.onClick(Internal(MeasurableNew(channelId)), e)
            }>
            {"New Question" |> Utils.ste}
-         </FC__Button>
+         </ForetoldComponents.Button>
          |> E.React2.showIf(channelId != "")}
         {Reducer.Components.paginationPage(t.reducerParams)}
       </Div>

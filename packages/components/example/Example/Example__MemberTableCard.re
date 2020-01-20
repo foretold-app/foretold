@@ -17,9 +17,9 @@ let make =
           PageCard.HeaderRow.Styles.itemTopPadding,
           PageCard.HeaderRow.Styles.itemBottomPadding,
         ])}>
-        <FC__Button variant=FC__Button.Primary size=FC__Button.Small>
+        <Button variant=Button.Primary size=Button.Small>
           {"< Back" |> ReasonReact.string}
-        </FC__Button>
+        </Button>
       </Div>
     </PageCard.HeaderRow>
     <Table>

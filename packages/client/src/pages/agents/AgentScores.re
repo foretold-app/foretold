@@ -4,15 +4,19 @@ open Style.Grid;
 let make = (~agentId) => {
   let head = (~channelId, ~paginationPage, ()) =>
     <div>
-      <FC.Base.Div float=`left>
-        <FC.PageCard.HeaderRow.Title>
+      <ForetoldComponents.Base.Div float=`left>
+        <ForetoldComponents.PageCard.HeaderRow.Title>
           {"Scores" |> Utils.ste}
-        </FC.PageCard.HeaderRow.Title>
-      </FC.Base.Div>
+        </ForetoldComponents.PageCard.HeaderRow.Title>
+      </ForetoldComponents.Base.Div>
       <Div>
         <Div
           float=`right
-          styles=[Css.style([FC.PageCard.HeaderRow.Styles.itemTopPadding])]>
+          styles=[
+            Css.style([
+              ForetoldComponents.PageCard.HeaderRow.Styles.itemTopPadding,
+            ]),
+          ]>
           paginationPage
         </Div>
       </Div>

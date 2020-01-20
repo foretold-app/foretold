@@ -29,18 +29,18 @@ module Pagination = {
             float=`left
             styles=[
               Css.style([
-                FC.PageCard.HeaderRow.Styles.itemTopPadding,
-                FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+                ForetoldComponents.PageCard.HeaderRow.Styles.itemTopPadding,
+                ForetoldComponents.PageCard.HeaderRow.Styles.itemBottomPadding,
               ]),
             ]>
-            <FC.Base.Button
-              variant=FC.Base.Button.Primary
-              size=FC.Base.Button.Small
+            <ForetoldComponents.Base.Button
+              variant=ForetoldComponents.Base.Button.Primary
+              size=ForetoldComponents.Base.Button.Small
               onClick={e =>
                 LinkType.onClick(Internal(ChannelAddNotebook(channelId)), e)
               }>
               {"New Notebook" |> Utils.ste}
-            </FC.Base.Button>
+            </ForetoldComponents.Base.Button>
           </Div>
           |> Primary.User.authorized(loggedUser)
           |> E.React2.showIf(channelId != "")
@@ -50,8 +50,8 @@ module Pagination = {
         float=`right
         styles=[
           Css.style([
-            FC.PageCard.HeaderRow.Styles.itemTopPadding,
-            FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+            ForetoldComponents.PageCard.HeaderRow.Styles.itemTopPadding,
+            ForetoldComponents.PageCard.HeaderRow.Styles.itemBottomPadding,
           ]),
         ]>
         {Reducer.Components.paginationPage(reducerParams)}
@@ -78,7 +78,7 @@ let make = (~channelId: string) => {
 
     let body =
       switch (reducerParams.response, isFound) {
-      | (Success(_), true) => <FC.PageCard.Body> table </FC.PageCard.Body>
+      | (Success(_), true) => <ForetoldComponents.PageCard.Body> table </ForetoldComponents.PageCard.Body>
       | (Success(_), false) => <NothingToShow />
       | _ => <Spin />
       };

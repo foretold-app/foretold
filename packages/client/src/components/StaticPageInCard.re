@@ -3,13 +3,13 @@ let make = (~markdown) => {
   <div className=StaticStyles.body>
     <div className={SLayout.Styles.container(`fixedWidth)}>
       <div className=Css.(style([textAlign(`left), paddingTop(`em(3.))]))>
-        <FC.PageCard>
-          <FC.PageCard.Body>
-            <FC.PageCard.BodyPadding>
+        <ForetoldComponents.PageCard>
+          <ForetoldComponents.PageCard.Body>
+            <ForetoldComponents.PageCard.BodyPadding>
               <Markdown source=markdown />
-            </FC.PageCard.BodyPadding>
-          </FC.PageCard.Body>
-        </FC.PageCard>
+            </ForetoldComponents.PageCard.BodyPadding>
+          </ForetoldComponents.PageCard.Body>
+        </ForetoldComponents.PageCard>
       </div>
     </div>
   </div>;

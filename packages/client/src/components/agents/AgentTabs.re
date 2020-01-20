@@ -13,13 +13,13 @@ module Tab = {
   [@react.component]
   let make = (~agentId, ~subPage, ~selectedPage) => {
     let isActive = subPage == selectedPage;
-    <FC.Tab
+    <ForetoldComponents.Tab
       isActive
       onClick={LinkType.onClick(
         Internal(Agent({agentId, subPage: selectedPage})),
       )}>
       {name(selectedPage) |> ste}
-    </FC.Tab>;
+    </ForetoldComponents.Tab>;
   };
 };
 

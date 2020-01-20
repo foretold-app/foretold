@@ -39,9 +39,9 @@ let make =
       switch (reducerParams.response) {
       | Success(_) =>
         Array.length(items) > 0
-          ? <FC.PageCard.Body>
+          ? <ForetoldComponents.PageCard.Body>
               <LeaderboardTable items columns />
-            </FC.PageCard.Body>
+            </ForetoldComponents.PageCard.Body>
           : <NothingToShow />
       | _ => <Spin />
       };

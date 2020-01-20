@@ -8,7 +8,7 @@ let make = _ => {
   <Providers.AppContext.Consumer>
     ...{({loggedUser}) => {
       let warning = email =>
-        <FC__Alert type_=`warning>
+        <ForetoldComponents.Alert type_=`warning>
           <span className=Styles.icon>
             <Icon icon="EMAIL_UNREAD" />
           </span>
@@ -16,15 +16,15 @@ let make = _ => {
            ++ email
            ++ "\"."
            |> Utils.ste}
-        </FC__Alert>;
+        </ForetoldComponents.Alert>;
 
       let warningNoEmail =
-        <FC__Alert type_=`warning>
+        <ForetoldComponents.Alert type_=`warning>
           <span className=Styles.icon>
             <Icon icon="EMAIL_UNREAD" />
           </span>
           {"Please verify your email address. " |> Utils.ste}
-        </FC__Alert>;
+        </ForetoldComponents.Alert>;
 
       switch (loggedUser) {
       | Some({isEmailVerified: Some(isEmailVerified), email: Some(email)}) =>

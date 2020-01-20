@@ -130,7 +130,7 @@ module Header = {
                 <Div
                   float=`left
                   styles=[Css.style([Css.marginLeft(`em(0.45))])]>
-                  <FC.Base.Avatar src=picture width=1.5 />
+                  <ForetoldComponents.Base.Avatar src=picture width=1.5 />
                 </Div>
               )}
         </Div>

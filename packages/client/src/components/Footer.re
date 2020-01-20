@@ -4,7 +4,7 @@ let documentationUrl = "https://docs.foretold.io/";
 
 [@react.component]
 let make = () => {
-  <FC__Footer
+  <ForetoldComponents.Footer
     logo={React.string({js|Foretold.io|js})}
     links=[|
       <Link linkType={External(documentationUrl)}>

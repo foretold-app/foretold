@@ -4,7 +4,7 @@ let make = (~loggedUser: Types.user) => {
   let (mutate, result, _) = Subscribe.Mutation.use();
 
   <SLayout head={<SLayout.TextDiv text=Lang.subscribePageCardTitle />}>
-    <FC.PageCard.BodyPadding>
+    <ForetoldComponents.PageCard.BodyPadding>
       {switch (result) {
        | Error(_error) => <Sorry />
        | Data(_) => <p> {Lang.sucSubscribing |> Utils.ste} </p>
@@ -19,6 +19,6 @@ let make = (~loggedUser: Types.user) => {
 
          <p> {Lang.subscribing |> Utils.ste} </p>;
        }}
-    </FC.PageCard.BodyPadding>
+    </ForetoldComponents.PageCard.BodyPadding>
   </SLayout>;
 };

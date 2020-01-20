@@ -16,12 +16,15 @@ module Styles = {
     style([color(`rgb((102, 121, 134))), fontSize(`em(1.1))]);
 
   let secondaryText =
-    style([fontSize(`em(0.9)), color(FC__Settings.accentBlue)]);
+    style([
+      fontSize(`em(0.9)),
+      color(ForetoldComponents.Settings.accentBlue),
+    ]);
 
   let inputText =
     style([
       fontSize(`em(0.8)),
-      color(FC__Settings.accentBlue),
+      color(ForetoldComponents.Settings.accentBlue),
       maxWidth(`percent(90.)),
     ]);
 
@@ -80,12 +83,16 @@ module Helpers = {
       | Ok(`FloatCdf(r)) =>
         r
         |> MeasurementValue.FloatCdf.toJs
-        |> FC.Base.Types.Dist.fromJson
-        |> (cdf => <FC__CdfChart__StatSummary cdf showMean=false />)
-      | Ok(`FloatPoint(r)) => <FC__NumberShower precision=8 number=r />
+        |> ForetoldComponents.Base.Types.Dist.fromJson
+        |> (
+          cdf =>
+            <ForetoldComponents.CdfChart__StatSummary cdf showMean=false />
+        )
+      | Ok(`FloatPoint(r)) =>
+        <ForetoldComponents.NumberShower precision=8 number=r />
       | Ok(`Percentage(r)) =>
         <span className=Styles.percentage>
-          <FC__PercentageShower precision=8 percentage=r />
+          <ForetoldComponents.PercentageShower precision=8 percentage=r />
         </span>
       | Ok(`Binary(r)) =>
         <span className=Styles.result>
@@ -349,7 +356,9 @@ let bottomSubRowFn =
       | Some("") => None
       | Some(_) =>
         Some([|
-          FC.Table.Row.textSection(<Helpers.Description m=measurement />),
+          ForetoldComponents.Table.Row.textSection(
+            <Helpers.Description m=measurement />,
+          ),
         |])
       | _ => None
       },
@@ -432,12 +441,12 @@ let make =
   let measurementsList' = measurementsList;
 
   measurementsList' |> E.L.length > 0
-    ? <FC.PageCard.Body>
+    ? <ForetoldComponents.PageCard.Body>
         <Table
           columns=all
           rows={measurementsList' |> Array.of_list}
           bottomSubRowFn
         />
-      </FC.PageCard.Body>
+      </ForetoldComponents.PageCard.Body>
     : <NothingToShow />;
 };

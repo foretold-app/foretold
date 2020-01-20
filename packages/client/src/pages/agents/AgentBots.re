@@ -9,11 +9,11 @@ module Styles = {
 module Title = {
   [@react.component]
   let make = () =>
-    <FC.Base.Div float=`left>
-      <FC.PageCard.HeaderRow.Title>
+    <ForetoldComponents.Base.Div float=`left>
+      <ForetoldComponents.PageCard.HeaderRow.Title>
         {"Bots" |> Utils.ste}
-      </FC.PageCard.HeaderRow.Title>
-    </FC.Base.Div>;
+      </ForetoldComponents.PageCard.HeaderRow.Title>
+    </ForetoldComponents.Base.Div>;
 };
 
 module AgentSection = {
@@ -102,9 +102,9 @@ let make = (~pageParams: Types.pageParams) => {
     | Success(Some(agent)) =>
       let showBots = bots =>
         Array.length(bots) > 0
-          ? <FC.PageCard.Body>
+          ? <ForetoldComponents.PageCard.Body>
               <Table columns=Columns.all rows=bots />
-            </FC.PageCard.Body>
+            </ForetoldComponents.PageCard.Body>
           : <NothingToShow />;
 
       let body =
@@ -116,14 +116,14 @@ let make = (~pageParams: Types.pageParams) => {
       let head =
         <div>
           <Title />
-          <FC.Base.Div
+          <ForetoldComponents.Base.Div
             float=`right
             className={Css.style([
-              FC.PageCard.HeaderRow.Styles.itemTopPadding,
-              FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+              ForetoldComponents.PageCard.HeaderRow.Styles.itemTopPadding,
+              ForetoldComponents.PageCard.HeaderRow.Styles.itemBottomPadding,
             ])}>
             <AgentSection agent />
-          </FC.Base.Div>
+          </ForetoldComponents.Base.Div>
         </div>;
 
       <SLayout head> body </SLayout>;

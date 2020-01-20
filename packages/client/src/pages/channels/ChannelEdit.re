@@ -6,32 +6,32 @@ let make = (~channelId: string) => {
 
   let head =
     <>
-      <FC.Base.Div float=`left>
-        <FC.PageCard.HeaderRow.Title>
+      <ForetoldComponents.Base.Div float=`left>
+        <ForetoldComponents.PageCard.HeaderRow.Title>
           {"Edit Community" |> Utils.ste}
-        </FC.PageCard.HeaderRow.Title>
-      </FC.Base.Div>
+        </ForetoldComponents.PageCard.HeaderRow.Title>
+      </ForetoldComponents.Base.Div>
       <Providers.AppContext.Consumer>
         ...{({loggedUser}) =>
           switch (loggedUser) {
           | Some(loggedUser) =>
-            <FC.Base.Div
+            <ForetoldComponents.Base.Div
               float=`right
               className={Css.style([
-                FC.PageCard.HeaderRow.Styles.itemTopPadding,
+                ForetoldComponents.PageCard.HeaderRow.Styles.itemTopPadding,
               ])}>
               {Primary.User.show(
                  loggedUser,
-                 <FC.Base.Button
-                   variant=FC.Base.Button.Primary
-                   size=FC.Base.Button.Small
+                 <ForetoldComponents.Base.Button
+                   variant=ForetoldComponents.Base.Button.Primary
+                   size=ForetoldComponents.Base.Button.Small
                    onClick={e =>
                      LinkType.onClick(Internal(SeriesNew(channelId)), e)
                    }>
                    {"New Series" |> Utils.ste}
-                 </FC.Base.Button>,
+                 </ForetoldComponents.Base.Button>,
                )}
-            </FC.Base.Div>
+            </ForetoldComponents.Base.Div>
           | _ => <Null />
           }
         }
@@ -39,13 +39,13 @@ let make = (~channelId: string) => {
     </>;
 
   <SLayout head>
-    <FC.PageCard.BodyPadding>
+    <ForetoldComponents.PageCard.BodyPadding>
       {loadChannel(
          HttpResponse.fmap(channel =>
            <ChannelForm.Edit id=channelId channel />
          )
          ||> HttpResponse.withReactDefaults,
        )}
-    </FC.PageCard.BodyPadding>
+    </ForetoldComponents.PageCard.BodyPadding>
   </SLayout>;
 };

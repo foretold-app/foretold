@@ -53,9 +53,9 @@ module DashboardTableToTable = {
                     />
                   </div>;
                 | None =>
-                  <FC__Alert type_=`warning>
+                  <ForetoldComponents.Alert type_=`warning>
                     {"Not loaded" |> Utils.ste}
-                  </FC__Alert>
+                  </ForetoldComponents.Alert>
                 }
             )
           | Some(Empty)

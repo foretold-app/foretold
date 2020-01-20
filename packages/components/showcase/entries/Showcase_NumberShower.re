@@ -48,7 +48,7 @@ module NumbersDisplay = {
            numbers
            |> E.L.fmap(n =>
                 <div key={n |> Js.Float.toString}>
-                  <FC__NumberShower number=n precision=3 />
+                  <NumberShower number=n precision=3 />
                 </div>
               )
            |> E.L.toArray

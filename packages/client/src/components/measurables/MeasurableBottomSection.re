@@ -11,7 +11,6 @@ module Styles = {
 
 module Tabs = {
   open Style.Grid;
-  open FC;
 
   [@react.component]
   let make =
@@ -20,25 +19,27 @@ module Tabs = {
       <Div
         styles=[
           Css.style([
-            FC.Base.BaseStyles.floatLeft,
+            ForetoldComponents.Base.BaseStyles.floatLeft,
             Css.paddingTop(`em(0.2)),
           ]),
         ]>
-        <TabButton
+        <ForetoldComponents.Tab.Button
           isActive={tab == Measurements}
           onClick={_ => switchTab(Measurements)}>
           {"Predictions" |> Utils.ste}
-        </TabButton>
-        <TabButton isActive={tab == Scores} onClick={_ => switchTab(Scores)}>
+        </ForetoldComponents.Tab.Button>
+        <ForetoldComponents.Tab.Button
+          isActive={tab == Scores} onClick={_ => switchTab(Scores)}>
           {"Scores" |> Utils.ste}
-        </TabButton>
-        <TabButton
+        </ForetoldComponents.Tab.Button>
+        <ForetoldComponents.Tab.Button
           isActive={tab == Details} onClick={_ => switchTab(Details)}>
           {"Details" |> Utils.ste}
-        </TabButton>
-        {<TabButton isActive={tab == Edit} onClick={_ => switchTab(Edit)}>
+        </ForetoldComponents.Tab.Button>
+        {<ForetoldComponents.Tab.Button
+           isActive={tab == Edit} onClick={_ => switchTab(Edit)}>
            {"Edit" |> Utils.ste}
-         </TabButton>
+         </ForetoldComponents.Tab.Button>
          |> E.React2.showIf(
               Primary.Permissions.can(
                 `MEASURABLE_UPDATE,
@@ -49,7 +50,11 @@ module Tabs = {
       <Div>
         <Div
           float=`right
-          styles=[Css.style([FC.PageCard.HeaderRow.Styles.itemTopPadding])]>
+          styles=[
+            Css.style([
+              ForetoldComponents.PageCard.HeaderRow.Styles.itemTopPadding,
+            ]),
+          ]>
           paginationPage
         </Div>
       </Div>
@@ -96,34 +101,34 @@ module Inner = {
           (),
         )}
         container=`none>
-        <FC.PageCard.Body>
+        <ForetoldComponents.PageCard.Body>
           <Style.Grid.Div
             float=`left
             styles=[
               Css.style([
-                FC.PageCard.HeaderRow.Styles.itemTopPadding,
-                FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+                ForetoldComponents.PageCard.HeaderRow.Styles.itemTopPadding,
+                ForetoldComponents.PageCard.HeaderRow.Styles.itemBottomPadding,
                 Css.marginLeft(`em(1.0)),
               ]),
             ]>
-            <FC__Div>
+            <ForetoldComponents.Div>
               <h4> {"Question Id:" |> Utils.ste} </h4>
               <div> <MeasurableItems.Id measurable /> </div>
-            </FC__Div>
-            <FC__Div styles=[Styles.block]>
+            </ForetoldComponents.Div>
+            <ForetoldComponents.Div styles=[Styles.block]>
               <h4> {"Name:" |> Utils.ste} </h4>
               <MeasurableItems.LinkMeasurable measurable />
-            </FC__Div>
-            <FC__Div styles=[Styles.block]>
+            </ForetoldComponents.Div>
+            <ForetoldComponents.Div styles=[Styles.block]>
               <h4> {"Desciption:" |> Utils.ste} </h4>
               <MeasurableItems.Description measurable />
-            </FC__Div>
-            <FC__Div styles=[Styles.block]>
+            </ForetoldComponents.Div>
+            <ForetoldComponents.Div styles=[Styles.block]>
               <h4> {"Owner:" |> Utils.ste} </h4>
               <div> <MeasurableItems.CreatorLink measurable /> </div>
-            </FC__Div>
+            </ForetoldComponents.Div>
           </Style.Grid.Div>
-        </FC.PageCard.Body>
+        </ForetoldComponents.PageCard.Body>
       </SLayout>
 
     | Edit =>
@@ -134,13 +139,13 @@ module Inner = {
           (),
         )}
         container=`none>
-        <FC.PageCard.Body>
+        <ForetoldComponents.PageCard.Body>
           <Style.Grid.Div
             float=`left
             styles=[
               Css.style([
-                FC.PageCard.HeaderRow.Styles.itemTopPadding,
-                FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+                ForetoldComponents.PageCard.HeaderRow.Styles.itemTopPadding,
+                ForetoldComponents.PageCard.HeaderRow.Styles.itemBottomPadding,
                 Css.marginLeft(`em(1.0)),
               ]),
             ]>
@@ -149,7 +154,7 @@ module Inner = {
               key={"measurable-edit-" ++ measurable.id}
             />
           </Style.Grid.Div>
-        </FC.PageCard.Body>
+        </ForetoldComponents.PageCard.Body>
       </SLayout>
     };
   };

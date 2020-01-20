@@ -120,8 +120,8 @@ let make = (~loggedUser: Types.user) => {
     |> E.O.default(true);
 
   <SLayout head={<SLayout.TextDiv text="Preferences" />}>
-    <FC.PageCard.BodyPadding>
+    <ForetoldComponents.PageCard.BodyPadding>
       <Edit id stopAllEmails enableExperimentalFeatures />
-    </FC.PageCard.BodyPadding>
+    </ForetoldComponents.PageCard.BodyPadding>
   </SLayout>;
 };

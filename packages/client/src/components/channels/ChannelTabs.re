@@ -4,9 +4,9 @@ open Routing;
 module Tab = {
   [@react.component]
   let make = (~isActive, ~interalUrl, ~str) =>
-    <FC.Tab isActive onClick={LinkType.onClick(Internal(interalUrl))}>
+    <ForetoldComponents.Tab isActive onClick={LinkType.onClick(Internal(interalUrl))}>
       {str |> ste}
-    </FC.Tab>;
+    </ForetoldComponents.Tab>;
 };
 
 let tabToInternalUrl = (channelId, tabSelected: ChannelPage.tab): Url.t => {

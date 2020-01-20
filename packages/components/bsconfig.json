@@ -18,7 +18,7 @@
     "module": "commonjs",
     "in-source": true
   }],
-  "namespace": false,
+  "namespace": true,
   "sources": [{
       "dir": "src",
       "subdirs": true

@@ -175,8 +175,8 @@ let make = (~loggedUser: Types.user) => {
     agent |> E.O.bind(_, (r: Types.agent) => r.name) |> E.O.default("");
 
   <SLayout head={<SLayout.TextDiv text="Edit Profile Information" />}>
-    <FC.PageCard.BodyPadding>
+    <ForetoldComponents.PageCard.BodyPadding>
       <Edit id email picture description name />
-    </FC.PageCard.BodyPadding>
+    </ForetoldComponents.PageCard.BodyPadding>
   </SLayout>;
 };

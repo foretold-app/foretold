@@ -1,8 +1,8 @@
 let agentLinkStyle = {
   Css.(
     style([
-      color(FC__Settings.Text.LightBackground.light),
-      hover([color(FC__Settings.Text.LightBackground.light)]),
+      color(ForetoldComponents.Settings.Text.LightBackground.light),
+      hover([color(ForetoldComponents.Settings.Text.LightBackground.light)]),
     ])
   );
 };
@@ -17,13 +17,20 @@ let rec toAgent = (~agent: Types.agent) => {
 
   switch (agent.name, agent.agentType) {
   | (_, Some(User({name, picture}))) =>
-    Some(FC__AgentLink.Agent.makeUser(~name, ~onClick, ~image=?picture, ()))
+    Some(
+      ForetoldComponents.AgentLink.Agent.makeUser(
+        ~name,
+        ~onClick,
+        ~image=?picture,
+        (),
+      ),
+    )
 
   | (_, Some(Bot({name, owner: Some(agent), picture}))) =>
     let owner = toAgent(~agent);
 
     Some(
-      FC__AgentLink.Agent.makeBot(
+      ForetoldComponents.AgentLink.Agent.makeBot(
         ~name=name |> E.O.default("bot"),
         ~owner?,
         ~onClick,
@@ -34,7 +41,7 @@ let rec toAgent = (~agent: Types.agent) => {
 
   | (_, Some(Bot({name, picture}))) =>
     Some(
-      FC__AgentLink.Agent.makeBot(
+      ForetoldComponents.AgentLink.Agent.makeBot(
         ~name=name |> E.O.default("bot"),
         ~onClick,
         ~image=?picture,
@@ -43,7 +50,7 @@ let rec toAgent = (~agent: Types.agent) => {
     )
 
   | (Some(name), _) =>
-    Some(FC__AgentLink.Agent.makeUser(~name, ~onClick, ()))
+    Some(ForetoldComponents.AgentLink.Agent.makeUser(~name, ~onClick, ()))
 
   | (_, _) => None
   };
@@ -53,5 +60,5 @@ let rec toAgent = (~agent: Types.agent) => {
 let make = (~agent: Types.agent) =>
   toAgent(~agent)
   |> E.O.React.fmapOrNull(agent =>
-       <FC__AgentLink agent className=agentLinkStyle />
+       <ForetoldComponents.AgentLink agent className=agentLinkStyle />
      );

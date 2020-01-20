@@ -32,11 +32,11 @@ let make = (~channelId: string) => {
   let all = [|agent, invite|];
 
   let title =
-    <FC.Base.Div float=`left>
-      <FC.PageCard.HeaderRow.Title>
+    <ForetoldComponents.Base.Div float=`left>
+      <ForetoldComponents.PageCard.HeaderRow.Title>
         {"Add Agents" |> Utils.ste}
-      </FC.PageCard.HeaderRow.Title>
-    </FC.Base.Div>;
+      </ForetoldComponents.PageCard.HeaderRow.Title>
+    </ForetoldComponents.Base.Div>;
 
   let onSuccess = agents => {
     let dataSource =
@@ -61,6 +61,8 @@ let make = (~channelId: string) => {
     );
 
   <SLayout head={<div> title </div>}>
-    <FC.PageCard.Body> table </FC.PageCard.Body>
+    <ForetoldComponents.PageCard.Body>
+      table
+    </ForetoldComponents.PageCard.Body>
   </SLayout>;
 };

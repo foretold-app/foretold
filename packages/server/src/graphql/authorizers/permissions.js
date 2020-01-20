@@ -171,7 +171,11 @@ const rules = () => ({
     ...rulesInvitations().Query,
   },
   Mutation: {
-    '*': and(currentAgentIsAuthenticated, rateLimit),
+    '*': and(
+      currentAgentIsAuthenticated,
+      // @todo: To apply for other places too.
+      rateLimit,
+    ),
 
     mutexTake: currentAgentIsAuthenticated,
     mutexFree: currentAgentIsAuthenticated,

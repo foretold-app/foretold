@@ -10,6 +10,7 @@ WORKDIR /opt/app
 
 RUN yarn install --loglevel=warn --unsafe-perm --ignore-scripts
 RUN yarn bootstrap
+RUN yarn packages/clean
+RUN yarn packages/build
 
 EXPOSE ${PORT:-80}
-

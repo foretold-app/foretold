@@ -17,3 +17,4 @@ let copiedDescription = "The question ID was copied.";
 let backButtonTip = "Back";
 let pageIsNotFound = "Page not found";
 let notebookRemove = "Are you sure you want to delete this notebook?";
+let areYouSure = "Are you sure?";

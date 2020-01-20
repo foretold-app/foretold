@@ -49,6 +49,7 @@ services:
     expose:
       - 80
 
+  # @todo: update to 12
   database:
     image: postgres:11
     environment:

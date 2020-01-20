@@ -203,7 +203,7 @@ class ModelPostgres extends Model {
    */
   async getOne(params = {}, query = {}, restrictions = {}, options = {}) {
     this._assertInput({ params, query, restrictions, options });
-    const cond = await this.getPredicated(params, query, restrictions, options);
+    const cond = await this._getPredicated(params, query, restrictions, options);
     return this.model.findOne(cond);
   }
 
@@ -217,19 +217,19 @@ class ModelPostgres extends Model {
    */
   async getCount(params = {}, query = {}, restrictions = {}, options = {}) {
     this._assertInput({ params, query, restrictions, options });
-    const cond = await this.getPredicated(params, query, restrictions, options);
+    const cond = await this._getPredicated(params, query, restrictions, options);
     return this.model.count(cond);
   }
 
   /**
-   * @public
+   * @protected
    * @param {Layers.AbstractModelsLayer.params} [params]
    * @param {Layers.AbstractModelsLayer.query} [query]
    * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
    * @param {Layers.AbstractModelsLayer.options} [options]
    * @return {Promise<*>}
    */
-  async getPredicated(
+  async _getPredicated(
     params = {},
     query = {},
     restrictions = {},

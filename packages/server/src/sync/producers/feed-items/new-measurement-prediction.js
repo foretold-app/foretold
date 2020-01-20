@@ -18,8 +18,7 @@ class NewMeasurementPrediction extends NewMeasurement {
   async _isActual() {
     const { competitorType } = this.input;
 
-    return competitorType === MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE
-      || competitorType === MEASUREMENT_COMPETITOR_TYPE.AGGREGATION;
+    return competitorType === MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE;
   }
 }
 

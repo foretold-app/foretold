@@ -464,6 +464,12 @@ class ModelPostgres extends Model {
       });
     }
 
+    if (!!filter.role) {
+      where[this.and].push({
+        role: filter.role,
+      });
+    }
+
     if (!!filter.userId) {
       where[this.and].push({
         userId: filter.userId,

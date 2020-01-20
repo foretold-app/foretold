@@ -37,7 +37,6 @@ const agent = new graphql.GraphQLObjectType({
     },
 
     // @todo: security
-    // @todo: Do not use resolver. Use common interfaces of Data layer.
     preference: {
       type: require('./preferences').preference,
       resolve: require('../resolvers').preferences.getOne,

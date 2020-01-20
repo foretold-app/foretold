@@ -112,12 +112,13 @@ function membershipBelongsToCurrentAgentRule(root, args, context, _info) {
     || _.get(root, 'agentId', null);
   const currentAgentId = _.get(context, 'agent.id', null);
 
-  const result = !!membershipAgentId && membershipAgentId === currentAgentId;
+  const result = (!!membershipAgentId && !!currentAgentId )
+    && membershipAgentId === currentAgentId;
 
   log.trace(
     '\x1b[33m Rule Channel Memberships '
-    + '(membershipBelongsToCurrentAgentRule) objectAgentId = '
-    + `"${membershipAgentId}", subjectAgentId = "${currentAgentId}", `
+    + '(membershipBelongsToCurrentAgentRule) membershipAgentId = '
+    + `"${membershipAgentId}", currentAgentId = "${currentAgentId}", `
     + `result = "${result}".\x1b[0m`,
   );
 

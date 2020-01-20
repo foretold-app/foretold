@@ -93,16 +93,17 @@ module LoadedAndUnselected = {
             FC.PageCard.HeaderRow.Styles.itemBottomPadding,
           ]),
         ]>
-        <FC__Button
-          variant=FC__Button.Primary
-          isDisabled=false
-          size=FC__Button.(Small)
-          className=Css.(style([marginRight(`em(1.5))]))
-          onClick={e =>
-            LinkType.onClick(Internal(MeasurableNew(channelId)), e)
-          }>
-          {"New Question" |> Utils.ste}
-        </FC__Button>
+        {<FC__Button
+           variant=FC__Button.Primary
+           isDisabled=false
+           size=FC__Button.(Small)
+           className=Css.(style([marginRight(`em(1.5))]))
+           onClick={e =>
+             LinkType.onClick(Internal(MeasurableNew(channelId)), e)
+           }>
+           {"New Question" |> Utils.ste}
+         </FC__Button>
+         |> E.React2.showIf(channelId != "")}
         {Reducer.Components.paginationPage(t.reducerParams)}
       </Div>
     </Div>;

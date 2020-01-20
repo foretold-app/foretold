@@ -11,7 +11,7 @@ const log = logger.module('middlewares/measurables');
  * @todo: To fix "||" a joined logic.
  * @param {object | null} root
  * @param {object} args
- * @param {object} context
+ * @param {Schema.Context} context
  * @param {object} _info
  * @return {Promise<void>}
  */
@@ -27,7 +27,7 @@ async function setContextMeasurable(root, args, context, _info) {
     { measurableId },
   );
 
-  if (measurableId) {
+  if (!!measurableId) {
     const params = new Params({ id: measurableId });
     context.measurable = await new MeasurablesData().getOne(params);
   } else {
@@ -38,7 +38,7 @@ async function setContextMeasurable(root, args, context, _info) {
 /**
  * @param {object | null} root
  * @param {object} args
- * @param {object} context
+ * @param {Schema.Context} context
  * @param {object} _info
  * @return {Promise<void>}
  */

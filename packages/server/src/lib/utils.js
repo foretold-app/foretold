@@ -20,7 +20,7 @@ module.exports.diff = function diff(className, options, list) {
 /**
  * @param {string} className
  * @param {object} list
- * @param {object} context
+ * @param {Schema.Context} context
  */
 module.exports.test = function test(className, list, context) {
   _.each(list, (test, name) => {
@@ -38,7 +38,7 @@ module.exports.test = function test(className, list, context) {
  * @param {string} className
  * @param {object | string[]} list
  * @param {object} options
- * @param {object} context
+ * @param {Schema.Context} context
  */
 module.exports.extend = function extend2(className, options, list, context) {
   list = _.isArray(list) ? list : _.keys(list);
@@ -52,7 +52,7 @@ module.exports.extend = function extend2(className, options, list, context) {
 /**
  * @param {string} className
  * @param {object} options
- * @param {object} context
+ * @param {Schema.Context} context
  */
 module.exports.copy = function copy(className, options, context) {
   _.each(options, (value, name) => {
@@ -69,7 +69,7 @@ module.exports.none = function none(v) {
 };
 
 /**
- * @param {object} context
+ * @param {Schema.Context} context
  */
 module.exports.inspect = function inspect(context) {
   console.log(

@@ -15,7 +15,7 @@ const { Data } = require('../../data/classes');
  * agentId: Models.AgentID,
  * role: string,
  * }}} args
- * @param {*} context
+ * @param {Schema.Context} context
  * @returns {Promise<Models.ChannelMemberships>}
  */
 async function create(_root, args, context) {

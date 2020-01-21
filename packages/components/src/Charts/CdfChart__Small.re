@@ -46,19 +46,3 @@ let make =
     />
   </div>;
 };
-
-module Jsx2 = {
-  let make =
-      (
-        ~cdf: Types.Dist.t,
-        ~minX=None,
-        ~maxX=None,
-        ~color=`hex("7e9db7"),
-        children,
-      ) =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(~cdf, ~minX, ~maxX, ~color, ()),
-      children,
-    );
-};

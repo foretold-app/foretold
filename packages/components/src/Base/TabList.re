@@ -20,11 +20,3 @@ let make = (~selected, ~flex=false, ~onClick=?, ~list) =>
        </Tab>
      );
 
-module Jsx2 = {
-  let make = (~selected, ~flex=false, ~onClick=?, ~list, children) =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(~selected, ~flex=false, ~onClick?, ~list, ()),
-      children,
-    );
-};

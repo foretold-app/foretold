@@ -25,12 +25,3 @@ let make = (~src: string, ~width=1., ()) =>
   <span className={Styles.imageCropper(width)}>
     <img src className=Styles.image />
   </span>;
-
-module Jsx2 = {
-  let make = (~src: string, ~width=1., children) =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(~src, ~width, ()),
-      children,
-    );
-};

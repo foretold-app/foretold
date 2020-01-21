@@ -12,12 +12,3 @@ let make = (~percentage, ~precision) => {
     <span className=percentageSign> {"%" |> ReasonReact.string} </span>
   </span>;
 };
-
-module Jsx2 = {
-  let make = (~percentage, ~precision, children) =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(~percentage, ~precision, ()),
-      children,
-    );
-};

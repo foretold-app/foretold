@@ -31,12 +31,3 @@ let make = (~cdf: Types.Dist.t, ~showMean=true) =>
       />
     </div>
   </>;
-
-module Jsx2 = {
-  let make = (~cdf: Types.Dist.t, ~showMean=true, children) =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(~cdf, ~showMean, ()),
-      children,
-    );
-};

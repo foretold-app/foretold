@@ -43,15 +43,6 @@ module Overlay = {
         </PageCard.Body>
       </PageCard>
     </div>;
-
-  module Jsx2 = {
-    let make = (~content, children) =>
-      ReasonReactCompat.wrapReactForReasonReact(
-        make,
-        makeProps(~content, ()),
-        children,
-      );
-  };
 };
 
 [@react.component]
@@ -60,11 +51,3 @@ let make = (~content) =>
     <span> <Icon.Questionmark isInteractive=true /> </span>
   </Dropdown>;
 
-module Jsx2 = {
-  let make = (~content, children) =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(~content, ()),
-      children,
-    );
-};

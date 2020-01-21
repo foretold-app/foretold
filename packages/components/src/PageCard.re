@@ -20,15 +20,6 @@ let make = (~children) =>
     children
   </Div>;
 
-module Jsx2 = {
-  let make = children =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(~children, ()),
-      children,
-    );
-};
-
 let defaultPadding = Css.padding2(~v=`em(0.0), ~h=`em(1.5));
 
 module HeaderRow = {
@@ -54,15 +45,6 @@ module HeaderRow = {
         ]>
         children
       </Div>;
-
-    module Jsx2 = {
-      let make = children =>
-        ReasonReactCompat.wrapReactForReasonReact(
-          make,
-          makeProps(~children, ()),
-          children,
-        );
-    };
   };
 
   [@react.component]
@@ -81,30 +63,12 @@ module HeaderRow = {
       ]>
       children
     </Div>;
-
-  module Jsx2 = {
-    let make = children =>
-      ReasonReactCompat.wrapReactForReasonReact(
-        make,
-        makeProps(~children, ()),
-        children,
-      );
-  };
 };
 
 module Body = {
   [@react.component]
   let make = (~children) =>
     <Div styles=[Css.style(BaseStyles.fullWidthFloatLeft)]> children </Div>;
-
-  module Jsx2 = {
-    let make = children =>
-      ReasonReactCompat.wrapReactForReasonReact(
-        make,
-        makeProps(~children, ()),
-        children,
-      );
-  };
 };
 
 module BodyPadding = {
@@ -118,15 +82,6 @@ module BodyPadding = {
       ]>
       children
     </Div>;
-
-  module Jsx2 = {
-    let make = (~v=`em(1.5), children) =>
-      ReasonReactCompat.wrapReactForReasonReact(
-        make,
-        makeProps(~v, ~children, ()),
-        children,
-      );
-  };
 };
 
 module Section = {
@@ -206,22 +161,6 @@ module Section = {
     <div className={StyleProps.toClasses(background, border, padding, flex)}>
       children
     </div>;
-
-  module Jsx2 = {
-    let make =
-        (
-          ~background: StyleProps.background=`white,
-          ~border: StyleProps.border=`none,
-          ~padding: StyleProps.padding=`all,
-          ~flex=false,
-          children,
-        ) =>
-      ReasonReactCompat.wrapReactForReasonReact(
-        make,
-        makeProps(~background, ~border, ~padding, ~flex, ~children, ()),
-        children,
-      );
-  };
 };
 
 module VerticalSpace = {
@@ -229,11 +168,6 @@ module VerticalSpace = {
 
   [@react.component]
   let make = _ => <div className=spaceStyle />;
-
-  module Jsx2 = {
-    let make = children =>
-      ReasonReactCompat.wrapReactForReasonReact(make, makeProps(), children);
-  };
 };
 
 module H1 = {
@@ -254,15 +188,6 @@ module H1 = {
       )>
       children
     </h1>;
-
-  module Jsx2 = {
-    let make = children =>
-      ReasonReactCompat.wrapReactForReasonReact(
-        make,
-        makeProps(~children, ()),
-        children,
-      );
-  };
 };
 
 module P = {
@@ -274,13 +199,4 @@ module P = {
       )>
       children
     </p>;
-
-  module Jsx2 = {
-    let make = children =>
-      ReasonReactCompat.wrapReactForReasonReact(
-        make,
-        makeProps(~children, ()),
-        children,
-      );
-  };
 };

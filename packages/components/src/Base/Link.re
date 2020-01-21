@@ -29,19 +29,3 @@ let make =
     children
   </a>;
 };
-
-module Jsx2 = {
-  let make = (~href=?, ~onClick=?, ~isDisabled=?, ~className=?, children) =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(
-        ~href?,
-        ~onClick?,
-        ~isDisabled?,
-        ~className?,
-        ~children=children |> ReasonReact.array,
-        (),
-      ),
-      children,
-    );
-};

@@ -58,12 +58,3 @@ let make = (~title, ~trigger=Dropdown.Hover, ~children) => {
     </button>
   </Dropdown>;
 };
-
-module Jsx2 = {
-  let make = (~title, ~trigger=Dropdown.Hover, children) =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(~title, ~trigger, ~children, ()),
-      children,
-    );
-};

@@ -28,30 +28,3 @@ let make =
 
   <div className=allStyles onClick> children </div>;
 };
-
-module Jsx2 = {
-  let make =
-      (
-        ~styles=?,
-        ~className=?,
-        ~flex=?,
-        ~flexDirection=?,
-        ~float=?,
-        ~onClick=?,
-        children,
-      ) =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(
-        ~styles?,
-        ~className?,
-        ~flex?,
-        ~flexDirection?,
-        ~float?,
-        ~onClick?,
-        ~children,
-        (),
-      ),
-      children,
-    );
-};

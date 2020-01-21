@@ -7,12 +7,3 @@ let make = (~fullWidth=false, ~placeholder=?) =>
     className={FormStyles.widthStyle(~fullWidth, ())}
     ?placeholder
   />;
-
-module Jsx2 = {
-  let make = (~fullWidth=false, ~placeholder=?, children) =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(~fullWidth, ~placeholder?, ()),
-      children,
-    );
-};

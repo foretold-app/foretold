@@ -50,15 +50,6 @@ module Button = {
       )}>
       children
     </button>;
-
-  module Jsx2 = {
-    let make = (~isActive=false, ~onClick=?, ~flex=false, children) =>
-      ReasonReactCompat.wrapReactForReasonReact(
-        make,
-        makeProps(~isActive, ~onClick?, ~flex, ~children, ()),
-        children,
-      );
-  };
 };
 
 [@react.component]
@@ -72,12 +63,3 @@ let make = (~isActive=false, ~onClick=?, ~flex=false, ~children) =>
     )}>
     children
   </Link>;
-
-module Jsx2 = {
-  let make = (~isActive=false, ~onClick=?, ~flex=false, children) =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(~isActive, ~onClick?, ~flex, ~children, ()),
-      children,
-    );
-};

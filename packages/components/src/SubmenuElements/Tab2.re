@@ -51,12 +51,3 @@ let make = (~isActive, ~onClick=?, ~number: option(int)=?, ~children) => {
         )}
   </Link>;
 };
-
-module Jsx2 = {
-  let make = (~isActive, ~onClick=?, ~number: option(int)=?, children) =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(~isActive, ~onClick?, ~number?, ~children, ()),
-      children,
-    );
-};

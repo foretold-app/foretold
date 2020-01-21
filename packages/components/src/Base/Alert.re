@@ -35,12 +35,3 @@ let make = (~type_: type_=`info, ~children) => {
   let classes = Styles.alertBox ++ " " ++ Styles.colors(type_);
   <div className=classes> children </div>;
 };
-
-module Jsx2 = {
-  let make = (~type_: type_=`info, children) =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(~type_, ~children, ()),
-      children,
-    );
-};

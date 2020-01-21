@@ -29,13 +29,3 @@ let make = (~cdf: Types.Dist.t, ~minX=?, ~maxX=?, ~width=Some(400)) => {
     />
   </div>;
 };
-
-module Jsx2 = {
-  let make =
-      (~cdf: Types.Dist.t, ~minX=?, ~maxX=?, ~width=Some(400), children) =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(~cdf, ~minX?, ~maxX?, ~width, ()),
-      children,
-    );
-};

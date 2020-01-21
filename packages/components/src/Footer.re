@@ -108,17 +108,3 @@ let make =
       </div>
     </div>
   </div>;
-
-module Jsx2 = {
-  let make =
-      (
-        ~logo: ReasonReact.reactElement,
-        ~links: array(ReasonReact.reactElement),
-        children,
-      ) =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(~logo, ~links, ()),
-      children,
-    );
-};

@@ -60,19 +60,3 @@ let make =
       </Menu>
   </DropdownMenu>;
 };
-
-module Jsx2 = {
-  let make =
-      (
-        ~initialValue: option('a)=None,
-        ~values: list(('a, string)),
-        ~onSelect: option(option('a) => unit)=?,
-        ~trigger=Dropdown.Click,
-        children,
-      ) =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(~initialValue, ~values, ~onSelect?, ~trigger, ()),
-      children,
-    );
-};

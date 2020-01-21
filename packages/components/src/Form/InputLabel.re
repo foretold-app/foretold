@@ -5,12 +5,3 @@ let inputHeader =
 
 [@react.component]
 let make = (~children) => <div className=inputHeader> children </div>;
-
-module Jsx2 = {
-  let make = children =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(~children, ()),
-      children,
-    );
-};

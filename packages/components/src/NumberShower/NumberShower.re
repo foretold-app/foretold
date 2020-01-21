@@ -32,12 +32,3 @@ let make = (~number, ~precision) => {
         )}
   </span>;
 };
-
-module Jsx2 = {
-  let make = (~number, ~precision, children) =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(~number, ~precision, ()),
-      children,
-    );
-};

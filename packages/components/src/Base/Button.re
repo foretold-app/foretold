@@ -130,29 +130,3 @@ let make =
     children
   </button>;
 
-module Jsx2 = {
-  let make =
-      (
-        ~onClick=?,
-        ~variant=Secondary,
-        ~size=Medium,
-        ~isDisabled=false,
-        ~fullWidth=false,
-        ~className="",
-        children,
-      ) =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(
-        ~onClick?,
-        ~variant,
-        ~size,
-        ~isDisabled,
-        ~fullWidth,
-        ~className="",
-        ~children,
-        (),
-      ),
-      children,
-    );
-};

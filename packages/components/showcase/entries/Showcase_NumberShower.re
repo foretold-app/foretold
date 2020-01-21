@@ -57,11 +57,6 @@ module NumbersDisplay = {
       </div>
     </PageCard>;
   };
-
-  module Jsx2 = {
-    let make = children =>
-      ReasonReactCompat.wrapReactForReasonReact(make, makeProps(), children);
-  };
 };
 
 let entry =

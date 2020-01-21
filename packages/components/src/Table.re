@@ -107,15 +107,6 @@ module Cell = {
       ])}>
       children
     </Div>;
-
-  module Jsx2 = {
-    let make = (~flex, ~className="", ~properties=[], children) =>
-      ReasonReactCompat.wrapReactForReasonReact(
-        make,
-        makeProps(~flex, ~className, ~properties, ~children, ()),
-        children,
-      );
-  };
 };
 
 module HeaderRow = {
@@ -138,15 +129,6 @@ module HeaderRow = {
 
   [@react.component]
   let make = (~children) => <Div styles=[Styles.headerRow]> children </Div>;
-
-  module Jsx2 = {
-    let make = children =>
-      ReasonReactCompat.wrapReactForReasonReact(
-        make,
-        makeProps(~children, ()),
-        children,
-      );
-  };
 };
 
 module Row = {
@@ -171,25 +153,7 @@ module Row = {
       <Div styles=commonClasses ?onClick> children </Div>;
     };
   };
-
-  module Jsx2 = {
-    let make = (~className="", ~bottomSubRow=?, ~onClick=?, children) =>
-      ReasonReactCompat.wrapReactForReasonReact(
-        make,
-        makeProps(~className, ~bottomSubRow?, ~onClick?, ~children, ()),
-        children,
-      );
-  };
 };
 
 [@react.component]
 let make = (~children) => <div> children </div>;
-
-module Jsx2 = {
-  let make = children =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(~children, ()),
-      children,
-    );
-};

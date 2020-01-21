@@ -230,15 +230,6 @@ module SubMenu = {
       children,
     )
     |> ReasonReact.element;
-
-  module Jsx2 = {
-    let make = (~title, children) =>
-      ReasonReactCompat.wrapReactForReasonReact(
-        make,
-        makeProps(~title, ~children, ()),
-        children,
-      );
-  };
 };
 
 module Item = {
@@ -263,15 +254,6 @@ module Item = {
       children,
     )
     |> ReasonReact.element;
-
-  module Jsx2 = {
-    let make = (~disabled=false, ~itemIcon=None, children) =>
-      ReasonReactCompat.wrapReactForReasonReact(
-        make,
-        makeProps(~disabled, ~itemIcon, ~children, ()),
-        children,
-      );
-  };
 };
 
 module Divider = {
@@ -285,15 +267,6 @@ module Divider = {
       children,
     )
     |> ReasonReact.element;
-
-  module Jsx2 = {
-    let make = children =>
-      ReasonReactCompat.wrapReactForReasonReact(
-        make,
-        makeProps(~children, ()),
-        children,
-      );
-  };
 };
 
 type callbackType =
@@ -402,20 +375,3 @@ let make =
     children,
   )  /* Menu item group is not implemented (https://react-component.github.io/menu/examples/menuItemGroup.html*/
   |> ReasonReact.element;
-
-module Jsx2 = {
-  let make =
-      (~onClick=?, ~selectable=false, ~onSelect=?, ~selectedKey=?, children) =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(
-        ~onClick?,
-        ~selectable,
-        ~onSelect?,
-        ~selectedKey?,
-        ~children,
-        (),
-      ),
-      children,
-    );
-};

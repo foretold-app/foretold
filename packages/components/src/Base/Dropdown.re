@@ -104,12 +104,3 @@ let make =
     children,
   )
   |> ReasonReact.element;
-
-module Jsx2 = {
-  let make = (~overlay, ~trigger=Hover, ~prefixCls="rc-dropdown", children) =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(~overlay, ~trigger, ~prefixCls, ~children, ()),
-      children,
-    );
-};

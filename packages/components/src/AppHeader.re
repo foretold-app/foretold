@@ -28,12 +28,3 @@ module Styles = {
 [@react.component]
 let make = (~links: ReasonReact.reactElement) =>
   <Div styles=[Styles.outer]> <Div float=`left> links </Div> </Div>;
-
-module Jsx2 = {
-  let make = (~links: ReasonReact.reactElement, children) =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(~links, ()),
-      children,
-    );
-};

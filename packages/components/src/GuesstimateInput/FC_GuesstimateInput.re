@@ -31,32 +31,3 @@ let make =
     children,
   )
   |> ReasonReact.element;
-
-module Jsx2 = {
-  let make =
-      (
-        ~sampleCount=10000,
-        ~min=None,
-        ~max=None,
-        ~initialValue=None,
-        ~onUpdate=fn,
-        ~onChange=fn2,
-        ~focusOnRender=true,
-        children,
-      ) =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(
-        ~sampleCount,
-        ~min,
-        ~max,
-        ~initialValue,
-        ~onUpdate,
-        ~onChange,
-        ~focusOnRender,
-        ~children,
-        (),
-      ),
-      children,
-    );
-};

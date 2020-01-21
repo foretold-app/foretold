@@ -41,15 +41,6 @@ let make = (~children) =>
     <Div styles=[Styles.inner]> ...children </Div>
   </Div>;
 
-module Jsx2 = {
-  let make = children =>
-    ReasonReactCompat.wrapReactForReasonReact(
-      make,
-      makeProps(~children, ()),
-      children,
-    );
-};
-
 module SubHeader = {
   [@react.component]
   let make = (~children) =>
@@ -77,13 +68,4 @@ module SubHeader = {
         children
       </Div>
     </Div>;
-
-  module Jsx2 = {
-    let make = children =>
-      ReasonReactCompat.wrapReactForReasonReact(
-        make,
-        makeProps(~children, ()),
-        children,
-      );
-  };
 };

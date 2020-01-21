@@ -23,5 +23,7 @@ module Title = {
   let main = "Foretold.io";
   let home = "Home";
   let channelNew = "New Channel";
+  let communities = "Communities";
+  let login = "Login";
   let breadcrumbsSeparation = " - ";
 };

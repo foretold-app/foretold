@@ -6,19 +6,23 @@ let make = () => {
     );
 
   React.useState(() => {
-    History.onPushState(event => {
-      let miss = History.miss(event);
-      if (!miss) {
+    History.onPushState(event =>
+      if (!History.miss(event)) {
         let url = ReasonReact.Router.dangerouslyGetInitialUrl();
         setRoute(_ => url |> Routing.Route.fromUrl);
-      };
-    });
+      }
+    );
     History.onPopState(_ => {
       let url = ReasonReact.Router.dangerouslyGetInitialUrl();
       setRoute(_ => url |> Routing.Route.fromUrl);
     });
   })
   |> ignore;
+
+  route
+  |> Routing.Route.title
+  |> E.Title.toString
+  |> ForetoldComponents.Hooks.useTitle;
 
   let context = React.useContext(Providers.app);
 

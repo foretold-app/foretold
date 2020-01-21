@@ -130,9 +130,7 @@ module Route = {
       Channel({
         channelId: getChannelId(channelId),
         subPage:
-          Measurables(
-            url.search |> MeasurableQuery.fromStringWithDefaults,
-          ),
+          Measurables(url.search |> MeasurableQuery.fromStringWithDefaults),
       });
 
     switch (url.path) {
@@ -216,13 +214,13 @@ module Route = {
     | _ => NotFound
     };
   };
-};
 
-module Title = {
-  let fromUrl = (url: ReasonReact.Router.url) => {
-    switch (url.path) {
-    | [] => [|Lang.Title.home, Lang.Title.main|]
-    | ["c", _channelId, "new"] => [|Lang.Title.channelNew, Lang.Title.main|]
+  let title = (t: t): array(string) => {
+    switch (t) {
+    | Home => [|Lang.Title.home, Lang.Title.main|]
+    | ChannelNew => [|Lang.Title.channelNew, Lang.Title.main|]
+    | ChannelIndex => [|Lang.Title.communities, Lang.Title.main|]
+    | Login => [|Lang.Title.login, Lang.Title.main|]
     | _ => [|Lang.Title.main|]
     };
   };

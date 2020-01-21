@@ -103,9 +103,7 @@ module Index = {
     | ChangeRoute(ReasonReactRouter.url);
 
   let changeId = (id: string) => {
-    ReasonReact.SideEffects(
-      _ => ReasonReactRouter.push(baseUrl ++ "#" ++ id),
-    );
+    ReasonReactRouter.push(baseUrl ++ "#" ++ id);
     ();
   };
 

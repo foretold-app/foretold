@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 type content = {
   headerContent: ReasonReact.reactElement,
   bodyContent: ReasonReact.reactElement,

@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 open FC.Base;
 
 let multimodal = "=mm(uniform(0,100), uniform(10,20), [.33,0.9])";

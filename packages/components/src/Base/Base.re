@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 module Types = Types;
 module Link = Link;
 module Colors = Settings;

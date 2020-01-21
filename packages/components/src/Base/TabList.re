@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 [@react.component]
 let make = (~selected, ~flex=false, ~onClick=?, ~list) =>
   list

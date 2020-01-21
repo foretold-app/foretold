@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 module Example1 = {
   let xs = [|
     2.97474297511,

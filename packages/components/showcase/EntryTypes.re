@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 type compEntry = {
   mutable id: string,
   title: string,

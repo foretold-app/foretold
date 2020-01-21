@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 let percentageSign = Css.(style([opacity(0.5), marginLeft(`em(0.1))]));
 
 [@react.component]

@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 module Styles = {
   open Css;
   let textOverlay = style([position(`absolute)]);

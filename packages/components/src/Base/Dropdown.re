@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 /**
  * Dropdown component provides a way to show an overlay element
  * at a position relative to it's trigger element (the children given

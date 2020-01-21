@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 /**
  * Menu component and sibling components provides define menu items,
  * submenues and dividers. See make for usage.

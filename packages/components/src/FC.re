@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 module Base = Base;
 
 module AppHeader = AppHeader;

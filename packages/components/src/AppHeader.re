@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 open Base;
 
 module Styles = {

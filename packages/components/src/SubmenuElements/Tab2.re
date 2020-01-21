@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 open Base;
 
 let styles = (~isDisabled=false, ~heightPadding=0, ()) => {

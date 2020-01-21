@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 let inputHeader =
   Css.(style([paddingLeft(`em(0.4)), paddingBottom(`em(0.6))]));
 

@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 /* For the icons, font-awesome (or similar?) is a possibility */
 
 module Styles = {

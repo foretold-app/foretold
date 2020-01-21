@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 module Questionmark = {
   // Adapted to pagecard title
   let circle =

@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 type color = [ | `hex(Js.String.t)];
 
 /* I made this contain strings instead of colors,

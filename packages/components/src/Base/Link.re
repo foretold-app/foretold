@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 let headerLink = (~className, ~isDisabled=false, ()) => {
   let primaryStyles =
     Css.(

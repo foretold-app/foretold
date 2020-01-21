@@ -1,8 +1,8 @@
 [@react.component]
 let make = (~channelId: string) => {
   <SLayout head={<SLayout.TextDiv text="Make a New Series" />}>
-    <FC.PageCard.BodyPadding>
+    <ForetoldComponents.PageCard.BodyPadding>
       <SeriesForm.Create channelId />
-    </FC.PageCard.BodyPadding>
+    </ForetoldComponents.PageCard.BodyPadding>
   </SLayout>;
 };

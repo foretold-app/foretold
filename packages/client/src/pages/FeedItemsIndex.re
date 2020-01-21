@@ -27,8 +27,8 @@ let make = (~channelId=None, ~agentId=None) => {
         float=`right
         styles=[
           Css.style([
-            FC.PageCard.HeaderRow.Styles.itemTopPadding,
-            FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+            ForetoldComponents.PageCard.HeaderRow.Styles.itemTopPadding,
+            ForetoldComponents.PageCard.HeaderRow.Styles.itemBottomPadding,
           ]),
         ]>
         {Reducer.Components.paginationPage(reducerParams)}
@@ -55,7 +55,10 @@ let make = (~channelId=None, ~agentId=None) => {
       switch (reducerParams.response) {
       | Success(_) =>
         isFound
-          ? <FC.PageCard.Body> table </FC.PageCard.Body> : <NothingToShow />
+          ? <ForetoldComponents.PageCard.Body>
+              table
+            </ForetoldComponents.PageCard.Body>
+          : <NothingToShow />
       | _ => <Spin />
       };
 

@@ -6,7 +6,7 @@ module FloatPoint = {
     let mainText =
       Css.style([
         Css.fontSize(`em(1.1)),
-        Css.color(FC__Settings.darkLink),
+        Css.color(ForetoldComponents.Settings.darkLink),
       ]);
 
     <Div flexDirection=`column>
@@ -45,8 +45,8 @@ module FloatCdf = {
     let stat =
       value
       |> MeasurementValue.FloatCdf.toJs
-      |> FC.Base.Types.Dist.fromJson
-      |> (cdf => <FC__CdfChart__StatSummary cdf />);
+      |> ForetoldComponents.Base.Types.Dist.fromJson
+      |> (cdf => <ForetoldComponents.CdfChart__StatSummary cdf />);
 
     <Div flexDirection=`row>
       <Div flex={`num(1.)}> stat </Div>
@@ -81,7 +81,7 @@ module UnresolvableResolution = {
     let secondaryText =
       Css.style([
         Css.fontSize(`em(0.9)),
-        Css.color(FC__Settings.accentBlue),
+        Css.color(ForetoldComponents.Settings.accentBlue),
       ]);
 
     <Div flexDirection=`column>
@@ -100,19 +100,19 @@ module Percentage = {
     let mainText =
       Css.style([
         Css.fontSize(`em(1.1)),
-        Css.color(FC__Settings.darkLink),
+        Css.color(ForetoldComponents.Settings.darkLink),
       ]);
 
     let secondaryText =
       Css.style([
         Css.fontSize(`em(0.9)),
-        Css.color(FC__Settings.accentBlue),
+        Css.color(ForetoldComponents.Settings.accentBlue),
       ]);
 
     <Div flexDirection=`column>
       <Div flex={`num(1.)}>
         <div className=mainText>
-          <FC__PercentageShower precision=8 percentage=value />
+          <ForetoldComponents.PercentageShower precision=8 percentage=value />
         </div>
       </Div>
       <Div flex={`num(1.)}>

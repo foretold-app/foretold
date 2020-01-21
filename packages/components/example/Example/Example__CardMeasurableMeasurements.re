@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 open FC;
 open Base;
 
@@ -22,18 +20,18 @@ let row =
       className=Css.(
         style([paddingTop(`em(0.6)), paddingBottom(`em(0.0))])
       )>
-      <FC__CdfChart__Plain cdf minX=2.0 color={`hex("#d9dcdf")} maxX=12.0 />
+      <CdfChart__Plain cdf minX=2.0 color={`hex("#d9dcdf")} maxX=12.0 />
     </Table.Cell>
     <Table.Cell
       flex={`num(1.0)}
       className=Css.(
         style([paddingTop(`em(0.2)), paddingBottom(`em(0.3))])
       )>
-      <FC__CdfChart__StatSummary cdf />
+      <CdfChart__StatSummary cdf />
     </Table.Cell>
     <Table.Cell flex={`num(1.0)} className=cellStyle>
-      <FC__AgentLink
-        agent={FC__AgentLink.Agent.makeUser(
+      <AgentLink
+        agent={AgentLink.Agent.makeUser(
           ~name="Roger Adams",
           ~image=
             "https://lh3.googleusercontent.com/-1sj3EqkojJ4/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3rfWCVqnuJxxM41Zird4HZx0BbRpbQ/photo.jpg",
@@ -42,7 +40,7 @@ let row =
       />
     </Table.Cell>
     <Table.Cell flex={`num(1.0)} className=cellStyle>
-      <span className=Css.(style([color(FC__Settings.textMedium)]))>
+      <span className=Css.(style([color(Settings.textMedium)]))>
         {MomentRe.momentWithUnix(pastTime)
          |> MomentRe.Moment.format(format_standard)
          |> ReasonReact.string}
@@ -57,18 +55,18 @@ let row2 =
       className=Css.(
         style([paddingTop(`em(0.6)), paddingBottom(`em(0.0))])
       )>
-      <FC__CdfChart__Plain cdf minX=2.0 color={`hex("#d9dcdf")} maxX=12.0 />
+      <CdfChart__Plain cdf minX=2.0 color={`hex("#d9dcdf")} maxX=12.0 />
     </Table.Cell>
     <Table.Cell
       flex={`num(1.0)}
       className=Css.(
         style([paddingTop(`em(0.2)), paddingBottom(`em(0.3))])
       )>
-      <FC__CdfChart__StatSummary cdf />
+      <CdfChart__StatSummary cdf />
     </Table.Cell>
     <Table.Cell flex={`num(1.0)} className=cellStyle>
-      <FC__AgentLink
-        agent={FC__AgentLink.Agent.makeUser(
+      <AgentLink
+        agent={AgentLink.Agent.makeUser(
           ~name="Samantha Hope",
           ~image=
             "https://lh3.googleusercontent.com/-1sj3EqkojJ4/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3rfWCVqnuJxxM41Zird4HZx0BbRpbQ/photo.jpg",
@@ -77,7 +75,7 @@ let row2 =
       />
     </Table.Cell>
     <Table.Cell flex={`num(1.0)} className=cellStyle>
-      <span className=Css.(style([color(FC__Settings.textMedium)]))>
+      <span className=Css.(style([color(Settings.textMedium)]))>
         {MomentRe.momentWithUnix(pastTime)
          |> MomentRe.Moment.format(format_standard)
          |> ReasonReact.string}

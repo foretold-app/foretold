@@ -12,13 +12,13 @@ let make = (~notebookRedux: NotebookRedux.t) => {
 
            <div>
              <SLayout container=`fluidLeft>
-               <FC.PageCard.Body>
+               <ForetoldComponents.PageCard.Body>
                  <MeasurementForm
                    measurable
                    defaultValueText
                    key={measurable.id}
                  />
-               </FC.PageCard.Body>
+               </ForetoldComponents.PageCard.Body>
              </SLayout>
              <SLayout.Container container=`fluidLeft>
                <MeasurableBottomSection.Inner

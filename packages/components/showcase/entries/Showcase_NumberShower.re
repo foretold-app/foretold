@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 open FC;
 open FC.Base;
 
@@ -48,7 +46,7 @@ module NumbersDisplay = {
            numbers
            |> E.L.fmap(n =>
                 <div key={n |> Js.Float.toString}>
-                  <FC__NumberShower number=n precision=3 />
+                  <NumberShower number=n precision=3 />
                 </div>
               )
            |> E.L.toArray
@@ -56,11 +54,6 @@ module NumbersDisplay = {
          ->React.array}
       </div>
     </PageCard>;
-  };
-
-  module Jsx2 = {
-    let make = children =>
-      ReasonReactCompat.wrapReactForReasonReact(make, makeProps(), children);
   };
 };
 

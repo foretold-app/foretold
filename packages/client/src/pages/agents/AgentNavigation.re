@@ -18,7 +18,7 @@ module Top = {
           )
           |> E.O.default("");
         <>
-          <FC.GroupHeader>
+          <ForetoldComponents.GroupHeader>
             <Div flexDirection=`column>
               <Div
                 flex={`num(1.)}
@@ -34,10 +34,10 @@ module Top = {
                 {description |> Utils.ste}
               </Div>
             </Div>
-          </FC.GroupHeader>
-          <FC.GroupHeader.SubHeader>
+          </ForetoldComponents.GroupHeader>
+          <ForetoldComponents.GroupHeader.SubHeader>
             <AgentTabs.Tabs agentPage agent />
-          </FC.GroupHeader.SubHeader>
+          </ForetoldComponents.GroupHeader.SubHeader>
         </>;
       | _ => <Null />
       }

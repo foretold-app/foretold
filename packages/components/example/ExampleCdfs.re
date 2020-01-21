@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 module Example1 = {
   let xs = [|
     2.97474297511,
@@ -2005,7 +2003,7 @@ module Example1 = {
     1.0000000000000018,
     1.0000000000000018,
   |];
-  let cdf: FC__Types.Dist.t = {xs, ys};
+  let cdf: Types.Dist.t = {xs, ys};
 };
 
 module Example2 = {
@@ -4014,5 +4012,5 @@ module Example2 = {
     1.0000000000000007,
   |];
 
-  let cdf: FC__Types.Dist.t = {xs, ys};
+  let cdf: Types.Dist.t = {xs, ys};
 };

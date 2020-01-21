@@ -49,7 +49,7 @@ module FormComponent = {
        | _ =>
          let notebookRedux = NotebookRedux.reducer();
 
-         <FC__PageCard.BodyPadding>
+         <ForetoldComponents.PageCard.BodyPadding>
            <Form.Field
              field=FormConfig.Name
              render={({handleChange, error, value, validate}) =>
@@ -108,7 +108,7 @@ module FormComponent = {
                />
              </Div>
            </Div>
-         </FC__PageCard.BodyPadding>;
+         </ForetoldComponents.PageCard.BodyPadding>;
        }}
     </Form.Provider>;
   };

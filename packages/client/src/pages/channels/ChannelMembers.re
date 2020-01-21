@@ -139,46 +139,46 @@ module Columns = {
 };
 
 let title = () =>
-  <FC.Base.Div float=`left>
-    <FC.PageCard.HeaderRow.Title>
+  <ForetoldComponents.Base.Div float=`left>
+    <ForetoldComponents.PageCard.HeaderRow.Title>
       {"Community Members" |> Utils.ste}
-    </FC.PageCard.HeaderRow.Title>
-  </FC.Base.Div>;
+    </ForetoldComponents.PageCard.HeaderRow.Title>
+  </ForetoldComponents.Base.Div>;
 
 let addMembersButtonSection = (channelId: string) =>
-  <FC.Base.Div
+  <ForetoldComponents.Base.Div
     float=`right
     className={Css.style([
-      FC.PageCard.HeaderRow.Styles.itemTopPadding,
-      FC.PageCard.HeaderRow.Styles.itemRightPadding,
+      ForetoldComponents.PageCard.HeaderRow.Styles.itemTopPadding,
+      ForetoldComponents.PageCard.HeaderRow.Styles.itemRightPadding,
     ])}>
-    <FC.Base.Button
-      variant=FC.Base.Button.Primary
-      size=FC.Base.Button.MediumShort
+    <ForetoldComponents.Base.Button
+      variant=ForetoldComponents.Base.Button.Primary
+      size=ForetoldComponents.Base.Button.MediumShort
       onClick={e =>
         LinkType.onClick(Internal(ChannelAddMember(channelId)), e)
       }>
       {"Add Members" |> Utils.ste}
-    </FC.Base.Button>
-  </FC.Base.Div>;
+    </ForetoldComponents.Base.Button>
+  </ForetoldComponents.Base.Div>;
 
 // Currently seems broken, so I removed it for now. Add to "SuccesFn" later when fixed.
 let inviteMemberButtonSection = (channelId: string) =>
-  <FC.Base.Div
+  <ForetoldComponents.Base.Div
     float=`right
     className={Css.style([
-      FC.PageCard.HeaderRow.Styles.itemTopPadding,
-      FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+      ForetoldComponents.PageCard.HeaderRow.Styles.itemTopPadding,
+      ForetoldComponents.PageCard.HeaderRow.Styles.itemBottomPadding,
     ])}>
-    <FC.Base.Button
-      variant=FC.Base.Button.Secondary
-      size=FC.Base.Button.MediumShort
+    <ForetoldComponents.Base.Button
+      variant=ForetoldComponents.Base.Button.Secondary
+      size=ForetoldComponents.Base.Button.MediumShort
       onClick={e =>
         LinkType.onClick(Internal(ChannelInviteMember(channelId)), e)
       }>
       {"Invite Member With Email" |> Utils.ste}
-    </FC.Base.Button>
-  </FC.Base.Div>;
+    </ForetoldComponents.Base.Button>
+  </ForetoldComponents.Base.Div>;
 
 let succesFn = (~channelId: string, ~channel: Types.channel, ~memberships) => {
   let head =
@@ -191,7 +191,7 @@ let succesFn = (~channelId: string, ~channel: Types.channel, ~memberships) => {
   let table =
     <Table columns={Columns.all(channelId, channel)} rows=memberships />;
 
-  <SLayout head> <FC.PageCard.Body> table </FC.PageCard.Body> </SLayout>;
+  <SLayout head> <ForetoldComponents.PageCard.Body> table </ForetoldComponents.PageCard.Body> </SLayout>;
 };
 
 let errorFn = _ => <NotFoundPage />;

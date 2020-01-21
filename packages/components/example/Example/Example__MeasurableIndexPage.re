@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 open FC;
 open Base;
 
@@ -62,14 +60,14 @@ let row =
           {"2018" |> ReasonReact.string}
         </Link>
       </span>
-      {FC__StateStatus.make(
+      {StateStatus.make(
          ~state=OPEN(MomentRe.momentWithUnix(futureTime)),
          ~fontSize=`em(0.85),
          (),
        )}
     </Table.Cell>
     <Table.Cell flex={`num(2.)}>
-      <FC__CdfChart__Small
+      <CdfChart__Small
         cdf
         minX={Some(2.0)}
         color={`hex("#d9dcdf")}

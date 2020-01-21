@@ -132,7 +132,10 @@ module Description = {
     switch (measurable.labelCustom) {
     | Some("")
     | None => <Null />
-    | Some(text) => <FC__Div styles> <Markdown source=text /> </FC__Div>
+    | Some(text) =>
+      <ForetoldComponents.Div styles>
+        <Markdown source=text />
+      </ForetoldComponents.Div>
     };
 };
 

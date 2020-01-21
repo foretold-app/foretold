@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 open FC;
 open Base;
 
@@ -31,25 +29,25 @@ let make =
         </p>
       </Div>
       <Div float=`right>
-        <FC__Button
-          variant=FC__Button.Secondary
+        <Button
+          variant=Button.Secondary
           isDisabled=false
-          size=FC__Button.(Medium)
+          size=Button.(Medium)
           className=GroupHeader.Styles.actionButtonPosition>
           {"Leave Channel" |> ReasonReact.string}
-        </FC__Button>
-        <FC__Button
+        </Button>
+        <Button
           isDisabled=false
-          size=FC__Button.(Medium)
+          size=Button.(Medium)
           className=GroupHeader.Styles.actionButtonPosition>
           {"Create Question" |> ReasonReact.string}
-        </FC__Button>
-        <FC__Button
+        </Button>
+        <Button
           isDisabled=false
-          size=FC__Button.(Medium)
+          size=Button.(Medium)
           className=GroupHeader.Styles.actionButtonPosition>
           {"Create Question" |> ReasonReact.string}
-        </FC__Button>
+        </Button>
       </Div>
     </GroupHeader>
     <GroupHeader.SubHeader>

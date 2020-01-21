@@ -1,7 +1,7 @@
 {
   "name": "@foretold/components",
   "reason": {
-    "react-jsx": 2
+    "react-jsx": 3
   },
   "refmt": 3,
   "bs-dependencies": [
@@ -18,7 +18,7 @@
     "module": "commonjs",
     "in-source": true
   }],
-  "namespace": false,
+  "namespace": true,
   "sources": [{
       "dir": "src",
       "subdirs": true

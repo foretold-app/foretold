@@ -1,5 +1,3 @@
-[@bs.config {jsx: 3}];
-
 open FC;
 open Base;
 
@@ -18,9 +16,9 @@ let make =
               PageCard.HeaderRow.Styles.itemBottomPadding,
             ]),
           ]>
-          <FC__Button size=FC__Button.Small>
+          <Button size=Button.Small>
             {"< Back" |> ReasonReact.string}
-          </FC__Button>
+          </Button>
         </Div>
         <Div
           float=`right
@@ -57,14 +55,14 @@ let make =
           <PageCard.H1>
             {"What would the US GDP Be in 2020?" |> ReasonReact.string}
           </PageCard.H1>
-          {FC__StateStatus.make(
+          {StateStatus.make(
              ~state=RESOLVED(MomentRe.momentWithUnix(pastTime)),
              ~fontSize=`em(1.0),
              (),
            )}
         </Div>
-        <FC__AgentLink
-          agent={FC__AgentLink.Agent.makeUser(
+        <AgentLink
+          agent={AgentLink.Agent.makeUser(
             ~name="Roger Adams",
             ~image=
               "https://lh3.googleusercontent.com/-1sj3EqkojJ4/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3rfWCVqnuJxxM41Zird4HZx0BbRpbQ/photo.jpg",

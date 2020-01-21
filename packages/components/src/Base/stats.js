@@ -4,19 +4,19 @@ import {
   ContinuousDistribution,
   ContinuousDistributionCombination,
   scoringFunctions
-} from "@foretold/cdf";
+} from '@foretold/cdf';
 
 function cdfToPdf({ xs, ys }) {
   let cdf = new Cdf(xs, ys);
   let pdf = cdf.toPdf();
-  return { xs: pdf.xs, ys: pdf.ys }
+  return { xs: pdf.xs, ys: pdf.ys };
 }
 
 function mean(vars) {
   let cdfs = vars.map(r => new Cdf(r.xs, r.ys));
   let comb = new ContinuousDistributionCombination(cdfs);
   let newCdf = comb.combineYsWithMean(10000);
-  return { xs: newCdf.xs, ys: newCdf.ys }
+  return { xs: newCdf.xs, ys: newCdf.ys };
 }
 
 function distributionScoreDistribution(vars) {
@@ -26,9 +26,9 @@ function distributionScoreDistribution(vars) {
     aggregateCdf: cdfs[1],
     resultCdf: cdfs[2],
     sampleCount: 10000
-  })
+  });
   let newCdf = (new Pdf(newDist.xs, newDist.ys)).toCdf();
-  return { xs: newCdf.xs, ys: newCdf.ys }
+  return { xs: newCdf.xs, ys: newCdf.ys };
 }
 
 function distributionScoreNumber(vars) {
@@ -37,20 +37,20 @@ function distributionScoreNumber(vars) {
     predictionCdf: cdfs[0],
     aggregateCdf: cdfs[1],
     resultCdf: cdfs[2],
-    sampleCount: 10000
+    sampleCount: 10000,
   });
 }
 
 function findY(x, { xs, ys }) {
   let cdf = new Cdf(xs, ys);
   let result = cdf.findY(x);
-  return result
+  return result;
 }
 
 function findX(y, { xs, ys }) {
   let cdf = new Cdf(xs, ys);
   let result = cdf.findX(y);
-  return result
+  return result;
 }
 
 function integral({ xs, ys }) {

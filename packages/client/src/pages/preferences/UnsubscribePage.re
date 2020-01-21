@@ -4,7 +4,7 @@ let make = (~loggedUser: Types.user) => {
   let (mutate, result, _) = Unsubscribe.Mutation.use();
 
   <SLayout head={<SLayout.TextDiv text={Lang.unsubscribePageCardTitle} />}>
-    <FC.PageCard.BodyPadding>
+    <ForetoldComponents.PageCard.BodyPadding>
       {switch (result) {
        | Error(_error) => <Sorry />
        | Data(_) => <p> {Lang.sucUnsubscribing |> Utils.ste} </p>
@@ -19,6 +19,6 @@ let make = (~loggedUser: Types.user) => {
 
          <p> {Lang.unsubscribing |> Utils.ste} </p>;
        }}
-    </FC.PageCard.BodyPadding>
+    </ForetoldComponents.PageCard.BodyPadding>
   </SLayout>;
 };

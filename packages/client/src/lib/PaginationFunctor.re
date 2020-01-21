@@ -270,7 +270,7 @@ module Make = (Config: Config) => {
     let paginationItem = reducerParams =>
       switch (totalItems(reducerParams), selectionIndex(reducerParams)) {
       | (Some(count), Some(selection)) =>
-        FC.PaginationButtons.make({
+        ForetoldComponents.PaginationButtons.make({
           currentValue: Item(selection + 1),
           max: count,
           pageLeft: {
@@ -292,7 +292,7 @@ module Make = (Config: Config) => {
         lowerBoundIndex(reducerParams),
       ) {
       | (Some(count), Some(upper), Some(lower)) =>
-        FC.PaginationButtons.make({
+        ForetoldComponents.PaginationButtons.make({
           currentValue: Range(lower + 1, upper + 1),
           max: count,
           pageLeft: {
@@ -349,18 +349,17 @@ module Make = (Config: Config) => {
     let send = action =>
       switch (itemState, action) {
       | (ItemUnselected | ItemDeselected, NextPage) =>
-        setPageConfig(_ => ItemUnselected.nextPage(state));
+        setPageConfig(_ => ItemUnselected.nextPage(state))
 
       | (ItemUnselected | ItemDeselected, LastPage) =>
-        setPageConfig(_ => ItemUnselected.lastPage(state));
+        setPageConfig(_ => ItemUnselected.lastPage(state))
 
       | (ItemUnselected | ItemDeselected, SelectIndex(i)) =>
         ItemUnselected.selectIndex(i, itemsPerPage)
         |> E.O.fmap(itemState => setItemState(_ => itemState))
-        |> ignore;
+        |> ignore
 
-      | (ItemSelected(_), Deselect) =>
-        setItemState(_ => ItemDeselected);
+      | (ItemSelected(_), Deselect) => setItemState(_ => ItemDeselected)
 
       | (ItemSelected(itemSelected), NextSelection) =>
         ItemSelected.nextSelection(itemsPerPage, itemSelected)

@@ -29,8 +29,6 @@ module ShowIfSameUser = {
 };
 
 module Tabs = {
-  open FC;
-
   [@react.component]
   let make = (~switchTab, ~tab, ~notebook: Types.notebook) => {
     <Div
@@ -44,21 +42,23 @@ module Tabs = {
       <Div
         styles=[
           Css.style([
-            FC.Base.BaseStyles.floatRight,
+            ForetoldComponents.Base.BaseStyles.floatRight,
             Css.paddingTop(`em(0.2)),
           ]),
         ]>
-        <TabButton isActive={tab == Show} onClick={_ => switchTab(Show)}>
+        <ForetoldComponents.Tab.Button
+          isActive={tab == Show} onClick={_ => switchTab(Show)}>
           {"Notebook" |> Utils.ste}
-        </TabButton>
-        <TabButton
+        </ForetoldComponents.Tab.Button>
+        <ForetoldComponents.Tab.Button
           isActive={tab == Details} onClick={_ => switchTab(Details)}>
           {"Markdown" |> Utils.ste}
-        </TabButton>
+        </ForetoldComponents.Tab.Button>
         <ShowIfSameUser agentId={notebook.ownerId}>
-          <TabButton isActive={tab == Edit} onClick={_ => switchTab(Edit)}>
+          <ForetoldComponents.Tab.Button
+            isActive={tab == Edit} onClick={_ => switchTab(Edit)}>
             {"Edit" |> Utils.ste}
-          </TabButton>
+          </ForetoldComponents.Tab.Button>
         </ShowIfSameUser>
       </Div>
     </Div>;
@@ -103,12 +103,12 @@ let make = (~notebookId: string) => {
                      />
                    </div>
                  | Details =>
-                   <FC__PageCard.BodyPadding>
+                   <ForetoldComponents.PageCard.BodyPadding>
                      <Antd.Input.TextArea
                        style={ReactDOMRe.Style.make(~minHeight="80em", ())}
                        value={notebook.body}
                      />
-                   </FC__PageCard.BodyPadding>
+                   </ForetoldComponents.PageCard.BodyPadding>
                  | Edit =>
                    <NotebookUpdate
                      notebook

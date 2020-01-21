@@ -1,7 +1,7 @@
 type column('a) = {
   name: ReasonReact.reactElement,
   render: 'a => ReasonReact.reactElement,
-  help: option(FC.HelpDropdown.content),
+  help: option(ForetoldComponents.HelpDropdown.content),
   flex: int,
   show: 'a => bool,
 };
@@ -30,8 +30,7 @@ let filterColums = (columns, rows) => {
 };
 
 module Column = {
-  let make =
-      (~name, ~render, ~flex=1, ~show=_ => true, ~help=None, ()) => {
+  let make = (~name, ~render, ~flex=1, ~show=_ => true, ~help=None, ()) => {
     name,
     help,
     render,
@@ -44,11 +43,11 @@ module Column = {
 let make = (~columns, ~rows, ~bottomSubRowFn=None, ~onRowClb=None) => {
   let columns' = filterColums(columns, rows);
 
-  <FC__Table>
-    <FC__Table.HeaderRow>
+  <ForetoldComponents.Table>
+    <ForetoldComponents.Table.HeaderRow>
       {columns'
        |> Array.mapi((columnIndex, column: column('a)) =>
-            <FC.Table.Cell
+            <ForetoldComponents.Table.Cell
               flex={`num(column.flex |> float_of_int)}
               properties=headerCellStyles
               key={columnIndex |> string_of_int}>
@@ -61,24 +60,24 @@ let make = (~columns, ~rows, ~bottomSubRowFn=None, ~onRowClb=None) => {
                      className=Css.(
                        style([fontSize(`em(1.2)), marginLeft(`em(0.4))])
                      )>
-                     <FC.HelpDropdown content />
+                     <ForetoldComponents.HelpDropdown content />
                    </span>
                  </span>
                }}
-            </FC.Table.Cell>
+            </ForetoldComponents.Table.Cell>
           )
        |> ReasonReact.array}
-    </FC__Table.HeaderRow>
+    </ForetoldComponents.Table.HeaderRow>
     {rows
      |> Array.mapi((rowIndex, row: 'a) => {
           let columnsBody =
             columns'
             |> Array.mapi((columnIndex, column: column('a)) =>
-                 <FC.Table.Cell
+                 <ForetoldComponents.Table.Cell
                    flex={`num(column.flex |> float_of_int)}
                    key={columnIndex |> string_of_int}>
                    {column.render(row)}
-                 </FC.Table.Cell>
+                 </ForetoldComponents.Table.Cell>
                )
             |> ReasonReact.array;
 
@@ -94,10 +93,10 @@ let make = (~columns, ~rows, ~bottomSubRowFn=None, ~onRowClb=None) => {
                  ();
                });
 
-          <FC.Table.Row ?onClick ?bottomSubRow key>
+          <ForetoldComponents.Table.Row ?onClick ?bottomSubRow key>
             columnsBody
-          </FC.Table.Row>;
+          </ForetoldComponents.Table.Row>;
         })
      |> ReasonReact.array}
-  </FC__Table>;
+  </ForetoldComponents.Table>;
 };

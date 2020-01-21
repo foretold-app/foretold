@@ -1,6 +1,4 @@
-[@bs.config {jsx: 3}];
-
-open FC__Base;
+open Base;
 open FC;
 let make =
   <Div>
@@ -12,8 +10,8 @@ let make =
             className=Css.(
               style([
                 marginRight(`em(2.)),
-                color(FC__Settings.Text.LightBackground.main),
-                hover([color(FC__Settings.Text.LightBackground.main)]),
+                color(Settings.Text.LightBackground.main),
+                hover([color(Settings.Text.LightBackground.main)]),
               ])
             )
             href="#">
@@ -24,8 +22,8 @@ let make =
             className=Css.(
               style([
                 marginRight(`em(2.)),
-                color(FC__Settings.Text.LightBackground.main),
-                hover([color(FC__Settings.Text.LightBackground.main)]),
+                color(Settings.Text.LightBackground.main),
+                hover([color(Settings.Text.LightBackground.main)]),
               ])
             )
             href="#">

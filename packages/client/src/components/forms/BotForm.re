@@ -73,7 +73,7 @@ module FormComponent = {
        | Error(_error) => <Sorry />
        | Data(_) => <Spin />
        | _ =>
-         <FC__PageCard.BodyPadding>
+         <ForetoldComponents.PageCard.BodyPadding>
            <Antd.Form onSubmit>
              <FieldString field=FormConfig.Name label="Name" />
              <FieldString field=FormConfig.Description label="Description" />
@@ -86,7 +86,7 @@ module FormComponent = {
                     </Antd.Button>}
              </Antd.Form.Item>
            </Antd.Form>
-         </FC__PageCard.BodyPadding>
+         </ForetoldComponents.PageCard.BodyPadding>
        }}
     </Form.Provider>;
   };

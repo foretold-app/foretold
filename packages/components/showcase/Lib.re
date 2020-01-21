@@ -102,23 +102,15 @@ module Index = {
     | ItemClick(string)
     | ChangeRoute(ReasonReactRouter.url);
 
-  let reducer = (action: action, _state: state) => {
-    switch (action) {
-    | ItemClick(id) =>
-      ReasonReact.SideEffects(
-        _ => ReasonReactRouter.push(baseUrl ++ "#" ++ id),
-      )
-    | ChangeRoute(route) => ReasonReact.Update({route: route})
-    };
+  let changeId = (id: string) => {
+    ReasonReactRouter.push(baseUrl ++ "#" ++ id);
+    ();
   };
-  let component = ReasonReact.reducerComponent(__MODULE__);
 
-  let buildNav = self => {
+  let buildNav = setRoute => {
     let rec buildFolder = (f: folderEntry) => {
       <div key={f.id} className=Styles.folderNav>
-        <h4 onClick={_e => self.ReasonReact.send(ItemClick(f.id))}>
-          f.title->React.string
-        </h4>
+        <h4 onClick={_e => changeId(f.id)}> f.title->React.string </h4>
         <div className=Styles.folderChildren>
           {(
              f.children
@@ -135,10 +127,7 @@ module Index = {
       </div>;
     }
     and buildEntry = (e: compEntry) => {
-      <div
-        key={e.id}
-        className=Styles.compNav
-        onClick={_e => self.ReasonReact.send(ItemClick(e.id))}>
+      <div key={e.id} className=Styles.compNav onClick={_e => changeId(e.id)}>
         e.title->React.string
       </div>;
     };
@@ -162,55 +151,51 @@ module Index = {
     };
   };
 
-  let make = _children => {
-    ...component,
-    initialState: () => {
-      /* Not the correct url at this point */
-      route: {
-        path: [],
-        hash: "",
-        search: "",
-      },
-    },
-    reducer,
-    didMount: self => {
-      let watcherID =
-        ReasonReactRouter.watchUrl(url => self.send(ChangeRoute(url)));
-      self.onUnmount(() => ReasonReactRouter.unwatchUrl(watcherID));
-    },
-    render: self =>
-      <div className=Styles.pageContainer>
-        <div className=Styles.leftNav> {buildNav(self)} </div>
-        <div className=Styles.compContainer>
-          {if (self.state.route.hash == "") {
-             React.null;
-           } else {
-             switch (HS.get(entriesByPath, self.state.route.hash)) {
-             | Some(navEntry) =>
-               switch (navEntry) {
-               | CompEntry(c) => renderEntry(c)
-               | FolderEntry(f) =>
-                 /* Rendering immediate children */
-                 (
-                   f.children
-                   |> E.L.fmap(child =>
-                        switch (child) {
-                        | CompEntry(c) =>
-                          <div
-                            className=Styles.folderChildContainer key={c.id}>
-                            {renderEntry(c)}
-                          </div>
-                        | _ => React.null
-                        }
-                      )
-                   |> E.L.toArray
-                 )
-                 ->React.array
-               }
-             | None => <div> "Component not found"->React.string </div>
-             };
-           }}
-        </div>
-      </div>,
+  [@react.component]
+  let make = () => {
+    let (route, setRoute) =
+      React.useState(() => {
+        let url: ReasonReactRouter.url = {path: [], hash: "", search: ""};
+        url;
+      });
+
+    React.useState(() => {
+      ReasonReactRouter.watchUrl(url => setRoute(_ => url));
+      ();
+    })
+    |> ignore;
+
+    <div className=Styles.pageContainer>
+      <div className=Styles.leftNav> {buildNav(setRoute)} </div>
+      <div className=Styles.compContainer>
+        {if (route.hash == "") {
+           React.null;
+         } else {
+           switch (HS.get(entriesByPath, route.hash)) {
+           | Some(navEntry) =>
+             switch (navEntry) {
+             | CompEntry(c) => renderEntry(c)
+             | FolderEntry(f) =>
+               /* Rendering immediate children */
+               (
+                 f.children
+                 |> E.L.fmap(child =>
+                      switch (child) {
+                      | CompEntry(c) =>
+                        <div className=Styles.folderChildContainer key={c.id}>
+                          {renderEntry(c)}
+                        </div>
+                      | _ => React.null
+                      }
+                    )
+                 |> E.L.toArray
+               )
+               ->React.array
+             }
+           | None => <div> "Component not found"->React.string </div>
+           };
+         }}
+      </div>
+    </div>;
   };
 };

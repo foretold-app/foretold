@@ -1,24 +1,22 @@
-[@bs.config {jsx: 3}];
+module Base = Base;
 
-module Base = FC__Base;
-
-module AppHeader = FC__AppHeader;
-module GroupHeader = FC__GroupHeader;
-module PageCard = FC__PageCard;
-module PaginationButtons = FC__PaginationButtons;
-module Tab = FC__Tab;
-module Tab2 = FC__Tab2;
-module TabButton = FC__Tab.Button;
-module Table = FC__Table;
-module Footer = FC__Footer;
-module StateStatus = FC__StateStatus;
-module MeasurableForm = FC__MeasurableForm;
-module NumberShower = FC__NumberShower;
-module Button = FC__Button;
-module HelpDropdown = FC__HelpDropdown;
+module AppHeader = AppHeader;
+module GroupHeader = GroupHeader;
+module PageCard = PageCard;
+module PaginationButtons = PaginationButtons;
+module Tab = Tab;
+module Tab2 = Tab2;
+module TabButton = Tab.Button;
+module Table = Table;
+module Footer = Footer;
+module StateStatus = StateStatus;
+module MeasurableForm = MeasurableForm;
+module NumberShower = NumberShower;
+module Button = Button;
+module HelpDropdown = HelpDropdown;
 
 module Charts = {
-  module Large = FC__CdfChart__Large;
-  module Plain = FC__CdfChart__Plain;
-  module Small = FC__CdfChart__Small;
+  module Large = CdfChart__Large;
+  module Plain = CdfChart__Plain;
+  module Small = CdfChart__Small;
 };

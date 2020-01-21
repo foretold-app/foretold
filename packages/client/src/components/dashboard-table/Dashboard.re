@@ -12,7 +12,7 @@ let make = () => {
   let (text, setText) = React.useState(() => "");
 
   <SLayout container=`fluid>
-    <FC.PageCard.Body>
+    <ForetoldComponents.PageCard.Body>
       <div className=Styles.padding>
         <Antd.Input.TextArea
           style={ReactDOMRe.Style.make(~minHeight="6em", ())}
@@ -21,6 +21,6 @@ let make = () => {
         />
       </div>
       <Markdown source=text supportForetoldJs=true />
-    </FC.PageCard.Body>
+    </ForetoldComponents.PageCard.Body>
   </SLayout>;
 };

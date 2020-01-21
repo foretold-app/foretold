@@ -69,7 +69,7 @@ let make =
                         "p",
                         [
                           marginBottom(`zero),
-                          color(FC.Base.Colors.textDark),
+                          color(ForetoldComponents.Base.Colors.textDark),
                         ],
                       ),
                     ])
@@ -100,10 +100,12 @@ let make =
       switch (channel) {
       | Some(channel) =>
         <>
-          <FC.GroupHeader> <Top channel /> </FC.GroupHeader>
-          <FC.GroupHeader.SubHeader>
+          <ForetoldComponents.GroupHeader>
+            <Top channel />
+          </ForetoldComponents.GroupHeader>
+          <ForetoldComponents.GroupHeader.SubHeader>
             <ChannelTabs tabSelected channel />
-          </FC.GroupHeader.SubHeader>
+          </ForetoldComponents.GroupHeader.SubHeader>
         </>
       | _ => <div />
       };

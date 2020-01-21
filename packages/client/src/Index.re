@@ -1,3 +1,3 @@
-FC.Base.Globals.load();
+ForetoldComponents.Base.Globals.load();
 
 ReactDOMRe.renderToElementWithId(<App />, "app");

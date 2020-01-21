@@ -50,25 +50,27 @@ module Styles = {
 module Header = {
   [@react.component]
   let make = (~children=<Null />) =>
-    <FC.PageCard.HeaderRow> children </FC.PageCard.HeaderRow>;
+    <ForetoldComponents.PageCard.HeaderRow>
+      children
+    </ForetoldComponents.PageCard.HeaderRow>;
 };
 
 module TextDiv = {
   [@react.component]
   let make = (~text) =>
-    <FC__PageCard.HeaderRow.Title>
+    <ForetoldComponents.PageCard.HeaderRow.Title>
       {text |> ste}
-    </FC__PageCard.HeaderRow.Title>;
+    </ForetoldComponents.PageCard.HeaderRow.Title>;
 };
 
 module ChannelBack = {
   [@react.component]
   let make = (~onClick, ()) =>
-    <FC__Button onClick size=FC__Button.Small>
+    <ForetoldComponents.Button onClick size=ForetoldComponents.Button.Small>
       <Antd_Tooltip title={Lang.backButtonTip |> Utils.ste} placement=`bottom>
         {"< Back" |> Utils.ste}
       </Antd_Tooltip>
-    </FC__Button>;
+    </ForetoldComponents.Button>;
 };
 
 module ChannelLink = {
@@ -106,7 +108,7 @@ module Container = {
 [@react.component]
 let make =
     (~head=ReasonReact.null, ~container=`fixedWidth, ~children=<Null />) => {
-  <FC.Base.Div
+  <ForetoldComponents.Base.Div
     className=Css.(
       style(
         [
@@ -114,15 +116,20 @@ let make =
           width(`percent(100.)),
           boxSizing(`borderBox),
         ]
-        @ FC.Base.BaseStyles.fullWidthFloatLeft,
+        @ ForetoldComponents.Base.BaseStyles.fullWidthFloatLeft,
       )
     )>
     <Container container>
-      <FC.PageCard>
+      <ForetoldComponents.PageCard>
         {head != ReasonReact.null
-           ? <FC.PageCard.HeaderRow> head </FC.PageCard.HeaderRow> : head}
-        <FC.PageCard.Body> children </FC.PageCard.Body>
-      </FC.PageCard>
+           ? <ForetoldComponents.PageCard.HeaderRow>
+               head
+             </ForetoldComponents.PageCard.HeaderRow>
+           : head}
+        <ForetoldComponents.PageCard.Body>
+          children
+        </ForetoldComponents.PageCard.Body>
+      </ForetoldComponents.PageCard>
     </Container>
-  </FC.Base.Div>;
+  </ForetoldComponents.Base.Div>;
 };

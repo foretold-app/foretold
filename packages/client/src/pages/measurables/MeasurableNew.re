@@ -1,8 +1,8 @@
 [@react.component]
 let make = (~channelId) => {
   <SLayout head={<SLayout.TextDiv text="New Question" />}>
-    <FC.PageCard.BodyPadding>
+    <ForetoldComponents.PageCard.BodyPadding>
       <MeasurableForm.Create channelId />
-    </FC.PageCard.BodyPadding>
+    </ForetoldComponents.PageCard.BodyPadding>
   </SLayout>;
 };

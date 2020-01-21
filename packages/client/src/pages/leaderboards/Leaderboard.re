@@ -14,11 +14,11 @@ module Pagination = {
           float=`left
           styles=[
             Css.style([
-              FC.PageCard.HeaderRow.Styles.itemTopPadding,
-              FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+              ForetoldComponents.PageCard.HeaderRow.Styles.itemTopPadding,
+              ForetoldComponents.PageCard.HeaderRow.Styles.itemBottomPadding,
             ]),
           ]>
-          <FC.Tab2
+          <ForetoldComponents.Tab2
             isActive={subTab === ByMember}
             onClick={LinkType.onClick(
               Internal(
@@ -26,8 +26,8 @@ module Pagination = {
               ),
             )}>
             {"Member Scores" |> Utils.ste}
-          </FC.Tab2>
-          <FC.Tab2
+          </ForetoldComponents.Tab2>
+          <ForetoldComponents.Tab2
             isActive={subTab === ByMeasurable}
             onClick={LinkType.onClick(
               Internal(
@@ -35,15 +35,15 @@ module Pagination = {
               ),
             )}>
             {"Question Scores" |> Utils.ste}
-          </FC.Tab2>
+          </ForetoldComponents.Tab2>
         </Div>
       </Div>
       <Div
         float=`right
         styles=[
           Css.style([
-            FC.PageCard.HeaderRow.Styles.itemTopPadding,
-            FC.PageCard.HeaderRow.Styles.itemBottomPadding,
+            ForetoldComponents.PageCard.HeaderRow.Styles.itemTopPadding,
+            ForetoldComponents.PageCard.HeaderRow.Styles.itemBottomPadding,
           ]),
         ]>
         paginationPage

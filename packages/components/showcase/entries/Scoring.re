@@ -40,7 +40,7 @@ module Scoring = {
     Js.log2("MIN", min);
     <div>
       <h3> {"Variable A" |> ReasonReact.string} </h3>
-      <FC_GuesstimateInput
+      <ReGuesstimateInput
         focusOnRender=true
         initialValue={Some(mm1)}
         sampleCount=50000
@@ -56,7 +56,7 @@ module Scoring = {
             <CdfChart__Large cdf=v minX maxX width=None />
           )}
       <h3> {"Variable B" |> ReasonReact.string} </h3>
-      <FC_GuesstimateInput
+      <ReGuesstimateInput
         focusOnRender=true
         sampleCount=50000
         initialValue={Some(mm2)}
@@ -71,7 +71,7 @@ module Scoring = {
             <CdfChart__Large minX maxX cdf=v width=None />
           )}
       <h3> {"Variable C" |> ReasonReact.string} </h3>
-      <FC_GuesstimateInput
+      <ReGuesstimateInput
         focusOnRender=true
         sampleCount=50000
         initialValue={Some("20 to 60")}

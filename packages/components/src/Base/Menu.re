@@ -73,7 +73,7 @@ module Styles = {
    * classNames based on prefixCls. It is meant
    * to be called only once per prefix, for example
    * on a module level.
-   * For an example, see FC_DropdownMenu
+   * For an example, see DropdownMenu
    */
   let createStyle =
       (

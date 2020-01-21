@@ -1,8 +1,8 @@
-import React from "react";
-import _ from "lodash";
+import React from 'react';
+import _ from 'lodash';
 
 import { Guesstimator } from '@foretold/guesstimator';
-import { Samples } from "@foretold/cdf";
+import { Samples } from '@foretold/cdf';
 
 /**
  * @param {number} ratio
@@ -10,11 +10,11 @@ import { Samples } from "@foretold/cdf";
  */
 const minMaxRatio = (ratio) => {
   if (ratio < 100000) {
-    return "SMALL"
+    return "SMALL";
   } else if (ratio < 10000000) {
-    return "MEDIUM"
+    return "MEDIUM";
   } else {
-    return "LARGE"
+    return "LARGE";
   }
 };
 
@@ -64,7 +64,7 @@ export class GuesstimateInput extends React.Component {
     }
 
     if (this.state.value !== ""){
-      this.handleChangeValue(this.state.value)
+      this.handleChangeValue(this.state.value);
     }
   }
 
@@ -97,7 +97,7 @@ export class GuesstimateInput extends React.Component {
   }
 
   handleChange(event){
-    this.handleChangeValue(event.target.value)
+    this.handleChangeValue(event.target.value);
   }
 
   render() {

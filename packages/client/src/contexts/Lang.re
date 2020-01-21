@@ -18,3 +18,10 @@ let backButtonTip = "Back";
 let pageIsNotFound = "Page not found";
 let notebookRemove = "Are you sure you want to delete this notebook?";
 let areYouSure = "Are you sure?";
+
+module Title = {
+  let main = "Foretold.io";
+  let home = "Home";
+  let channelNew = "New Channel";
+  let breadcrumbsSeparation = " - ";
+};

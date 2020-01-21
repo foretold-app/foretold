@@ -4,6 +4,8 @@ open Rationale.Function.Infix;
 let make = (~channelId: string) => {
   let loadChannel = ChannelGet.getChannelByIdAsComponent(~id=channelId);
 
+  let context = React.useContext(Providers.app);
+
   let head =
     <>
       <ForetoldComponents.Base.Div float=`left>
@@ -11,31 +13,27 @@ let make = (~channelId: string) => {
           {"Edit Community" |> Utils.ste}
         </ForetoldComponents.PageCard.HeaderRow.Title>
       </ForetoldComponents.Base.Div>
-      <Providers.AppContext.Consumer>
-        ...{({loggedUser}) =>
-          switch (loggedUser) {
-          | Some(loggedUser) =>
-            <ForetoldComponents.Base.Div
-              float=`right
-              className={Css.style([
-                ForetoldComponents.PageCard.HeaderRow.Styles.itemTopPadding,
-              ])}>
-              {Primary.User.show(
-                 loggedUser,
-                 <ForetoldComponents.Base.Button
-                   variant=ForetoldComponents.Base.Button.Primary
-                   size=ForetoldComponents.Base.Button.Small
-                   onClick={e =>
-                     LinkType.onClick(Internal(SeriesNew(channelId)), e)
-                   }>
-                   {"New Series" |> Utils.ste}
-                 </ForetoldComponents.Base.Button>,
-               )}
-            </ForetoldComponents.Base.Div>
-          | _ => <Null />
-          }
-        }
-      </Providers.AppContext.Consumer>
+      {switch (context.loggedUser) {
+       | Some(loggedUser) =>
+         <ForetoldComponents.Base.Div
+           float=`right
+           className={Css.style([
+             ForetoldComponents.PageCard.HeaderRow.Styles.itemTopPadding,
+           ])}>
+           {Primary.User.show(
+              loggedUser,
+              <ForetoldComponents.Base.Button
+                variant=ForetoldComponents.Base.Button.Primary
+                size=ForetoldComponents.Base.Button.Small
+                onClick={e =>
+                  LinkType.onClick(Internal(SeriesNew(channelId)), e)
+                }>
+                {"New Series" |> Utils.ste}
+              </ForetoldComponents.Base.Button>,
+            )}
+         </ForetoldComponents.Base.Div>
+       | _ => <Null />
+       }}
     </>;
 
   <SLayout head>

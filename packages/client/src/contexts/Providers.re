@@ -3,8 +3,13 @@ type appContext = {
   globalSetting: option(Types.globalSetting),
 };
 
-module AppContext =
-  Contexts.MakePair({
-    type t = appContext;
-    let defaultValue = {loggedUser: None, globalSetting: None};
-  });
+let appContextInit: appContext = {loggedUser: None, globalSetting: None};
+let app = React.createContext(appContextInit);
+
+module AppContexProvider = {
+  let makeProps = (~value, ~children, ()) => {
+    "value": value,
+    "children": children,
+  };
+  let make = React.Context.provider(app);
+};

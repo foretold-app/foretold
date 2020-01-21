@@ -69,29 +69,28 @@ module DateItem = {
 
 module LinkName = {
   [@react.component]
-  let make = (~measurable: Types.measurable) =>
-    <Providers.AppContext.Consumer>
-      ...{context => {
-        module Config = {
-          let globalSetting = context.globalSetting;
-        };
-        module Ken = KenTools.Functor(Config);
-        module MeasurableEntityLinks = MeasurableEntityLinks.Functor(Ken);
-        <>
-          {MeasurableEntityLinks.nameEntityLink(
-             ~m=measurable,
-             ~className=Shared.TagLink.item,
-           )
-           |> E.O.React.defaultNull}
-          {MeasurableEntityLinks.propertyEntityLink(
-             ~m=measurable,
-             ~className=Shared.TagLink.property,
-           )
-           |> E.O.React.defaultNull}
-          <DateItem measurable />
-        </>;
-      }}
-    </Providers.AppContext.Consumer>;
+  let make = (~measurable: Types.measurable) => {
+    let context = React.useContext(Providers.app);
+    module Config = {
+      let globalSetting = context.globalSetting;
+    };
+    module Ken = KenTools.Functor(Config);
+    module MeasurableEntityLinks = MeasurableEntityLinks.Functor(Ken);
+
+    <>
+      {MeasurableEntityLinks.nameEntityLink(
+         ~m=measurable,
+         ~className=Shared.TagLink.item,
+       )
+       |> E.O.React.defaultNull}
+      {MeasurableEntityLinks.propertyEntityLink(
+         ~m=measurable,
+         ~className=Shared.TagLink.property,
+       )
+       |> E.O.React.defaultNull}
+      <DateItem measurable />
+    </>;
+  };
 };
 
 module LinkMeasurable = {

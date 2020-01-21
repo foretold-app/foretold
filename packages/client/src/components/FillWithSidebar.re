@@ -26,23 +26,20 @@ module Styles = {
 
 [@react.component]
 let make = (~channelId=None, ~children=<Null />) => {
-  <Providers.AppContext.Consumer>
-    ...{({loggedUser}) =>
-      <div className=Styles.outer>
-        {loggedUser
-         |> E.O.React.fmapOrNull(_ =>
-              <div className=Styles.left>
-                <Sidebar channelId loggedUser />
-              </div>
-            )}
-        <div className=Styles.right>
-          <div className=Styles.rightInner>
-            <Header loggedUser />
-            <div> children </div>
+  let context = React.useContext(Providers.app);
+  <div className=Styles.outer>
+    {context.loggedUser
+     |> E.O.React.fmapOrNull(_ =>
+          <div className=Styles.left>
+            <Sidebar channelId loggedUser={context.loggedUser} />
           </div>
-          <Footer />
-        </div>
+        )}
+    <div className=Styles.right>
+      <div className=Styles.rightInner>
+        <Header loggedUser={context.loggedUser} />
+        <div> children </div>
       </div>
-    }
-  </Providers.AppContext.Consumer>;
+      <Footer />
+    </div>
+  </div>;
 };

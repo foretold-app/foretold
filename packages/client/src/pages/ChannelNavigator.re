@@ -2,8 +2,6 @@
 let make = (~channelPage: Routing.ChannelPage.t) => {
   let channelId = channelPage.channelId;
 
-  let loadChannel = ChannelGet.component2(~id=channelId);
-
   let successFn = (channel: Types.channel) =>
     <Channel channelPage channel={Some(channel)}>
       {switch (channelPage.subPage) {
@@ -49,7 +47,7 @@ let make = (~channelPage: Routing.ChannelPage.t) => {
       <SLayout> <Spin /> </SLayout>
     </Channel>;
 
-  loadChannel(result =>
+  ChannelGet.component2(~id=channelId, result =>
     result |> HttpResponse.flatten(successFn, errorFn, loadingFn)
   );
 };

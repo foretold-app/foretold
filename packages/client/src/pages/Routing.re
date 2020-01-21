@@ -37,7 +37,7 @@ module ChannelPage = {
 
   module SubPage = {
     type t =
-      | Measurables(MeasurableQueryIndex.query)
+      | Measurables(MeasurableQuery.query)
       | Measurable(string)
       | NewMeasurable
       | Members
@@ -131,7 +131,7 @@ module Route = {
         channelId: getChannelId(channelId),
         subPage:
           Measurables(
-            url.search |> MeasurableQueryIndex.fromStringWithDefaults,
+            url.search |> MeasurableQuery.fromStringWithDefaults,
           ),
       });
 
@@ -214,6 +214,16 @@ module Route = {
     | ["subscribe"] => Subscribe
     | ["unsubscribe"] => Unsubscribe
     | _ => NotFound
+    };
+  };
+};
+
+module Title = {
+  let fromUrl = (url: ReasonReact.Router.url) => {
+    switch (url.path) {
+    | [] => [|Lang.Title.home, Lang.Title.main|]
+    | ["c", _channelId, "new"] => [|Lang.Title.channelNew, Lang.Title.main|]
+    | _ => [|Lang.Title.main|]
     };
   };
 };

@@ -7,13 +7,14 @@ module Main = {
     <ReasonApollo.Provider client>
       <ReasonApolloHooks.ApolloProvider client>
         {GlobalSettingGet.inner(globalSetting =>
-           UserGet.inner(loggedUser =>
-             <Providers.AppContext.Provider value={loggedUser, globalSetting}>
+           UserGet.inner(loggedUser => {
+             let value: Providers.appContext = {loggedUser, globalSetting};
+             <Providers.AppContexProvider value>
                <Navigator />
                <Intercom />
                <CheckSession />
-             </Providers.AppContext.Provider>
-           )
+             </Providers.AppContexProvider>;
+           })
          )}
       </ReasonApolloHooks.ApolloProvider>
     </ReasonApollo.Provider>;

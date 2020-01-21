@@ -11,8 +11,8 @@ module ReducerConfig = {
   let onItemDeselected = (params: callFnParams) => {
     let st =
       params.states
-      |> MeasurableQueryIndex.make
-      |> MeasurableQueryIndex.toUrlParams;
+      |> MeasurableQuery.make
+      |> MeasurableQuery.toUrlParams;
     let channelLink = Routing.Url.toString(ChannelShow(params.channelId));
     History.append(channelLink ++ st);
   };

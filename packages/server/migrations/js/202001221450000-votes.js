@@ -26,7 +26,7 @@ module.exports = {
           allowNull: false,
         },
         voteAmount: {
-          type: Sequelize.TINYINT,
+          type: Sequelize.SMALLINT,
           allowNull: false,
           // And VoteAmount <> 0
           defaultValue: 0,

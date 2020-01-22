@@ -228,6 +228,12 @@ export namespace Models {
     agentId: AgentID;
   }
 
+  export interface Vote extends Model {
+    agentId: AgentID;
+    measurableId: MeasurableID;
+    voteAmount: number;
+  }
+
   export type Creator = Models.User | Models.Bot;
 }
 

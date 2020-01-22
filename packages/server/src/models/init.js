@@ -33,6 +33,7 @@ function init(db) {
   const template = db.sequelize.import('./template');
   const globalSetting = db.sequelize.import('./global-setting');
   const channelAgent = db.sequelize.import('./channel-agent');
+  const votes = db.sequelize.import('./votes');
 
   db.Agent = agent;
   db.AgentMeasurable = agentMeasurable;
@@ -55,13 +56,14 @@ function init(db) {
   db.Token = token;
   db.Template = template;
   db.ChannelAgent = channelAgent;
+  db.Votes = votes;
 
   const initList = [
     'Agent', 'Bot', 'ChannelMemberships', 'Channel', 'Measurable',
     'Series', 'User', 'Token', 'Preference',
     'NotificationStatus', 'FeedItem', 'Measurement',
     'AgentMeasurable', 'AgentChannel', 'Invitation', 'Mutex',
-    'Notebook', 'ChannelAgent',
+    'Notebook', 'ChannelAgent', 'Votes',
   ];
 
   // Associate All Models

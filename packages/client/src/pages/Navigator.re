@@ -26,7 +26,7 @@ let make = () => {
 
   <>
     {switch (route, context.loggedUser) {
-     // Statis Pages
+     // Static Pages
      | (Privacy, _) =>
        <StaticPageInCard markdown=StaticMarkdown.privacyPolicy />
      | (Terms, _) =>

@@ -315,7 +315,7 @@ module Url = {
     | SeriesShow(channelId, id) =>
       "/c/" ++ setChannelId(channelId) ++ "/s/" ++ id
 
-    // Statis pages
+    // Static pages
     | Home => "/"
     | Privacy => "/privacy_policy"
     | Terms => "/terms_and_conditions"

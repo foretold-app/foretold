@@ -35,17 +35,14 @@ module ColumnsFunctor = (Ken: KenTools.KenModule) => {
 
 [@react.component]
 let make = () => {
-  <Providers.AppContext.Consumer>
-    ...{context => {
-      module Config = {
-        let globalSetting = context.globalSetting;
-      };
-      module Ken = KenTools.Functor(Config);
-      module Columns = ColumnsFunctor(Ken);
+  let context = React.useContext(Providers.app);
+  module Config = {
+    let globalSetting = context.globalSetting;
+  };
+  module Ken = KenTools.Functor(Config);
+  module Columns = ColumnsFunctor(Ken);
 
-      <SLayout head={<SLayout.TextDiv text="All Entities" />}>
-        <Table columns=Columns.all rows=Ken.dataSource />
-      </SLayout>;
-    }}
-  </Providers.AppContext.Consumer>;
+  <SLayout head={<SLayout.TextDiv text="All Entities" />}>
+    <Table columns=Columns.all rows=Ken.dataSource />
+  </SLayout>;
 };

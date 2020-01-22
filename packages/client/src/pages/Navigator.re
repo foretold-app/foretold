@@ -1,18 +1,20 @@
 [@react.component]
 let make = () => {
+  // @todo: Do not set URL as string directly,
+  // @todo: push new state into the application state.
+  // @todo: keywords: application state
   let (route, setRoute) =
     React.useState(() =>
       ReasonReact.Router.dangerouslyGetInitialUrl() |> Routing.Route.fromUrl
     );
 
   React.useState(() => {
-    History.onPushState(event => {
-      let miss = History.miss(event);
-      if (!miss) {
+    History.onPushState(event =>
+      if (!History.miss(event)) {
         let url = ReasonReact.Router.dangerouslyGetInitialUrl();
         setRoute(_ => url |> Routing.Route.fromUrl);
-      };
-    });
+      }
+    );
     History.onPopState(_ => {
       let url = ReasonReact.Router.dangerouslyGetInitialUrl();
       setRoute(_ => url |> Routing.Route.fromUrl);
@@ -20,56 +22,55 @@ let make = () => {
   })
   |> ignore;
 
-  <Providers.AppContext.Consumer>
-    ...{({loggedUser}) => {
-      let routeComponent =
-        switch (route, loggedUser) {
-        // Statis Pages
-        | (Privacy, _) =>
-          <StaticPageInCard markdown=StaticMarkdown.privacyPolicy />
-        | (Terms, _) =>
-          <StaticPageInCard markdown=StaticMarkdown.termsAndConditions />
-        | (Login, _) => <Login />
+  let context = React.useContext(Providers.app);
 
-        // Channels
-        | (Channel(channel), _) => <ChannelNavigation channelPage=channel />
-        | (ChannelIndex, _) =>
-          <FillWithSidebar> <ChannelIndex /> </FillWithSidebar>
-        | (ChannelNew, Some(_)) =>
-          <FillWithSidebar> <ChannelNew /> </FillWithSidebar>
+  <>
+    {switch (route, context.loggedUser) {
+     // Static Pages
+     | (Privacy, _) =>
+       <StaticPageInCard markdown=StaticMarkdown.privacyPolicy />
+     | (Terms, _) =>
+       <StaticPageInCard markdown=StaticMarkdown.termsAndConditions />
+     | (Login, _) => <Login />
 
-        // Members
-        | (Agent(agentPage), _) => <AgentNavigation agentPage />
-        | (AgentIndex, _) => <AgentIndex />
-        | (Profile, Some(loggedUser)) =>
-          <FillWithSidebar> <ProfileEdit loggedUser /> </FillWithSidebar>
-        | (Subscribe, Some(loggedUser)) =>
-          <FillWithSidebar> <SubscribePage loggedUser /> </FillWithSidebar>
-        | (Unsubscribe, Some(loggedUser)) =>
-          <FillWithSidebar> <UnsubscribePage loggedUser /> </FillWithSidebar>
-        | (Preferences, Some(loggedUser)) =>
-          <FillWithSidebar> <Preferences loggedUser /> </FillWithSidebar>
+     // Channels
+     | (Channel(channelPage), _) => <ChannelNavigator channelPage />
+     | (ChannelIndex, _) =>
+       <FillWithSidebar> <ChannelIndex /> </FillWithSidebar>
+     | (ChannelNew, Some(_)) =>
+       <FillWithSidebar> <ChannelNew /> </FillWithSidebar>
 
-        // Bots
-        | (BotCreate, Some(loggedUser)) =>
-          <FillWithSidebar> <BotCreate loggedUser /> </FillWithSidebar>
-        | (BotEdit(botId), Some(loggedUser)) =>
-          <FillWithSidebar>
-            <BotEdit pageParams={id: botId} loggedUser />
-          </FillWithSidebar>
+     // Members
+     | (Agent(agentPage), _) => <AgentNavigator agentPage />
+     | (AgentIndex, _) => <AgentIndex />
+     | (Profile, Some(loggedUser)) =>
+       <FillWithSidebar> <ProfileEdit loggedUser /> </FillWithSidebar>
+     | (Subscribe, Some(loggedUser)) =>
+       <FillWithSidebar> <SubscribePage loggedUser /> </FillWithSidebar>
+     | (Unsubscribe, Some(loggedUser)) =>
+       <FillWithSidebar> <UnsubscribePage loggedUser /> </FillWithSidebar>
+     | (Preferences, Some(loggedUser)) =>
+       <FillWithSidebar> <Preferences loggedUser /> </FillWithSidebar>
 
-        // Entities
-        | (EntityShow(entityId), Some(_)) =>
-          <FillWithSidebar>
-            <EntityShow pageParams={id: entityId} />
-          </FillWithSidebar>
-        | (EntityIndex, Some(_)) =>
-          <FillWithSidebar> <EntityIndex /> </FillWithSidebar>
+     // Bots
+     | (BotCreate, Some(loggedUser)) =>
+       <FillWithSidebar> <BotCreate loggedUser /> </FillWithSidebar>
+     | (BotEdit(botId), Some(loggedUser)) =>
+       <FillWithSidebar>
+         <BotEdit pageParams={id: botId} loggedUser />
+       </FillWithSidebar>
 
-        | (_, _) => <Home />
-        };
+     // Entities
+     | (EntityShow(entityId), Some(_)) =>
+       <FillWithSidebar>
+         <EntityShow pageParams={id: entityId} />
+       </FillWithSidebar>
+     | (EntityIndex, Some(_)) =>
+       <FillWithSidebar> <EntityIndex /> </FillWithSidebar>
 
-      <> routeComponent <Redirect route loggedUser /> </>;
-    }}
-  </Providers.AppContext.Consumer>;
+     | (_, _) => <Home />
+     }}
+    <Title route />
+    <Redirect route loggedUser={context.loggedUser} />
+  </>;
 };

@@ -1,5 +1,5 @@
 [@react.component]
-let make = (~channelId: string, ~searchParams: MeasurableQueryIndex.query) => {
+let make = (~channelId: string, ~searchParams: MeasurableQuery.query) => {
   module Reducer =
     PaginationFunctor.Make(MeasurableIndex__Logic.ReducerConfig);
 

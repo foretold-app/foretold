@@ -1,24 +1,22 @@
-[@bs.module "../lib/intercom.js"]
+[@bs.module "../lib/js/intercom.js"]
 external intercom:
   (string, string, string, string, option(MomentRe.Moment.t)) => unit =
   "intercom";
 
 [@react.component]
 let make = () => {
-  <Providers.AppContext.Consumer>
-    ...{({loggedUser}) => {
-      switch (Env.clientEnv, loggedUser) {
-      | (Production, Some(loggedUser)) =>
-        let name = loggedUser |> Primary.User.getName;
-        let email = loggedUser.email |> E.O.default("no-reply@foretold.io");
-        let createdAt = loggedUser.createdAt;
-        let userId = loggedUser.id;
+  let context = React.useContext(Providers.app);
 
-        intercom(Env.intercomAppId, name, email, userId, createdAt);
-      | _ => ()
-      };
+  switch (Env.clientEnv, context.loggedUser) {
+  | (Production, Some(loggedUser)) =>
+    let name = loggedUser |> Primary.User.getName;
+    let email = loggedUser.email |> E.O.default("no-reply@foretold.io");
+    let createdAt = loggedUser.createdAt;
+    let userId = loggedUser.id;
 
-      <Null />;
-    }}
-  </Providers.AppContext.Consumer>;
+    intercom(Env.intercomAppId, name, email, userId, createdAt);
+  | _ => ()
+  };
+
+  <Null />;
 };

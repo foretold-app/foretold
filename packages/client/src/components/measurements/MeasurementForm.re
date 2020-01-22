@@ -1,35 +1,32 @@
 [@react.component]
 let make = (~measurable: Types.measurable, ~defaultValueText="") => {
-  <Providers.AppContext.Consumer>
-    ...{({loggedUser}) =>
-      switch (loggedUser) {
-      | Some(loggedUser) =>
-        <MeasurementCreate.Mutation>
-          ...{(mutation, data) =>
-            <CdfInput
-              measurable
-              defaultValueText
-              onSubmit={(
-                (value, competitorType, description, valueText, asAgent),
-              ) =>
-                MeasurementCreate.mutate(
-                  mutation,
-                  measurable.id,
-                  value,
-                  competitorType,
-                  description,
-                  valueText,
-                  asAgent,
-                )
-              }
-              bots={loggedUser.bots}
-              data
-              loggedUser
-            />
+  let context = React.useContext(Providers.app);
+  switch (context.loggedUser) {
+  | Some(loggedUser) =>
+    <MeasurementCreate.Mutation>
+      ...{(mutation, data) =>
+        <CdfInput
+          measurable
+          defaultValueText
+          onSubmit={(
+            (value, competitorType, description, valueText, asAgent),
+          ) =>
+            MeasurementCreate.mutate(
+              mutation,
+              measurable.id,
+              value,
+              competitorType,
+              description,
+              valueText,
+              asAgent,
+            )
           }
-        </MeasurementCreate.Mutation>
-      | _ => <Null />
+          bots={loggedUser.bots}
+          data
+          loggedUser
+        />
       }
-    }
-  </Providers.AppContext.Consumer>;
+    </MeasurementCreate.Mutation>
+  | _ => <Null />
+  };
 };

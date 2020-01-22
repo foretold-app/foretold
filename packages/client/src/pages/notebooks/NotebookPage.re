@@ -16,15 +16,12 @@ type tab =
 module ShowIfSameUser = {
   [@react.component]
   let make = (~agentId, ~children) => {
-    <Providers.AppContext.Consumer>
-      ...{({loggedUser}) => {
-        let isCorrect =
-          loggedUser
-          |> E.O.fmap((r: Types.user) => r.agentId == agentId)
-          |> E.O.default(false);
-        isCorrect ? children : ReasonReact.null;
-      }}
-    </Providers.AppContext.Consumer>;
+    let context = React.useContext(Providers.app);
+    let isCorrect =
+      context.loggedUser
+      |> E.O.fmap((r: Types.user) => r.agentId == agentId)
+      |> E.O.default(false);
+    isCorrect ? children : ReasonReact.null;
   };
 };
 

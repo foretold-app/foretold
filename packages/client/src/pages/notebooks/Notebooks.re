@@ -21,31 +21,28 @@ module Reducer = PaginationFunctor.Make(ReducerConfig);
 
 module Pagination = {
   [@react.component]
-  let make = (~reducerParams: Reducer.Types.reducerParams, ~channelId: string) =>
+  let make = (~reducerParams: Reducer.Types.reducerParams, ~channelId: string) => {
+    let context = React.useContext(Providers.app);
     <Div>
-      <Providers.AppContext.Consumer>
-        ...{({loggedUser}) =>
-          <Div
-            float=`left
-            styles=[
-              Css.style([
-                ForetoldComponents.PageCard.HeaderRow.Styles.itemTopPadding,
-                ForetoldComponents.PageCard.HeaderRow.Styles.itemBottomPadding,
-              ]),
-            ]>
-            <ForetoldComponents.Base.Button
-              variant=ForetoldComponents.Base.Button.Primary
-              size=ForetoldComponents.Base.Button.Small
-              onClick={e =>
-                LinkType.onClick(Internal(ChannelAddNotebook(channelId)), e)
-              }>
-              {"New Notebook" |> Utils.ste}
-            </ForetoldComponents.Base.Button>
-          </Div>
-          |> Primary.User.authorized(loggedUser)
-          |> E.React2.showIf(channelId != "")
-        }
-      </Providers.AppContext.Consumer>
+      {<Div
+         float=`left
+         styles=[
+           Css.style([
+             ForetoldComponents.PageCard.HeaderRow.Styles.itemTopPadding,
+             ForetoldComponents.PageCard.HeaderRow.Styles.itemBottomPadding,
+           ]),
+         ]>
+         <ForetoldComponents.Base.Button
+           variant=ForetoldComponents.Base.Button.Primary
+           size=ForetoldComponents.Base.Button.Small
+           onClick={e =>
+             LinkType.onClick(Internal(ChannelAddNotebook(channelId)), e)
+           }>
+           {"New Notebook" |> Utils.ste}
+         </ForetoldComponents.Base.Button>
+       </Div>
+       |> Primary.User.authorized(context.loggedUser)
+       |> E.React2.showIf(channelId != "")}
       <Div
         float=`right
         styles=[
@@ -57,6 +54,7 @@ module Pagination = {
         {Reducer.Components.paginationPage(reducerParams)}
       </Div>
     </Div>;
+  };
 };
 
 [@react.component]
@@ -78,7 +76,10 @@ let make = (~channelId: string) => {
 
     let body =
       switch (reducerParams.response, isFound) {
-      | (Success(_), true) => <ForetoldComponents.PageCard.Body> table </ForetoldComponents.PageCard.Body>
+      | (Success(_), true) =>
+        <ForetoldComponents.PageCard.Body>
+          table
+        </ForetoldComponents.PageCard.Body>
       | (Success(_), false) => <NothingToShow />
       | _ => <Spin />
       };

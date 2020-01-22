@@ -337,3 +337,8 @@ module BoundedInt = {
   let increment = fmap(I.increment);
   let decrement = fmap(I.decrement);
 };
+
+module Title = {
+  let toString = (breadcrumbs: array(string)): string =>
+    breadcrumbs |> Js.Array.joinWith(Lang.Title.breadcrumbsSeparation);
+};

@@ -21,6 +21,7 @@ let handleStringUrlClick = (event: ReactEvent.Mouse.t, href) =>
     ReasonReact.Router.push(href);
   };
 
+// @todo: keywords: application state
 let onClick = (linkType: t, event) =>
   switch (linkType) {
   | Action(action) => action(event)
@@ -29,6 +30,7 @@ let onClick = (linkType: t, event) =>
   | External(_) => ()
   };
 
+// @todo: keywords: application state
 let onClick2 = (linkType: t) =>
   switch (linkType) {
   | Action(_) => ()

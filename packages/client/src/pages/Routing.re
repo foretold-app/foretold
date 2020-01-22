@@ -37,7 +37,7 @@ module ChannelPage = {
 
   module SubPage = {
     type t =
-      | Measurables(MeasurableQueryIndex.query)
+      | Measurables(MeasurableQuery.query)
       | Measurable(string)
       | NewMeasurable
       | Members
@@ -130,9 +130,7 @@ module Route = {
       Channel({
         channelId: getChannelId(channelId),
         subPage:
-          Measurables(
-            url.search |> MeasurableQueryIndex.fromStringWithDefaults,
-          ),
+          Measurables(url.search |> MeasurableQuery.fromStringWithDefaults),
       });
 
     switch (url.path) {
@@ -317,7 +315,7 @@ module Url = {
     | SeriesShow(channelId, id) =>
       "/c/" ++ setChannelId(channelId) ++ "/s/" ++ id
 
-    // Statis pages
+    // Static pages
     | Home => "/"
     | Privacy => "/privacy_policy"
     | Terms => "/terms_and_conditions"
@@ -325,6 +323,10 @@ module Url = {
     | Unknown => "/"
     };
 
+  // @todo: No. Do not do like this. It is not scalable.
+  // @todo: We need to add an application state and
+  // @todo: to push new state into it.
+  // @todo: keywords: application state
   let push = (r: t) => r |> toString |> ReasonReact.Router.push;
 
   let fromChannelPage = (channelPage: ChannelPage.t) =>

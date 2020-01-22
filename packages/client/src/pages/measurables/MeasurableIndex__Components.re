@@ -36,8 +36,8 @@ module LoadedAndUnselected = {
       number=num
       onClick={LinkType.onClick(
         Relative(
-          MeasurableQueryIndex.make(Some(state))
-          |> MeasurableQueryIndex.toUrlParams,
+          MeasurableQuery.make(Some(state))
+          |> MeasurableQuery.toUrlParams,
         ),
       )}>
       {text |> ste}
@@ -48,7 +48,7 @@ module LoadedAndUnselected = {
       (
         t: loadedAndUnselected,
         stats: measurablesStateStatsQuery,
-        query: MeasurableQueryIndex.query,
+        query: MeasurableQuery.query,
         channelId,
       ) =>
     <Div>
@@ -133,7 +133,7 @@ module LoadedAndUnselected = {
 let toLayoutInput =
     (
       send: Reducer.Types.send,
-      selectedState: MeasurableQueryIndex.query,
+      selectedState: MeasurableQuery.query,
       stats: measurablesStateStatsQuery,
       state: state,
       channelId: string,

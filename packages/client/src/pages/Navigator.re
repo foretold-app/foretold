@@ -1,5 +1,8 @@
 [@react.component]
 let make = () => {
+  // @todo: Do not set URL as string directly,
+  // @todo: push new state into the application state.
+  // @todo: keywords: application state
   let (route, setRoute) =
     React.useState(() =>
       ReasonReact.Router.dangerouslyGetInitialUrl() |> Routing.Route.fromUrl
@@ -19,11 +22,6 @@ let make = () => {
   })
   |> ignore;
 
-  route
-  |> Routing.Route.title
-  |> E.Title.toString
-  |> ForetoldComponents.Hooks.useTitle;
-
   let context = React.useContext(Providers.app);
 
   <>
@@ -36,7 +34,7 @@ let make = () => {
      | (Login, _) => <Login />
 
      // Channels
-     | (Channel(channel), _) => <ChannelNavigator channelPage=channel />
+     | (Channel(channelPage), _) => <ChannelNavigator channelPage />
      | (ChannelIndex, _) =>
        <FillWithSidebar> <ChannelIndex /> </FillWithSidebar>
      | (ChannelNew, Some(_)) =>
@@ -72,6 +70,7 @@ let make = () => {
 
      | (_, _) => <Home />
      }}
+    <Title route />
     <Redirect route loggedUser={context.loggedUser} />
   </>;
 };

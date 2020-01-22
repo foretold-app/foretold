@@ -21,9 +21,9 @@ let areYouSure = "Are you sure?";
 
 module Title = {
   let main = "Foretold.io";
-  let home = "Home";
   let channelNew = "New Channel";
   let communities = "Communities";
   let login = "Login";
+  let terms = "Foretold Terms of Service";
   let breadcrumbsSeparation = " - ";
 };

@@ -214,16 +214,6 @@ module Route = {
     | _ => NotFound
     };
   };
-
-  let title = (t: t): array(string) => {
-    switch (t) {
-    | Home => [|Lang.Title.home, Lang.Title.main|]
-    | ChannelNew => [|Lang.Title.channelNew, Lang.Title.main|]
-    | ChannelIndex => [|Lang.Title.communities, Lang.Title.main|]
-    | Login => [|Lang.Title.login, Lang.Title.main|]
-    | _ => [|Lang.Title.main|]
-    };
-  };
 };
 
 module Url = {
@@ -333,6 +323,10 @@ module Url = {
     | Unknown => "/"
     };
 
+  // @todo: No. Do not do like this. It is not scalable.
+  // @todo: We need to add an application state and
+  // @todo: to push new state into it.
+  // @todo: keywords: application state
   let push = (r: t) => r |> toString |> ReasonReact.Router.push;
 
   let fromChannelPage = (channelPage: ChannelPage.t) =>

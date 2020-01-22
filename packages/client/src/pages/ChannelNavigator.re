@@ -2,7 +2,7 @@
 let make = (~channelPage: Routing.ChannelPage.t) => {
   let channelId = channelPage.channelId;
 
-  let successFn = (channel: Types.channel) =>
+  let successFn = (channel: Types.channel) => {
     <Channel channelPage channel={Some(channel)}>
       {switch (channelPage.subPage) {
        // Measurables
@@ -38,6 +38,7 @@ let make = (~channelPage: Routing.ChannelPage.t) => {
        | Unknown => <NotFoundPage />
        }}
     </Channel>;
+  };
 
   let errorFn = _ =>
     <Channel channelPage channel=None> <NotFoundPage /> </Channel>;

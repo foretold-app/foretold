@@ -1,29 +1,25 @@
-const { NOTIFICATION_TYPE } = require('../enums');
-
-/**
- * KISS
- * @param sequelize
- * @param DataTypes
- */
+// Do not use associations between models and do not
+// use ORM for fetching them!
 module.exports = (sequelize, DataTypes) => {
-  const Notification = sequelize.define('Notification', {
+  const Votes = sequelize.define('Votes', {
     id: {
       type: DataTypes.UUID(),
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
       allowNull: false,
     },
-    type: {
-      type: DataTypes.ENUM([
-        NOTIFICATION_TYPE.EMAIL,
-        NOTIFICATION_TYPE.PUSH,
-        NOTIFICATION_TYPE.WEB_PUSH,
-      ]),
-      defaultValue: NOTIFICATION_TYPE.EMAIL,
-    },
-    envelope: {
-      type: DataTypes.JSON,
+    measurableId: {
+      type: DataTypes.UUID(),
       allowNull: false,
+    },
+    agentId: {
+      type: DataTypes.UUID(),
+      allowNull: false,
+    },
+    voteAmount: {
+      type: DataTypes.SMALLINT,
+      allowNull: false,
+      defaultValue: 0,
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -36,6 +32,5 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
   });
-
-  return Notification;
+  return Votes;
 };

@@ -102,10 +102,12 @@ module.exports = (sequelize, DataTypes) => {
     createdAt: {
       type: DataTypes.DATE,
       defaultValue: sequelize.fn('statement_timestamp'),
+      allowNull: false,
     },
     updatedAt: {
       type: DataTypes.DATE,
       defaultValue: sequelize.fn('statement_timestamp'),
+      allowNull: false,
     },
   });
 

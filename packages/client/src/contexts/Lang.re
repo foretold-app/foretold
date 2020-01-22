@@ -25,5 +25,7 @@ module Title = {
   let communities = "Communities";
   let login = "Login";
   let terms = "Foretold Terms of Service";
+  let profile = "Profile";
+  let preferences = "Preferences";
   let breadcrumbsSeparation = " - ";
 };

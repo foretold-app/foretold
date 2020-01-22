@@ -1,7 +1,7 @@
 [@react.component]
 let make = (~route: Routing.Route.t) => {
   switch (route) {
-  | Channel({channelId, subPage: Measurables(_)}) =>
+  | Channel({channelId, subPage}) =>
     ChannelGet.component2(~id=channelId, result =>
       switch (result) {
       | Success(channel) =>
@@ -25,6 +25,14 @@ let make = (~route: Routing.Route.t) => {
   | Terms =>
     <ForetoldComponents.Title
       title={[|Lang.Title.terms, Lang.Title.main|] |> E.Title.toString}
+    />
+  | Profile =>
+    <ForetoldComponents.Title
+      title={[|Lang.Title.profile, Lang.Title.main|] |> E.Title.toString}
+    />
+  | Preferences =>
+    <ForetoldComponents.Title
+      title={[|Lang.Title.preferences, Lang.Title.main|] |> E.Title.toString}
     />
   | _ =>
     <ForetoldComponents.Title

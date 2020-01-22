@@ -3,14 +3,18 @@ module.exports = {
     try {
       await queryInterface.sequelize.query('BEGIN');
 
-      await queryInterface.createTable('Mutexes', {
+      await queryInterface.createTable('Votes', {
         id: {
           allowNull: false,
           primaryKey: true,
           type: Sequelize.UUID,
         },
-        name: {
-          type: Sequelize.STRING(128),
+        measurableId: {
+          type: Sequelize.UUID,
+          references: {
+            model: 'Measurables',
+            key: 'id',
+          },
           allowNull: false,
         },
         agentId: {
@@ -20,6 +24,12 @@ module.exports = {
             key: 'id',
           },
           allowNull: false,
+        },
+        voteAmount: {
+          type: Sequelize.TINYINT,
+          allowNull: false,
+          // And VoteAmount <> 0
+          defaultValue: 0,
         },
         createdAt: {
           type: Sequelize.DATE,
@@ -31,10 +41,16 @@ module.exports = {
         },
       });
 
-      await queryInterface.addIndex('Mutexes', ['name', 'agentId'], {
-        name: 'Mutexes_name_agentId_unique',
+      await queryInterface.addIndex('Votes', ['measurableId', 'agentId'], {
+        name: 'Votes_measurableId_agentId_unique',
         unique: true,
       });
+
+      // And VoteAmount <> 0
+      await queryInterface.sequelize.query(
+        'ALTER TABLE "Votes" ADD CONSTRAINT "voteAmount" '
+        + 'CHECK ("voteAmount" >= -10 AND "voteAmount" <= 10);',
+      );
 
       await queryInterface.sequelize.query('COMMIT');
     } catch (e) {
@@ -48,10 +64,10 @@ module.exports = {
     try {
       await queryInterface.sequelize.query('BEGIN');
       await queryInterface.removeIndex(
-        'Mutexes',
-        'Mutexes_name_agentId_unique',
+        'Votes',
+        'Votes_measurableId_agentId_unique',
       );
-      await queryInterface.dropTable('Mutexes');
+      await queryInterface.dropTable('Votes');
       await queryInterface.sequelize.query('COMMIT');
     } catch (e) {
       console.error('Migration Down Error', e);

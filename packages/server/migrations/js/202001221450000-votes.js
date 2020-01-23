@@ -9,10 +9,10 @@ module.exports = {
           primaryKey: true,
           type: Sequelize.UUID,
         },
-        measurableId: {
+        measurementId: {
           type: Sequelize.UUID,
           references: {
-            model: 'Measurables',
+            model: 'Measurements',
             key: 'id',
           },
           allowNull: false,
@@ -43,8 +43,8 @@ module.exports = {
         },
       });
 
-      await queryInterface.addIndex('Votes', ['measurableId', 'agentId'], {
-        name: 'Votes_measurableId_agentId_unique',
+      await queryInterface.addIndex('Votes', ['measurementId', 'agentId'], {
+        name: 'Votes_measurementId_agentId_unique',
         unique: true,
       });
 
@@ -67,7 +67,7 @@ module.exports = {
       await queryInterface.sequelize.query('BEGIN');
       await queryInterface.removeIndex(
         'Votes',
-        'Votes_measurableId_agentId_unique',
+        'Votes_measurementId_agentId_unique',
       );
       await queryInterface.dropTable('Votes');
       await queryInterface.sequelize.query('COMMIT');

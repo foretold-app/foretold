@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.UUIDV4,
       allowNull: false,
     },
-    measurableId: {
+    measurementId: {
       type: DataTypes.UUID(),
       allowNull: false,
     },

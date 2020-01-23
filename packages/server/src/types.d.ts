@@ -230,7 +230,7 @@ export namespace Models {
 
   export interface Vote extends Model {
     agentId: AgentID;
-    measurableId: MeasurableID;
+    measurementId: MeasurementID;
     voteAmount: number;
   }
 

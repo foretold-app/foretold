@@ -75,13 +75,11 @@ class ModelPostgres extends Model {
   async updateOne(params = {}, data = {}, restrictions = {}, options = {}) {
     this._assertInput({ params, data, restrictions, options });
 
-    const findCond = { where: { ...params } };
-    const updateCond = {};
-    this._extendConditions(findCond, options);
-    this._extendConditions(updateCond, options);
+    const cond = { where: { ...params } };
+    this._extendConditions(cond, options);
 
-    const entity = await this.model.findOne(findCond);
-    if (!!entity) await entity.update(data, updateCond);
+    const entity = await this.model.findOne(cond);
+    if (!!entity) await this.model.update(data, cond);
     return entity;
   }
 

@@ -7,15 +7,15 @@ module.exports = new graphql.GraphQLScalarType({
   name: 'JWT',
   description: 'A special custom Scalar type for JWT',
 
-  serialize: function serialize(d) {
+  serialize(d) {
     return d;
   },
 
-  parseValue: function parseValue(d) {
+  parseValue(d) {
     return d;
   },
 
-  parseLiteral: function parseLiteral(ast) {
+  parseLiteral(ast) {
     if (typeof ast.value !== 'string') {
       throw new Error('JWT should be a string.');
     }

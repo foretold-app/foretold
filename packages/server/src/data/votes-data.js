@@ -14,23 +14,23 @@ class VotesData extends DataBase {
 
   /**
    * @param {Models.AgentID} agentId
-   * @param {Models.MeasurableID} measurableId
+   * @param {Models.MeasurementID} measurementId
    * @returns {boolean}
    */
-  upvote(agentId, measurableId) {
+  upvote(agentId, measurementId) {
     assert(!!agentId, 'Agent ID is required.');
-    assert(!!measurableId, 'Measurable ID is required.');
+    assert(!!measurementId, 'Measurement ID is required.');
     return true;
   }
 
   /**
    * @param {Models.AgentID} agentId
-   * @param {Models.MeasurableID} measurableId
+   * @param {Models.MeasurementID} measurementId
    * @returns {boolean}
    */
-  downvote(agentId, measurableId) {
+  downvote(agentId, measurementId) {
     assert(!!agentId, 'Agent ID is required.');
-    assert(!!measurableId, 'Measurable ID is required.');
+    assert(!!measurementId, 'Measurement ID is required.');
     return true;
   }
 }

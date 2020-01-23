@@ -7,15 +7,15 @@ module.exports = new graphql.GraphQLScalarType({
   name: 'Cursor',
   description: 'A special custom scalar type for a Cursor',
 
-  serialize: function serialize(d) {
+  serialize(d) {
     return d;
   },
 
-  parseValue: function parseValue(d) {
+  parseValue(d) {
     return d;
   },
 
-  parseLiteral: function parseLiteral(ast) {
+  parseLiteral(ast) {
     if (typeof ast.value !== 'string') {
       throw new UserInputError('Cursor should be a string.');
     }

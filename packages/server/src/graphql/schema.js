@@ -579,8 +579,8 @@ const schema = new graphql.GraphQLSchema({
       upvote: {
         type: graphql.GraphQLBoolean,
         args: {
-          measurableId: {
-            type: graphql.GraphQLNonNull(types.scalars.measurableId),
+          measurementId: {
+            type: graphql.GraphQLNonNull(types.scalars.measurementId),
           },
         },
         resolve: resolvers.votes.upvote,
@@ -589,8 +589,8 @@ const schema = new graphql.GraphQLSchema({
       downvote: {
         type: graphql.GraphQLBoolean,
         args: {
-          measurableId: {
-            type: graphql.GraphQLNonNull(types.scalars.measurableId),
+          measurementId: {
+            type: graphql.GraphQLNonNull(types.scalars.measurementId),
           },
         },
         resolve: resolvers.votes.downvote,

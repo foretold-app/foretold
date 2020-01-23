@@ -21,7 +21,7 @@ class DataBase {
 
   /**
    * @public
-   * @return {Promise<*>}
+   * @return {Promise<Layers.Transaction>}
    */
   async getTransaction() {
     return this.model.getTransaction();
@@ -29,7 +29,7 @@ class DataBase {
 
   /**
    * @public
-   * @param {*} transaction
+   * @param {Layers.Transaction} transaction
    * @return {Promise<*>}
    */
   async commit(transaction) {
@@ -38,7 +38,7 @@ class DataBase {
 
   /**
    * @public
-   * @param {*} transaction
+   * @param {Layers.Transaction} transaction
    * @return {Promise<*>}
    */
   async rollback(transaction) {
@@ -107,6 +107,19 @@ class DataBase {
 
   /**
    * @public
+   * @param {Layers.DataSourceLayer.params} [params]
+   * @param {Layers.DataSourceLayer.query} [query]
+   * @param {Layers.DataSourceLayer.data} [data]
+   * @param {Layers.DataSourceLayer.options} [options]
+   * @return {Promise<*>}
+   */
+  async upsertOne(params = {}, query = {}, data = {}, options = {}) {
+    const { restriction$, option$ } = this._getOptionsRestrictions(options);
+    return this.model.upsertOne(params, query, data, restriction$, option$);
+  }
+
+  /**
+   * @public
    * @param {Layers.DataSourceLayer.filter} [filter]
    * @param {Models.AgentID} filter.userId
    * @param {Layers.DataSourceLayer.pagination} [pagination]
@@ -129,19 +142,6 @@ class DataBase {
   async getAll(filter = {}, pagination = {}, options = {}) {
     const { restriction$, option$ } = this._getOptionsRestrictions(options);
     return this.model.getAll(filter, pagination, restriction$, option$);
-  }
-
-  /**
-   * @public
-   * @param {Layers.DataSourceLayer.params} [params]
-   * @param {Layers.DataSourceLayer.query} [query]
-   * @param {Layers.DataSourceLayer.data} [data]
-   * @param {Layers.DataSourceLayer.options} [options]
-   * @return {Promise<*>}
-   */
-  async upsertOne(params = {}, query = {}, data = {}, options = {}) {
-    const { restriction$, option$ } = this._getOptionsRestrictions(options);
-    return this.model.upsertOne(params, query, data, restriction$, option$);
   }
 
   /**

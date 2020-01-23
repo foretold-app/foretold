@@ -8,6 +8,7 @@ const { setContextMeasurableByRoot } = require('./measurables');
 const { measurableNameValidation } = require('./measurables');
 const { measurementValueValidation } = require('./measurements');
 const { measurementValueTypeValidation } = require('./measurements');
+const { setContextMeasurement } = require('./measurements');
 const { setContextBot } = require('./bots');
 const { setContextPreferenceFromId } = require('./preferences');
 const { setContextPreferenceFromAgentId } = require('./preferences');
@@ -235,12 +236,12 @@ const middlewares = {
     },
 
     upvote: async (resolve, root, args, context, info) => {
-      await setContextMeasurable(root, args, context, info);
+      await setContextMeasurement(root, args, context, info);
       return resolve(root, args, context, info);
     },
 
     downvote: async (resolve, root, args, context, info) => {
-      await setContextMeasurable(root, args, context, info);
+      await setContextMeasurement(root, args, context, info);
       return resolve(root, args, context, info);
     },
   },

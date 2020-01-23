@@ -6,6 +6,8 @@ const {
   FINAL_COMPARISON_MEASUREMENT,
 } = require('../../../enums/agent-measurable-score-type');
 
+// @todo: To rename the file.
+
 const marketScoreType = graphql.GraphQLNonNull(new graphql.GraphQLEnumType({
   name: 'marketScoreType',
   values: {

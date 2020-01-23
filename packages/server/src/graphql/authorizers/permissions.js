@@ -21,7 +21,7 @@ const { agentIdFromContext } = require('./predicates');
 const { agentIdFromRootAgentId } = require('./predicates');
 const { notebookIsOwnedByCurrentAgent } = require('./notebooks');
 const { rateLimit } = require('./rate-limit');
-const { measurableIsCompetitiveOrCommentOnly } = require('./measurables');
+const { measurementIsCompetitiveOrCommentOnly } = require('./measurements');
 
 const currentAgentIsApplicationAdminOrChannelAdmin = or(
   currentAgentIsApplicationAdmin,
@@ -159,11 +159,11 @@ const rulesVotes = () => ({
   Mutation: {
     upvote: and(
       currentAgentIsAuthenticated,
-      measurableIsCompetitiveOrCommentOnly,
+      measurementIsCompetitiveOrCommentOnly,
     ),
     downvote: and(
       currentAgentIsAuthenticated,
-      measurableIsCompetitiveOrCommentOnly,
+      measurementIsCompetitiveOrCommentOnly,
     ),
   },
 });

@@ -4,6 +4,7 @@ const {
   MEASURABLE_VALUE_TYPE,
 } = require('../../../enums/measurable-value-type');
 
+// @todo: To remove nonNull.
 const measurableValueType = graphql.GraphQLNonNull(
   new graphql.GraphQLEnumType({
     name: 'valueType',

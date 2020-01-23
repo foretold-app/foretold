@@ -46,7 +46,7 @@ async function total(root, _args, _context, _info) {
   const query = new Query({ sort: 0 });
   const options = new Options({ raw: true });
   const votes = await new VotesData().getOne(params, query, options);
-  return _.get(votes, 'totalVoteCount', null);
+  return _.get(votes, 'totalVoteAmount', null);
 }
 
 module.exports = {

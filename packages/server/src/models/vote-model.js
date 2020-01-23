@@ -18,7 +18,7 @@ class VoteModel extends ModelPostgres {
    */
   _getAttributes() {
     return [
-      [this.fn('SUM', this.col('voteAmount')), 'totalVoteCount'],
+      [this.fn('SUM', this.col('voteAmount')), 'totalVoteAmount'],
     ];
   }
 

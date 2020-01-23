@@ -575,6 +575,26 @@ const schema = new graphql.GraphQLSchema({
         },
         resolve: resolvers.mutexes.free,
       },
+
+      upvote: {
+        type: graphql.GraphQLBoolean,
+        args: {
+          measurableId: {
+            type: graphql.GraphQLNonNull(types.scalars.measurableId),
+          },
+        },
+        resolve: resolvers.votes.upvote,
+      },
+
+      downvote: {
+        type: graphql.GraphQLBoolean,
+        args: {
+          measurableId: {
+            type: graphql.GraphQLNonNull(types.scalars.measurableId),
+          },
+        },
+        resolve: resolvers.votes.upvote,
+      },
     },
   }),
 });

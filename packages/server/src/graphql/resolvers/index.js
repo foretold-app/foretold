@@ -17,6 +17,7 @@ const agentMeasurables = require('./agent-measurables');
 const agentChannels = require('./agent-channels');
 const mutexes = require('./mutexes');
 const notebooks = require('./notebooks');
+const votes = require('./votes');
 
 module.exports = {
   channels,
@@ -38,4 +39,5 @@ module.exports = {
   agentChannels,
   mutexes,
   notebooks,
+  votes,
 };

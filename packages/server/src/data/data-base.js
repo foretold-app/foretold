@@ -1,8 +1,8 @@
 const _ = require('lodash');
 
-const { Model } = require('../models-abstract');
-const { Options } = require('../models-abstract/classes');
-const { Restrictions } = require('../models-abstract/classes');
+const { Model } = require('../models');
+const { Options } = require('../models/classes');
+const { Restrictions } = require('../models/classes');
 const logger = require('../lib/log');
 
 const { structures } = require('./classes');

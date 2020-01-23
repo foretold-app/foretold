@@ -4,7 +4,7 @@ const {
   MEASUREMENT_VALUE,
 } = require('@foretold/measurement-value/enums/measurement-value');
 
-const models = require('../../models');
+const models = require('../../models/definitions');
 
 const {
   measurementUnresolvableResolution,

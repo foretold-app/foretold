@@ -4,7 +4,7 @@ const moment = require('moment');
 const { DataBase } = require('./data-base');
 
 const config = require('../../config/config');
-const { TokenModel } = require('../models-abstract');
+const { TokenModel } = require('../models');
 const { TOKEN_TYPE } = require('../enums');
 
 /**

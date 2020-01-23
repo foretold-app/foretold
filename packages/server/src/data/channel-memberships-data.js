@@ -3,7 +3,7 @@ const assert = require('assert');
 
 const { DataBase } = require('./data-base');
 
-const { ChannelMembershipModel } = require('../models-abstract');
+const { ChannelMembershipModel } = require('../models');
 const { CHANNEL_MEMBERSHIP_TYPE } = require('../enums');
 
 const { Data } = require('../data/classes');

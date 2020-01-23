@@ -4,7 +4,7 @@ const { DataBase } = require('./data-base');
 const { Params, Query, Data, Options } = require('./classes');
 const logger = require('../lib/log');
 
-const { PreferenceModel } = require('../models-abstract');
+const { PreferenceModel } = require('../models');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}

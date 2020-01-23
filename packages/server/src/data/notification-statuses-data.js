@@ -1,5 +1,5 @@
 const { DataBase } = require('./data-base');
-const { NotificationStatusModel } = require('../models-abstract');
+const { NotificationStatusModel } = require('../models');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}

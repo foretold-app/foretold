@@ -8,7 +8,7 @@ const { Filter } = require('./classes');
 const { Pagination } = require('./classes');
 const { Options } = require('./classes');
 
-const { AgentChannelModel } = require('../models-abstract');
+const { AgentChannelModel } = require('../models');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}

@@ -1,5 +1,5 @@
 const { DataBase } = require('./data-base');
-const { TemplateModel } = require('../models-abstract');
+const { TemplateModel } = require('../models');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}

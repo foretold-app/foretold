@@ -3,7 +3,7 @@ const { resolver } = require('graphql-sequelize');
 
 const resolvers = require('../resolvers');
 const channelMemberships = require('./channel-memberhips');
-const models = require('../../models');
+const models = require('../../models/definitions');
 
 const { agentType } = require('./enums/agent-type');
 

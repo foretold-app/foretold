@@ -2,7 +2,7 @@ const graphql = require('graphql');
 const { resolver } = require('graphql-sequelize');
 const { applyMiddleware } = require('graphql-middleware');
 
-const models = require('../models');
+const models = require('../models/definitions');
 const resolvers = require('./resolvers');
 
 const types = require('./types');

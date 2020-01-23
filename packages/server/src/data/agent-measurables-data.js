@@ -9,7 +9,7 @@ const { nonMarketScore } = require('@foretold/prediction-analysis');
 
 // The first level of dependencies (..)
 const logger = require('../lib/log');
-const { AgentMeasurableModel } = require('../models-abstract');
+const { AgentMeasurableModel } = require('../models');
 const { MEASUREMENT_COMPETITOR_TYPE } = require('../enums');
 
 const { MARKET_TYPE } = require('../enums');

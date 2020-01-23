@@ -1,7 +1,7 @@
 const graphql = require('graphql');
 const { DateType, resolver } = require('graphql-sequelize');
 
-const models = require('../../models');
+const models = require('../../models/definitions');
 
 const { FEED_ITEM_BODY } = require('../../enums/feed-item-body');
 

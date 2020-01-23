@@ -1,7 +1,7 @@
 const graphql = require('graphql');
 const { resolver, DateType } = require('graphql-sequelize');
 
-const models = require('../../models');
+const models = require('../../models/definitions');
 const resolvers = require('../resolvers');
 
 const { measurableValueType } = require('./enums/measurable-value-type');

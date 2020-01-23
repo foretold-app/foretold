@@ -1,5 +1,5 @@
 const { DataBase } = require('./data-base');
-const { FeedItemModel } = require('../models-abstract');
+const { FeedItemModel } = require('../models');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}

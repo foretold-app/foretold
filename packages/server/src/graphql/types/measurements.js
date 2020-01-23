@@ -124,6 +124,11 @@ const measurement = new graphql.GraphQLObjectType({
       resolve: require('../resolvers/measurements').scoreSet,
     },
 
+    totalVoteCount: {
+      type: graphql.GraphQLNonNull(graphql.GraphQLFloat),
+      resolve: require('../resolvers/votes').total,
+    },
+
     // @todo: Do not use resolver. Use common interfaces of Data layer.
     measurable: {
       type: require('./measurables').measurable,

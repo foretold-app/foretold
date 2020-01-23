@@ -1,6 +1,46 @@
 const graphql = require('graphql');
 const { DateType } = require('graphql-sequelize');
 
+const points = graphql.GraphQLList(new graphql.GraphQLObjectType({
+  name: 'point',
+  fields: () => ({
+    x: { type: graphql.GraphQLInt },
+    y: { type: graphql.GraphQLFloat },
+  }),
+}));
+
+const activeTimeDistribution = new graphql.GraphQLObjectType({
+  name: 'timeDistribution',
+  fields: () => ({
+    finalX: { type: graphql.GraphQLInt },
+    points: {
+      type: points,
+    },
+  }),
+});
+
+const timeAverageScore = new graphql.GraphQLObjectType({
+  name: 'timeAverageScore',
+  fields: () => ({
+    score: { type: graphql.GraphQLFloat },
+    agentPredictions: {
+      type: graphql.GraphQLList(require('./measurements').measurement),
+    },
+    aggregations: {
+      type: graphql.GraphQLList(require('./measurements').measurement),
+    },
+    recentResult: {
+      type: require('./measurements').measurement,
+    },
+    scoringStartTime: { type: DateType.default },
+    scoringEndTime: { type: DateType.default },
+    measurableCreationTime: { type: DateType.default },
+    finalResolutionTime: { type: DateType.default },
+    timeActivityRatio: { type: graphql.GraphQLFloat },
+    activeTimeDistribution: { type: activeTimeDistribution },
+  }),
+});
+
 const agentMeasurable = new graphql.GraphQLObjectType({
   name: 'AgentMeasurable',
   fields: () => ({
@@ -12,43 +52,7 @@ const agentMeasurable = new graphql.GraphQLObjectType({
       resolve: require('../resolvers').agentMeasurables.primaryPointScore,
     },
     timeAverageScore: {
-      type: new graphql.GraphQLObjectType({
-        name: 'timeAverageScore',
-        fields: () => ({
-          score: { type: graphql.GraphQLFloat },
-          agentPredictions: {
-            type: graphql.GraphQLList(require('./measurements').measurement),
-          },
-          aggregations: {
-            type: graphql.GraphQLList(require('./measurements').measurement),
-          },
-          recentResult: {
-            type: require('./measurements').measurement,
-          },
-          scoringStartTime: { type: DateType.default },
-          scoringEndTime: { type: DateType.default },
-          measurableCreationTime: { type: DateType.default },
-          finalResolutionTime: { type: DateType.default },
-          timeActivityRatio: { type: graphql.GraphQLFloat },
-          activeTimeDistribution: {
-            type: new graphql.GraphQLObjectType({
-              name: 'timeDistribution',
-              fields: () => ({
-                finalX: { type: graphql.GraphQLInt },
-                points: {
-                  type: graphql.GraphQLList(new graphql.GraphQLObjectType({
-                    name: 'point',
-                    fields: () => ({
-                      x: { type: graphql.GraphQLInt },
-                      y: { type: graphql.GraphQLFloat },
-                    }),
-                  })),
-                },
-              }),
-            }),
-          },
-        }),
-      }),
+      type: timeAverageScore,
       resolve: require('../resolvers').agentMeasurables.timeAverageScore,
       args: {
         marketType: {

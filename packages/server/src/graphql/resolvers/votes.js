@@ -29,7 +29,20 @@ async function downvote(_root, args, context, _info) {
   return new VotesData().downvote(agentId, measurementId);
 }
 
+/**
+ * @param {*} _root
+ * @param {object} args
+ * @param {Models.MeasurementID} args.measurementId
+ * @param {Schema.Context} context
+ * @param {object} _info
+ * @returns {Promise<*|Array<Model>>}
+ */
+async function total(_root, args, context, _info) {
+  return 2;
+}
+
 module.exports = {
   upvote,
   downvote,
+  total,
 };

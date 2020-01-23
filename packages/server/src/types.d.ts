@@ -290,6 +290,19 @@ export namespace Layers {
 
   export type order = { field: string; direction: string };
   export type orderList = order[];
+  export type lock = boolean | {
+    level: string,
+  };
+
+  export interface Transaction {
+    LOCK: {
+      UPDATE: string,
+    },
+
+    commit(): void;
+
+    rollback(): void;
+  }
 
   namespace DataSourceLayer {
     type compoundId = object;
@@ -300,7 +313,7 @@ export namespace Layers {
       agentId?: Models.AgentID;
       measuredByAgentId?: Models.AgentID;
       transaction?: object;
-      lock?: boolean;
+      lock?: lock;
       skipLocked?: boolean;
       raw?: boolean;
       currentAgentId?: Models.AgentID;
@@ -318,6 +331,7 @@ export namespace Layers {
       notificationId?: Models.NotificationID;
       ownerId?: Models.AgentID;
       measurableIds?: Models.MeasurableID[];
+      measurementId?: Models.MeasurementID;
 
       competitorType?: string;
       type?: string;
@@ -364,6 +378,7 @@ export namespace Layers {
 
       agentId?: Models.AgentID;
       measurableId?: Models.MeasurableID;
+      measurementId?: Models.MeasurementID;
       seriesId?: Models.SeriesID;
       channelId?: Models.ChannelID;
 
@@ -376,27 +391,46 @@ export namespace Layers {
     type response = { data: any };
     type responseList = { data: any[]; total: number };
 
+    // @todo: To fix response types.
     interface DataSource {
-      createOne(data: data, options: options): response;
+      createOne(data: data, options: options): Promise<response>;
 
-      getOne(params: params, query: query, options: options): response;
+      getOne(params: params, query: query, options: options): Promise<response>;
 
-      updateOne(params: params, data: data, options: options): response;
+      getCount(params: params, query: query, options: options): Promise<number>;
 
-      deleteOne(params: params, options: options): response;
+      updateOne(params: params, data: data, options: options): Promise<response>;
+
+      deleteOne(params: params, options: options): Promise<response>;
 
       getAll(
         filter: filter,
         pagination: pagination,
         options: options
-      ): responseList;
+      ): Promise<responseList>;
+
+      getConnection(
+        filter: filter,
+        pagination: pagination,
+        options: options
+      ): Promise<responseList>;
 
       upsertOne(
         params: params,
         query: query,
         data: data,
         options: options
-      ): response;
+      ): Promise<response>;
+
+      getTransaction(): Promise<Transaction>;
+
+      commit(Transaction): Promise<Transaction>;
+
+      rollback(Transaction): Promise<Transaction>;
+
+      lock(): Promise<boolean>;
+
+      updateMaterializedView(): Promise<boolean>;
     }
   }
 
@@ -422,7 +456,7 @@ export namespace Layers {
     };
     type options = {
       transaction?: object;
-      lock?: boolean;
+      lock?: lock;
       skipLocked?: boolean;
       raw?: boolean;
     };
@@ -437,6 +471,7 @@ export namespace Layers {
       creatorId?: Models.AgentID;
       ownerId?: Models.AgentID;
       measurableIds?: Models.MeasurableID[];
+      measurementId?: Models.MeasurementID;
 
       isArchived?: string[];
       types?: string[];
@@ -484,46 +519,45 @@ export namespace Layers {
     };
     type params = {
       id?: Models.ObjectID;
+
       agentId?: Models.AgentID;
-      name?: string;
-      auth0Id?: string;
+      measurableId?: Models.MeasurableID;
+      measurementId?: Models.MeasurementID;
       seriesId?: Models.SeriesID;
+      channelId?: Models.ChannelID;
+
+      auth0Id?: string;
+      name?: string;
+      competitorType?: string;
+      email?: string;
       isEmailVerified?: boolean;
     };
     type response = { data: any };
     type responseList = { data: any[]; total: number };
 
+    // @todo: To fix response types.
     interface AbstractModel {
       deleteOne(
         params: params,
         restrictions: restrictions,
         options: options
-      ): response;
+      ): Promise<response>;
 
       updateOne(
         params: params,
         data: data,
         restrictions: restrictions,
         options: options
-      ): response;
+      ): Promise<response>;
 
-      createOne(data: data, restrictions: restrictions): response;
+      createOne(data: data, restrictions: restrictions): Promise<response>;
 
       getOne(
         params: params,
         query: query,
         restrictions: restrictions,
         options: options
-      ): response;
-
-      getAll(
-        filter: filter,
-        pagination: pagination,
-        restrictions: restrictions,
-        options: options
-      ): responseList;
-
-      updateAll(params: params, data: data, options: options): boolean;
+      ): Promise<response>;
 
       upsertOne(
         params: params,
@@ -531,7 +565,48 @@ export namespace Layers {
         data: data,
         restrictions: restrictions,
         options: options
-      ): response;
+      ): Promise<response>;
+
+      getCount(
+        params: params,
+        query: query,
+        restrictions: restrictions,
+        options: options
+      ): Promise<number>;
+
+      getAll(
+        filter: filter,
+        pagination: pagination,
+        restrictions: restrictions,
+        options: options
+      ): Promise<responseList>;
+
+      getAllWithConnections(
+        filter: filter,
+        pagination: pagination,
+        restrictions: restrictions,
+        options: options
+      ): Promise<responseList>;
+
+      updateAll(params: params, data: data, options: options): Promise<boolean>;
+
+      upsertOne(
+        params: params,
+        query: query,
+        data: data,
+        restrictions: restrictions,
+        options: options
+      ): Promise<response>;
+
+      getTransaction(): Promise<Transaction>;
+
+      commit(Transaction): Promise<Transaction>;
+
+      rollback(Transaction): Promise<Transaction>;
+
+      lock(): Promise<boolean>;
+
+      updateMaterializedView(): Promise<boolean>;
     }
   }
 }

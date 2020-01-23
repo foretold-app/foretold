@@ -203,7 +203,9 @@ class ModelPostgres extends Model {
    */
   async getOne(params = {}, query = {}, restrictions = {}, options = {}) {
     this._assertInput({ params, query, restrictions, options });
-    const cond = await this._getPredicated(params, query, restrictions, options);
+    const cond = await this._getPredicated(
+      params, query, restrictions, options,
+    );
     return this.model.findOne(cond);
   }
 
@@ -217,11 +219,14 @@ class ModelPostgres extends Model {
    */
   async getCount(params = {}, query = {}, restrictions = {}, options = {}) {
     this._assertInput({ params, query, restrictions, options });
-    const cond = await this._getPredicated(params, query, restrictions, options);
+    const cond = await this._getPredicated(
+      params, query, restrictions, options,
+    );
     return this.model.count(cond);
   }
 
   /**
+   * @todo: To fix a "spread".
    * @protected
    * @param {Layers.AbstractModelsLayer.params} [params]
    * @param {Layers.AbstractModelsLayer.query} [query]
@@ -274,6 +279,7 @@ class ModelPostgres extends Model {
   }
 
   /**
+   * @todo: To fix a "spread".
    * @public
    * @param {Layers.AbstractModelsLayer.params} [params]
    * @param {Layers.AbstractModelsLayer.query} [query]
@@ -295,7 +301,7 @@ class ModelPostgres extends Model {
 
   /**
    * @public
-   * @return {Promise<*>}
+   * @return {Promise<Layers.Transaction>}
    */
   async getTransaction() {
     return this.sequelize.transaction();
@@ -303,7 +309,7 @@ class ModelPostgres extends Model {
 
   /**
    * @public
-   * @param {object} transaction
+   * @param {Layers.Transaction} transaction
    * @return {Promise<*>}
    */
   async commit(transaction) {
@@ -312,7 +318,7 @@ class ModelPostgres extends Model {
 
   /**
    * @public
-   * @param {object} transaction
+   * @param {Layers.Transaction} transaction
    * @return {Promise<*>}
    */
   async rollback(transaction) {
@@ -491,6 +497,12 @@ class ModelPostgres extends Model {
     if (!!filter.measurableId) {
       where[this.and].push({
         measurableId: filter.measurableId,
+      });
+    }
+
+    if (!!filter.measurementId) {
+      where[this.and].push({
+        measurementId: filter.measurementId,
       });
     }
 
@@ -977,17 +989,8 @@ class ModelPostgres extends Model {
    * @protected
    */
   _assertInput(input = {}) {
-    const asserts = {
-      data: Data,
-      filter: Filter,
-      options: Options,
-      pagination: Pagination,
-      params: Params,
-      query: Query,
-      restrictions: Restrictions,
-    };
-    for (const key in asserts) {
-      const klass = asserts[key];
+    for (const key in ModelPostgres.asserts) {
+      const klass = ModelPostgres.asserts[key];
       const object = input[key];
       if (object === undefined) continue;
       if (_.isEmpty(object)) continue;
@@ -997,6 +1000,16 @@ class ModelPostgres extends Model {
     }
   }
 }
+
+ModelPostgres.asserts = {
+  data: Data,
+  filter: Filter,
+  options: Options,
+  pagination: Pagination,
+  params: Params,
+  query: Query,
+  restrictions: Restrictions,
+};
 
 module.exports = {
   ModelPostgres,

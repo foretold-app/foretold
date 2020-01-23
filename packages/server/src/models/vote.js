@@ -1,7 +1,7 @@
 // Do not use associations between models and do not
 // use ORM for fetching them!
 module.exports = (sequelize, DataTypes) => {
-  const Votes = sequelize.define('Votes', {
+  const Vote = sequelize.define('Vote', {
     id: {
       type: DataTypes.UUID(),
       primaryKey: true,
@@ -32,5 +32,5 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
   });
-  return Votes;
+  return Vote;
 };

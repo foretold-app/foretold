@@ -1,3 +1,5 @@
+// @todo: To split the file.
+
 const MARKET_TYPE = {
   MARKET: 'MARKET',
   NON_MARKET: 'NON_MARKET',

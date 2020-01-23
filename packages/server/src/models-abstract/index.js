@@ -19,7 +19,7 @@ const { AgentChannelModel } = require('./agent-channel-model');
 const { MutexModel } = require('./mutex-model');
 const { NotebookModel } = require('./notebook-model');
 const { ChannelAgentModel } = require('./channel-agent-model');
-const { VotesModel } = require('./votes-model');
+const { VoteModel } = require('./vote-model');
 const { Model } = require('./model');
 
 module.exports = {
@@ -44,6 +44,6 @@ module.exports = {
   MutexModel,
   NotebookModel,
   ChannelAgentModel,
-  VotesModel,
+  VoteModel,
   Model,
 };

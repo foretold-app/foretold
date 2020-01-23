@@ -593,7 +593,7 @@ const schema = new graphql.GraphQLSchema({
             type: graphql.GraphQLNonNull(types.scalars.measurableId),
           },
         },
-        resolve: resolvers.votes.upvote,
+        resolve: resolvers.votes.downvote,
       },
     },
   }),

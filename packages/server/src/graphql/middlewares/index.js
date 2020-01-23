@@ -233,6 +233,16 @@ const middlewares = {
       await setContextUser(root, args, context, info);
       return resolve(root, args, context, info);
     },
+
+    upvote: async (resolve, root, args, context, info) => {
+      await setContextMeasurable(root, args, context, info);
+      return resolve(root, args, context, info);
+    },
+
+    downvote: async (resolve, root, args, context, info) => {
+      await setContextMeasurable(root, args, context, info);
+      return resolve(root, args, context, info);
+    },
   },
 };
 

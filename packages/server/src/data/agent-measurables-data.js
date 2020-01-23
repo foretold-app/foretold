@@ -2,7 +2,7 @@
 const _ = require('lodash');
 const moment = require('moment');
 const {
-  PredictionResolutionOverTime
+  PredictionResolutionOverTime,
 } = require('@foretold/prediction-analysis');
 const { marketScore } = require('@foretold/prediction-analysis');
 const { nonMarketScore } = require('@foretold/prediction-analysis');

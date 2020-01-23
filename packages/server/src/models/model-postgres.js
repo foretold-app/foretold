@@ -158,31 +158,34 @@ class ModelPostgres extends Model {
     // if ('inspect' in restrictions) restrictions.inspect();
 
     this.applyRestrictions(where, restrictions);
-    this.applyRestrictionsIncluding(include, restrictions);
     this.applyFilter(where, filter);
+    this.applyRestrictionsIncluding(include, restrictions);
 
-    const cond = { where, include };
-    this._extendConditions(cond, options);
-
+    // Block 1
+    const countCond = { where, include };
+    this._extendConditions(countCond, options);
     /** @type {number} */
-    const total = await this.model.count(cond);
+    const total = await this.model.count(countCond);
     const { limit, offset } = pagination.getPagination2();
 
+    // Block 2
     const order = pagination.isOrderSet()
       ? this._getDefaultOrder(pagination)
       : this._getOrder();
 
     const findCond = {
-      ...cond,
+      where,
+      include,
       limit,
       offset,
       order,
       attributes: this._getAttributes(),
     };
-
+    this._extendConditions(findCond, options);
     /** @type {Models.Model[]} */
     const data = await this.model.findAll(findCond);
 
+    // Block 3
     return new ResponseAll(
       data,
       total,
@@ -200,7 +203,6 @@ class ModelPostgres extends Model {
    * @return {Promise<Models.Model>}
    */
   async getOne(params = {}, query = {}, restrictions = {}, options = {}) {
-    this._assertInput({ params, query, restrictions, options });
     const cond = await this._getPredicated(
       params, query, restrictions, options,
     );
@@ -216,52 +218,10 @@ class ModelPostgres extends Model {
    * @return {Promise<Models.Model>}
    */
   async getCount(params = {}, query = {}, restrictions = {}, options = {}) {
-    this._assertInput({ params, query, restrictions, options });
     const cond = await this._getPredicated(
       params, query, restrictions, options,
     );
     return this.model.count(cond);
-  }
-
-  /**
-   * @todo: To fix a "spread".
-   * @protected
-   * @param {Layers.AbstractModelsLayer.params} [params]
-   * @param {Layers.AbstractModelsLayer.query} [query]
-   * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
-   * @param {Layers.AbstractModelsLayer.options} [options]
-   * @return {Promise<*>}
-   */
-  async _getPredicated(
-    params = {},
-    query = {},
-    restrictions = {},
-    options = {},
-  ) {
-    this._assertInput({ params, query, restrictions, options });
-    const where = { ...params };
-    const order = this._getOrderForOne(query);
-    const distinct = !!query.distinct ? true : null;
-    const col = !!query.col ? query.col : null;
-    const attributes = this._getAttributes();
-    const group = this._getGroups();
-
-    // if ('inspect' in params) params.inspect();
-    // if ('inspect' in restrictions) restrictions.inspect();
-
-    this.applyRestrictions(where, restrictions);
-    const cond = {
-      where,
-      order,
-      distinct,
-      col,
-      attributes,
-      group,
-    };
-
-    this._extendConditions(cond, options);
-
-    return cond;
   }
 
   /**
@@ -715,6 +675,44 @@ class ModelPostgres extends Model {
   }
 
   /**
+   * @todo: To fix a "spread".
+   * @protected
+   * @param {Layers.AbstractModelsLayer.params} [params]
+   * @param {Layers.AbstractModelsLayer.query} [query]
+   * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
+   * @param {Layers.AbstractModelsLayer.options} [options]
+   * @return {Promise<*>}
+   */
+  async _getPredicated(
+    params = {},
+    query = {},
+    restrictions = {},
+    options = {},
+  ) {
+    this._assertInput({ params, query, restrictions, options });
+    const where = { ...params };
+
+    // if ('inspect' in params) params.inspect();
+    // if ('inspect' in restrictions) restrictions.inspect();
+
+    this.applyRestrictions(where, restrictions);
+
+    const order = this._getOrderForOne(query);
+    const distinct = !!query.distinct ? true : null;
+    const col = !!query.col ? query.col : null;
+
+    const cond = {
+      where,
+      order,
+      distinct,
+      col,
+    };
+    this._extendConditions(cond, options);
+
+    return cond;
+  }
+
+  /**
    * @protected
    * @todo: see this._publicAndJoinedChannels()
    * @param {Models.AgentID} [agentId]
@@ -726,6 +724,7 @@ class ModelPostgres extends Model {
   }
 
   /**
+   * @todo: To use SQL replacements or bindings.
    * @protected
    * @param {Models.AgentID} [agentId]
    * @param {string} [name]
@@ -780,6 +779,7 @@ class ModelPostgres extends Model {
   }
 
   /**
+   * @todo: To use SQL replacements or bindings.
    * @todo: Rename to "withinJoinedChannels"?
    * @protected
    * @param {Models.AgentID} [agentId]
@@ -813,10 +813,11 @@ class ModelPostgres extends Model {
   }
 
   /**
-   * @protected
+   * @todo: To use SQL replacements or bindings.
    * @param {Models.AgentID} [agentId]
    * @param {string} [name]
    * @return {string}
+   * @protected
    */
   _measurablesInPublicAndJoinedChannels(agentId, name = '') {
     assert(!!agentId, 'Agent ID is required.');
@@ -840,9 +841,10 @@ class ModelPostgres extends Model {
   }
 
   /**
-   * @protected
+   * @todo: To use SQL replacements or bindings.
    * @param {string} [name]
    * @return {string}
+   * @protected
    */
   _measurablesInPublicChannels(name = '') {
     return `(
@@ -867,11 +869,12 @@ class ModelPostgres extends Model {
   }
 
   /**
-   * @protected
+   * @todo: To use SQL replacements or bindings.
    * @param {string[] | null} statesIn
    * @param {Models.ChannelID | null} channelIdIn
    * @param {string} [name]
    * @return {string}
+   * @protected
    */
   _withinMeasurables(statesIn, channelIdIn, name = '') {
     const cond = [];
@@ -942,18 +945,20 @@ class ModelPostgres extends Model {
   }
 
   /**
+   * @param {Layers.AbstractModelsLayer.options} _options
    * @return {{include: Sequelize.literal|*[]} | null}
    * @private
    */
-  _getAttributes() {
+  _getAttributes(_options = {}) {
     return null;
   }
 
   /**
+   * @param {Layers.AbstractModelsLayer.options} _options
    * @return {{include: Sequelize.literal|*[]} | null}
    * @private
    */
-  _getGroups() {
+  _getGroups(_options = {}) {
     return null;
   }
 
@@ -967,7 +972,7 @@ class ModelPostgres extends Model {
     this._assertInput({ options });
     const cond = {};
     this._extendConditions(cond, options);
-    await this.sequelize.query(`SET LOCAL lock_timeout = '3s'`, cond);
+    await this.sequelize.query('SET LOCAL lock_timeout = \'3s\'', cond);
     return this.sequelize.query(`LOCK TABLE "${name}"`, cond);
   }
 
@@ -1001,6 +1006,12 @@ class ModelPostgres extends Model {
     }
     if (_.has(options, 'raw')) {
       cond.raw = options.raw;
+    }
+    if (_.has(options, 'attributes')) {
+      cond.attributes = this._getAttributes(options);
+    }
+    if (_.has(options, 'group')) {
+      cond.group = this._getGroups(options);
     }
     return cond;
   }

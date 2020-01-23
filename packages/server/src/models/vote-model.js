@@ -13,19 +13,21 @@ class VoteModel extends ModelPostgres {
   }
 
   /**
+   * @param {Layers.AbstractModelsLayer.options} _options
    * @return {{include: Sequelize.literal|*[]}}
    * @protected
    */
-  _getAttributes() {
+  _getAttributes(_options = {}) {
     return [
       [this.fn('SUM', this.col('voteAmount')), 'totalVoteAmount'],
     ];
   }
 
   /**
+   * @param {Layers.AbstractModelsLayer.options} _options
    * @protected
    */
-  _getGroups() {
+  _getGroups(_options = {}) {
     return ['measurementId'];
   }
 }

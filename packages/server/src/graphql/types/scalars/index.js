@@ -10,6 +10,11 @@ const agentId = createObjectId('AgentId');
 const channelId = createObjectId('ChannelId');
 const userId = createObjectId('UserId');
 const measurableId = createObjectId('MeasurableId');
+const voteId = createObjectId('VoteId');
+const botId = createObjectId('BoteId');
+const measurementId = createObjectId('MeasurementId');
+const seriesId = createObjectId('SeriesId');
+const tokenId = createObjectId('TokenId');
 
 const string0to255 = createLimitedString(0, 255);
 const string3to255 = createLimitedString(3, 255);
@@ -38,6 +43,11 @@ module.exports = {
   channelId,
   userId,
   measurableId,
+  voteId,
+  botId,
+  measurementId,
+  seriesId,
+  tokenId,
 
   string0to255,
   string3to255,

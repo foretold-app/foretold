@@ -23,42 +23,28 @@ class VotesData extends DataBase {
   /**
    * @param {Models.AgentID} agentId
    * @param {Models.MeasurementID} measurementId
-   * @returns {boolean}
+   * @returns {Promise<Models.Vote>}
    */
   async upvote(agentId, measurementId) {
-    assert(!!agentId, 'Agent ID is required.');
-    assert(!!measurementId, 'Measurement ID is required.');
-
-    let transaction;
-    try {
-      transaction = await this.getTransaction();
-    } catch (e) {
-      this.log.trace('upvote', e.message, e);
-      throw e;
-    }
-
-    try {
-      const vote = await this._getVote(agentId, measurementId, transaction);
-
-      let voteAmount = vote.voteAmount;
-      if (voteAmount < 0) voteAmount = 0;
-      if (voteAmount <= 9) voteAmount += 1;
-
-      await this._updateVote(vote.id, voteAmount, transaction);
-      await this.commit(transaction);
-    } catch (e) {
-      this.log.trace('upvote', e.message, e);
-      await this.rollback(transaction);
-    }
-    return true;
+    return this._changeVote(agentId, measurementId, this._up);
   }
 
   /**
    * @param {Models.AgentID} agentId
    * @param {Models.MeasurementID} measurementId
-   * @returns {boolean}
+   * @returns {Promise<Models.Vote>}
    */
   async downvote(agentId, measurementId) {
+    return this._changeVote(agentId, measurementId, this._down);
+  }
+
+  /**
+   * @param {Models.AgentID} agentId
+   * @param {Models.MeasurementID} measurementId
+   * @param {Function} change
+   * @returns {Promise<Models.Vote>}
+   */
+  async _changeVote(agentId, measurementId, change) {
     assert(!!agentId, 'Agent ID is required.');
     assert(!!measurementId, 'Measurement ID is required.');
 
@@ -66,24 +52,47 @@ class VotesData extends DataBase {
     try {
       transaction = await this.getTransaction();
     } catch (e) {
-      this.log.trace('downvote', e.message, e);
+      this.log.trace(e.message, e);
       throw e;
     }
 
     try {
-      const vote = await this._getVote(agentId, measurementId, transaction);
-
-      let voteAmount = vote.voteAmount;
-      if (voteAmount > 0) voteAmount = 0;
-      if (voteAmount >= -9) voteAmount -= 1;
-
-      await this._updateVote(vote.id, voteAmount, transaction);
+      const vote = await this._voteLocked(agentId, measurementId, transaction);
+      const voteAmount = change(vote);
+      if (voteAmount !== vote.voteAmount) {
+        await this._update(vote, voteAmount, transaction);
+      }
       await this.commit(transaction);
+      return this._vote(agentId, measurementId, transaction);
     } catch (e) {
-      this.log.trace('downvote', e.message, e);
+      this.log.trace(e.message, e);
       await this.rollback(transaction);
+      throw e;
     }
-    return true;
+  }
+
+  /**
+   * @param vote
+   * @returns {number}
+   * @protected
+   */
+  _up(vote) {
+    let voteAmount = vote.voteAmount;
+    if (voteAmount < 0) voteAmount = 0;
+    if (voteAmount <= 9) voteAmount += 1;
+    return voteAmount;
+  }
+
+  /**
+   * @param vote
+   * @returns {number}
+   * @protected
+   */
+  _down(vote) {
+    let voteAmount = vote.voteAmount;
+    if (voteAmount > 0) voteAmount = 0;
+    if (voteAmount >= -9) voteAmount -= 1;
+    return voteAmount;
   }
 
   /**
@@ -93,7 +102,7 @@ class VotesData extends DataBase {
    * @returns {Promise<*>}
    * @private
    */
-  async _getVote(agentId, measurementId, transaction) {
+  async _voteLocked(agentId, measurementId, transaction) {
     const params = new Params({ agentId, measurementId });
     const query = new Query();
     const lock = { level: transaction.LOCK.UPDATE };
@@ -104,13 +113,27 @@ class VotesData extends DataBase {
 
   /**
    * @param {Models.AgentID} agentId
+   * @param {Models.MeasurementID} measurementId
+   * @param {Layers.Transaction} transaction
+   * @returns {Promise<*>}
+   * @private
+   */
+  async _vote(agentId, measurementId, transaction) {
+    const params = new Params({ agentId, measurementId });
+    const query = new Query();
+    const options = new Options({ transaction, raw: true });
+    return this.upsertOne(params, query, options);
+  }
+
+  /**
+   * @param {Models.Vote} vote
    * @param {number} voteAmount
    * @param {Layers.Transaction} transaction
    * @returns {Promise<*>}
    * @private
    */
-  async _updateVote(agentId, voteAmount, transaction) {
-    const params = new Params({ id: agentId });
+  async _update(vote, voteAmount, transaction) {
+    const params = new Params({ id: vote.id });
     const data = new Data({ voteAmount });
     const options = new Options({ transaction, raw: true });
     return this.updateOne(params, data, options);

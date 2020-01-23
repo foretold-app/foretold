@@ -11,6 +11,23 @@ class VoteModel extends ModelPostgres {
       sequelize: models.sequelize,
     });
   }
+
+  /**
+   * @return {{include: Sequelize.literal|*[]}}
+   * @protected
+   */
+  _getAttributes() {
+    return [
+      [this.fn('SUM', this.col('voteAmount')), 'totalVoteCount'],
+    ];
+  }
+
+  /**
+   * @protected
+   */
+  _getGroups() {
+    return ['measurementId'];
+  }
 }
 
 module.exports = {

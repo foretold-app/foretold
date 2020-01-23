@@ -49,7 +49,7 @@ class ModelPostgres extends Model {
     this.col = this.sequelize.col;
     this.literal = this.sequelize.literal;
 
-    this.log = logger.module('models-abstract/model-postgres');
+    this.log = logger.module('models/model-postgres');
   }
 
   /**
@@ -240,21 +240,23 @@ class ModelPostgres extends Model {
   ) {
     this._assertInput({ params, query, restrictions, options });
     const where = { ...params };
-    const sort = query.sort === 1 ? 'ASC' : 'DESC';
-    const order = [['createdAt', sort]];
+    const order = this._getOrderForOne(query);
     const distinct = !!query.distinct ? true : null;
     const col = !!query.col ? query.col : null;
+    const attributes = this._getAttributes();
+    const group = this._getGroups();
 
     // if ('inspect' in params) params.inspect();
     // if ('inspect' in restrictions) restrictions.inspect();
 
     this.applyRestrictions(where, restrictions);
-
     const cond = {
       where,
       order,
       distinct,
       col,
+      attributes,
+      group,
     };
 
     this._extendConditions(cond, options);
@@ -925,11 +927,33 @@ class ModelPostgres extends Model {
   }
 
   /**
-   *
+   * @return {*[] | null}
+   * @private
+   */
+  _getOrderForOne(query) {
+    if (!query) {
+      return [['createdAt', 'DESC']];
+    }
+    if (query.sort === 0) {
+      return null;
+    }
+    const sort = query.sort === 1 ? 'ASC' : 'DESC';
+    return [['createdAt', sort]];
+  }
+
+  /**
    * @return {{include: Sequelize.literal|*[]} | null}
    * @private
    */
   _getAttributes() {
+    return null;
+  }
+
+  /**
+   * @return {{include: Sequelize.literal|*[]} | null}
+   * @private
+   */
+  _getGroups() {
     return null;
   }
 

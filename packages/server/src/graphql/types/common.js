@@ -47,8 +47,6 @@ const orderField = new graphql.GraphQLEnumType({
   name: 'OrderField',
   values: {
     primaryPointScore: { value: 'primaryPointScore' },
-    membersCount: { value: 'membersCount' },
-    isCurated: { value: 'isCurated' },
   },
 });
 
@@ -69,11 +67,12 @@ const order = new graphql.GraphQLInputObjectType({
 });
 
 module.exports = {
+  connectionArguments,
+  iAmOwner,
+  iAmOwnerByUserId,
+  isArchived,
   isMe,
   order,
-  iAmOwner,
-  isArchived,
-  iAmOwnerByUserId,
-  connectionArguments,
+  orderDirection,
   pageInfoConnection,
 };

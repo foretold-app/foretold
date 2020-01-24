@@ -66,7 +66,26 @@ const channelInput = new graphql.GraphQLInputObjectType({
   }),
 });
 
+const orderFieldChannel = new graphql.GraphQLEnumType({
+  name: 'OrderFieldChannel',
+  values: {
+    membersCount: { value: 'membersCount' },
+    isCurated: { value: 'isCurated' },
+  },
+});
+
+const orderChannel = new graphql.GraphQLInputObjectType({
+  name: 'OrderChannel',
+  fields: () => ({
+    field: { type: graphql.GraphQLNonNull(orderFieldChannel) },
+    direction: {
+      type: graphql.GraphQLNonNull(require('./common').orderDirection),
+    },
+  }),
+});
+
 module.exports = {
   channel,
   channelInput,
+  orderChannel,
 };

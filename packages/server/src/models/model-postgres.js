@@ -914,7 +914,7 @@ class ModelPostgres extends Model {
   /**
    * @param pagination
    * @returns {[any, any][]}
-   * @private
+   * @protected
    */
   _getDefaultOrder(pagination) {
     return pagination.getOrder()
@@ -923,7 +923,7 @@ class ModelPostgres extends Model {
 
   /**
    * @return {*[] | null}
-   * @private
+   * @protected
    */
   _getOrder() {
     return [['createdAt', 'DESC']];
@@ -931,7 +931,7 @@ class ModelPostgres extends Model {
 
   /**
    * @return {*[] | null}
-   * @private
+   * @protected
    */
   _getOrderForOne(query) {
     if (!query) {
@@ -946,8 +946,8 @@ class ModelPostgres extends Model {
 
   /**
    * @param {Layers.AbstractModelsLayer.options} _options
-   * @return {{include: Sequelize.literal|*[]} | null}
-   * @private
+   * @return {*}
+   * @protected
    */
   _getAttributes(_options = {}) {
     return null;
@@ -955,8 +955,8 @@ class ModelPostgres extends Model {
 
   /**
    * @param {Layers.AbstractModelsLayer.options} _options
-   * @return {{include: Sequelize.literal|*[]} | null}
-   * @private
+   * @return {*}
+   * @protected
    */
   _getGroups(_options = {}) {
     return null;

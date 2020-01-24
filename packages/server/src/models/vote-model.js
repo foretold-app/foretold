@@ -13,8 +13,8 @@ class VoteModel extends ModelPostgres {
   }
 
   /**
-   * @param {Layers.AbstractModelsLayer.options} _options
-   * @return {{include: Sequelize.literal|*[]}}
+   * @param _options
+   * @returns {*}
    * @protected
    */
   _getAttributes(_options = {}) {

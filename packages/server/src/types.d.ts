@@ -309,14 +309,17 @@ export namespace Layers {
     type id = string | compoundId;
     type data = object;
     type options = {
-      isAdmin?: boolean;
       agentId?: Models.AgentID;
-      measuredByAgentId?: Models.AgentID;
-      transaction?: object;
-      lock?: lock;
-      skipLocked?: boolean;
-      raw?: boolean;
       currentAgentId?: Models.AgentID;
+      isAdmin?: boolean;
+      measuredByAgentId?: Models.AgentID;
+
+      attributes?: boolean;
+      group?: boolean;
+      lock?: lock;
+      raw?: boolean;
+      skipLocked?: boolean;
+      transaction?: object;
     };
     type filter = {
       id?: Models.ObjectID;
@@ -441,24 +444,25 @@ export namespace Layers {
     type data = object;
     type restrictions = {
       agentId?: Models.AgentID;
-      userId?: Models.UserID;
       channelId?: Models.ChannelID;
-      measuredByAgentId?: Models.AgentID;
-
-      isAdmin?: boolean;
       channelIdAsId?: boolean;
+      isAdmin?: boolean;
       measurableId?: boolean;
+      measuredByAgentId?: Models.AgentID;
+      userId?: Models.UserID;
 
-      withinMeasurables?: withinMeasurables | null;
-      withinPublicChannels?: withinPublicChannels | null;
       withinJoinedChannels?: withinJoinedChannels | null;
+      withinMeasurables?: withinMeasurables | null;
       withinPublicAndJoinedChannels?: withinPublicAndJoinedChannels | null;
+      withinPublicChannels?: withinPublicChannels | null;
     };
     type options = {
-      transaction?: object;
+      attributes?: boolean;
+      group?: boolean;
       lock?: lock;
-      skipLocked?: boolean;
       raw?: boolean;
+      skipLocked?: boolean;
+      transaction?: object;
     };
     type filter = {
       agentId?: Models.AgentID;
@@ -513,9 +517,9 @@ export namespace Layers {
       isOrderSet(): boolean;
     };
     type query = {
-      sort?: number;
-      distinct?: boolean;
       col?: string;
+      distinct?: boolean;
+      sort?: number;
     };
     type params = {
       id?: Models.ObjectID;

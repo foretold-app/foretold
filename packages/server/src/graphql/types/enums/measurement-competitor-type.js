@@ -22,7 +22,7 @@ const measurementCompetitorType = graphql.GraphQLNonNull(
         value: MEASUREMENT_COMPETITOR_TYPE.COMMENT,
       },
     },
-  })
+  }),
 );
 
 module.exports = {

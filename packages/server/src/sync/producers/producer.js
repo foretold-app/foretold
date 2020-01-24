@@ -11,6 +11,7 @@ const { TemplatesData } = require('../../data');
 const { FeedItemsData } = require('../../data');
 
 const { Options } = require('../../data/classes');
+const { Params } = require('../../data/classes');
 
 const { TEMPLATE_NAME } = require('../../enums');
 const { NOTIFICATION_TYPE } = require('../../enums');
@@ -85,7 +86,7 @@ class Producer {
   async _getTemplate(name = this.templateName) {
     assert(!!name, 'Template Name is required');
 
-    const params = { name };
+    const params = new Params({ name });
     const template = await this.templates.getOne(params);
 
     assert(!!_.get(template, 'name'), 'Template name is required');

@@ -10,6 +10,7 @@ const { Pagination } = require('../../data/classes');
 const { Filter } = require('../../data/classes');
 const { Options } = require('../../data/classes');
 const { Params } = require('../../data/classes');
+const { Data } = require('../../data/classes');
 const logger = require('../../lib/log');
 
 const { assert, errs } = require('./errors');
@@ -122,7 +123,7 @@ class Emails extends Consumer {
    */
   async _markNotificationAsSent(notificationStatus, transaction) {
     const params = new Params({ id: notificationStatus.id });
-    const data = { sentAt: moment.utc().toDate() };
+    const data = new Data({ sentAt: moment.utc().toDate() });
     const options = new Options({ transaction });
     return this.notificationStatuses.updateOne(params, data, options);
   }
@@ -142,7 +143,7 @@ class Emails extends Consumer {
     const errorReason = err.type || (new errs.InternalError()).type;
 
     const params = new Params({ id: notificationStatus.id });
-    const data = { errorAt, attemptCounter, errorReason };
+    const data = new Data({ errorAt, attemptCounter, errorReason });
     const options = new Options({ transaction });
 
     return this.notificationStatuses.updateOne(params, data, options);

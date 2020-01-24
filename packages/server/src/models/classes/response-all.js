@@ -66,6 +66,14 @@ class ResponseAll {
     return _.head(this._data) || null;
   }
 
+  /**
+   * @public
+   * @returns {* | null}
+   */
+  getData() {
+    return this._data;
+  }
+
   inspect() {
     utils.inspect(this);
   }

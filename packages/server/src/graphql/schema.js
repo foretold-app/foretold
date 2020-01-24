@@ -125,7 +125,11 @@ const schema = new graphql.GraphQLSchema({
             ),
           },
           minPredictionCountTotal: { type: graphql.GraphQLInt },
-          order: { type: graphql.GraphQLList(types.common.order) },
+          order: {
+            type: graphql.GraphQLList(
+              types.agentMeasurables.orderAgentMeasurables,
+            ),
+          },
         },
         resolve: resolvers.agentMeasurables.all,
       },
@@ -244,7 +248,7 @@ const schema = new graphql.GraphQLSchema({
           limit: { type: graphql.GraphQLInt },
           channelMemberId: { type: graphql.GraphQLString },
           isArchived: { type: graphql.GraphQLList(types.common.isArchived) },
-          order: { type: graphql.GraphQLList(types.channels.orderChannel) },
+          order: { type: graphql.GraphQLList(types.channels.orderChannels) },
         },
         resolve: resolvers.channels.all,
       },

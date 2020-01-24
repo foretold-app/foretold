@@ -8,6 +8,8 @@ const { MEASUREMENT_COMPETITOR_TYPE } = require('../../../enums');
 
 const { ProducerNotifications } = require('./producer-notifications');
 
+const { Params } = require('../../../data/classes');
+
 /**
  * @abstract
  */
@@ -50,10 +52,10 @@ class MeasurableState extends ProducerNotifications {
    * @protected
    */
   async _getLastResolvedMeasurement() {
-    const params = {
+    const params = new Params({
       measurableId: this.measurable.id,
       competitorType: MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE,
-    };
+    });
     const options = await this._getOptions();
     return this.measurements.getOne(params, options);
   }

@@ -129,7 +129,6 @@ class ModelPostgres extends Model {
     // Block 1
     this._assertInput({ filter, pagination, restrictions, options });
     const where = {};
-    const include = [];
 
     // if ('inspect' in filter) filter.inspect();
     // if ('inspect' in pagination) pagination.inspect();
@@ -137,18 +136,11 @@ class ModelPostgres extends Model {
 
     this.applyRestrictions(where, restrictions);
     this.applyFilter(where, filter);
-    this.applyRestrictionsIncluding(include, restrictions);
-
-    // Block 2
-    const order = pagination.isOrderSet()
-      ? this._getDefaultOrder(pagination)
-      : this._getOrder();
 
     const findCond = {
       limit: pagination.limit,
       offset: pagination.offset,
       where,
-      order,
     };
     this._extendConditions(findCond, options);
     const data = await this.model.findAll(findCond);
@@ -157,6 +149,7 @@ class ModelPostgres extends Model {
   }
 
   /**
+   * @todo: To "attributes".
    * @todo: This is an anisotropy when pagination is defined {}
    * @todo: instead of pagination = new Pagination().
    * @public
@@ -186,8 +179,8 @@ class ModelPostgres extends Model {
     this.applyRestrictionsIncluding(include, restrictions);
 
     // Block 2
-    const { limit, offset } = pagination.getPagination2();
-    const attributes = this._getAttributes();
+    const { limit, offset } = pagination.getPagination();
+    const attributes = this._getAttributes(options);
     const order = pagination.isOrderSet()
       ? this._getDefaultOrder(pagination)
       : this._getOrder();
@@ -969,6 +962,7 @@ class ModelPostgres extends Model {
   }
 
   /**
+   * @todo:
    * @return {*[] | null}
    * @protected
    */
@@ -1065,7 +1059,6 @@ class ModelPostgres extends Model {
       const klass = ModelPostgres.asserts[key];
       const object = input[key];
       if (object === undefined) continue;
-      if (_.isEmpty(object)) continue;
       if (!(object instanceof klass)) {
         this.log.warn(new Error(`"${key}" is not ${key} class.`));
       }

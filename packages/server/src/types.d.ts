@@ -512,8 +512,7 @@ export namespace Layers {
       before?: string;
       order?: orderList;
 
-      getPagination(total: number): { limit: number; offset: number };
-      getPagination2(): { limit: number; offset: number };
+      getPagination(): { limit: number; offset: number };
       isOrderSet(): boolean;
     };
     type query = {

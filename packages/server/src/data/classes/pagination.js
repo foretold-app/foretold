@@ -63,6 +63,7 @@ class Pagination {
   }
 
   /**
+   * @public
    * @returns {boolean}
    */
   isOrderSet() {
@@ -70,6 +71,7 @@ class Pagination {
   }
 
   /**
+   * @public
    * @returns {{field: any, direction: any}[]}
    */
   getOrder() {
@@ -77,10 +79,11 @@ class Pagination {
   }
 
   /**
+   * @todo: Adds a limit to the "limit".
    * @public
    * @return {{offset: number | null, limit: number | null}}
    */
-  getPagination2() {
+  getPagination() {
     if (this.first) {
       const limit = this.first;
       const offset = this.after ? this.after + 1 : null;
@@ -91,9 +94,15 @@ class Pagination {
       const offset = this.before ? this.before - this.last : null;
       return { limit, offset };
     }
-    return { limit: 10, offset: null };
+    return {
+      limit: this.limit || 10,
+      offset: null,
+    };
   }
 
+  /**
+   * @public
+   */
   inspect() {
     utils.inspect(this);
   }

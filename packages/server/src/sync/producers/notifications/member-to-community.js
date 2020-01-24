@@ -3,6 +3,7 @@ const _ = require('lodash');
 
 const { getChannelLinkWithToken } = require('../../../../config/client-urls');
 const { getAgentLinkWithToken } = require('../../../../config/client-urls');
+const { Params } = require('../../../data/classes');
 const logger = require('../../../lib/log');
 
 const { Producer } = require('../producer');
@@ -43,17 +44,17 @@ class MemberToCommunity extends ProducerNotifications {
 
     try {
       /** @type {Models.Channel} */
-      const channel = await this.channels.getOne({
+      const channel = await this.channels.getOne(new Params({
         id: this.channelMembership.channelId,
-      });
+      }));
       /** @type {Models.Agent} */
-      const agent = await this.agents.getOne({
+      const agent = await this.agents.getOne(new Params({
         id: this.channelMembership.agentId,
-      });
+      }));
       /** @type {Models.Agent} */
-      const inviter = await this.users.getOne({
+      const inviter = await this.users.getOne(new Params({
         agentId: this.channelMembership.inviterAgentId,
-      });
+      }));
 
       assert(!!_.get(channel, 'id'), 'Channel ID is required.');
       assert(!!_.get(agent, 'id'), 'Agent ID is required.');

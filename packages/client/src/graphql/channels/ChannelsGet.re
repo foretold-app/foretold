@@ -3,10 +3,13 @@ module Query = [%graphql
     query getChannels (
         $channelMemberId: String
         $isArchived: [isArchived]
+        $order: [OrderChannels]
     ){
       channels (
         channelMemberId: $channelMemberId
         isArchived: $isArchived
+        order: $order
+        limit: 500
       ){
         id
         name
@@ -36,49 +39,41 @@ let toChannel = m =>
     (),
   );
 
-let sortDefault = arr => arr;
+type order =
+  option(
+    array(
+      option({
+        .
+        "direction": Types.direction,
+        "field": Types.fieldChannels,
+      }),
+    ),
+  );
 
-let isCuratedCompare = (a: Types.channel, b: Types.channel) =>
-  a.isCurated > b.isCurated ? (-1) : 1;
+let orderAsCommunities: order =
+  Some([|
+    Some({"field": `isCurated, "direction": `DESC}),
+    Some({"field": `membersCount, "direction": `DESC}),
+  |]);
 
-let nameCompare = (a: Types.channel, b: Types.channel) =>
-  String.compare(a.name, b.name);
-
-let sortAsc = (arr: array(Types.channel)) => {
-  Array.sort(nameCompare, arr);
-  arr;
-};
-
-let membershipCountCompare = (a: Types.channel, b: Types.channel) =>
-  a.membershipCount > b.membershipCount ? (-1) : 1;
-
-let sortMembershipCount = (arr: array(Types.channel)) => {
-  Array.sort(membershipCountCompare, arr);
-  arr;
-};
-
-let sortCurated = (arr: array(Types.channel)) => {
-  Array.sort(nameCompare, arr);
-  Array.sort(membershipCountCompare, arr);
-  Array.sort(isCuratedCompare, arr);
-  arr;
-};
+let orderAsSidebar: order =
+  Some([|Some({"field": `name, "direction": `ASC})|]);
 
 let component =
     (
       ~channelMemberId: option(string)=?,
       ~isArchived=[|Some(`FALSE)|],
-      ~sortFn=sortDefault,
+      ~order=orderAsCommunities,
       fn,
     ) => {
-  let query = Query.make(~channelMemberId?, ~isArchived, ());
+  let query = Query.make(~channelMemberId?, ~isArchived, ~order?, ());
 
   <QueryComponent variables=query##variables>
     ...{({result}) =>
       result
       |> ApolloUtils.apolloResponseToResult
       |> E.R.fmap(e =>
-           e##channels |> E.A.O.concatSomes |> E.A.fmap(toChannel) |> sortFn
+           e##channels |> E.A.O.concatSomes |> E.A.fmap(toChannel)
          )
       |> E.R.fmap(fn)
       |> E.R.id

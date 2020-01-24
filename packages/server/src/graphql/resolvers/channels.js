@@ -46,14 +46,15 @@ async function all(root, args, context, _info) {
   const withinJoinedChannels = _.isEmpty(channelMemberId)
     ? null : structures.withinJoinedChannelsById(channelMemberId);
 
-  const filter = new Filter({
-    withinJoinedChannels,
-    isArchived,
-  });
+  const filter = new Filter({ withinJoinedChannels, isArchived });
   const pagination = new Pagination(args);
   const options = new Options({ agentId, attributes: true, raw: true });
 
-  return new ChannelsData().getAll(filter, pagination, options);
+  const response = await new ChannelsData().getConnection(
+    filter, pagination, options,
+  );
+
+  return response.getData();
 }
 
 /**

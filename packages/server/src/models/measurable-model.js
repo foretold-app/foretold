@@ -15,27 +15,6 @@ class MeasurableModel extends ModelPostgres {
   }
 
   /**
-   * @protected
-   * @return {Sequelize.literal|*}
-   */
-  _getStateOrderField() {
-    const {
-      OPEN,
-      JUDGEMENT_PENDING,
-      JUDGED,
-      CLOSED_AS_UNRESOLVED,
-    } = MeasurableModel.MEASURABLE_STATE;
-
-    return this.sequelize.literal(
-      `(CASE WHEN "state"='${OPEN}' THEN 1 `
-      + `WHEN "state"='${JUDGEMENT_PENDING}' THEN 2 `
-      + `WHEN "state"='${JUDGED}' THEN 3 `
-      + `WHEN "state"='${CLOSED_AS_UNRESOLVED}' THEN 3 `
-      + 'ELSE 5 END) AS "stateOrder"',
-    );
-  }
-
-  /**
    * @public
    * @todo: To use "applyFilter" to use "transactions" later.
    * @param {string} channelId
@@ -113,6 +92,27 @@ class MeasurableModel extends ModelPostgres {
     return {
       include: [this._getStateOrderField()],
     };
+  }
+
+  /**
+   * @protected
+   * @return {Sequelize.literal|*}
+   */
+  _getStateOrderField() {
+    const {
+      OPEN,
+      JUDGEMENT_PENDING,
+      JUDGED,
+      CLOSED_AS_UNRESOLVED,
+    } = MeasurableModel.MEASURABLE_STATE;
+
+    return this.literal(
+      `(CASE WHEN "state"='${OPEN}' THEN 1 `
+      + `WHEN "state"='${JUDGEMENT_PENDING}' THEN 2 `
+      + `WHEN "state"='${JUDGED}' THEN 3 `
+      + `WHEN "state"='${CLOSED_AS_UNRESOLVED}' THEN 3 `
+      + 'ELSE 5 END) AS "stateOrder"',
+    );
   }
 }
 

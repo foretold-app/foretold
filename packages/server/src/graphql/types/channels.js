@@ -69,13 +69,14 @@ const channelInput = new graphql.GraphQLInputObjectType({
 const orderFieldChannel = new graphql.GraphQLEnumType({
   name: 'OrderFieldChannel',
   values: {
-    membersCount: { value: 'membersCount' },
     isCurated: { value: 'isCurated' },
+    membersCount: { value: 'membersCount' },
+    name: { value: 'name' },
   },
 });
 
-const orderChannel = new graphql.GraphQLInputObjectType({
-  name: 'OrderChannel',
+const orderChannels = new graphql.GraphQLInputObjectType({
+  name: 'OrderChannels',
   fields: () => ({
     field: { type: graphql.GraphQLNonNull(orderFieldChannel) },
     direction: {
@@ -87,5 +88,5 @@ const orderChannel = new graphql.GraphQLInputObjectType({
 module.exports = {
   channel,
   channelInput,
-  orderChannel,
+  orderChannels,
 };

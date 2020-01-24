@@ -1,7 +1,10 @@
 const { AgentsData } = require('../../data');
 const { MeasurablesData } = require('../../data');
 const { ChannelMembershipsData } = require('../../data');
+
 const { Data } = require('../../data/classes');
+const { Params } = require('../../data/classes');
+const { Query } = require('../../data/classes');
 
 const { MEASURABLE_VALUE_TYPE } = require('../../enums');
 const { CHANNEL_MEMBERSHIP_ROLES } = require('../../enums');
@@ -29,7 +32,7 @@ class Creators {
             property,
             date,
           );
-          await this.measurables.createOne({
+          await this.measurables.createOne(new Data({
             name: '',
             labelSubject: subject,
             labelProperty: property,
@@ -39,7 +42,7 @@ class Creators {
             creatorId: series.creatorId,
             channelId: series.channelId,
             valueType: MEASURABLE_VALUE_TYPE.FLOAT,
-          });
+          }));
         }
       }
     }
@@ -50,14 +53,14 @@ class Creators {
    * @returns {Promise<boolean>}
    */
   async createChannelMembership(channel) {
-    await this.channelMemberships.upsertOne({
+    await this.channelMemberships.upsertOne(new Params({
       channelId: channel.id,
       agentId: channel.creatorId,
-    }, {}, {
+    }), new Query({}), new Data({
       role: CHANNEL_MEMBERSHIP_ROLES.ADMIN,
       channelId: channel.id,
       agentId: channel.creatorId,
-    });
+    }));
     return true;
   }
 

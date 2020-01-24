@@ -31,6 +31,7 @@ async function one(root, args, context, _info) {
 }
 
 /**
+ * @todo: To use "getConnection" to limit queries.
  * @param {*} root
  * @param {object} args
  * @param {Models.ChannelID} args.channelId

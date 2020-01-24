@@ -52,7 +52,7 @@ module Query = [%graphql
         $measurableId: String
         $minPredictionCountTotal: Int
         $measurableState: [measurableState]
-        $order: [Order]
+        $order: [OrderAgentMeasurables]
         $marketType: marketScoreType!
         $finalComparisonMeasurement: finalComparisonMeasurement!
      ) {

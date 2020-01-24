@@ -21,7 +21,7 @@ class Query {
 }
 
 const list = {
-  col: (v) => _.isBoolean(v) || utils.none(v),
+  col: (v) => _.isString(v) || utils.none(v),
   distinct: (v) => _.isBoolean(v) || utils.none(v),
   sort: (v) => _.isNumber(v) || utils.none(v),
 };

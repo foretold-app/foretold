@@ -1,5 +1,6 @@
 const graphql = require('graphql');
 const { DateType } = require('graphql-sequelize');
+const resolvers = require('../resolvers');
 
 const points = graphql.GraphQLList(new graphql.GraphQLObjectType({
   name: 'point',
@@ -49,11 +50,11 @@ const agentMeasurable = new graphql.GraphQLObjectType({
     measurableId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     primaryPointScore: {
       type: graphql.GraphQLFloat,
-      resolve: require('../resolvers').agentMeasurables.primaryPointScore,
+      resolve: resolvers.agentMeasurables.primaryPointScore,
     },
     timeAverageScore: {
       type: timeAverageScore,
-      resolve: require('../resolvers').agentMeasurables.timeAverageScore,
+      resolve: resolvers.agentMeasurables.timeAverageScore,
       args: {
         marketType: {
           type: require('./enums/agent-measurable-score-params')
@@ -75,13 +76,13 @@ const agentMeasurable = new graphql.GraphQLObjectType({
     // OK
     agent: {
       type: graphql.GraphQLNonNull(require('./agents').agent),
-      resolve: require('../resolvers').agents.one,
+      resolve: resolvers.agents.one,
     },
 
     // OK
     measurable: {
       type: graphql.GraphQLNonNull(require('./measurables').measurable),
-      resolve: require('../resolvers').measurables.one,
+      resolve: resolvers.measurables.one,
     },
 
     // OK
@@ -95,7 +96,7 @@ const agentMeasurable = new graphql.GraphQLObjectType({
           ),
         },
       },
-      resolve: require('../resolvers').measurements.measurableMeasurement,
+      resolve: resolvers.measurements.measurableMeasurement,
     },
   }),
 });

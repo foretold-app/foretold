@@ -4,6 +4,7 @@ const {
   MEASUREMENT_VALUE,
 } = require('@foretold/measurement-value/enums/measurement-value');
 
+const resolvers = require('../resolvers');
 const models = require('../../models/definitions');
 
 const {
@@ -62,7 +63,7 @@ const measurementValue = new graphql.GraphQLObjectType({
         truncate: { type: graphql.GraphQLFloat },
         round: { type: graphql.GraphQLInt },
       },
-      resolve: require('../resolvers').measurements.truncateCdf,
+      resolve: resolvers.measurements.truncateCdf,
     },
     [MEASUREMENT_VALUE.floatPoint]: { type: graphql.GraphQLFloat },
     [MEASUREMENT_VALUE.percentage]: { type: graphql.GraphQLFloat },

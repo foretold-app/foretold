@@ -1,5 +1,6 @@
 const graphql = require('graphql');
 const { DateType } = require('graphql-sequelize');
+const resolvers = require('../resolvers');
 
 const agentChannel = new graphql.GraphQLObjectType({
   name: 'AgentChannel',
@@ -9,7 +10,7 @@ const agentChannel = new graphql.GraphQLObjectType({
     channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     primaryPointScore: {
       type: graphql.GraphQLFloat,
-      resolve: require('../resolvers').agentChannels.primaryPointScore,
+      resolve: resolvers.agentChannels.primaryPointScore,
     },
     numberOfPredictions: { type: graphql.GraphQLNonNull(graphql.GraphQLInt) },
     numberOfQuestionsScored: {
@@ -21,13 +22,13 @@ const agentChannel = new graphql.GraphQLObjectType({
     // OK
     agent: {
       type: graphql.GraphQLNonNull(require('./agents').agent),
-      resolve: require('../resolvers').agents.one,
+      resolve: resolvers.agents.one,
     },
 
     // OK
     channel: {
       type: graphql.GraphQLNonNull(require('./channels').channel),
-      resolve: require('../resolvers').channels.one,
+      resolve: resolvers.channels.one,
     },
   }),
 });

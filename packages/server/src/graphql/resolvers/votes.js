@@ -1,10 +1,6 @@
 const _ = require('lodash');
 const { VotesData } = require('../../data');
 
-const { Params } = require('../../data/classes');
-const { Query } = require('../../data/classes');
-const { Options } = require('../../data/classes');
-
 /**
  * @param {*} _root
  * @param {object} args

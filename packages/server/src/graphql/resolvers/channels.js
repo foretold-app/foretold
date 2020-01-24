@@ -51,7 +51,7 @@ async function all(root, args, context, _info) {
     isArchived,
   });
   const pagination = new Pagination(args);
-  const options = new Options({ agentId });
+  const options = new Options({ agentId, attributes: true, raw: true });
 
   return new ChannelsData().getAll(filter, pagination, options);
 }

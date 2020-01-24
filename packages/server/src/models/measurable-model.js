@@ -105,11 +105,11 @@ class MeasurableModel extends ModelPostgres {
   }
 
   /**
-   *
+   * @param {Layers.AbstractModelsLayer.options} _options
    * @return {{include: Sequelize.literal|*[]}}
    * @protected
    */
-  _getAttributes() {
+  _getAttributes(_options = {}) {
     return {
       include: [this._getStateOrderField()],
     };

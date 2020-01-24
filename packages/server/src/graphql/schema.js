@@ -244,6 +244,7 @@ const schema = new graphql.GraphQLSchema({
           limit: { type: graphql.GraphQLInt },
           channelMemberId: { type: graphql.GraphQLString },
           isArchived: { type: graphql.GraphQLList(types.common.isArchived) },
+          order: { type: new graphql.GraphQLList(types.common.order) },
         },
         resolve: resolvers.channels.all,
       },

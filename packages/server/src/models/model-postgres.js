@@ -112,8 +112,10 @@ class ModelPostgres extends Model {
     restrictions = {},
     options = {},
   ) {
+    // Block 1
     this._assertInput({ filter, pagination, restrictions, options });
     const where = {};
+    const include = [];
 
     // if ('inspect' in filter) filter.inspect();
     // if ('inspect' in pagination) pagination.inspect();
@@ -121,16 +123,23 @@ class ModelPostgres extends Model {
 
     this.applyRestrictions(where, restrictions);
     this.applyFilter(where, filter);
+    this.applyRestrictionsIncluding(include, restrictions);
 
-    const cond = {
+    // Block 2
+    const order = pagination.isOrderSet()
+      ? this._getDefaultOrder(pagination)
+      : this._getOrder();
+
+    const findCond = {
       limit: pagination.limit,
       offset: pagination.offset,
       where,
+      order,
     };
+    this._extendConditions(findCond, options);
+    const data = await this.model.findAll(findCond);
 
-    this._extendConditions(cond, options);
-
-    return this.model.findAll(cond);
+    return data;
   }
 
   /**
@@ -149,6 +158,7 @@ class ModelPostgres extends Model {
     restrictions = {},
     options = {},
   ) {
+    // Block 1
     this._assertInput({ filter, pagination, restrictions, options });
     const where = {};
     const include = [];
@@ -161,14 +171,9 @@ class ModelPostgres extends Model {
     this.applyFilter(where, filter);
     this.applyRestrictionsIncluding(include, restrictions);
 
-    // Block 1
-    const countCond = { where, include };
-    this._extendConditions(countCond, options);
-    /** @type {number} */
-    const total = await this.model.count(countCond);
-    const { limit, offset } = pagination.getPagination2();
-
     // Block 2
+    const { limit, offset } = pagination.getPagination2();
+    const attributes = this._getAttributes();
     const order = pagination.isOrderSet()
       ? this._getDefaultOrder(pagination)
       : this._getOrder();
@@ -179,11 +184,15 @@ class ModelPostgres extends Model {
       limit,
       offset,
       order,
-      attributes: this._getAttributes(),
+      attributes,
     };
     this._extendConditions(findCond, options);
-    /** @type {Models.Model[]} */
     const data = await this.model.findAll(findCond);
+
+    // Block 1
+    const countCond = { where, include };
+    this._extendConditions(countCond, options);
+    const total = await this.model.count(countCond);
 
     // Block 3
     return new ResponseAll(
@@ -724,6 +733,7 @@ class ModelPostgres extends Model {
   }
 
   /**
+   * @todo: sequelize.dialect.QueryGenerator.selectQuery
    * @todo: To use SQL replacements or bindings.
    * @protected
    * @param {Models.AgentID} [agentId]

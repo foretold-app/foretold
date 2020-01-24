@@ -31,6 +31,61 @@ class ChannelModel extends ModelPostgres {
     });
     return _.get(channel, 'agents', []);
   }
+
+  /**
+   * @param _options
+   * @returns {*}
+   * @protected
+   */
+  _getAttributes(_options = {}) {
+    return {
+      include: [
+        [this._membersCountLiteral(), 'membersCount'],
+      ],
+    };
+  }
+
+  /**
+   * @param pagination
+   * @returns {[any, any][]}
+   * @protected
+   */
+  _getDefaultOrder(pagination) {
+    return pagination.getOrder()
+      .map((item) => ([this._switchField(item.field), item.direction]));
+  }
+
+  /**
+   * @param name
+   * @returns {*}
+   * @private
+   */
+  _switchField(name = '') {
+    if (name === 'membersCount') {
+      return this._membersCountLiteral();
+    }
+    return name;
+  }
+
+  /**
+   * @protected
+   * @return {Sequelize.literal}
+   */
+  _membersCountLiteral() {
+    return this.literal(this._membersCount());
+  }
+
+  /**
+   * @protected
+   * @return {string}
+   */
+  _membersCount() {
+    return `(
+        SELECT count(*) as "membersCount"
+        FROM "ChannelMemberships"
+        WHERE "ChannelMemberships"."channelId" = "Channel"."id"
+    )`;
+  }
 }
 
 module.exports = {

@@ -47,6 +47,8 @@ const orderField = new graphql.GraphQLEnumType({
   name: 'OrderField',
   values: {
     primaryPointScore: { value: 'primaryPointScore' },
+    membersCount: { value: 'membersCount' },
+    isCurated: { value: 'isCurated' },
   },
 });
 

@@ -24,7 +24,7 @@ class VotesData extends DataBase {
 
   /**
    * @param {Models.MeasurementID} measurementId
-   * @returns {Promise<Models.Vote>}
+   * @returns {Promise<number | null>}
    * @public
    */
   async totalVoteAmount(measurementId) {

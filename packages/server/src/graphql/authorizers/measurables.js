@@ -53,30 +53,6 @@ function measurableIsArchivedRule(_root, _args, context, _info) {
   return result;
 }
 
-/**
- * @param {object} _root
- * @param {object} _args
- * @param {Schema.Context} context
- * @param {object} _info
- * @return {boolean}
- */
-function measurableIsCompetitiveOrCommentOnlyRule(
-  _root, _args, context, _info,
-) {
-  const competitorType = _.get(context, 'measurable.competitorType', null);
-
-  const result = !!competitorType
-    && (MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE === competitorType
-      || MEASUREMENT_COMPETITOR_TYPE.COMMENT === competitorType);
-
-  log.trace(
-    '\x1b[33m Rule Measurables '
-    + `(measurableIsCompetitiveOrCommentOnlyRule) "${result}".\x1b[0m`,
-  );
-
-  return result;
-}
-
 /** @type {Rule} */
 const measurableIsOwnedByCurrentAgent = rule({
   cache: 'no_cache',
@@ -87,13 +63,8 @@ const measurableIsArchived = rule({
   cache: 'no_cache',
 })(measurableIsArchivedRule);
 
-/** @type {Rule} */
-const measurableIsCompetitiveOrCommentOnly = rule({
-  cache: 'no_cache',
-})(measurableIsCompetitiveOrCommentOnlyRule);
 
 module.exports = {
   measurableIsOwnedByCurrentAgent,
   measurableIsArchived,
-  measurableIsCompetitiveOrCommentOnly,
 };

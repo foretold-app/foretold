@@ -46,7 +46,7 @@ class MeasurementModel extends ModelPostgres {
 
   /**
    * @return {*[] | null}
-   * @private
+   * @protected
    */
   _getOrder() {
     return [

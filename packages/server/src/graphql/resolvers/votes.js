@@ -42,11 +42,7 @@ async function downvote(_root, args, context, _info) {
  */
 async function total(root, _args, _context, _info) {
   const measurementId = _.get(root, 'id', null);
-  const params = new Params({ measurementId });
-  const query = new Query({ sort: 0 });
-  const options = new Options({ raw: true });
-  const votes = await new VotesData().getOne(params, query, options);
-  return _.get(votes, 'totalVoteAmount', null);
+  return new VotesData().totalVoteAmount(measurementId);
 }
 
 module.exports = {

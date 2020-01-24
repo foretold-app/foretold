@@ -95,7 +95,7 @@ class MeasurableModel extends ModelPostgres {
 
   /**
    * @return {*[]}
-   * @private
+   * @protected
    */
   _getOrder() {
     return [
@@ -107,7 +107,7 @@ class MeasurableModel extends ModelPostgres {
   /**
    *
    * @return {{include: Sequelize.literal|*[]}}
-   * @private
+   * @protected
    */
   _getAttributes() {
     return {

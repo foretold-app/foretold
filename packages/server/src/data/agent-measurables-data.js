@@ -205,7 +205,7 @@ class AgentMeasurablesData extends DataBase {
    * @param marketScoreType
    * @param startTime
    * @returns {undefined|{score: *, distribution: *}}
-   * @private
+   * @protected
    */
   _scoreCalculator(
     {

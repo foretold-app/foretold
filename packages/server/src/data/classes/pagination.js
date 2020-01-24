@@ -48,7 +48,7 @@ class Pagination {
    * @param {object} options
    * @param {Layers.orderList} options.order
    * @returns {Layers.orderList}
-   * @private
+   * @protected
    */
   _getOrder(options) {
     const orderInput = _.get(options, 'order');

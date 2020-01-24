@@ -18,7 +18,7 @@ export const formatters = [
 /**
  * @param g
  * @returns {*}
- * @private
+ * @protected
  */
 export function _matchingFormatter(g) {
   for (let formatter of formatters) {

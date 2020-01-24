@@ -78,7 +78,7 @@ class EmailSender {
 
   /**
    * @returns {string}
-   * @private
+   * @protected
    */
   _getHtml() {
     // {{{ }}}
@@ -105,7 +105,7 @@ class EmailSender {
    *  subscribe: {link: string},
    *  unsubscribe: {link: string}
    * }}
-   * @private
+   * @protected
    */
   _getReplacements() {
     return {
@@ -152,7 +152,7 @@ class EmailSender {
 
   /**
    * @returns {string}
-   * @private
+   * @protected
    */
   _getSubscribeLink() {
     return this._compileStr(this.config.subscribeLink);
@@ -160,7 +160,7 @@ class EmailSender {
 
   /**
    * @returns {string}
-   * @private
+   * @protected
    */
   _getUnsubscribeLink() {
     return this._compileStr(this.config.unsubscribeLink);

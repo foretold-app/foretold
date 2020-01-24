@@ -55,7 +55,7 @@ class MutexesData extends DataBase {
   }
 
   /**
-   * @private
+   * @protected
    * @param mutex
    * @returns {boolean}
    */
@@ -64,7 +64,7 @@ class MutexesData extends DataBase {
   }
 
   /**
-   * @private
+   * @protected
    * @param mutex
    * @returns {number}
    */

@@ -1,4 +1,6 @@
+const _ = require('lodash');
 const assert = require('assert');
+
 const { DataBase } = require('./data-base');
 const { VoteModel } = require('../models');
 
@@ -11,7 +13,7 @@ const logger = require('../lib/log');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
- * @property {MutexModel} model
+ * @property {VoteModel} model
  */
 class VotesData extends DataBase {
   constructor() {
@@ -21,9 +23,23 @@ class VotesData extends DataBase {
   }
 
   /**
+   * @param {Models.MeasurementID} measurementId
+   * @returns {Promise<Models.Vote>}
+   * @public
+   */
+  async totalVoteAmount(measurementId) {
+    const params = new Params({ measurementId });
+    const query = new Query({ sort: 0 });
+    const options = new Options({ raw: true, attributes: true, group: true });
+    const votes = await this.getOne(params, query, options);
+    return _.get(votes, 'totalVoteAmount', null);
+  }
+
+  /**
    * @param {Models.AgentID} agentId
    * @param {Models.MeasurementID} measurementId
    * @returns {Promise<Models.Vote>}
+   * @public
    */
   async upvote(agentId, measurementId) {
     return this._changeVote(agentId, measurementId, this._up);
@@ -33,6 +49,7 @@ class VotesData extends DataBase {
    * @param {Models.AgentID} agentId
    * @param {Models.MeasurementID} measurementId
    * @returns {Promise<Models.Vote>}
+   * @public
    */
   async downvote(agentId, measurementId) {
     return this._changeVote(agentId, measurementId, this._down);
@@ -43,6 +60,7 @@ class VotesData extends DataBase {
    * @param {Models.MeasurementID} measurementId
    * @param {Function} change
    * @returns {Promise<Models.Vote>}
+   * @public
    */
   async _changeVote(agentId, measurementId, change) {
     assert(!!agentId, 'Agent ID is required.');
@@ -100,7 +118,7 @@ class VotesData extends DataBase {
    * @param {Models.MeasurementID} measurementId
    * @param {Layers.Transaction} transaction
    * @returns {Promise<*>}
-   * @private
+   * @protected
    */
   async _voteLocked(agentId, measurementId, transaction) {
     const params = new Params({ agentId, measurementId });
@@ -116,7 +134,7 @@ class VotesData extends DataBase {
    * @param {Models.MeasurementID} measurementId
    * @param {Layers.Transaction} transaction
    * @returns {Promise<*>}
-   * @private
+   * @protected
    */
   async _vote(agentId, measurementId, transaction) {
     const params = new Params({ agentId, measurementId });
@@ -130,7 +148,7 @@ class VotesData extends DataBase {
    * @param {number} voteAmount
    * @param {Layers.Transaction} transaction
    * @returns {Promise<*>}
-   * @private
+   * @protected
    */
   async _update(vote, voteAmount, transaction) {
     const params = new Params({ id: vote.id });

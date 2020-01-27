@@ -30,6 +30,7 @@ const list = {
   isNotEmailVerified: (v) => _.isBoolean(v) || utils.none(v),
   measurableId: (v) => _.isString(v) || utils.none(v),
   measurableIds: (v) => _.isArray(v) || utils.none(v),
+  measurementId: (v) => _.isString(v) || utils.none(v),
   name: (v) => _.isString(v) || utils.none(v),
   seriesId: (v) => _.isString(v) || utils.none(v),
 };

@@ -22,6 +22,7 @@ const mutexes = require('./mutexes');
 const notebooks = require('./notebooks');
 const jwt = require('./scalars/jwt');
 const scalars = require('./scalars');
+const votes = require('./votes');
 
 module.exports = {
   bots,
@@ -47,4 +48,5 @@ module.exports = {
   notebooks,
   jwt,
   scalars,
+  votes,
 };

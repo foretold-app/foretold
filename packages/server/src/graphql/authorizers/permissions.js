@@ -21,6 +21,7 @@ const { agentIdFromContext } = require('./predicates');
 const { agentIdFromRootAgentId } = require('./predicates');
 const { notebookIsOwnedByCurrentAgent } = require('./notebooks');
 const { rateLimit } = require('./rate-limit');
+const { measurementIsCompetitiveOrCommentOnly } = require('./measurements');
 
 const currentAgentIsApplicationAdminOrChannelAdmin = or(
   currentAgentIsApplicationAdmin,
@@ -153,6 +154,16 @@ const rulesNotebooks = () => ({
   },
 });
 
+const rulesVotes = () => ({
+  Query: {},
+  Mutation: {
+    vote: and(
+      currentAgentIsAuthenticated,
+      measurementIsCompetitiveOrCommentOnly,
+    ),
+  },
+});
+
 const rules = () => ({
   Bot: {
     token: botBelongsToCurrentUser,
@@ -222,6 +233,7 @@ const rules = () => ({
     ...rulesChannelMemberships().Mutation,
     ...rulesInvitations().Mutation,
     ...rulesNotebooks().Mutation,
+    ...rulesVotes().Mutation,
   },
 });
 

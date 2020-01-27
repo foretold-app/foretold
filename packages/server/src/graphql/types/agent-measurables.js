@@ -1,5 +1,46 @@
 const graphql = require('graphql');
 const { DateType } = require('graphql-sequelize');
+const resolvers = require('../resolvers');
+
+const points = graphql.GraphQLList(new graphql.GraphQLObjectType({
+  name: 'point',
+  fields: () => ({
+    x: { type: graphql.GraphQLInt },
+    y: { type: graphql.GraphQLFloat },
+  }),
+}));
+
+const activeTimeDistribution = new graphql.GraphQLObjectType({
+  name: 'timeDistribution',
+  fields: () => ({
+    finalX: { type: graphql.GraphQLInt },
+    points: {
+      type: points,
+    },
+  }),
+});
+
+const timeAverageScore = new graphql.GraphQLObjectType({
+  name: 'timeAverageScore',
+  fields: () => ({
+    score: { type: graphql.GraphQLFloat },
+    agentPredictions: {
+      type: graphql.GraphQLList(require('./measurements').measurement),
+    },
+    aggregations: {
+      type: graphql.GraphQLList(require('./measurements').measurement),
+    },
+    recentResult: {
+      type: require('./measurements').measurement,
+    },
+    scoringStartTime: { type: DateType.default },
+    scoringEndTime: { type: DateType.default },
+    measurableCreationTime: { type: DateType.default },
+    finalResolutionTime: { type: DateType.default },
+    timeActivityRatio: { type: graphql.GraphQLFloat },
+    activeTimeDistribution: { type: activeTimeDistribution },
+  }),
+});
 
 const agentMeasurable = new graphql.GraphQLObjectType({
   name: 'AgentMeasurable',
@@ -9,47 +50,11 @@ const agentMeasurable = new graphql.GraphQLObjectType({
     measurableId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     primaryPointScore: {
       type: graphql.GraphQLFloat,
-      resolve: require('../resolvers').agentMeasurables.primaryPointScore,
+      resolve: resolvers.agentMeasurables.primaryPointScore,
     },
     timeAverageScore: {
-      type: new graphql.GraphQLObjectType({
-        name: 'timeAverageScore',
-        fields: () => ({
-          score: { type: graphql.GraphQLFloat },
-          agentPredictions: {
-            type: graphql.GraphQLList(require('./measurements').measurement),
-          },
-          aggregations: {
-            type: graphql.GraphQLList(require('./measurements').measurement),
-          },
-          recentResult: {
-            type: require('./measurements').measurement,
-          },
-          scoringStartTime: { type: DateType.default },
-          scoringEndTime: { type: DateType.default },
-          measurableCreationTime: { type: DateType.default },
-          finalResolutionTime: { type: DateType.default },
-          timeActivityRatio: { type: graphql.GraphQLFloat },
-          activeTimeDistribution: {
-            type: new graphql.GraphQLObjectType({
-              name: 'timeDistribution',
-              fields: () => ({
-                finalX: { type: graphql.GraphQLInt },
-                points: {
-                  type: graphql.GraphQLList(new graphql.GraphQLObjectType({
-                    name: 'point',
-                    fields: () => ({
-                      x: { type: graphql.GraphQLInt },
-                      y: { type: graphql.GraphQLFloat },
-                    }),
-                  })),
-                },
-              }),
-            }),
-          },
-        }),
-      }),
-      resolve: require('../resolvers').agentMeasurables.timeAverageScore,
+      type: timeAverageScore,
+      resolve: resolvers.agentMeasurables.timeAverageScore,
       args: {
         marketType: {
           type: require('./enums/agent-measurable-score-params')
@@ -71,13 +76,13 @@ const agentMeasurable = new graphql.GraphQLObjectType({
     // OK
     agent: {
       type: graphql.GraphQLNonNull(require('./agents').agent),
-      resolve: require('../resolvers').agents.one,
+      resolve: resolvers.agents.one,
     },
 
     // OK
     measurable: {
       type: graphql.GraphQLNonNull(require('./measurables').measurable),
-      resolve: require('../resolvers').measurables.one,
+      resolve: resolvers.measurables.one,
     },
 
     // OK
@@ -91,7 +96,7 @@ const agentMeasurable = new graphql.GraphQLObjectType({
           ),
         },
       },
-      resolve: require('../resolvers').measurements.measurableMeasurement,
+      resolve: resolvers.measurements.measurableMeasurement,
     },
   }),
 });

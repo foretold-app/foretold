@@ -1,10 +1,10 @@
 const graphql = require('graphql');
 
-const {
-  MARKET_TYPE,
-  START_AT,
-  FINAL_COMPARISON_MEASUREMENT,
-} = require('../../../enums/agent-measurable-score-type');
+const { MARKET_TYPE } = require('../../../enums');
+const { START_AT } = require('../../../enums');
+const { FINAL_COMPARISON_MEASUREMENT } = require('../../../enums');
+
+// @todo: To rename the file.
 
 const marketScoreType = graphql.GraphQLNonNull(new graphql.GraphQLEnumType({
   name: 'marketScoreType',

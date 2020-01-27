@@ -19,6 +19,7 @@ const { AgentChannelsData } = require('./agent-channels-data');
 const { MutexesData } = require('./mutexes-data');
 const { NotebooksData } = require('./notebooks-data');
 const { ChannelAgentsData } = require('./channel-agents-data');
+const { VotesData } = require('./votes-data');
 
 module.exports = {
   MeasurablesData,
@@ -42,4 +43,5 @@ module.exports = {
   MutexesData,
   NotebooksData,
   ChannelAgentsData,
+  VotesData,
 };

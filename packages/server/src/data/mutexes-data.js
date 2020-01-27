@@ -3,7 +3,7 @@ const moment = require('moment');
 const { DataBase } = require('./data-base');
 const { Params, Query, Data, Options } = require('./classes');
 
-const { MutexModel } = require('../models-abstract');
+const { MutexModel } = require('../models');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
@@ -55,7 +55,7 @@ class MutexesData extends DataBase {
   }
 
   /**
-   * @private
+   * @protected
    * @param mutex
    * @returns {boolean}
    */
@@ -64,7 +64,7 @@ class MutexesData extends DataBase {
   }
 
   /**
-   * @private
+   * @protected
    * @param mutex
    * @returns {number}
    */

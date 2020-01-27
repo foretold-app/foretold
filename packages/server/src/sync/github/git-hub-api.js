@@ -50,6 +50,11 @@ class GitHubApi {
       return false;
     }
 
+    if (this.hookUrl.includes('localhost')) {
+      log.warn('GitHub hook URL has a "localhost".');
+      return false;
+    }
+
     const hook = {
       name: 'web',
       active: true,

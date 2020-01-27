@@ -1,6 +1,6 @@
 const graphql = require('graphql');
 
-const { MEASURABLE_STATE } = require('../../../enums/measurable-state');
+const { MEASURABLE_STATE } = require('../../../enums');
 
 const measurableState = new graphql.GraphQLEnumType({
   name: 'measurableState',

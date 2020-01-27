@@ -6,10 +6,16 @@ const { Binary, Percentage } = require('@foretold/measurement-value');
 const { UnresolvableResolution } = require('@foretold/measurement-value');
 const { Comment } = require('@foretold/measurement-value');
 
+const { MeasurementsData } = require('../../data');
+const { Params } = require('../../data/classes');
+
 const { MEASURABLE_STATE } = require('../../enums');
 const { MEASUREMENT_COMPETITOR_TYPE } = require('../../enums');
 const { MEASURABLE_VALUE_TYPE } = require('../../enums');
 const lang = require('../../../config/lang');
+const logger = require('../../lib/log');
+
+const log = logger.module('middlewares/measurement');
 
 /**
  * @param {*} root
@@ -83,7 +89,31 @@ async function measurementValueTypeValidation(root, args, context, _info) {
   throw new Error(lang.measurementValueTypeWrong());
 }
 
+/**
+ * @param {object | null} root
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @param {object} _info
+ * @return {Promise<void>}
+ */
+async function setContextMeasurement(root, args, context, _info) {
+  const measurementId = _.get(args, 'measurementId', null);
+
+  log.trace(
+    '\x1b[36m ---> \x1b[0m Middleware (setContextMeasurement)',
+    { measurementId },
+  );
+
+  if (!!measurementId) {
+    const params = new Params({ id: measurementId });
+    context.measurement = await new MeasurementsData().getOne(params);
+  } else {
+    context.measurement = null;
+  }
+}
+
 module.exports = {
+  setContextMeasurement,
   measurementValueValidation,
   measurementValueTypeValidation,
   competitiveMeasurementCanBeAddedToOpenMeasurable,

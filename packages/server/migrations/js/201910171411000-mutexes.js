@@ -7,7 +7,7 @@ module.exports = {
         id: {
           allowNull: false,
           primaryKey: true,
-          type: Sequelize.UUID
+          type: Sequelize.UUID,
         },
         name: {
           type: Sequelize.STRING(128),
@@ -58,5 +58,5 @@ module.exports = {
       await queryInterface.sequelize.query('ROLLBACK');
       throw e;
     }
-  }
+  },
 };

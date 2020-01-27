@@ -1,6 +1,6 @@
 const graphql = require('graphql');
 
-const { AGENT_TYPE } = require('../../../enums/agent-type');
+const { AGENT_TYPE } = require('../../../enums');
 
 const agentType = new graphql.GraphQLEnumType({
   name: 'AgentType',

@@ -59,6 +59,7 @@ const list = {
   isNotEmailVerified: (v) => _.isBoolean(v) || utils.none(v),
   measurableId: (v) => _.isString(v) || utils.none(v),
   measurableIds: (v) => _.isArray(v) || utils.none(v),
+  measurementId: (v) => _.isString(v) || utils.none(v),
   minNumberOfPredictions: (v) => _.isNumber(v) || utils.none(v),
   minNumberOfQuestionsScored: (v) => _.isNumber(v) || utils.none(v),
   minPredictionCountTotal: (v) => _.isNumber(v) || utils.none(v),
@@ -68,6 +69,7 @@ const list = {
   notTaggedByAgent: (v) => _.isString(v) || utils.none(v),
   notificationId: (v) => _.isString(v) || utils.none(v),
   ownerId: (v) => _.isString(v) || utils.none(v),
+  role: (v) => _.isString(v) || utils.none(v),
   sentAt: (v) => _.isString(v) || _.isObject(v) || utils.none(v),
   seriesId: (v) => _.isString(v) || utils.none(v),
   states: (v) => _.isArray(v) || utils.none(v),
@@ -77,7 +79,6 @@ const list = {
   userId: (v) => _.isString(v) || utils.none(v),
   withinJoinedChannels: (v) => _.isObject(v) || utils.none(v),
   withinMeasurables: (v) => _.isObject(v) || utils.none(v),
-  role: (v) => _.isString(v) || utils.none(v),
 };
 
 Filter.LIST = list;

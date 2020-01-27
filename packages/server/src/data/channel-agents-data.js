@@ -1,5 +1,5 @@
 const { DataBase } = require('./data-base');
-const { ChannelAgentModel } = require('../models-abstract');
+const { ChannelAgentModel } = require('../models');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}

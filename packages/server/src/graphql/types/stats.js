@@ -1,6 +1,6 @@
 const graphql = require('graphql');
 
-const models = require('../../models');
+const models = require('../../models/definitions');
 const resolvers = require('../resolvers');
 
 /**

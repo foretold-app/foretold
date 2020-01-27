@@ -3,7 +3,7 @@ const { resolver } = require('graphql-sequelize');
 
 const resolvers = require('../resolvers');
 const channelMemberships = require('./channel-memberhips');
-const models = require('../../models');
+const models = require('../../models/definitions');
 
 const { agentType } = require('./enums/agent-type');
 
@@ -16,7 +16,7 @@ const agent = new graphql.GraphQLObjectType({
 
     measurementCount: {
       type: graphql.GraphQLNonNull(graphql.GraphQLInt),
-      resolve: require('../resolvers').measurements.measurementCountByAgentId,
+      resolve: resolvers.measurements.measurementCountByAgentId,
     },
 
     isMe: require('./common').isMe,
@@ -39,7 +39,7 @@ const agent = new graphql.GraphQLObjectType({
     // @todo: security
     preference: {
       type: require('./preferences').preference,
-      resolve: require('../resolvers').preferences.getOne,
+      resolve: resolvers.preferences.getOne,
     },
 
     // OK

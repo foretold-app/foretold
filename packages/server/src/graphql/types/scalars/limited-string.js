@@ -44,15 +44,15 @@ function createLimitedString(min, max) {
     name,
     description: `A special custom scalar type for a ${name}`,
 
-    serialize: function serialize(value) {
+    serialize(value) {
       return value;
     },
 
-    parseValue: function parseValue(value) {
+    parseValue(value) {
       return validate(value);
     },
 
-    parseLiteral: function parseLiteral(ast) {
+    parseLiteral(ast) {
       return validate(ast.value);
     },
   });

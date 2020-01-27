@@ -4,7 +4,8 @@ const {
   MEASUREMENT_VALUE,
 } = require('@foretold/measurement-value/enums/measurement-value');
 
-const models = require('../../models');
+const resolvers = require('../resolvers');
+const models = require('../../models/definitions');
 
 const {
   measurementUnresolvableResolution,
@@ -62,7 +63,7 @@ const measurementValue = new graphql.GraphQLObjectType({
         truncate: { type: graphql.GraphQLFloat },
         round: { type: graphql.GraphQLInt },
       },
-      resolve: require('../resolvers').measurements.truncateCdf,
+      resolve: resolvers.measurements.truncateCdf,
     },
     [MEASUREMENT_VALUE.floatPoint]: { type: graphql.GraphQLFloat },
     [MEASUREMENT_VALUE.percentage]: { type: graphql.GraphQLFloat },
@@ -122,6 +123,11 @@ const measurement = new graphql.GraphQLObjectType({
     measurementScoreSet: {
       type: require('./measurements').measurementScoreSet,
       resolve: require('../resolvers/measurements').scoreSet,
+    },
+
+    totalVoteAmount: {
+      type: graphql.GraphQLFloat,
+      resolve: require('../resolvers/votes').total,
     },
 
     // @todo: Do not use resolver. Use common interfaces of Data layer.

@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const { rule } = require('graphql-shield');
 const logger = require('../../lib/log');
+const { MEASUREMENT_COMPETITOR_TYPE } = require('../../enums');
 
 const log = logger.module('authorizers/measurables');
 
@@ -8,13 +9,13 @@ const log = logger.module('authorizers/measurables');
  * @todo: To fix ".get(context, 'measurable.creatorId', null)".
  * @todo: Either from a context or from a root. And everywhere should be
  * @todo: the same.
- * @param {object} root
- * @param {object} args
+ * @param {object} _root
+ * @param {object} _args
  * @param {Schema.Context} context
  * @param {object} _info
  * @return {boolean}
  */
-function measurableIsOwnedByCurrentAgentRule(root, args, context, _info) {
+function measurableIsOwnedByCurrentAgentRule(_root, _args, context, _info) {
   const creatorId = _.get(context, 'measurable.creatorId', null);
   const agentId = _.get(context, 'agent.id', null);
 
@@ -35,13 +36,13 @@ function measurableIsOwnedByCurrentAgentRule(root, args, context, _info) {
 
 /**
  * @todo: To think about "_.get(context, 'measurable.isArchived', null)".
- * @param {object} root
- * @param {object} args
+ * @param {object} _root
+ * @param {object} _args
  * @param {Schema.Context} context
  * @param {object} _info
  * @return {boolean}
  */
-function measurableIsArchivedRule(root, args, context, _info) {
+function measurableIsArchivedRule(_root, _args, context, _info) {
   const result = !!_.get(context, 'measurable.isArchived', null);
 
   log.trace(
@@ -61,6 +62,7 @@ const measurableIsOwnedByCurrentAgent = rule({
 const measurableIsArchived = rule({
   cache: 'no_cache',
 })(measurableIsArchivedRule);
+
 
 module.exports = {
   measurableIsOwnedByCurrentAgent,

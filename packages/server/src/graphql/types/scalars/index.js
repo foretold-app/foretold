@@ -3,13 +3,29 @@ const { GraphQLInputInt } = require('graphql-input-number');
 const cursor = require('./cursor');
 const jwt = require('./jwt');
 const { createObjectId } = require('./object-id');
+const { createObjectIdEmptiable } = require('./object-id-emptiable');
 const { createLimitedString } = require('./limited-string');
+const { voteAmount } = require('./vote-amount');
 
-const notebookId = createObjectId('NotebookId');
 const agentId = createObjectId('AgentId');
-const channelId = createObjectId('ChannelId');
-const userId = createObjectId('UserId');
+const botId = createObjectId('BoteId');
+const channelMembershipId = createObjectId('ChannelMembershipId');
+const channelId = createObjectIdEmptiable('ChannelId');
+const feedItemId = createObjectId('FeedItemId');
+const globalSettingId = createObjectId('GlobalSettingId');
+const invitationId = createObjectId('InvitationId');
 const measurableId = createObjectId('MeasurableId');
+const measurementId = createObjectId('MeasurementId');
+const mutexId = createObjectId('MutexId');
+const notebookId = createObjectId('NotebookId');
+const notificationId = createObjectId('NotificationId');
+const notificationStatusId = createObjectId('NotificationStatusId');
+const preferenceId = createObjectId('PreferenceId');
+const seriesId = createObjectId('SeriesId');
+const templateId = createObjectId('TemplateId');
+const tokenId = createObjectId('TokenId');
+const userId = createObjectId('UserId');
+const voteId = createObjectId('VoteId');
 
 const string0to255 = createLimitedString(0, 255);
 const string3to255 = createLimitedString(3, 255);
@@ -32,12 +48,27 @@ const int500 = GraphQLInputInt({
 module.exports = {
   cursor,
   jwt,
+  voteAmount,
 
-  notebookId,
   agentId,
+  botId,
+  channelMembershipId,
   channelId,
-  userId,
+  feedItemId,
+  globalSettingId,
+  invitationId,
   measurableId,
+  measurementId,
+  mutexId,
+  notebookId,
+  notificationId,
+  notificationStatusId,
+  preferenceId,
+  seriesId,
+  templateId,
+  tokenId,
+  userId,
+  voteId,
 
   string0to255,
   string3to255,

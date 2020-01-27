@@ -79,7 +79,7 @@ class Samples {
    * @param max
    * @param size
    * @param width
-   * @private
+   * @protected
    */
   _kde({ min, max, size, width }) {
     let samples = this.filter({min, max}).samples;

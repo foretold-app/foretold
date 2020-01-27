@@ -1,8 +1,6 @@
 const graphql = require('graphql');
 
-const {
-  UNRESOLVABLE_RESOLUTIONS,
-} = require('../../../enums/measurement-unresolvable-resolutions');
+const { UNRESOLVABLE_RESOLUTIONS } = require('../../../enums');
 
 const measurementUnresolvableResolution = new graphql.GraphQLEnumType({
   name: 'unresolvableResolution',

@@ -128,6 +128,7 @@
       "no-await-in-loop": 0,
       "no-underscore-dangle": 0,
       "prefer-destructuring": 0,
+      "no-lone-blocks": 0,
       "filenames/match-exported": [2, "kebab"],
       "no-unused-vars": ["error", {
         "argsIgnorePattern": "^_"

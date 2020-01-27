@@ -576,24 +576,21 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.mutexes.free,
       },
 
-      upvote: {
+      vote: {
         type: types.votes.vote,
         args: {
           measurementId: {
-            type: graphql.GraphQLNonNull(types.scalars.measurementId),
+            type: graphql.GraphQLNonNull(
+              types.scalars.measurementId,
+            ),
+          },
+          input: {
+            type: graphql.GraphQLNonNull(
+              types.votes.voteInput,
+            ),
           },
         },
-        resolve: resolvers.votes.upvote,
-      },
-
-      downvote: {
-        type: types.votes.vote,
-        args: {
-          measurementId: {
-            type: graphql.GraphQLNonNull(types.scalars.measurementId),
-          },
-        },
-        resolve: resolvers.votes.downvote,
+        resolve: resolvers.votes.vote,
       },
     },
   }),

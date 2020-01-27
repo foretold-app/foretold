@@ -4,29 +4,18 @@ const { VotesData } = require('../../data');
 /**
  * @param {*} _root
  * @param {object} args
+ * @param {object} args.input
+ * @param {number} args.input.voteAmount
  * @param {Models.MeasurementID} args.measurementId
  * @param {Schema.Context} context
  * @param {object} _info
  * @returns {Promise<*|Array<Model>>}
  */
-async function upvote(_root, args, context, _info) {
+async function vote(_root, args, context, _info) {
   const agentId = _.get(context, 'agent.id', null);
   const measurementId = _.get(args, 'measurementId', null);
-  return new VotesData().upvote(agentId, measurementId);
-}
-
-/**
- * @param {*} _root
- * @param {object} args
- * @param {Models.MeasurementID} args.measurementId
- * @param {Schema.Context} context
- * @param {object} _info
- * @returns {Promise<*|Array<Model>>}
- */
-async function downvote(_root, args, context, _info) {
-  const agentId = _.get(context, 'agent.id', null);
-  const measurementId = _.get(args, 'measurementId', null);
-  return new VotesData().downvote(agentId, measurementId);
+  const voteAmount = _.get(args, 'input.voteAmount', null);
+  return new VotesData().vote(agentId, measurementId, voteAmount);
 }
 
 /**
@@ -42,7 +31,6 @@ async function total(root, _args, _context, _info) {
 }
 
 module.exports = {
-  upvote,
-  downvote,
+  vote,
   total,
 };

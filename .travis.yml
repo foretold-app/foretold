@@ -3,41 +3,32 @@ language: generic
 services:
   - docker
 
-addons:
-  postgresql: "12"
-  apt:
-    packages:
-      - postgresql-12
-      - postgresql-client-12
-
 branches:
   only:
     - master
     - develop
     - master-server
-
 env:
   global:
-    - PGPORT=5433
     - COMMIT=${TRAVIS_COMMIT::8}
     - REPO=foretold-app/foretold
     - DOCKER_COMPOSE_VERSION=1.8.1
-    - DB_USERNAME=postgres
-    - DB_PASSWORD=
-    - DB_DATABASE=travis_ci_test
-    - DB_HOST=localhost
+    - COMPOSE_FILE=docker-compose.yml:docker-compose.override.travis.yml
 
 before_script:
   - echo Before-Script-OK
 
 install:
-  - docker build -t main ./
-  - psql -c 'create database travis_ci_test;' -U postgres
+  - docker-compose ps
+  - docker-compose up -d --build
+  - docker-compose scale app=3
+  - docker-compose ps
+  - docker-compose exec app yarn server/db:create
+  - docker-compose exec app yarn server/db:migrate
+  - docker-compose restart app
+  - docker-compose ps
 
 script:
   - printenv
-  - docker ps -a
-  - docker run main yarn server/db:migrate
-#  - docker run main yarn packages/build
-#  - docker run main yarn packages/test
-#  - docker run main yarn packages/lint
+  - docker-compose exec app yarn packages/test
+  - docker-compose exec app yarn packages/lint

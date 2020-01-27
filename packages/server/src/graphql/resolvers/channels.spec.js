@@ -39,7 +39,7 @@ describe('Channels Resolvers', () => {
 
     it('returns channels with restrictions', () => {
       return channels.all(root, args, context, info).then((result) => {
-        expect(new ChannelsData().getAll).toHaveBeenCalledWith({
+        expect(new ChannelsData().getConnection).toHaveBeenCalledWith({
           isArchived: null,
           withinJoinedChannels: { agentId: 'channelMemberId1', as: 'id' },
         }, {
@@ -47,6 +47,8 @@ describe('Channels Resolvers', () => {
           offset: 1,
         }, {
           agentId: '1',
+          attributes: true,
+          raw: true,
         });
         expect(result).toBe(true);
       });

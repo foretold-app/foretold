@@ -6,8 +6,8 @@ const { UserInputError } = require('apollo-server');
  * @returns {boolean}
  */
 function validate(value) {
-  if (Number.isInteger(value)) {
-    throw new UserInputError('Vote is not integer.');
+  if (!Number.isInteger(value)) {
+    throw new UserInputError('Vote is not an integer.');
   }
   if (value > 10) {
     throw new UserInputError('Vote is more than 10.');

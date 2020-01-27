@@ -5,6 +5,7 @@ const jwt = require('./jwt');
 const { createObjectId } = require('./object-id');
 const { createObjectIdEmptiable } = require('./object-id-emptiable');
 const { createLimitedString } = require('./limited-string');
+const { voteAmount } = require('./vote-amount');
 
 const agentId = createObjectId('AgentId');
 const botId = createObjectId('BoteId');
@@ -47,6 +48,7 @@ const int500 = GraphQLInputInt({
 module.exports = {
   cursor,
   jwt,
+  voteAmount,
 
   agentId,
   botId,

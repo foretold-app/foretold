@@ -4,6 +4,7 @@ services:
 
   app:
     build: ./
+    restart: always
     environment:
       # 1. Persistence
       - PORT=80 # 1.1
@@ -52,11 +53,13 @@ services:
   # @todo: update to 12
   database:
     image: postgres:11
+    restart: always
     environment:
       - POSTGRES_PASSWORD=<change-me> # 6.2
 
   # Load Balancer
   nginx:
     image: nginx:latest
+    restart: always
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro

@@ -35,36 +35,21 @@ class VotesData extends DataBase {
     return _.get(votes, 'totalVoteAmount', null);
   }
 
-  /**
-   * @param {Models.AgentID} agentId
-   * @param {Models.MeasurementID} measurementId
-   * @returns {Promise<Models.Vote>}
-   * @public
-   */
-  async upvote(agentId, measurementId) {
-    return this._changeVote(agentId, measurementId, this._up);
-  }
 
   /**
    * @param {Models.AgentID} agentId
    * @param {Models.MeasurementID} measurementId
+   * @param {number} voteAmountInput
    * @returns {Promise<Models.Vote>}
    * @public
    */
-  async downvote(agentId, measurementId) {
-    return this._changeVote(agentId, measurementId, this._down);
-  }
-
-  /**
-   * @param {Models.AgentID} agentId
-   * @param {Models.MeasurementID} measurementId
-   * @param {Function} change
-   * @returns {Promise<Models.Vote>}
-   * @public
-   */
-  async _changeVote(agentId, measurementId, change) {
+  async vote(agentId, measurementId, voteAmountInput) {
     assert(!!agentId, 'Agent ID is required.');
     assert(!!measurementId, 'Measurement ID is required.');
+    assert(
+      !!Number.isInteger(voteAmountInput),
+      'Vote amount is required to be integer.',
+    );
 
     let transaction;
     try {
@@ -76,7 +61,23 @@ class VotesData extends DataBase {
 
     try {
       const vote = await this._voteLocked(agentId, measurementId, transaction);
-      const voteAmount = change(vote);
+
+      let voteAmount = vote.voteAmount;
+
+      if (voteAmountInput > 0 && voteAmount < 0) {
+        voteAmount = 0;
+      } else if (voteAmountInput < 0 && voteAmount > 0) {
+        voteAmount = 0;
+      }
+
+      voteAmount += voteAmountInput;
+
+      if (voteAmount < -10) {
+        voteAmount = -10;
+      } else if (voteAmount > 10) {
+        voteAmount = 10;
+      }
+
       if (voteAmount !== vote.voteAmount) {
         await this._update(vote, voteAmount, transaction);
       }
@@ -87,30 +88,6 @@ class VotesData extends DataBase {
       await this.rollback(transaction);
       throw e;
     }
-  }
-
-  /**
-   * @param vote
-   * @returns {number}
-   * @protected
-   */
-  _up(vote) {
-    let voteAmount = vote.voteAmount;
-    if (voteAmount < 0) voteAmount = 0;
-    if (voteAmount <= 9) voteAmount += 1;
-    return voteAmount;
-  }
-
-  /**
-   * @param vote
-   * @returns {number}
-   * @protected
-   */
-  _down(vote) {
-    let voteAmount = vote.voteAmount;
-    if (voteAmount > 0) voteAmount = 0;
-    if (voteAmount >= -9) voteAmount -= 1;
-    return voteAmount;
   }
 
   /**

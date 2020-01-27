@@ -157,11 +157,7 @@ const rulesNotebooks = () => ({
 const rulesVotes = () => ({
   Query: {},
   Mutation: {
-    upvote: and(
-      currentAgentIsAuthenticated,
-      measurementIsCompetitiveOrCommentOnly,
-    ),
-    downvote: and(
+    vote: and(
       currentAgentIsAuthenticated,
       measurementIsCompetitiveOrCommentOnly,
     ),

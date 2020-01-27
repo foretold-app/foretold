@@ -15,6 +15,14 @@ const vote = new graphql.GraphQLObjectType({
   }),
 });
 
+const voteInput = new graphql.GraphQLInputObjectType({
+  name: 'VoteInput',
+  fields: () => ({
+    voteAmount: { type: graphql.GraphQLNonNull(scalars.voteAmount) },
+  }),
+});
+
 module.exports = {
   vote,
+  voteInput,
 };

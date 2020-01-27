@@ -2,6 +2,7 @@ sudo: required
 
 services:
   - docker
+  - postgresql
 
 branches:
   only:
@@ -14,18 +15,19 @@ env:
     - COMMIT=${TRAVIS_COMMIT::8}
     - REPO=foretold-app/foretold
     - DOCKER_COMPOSE_VERSION=1.8.1
-
-before_install:
-  - echo Before-Install-OK
+    - DB_USERNAME=postgres
+    - DB_PASSWORD=
+    - DB_DATABASE=travis_ci_test
+    - DB_HOST=localhost
 
 before_script:
   - echo Before-Script-OK
-
-install:
-  - docker build -t main ./
+  - psql -c 'create database travis_ci_test;' -U postgres
 
 script:
   - printenv
-  - docker run main yarn packages/build
-  - docker run main yarn packages/test
-  - docker run main yarn packages/lint
+  - docker build -t main ./
+  - docker exec -d main yarn server/db:migrate
+#  - docker run main yarn packages/build
+#  - docker run main yarn packages/test
+#  - docker run main yarn packages/lint

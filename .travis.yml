@@ -1,4 +1,4 @@
-sudo: required
+language: generic
 
 services:
   - docker
@@ -22,12 +22,14 @@ env:
 
 before_script:
   - echo Before-Script-OK
+
+install:
+  - docker build -t main ./
   - psql -c 'create database travis_ci_test;' -U postgres
 
 script:
   - printenv
-  - docker build -t main ./
-  - docker exec -d main yarn server/db:migrate
+  - docker run main yarn server/db:migrate
 #  - docker run main yarn packages/build
 #  - docker run main yarn packages/test
 #  - docker run main yarn packages/lint

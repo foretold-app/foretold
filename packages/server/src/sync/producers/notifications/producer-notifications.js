@@ -3,6 +3,8 @@ const assert = require('assert');
 
 const { Producer } = require('../producer');
 
+const { Data } = require('../../../data/classes');
+
 /**
  * @abstract
  */
@@ -63,7 +65,7 @@ class ProducerNotifications extends Producer {
       envelope instanceof Producer.EmailEnvelope,
       'Envelope is not EmailEnvelope',
     );
-    const data = { type, envelope };
+    const data = new Data({ type, envelope });
     const options = await this._getOptions();
     return this.notifications.createOne(data, options);
   }
@@ -77,10 +79,10 @@ class ProducerNotifications extends Producer {
   async _assignNotification(agent, notification) {
     assert(!!_.get(notification, 'id'), 'Notification ID is required');
 
-    const data = {
+    const data = new Data({
       agentId: _.get(agent, 'id', null),
       notificationId: notification.id,
-    };
+    });
 
     const options = await this._getOptions();
     return this.notificationStatuses.createOne(

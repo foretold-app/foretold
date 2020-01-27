@@ -435,12 +435,9 @@ async function count(_root, _args, _context, _info) {
  */
 async function measurerCount(root, _args, _context, _info) {
   const measurableId = _.get(root, 'id', null);
-  return new MeasurementsData().getCount(new Params({
-    measurableId,
-  }), new Query({
-    distinct: true,
-    col: 'agentId',
-  }));
+  const params = new Params({ measurableId });
+  const query = new Query({ distinct: true, col: 'agentId' });
+  return new MeasurementsData().getCount(params, query);
 }
 
 module.exports = {

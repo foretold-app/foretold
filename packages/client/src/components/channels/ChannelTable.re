@@ -58,8 +58,8 @@ module Columns = {
 let make = (~agentId=None, ~isArchived=?) =>
   ChannelsGet.component(
     ~channelMemberId=?agentId,
+    ~order=ChannelsGet.orderAsCommunities,
     ~isArchived?,
-    ~sortFn=ChannelsGet.sortCurated,
     channels =>
     <Table columns=Columns.all rows=channels />
   );

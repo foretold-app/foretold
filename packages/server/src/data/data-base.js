@@ -1,7 +1,8 @@
 const _ = require('lodash');
 
 const { Model } = require('../models');
-const { Options } = require('../models/classes');
+const { Options: ModelsOptions } = require('../models/classes');
+const { Options: DataOptions } = require('./classes');
 const { Restrictions } = require('../models/classes');
 const logger = require('../lib/log');
 
@@ -51,7 +52,7 @@ class DataBase {
    * @param {Layers.DataSourceLayer.options} [options]
    * @return {Promise<*>}
    */
-  async createOne(data = {}, options = {}) {
+  async createOne(data, options = new DataOptions()) {
     const { option$, restriction$ } = this._getOptionsRestrictions(options);
     return this.model.createOne(data, restriction$, option$);
   }
@@ -63,7 +64,7 @@ class DataBase {
    * @param {Layers.DataSourceLayer.options} [options]
    * @return {Promise<*>}
    */
-  async getOne(params = {}, query = {}, options = {}) {
+  async getOne(params, query, options = new DataOptions()) {
     const { restriction$, option$ } = this._getOptionsRestrictions(options);
     return this.model.getOne(params, query, restriction$, option$);
   }
@@ -76,7 +77,7 @@ class DataBase {
    * @param {Layers.DataSourceLayer.options} [options]
    * @return {Promise<*>}
    */
-  async getCount(params = {}, query = {}, options = {}) {
+  async getCount(params, query, options = new DataOptions()) {
     const { restriction$, option$ } = this._getOptionsRestrictions(options);
     return this.model.getCount(params, query, restriction$, option$);
   }
@@ -88,7 +89,7 @@ class DataBase {
    * @param {Layers.DataSourceLayer.options} options
    * @return {Promise<*>}
    */
-  async updateOne(params = {}, data = {}, options = {}) {
+  async updateOne(params, data, options = new DataOptions()) {
     const { restriction$, option$ } = this._getOptionsRestrictions(options);
     return this.model.updateOne(params, data, restriction$, option$);
   }
@@ -100,7 +101,7 @@ class DataBase {
    * @param {Layers.DataSourceLayer.options} [options]
    * @return {Promise<*>}
    */
-  async deleteOne(params = {}, query = {}, options = {}) {
+  async deleteOne(params, query, options = new DataOptions()) {
     const { restriction$, option$ } = this._getOptionsRestrictions(options);
     return this.model.deleteOne(params, query, restriction$, option$);
   }
@@ -113,7 +114,7 @@ class DataBase {
    * @param {Layers.DataSourceLayer.options} [options]
    * @return {Promise<*>}
    */
-  async upsertOne(params = {}, query = {}, data = {}, options = {}) {
+  async upsertOne(params, query, data, options = new DataOptions()) {
     const { restriction$, option$ } = this._getOptionsRestrictions(options);
     return this.model.upsertOne(params, query, data, restriction$, option$);
   }
@@ -126,7 +127,7 @@ class DataBase {
    * @param {Layers.DataSourceLayer.options} [options]
    * @return {Promise<{data: Models.Model[], total: number}>}
    */
-  async getConnection(filter = {}, pagination = {}, options = {}) {
+  async getConnection(filter, pagination, options = new DataOptions()) {
     const { restriction$, option$ } = this._getOptionsRestrictions(options);
     return this.model.getAllWithConnections(
       filter, pagination, restriction$, option$,
@@ -139,7 +140,7 @@ class DataBase {
    * @param {Layers.DataSourceLayer.pagination} [pagination]
    * @param {Layers.DataSourceLayer.options} [options]
    */
-  async getAll(filter = {}, pagination = {}, options = {}) {
+  async getAll(filter, pagination, options = new DataOptions()) {
     const { restriction$, option$ } = this._getOptionsRestrictions(options);
     return this.model.getAll(filter, pagination, restriction$, option$);
   }
@@ -149,7 +150,7 @@ class DataBase {
    * @param {Layers.DataSourceLayer.options} [options]
    * @return {Promise<*>}
    */
-  async lock(options = {}) {
+  async lock(options = new DataOptions()) {
     const { option$ } = this._getOptionsRestrictions(options);
     return this.model.lock(option$);
   }
@@ -159,7 +160,7 @@ class DataBase {
    * @param {Layers.DataSourceLayer.options} [options]
    * @return {Promise<*>}
    */
-  async updateMaterializedView(options = {}) {
+  async updateMaterializedView(options = new DataOptions()) {
     const { option$ } = this._getOptionsRestrictions(options);
     return this.model.updateMaterializedView(option$);
   }
@@ -172,7 +173,7 @@ class DataBase {
    *  restriction$: Layers.AbstractModelsLayer.restrictions,
    * }}
    */
-  _getOptionsRestrictions(options = {}) {
+  _getOptionsRestrictions(options = new DataOptions()) {
     const {
       separatedOptions,
       separatedRestrictions,
@@ -187,10 +188,10 @@ class DataBase {
    * @param {Layers.DataSourceLayer.options} [options]
    * @return {Layers.AbstractModelsLayer.options}
    */
-  _getModelOptions(options = {}) {
-    if (_.isEmpty(options)) return new Options({});
+  _getModelOptions(options = new DataOptions()) {
+    if (_.isEmpty(options)) return new ModelsOptions({});
 
-    return new Options({
+    return new ModelsOptions({
       ...options,
       ...this._getDefaultOptions(options),
     });
@@ -201,7 +202,7 @@ class DataBase {
    * @param {Layers.DataSourceLayer.options} [_options]
    * @return {Layers.AbstractModelsLayer.options}
    */
-  _getDefaultOptions(_options = {}) {
+  _getDefaultOptions(_options = new DataOptions()) {
     return {};
   }
 
@@ -210,7 +211,7 @@ class DataBase {
    * @param {Layers.DataSourceLayer.options} [options]
    * @return {Layers.AbstractModelsLayer.restrictions}
    */
-  _getModelRestrictions(options = {}) {
+  _getModelRestrictions(options = new DataOptions()) {
     if (_.isEmpty(options)) return new Restrictions({});
 
     return new Restrictions({
@@ -224,7 +225,7 @@ class DataBase {
    * @param {Layers.DataSourceLayer.options} [_options]
    * @return {Layers.AbstractModelsLayer.restrictions}
    */
-  _getDefaultRestrictions(_options = {}) {
+  _getDefaultRestrictions(_options = new DataOptions()) {
     return {};
   }
 
@@ -233,7 +234,7 @@ class DataBase {
    * @param {Layers.DataSourceLayer.options} [options]
    * @return {Layers.AbstractModelsLayer.restrictions}
    */
-  _getDefaultRestrictionsForIncludedIntoChannel(options = {}) {
+  _getDefaultRestrictionsForIncludedIntoChannel(options = new DataOptions()) {
     const currentAgentId = _.get(options, 'currentAgentId', null);
 
     const withinPublicChannels = !!currentAgentId
@@ -255,7 +256,9 @@ class DataBase {
    * @param {Layers.DataSourceLayer.options} [options]
    * @return {Layers.AbstractModelsLayer.restrictions}
    */
-  _getDefaultRestrictionsForIncludedIntoMeasurables(options = {}) {
+  _getDefaultRestrictionsForIncludedIntoMeasurables(
+    options = new DataOptions(),
+  ) {
     const currentAgentId = _.get(options, 'currentAgentId', null);
 
     return {
@@ -269,9 +272,9 @@ class DataBase {
    * @param {Layers.DataSourceLayer.options} [options]
    * @return {{separatedOptions: Object, separatedRestrictions: Object}}
    */
-  _separateDataOptions(options = {}) {
+  _separateDataOptions(options = new DataOptions()) {
     const separatedOptions = _.omit(options, Restrictions.KEYS);
-    const separatedRestrictions = _.omit(options, Options.KEYS);
+    const separatedRestrictions = _.omit(options, ModelsOptions.KEYS);
     return { separatedOptions, separatedRestrictions };
   }
 }

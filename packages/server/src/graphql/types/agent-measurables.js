@@ -124,8 +124,28 @@ const agentMeasurablesConnection = new graphql.GraphQLObjectType({
   }),
 });
 
+const orderFieldAgentMeasurables = new graphql.GraphQLEnumType({
+  name: 'OrderFieldAgentMeasurables',
+  values: {
+    primaryPointScore: { value: 'primaryPointScore' },
+  },
+});
+
+const orderAgentMeasurables = new graphql.GraphQLInputObjectType({
+  name: 'OrderAgentMeasurables',
+  fields: () => ({
+    field: { type: graphql.GraphQLNonNull(orderFieldAgentMeasurables) },
+    direction: {
+      type: graphql.GraphQLNonNull(
+        require('./common').orderDirection,
+      ),
+    },
+  }),
+});
+
 module.exports = {
   agentMeasurable,
   agentMeasurablesEdge,
   agentMeasurablesConnection,
+  orderAgentMeasurables,
 };

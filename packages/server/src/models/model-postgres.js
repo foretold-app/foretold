@@ -59,7 +59,11 @@ class ModelPostgres extends Model {
    * @param {Layers.AbstractModelsLayer.options} [options]
    * @return {Promise.<object>}
    */
-  async createOne(data = {}, restrictions = {}, options = {}) {
+  async createOne(
+    data = new Data(),
+    restrictions = new Restrictions(),
+    options = new Options(),
+  ) {
     this._assertInput({ data, restrictions, options });
     return this.model.create(data, options);
   }
@@ -72,7 +76,12 @@ class ModelPostgres extends Model {
    * @param {Layers.AbstractModelsLayer.options} [options]
    * @return {Promise.<object>}
    */
-  async updateOne(params = {}, data = {}, restrictions = {}, options = {}) {
+  async updateOne(
+    params = new Params(),
+    data = new Data(),
+    restrictions = new Restrictions(),
+    options = new Options(),
+  ) {
     this._assertInput({ params, data, restrictions, options });
 
     const cond = { where: { ...params } };
@@ -91,7 +100,12 @@ class ModelPostgres extends Model {
    * @param {Layers.AbstractModelsLayer.options} [options]
    * @return {boolean}
    */
-  async updateAll(params = {}, data = {}, restrictions = {}, options = {}) {
+  async updateAll(
+    params = new Params(),
+    data = new Data(),
+    restrictions = new Restrictions(),
+    options = new Options(),
+  ) {
     this._assertInput({ params, data, restrictions, options });
     const cond = { where: { ...params } };
     this._extendConditions(cond, options);
@@ -107,11 +121,12 @@ class ModelPostgres extends Model {
    * @return {Promise<*[]>}
    */
   async getAll(
-    filter = {},
-    pagination = {},
-    restrictions = {},
-    options = {},
+    filter = new Filter(),
+    pagination = new Pagination(),
+    restrictions = new Restrictions(),
+    options = new Options(),
   ) {
+    // Block 1
     this._assertInput({ filter, pagination, restrictions, options });
     const where = {};
 
@@ -122,18 +137,19 @@ class ModelPostgres extends Model {
     this.applyRestrictions(where, restrictions);
     this.applyFilter(where, filter);
 
-    const cond = {
+    const findCond = {
       limit: pagination.limit,
       offset: pagination.offset,
       where,
     };
+    this._extendConditions(findCond, options);
+    const data = await this.model.findAll(findCond);
 
-    this._extendConditions(cond, options);
-
-    return this.model.findAll(cond);
+    return data;
   }
 
   /**
+   * @todo: To "attributes".
    * @todo: This is an anisotropy when pagination is defined {}
    * @todo: instead of pagination = new Pagination().
    * @public
@@ -144,11 +160,12 @@ class ModelPostgres extends Model {
    * @return {Promise<{data: Models.Model[], total: number}>}
    */
   async getAllWithConnections(
-    filter = {},
-    pagination = {},
-    restrictions = {},
-    options = {},
+    filter = new Filter(),
+    pagination = new Pagination(),
+    restrictions = new Restrictions(),
+    options = new Options(),
   ) {
+    // Block 1
     this._assertInput({ filter, pagination, restrictions, options });
     const where = {};
     const include = [];
@@ -161,14 +178,9 @@ class ModelPostgres extends Model {
     this.applyFilter(where, filter);
     this.applyRestrictionsIncluding(include, restrictions);
 
-    // Block 1
-    const countCond = { where, include };
-    this._extendConditions(countCond, options);
-    /** @type {number} */
-    const total = await this.model.count(countCond);
-    const { limit, offset } = pagination.getPagination2();
-
     // Block 2
+    const { limit, offset } = pagination.getPagination();
+    const attributes = this._getAttributes(options);
     const order = pagination.isOrderSet()
       ? this._getDefaultOrder(pagination)
       : this._getOrder();
@@ -179,11 +191,15 @@ class ModelPostgres extends Model {
       limit,
       offset,
       order,
-      attributes: this._getAttributes(),
+      attributes,
     };
     this._extendConditions(findCond, options);
-    /** @type {Models.Model[]} */
     const data = await this.model.findAll(findCond);
+
+    // Block 1
+    const countCond = { where, include };
+    this._extendConditions(countCond, options);
+    const total = await this.model.count(countCond);
 
     // Block 3
     return new ResponseAll(
@@ -202,7 +218,12 @@ class ModelPostgres extends Model {
    * @param {Layers.AbstractModelsLayer.options} [options]
    * @return {Promise<Models.Model>}
    */
-  async getOne(params = {}, query = {}, restrictions = {}, options = {}) {
+  async getOne(
+    params = new Params(),
+    query = new Query(),
+    restrictions = new Restrictions(),
+    options = new Options(),
+  ) {
     const cond = await this._getPredicated(
       params, query, restrictions, options,
     );
@@ -217,7 +238,12 @@ class ModelPostgres extends Model {
    * @param {Layers.AbstractModelsLayer.options} [options]
    * @return {Promise<Models.Model>}
    */
-  async getCount(params = {}, query = {}, restrictions = {}, options = {}) {
+  async getCount(
+    params = new Params(),
+    query = new Query(),
+    restrictions = new Restrictions(),
+    options = new Options(),
+  ) {
     const cond = await this._getPredicated(
       params, query, restrictions, options,
     );
@@ -247,7 +273,12 @@ class ModelPostgres extends Model {
    * @param {Layers.AbstractModelsLayer.options} options
    * @return {Promise<Models.Model>}
    */
-  async deleteOne(params, query, restrictions, options) {
+  async deleteOne(
+    params = new Params(),
+    query = new Query(),
+    restrictions = new Restrictions(),
+    options = new Options(),
+  ) {
     this._assertInput({ params, query, restrictions, options });
     const entity = await this.getOne(params, query, restrictions, options);
     if (entity) {
@@ -292,7 +323,7 @@ class ModelPostgres extends Model {
    * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
    * @return {object}
    */
-  applyRestrictions(where = {}, restrictions = {}) {
+  applyRestrictions(where = {}, restrictions = new Restrictions()) {
     if (restrictions.isAdmin) return where;
     if (!where[this.and]) where[this.and] = [];
 
@@ -379,7 +410,7 @@ class ModelPostgres extends Model {
    * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
    * @return {*}
    */
-  applyRestrictionsIncluding(include = [], restrictions = {}) {
+  applyRestrictionsIncluding(include = [], restrictions = new Restrictions()) {
     if (!include) include = [];
 
     // @todo: It is a filter, b͟u͟t͟ ͟n͟o͟t͟ ͟r͟e͟s͟t͟r͟i͟c͟t͟i͟o͟n͟
@@ -408,7 +439,7 @@ class ModelPostgres extends Model {
    * @param {Layers.AbstractModelsLayer.filter} [filter]
    * @param {Models.AgentID} [filter.userId]
    */
-  applyFilter(where = {}, filter = {}) {
+  applyFilter(where = {}, filter = new Filter()) {
     if (!where) where = {};
     if (!where[this.and]) where[this.and] = [];
 
@@ -684,10 +715,10 @@ class ModelPostgres extends Model {
    * @return {Promise<*>}
    */
   async _getPredicated(
-    params = {},
-    query = {},
-    restrictions = {},
-    options = {},
+    params = new Params(),
+    query = new Query(),
+    restrictions = new Restrictions(),
+    options = new Options(),
   ) {
     this._assertInput({ params, query, restrictions, options });
     const where = { ...params };
@@ -724,6 +755,7 @@ class ModelPostgres extends Model {
   }
 
   /**
+   * @todo: sequelize.dialect.QueryGenerator.selectQuery
    * @todo: To use SQL replacements or bindings.
    * @protected
    * @param {Models.AgentID} [agentId]
@@ -930,6 +962,7 @@ class ModelPostgres extends Model {
   }
 
   /**
+   * @todo:
    * @return {*[] | null}
    * @protected
    */
@@ -1026,7 +1059,6 @@ class ModelPostgres extends Model {
       const klass = ModelPostgres.asserts[key];
       const object = input[key];
       if (object === undefined) continue;
-      if (_.isEmpty(object)) continue;
       if (!(object instanceof klass)) {
         this.log.warn(new Error(`"${key}" is not ${key} class.`));
       }

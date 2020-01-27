@@ -43,13 +43,6 @@ const isArchived = new graphql.GraphQLEnumType({
   },
 });
 
-const orderField = new graphql.GraphQLEnumType({
-  name: 'OrderField',
-  values: {
-    primaryPointScore: { value: 'primaryPointScore' },
-  },
-});
-
 const orderDirection = new graphql.GraphQLEnumType({
   name: 'OrderDirection',
   values: {
@@ -58,20 +51,12 @@ const orderDirection = new graphql.GraphQLEnumType({
   },
 });
 
-const order = new graphql.GraphQLInputObjectType({
-  name: 'Order',
-  fields: () => ({
-    field: { type: graphql.GraphQLNonNull(orderField) },
-    direction: { type: graphql.GraphQLNonNull(orderDirection) },
-  }),
-});
-
 module.exports = {
-  isMe,
-  order,
-  iAmOwner,
-  isArchived,
-  iAmOwnerByUserId,
   connectionArguments,
+  iAmOwner,
+  iAmOwnerByUserId,
+  isArchived,
+  isMe,
+  orderDirection,
   pageInfoConnection,
 };

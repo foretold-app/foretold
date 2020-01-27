@@ -27,6 +27,11 @@ const ChannelMembershipsData = jest.fn()
 
 const channelsDataMethods = {
   ...dataBaseMethods(),
+  getConnection: jest.fn(() => Promise.resolve({
+    getData: async () => {
+      return true;
+    },
+  })),
   getCreatorByChannelId: jest.fn(() => Promise.resolve(true)),
   getAgentsByChannelId: jest.fn(() => Promise.resolve(true)),
 };

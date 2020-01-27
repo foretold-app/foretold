@@ -167,11 +167,7 @@ async function myRole(root, _args, context, _info) {
  * @returns {Promise<string>}
  */
 async function membershipCount(root, _args, _context, _info) {
-  const channelId = _.get(root, 'id', null);
-
-  return new ChannelMembershipsData().getCount(new Params({
-    channelId,
-  }));
+  return _.get(root, 'membersCount', 0);
 }
 
 module.exports = {

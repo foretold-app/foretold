@@ -68,7 +68,7 @@ module ChannelsList = {
     |> E.O.fmap((agent: Types.agent) =>
          ChannelsGet.component(
            ~channelMemberId=?Some(agent.id),
-           ~sortFn=ChannelsGet.sortAsc,
+           ~order=ChannelsGet.orderAsSidebar,
            channels =>
            channels
            |> Array.mapi((index, channel: Types.channel) =>

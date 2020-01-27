@@ -23,7 +23,15 @@ type measurableState = [
 
 type isArchived = [ | `TRUE | `FALSE];
 
-type field = [ | `primaryPointScore];
+type fieldChannels = [
+  | `membersCount
+  | `isCurated
+  | `name
+];
+
+type fieldAgentMeasurables = [
+  | `primaryPointScore
+];
 
 type direction = [ | `ASC | `DESC];
 

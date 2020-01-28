@@ -21,7 +21,6 @@ before_script:
 install:
   - docker-compose ps
   - docker-compose up -d --build
-  - docker-compose scale app=3
   - docker-compose ps
   - docker-compose exec app yarn server/db:create
   - docker-compose exec app yarn server/db:migrate
@@ -30,5 +29,9 @@ install:
 
 script:
   - printenv
-  - docker-compose exec app yarn packages/test
+  - docker-compose exec app yarn guesstimator/test:ci
+  - docker-compose exec app yarn cdf/test:ci
+  - docker-compose exec app yarn bots/test:ci
+  - docker-compose exec app yarn prediction-analysis/test:ci
+  - docker-compose exec app yarn tests/test:ci
   - docker-compose exec app yarn packages/lint

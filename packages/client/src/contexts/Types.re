@@ -23,15 +23,9 @@ type measurableState = [
 
 type isArchived = [ | `TRUE | `FALSE];
 
-type fieldChannels = [
-  | `membersCount
-  | `isCurated
-  | `name
-];
+type fieldChannels = [ | `membersCount | `isCurated | `name];
 
-type fieldAgentMeasurables = [
-  | `primaryPointScore
-];
+type fieldAgentMeasurables = [ | `primaryPointScore];
 
 type direction = [ | `ASC | `DESC];
 
@@ -188,6 +182,7 @@ and measurement = {
   measurable: option(measurable),
   agent: option(agent),
   measurementScoreSet: option(measurementScoreSet),
+  totalVoteAmount: option(float),
 }
 
 and timeAverageScore = {

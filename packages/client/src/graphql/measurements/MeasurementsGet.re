@@ -46,6 +46,7 @@ let toMeasurement = (measurement): Types.measurement => {
     ~agent,
     ~measurementScoreSet,
     ~measurable,
+    ~totalVoteAmount=measurement##totalVoteAmount,
     (),
   );
 };
@@ -101,6 +102,7 @@ module Query = [%graphql
                   description
                   valueText
                   taggedMeasurementId
+                  totalVoteAmount
 
                   agent {
                       id

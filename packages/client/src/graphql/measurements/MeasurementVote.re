@@ -23,7 +23,7 @@ let mutate = (mutation: Mutation.apolloMutation, measurementId, voteAmount) => {
     Query.make(~measurementId=E.J.fromString(measurementId), ~input, ());
   mutation(
     ~variables=m##variables,
-    ~refetchQueries=[|"getMeasurements"|],
+    ~refetchQueries=[|"measurements"|],
     (),
   )
   |> ignore;

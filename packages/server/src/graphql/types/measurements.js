@@ -126,7 +126,7 @@ const measurement = new graphql.GraphQLObjectType({
     },
 
     totalVoteAmount: {
-      type: graphql.GraphQLFloat,
+      type: graphql.GraphQLInt,
       resolve: require('../resolvers/votes').total,
     },
 

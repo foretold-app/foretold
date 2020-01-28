@@ -126,11 +126,8 @@ module Helpers = {
       <MeasurementVote.Mutation onCompleted>
         ...{(mutation, result: MeasurementVote.Mutation.renderPropObj) =>
           <Antd.Button
-            loading={Bool(result.loading)}
-            _type=`danger
-            onClick={_ =>
-              MeasurementVote.mutate(mutation, measurement.id, -1)
-            }>
+            disabled={result.loading}
+            onClick={_ => MeasurementVote.mutate(mutation, measurement.id, 1)}>
             {">" |> Utils.ste}
           </Antd.Button>
         }
@@ -144,8 +141,7 @@ module Helpers = {
       <MeasurementVote.Mutation onCompleted>
         ...{(mutation, result: MeasurementVote.Mutation.renderPropObj) =>
           <Antd.Button
-            loading={Bool(result.loading)}
-            _type=`danger
+            disabled={result.loading}
             onClick={_ =>
               MeasurementVote.mutate(mutation, measurement.id, -1)
             }>
@@ -157,17 +153,24 @@ module Helpers = {
   };
 
   module Vote = {
+    module Styles = {
+      open Css;
+      let vote = style([marginLeft(`px(5)), marginRight(`px(5))]);
+    };
     [@react.component]
-    let make = (~measurement: Types.measurement) =>
+    let make = (~measurement: Types.measurement) => {
       measurement.totalVoteAmount
       |> E.O.fmap(r =>
            <>
              <MeasurementVoteDown measurement />
-             {string_of_float(r) |> Utils.ste}
+             <span className=Styles.vote>
+               {string_of_int(r) |> Utils.ste}
+             </span>
              <MeasurementVoteUp measurement />
            </>
          )
       |> E.O.React.defaultNull;
+    };
   };
 
   module Description = {

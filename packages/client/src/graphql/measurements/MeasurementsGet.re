@@ -42,6 +42,7 @@ let toMeasurement = (measurement): Types.measurement => {
     ~competitorType=measurement##competitorType,
     ~taggedMeasurementId=measurement##taggedMeasurementId,
     ~createdAt=Some(measurement##createdAt),
+    ~updatedAt=Some(measurement##updatedAt),
     ~relevantAt=measurement##relevantAt,
     ~agent,
     ~measurementScoreSet,
@@ -53,7 +54,7 @@ let toMeasurement = (measurement): Types.measurement => {
 
 module Query = [%graphql
   {|
-    query getMeasurements(
+    query measurements (
         $measurableId: String
         $agentId: String
         $channelId: String
@@ -86,6 +87,7 @@ module Query = [%graphql
               node{
                   id
                   createdAt @bsDecoder(fn: "E.J.toMoment")
+                  updatedAt @bsDecoder(fn: "E.J.toMoment")
                   value {
                       floatCdf {
                           xs

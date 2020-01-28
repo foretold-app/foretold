@@ -444,7 +444,7 @@ module Create = {
               ~refetchQueries=[|
                 "getAgent",
                 "getMeasurable",
-                "getMeasurements",
+                "measurements",
               |],
               (),
             )

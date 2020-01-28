@@ -1,7 +1,7 @@
 {
   "name": "@foretold/tests",
   "version": "1.0.0",
-  "description": "",
+  "description": "End-to-end tests.",
   "main": "index.js",
   "scripts": {
     "test": "node index",

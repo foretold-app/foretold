@@ -1,3 +1,3 @@
-# Bots
+# End-to-end tests
 
-This library encapsulates the bots logic.
+Only for CI/CD.

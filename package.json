@@ -33,7 +33,7 @@
     "cdf/test:ci": "cd packages/cdf && yarn test:ci && cd ../..",
     "bots/test:ci": "cd packages/bots && yarn test:ci && cd ../..",
     "prediction-analysis/test:ci": "cd packages/prediction-analysis && yarn build && yarn test:ci && cd ../..",
-    "tests/test:ci": "cd packages/tests && yarn build && yarn test:ci && cd ../..",
+    "tests/test:ci": "cd packages/tests && yarn test:ci && cd ../..",
 
     "google": "echo ${GOOGLE_AUTH} > ./packages/server/config/google.json",
 

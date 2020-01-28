@@ -6,19 +6,40 @@ query {
 }
 `;
 
+const authentication = `
+query authentication(
+  $auth0jwt: JWT!
+  $auth0accessToken: String
+){
+  authentication(
+    auth0jwt: $auth0jwt
+    auth0accessToken: $auth0accessToken
+  ){
+    jwt
+  }
+}
+`;
+
 const measurables = `
-query measurables {
+query measurables(
+  $first: Int500
+  $states: [measurableState]
+  $isArchived: [isArchived]
+  $channelId: String
+) {
   measurables(
-    first: 500
-    states: [OPEN, JUDGEMENT_PENDING] 
-    isArchived: [FALSE]
+    first: $first
+    states: $states
+    isArchived: $isArchived 
+    channelId: $channelId
   ) {
-      edges {
-        node {
-          id
-          name
-          valueType
-          state
+    edges {
+      node {
+        id
+        name
+        valueType
+        state
+        channelId
       }
     }
   }
@@ -62,29 +83,87 @@ mutation measurementCreate(
   $input: MeasurementCreateInput!
 ) {
   measurementCreate(input: $input) {
-    createdAt
-    __typename
-  }
-}
-`;
-
-const mutexTake = `
-mutation mutexTake (
-  $name: String
-) {
-  mutexTake(input:{
-    name: $name
-  }){
     id
+    createdAt
   }
 }
 `;
 
-const mutexFree = `
-mutation mutexFree (
-  $id: String!
-) {
-  mutexFree(id: $id)
+const channelCreate = `
+mutation channelCreate($input: ChannelInput!) {
+  channelCreate(
+    input: $input
+  ) {
+    id
+    name
+    notebooksCount
+    openedMeasurablesCount
+    isPublic
+    isCurated
+    isArchived
+    permissions {
+      queries {
+        deny
+        allow
+      }
+      mutations {
+        deny
+        allow
+      }
+    }
+    description
+    membershipCount
+  }
+}
+`;
+
+const measurableCreate = `
+mutation measurableCreate($input: MeasurableCreateInput!) {
+  measurableCreate(input: $input) {
+    id
+    channelId
+    createdAt
+    updatedAt
+    valueType
+    expectedResolutionDate
+    resolutionEndpointResponse
+    labelCustom
+    permissions {
+      queries {
+        allow
+        deny
+      }
+      mutations {
+        allow
+        deny
+      }
+    }
+    resolutionEndpoint
+    labelSubject
+    labelProperty
+    labelOnDate
+    labelCustom
+  }
+}
+`;
+
+const channel = `
+query channel($id: String!) {
+  channel(id: $id) {
+    id
+    name
+    description
+    isArchived
+    isPublic
+    membershipCount
+    notebooksCount
+    myRole
+    permissions {
+      mutations {
+        allow
+      }
+    }
+  }
 }
 `;
 
@@ -93,6 +172,8 @@ module.exports = {
   measurables,
   measurements,
   measurementCreate,
-  mutexTake,
-  mutexFree,
+  authentication,
+  channelCreate,
+  measurableCreate,
+  channel,
 };

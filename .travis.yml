@@ -1,4 +1,4 @@
-sudo: required
+language: generic
 
 services:
   - docker
@@ -8,24 +8,27 @@ branches:
     - master
     - develop
     - master-server
-
 env:
   global:
     - COMMIT=${TRAVIS_COMMIT::8}
     - REPO=foretold-app/foretold
     - DOCKER_COMPOSE_VERSION=1.8.1
-
-before_install:
-  - echo Before-Install-OK
+    - COMPOSE_FILE=docker-compose.yml:docker-compose.override.travis.yml
 
 before_script:
   - echo Before-Script-OK
 
 install:
-  - docker build -t main ./
+  - docker-compose ps
+  - docker-compose up -d --build
+  - docker-compose scale app=3
+  - docker-compose ps
+  - docker-compose exec app yarn server/db:create
+  - docker-compose exec app yarn server/db:migrate
+  - docker-compose restart app
+  - docker-compose ps
 
 script:
   - printenv
-  - docker run main yarn packages/build
-  - docker run main yarn packages/test
-  - docker run main yarn packages/lint
+  - docker-compose exec app yarn packages/test
+  - docker-compose exec app yarn packages/lint

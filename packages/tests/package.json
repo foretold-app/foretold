@@ -1,0 +1,16 @@
+{
+  "name": "@foretold/tests",
+  "version": "1.0.0",
+  "description": "End-to-end tests.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index",
+    "test:ci": "node index"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "graphql-client": "2.0.1",
+    "lodash": "4.17.11"
+  }
+}

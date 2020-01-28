@@ -581,7 +581,7 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.mutexes.free,
       },
 
-      vote: {
+      measurementVote: {
         type: types.votes.vote,
         args: {
           measurementId: {
@@ -595,7 +595,7 @@ const schema = new graphql.GraphQLSchema({
             ),
           },
         },
-        resolve: resolvers.votes.vote,
+        resolve: resolvers.votes.measurementVote,
       },
     },
   }),

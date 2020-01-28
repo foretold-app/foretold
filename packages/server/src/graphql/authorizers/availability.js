@@ -6,6 +6,7 @@ const { rulesChannelMemberships } = require('./permissions');
 const { rulesChannels } = require('./permissions');
 const { rulesMeasurables } = require('./permissions');
 const { rulesBots } = require('./permissions');
+const { rulesMeasurements } = require('./permissions');
 
 /**
  * @param {object} rulesIn
@@ -123,10 +124,22 @@ async function availableBotsPermissions(root, args, context, info) {
   return getAll(rulesBots())(root, args, context, info);
 }
 
+/**
+ * @param {object | null} root
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<*>}
+ */
+async function availableMeasurementsPermissions(root, args, context, info) {
+  return getAll(rulesMeasurements())(root, args, context, info);
+}
+
 module.exports = {
   availableAll,
   availableBotsPermissions,
   availableChannelPermissions,
   availableMeasurablesPermissions,
   availableChannelMembershipsPermissions,
+  availableMeasurementsPermissions,
 };

@@ -154,10 +154,10 @@ const rulesNotebooks = () => ({
   },
 });
 
-const rulesVotes = () => ({
+const rulesMeasurements = () => ({
   Query: {},
   Mutation: {
-    vote: and(
+    measurementVote: and(
       currentAgentIsAuthenticated,
       measurementIsCompetitiveOrCommentOnly,
     ),
@@ -233,7 +233,7 @@ const rules = () => ({
     ...rulesChannelMemberships().Mutation,
     ...rulesInvitations().Mutation,
     ...rulesNotebooks().Mutation,
-    ...rulesVotes().Mutation,
+    ...rulesMeasurements().Mutation,
   },
 });
 
@@ -251,6 +251,7 @@ module.exports = {
   rulesChannels,
   rulesMeasurables,
   rulesChannelMemberships,
+  rulesMeasurements,
 
   getPermissions,
 };

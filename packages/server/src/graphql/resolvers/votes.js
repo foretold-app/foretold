@@ -11,7 +11,7 @@ const { VotesData } = require('../../data');
  * @param {object} _info
  * @returns {Promise<*|Array<Model>>}
  */
-async function vote(_root, args, context, _info) {
+async function measurementVote(_root, args, context, _info) {
   const agentId = _.get(context, 'agent.id', null);
   const measurementId = _.get(args, 'measurementId', null);
   const voteAmount = _.get(args, 'input.voteAmount', null);
@@ -31,6 +31,6 @@ async function total(root, _args, _context, _info) {
 }
 
 module.exports = {
-  vote,
+  measurementVote,
   total,
 };

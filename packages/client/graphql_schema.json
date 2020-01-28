@@ -1470,6 +1470,12 @@
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
+            },
+            {
+              "name": "MEASUREMENT_VOTE",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "possibleTypes": null
@@ -2896,6 +2902,22 @@
                     "name": "Measurement",
                     "ofType": null
                   }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "permissions",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Permissions",
+                  "ofType": null
                 }
               },
               "isDeprecated": false,
@@ -7453,7 +7475,7 @@
               "deprecationReason": null
             },
             {
-              "name": "vote",
+              "name": "measurementVote",
               "description": null,
               "args": [
                 {

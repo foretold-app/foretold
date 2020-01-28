@@ -1,20 +1,21 @@
 const _ = require('lodash');
 
+const { authenticationInputValidation } = require('./authentications');
+const { measurableNameValidation } = require('./measurables');
+const { measurementValueTypeValidation } = require('./measurements');
+const { measurementValueValidation } = require('./measurements');
+const { setContextBot } = require('./bots');
 const { setContextChannel, setContextChannelByRoot } = require('./channels');
 const { setContextChannelMemberships } = require('./channel-memberships');
 const { setContextChannelMembershipsAdmins } = require('./channel-memberships');
 const { setContextMeasurable } = require('./measurables');
 const { setContextMeasurableByRoot } = require('./measurables');
-const { measurableNameValidation } = require('./measurables');
-const { measurementValueValidation } = require('./measurements');
-const { measurementValueTypeValidation } = require('./measurements');
 const { setContextMeasurement } = require('./measurements');
-const { setContextBot } = require('./bots');
-const { setContextPreferenceFromId } = require('./preferences');
-const { setContextPreferenceFromAgentId } = require('./preferences');
-const { setContextUser } = require('./users');
+const { setContextMeasurementByRoot } = require('./measurements');
 const { setContextNotebook } = require('./notebooks');
-const { authenticationInputValidation } = require('./authentications');
+const { setContextPreferenceFromAgentId } = require('./preferences');
+const { setContextPreferenceFromId } = require('./preferences');
+const { setContextUser } = require('./users');
 const { competitiveMeasurementCanBeAddedToOpenMeasurable }
   = require('./measurements');
 
@@ -62,6 +63,15 @@ const middlewares = {
       await setContextMeasurableByRoot(root, args, context$, info);
       await setContextChannel(root, args, context$, info);
       await setContextChannelMemberships(root, args, context$, info);
+      return resolve(root, args, context$, info);
+    },
+  },
+
+  // Copy context here (temporary solution)
+  Measurement: {
+    permissions: async (resolve, root, args, context, info) => {
+      const context$ = _.cloneDeep(context);
+      await setContextMeasurementByRoot(root, args, context$, info);
       return resolve(root, args, context$, info);
     },
   },
@@ -235,7 +245,7 @@ const middlewares = {
       return resolve(root, args, context, info);
     },
 
-    vote: async (resolve, root, args, context, info) => {
+    measurementVote: async (resolve, root, args, context, info) => {
       await setContextMeasurement(root, args, context, info);
       return resolve(root, args, context, info);
     },

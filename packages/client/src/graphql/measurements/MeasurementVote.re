@@ -1,10 +1,10 @@
 module Query = [%graphql
   {|
-    mutation vote(
+    mutation measurementVote(
         $measurementId: MeasurementId!
         $input: VoteInput!
     ) {
-        vote(
+        measurementVote(
             measurementId: $measurementId
             input: $input
         ) {

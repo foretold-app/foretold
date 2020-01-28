@@ -112,9 +112,22 @@ async function setContextMeasurement(root, args, context, _info) {
   }
 }
 
+/**
+ * @param {object | null} root
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @param {object} _info
+ * @return {Promise<void>}
+ */
+async function setContextMeasurementByRoot(root, args, context, _info) {
+  log.trace('\x1b[36m ---> \x1b[0m Middleware (setContextMeasurementByRoot)');
+  context.measurement = root || null;
+}
+
 module.exports = {
-  setContextMeasurement,
-  measurementValueValidation,
-  measurementValueTypeValidation,
   competitiveMeasurementCanBeAddedToOpenMeasurable,
+  measurementValueTypeValidation,
+  measurementValueValidation,
+  setContextMeasurement,
+  setContextMeasurementByRoot,
 };

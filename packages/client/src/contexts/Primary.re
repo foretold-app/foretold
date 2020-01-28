@@ -488,6 +488,7 @@ module Measurement = {
         ~valueText=None,
         ~measurementScoreSet=None,
         ~totalVoteAmount=None,
+        ~permissions=None,
         (),
       )
       : t => {
@@ -505,6 +506,7 @@ module Measurement = {
     valueText,
     measurementScoreSet,
     totalVoteAmount,
+    permissions,
   };
 };
 

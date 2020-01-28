@@ -153,6 +153,11 @@ const measurement = new graphql.GraphQLObjectType({
       type: graphql.GraphQLNonNull(graphql.GraphQLList(measurement)),
       resolve: resolver(models.Measurement.TaggedBy),
     },
+
+    permissions: {
+      type: graphql.GraphQLNonNull(require('./permissions').permissions),
+      resolve: resolvers.permissions.measurementsPermissions,
+    },
   }),
 });
 

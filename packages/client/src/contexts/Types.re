@@ -51,6 +51,7 @@ type permission = [
   | `PREFERENCE_UPDATE
   | `SUBSCRIBE
   | `UNSUBSCRIBE
+  | `MEASUREMENT_VOTE
 ];
 
 type marketType = [ | `MARKET | `NON_MARKET];
@@ -184,6 +185,7 @@ and measurement = {
   agent: option(agent),
   measurementScoreSet: option(measurementScoreSet),
   totalVoteAmount: option(int),
+  permissions: option(permissions),
 }
 
 and timeAverageScore = {

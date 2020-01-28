@@ -10,11 +10,6 @@ const api = new API(API_URL, token);
 const auth0jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZm9yZXRvbGQuaW8iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiZ2l2ZW5fbmFtZSI6IlRlc3QiLCJmYW1pbHlfbmFtZSI6IkZvcmV0b2xkIiwibmlja25hbWUiOiJ0ZXN0LmZvcmV0b2xkIiwibmFtZSI6IlRlc3QgRm9yZXRvbGQiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EtL0FBdUU3bURQb0lfRnZmTWVKZ194NlRCRzNLU3JSVEpyQzdQNjZOMHQxdVVoM0EiLCJsb2NhbGUiOiJydSIsInVwZGF0ZWRfYXQiOiIyMDIwLTAxLTIwVDA4OjQ0OjIxLjQzM1oiLCJpc3MiOiJodHRwczovL2ZvcmV0b2xkLXJtLmF1dGgwLmNvbS8iLCJzdWIiOiJnb29nbGUtb2F1dGgyfDEwNjI2MjkwODk1MjU3MTkzMTI1MyIsImF1ZCI6ImZKb0F6MzNKaTJKWGs4cnV2c2pCUlZnaHNaNTNIS1NVIiwiaWF0IjoxNTc5NTE0NTE0LCJhdF9oYXNoIjoia0FrRVNwdUw1cVBhLTBuelpOSFRaQSIsIm5vbmNlIjoiby1PUVViU0FLZWZRTU82Zm91U354Zk1YdTJfemxUU0oifQ.XZy7AiD_qmn-3cRkprKl--Ej1hcaxGpPK2ag-ouHB5A';
 const auth0accessToken = 'tFgp55FR5h2BGtTqMIN9EulZ6uQ3zsFL';
 
-if (process.env.NODE_ENV !== 'test') {
-  console.error('Error', new Error('NODE_ENV is not test.'));
-  process.exit(1);
-}
-
 async function main() {
   // Authentication
   const authentication = await api.authentication(auth0jwt, auth0accessToken);
@@ -123,7 +118,7 @@ async function main() {
 
   // Measurables
   const measurablesParams = {
-    // "channelId": channelId,
+    "channelId": channelId,
     "first": 10,
     "states": ["OPEN"]
   };

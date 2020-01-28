@@ -159,17 +159,19 @@ module Helpers = {
     };
     [@react.component]
     let make = (~measurement: Types.measurement) => {
-      measurement.totalVoteAmount
-      |> E.O.fmap(r =>
-           <>
-             <MeasurementVoteDown measurement />
-             <span className=Styles.vote>
-               {string_of_int(r) |> Utils.ste}
-             </span>
-             <MeasurementVoteUp measurement />
-           </>
-         )
-      |> E.O.React.defaultNull;
+      let can =
+        Primary.Permissions.can(`MEASUREMENT_VOTE, measurement.permissions);
+      let totalVoteAmount = measurement.totalVoteAmount |> E.O.default(0);
+
+      can
+        ? <>
+            <MeasurementVoteDown measurement />
+            <span className=Styles.vote>
+              {string_of_int(totalVoteAmount) |> Utils.ste}
+            </span>
+            <MeasurementVoteUp measurement />
+          </>
+        : <Null />;
     };
   };
 

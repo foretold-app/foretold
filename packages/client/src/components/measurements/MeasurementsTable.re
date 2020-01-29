@@ -161,17 +161,24 @@ module Helpers = {
     let make = (~measurement: Types.measurement) => {
       let can =
         Primary.Permissions.can(`MEASUREMENT_VOTE, measurement.permissions);
-      let totalVoteAmount = measurement.totalVoteAmount |> E.O.default(0);
 
-      can
-        ? <>
-            <MeasurementVoteDown measurement />
-            <span className=Styles.vote>
-              {string_of_int(totalVoteAmount) |> Utils.ste}
-            </span>
-            <MeasurementVoteUp measurement />
-          </>
-        : <Null />;
+      switch (can, measurement.totalVoteAmount) {
+      | (true, totalVoteAmount) =>
+        <>
+          <MeasurementVoteDown measurement />
+          <span className=Styles.vote>
+            {totalVoteAmount |> E.O.default(0) |> string_of_int |> Utils.ste}
+          </span>
+          <MeasurementVoteUp measurement />
+        </>
+      | (false, Some(totalVoteAmount)) =>
+        <>
+          <span className=Styles.vote>
+            {string_of_int(totalVoteAmount) |> Utils.ste}
+          </span>
+        </>
+      | _ => <Null />
+      };
     };
   };
 

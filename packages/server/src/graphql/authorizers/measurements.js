@@ -29,11 +29,41 @@ function measurementIsCompetitiveOrCommentOnlyRule(
   return result;
 }
 
+/**
+ * @param {object} _root
+ * @param {object} _args
+ * @param {Schema.Context} context
+ * @param {object} _info
+ * @return {boolean}
+ */
+function measurementIsOwnedByCurrentAgentRule(
+  _root, _args, context, _info,
+) {
+  const measurementAgentId = _.get(context, 'measurement.agentId', null);
+  const currentAgentId = _.get(context, 'agent.id', null);
+
+  const result = (!!measurementAgentId && !!currentAgentId)
+    && measurementAgentId === currentAgentId;
+
+  log.trace(
+    '\x1b[33m Rule Measurements (measurementIsOwnedByCurrentAgentRule), '
+    + `result = "${result}".\x1b[0m`,
+  );
+
+  return result;
+}
+
 /** @type {Rule} */
 const measurementIsCompetitiveOrCommentOnly = rule({
   cache: 'no_cache',
 })(measurementIsCompetitiveOrCommentOnlyRule);
 
+/** @type {Rule} */
+const measurementIsOwnedByCurrentAgent = rule({
+  cache: 'no_cache',
+})(measurementIsOwnedByCurrentAgentRule);
+
 module.exports = {
   measurementIsCompetitiveOrCommentOnly,
+  measurementIsOwnedByCurrentAgent,
 };

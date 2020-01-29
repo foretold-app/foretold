@@ -11,7 +11,7 @@ type authResult = {
   "idToken": string,
 };
 
-type authErr = {. "message": string};
+type authErr = Js.Nullable.t({. "message": string});
 
 type t = {
   .
@@ -48,8 +48,11 @@ let triggerLoginScreen = () => client##authorize();
 let checkSession = fn => {
   client##checkSession(
     Js.Dict.empty(),
-    (_authErr, authResult) => {
-      authResult |> fn;
+    (authErr, authResult) => {
+      switch (authErr |> Js.Nullable.toOption) {
+      | Some(err) => Js.log2("Check session error:", err)
+      | None => authResult |> fn
+      };
       ();
     },
   );

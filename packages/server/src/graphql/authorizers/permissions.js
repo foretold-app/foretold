@@ -22,6 +22,7 @@ const { agentIdFromRootAgentId } = require('./predicates');
 const { notebookIsOwnedByCurrentAgent } = require('./notebooks');
 const { rateLimit } = require('./rate-limit');
 const { measurementIsCompetitiveOrCommentOnly } = require('./measurements');
+const { measurementIsOwnedByCurrentAgent } = require('./measurements');
 
 const currentAgentIsApplicationAdminOrChannelAdmin = or(
   currentAgentIsApplicationAdmin,
@@ -160,6 +161,7 @@ const rulesMeasurements = () => ({
     measurementVote: and(
       currentAgentIsAuthenticated,
       measurementIsCompetitiveOrCommentOnly,
+      not(measurementIsOwnedByCurrentAgent),
     ),
   },
 });

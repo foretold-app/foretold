@@ -105,10 +105,10 @@ async function create(root, args, context, _info) {
   const creatorId = _.get(context, 'agent.id', null);
   const input = _.get(args, 'input') || {};
 
-  return new ChannelsData().createOne({
+  return new ChannelsData().createOne(new Data({
     ...input,
     creatorId,
-  });
+  }));
 }
 
 module.exports = {

@@ -2,16 +2,14 @@
 let make = (~channelId: string) => {
   let addToChannelLink = (agentId: string, channelId: string) =>
     <ChannelMembershipCreate.Mutation>
-      ...{(mutation, _) =>
-        <Link
-          linkType={
-            Action(
-              _ =>
-                ChannelMembershipCreate.mutate(mutation, agentId, channelId),
-            )
+      ...{(mutation, result: ChannelMembershipCreate.Mutation.renderPropObj) =>
+        <Antd.Button
+          loading={Bool(result.loading)}
+          onClick={_ =>
+            ChannelMembershipCreate.mutate(mutation, agentId, channelId)
           }>
           {"Add to Community" |> Utils.ste}
-        </Link>
+        </Antd.Button>
       }
     </ChannelMembershipCreate.Mutation>;
 

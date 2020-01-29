@@ -5,7 +5,6 @@ const { AgentsData } = require('./agents-data');
 
 const { ChannelModel } = require('../models');
 
-const { Data } = require('./classes');
 const { Params } = require('./classes');
 
 /**

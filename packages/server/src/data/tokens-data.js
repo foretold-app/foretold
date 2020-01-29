@@ -7,6 +7,9 @@ const config = require('../../config/config');
 const { TokenModel } = require('../models');
 const { TOKEN_TYPE } = require('../enums');
 
+const { Data } = require('./classes');
+const { Params } = require('./classes');
+
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
  * @property {TokenModel} model
@@ -48,12 +51,12 @@ class TokensData extends DataBase {
    * @return {Promise<string>}
    */
   async revokeGet(agentId, type = TOKEN_TYPE.ACCESS_TOKEN) {
-    await this.model.updateAll({
+    await this.model.updateAll(new Params({
       type,
       agentId,
-    }, {
+    }), new Data({
       isActive: false,
-    });
+    }));
     return this.getCreate(agentId, type);
   }
 
@@ -131,14 +134,14 @@ class TokensData extends DataBase {
     expiresAt = null,
     usageCount = null,
   ) {
-    return this.createOne({
+    return this.createOne(new Data({
       type,
       agentId,
       expiresAt,
       usageCount,
       token: this._generateToken(),
       isActive: true,
-    });
+    }));
   }
 
   /**

@@ -34,9 +34,9 @@ async function getOne(root, _args, _context, _info) {
  * @returns {Promise<Models.User>}
  */
 async function update(_root, args, _context, _info) {
-  const id = _.get(args, 'id', null);
+  const performanceId = _.get(args, 'id', null);
 
-  const params = new Params({ id });
+  const params = new Params({ id: performanceId });
   const data = new Data(args.input);
   const options = new Options();
 

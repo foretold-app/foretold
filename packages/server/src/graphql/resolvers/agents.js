@@ -4,6 +4,9 @@ const { AgentsData } = require('../../data');
 
 const { Params } = require('../../data/classes');
 const { Filter } = require('../../data/classes');
+const { Pagination } = require('../../data/classes');
+const { Options } = require('../../data/classes');
+const { Query } = require('../../data/classes');
 
 /**
  * @param {object | null} root
@@ -14,10 +17,12 @@ const { Filter } = require('../../data/classes');
  * @returns {Promise<Models.Agent>}
  */
 async function one(root, args, _context, _info) {
-  const id = _.get(args, 'id', null)
+  const agentId = _.get(args, 'id', null)
     || _.get(root, 'agentId', null);
-  const params = new Params({ id });
-  return new AgentsData().getOne(params);
+  const params = new Params({ id: agentId });
+  const query = new Query();
+  const options = new Options({ raw: true, attributes: true });
+  return new AgentsData().getOne(params, query, options);
 }
 
 /**
@@ -38,8 +43,10 @@ async function all(root, args, _context, _info) {
     excludeChannelId,
     types,
   });
+  const pagination = new Pagination();
+  const options = new Options({ raw: true, attributes: true });
 
-  return new AgentsData().getAll(filter);
+  return new AgentsData().getAll(filter, pagination, options);
 }
 
 module.exports = {

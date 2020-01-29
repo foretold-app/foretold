@@ -1,7 +1,6 @@
 const graphql = require('graphql');
-const { resolver, DateType } = require('graphql-sequelize');
+const { DateType } = require('graphql-sequelize');
 
-const models = require('../../models/definitions');
 const resolvers = require('../resolvers');
 
 const bot = new graphql.GraphQLObjectType({
@@ -34,17 +33,15 @@ const bot = new graphql.GraphQLObjectType({
     },
 
     // @todo: security?
-    // @todo: Do not use resolver. Use common interfaces of Data layer.
     agent: {
       type: require('./agents').agent,
-      resolve: resolver(models.Bot.Agent),
+      resolve: resolvers.agents.one,
     },
 
     // @todo: security?
-    // @todo: Do not use resolver. Use common interfaces of Data layer.
     user: {
       type: require('./users').user,
-      resolve: resolver(models.Bot.User),
+      resolve: resolvers.users.one,
     },
   }),
 });

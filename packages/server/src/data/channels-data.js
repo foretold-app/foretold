@@ -5,6 +5,8 @@ const { AgentsData } = require('./agents-data');
 
 const { ChannelModel } = require('../models');
 
+const { Params } = require('./classes');
+
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
  * @property {ChannelModel} model
@@ -32,7 +34,7 @@ class ChannelsData extends DataBase {
    * @return {Promise<Models.Channel>}
    */
   async createOne(data) {
-    const channel = await this.getOne({ name: data.name });
+    const channel = await this.getOne(new Params({ name: data.name }));
     if (channel) {
       return Promise.reject(new Error('Channel exists.'));
     }

@@ -94,12 +94,12 @@ async function all(_root, args, context, _info) {
  * @returns {Promise<Model>}
  */
 async function one(_root, args, context, _info) {
-  const id = _.get(args, 'id', null);
+  const notebookId = _.get(args, 'id', null);
 
   const isAdmin = _.get(context, 'agent.isAdmin', null);
   const currentAgentId = _.get(context, 'agent.id', null);
 
-  const params = new Params({ id });
+  const params = new Params({ id: notebookId });
   const query = new Query();
   const options = new Options({ isAdmin, currentAgentId });
 
@@ -128,12 +128,12 @@ async function count(root, _args, _context, _info) {
  * @returns {Promise<Model>}
  */
 async function remove(_root, args, context, _info) {
-  const id = _.get(args, 'id', null);
+  const notebookId = _.get(args, 'id', null);
 
   const isAdmin = _.get(context, 'agent.isAdmin', null);
   const currentAgentId = _.get(context, 'agent.id', null);
 
-  const params = new Params({ id });
+  const params = new Params({ id: notebookId });
   const query = new Query();
   const options = new Options({ isAdmin, currentAgentId });
 

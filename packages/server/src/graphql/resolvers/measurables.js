@@ -6,6 +6,7 @@ const { Pagination } = require('../../data/classes');
 const { Params } = require('../../data/classes');
 const { Filter } = require('../../data/classes');
 const { Options } = require('../../data/classes');
+const { Data } = require('../../data/classes');
 const { Query } = require('../../data/classes');
 const { structures } = require('../../data/classes');
 
@@ -75,11 +76,11 @@ async function all(root, args, context, _info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function one(root, args, context, _info) {
-  const id = _.get(args, 'id', null)
+  const measurableId = _.get(args, 'id', null)
     || _.get(root, 'measurableId', null);
   const currentAgentId = _.get(context, 'agent.id', null);
 
-  const params = new Params({ id });
+  const params = new Params({ id: measurableId });
   const query = new Query();
   const options = new Options({
     isAdmin: _.get(context, 'agent.isAdmin', null),
@@ -100,10 +101,10 @@ async function one(root, args, context, _info) {
 async function create(root, args, context, _info) {
   const agentId = _.get(context, 'agent.id', null);
   const input = _.get(args, 'input', null);
-  const data = {
+  const data = new Data({
     ...input,
     creatorId: agentId,
-  };
+  });
   return new MeasurablesData().createOne(data);
 }
 
@@ -116,8 +117,8 @@ async function create(root, args, context, _info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function archive(root, args, _context, _info) {
-  const id = _.get(args, 'id', null);
-  return new MeasurablesData().archive(id);
+  const measurableId = _.get(args, 'id', null);
+  return new MeasurablesData().archive(measurableId);
 }
 
 /**
@@ -129,8 +130,8 @@ async function archive(root, args, _context, _info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function unarchive(root, args, _context, _info) {
-  const id = _.get(args, 'id', null);
-  return new MeasurablesData().unArchive(id);
+  const measurableId = _.get(args, 'id', null);
+  return new MeasurablesData().unArchive(measurableId);
 }
 
 /**
@@ -143,9 +144,11 @@ async function unarchive(root, args, _context, _info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function update(root, args, _context, _info) {
-  const id = _.get(args, 'id', null);
+  const measurableId = _.get(args, 'id', null);
   const input = _.get(args, 'input') || {};
-  return new MeasurablesData().updateOne({ id }, input);
+  const params = new Params({ id: measurableId });
+  const data = new Data(input);
+  return new MeasurablesData().updateOne(params, data);
 }
 
 /**
@@ -181,7 +184,7 @@ async function count(_root, _args, _context, _info) {
  */
 async function measurableCount(root, _args, _context, _info) {
   const seriesId = _.get(root, 'id', null);
-  return new MeasurablesData().getCount({ seriesId });
+  return new MeasurablesData().getCount(new Params({ seriesId }));
 }
 
 /**

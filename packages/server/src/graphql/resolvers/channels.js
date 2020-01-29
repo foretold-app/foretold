@@ -66,10 +66,10 @@ async function all(root, args, context, _info) {
  * @returns {Promise<Models.Channel>}
  */
 async function one(root, args, context, _info) {
-  const id = _.get(args, 'id', null) || _.get(root, 'channelId', null);
+  const channelId = _.get(args, 'id', null) || _.get(root, 'channelId', null);
   const agentId = _.get(context, 'agent.id', null);
 
-  const params = new Params({ id });
+  const params = new Params({ id: channelId });
   const query = new Query();
   const options = new Options({ agentId });
 
@@ -86,9 +86,9 @@ async function one(root, args, context, _info) {
  * @returns {Promise<Models.Channel>}
  */
 async function update(root, args, _context, _info) {
-  const id = _.get(args, 'id', null);
+  const channelId = _.get(args, 'id', null);
 
-  const params = new Params({ id });
+  const params = new Params({ id: channelId });
   const data$ = new Data(args.input);
 
   return new ChannelsData().updateOne(params, data$);
@@ -105,10 +105,10 @@ async function create(root, args, context, _info) {
   const creatorId = _.get(context, 'agent.id', null);
   const input = _.get(args, 'input') || {};
 
-  return new ChannelsData().createOne({
+  return new ChannelsData().createOne(new Data({
     ...input,
     creatorId,
-  });
+  }));
 }
 
 module.exports = {

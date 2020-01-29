@@ -204,8 +204,7 @@ const schema = new graphql.GraphQLSchema({
         args: {
           id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
         },
-        // @todo: Do not use resolver. Use common interfaces of Data layer.
-        resolve: resolver(models.Agent),
+        resolve: resolvers.agents.one,
       },
 
       agents: {

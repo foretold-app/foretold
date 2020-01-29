@@ -1,7 +1,7 @@
 const graphql = require('graphql');
-const { resolver, DateType } = require('graphql-sequelize');
+const { DateType } = require('graphql-sequelize');
 
-const models = require('../../models/definitions');
+const resolvers = require('../resolvers');
 
 const userUpdateInput = new graphql.GraphQLInputObjectType({
   name: 'UserUpdateInput',
@@ -36,17 +36,15 @@ const user = new graphql.GraphQLObjectType({
     isMe: require('./common').isMe,
 
     // @todo: security?
-    // @todo: Do not use resolver. Use common interfaces of Data layer.
     agent: {
       type: require('./agents').agent,
-      resolve: resolver(models.User.Agent),
+      resolve: resolvers.agents.one,
     },
 
     // @todo: security?
-    // @todo: Do not use resolver. Use common interfaces of Data layer.
     bots: {
       type: graphql.GraphQLNonNull(graphql.GraphQLList(require('./bots').bot)),
-      resolve: resolver(models.User.Bots),
+      resolve: resolvers.bots.allById,
     },
   }),
 });

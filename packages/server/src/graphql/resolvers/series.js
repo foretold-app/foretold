@@ -7,6 +7,7 @@ const { Params } = require('../../data/classes');
 const { Filter } = require('../../data/classes');
 const { Options } = require('../../data/classes');
 const { Query } = require('../../data/classes');
+const { Data } = require('../../data/classes');
 
 /**
  * @param {*} root
@@ -17,10 +18,10 @@ const { Query } = require('../../data/classes');
  * @returns {Promise<*|Array<Model>>}
  */
 async function one(root, args, context, _info) {
-  const id = _.get(args, 'id', null);
+  const seriesId = _.get(args, 'id', null);
   const currentAgentId = _.get(context, 'agent.id', null);
 
-  const params = new Params({ id });
+  const params = new Params({ id: seriesId });
   const query = new Query();
   const options = new Options({
     isAdmin: _.get(context, 'agent.isAdmin', null),
@@ -64,10 +65,10 @@ async function all(root, args, context, _info) {
  */
 async function create(root, args, context, _info) {
   const agentId = _.get(context, 'agent.id', null);
-  const datas = {
+  const datas = new Data({
     ...args.input,
     creatorId: agentId,
-  };
+  });
   return new SeriesData().createOne(datas);
 }
 

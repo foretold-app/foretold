@@ -1,9 +1,7 @@
 const graphql = require('graphql');
-const { resolver } = require('graphql-sequelize');
 
 const resolvers = require('../resolvers');
 const channelMemberships = require('./channel-memberhips');
-const models = require('../../models/definitions');
 
 const { agentType } = require('./enums/agent-type');
 
@@ -23,17 +21,15 @@ const agent = new graphql.GraphQLObjectType({
     isAdmin: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
 
     // @todo: security
-    // @todo: Do not use resolver. Use common interfaces of Data layer.
     user: {
       type: require('./users').user,
-      resolve: resolver(models.Agent.User),
+      resolve: resolvers.users.oneByAgentId,
     },
 
     // @todo: security
-    // @todo: Do not use resolver. Use common interfaces of Data layer.
     bot: {
       type: require('./bots').bot,
-      resolve: resolver(models.Agent.Bot),
+      resolve: resolvers.bots.oneByAgentId,
     },
 
     // @todo: security

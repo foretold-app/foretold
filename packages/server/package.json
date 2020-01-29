@@ -101,6 +101,7 @@
     "supertest": "4.0.2"
   },
   "eslintConfig": {
+    "ignorePatterns": ["jest-globals.js"],
     "plugins": [
       "import",
       "jest",

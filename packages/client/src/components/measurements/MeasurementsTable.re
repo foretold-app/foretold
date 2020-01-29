@@ -120,6 +120,61 @@ module Helpers = {
       |> E.O.React.defaultNull;
   };
 
+  module MeasurementVoteUp = {
+    [@react.component]
+    let make = (~measurement: Types.measurement, ~onCompleted=_ => ()) => {
+      <MeasurementVote.Mutation onCompleted>
+        ...{(mutation, result: MeasurementVote.Mutation.renderPropObj) =>
+          <Antd.Button
+            disabled={result.loading}
+            onClick={_ => MeasurementVote.mutate(mutation, measurement.id, 1)}>
+            {">" |> Utils.ste}
+          </Antd.Button>
+        }
+      </MeasurementVote.Mutation>;
+    };
+  };
+
+  module MeasurementVoteDown = {
+    [@react.component]
+    let make = (~measurement: Types.measurement, ~onCompleted=_ => ()) => {
+      <MeasurementVote.Mutation onCompleted>
+        ...{(mutation, result: MeasurementVote.Mutation.renderPropObj) =>
+          <Antd.Button
+            disabled={result.loading}
+            onClick={_ =>
+              MeasurementVote.mutate(mutation, measurement.id, -1)
+            }>
+            {"<" |> Utils.ste}
+          </Antd.Button>
+        }
+      </MeasurementVote.Mutation>;
+    };
+  };
+
+  module Vote = {
+    module Styles = {
+      open Css;
+      let vote = style([marginLeft(`px(5)), marginRight(`px(5))]);
+    };
+    [@react.component]
+    let make = (~measurement: Types.measurement) => {
+      let can =
+        Primary.Permissions.can(`MEASUREMENT_VOTE, measurement.permissions);
+      let totalVoteAmount = measurement.totalVoteAmount |> E.O.default(0);
+
+      can
+        ? <>
+            <MeasurementVoteDown measurement />
+            <span className=Styles.vote>
+              {string_of_int(totalVoteAmount) |> Utils.ste}
+            </span>
+            <MeasurementVoteUp measurement />
+          </>
+        : <Null />;
+    };
+  };
+
   module Description = {
     [@react.component]
     let make = (~m: Types.measurement) => {
@@ -246,7 +301,7 @@ let predictionValue =
         <div> <Helpers.StatSummary measurement /> </div>,
     (),
   );
-// /
+
 let predictionText =
   Table.Column.make(
     ~name={
@@ -255,6 +310,16 @@ let predictionText =
     ~flex=5,
     ~render=
       (measurement: Types.measurement) => <Helpers.ValueText measurement />,
+    (),
+  );
+
+let vote =
+  Table.Column.make(
+    ~name={
+      "Votes" |> Utils.ste;
+    },
+    ~flex=5,
+    ~render=(measurement: Types.measurement) => <Helpers.Vote measurement />,
     (),
   );
 
@@ -384,12 +449,14 @@ let make =
         getPredictionDistribution(~bounds, ()),
         predictionValue,
         predictionText,
+        vote,
         time,
       |]
     | (`none, `none, `PERCENTAGE) => [|
         agent,
         getPredictionDistribution(~bounds, ()),
         predictionValue,
+        vote,
         time,
       |]
     | (`extended, `none, `FLOAT) => [|
@@ -399,6 +466,7 @@ let make =
         predictionText,
         logScore(),
         score(),
+        vote,
         time,
       |]
     | (`extended, `none, `PERCENTAGE) => [|
@@ -407,17 +475,20 @@ let make =
         predictionValue,
         logScore(),
         score(),
+        vote,
         time,
       |]
     | (`none, `inside, `FLOAT) => [|
         agent,
         getPredictionDistribution(~bounds, ~width=150, ()),
         predictionText,
+        vote,
         time,
       |]
     | (`none, `inside, `PERCENTAGE) => [|
         agent,
         getPredictionDistribution(~bounds, ~width=150, ()),
+        vote,
         time,
       |]
     | (`extended, `inside, `FLOAT) => [|
@@ -426,6 +497,7 @@ let make =
         predictionText,
         logScore(),
         score(),
+        vote,
         time,
       |]
     | (`extended, `inside, `PERCENTAGE) => [|
@@ -433,6 +505,7 @@ let make =
         getPredictionDistribution(~bounds, ~width=150, ()),
         logScore(),
         score(),
+        vote,
         time,
       |]
     | _ => Js.Exn.raiseError("Date not supported")

@@ -126,7 +126,7 @@ const measurement = new graphql.GraphQLObjectType({
     },
 
     totalVoteAmount: {
-      type: graphql.GraphQLFloat,
+      type: graphql.GraphQLInt,
       resolve: require('../resolvers/votes').total,
     },
 
@@ -152,6 +152,11 @@ const measurement = new graphql.GraphQLObjectType({
     taggedBy: {
       type: graphql.GraphQLNonNull(graphql.GraphQLList(measurement)),
       resolve: resolver(models.Measurement.TaggedBy),
+    },
+
+    permissions: {
+      type: graphql.GraphQLNonNull(require('./permissions').permissions),
+      resolve: resolvers.permissions.measurementsPermissions,
     },
   }),
 });

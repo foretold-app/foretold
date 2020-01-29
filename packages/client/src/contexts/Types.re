@@ -23,15 +23,9 @@ type measurableState = [
 
 type isArchived = [ | `TRUE | `FALSE];
 
-type fieldChannels = [
-  | `membersCount
-  | `isCurated
-  | `name
-];
+type fieldChannels = [ | `membersCount | `isCurated | `name];
 
-type fieldAgentMeasurables = [
-  | `primaryPointScore
-];
+type fieldAgentMeasurables = [ | `primaryPointScore];
 
 type direction = [ | `ASC | `DESC];
 
@@ -57,6 +51,7 @@ type permission = [
   | `PREFERENCE_UPDATE
   | `SUBSCRIBE
   | `UNSUBSCRIBE
+  | `MEASUREMENT_VOTE
 ];
 
 type marketType = [ | `MARKET | `NON_MARKET];
@@ -182,12 +177,15 @@ and measurement = {
   competitorType,
   taggedMeasurementId: option(string),
   createdAt: option(MomentRe.Moment.t),
+  updatedAt: option(MomentRe.Moment.t),
   relevantAt: option(MomentRe.Moment.t),
   measurableId: option(string),
   valueText: option(string),
   measurable: option(measurable),
   agent: option(agent),
   measurementScoreSet: option(measurementScoreSet),
+  totalVoteAmount: option(int),
+  permissions: option(permissions),
 }
 
 and timeAverageScore = {

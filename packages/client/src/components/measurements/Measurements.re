@@ -11,7 +11,19 @@ module ReducerConfig = {
     MeasurementsGet.component(~measurableId=Some(measurableId), ());
 
   let isEqual = (a: itemType, b: itemType) => {
-    a.id == b.id;
+    let dates =
+      switch (a.updatedAt, b.updatedAt) {
+      | (Some(a), Some(b)) => MomentRe.Moment.isSame(a, b)
+      | _ => true
+      };
+    let votes =
+      switch (a.totalVoteAmount, b.totalVoteAmount) {
+      | (Some(a), Some(b)) => a === b
+      | (None, Some(_)) => false
+      | (Some(_), None) => false
+      | _ => true
+      };
+    dates && votes;
   };
 };
 

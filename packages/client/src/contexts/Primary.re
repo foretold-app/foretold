@@ -480,12 +480,15 @@ module Measurement = {
         ~competitorType=`COMPETITIVE,
         ~taggedMeasurementId=None,
         ~createdAt=None,
+        ~updatedAt=None,
         ~relevantAt=None,
         ~agent=None,
         ~measurableId=None,
         ~measurable=None,
         ~valueText=None,
         ~measurementScoreSet=None,
+        ~totalVoteAmount=None,
+        ~permissions=None,
         (),
       )
       : t => {
@@ -495,12 +498,15 @@ module Measurement = {
     competitorType,
     taggedMeasurementId,
     createdAt,
+    updatedAt,
     relevantAt,
     agent,
     measurableId,
     measurable,
     valueText,
     measurementScoreSet,
+    totalVoteAmount,
+    permissions,
   };
 };
 

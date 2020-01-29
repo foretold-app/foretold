@@ -34,6 +34,11 @@ let toMeasurement = (measurement): Types.measurement => {
     | None => None
     };
 
+  let allowMutations =
+    measurement##permissions##mutations##allow |> E.A.O.concatSome |> E.A.to_list;
+
+  let permissions = Primary.Permissions.make(allowMutations);
+
   Primary.Measurement.make(
     ~id=measurement##id,
     ~description=measurement##description,
@@ -42,17 +47,20 @@ let toMeasurement = (measurement): Types.measurement => {
     ~competitorType=measurement##competitorType,
     ~taggedMeasurementId=measurement##taggedMeasurementId,
     ~createdAt=Some(measurement##createdAt),
+    ~updatedAt=Some(measurement##updatedAt),
     ~relevantAt=measurement##relevantAt,
     ~agent,
     ~measurementScoreSet,
     ~measurable,
+    ~totalVoteAmount=measurement##totalVoteAmount,
+    ~permissions=Some(permissions),
     (),
   );
 };
 
 module Query = [%graphql
   {|
-    query getMeasurements(
+    query measurements (
         $measurableId: String
         $agentId: String
         $channelId: String
@@ -85,6 +93,7 @@ module Query = [%graphql
               node{
                   id
                   createdAt @bsDecoder(fn: "E.J.toMoment")
+                  updatedAt @bsDecoder(fn: "E.J.toMoment")
                   value {
                       floatCdf {
                           xs
@@ -101,6 +110,7 @@ module Query = [%graphql
                   description
                   valueText
                   taggedMeasurementId
+                  totalVoteAmount
 
                   agent {
                       id
@@ -141,6 +151,12 @@ module Query = [%graphql
                   measurementScoreSet {
                     primaryPointScore
                     nonMarketLogScore
+                  }
+
+                  permissions {
+                    mutations {
+                      allow
+                    }
                   }
               }
           }

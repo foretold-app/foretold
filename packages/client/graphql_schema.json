@@ -1470,6 +1470,12 @@
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
+            },
+            {
+              "name": "MEASUREMENT_VOTE",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ],
           "possibleTypes": null
@@ -2839,7 +2845,7 @@
               "args": [],
               "type": {
                 "kind": "SCALAR",
-                "name": "Float",
+                "name": "Int",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -2896,6 +2902,22 @@
                     "name": "Measurement",
                     "ofType": null
                   }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "permissions",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Permissions",
+                  "ofType": null
                 }
               },
               "isDeprecated": false,
@@ -7453,7 +7475,7 @@
               "deprecationReason": null
             },
             {
-              "name": "upvote",
+              "name": "measurementVote",
               "description": null,
               "args": [
                 {
@@ -7469,29 +7491,16 @@
                     }
                   },
                   "defaultValue": null
-                }
-              ],
-              "type": {
-                "kind": "OBJECT",
-                "name": "Vote",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "downvote",
-              "description": null,
-              "args": [
+                },
                 {
-                  "name": "measurementId",
+                  "name": "input",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
-                      "kind": "SCALAR",
-                      "name": "MeasurementId",
+                      "kind": "INPUT_OBJECT",
+                      "name": "VoteInput",
                       "ofType": null
                     }
                   },
@@ -8786,6 +8795,41 @@
           "kind": "SCALAR",
           "name": "MeasurementId",
           "description": "A special custom scalar type for a MeasurementId",
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "VoteInput",
+          "description": null,
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "voteAmount",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "VoteAmount",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "SCALAR",
+          "name": "VoteAmount",
+          "description": "A special custom scalar type for a vote amount",
           "fields": null,
           "inputFields": null,
           "interfaces": null,

@@ -15,6 +15,7 @@ const { Filter } = require('../../data/classes');
 const { Options } = require('../../data/classes');
 const { Params } = require('../../data/classes');
 const { Query } = require('../../data/classes');
+const { Data } = require('../../data/classes');
 
 const { MEASUREMENT_COMPETITOR_TYPE } = require('../../enums');
 const logger = require('../../lib/log');
@@ -103,10 +104,10 @@ async function measurableMeasurement(root, args, context, _info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function one(root, args, context, _info) {
-  const id = _.get(args, 'id', null);
+  const measurementId = _.get(args, 'id', null);
   const currentAgentId = _.get(context, 'agent.id', null);
 
-  const params = new Params({ id });
+  const params = new Params({ id: measurementId });
   const query = new Query();
   const options = new Options({
     isAdmin: _.get(context, 'agent.isAdmin', null),
@@ -128,7 +129,7 @@ async function create(root, args, context, _info) {
   const agentId = _.get(args, 'input.agentId', null)
     || _.get(context, 'agent.id', null);
 
-  const data = { ...args.input, agentId };
+  const data = new Data({ ...args.input, agentId });
 
   return new MeasurementsData().createOne(data);
 }
@@ -179,8 +180,8 @@ async function scoreSet(root, _args, _context, _info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function prediction(root, _args, _context, _info) {
-  const id = _.get(root, 'id', null);
-  const params = new Params({ id });
+  const measurementId = _.get(root, 'id', null);
+  const params = new Params({ id: measurementId });
   return new MeasurementsData().getOne(params);
 }
 

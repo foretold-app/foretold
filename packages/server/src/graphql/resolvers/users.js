@@ -3,6 +3,8 @@ const _ = require('lodash');
 const { UsersData } = require('../../data');
 
 const { Params } = require('../../data/classes');
+const { Query } = require('../../data/classes');
+const { Options } = require('../../data/classes');
 const { Data } = require('../../data/classes');
 
 /**
@@ -14,10 +16,10 @@ const { Data } = require('../../data/classes');
  * @returns {Promise<Models.User>}
  */
 async function update(root, args, _context) {
-  const id = _.get(args, 'id', null);
+  const userId = _.get(args, 'id', null);
   const input = _.get(args, 'input') || {};
 
-  const params = new Params({ id });
+  const params = new Params({ id: userId });
   const data$ = new Data(input);
 
   return new UsersData().updateOne(params, data$);
@@ -33,10 +35,10 @@ async function update(root, args, _context) {
  * @returns {Promise<Models.User>}
  */
 async function accessTokenUpdate(root, args, _context) {
-  const id = _.get(args, 'id', null);
+  const userId = _.get(args, 'id', null);
   const input = _.get(args, 'input', null);
 
-  const params = new Params({ id });
+  const params = new Params({ id: userId });
   const data$ = new Data(input);
 
   return new UsersData().updateOne(params, data$);
@@ -50,13 +52,29 @@ async function accessTokenUpdate(root, args, _context) {
  * @returns {Promise<Models.User>}
  */
 async function one(root, args, _context) {
-  const id = _.get(args, 'id', null);
+  const userId = _.get(args, 'id', null) || _.get(root, 'userId', null);
+  const params = new Params({ id: userId });
+  return new UsersData().getOne(params);
+}
 
-  return new UsersData().getOne({ id });
+/**
+ * @param {*} root
+ * @param {object} _args
+ * @param {Schema.Context} _context
+ * @param {object} _info
+ * @returns {Promise<Model>}
+ */
+async function oneByAgentId(root, _args, _context, _info) {
+  const agentId = _.get(root, 'id', null);
+  const params = new Params({ agentId });
+  const query = new Query();
+  const options = new Options({ raw: true });
+  return new UsersData().getOne(params, query, options);
 }
 
 module.exports = {
   one,
   update,
+  oneByAgentId,
   accessTokenUpdate,
 };

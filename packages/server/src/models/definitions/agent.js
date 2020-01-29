@@ -40,6 +40,11 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
+  /**
+   * @todo: Are we already ready to remove this?
+   * @deprecated: Hardly deprecated!
+   * @returns {Promise<undefined>}
+   */
   async function getName() {
     if (this.type === AGENT_TYPE.USER) {
       const user = await this.getUser();

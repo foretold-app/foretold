@@ -8,7 +8,13 @@ describe('Agents Resolvers', () => {
     const args = { id: 'id1' };
     it('returns an agent by id', () => {
       return agents.one(root, args).then((result) => {
-        expect(new AgentsData().getOne).toHaveBeenCalledWith({ id: 'id1' });
+        expect(new AgentsData().getOne).toHaveBeenCalledWith(
+          {
+            id: 'id1',
+          }, {}, {
+            attributes: true,
+            raw: true
+          });
         expect(result).toBe(true);
       });
     });
@@ -19,7 +25,12 @@ describe('Agents Resolvers', () => {
     const args = {};
     it('returns an agent by agentId', () => {
       return agents.one(root, args).then((result) => {
-        expect(new AgentsData().getOne).toHaveBeenCalledWith({ id: 'agentId1' });
+        expect(new AgentsData().getOne).toHaveBeenCalledWith({
+          id: 'agentId1',
+        }, {}, {
+          attributes: true,
+          raw: true,
+        });
         expect(result).toBe(true);
       });
     });

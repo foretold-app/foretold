@@ -495,6 +495,7 @@ let make =
     | (`none, `inside, `PERCENTAGE) => [|
         agent,
         getPredictionDistribution(~bounds, ~width=150, ()),
+        predictionValue,
         vote,
         time,
       |]

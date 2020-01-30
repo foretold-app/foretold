@@ -271,7 +271,8 @@ let queryDirection =
 };
 
 let componentMaker = (~pollInterval=?, query, innerComponentFn) =>
-  <QueryComponent variables=query##variables ?pollInterval>
+  <QueryComponent
+    variables=query##variables ?pollInterval fetchPolicy="no-cache">
     ...{o =>
       o.result
       |> HttpResponse.fromApollo

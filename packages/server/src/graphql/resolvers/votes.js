@@ -35,13 +35,14 @@ async function total(root, _args, _context, _info) {
 /**
  * @param {*} root
  * @param {object} _args
- * @param {Schema.Context} _context
+ * @param {Schema.Context} context
  * @param {object} _info
  * @returns {Promise<Models.User>}
  */
-async function oneByMeasurementId(root, _args, _context, _info) {
+async function oneByMeasurementId(root, _args, context, _info) {
   const measurementId = _.get(root, 'id', null);
-  const params = new Params({ measurementId });
+  const currentAgentId = _.get(context, 'agent.id', null);
+  const params = new Params({ measurementId, agentId: currentAgentId });
   return new VotesData().getOne(params);
 }
 

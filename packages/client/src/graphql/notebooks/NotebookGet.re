@@ -1,7 +1,7 @@
 module Query = [%graphql
   {|
-      query getNotebook ($id: NotebookId!) {
-          notebook(id: $id) {
+      query notebook ($id: NotebookId!) {
+          notebook (id: $id) {
              id
              name
              body

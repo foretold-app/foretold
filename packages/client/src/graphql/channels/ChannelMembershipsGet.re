@@ -1,6 +1,6 @@
 module Query = [%graphql
   {|
-    query getChannelMemberships($id: String!) {
+    query channelMemberships ($id: String!) {
       channel(id: $id){
         id
         channelMemberships{

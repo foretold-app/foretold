@@ -135,7 +135,7 @@ module Create = {
                   },
                   (),
                 )##variables,
-              ~refetchQueries=[|"getNotebooks", "getChannel"|],
+              ~refetchQueries=[|"notebooks", "channel"|],
               (),
             )
             |> Js.Promise.then_((result: result('a)) => {
@@ -178,7 +178,7 @@ module Edit = {
                   },
                   (),
                 )##variables,
-              ~refetchQueries=[|"getNotebook"|],
+              ~refetchQueries=[|"notebook"|],
               (),
             )
             |> Js.Promise.then_((result: result('a)) => {

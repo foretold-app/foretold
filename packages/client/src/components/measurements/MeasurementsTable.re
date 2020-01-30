@@ -120,35 +120,51 @@ module Helpers = {
       |> E.O.React.defaultNull;
   };
 
-  module MeasurementVoteUp = {
+  module MeasurementVote = {
     [@react.component]
-    let make = (~measurement: Types.measurement, ~onCompleted=_ => ()) => {
-      <MeasurementVote.Mutation onCompleted>
-        ...{(mutation, result: MeasurementVote.Mutation.renderPropObj) =>
-          <Antd.Button
-            disabled={result.loading}
-            onClick={_ => MeasurementVote.mutate(mutation, measurement.id, 1)}>
-            {">" |> Utils.ste}
-          </Antd.Button>
-        }
+    let make =
+        (
+          ~measurement: Types.measurement,
+          ~amount,
+          ~max,
+          ~currentVote,
+          ~children,
+        ) => {
+      <MeasurementVote.Mutation>
+        ...{(mutation, result: MeasurementVote.Mutation.renderPropObj) => {
+          let sum = ref(0);
+          let send =
+            Debouncer.make(
+              ~wait=200,
+              MeasurementVote.mutate(mutation, measurement.id),
+            );
+          let onClick = _ => {
+            sum := sum^ + amount;
+            sum := Pervasives.abs(sum^) > Pervasives.abs(max) ? max : sum^;
+            send(sum^);
+          };
+          let disabled = result.loading || max == currentVote;
+          <Antd.Button disabled onClick> children </Antd.Button>;
+        }}
       </MeasurementVote.Mutation>;
     };
   };
 
   module MeasurementVoteDown = {
     [@react.component]
-    let make = (~measurement: Types.measurement, ~onCompleted=_ => ()) => {
-      <MeasurementVote.Mutation onCompleted>
-        ...{(mutation, result: MeasurementVote.Mutation.renderPropObj) =>
-          <Antd.Button
-            disabled={result.loading}
-            onClick={_ =>
-              MeasurementVote.mutate(mutation, measurement.id, -1)
-            }>
-            {"<" |> Utils.ste}
-          </Antd.Button>
-        }
-      </MeasurementVote.Mutation>;
+    let make = (~measurement: Types.measurement, ~currentVote) => {
+      <MeasurementVote measurement amount=(-1) max=(-10) currentVote>
+        {"<" |> Utils.ste}
+      </MeasurementVote>;
+    };
+  };
+
+  module MeasurementVoteUp = {
+    [@react.component]
+    let make = (~measurement: Types.measurement, ~currentVote) => {
+      <MeasurementVote measurement amount=1 max=10 currentVote>
+        {">" |> Utils.ste}
+      </MeasurementVote>;
     };
   };
 
@@ -164,13 +180,14 @@ module Helpers = {
 
       switch (can, measurement.totalVoteAmount) {
       | (true, totalVoteAmount) =>
+        let currentVote = totalVoteAmount |> E.O.default(0);
         <>
-          <MeasurementVoteDown measurement />
+          <MeasurementVoteDown measurement currentVote />
           <span className=Styles.vote>
-            {totalVoteAmount |> E.O.default(0) |> string_of_int |> Utils.ste}
+            {string_of_int(currentVote) |> Utils.ste}
           </span>
-          <MeasurementVoteUp measurement />
-        </>
+          <MeasurementVoteUp measurement currentVote />
+        </>;
       | (false, Some(totalVoteAmount)) =>
         <>
           <span className=Styles.vote>

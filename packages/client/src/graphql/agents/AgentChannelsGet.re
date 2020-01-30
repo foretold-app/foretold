@@ -32,7 +32,7 @@ let toNode = node => {
 
 module Query = [%graphql
   {|
-    query getAgentChannels(
+    query agentChannels (
         $first: Int500
         $last: Int500
         $after: Cursor

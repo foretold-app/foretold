@@ -379,6 +379,10 @@ module FormComponent = {
   };
 };
 
+// @todo: The "refetchQueries" policy does not work
+// @todo: since components to update are destroyed in the DOM
+// @todo: at a moment of refetching.
+
 module Create = {
   let onSuccess' = response => onSuccess(response##measurableCreate);
 
@@ -442,8 +446,8 @@ module Create = {
             mutate(
               ~variables=MeasurableCreate.Query.make(~input, ())##variables,
               ~refetchQueries=[|
-                "getAgent",
-                "getMeasurable",
+                "agent",
+                "measurable",
                 "measurements",
               |],
               (),
@@ -544,7 +548,7 @@ module Edit = {
                   },
                   (),
                 )##variables,
-              ~refetchQueries=[|"getMeasurables", "getMeasurable"|],
+              ~refetchQueries=[|"measurables", "measurable"|],
               (),
             )
             |> ignore;

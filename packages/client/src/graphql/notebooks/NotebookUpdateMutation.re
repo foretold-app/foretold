@@ -1,10 +1,10 @@
 module Query = [%graphql
   {|
-    mutation notebookUpdate(
+    mutation notebookUpdate (
         $id: String!,
         $input: NotebookUpdateInput!
     ) {
-        notebookUpdate(id: $id, input: $input) {
+        notebookUpdate (id: $id, input: $input) {
          id
         }
     }

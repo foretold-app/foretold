@@ -1,6 +1,6 @@
 module Query = [%graphql
   {|
-    query getNotebooks (
+    query notebooks (
         $channelId: ChannelId
         $ownerId: AgentId
         $first: Int500

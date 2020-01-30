@@ -71,7 +71,7 @@ async function one(root, args, context, _info) {
 
   const params = new Params({ id: channelId });
   const query = new Query();
-  const options = new Options({ agentId });
+  const options = new Options({ agentId, attributes: true, raw: true });
 
   return new ChannelsData().getOne(params, query, options);
 }

@@ -4,7 +4,7 @@ let toGlobalSetting = a =>
 module Query = [%graphql
   {|
     query globalSetting ($name: String!) {
-      globalSetting(name: $name) {
+      globalSetting (name: $name) {
         id
         entityGraph
       }

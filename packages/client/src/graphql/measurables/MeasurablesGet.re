@@ -102,7 +102,7 @@ let toMeasurable = m => {
 
 module Query = [%graphql
   {|
-    query getMeasurables (
+    query measurables (
         $measurableIds: [String!]
         $states: [measurableState!]
         $channelId: String
@@ -271,7 +271,8 @@ let queryDirection =
 };
 
 let componentMaker = (~pollInterval=?, query, innerComponentFn) =>
-  <QueryComponent variables=query##variables ?pollInterval>
+  <QueryComponent
+    variables=query##variables ?pollInterval fetchPolicy="no-cache">
     ...{o =>
       o.result
       |> HttpResponse.fromApollo

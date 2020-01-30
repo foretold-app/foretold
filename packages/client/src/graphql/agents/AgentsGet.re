@@ -12,7 +12,7 @@ let toAgent = agent => {
 
 module Query = [%graphql
   {|
-    query getAgents (
+    query agents (
         $excludeChannelId: String
         $types: [AgentType]
     ) {

@@ -1,6 +1,6 @@
 module Query = [%graphql
   {|
-             mutation channelMembershipRoleUpdate(
+             mutation channelMembershipRoleUpdate (
                 $input:ChannelMembershipRoleInput!
              ) {
                  channelMembershipRoleUpdate(input: $input) {
@@ -25,7 +25,7 @@ let mutate =
     );
   mutation(
     ~variables=m##variables,
-    ~refetchQueries=[|"getChannelMemberships"|],
+    ~refetchQueries=[|"channelMemberships"|],
     (),
   )
   |> ignore;

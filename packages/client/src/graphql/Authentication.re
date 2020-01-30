@@ -8,7 +8,7 @@ module Query = [%graphql
         $auth0accessToken: String
         $authToken: String
     ) {
-        authentication(
+        authentication (
             auth0jwt: $auth0jwt
             auth0accessToken: $auth0accessToken
             authToken: $authToken

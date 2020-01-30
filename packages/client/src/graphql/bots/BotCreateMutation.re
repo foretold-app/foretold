@@ -1,7 +1,7 @@
 module Query = [%graphql
   {|
-            mutation botCreate($input: BotInput!) {
-                botCreate(input: $input) {
+            mutation botCreate ($input: BotInput!) {
+                botCreate (input: $input) {
                  id
                 }
             }

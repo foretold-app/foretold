@@ -120,81 +120,6 @@ module Helpers = {
       |> E.O.React.defaultNull;
   };
 
-  module MeasurementVote = {
-    [@react.component]
-    let make =
-        (
-          ~measurement: Types.measurement,
-          ~amount,
-          ~max,
-          ~currentVote,
-          ~children,
-        ) => {
-      <MeasurementVote.Mutation>
-        ...{(mutation, result: MeasurementVote.Mutation.renderPropObj) => {
-          let sum = ref(0);
-          let send =
-            Debouncer.make(
-              ~wait=200,
-              MeasurementVote.mutate(mutation, measurement.id),
-            );
-          let onClick = _ => {
-            sum := sum^ + amount;
-            sum := Pervasives.abs(sum^) > Pervasives.abs(max) ? max : sum^;
-            send(sum^);
-          };
-          let disabled = result.loading || max == currentVote;
-          <Antd.Button disabled onClick> children </Antd.Button>;
-        }}
-      </MeasurementVote.Mutation>;
-    };
-  };
-
-  module MeasurementVoteDown = {
-    [@react.component]
-    let make = (~measurement: Types.measurement, ~currentVote) => {
-      <MeasurementVote measurement amount=(-1) max=(-10) currentVote>
-        {"<" |> Utils.ste}
-      </MeasurementVote>;
-    };
-  };
-
-  module MeasurementVoteUp = {
-    [@react.component]
-    let make = (~measurement: Types.measurement, ~currentVote) => {
-      <MeasurementVote measurement amount=1 max=10 currentVote>
-        {">" |> Utils.ste}
-      </MeasurementVote>;
-    };
-  };
-
-  module AgentVote = {
-    module Styles = {
-      open Css;
-      let vote = style([marginLeft(`px(5)), marginRight(`px(5))]);
-    };
-    [@react.component]
-    let make = (~measurement: Types.measurement) => {
-      let can =
-        Primary.Permissions.can(`MEASUREMENT_VOTE, measurement.permissions);
-
-      let currentVote =
-        measurement.vote
-        |> E.O.fmap((vote: Types.vote) => vote.voteAmount)
-        |> E.O.default(0);
-
-      can
-        ? <>
-            <MeasurementVoteDown measurement currentVote />
-            <span className=Styles.vote>
-              {string_of_int(currentVote) |> Utils.ste}
-            </span>
-            <MeasurementVoteUp measurement currentVote />
-          </>
-        : <Null />;
-    };
-  };
-
   module TotalVote = {
     [@react.component]
     let make = (~measurement: Types.measurement) => {
@@ -346,11 +271,10 @@ let predictionText =
 let agentVote =
   Table.Column.make(
     ~name={
-      "Your Vote" |> Utils.ste;
+      "" |> Utils.ste;
     },
-    ~flex=3,
-    ~render=
-      (measurement: Types.measurement) => <Helpers.AgentVote measurement />,
+    ~flex=2,
+    ~render=(measurement: Types.measurement) => <AgentVote measurement />,
     (),
   );
 
@@ -359,7 +283,7 @@ let totalVotes =
     ~name={
       "Votes" |> Utils.ste;
     },
-    ~flex=2,
+    ~flex=1,
     ~render=
       (measurement: Types.measurement) => <Helpers.TotalVote measurement />,
     (),
@@ -491,16 +415,16 @@ let make =
         getPredictionDistribution(~bounds, ()),
         predictionValue,
         predictionText,
-        totalVotes,
         agentVote,
+        totalVotes,
         time,
       |]
     | (`none, `none, `PERCENTAGE) => [|
         agent,
         getPredictionDistribution(~bounds, ()),
         predictionValue,
-        totalVotes,
         agentVote,
+        totalVotes,
         time,
       |]
     | (`extended, `none, `FLOAT) => [|
@@ -510,8 +434,8 @@ let make =
         predictionText,
         logScore(),
         score(),
-        totalVotes,
         agentVote,
+        totalVotes,
         time,
       |]
     | (`extended, `none, `PERCENTAGE) => [|
@@ -520,24 +444,24 @@ let make =
         predictionValue,
         logScore(),
         score(),
-        totalVotes,
         agentVote,
+        totalVotes,
         time,
       |]
     | (`none, `inside, `FLOAT) => [|
         agent,
         getPredictionDistribution(~bounds, ~width=150, ()),
         predictionText,
-        totalVotes,
         agentVote,
+        totalVotes,
         time,
       |]
     | (`none, `inside, `PERCENTAGE) => [|
         agent,
         getPredictionDistribution(~bounds, ~width=150, ()),
         predictionValue,
-        totalVotes,
         agentVote,
+        totalVotes,
         time,
       |]
     | (`extended, `inside, `FLOAT) => [|
@@ -546,8 +470,8 @@ let make =
         predictionText,
         logScore(),
         score(),
-        totalVotes,
         agentVote,
+        totalVotes,
         time,
       |]
     | (`extended, `inside, `PERCENTAGE) => [|
@@ -555,8 +479,8 @@ let make =
         getPredictionDistribution(~bounds, ~width=150, ()),
         logScore(),
         score(),
-        totalVotes,
         agentVote,
+        totalVotes,
         time,
       |]
     | _ => Js.Exn.raiseError("Date not supported")

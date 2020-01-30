@@ -1,7 +1,7 @@
 module Query = [%graphql
   {|
     query bots ($ownerId: String) {
-      bots(first: 200, ownerId: $ownerId){
+      bots (first: 200, ownerId: $ownerId) {
           edges{
               node{
                   id

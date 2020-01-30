@@ -1,10 +1,10 @@
 module Query = [%graphql
   {|
-    mutation userAccessTokenUpdate(
+    mutation userAccessTokenUpdate (
         $id: String!
         $input: UserAccessTokenUpdateInput!
     ) {
-        userAccessTokenUpdate(
+        userAccessTokenUpdate (
             id: $id
             input: $input
         ) {
@@ -24,5 +24,5 @@ let mutate =
       ~input={"auth0AccessToken": Some(auth0AccessToken)},
       (),
     );
-  mutation(~variables=mutate##variables, ~refetchQueries=[||], ()) |> ignore;
+  mutation(~variables=mutate##variables,()) |> ignore;
 };

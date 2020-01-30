@@ -90,7 +90,7 @@ let toFeedItem = (m: node): Types.feedItem => {
 
 module Query = [%graphql
   {|
-    query getFeedItems (
+    query feedItems (
         $channelId: String
         $agentId: String
         $first: Int500

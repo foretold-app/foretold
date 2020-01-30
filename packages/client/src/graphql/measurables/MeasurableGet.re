@@ -2,8 +2,8 @@ open Utils;
 
 module Query = [%graphql
   {|
-      query getMeasurable ($id: String!) {
-        measurable(id: $id){
+      query measurable ($id: String!) {
+        measurable (id: $id){
           id
           name
           valueType

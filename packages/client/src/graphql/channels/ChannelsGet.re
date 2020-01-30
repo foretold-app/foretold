@@ -1,6 +1,6 @@
 module Query = [%graphql
   {|
-    query getChannels (
+    query channels (
         $channelMemberId: String
         $isArchived: [isArchived]
         $order: [OrderChannels]

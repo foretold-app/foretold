@@ -195,7 +195,7 @@ module Create = {
                   },
                   (),
                 )##variables,
-              ~refetchQueries=[|"getChannels"|],
+              ~refetchQueries=[|"channels"|],
               (),
             )
             |> ignore;

@@ -1,7 +1,7 @@
 module Query = [%graphql
   {|
-    mutation notebookCreate($input: NotebookCreateInput!) {
-        notebookCreate(input: $input) {
+    mutation notebookCreate ($input: NotebookCreateInput!) {
+        notebookCreate (input: $input) {
          id
         }
     }

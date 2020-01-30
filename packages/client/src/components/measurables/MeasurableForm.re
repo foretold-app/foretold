@@ -442,8 +442,8 @@ module Create = {
             mutate(
               ~variables=MeasurableCreate.Query.make(~input, ())##variables,
               ~refetchQueries=[|
-                "getAgent",
-                "getMeasurable",
+                "agent",
+                "measurable",
                 "measurements",
               |],
               (),
@@ -544,7 +544,7 @@ module Edit = {
                   },
                   (),
                 )##variables,
-              ~refetchQueries=[|"getMeasurables", "getMeasurable"|],
+              ~refetchQueries=[|"measurables", "measurable"|],
               (),
             )
             |> ignore;

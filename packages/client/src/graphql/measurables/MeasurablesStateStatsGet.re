@@ -1,6 +1,6 @@
 module Query = [%graphql
   {|
-    query getMeasurablesStateStats ($channelId: String) {
+    query measurablesStateStats ($channelId: String) {
         openState: measurables(
             states: [OPEN],
             channelId: $channelId

@@ -59,7 +59,7 @@ let toUser = a =>
 
 module Query = [%graphql
   {|
-    query user {
+    query authenticated {
       authenticated {
           user {
             id

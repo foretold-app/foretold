@@ -15,9 +15,9 @@ let mutate = (mutation: Mutation.apolloMutation, id: string) => {
   mutation(
     ~variables=m##variables,
     ~refetchQueries=[|
-      "getAgent",
-      "getMeasurables",
-      "getMeasurablesStateStats",
+      "agent",
+      "measurables",
+      "measurablesStateStats",
     |],
     (),
   )

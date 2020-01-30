@@ -102,7 +102,7 @@ let toMeasurable = m => {
 
 module Query = [%graphql
   {|
-    query getMeasurables (
+    query measurables (
         $measurableIds: [String!]
         $states: [measurableState!]
         $channelId: String

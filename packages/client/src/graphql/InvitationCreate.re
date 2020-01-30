@@ -1,9 +1,9 @@
 module Query = [%graphql
   {|
-    mutation invitationCreate(
+    mutation invitationCreate (
         $input: InvitationCreateInput!
     ) {
-        invitationCreate(
+        invitationCreate (
             input: $input
         ) {
             id

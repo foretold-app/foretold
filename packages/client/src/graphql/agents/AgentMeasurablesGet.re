@@ -43,7 +43,7 @@ let toNode = (marketType, finalComparisonMeasurement, node) => {
 
 module Query = [%graphql
   {|
-    query getAgentMeasurables(
+    query agentMeasurables (
         $first: Int500
         $last: Int500
         $after: Cursor

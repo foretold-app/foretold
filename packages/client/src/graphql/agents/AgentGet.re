@@ -12,7 +12,7 @@ let toAgent = agent => {
 
 module Query = [%graphql
   {|
-    query getAgent ($id: String!) {
+    query agent ($id: String!) {
         agent(id: $id) {
             id
             isMe

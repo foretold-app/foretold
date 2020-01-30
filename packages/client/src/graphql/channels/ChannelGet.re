@@ -2,8 +2,8 @@ open Utils;
 
 module Query = [%graphql
   {|
-    query getChannel($id: String!) {
-      channel(id: $id){
+    query channel ($id: String!) {
+      channel (id: $id) {
         id
         name
         description

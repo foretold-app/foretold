@@ -1,16 +1,19 @@
 const graphql = require('graphql');
 const { resolver, DateType } = require('graphql-sequelize');
-const {
-  MEASUREMENT_VALUE,
-} = require('@foretold/measurement-value/enums/measurement-value');
+const { MEASUREMENT_VALUE } = require('@foretold/measurement-value/enums');
 
 const resolvers = require('../resolvers');
 const models = require('../../models/definitions');
 
-const {
-  measurementUnresolvableResolution,
-} = require('./enums/measurement-unresolvable-resolution');
-const { measurementCommentType } = require('./enums/measurement-comment-type');
+const votesTypes = require('./votes');
+const measurablesTypes = require('./measurables');
+const agentsTypes = require('./agents');
+const permissionsTypes = require('./permissions');
+const commonTypes = require('./common');
+
+const { measurementUnresolvableResolution } = require('./enums');
+const { measurementCommentType } = require('./enums');
+const { measurementCompetitorType } = require('./enums');
 
 const measurementValueInputFloatCdf = new graphql.GraphQLInputObjectType({
   name: 'MeasurementValueInputFloatCdf',
@@ -81,8 +84,7 @@ const measurementCreateInput = new graphql.GraphQLInputObjectType({
     value: { type: measurementValueInput },
     valueText: { type: graphql.GraphQLString },
     competitorType: {
-      type: require('./enums/measurement-competitor-type')
-        .measurementCompetitorType,
+      type: measurementCompetitorType,
     },
     measurableId: { type: graphql.GraphQLString },
     agentId: { type: graphql.GraphQLString },
@@ -107,8 +109,7 @@ const measurement = new graphql.GraphQLObjectType({
     id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     value: { type: graphql.GraphQLNonNull(measurementValue) },
     competitorType: {
-      type: require('./enums/measurement-competitor-type')
-        .measurementCompetitorType,
+      type: measurementCompetitorType,
     },
     description: { type: graphql.GraphQLString },
     measurableId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
@@ -117,11 +118,11 @@ const measurement = new graphql.GraphQLObjectType({
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
     taggedMeasurementId: { type: graphql.GraphQLString },
-    iAmOwner: require('./common').iAmOwner,
+    iAmOwner: commonTypes.iAmOwner,
     valueText: { type: graphql.GraphQLString },
 
     measurementScoreSet: {
-      type: require('./measurements').measurementScoreSet,
+      type: measurementScoreSet,
       resolve: require('../resolvers/measurements').scoreSet,
     },
 
@@ -130,15 +131,20 @@ const measurement = new graphql.GraphQLObjectType({
       resolve: require('../resolvers/votes').total,
     },
 
+    vote: {
+      type: votesTypes.vote,
+      resolve: require('../resolvers/votes').oneByMeasurementId,
+    },
+
     // @todo: Do not use resolver. Use common interfaces of Data layer.
     measurable: {
-      type: require('./measurables').measurable,
+      type: measurablesTypes.measurable,
       resolve: resolver(models.Measurement.Measurable),
     },
 
     // @todo: Do not use resolver. Use common interfaces of Data layer.
     agent: {
-      type: require('./agents').agent,
+      type: agentsTypes.agent,
       resolve: resolver(models.Measurement.Agent),
     },
 
@@ -155,7 +161,7 @@ const measurement = new graphql.GraphQLObjectType({
     },
 
     permissions: {
-      type: graphql.GraphQLNonNull(require('./permissions').permissions),
+      type: graphql.GraphQLNonNull(permissionsTypes.permissions),
       resolve: resolvers.permissions.measurementsPermissions,
     },
   }),
@@ -164,7 +170,7 @@ const measurement = new graphql.GraphQLObjectType({
 const measurementsEdge = new graphql.GraphQLObjectType({
   name: 'MeasurementsEdge',
   fields: () => ({
-    node: { type: require('./measurements').measurement },
+    node: { type: measurement },
     cursor: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
   }),
 });
@@ -174,10 +180,10 @@ const measurementsConnection = new graphql.GraphQLObjectType({
   fields: () => ({
     total: { type: graphql.GraphQLInt },
     pageInfo: {
-      type: graphql.GraphQLNonNull(require('./common').pageInfoConnection),
+      type: graphql.GraphQLNonNull(commonTypes.pageInfoConnection),
     },
     edges: {
-      type: graphql.GraphQLList(require('./measurements').measurementsEdge),
+      type: graphql.GraphQLList(measurementsEdge),
     },
   }),
 });
@@ -185,7 +191,7 @@ const measurementsConnection = new graphql.GraphQLObjectType({
 const agentMeasurementsEdge = new graphql.GraphQLObjectType({
   name: 'AgentMeasurementsEdge',
   fields: () => ({
-    node: { type: require('./measurements').measurement },
+    node: { type: measurement },
     cursor: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
   }),
 });
@@ -195,12 +201,10 @@ const agentMeasurementsConnection = new graphql.GraphQLObjectType({
   fields: () => ({
     total: { type: graphql.GraphQLInt },
     pageInfo: {
-      type: graphql.GraphQLNonNull(require('./common').pageInfoConnection),
+      type: graphql.GraphQLNonNull(commonTypes.pageInfoConnection),
     },
     edges: {
-      type: graphql.GraphQLList(
-        require('./measurements').agentMeasurementsEdge,
-      ),
+      type: graphql.GraphQLList(agentMeasurementsEdge),
     },
   }),
 });
@@ -210,17 +214,17 @@ const measurementScoreSet = new graphql.GraphQLObjectType({
   fields: () => ({
     prediction: {
       description: 'Returns itself.',
-      type: graphql.GraphQLNonNull(require('./measurements').measurement),
+      type: graphql.GraphQLNonNull(measurement),
       resolve: require('../resolvers/measurements').prediction,
     },
     outcome: {
       description: 'Returns latest objective measurement.',
-      type: require('./measurements').measurement,
+      type: measurement,
       resolve: require('../resolvers/measurements').outcome,
     },
     previousAggregate: {
       description: 'Returns latest aggregation measurement.',
-      type: require('./measurements').measurement,
+      type: measurement,
       resolve: require('../resolvers/measurements').previousAggregate,
     },
     nonMarketLogScore: {
@@ -237,15 +241,12 @@ const measurementScoreSet = new graphql.GraphQLObjectType({
 });
 
 module.exports = {
+  agentMeasurementsConnection,
+  agentMeasurementsEdge,
   measurement,
   measurementCreateInput,
-
-  measurementsEdge,
-  measurementsConnection,
-  agentMeasurementsEdge,
-  agentMeasurementsConnection,
-
-  measurementsInDateRangeInput,
-
   measurementScoreSet,
+  measurementsConnection,
+  measurementsEdge,
+  measurementsInDateRangeInput,
 };

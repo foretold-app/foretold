@@ -489,6 +489,7 @@ module Measurement = {
         ~measurementScoreSet=None,
         ~totalVoteAmount=None,
         ~permissions=None,
+        ~vote=None,
         (),
       )
       : t => {
@@ -507,6 +508,7 @@ module Measurement = {
     measurementScoreSet,
     totalVoteAmount,
     permissions,
+    vote,
   };
 };
 
@@ -982,6 +984,32 @@ module Notebook = {
       ~updatedAt=notebook##updatedAt,
       ~owner=notebook##owner,
       ~channel=notebook##channel,
+      (),
+    );
+  };
+};
+
+module Vote = {
+  type t = Types.vote;
+
+  let toVoteId = (json: Js.Json.t): Types.voteId =>
+    json |> E.J.toString;
+
+  let convertJs =
+      (
+        ~id: Js.Json.t,
+        ~voteAmount: int,
+        (),
+      )
+      : t => {
+    id: id |> toVoteId,
+    voteAmount: voteAmount ,
+  };
+
+  let convertJsObject = vote => {
+    convertJs(
+      ~id=vote##id,
+      ~voteAmount=vote##voteAmount,
       (),
     );
   };

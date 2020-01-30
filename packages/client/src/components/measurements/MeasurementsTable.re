@@ -168,7 +168,7 @@ module Helpers = {
     };
   };
 
-  module Vote = {
+  module AgentVote = {
     module Styles = {
       open Css;
       let vote = style([marginLeft(`px(5)), marginRight(`px(5))]);
@@ -178,24 +178,30 @@ module Helpers = {
       let can =
         Primary.Permissions.can(`MEASUREMENT_VOTE, measurement.permissions);
 
-      switch (can, measurement.totalVoteAmount) {
-      | (true, totalVoteAmount) =>
-        let currentVote = totalVoteAmount |> E.O.default(0);
-        <>
-          <MeasurementVoteDown measurement currentVote />
-          <span className=Styles.vote>
-            {string_of_int(currentVote) |> Utils.ste}
-          </span>
-          <MeasurementVoteUp measurement currentVote />
-        </>;
-      | (false, Some(totalVoteAmount)) =>
-        <>
-          <span className=Styles.vote>
-            {string_of_int(totalVoteAmount) |> Utils.ste}
-          </span>
-        </>
-      | _ => <Null />
-      };
+      let currentVote =
+        measurement.vote
+        |> E.O.fmap((vote: Types.vote) => vote.voteAmount)
+        |> E.O.default(0);
+
+      can
+        ? <>
+            <MeasurementVoteDown measurement currentVote />
+            <span className=Styles.vote>
+              {string_of_int(currentVote) |> Utils.ste}
+            </span>
+            <MeasurementVoteUp measurement currentVote />
+          </>
+        : <Null />;
+    };
+  };
+
+  module TotalVote = {
+    [@react.component]
+    let make = (~measurement: Types.measurement) => {
+      let totalVoteAmount = measurement.totalVoteAmount |> E.O.default(0);
+
+      totalVoteAmount != 0
+        ? string_of_int(totalVoteAmount) |> Utils.ste : <Null />;
     };
   };
 
@@ -337,13 +343,25 @@ let predictionText =
     (),
   );
 
-let vote =
+let agentVote =
+  Table.Column.make(
+    ~name={
+      "Your Vote" |> Utils.ste;
+    },
+    ~flex=3,
+    ~render=
+      (measurement: Types.measurement) => <Helpers.AgentVote measurement />,
+    (),
+  );
+
+let totalVotes =
   Table.Column.make(
     ~name={
       "Votes" |> Utils.ste;
     },
-    ~flex=5,
-    ~render=(measurement: Types.measurement) => <Helpers.Vote measurement />,
+    ~flex=2,
+    ~render=
+      (measurement: Types.measurement) => <Helpers.TotalVote measurement />,
     (),
   );
 
@@ -473,14 +491,16 @@ let make =
         getPredictionDistribution(~bounds, ()),
         predictionValue,
         predictionText,
-        vote,
+        totalVotes,
+        agentVote,
         time,
       |]
     | (`none, `none, `PERCENTAGE) => [|
         agent,
         getPredictionDistribution(~bounds, ()),
         predictionValue,
-        vote,
+        totalVotes,
+        agentVote,
         time,
       |]
     | (`extended, `none, `FLOAT) => [|
@@ -490,7 +510,8 @@ let make =
         predictionText,
         logScore(),
         score(),
-        vote,
+        totalVotes,
+        agentVote,
         time,
       |]
     | (`extended, `none, `PERCENTAGE) => [|
@@ -499,21 +520,24 @@ let make =
         predictionValue,
         logScore(),
         score(),
-        vote,
+        totalVotes,
+        agentVote,
         time,
       |]
     | (`none, `inside, `FLOAT) => [|
         agent,
         getPredictionDistribution(~bounds, ~width=150, ()),
         predictionText,
-        vote,
+        totalVotes,
+        agentVote,
         time,
       |]
     | (`none, `inside, `PERCENTAGE) => [|
         agent,
         getPredictionDistribution(~bounds, ~width=150, ()),
         predictionValue,
-        vote,
+        totalVotes,
+        agentVote,
         time,
       |]
     | (`extended, `inside, `FLOAT) => [|
@@ -522,7 +546,8 @@ let make =
         predictionText,
         logScore(),
         score(),
-        vote,
+        totalVotes,
+        agentVote,
         time,
       |]
     | (`extended, `inside, `PERCENTAGE) => [|
@@ -530,7 +555,8 @@ let make =
         getPredictionDistribution(~bounds, ~width=150, ()),
         logScore(),
         score(),
-        vote,
+        totalVotes,
+        agentVote,
         time,
       |]
     | _ => Js.Exn.raiseError("Date not supported")

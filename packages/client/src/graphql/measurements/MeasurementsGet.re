@@ -35,9 +35,12 @@ let toMeasurement = (measurement): Types.measurement => {
     };
 
   let allowMutations =
-    measurement##permissions##mutations##allow |> E.A.O.concatSome |> E.A.to_list;
+    measurement##permissions##mutations##allow
+    |> E.A.O.concatSome
+    |> E.A.to_list;
 
   let permissions = Primary.Permissions.make(allowMutations);
+  let vote = measurement##vote |> E.O.fmap(Primary.Vote.convertJsObject);
 
   Primary.Measurement.make(
     ~id=measurement##id,
@@ -54,6 +57,7 @@ let toMeasurement = (measurement): Types.measurement => {
     ~measurable,
     ~totalVoteAmount=measurement##totalVoteAmount,
     ~permissions=Some(permissions),
+    ~vote,
     (),
   );
 };
@@ -111,7 +115,10 @@ module Query = [%graphql
                   valueText
                   taggedMeasurementId
                   totalVoteAmount
-
+                  vote {
+                      id
+                      voteAmount
+                  }
                   agent {
                       id
                       name

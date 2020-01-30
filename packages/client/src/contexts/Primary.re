@@ -999,17 +999,23 @@ module Vote = {
       (
         ~id: Js.Json.t,
         ~voteAmount: int,
+        ~createdAt: Js.Json.t,
+        ~updatedAt: Js.Json.t,
         (),
       )
       : t => {
     id: id |> toVoteId,
     voteAmount: voteAmount ,
+    createdAt: toCreatedAt(createdAt),
+    updatedAt: toUpdatedAt(updatedAt),
   };
 
   let convertJsObject = vote => {
     convertJs(
       ~id=vote##id,
       ~voteAmount=vote##voteAmount,
+      ~createdAt=vote##createdAt,
+      ~updatedAt=vote##updatedAt,
       (),
     );
   };

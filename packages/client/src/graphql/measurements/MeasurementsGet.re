@@ -118,6 +118,8 @@ module Query = [%graphql
                   vote {
                       id
                       voteAmount
+                      createdAt
+                      updatedAt
                   }
                   agent {
                       id

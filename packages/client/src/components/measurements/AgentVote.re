@@ -30,11 +30,13 @@ module MeasurementVotes = {
       });
 
     <>
-      <Antd.Button onClick={_ => modify(Down)} disabled={!canDecrement}>
+      <Antd.Button
+        size=`small onClick={_ => modify(Down)} disabled={!canDecrement}>
         {"<" |> Utils.ste}
       </Antd.Button>
       <span className=Styles.vote> {string_of_int(count) |> Utils.ste} </span>
-      <Antd.Button onClick={_ => modify(Up)} disabled={!canIncrement}>
+      <Antd.Button
+        size=`small onClick={_ => modify(Up)} disabled={!canIncrement}>
         {">" |> Utils.ste}
       </Antd.Button>
     </>;

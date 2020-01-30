@@ -271,9 +271,9 @@ let predictionText =
 let agentVote =
   Table.Column.make(
     ~name={
-      "Your Vote" |> Utils.ste;
+      "" |> Utils.ste;
     },
-    ~flex=3,
+    ~flex=2,
     ~render=(measurement: Types.measurement) => <AgentVote measurement />,
     (),
   );
@@ -283,7 +283,7 @@ let totalVotes =
     ~name={
       "Votes" |> Utils.ste;
     },
-    ~flex=2,
+    ~flex=1,
     ~render=
       (measurement: Types.measurement) => <Helpers.TotalVote measurement />,
     (),
@@ -415,16 +415,16 @@ let make =
         getPredictionDistribution(~bounds, ()),
         predictionValue,
         predictionText,
-        totalVotes,
         agentVote,
+        totalVotes,
         time,
       |]
     | (`none, `none, `PERCENTAGE) => [|
         agent,
         getPredictionDistribution(~bounds, ()),
         predictionValue,
-        totalVotes,
         agentVote,
+        totalVotes,
         time,
       |]
     | (`extended, `none, `FLOAT) => [|
@@ -434,8 +434,8 @@ let make =
         predictionText,
         logScore(),
         score(),
-        totalVotes,
         agentVote,
+        totalVotes,
         time,
       |]
     | (`extended, `none, `PERCENTAGE) => [|
@@ -444,24 +444,24 @@ let make =
         predictionValue,
         logScore(),
         score(),
-        totalVotes,
         agentVote,
+        totalVotes,
         time,
       |]
     | (`none, `inside, `FLOAT) => [|
         agent,
         getPredictionDistribution(~bounds, ~width=150, ()),
         predictionText,
-        totalVotes,
         agentVote,
+        totalVotes,
         time,
       |]
     | (`none, `inside, `PERCENTAGE) => [|
         agent,
         getPredictionDistribution(~bounds, ~width=150, ()),
         predictionValue,
-        totalVotes,
         agentVote,
+        totalVotes,
         time,
       |]
     | (`extended, `inside, `FLOAT) => [|
@@ -470,8 +470,8 @@ let make =
         predictionText,
         logScore(),
         score(),
-        totalVotes,
         agentVote,
+        totalVotes,
         time,
       |]
     | (`extended, `inside, `PERCENTAGE) => [|
@@ -479,8 +479,8 @@ let make =
         getPredictionDistribution(~bounds, ~width=150, ()),
         logScore(),
         score(),
-        totalVotes,
         agentVote,
+        totalVotes,
         time,
       |]
     | _ => Js.Exn.raiseError("Date not supported")

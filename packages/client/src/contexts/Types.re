@@ -1,9 +1,15 @@
+type cursor = Js.Json.t;
+type agentId = string;
+type channelId = string;
+type notebookId = string;
+type voteId = string;
+type string0to255 = string;
+type string0to16K = string;
+type pageParams = {id: string};
+
 type valueType = [ | `DATE | `FLOAT | `PERCENTAGE];
-
 type agentTypeEntity = [ | `USER | `BOT];
-
 type channelMembershipRole = [ | `ADMIN | `VIEWER];
-
 type myMembershipRole = [ | `ADMIN | `VIEWER | `NONE];
 
 type competitorType = [
@@ -22,11 +28,8 @@ type measurableState = [
 ];
 
 type isArchived = [ | `TRUE | `FALSE];
-
 type fieldChannels = [ | `membersCount | `isCurated | `name];
-
 type fieldAgentMeasurables = [ | `primaryPointScore];
-
 type direction = [ | `ASC | `DESC];
 
 type permission = [
@@ -186,6 +189,12 @@ and measurement = {
   measurementScoreSet: option(measurementScoreSet),
   totalVoteAmount: option(int),
   permissions: option(permissions),
+  vote: option(vote),
+}
+
+and vote = {
+  id: string,
+  voteAmount: int,
 }
 
 and timeAverageScore = {
@@ -254,13 +263,6 @@ and feedItem = {
   updatedAt: option(MomentRe.Moment.t),
 }
 
-and cursor = Js.Json.t
-and agentId = string
-and channelId = string
-and notebookId = string
-and string0to255 = string
-and string0to16K = string
-
 and pageInfo = {
   hasNextPage: bool,
   hasPreviousPage: bool,
@@ -299,6 +301,4 @@ and notebook = {
   updatedAt: option(MomentRe.Moment.t),
   owner: agent,
   channel,
-}
-
-and pageParams = {id: string};
+};

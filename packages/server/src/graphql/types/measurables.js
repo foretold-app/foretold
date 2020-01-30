@@ -155,7 +155,7 @@ const measurableUpdateInput = new graphql.GraphQLInputObjectType({
 const measurablesEdge = new graphql.GraphQLObjectType({
   name: 'MeasurablesEdge',
   fields: () => ({
-    node: { type: require('./measurables').measurable },
+    node: { type: measurable },
     cursor: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
   }),
 });
@@ -170,7 +170,7 @@ const measurablesConnection = new graphql.GraphQLObjectType({
       type: graphql.GraphQLNonNull(require('./common').pageInfoConnection),
     },
     edges: {
-      type: graphql.GraphQLList(require('./measurables').measurablesEdge),
+      type: graphql.GraphQLList(measurablesEdge),
     },
   }),
 });

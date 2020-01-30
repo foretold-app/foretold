@@ -2,6 +2,8 @@ const graphql = require('graphql');
 const { DateType } = require('graphql-sequelize');
 
 const scalars = require('./scalars');
+const agentTypes = require('./agents');
+const resolvers = require('../resolvers');
 
 const vote = new graphql.GraphQLObjectType({
   name: 'Vote',
@@ -12,6 +14,11 @@ const vote = new graphql.GraphQLObjectType({
     voteAmount: { type: graphql.GraphQLNonNull(graphql.GraphQLInt) },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
+
+    agent: {
+      type: agentTypes.agent,
+      resolve: resolvers.agents.one,
+    },
   }),
 });
 

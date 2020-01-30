@@ -5,6 +5,11 @@ const channelMemberships = require('./channel-memberhips');
 
 const { agentType } = require('./enums/agent-type');
 
+const commonTypes = require('./common');
+const preferencesTypes = require('./preferences');
+const usersTypes = require('./users');
+const botsTypes = require('./bots');
+
 const agent = new graphql.GraphQLObjectType({
   name: 'Agent',
   fields: () => ({
@@ -17,31 +22,31 @@ const agent = new graphql.GraphQLObjectType({
       resolve: resolvers.measurements.measurementCountByAgentId,
     },
 
-    isMe: require('./common').isMe,
+    isMe: commonTypes.isMe,
     isAdmin: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
 
     // @todo: security
     user: {
-      type: require('./users').user,
+      type: usersTypes.user,
       resolve: resolvers.users.oneByAgentId,
     },
 
     // @todo: security
     bot: {
-      type: require('./bots').bot,
+      type: botsTypes.bot,
       resolve: resolvers.bots.oneByAgentId,
     },
 
     // @todo: security
     preference: {
-      type: require('./preferences').preference,
+      type: preferencesTypes.preference,
       resolve: resolvers.preferences.getOne,
     },
 
     // OK
     measurements: {
       type: require('./measurements').agentMeasurementsConnection,
-      args: require('./common').connectionArguments,
+      args: commonTypes.connectionArguments,
       resolve: require('../resolvers/measurements').all,
     },
 

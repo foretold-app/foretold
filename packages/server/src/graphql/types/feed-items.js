@@ -50,7 +50,7 @@ const feedItem = new graphql.GraphQLObjectType({
 const feedItemEdge = new graphql.GraphQLObjectType({
   name: 'FeedItemEdge',
   fields: () => ({
-    node: { type: require('./feed-items').feedItem },
+    node: { type: feedItem },
     cursor: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
   }),
 });
@@ -62,7 +62,7 @@ const feedItemsConnection = new graphql.GraphQLObjectType({
     pageInfo: {
       type: graphql.GraphQLNonNull(require('./common').pageInfoConnection),
     },
-    edges: { type: graphql.GraphQLList(require('./feed-items').feedItemEdge) },
+    edges: { type: graphql.GraphQLList(feedItemEdge) },
   }),
 });
 

@@ -104,7 +104,7 @@ const agentMeasurable = new graphql.GraphQLObjectType({
 const agentMeasurablesEdge = new graphql.GraphQLObjectType({
   name: 'AgentMeasurablesEdge',
   fields: () => ({
-    node: { type: require('./agent-measurables').agentMeasurable },
+    node: { type: agentMeasurable },
     cursor: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
   }),
 });
@@ -116,11 +116,7 @@ const agentMeasurablesConnection = new graphql.GraphQLObjectType({
     pageInfo: {
       type: graphql.GraphQLNonNull(require('./common').pageInfoConnection),
     },
-    edges: {
-      type: graphql.GraphQLList(
-        require('./agent-measurables').agentMeasurablesEdge,
-      ),
-    },
+    edges: { type: graphql.GraphQLList(agentMeasurablesEdge) },
   }),
 });
 

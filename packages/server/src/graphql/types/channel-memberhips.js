@@ -39,7 +39,7 @@ const channelMembershipRoleInput = new graphql.GraphQLInputObjectType({
     agentId: { type: graphql.GraphQLString },
     channelId: { type: graphql.GraphQLString },
     role: {
-      type: graphql.GraphQLNonNull(require('./channel-memberhips').role),
+      type: graphql.GraphQLNonNull(channelMembershipRoles),
     },
   }),
 });

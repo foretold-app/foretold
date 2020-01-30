@@ -8098,6 +8098,11 @@ re-classnames@^4.0.0:
   resolved "https://registry.yarnpkg.com/re-classnames/-/re-classnames-4.0.0.tgz#11c62c5f3f8696c20689fdc6b70cdbea9e3496ef"
   integrity sha512-uYtBCGfSHlNiAKg1nWRnZMWKTaFOHFPmUdygf7j9/bqjh2bTkl5f/8oxSocZriNnCcmdc1JD9YbVSI91lYvONA==
 
+re-debouncer@2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/re-debouncer/-/re-debouncer-2.1.0.tgz#2eaf7994ba41590f4f80d4a363ae8905156b7dc1"
+  integrity sha512-Iy9BecWF9X4V6zXfL3ROZpKGkCnpzYdjG/j6NIBxQn7gEwO2DzED5BsbfRUiPeqr7C0tAD0HPHF6tYIcQFEnyA==
+
 react-apollo-hooks@0.5.0:
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/react-apollo-hooks/-/react-apollo-hooks-0.5.0.tgz#49607fbe9cdfd0be08ea5defd39085bf5f42e10e"

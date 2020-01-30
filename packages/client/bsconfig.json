@@ -26,7 +26,8 @@
     "rationale",
     "reschema",
     "bs-ken",
-    "bs-reform"
+    "bs-reform",
+    "re-debouncer"
   ],
   "refmt": 3,
   "warnings": {

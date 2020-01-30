@@ -120,34 +120,25 @@ module Helpers = {
       |> E.O.React.defaultNull;
   };
 
-  module MeasurementVoteUp = {
+  module MeasurementVote = {
     [@react.component]
-    let make = (~measurement: Types.measurement, ~onCompleted=_ => ()) => {
-      <MeasurementVote.Mutation onCompleted>
-        ...{(mutation, result: MeasurementVote.Mutation.renderPropObj) =>
-          <Antd.Button
-            disabled={result.loading}
-            onClick={_ => MeasurementVote.mutate(mutation, measurement.id, 1)}>
-            {">" |> Utils.ste}
-          </Antd.Button>
-        }
-      </MeasurementVote.Mutation>;
-    };
-  };
-
-  module MeasurementVoteDown = {
-    [@react.component]
-    let make = (~measurement: Types.measurement, ~onCompleted=_ => ()) => {
-      <MeasurementVote.Mutation onCompleted>
-        ...{(mutation, result: MeasurementVote.Mutation.renderPropObj) =>
-          <Antd.Button
-            disabled={result.loading}
-            onClick={_ =>
-              MeasurementVote.mutate(mutation, measurement.id, -1)
-            }>
-            {"<" |> Utils.ste}
-          </Antd.Button>
-        }
+    let make = (~measurement: Types.measurement, ~amount, ~children) => {
+      <MeasurementVote.Mutation>
+        ...{(mutation, result: MeasurementVote.Mutation.renderPropObj) => {
+          let sum = ref(0);
+          let send =
+            Debouncer.make(
+              ~wait=200,
+              MeasurementVote.mutate(mutation, measurement.id),
+            );
+          let onClick = _ => {
+            sum := sum^ + amount;
+            send(sum^);
+          };
+          <Antd.Button disabled={result.loading} onClick>
+            children
+          </Antd.Button>;
+        }}
       </MeasurementVote.Mutation>;
     };
   };
@@ -165,11 +156,15 @@ module Helpers = {
       switch (can, measurement.totalVoteAmount) {
       | (true, totalVoteAmount) =>
         <>
-          <MeasurementVoteDown measurement />
+          <MeasurementVote measurement amount=(-1)>
+            {"<" |> Utils.ste}
+          </MeasurementVote>
           <span className=Styles.vote>
             {totalVoteAmount |> E.O.default(0) |> string_of_int |> Utils.ste}
           </span>
-          <MeasurementVoteUp measurement />
+          <MeasurementVote measurement amount=1>
+            {">" |> Utils.ste}
+          </MeasurementVote>
         </>
       | (false, Some(totalVoteAmount)) =>
         <>

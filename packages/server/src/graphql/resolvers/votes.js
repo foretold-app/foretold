@@ -1,6 +1,8 @@
 const _ = require('lodash');
 const { VotesData } = require('../../data');
 
+const { Params } = require('../../data/classes');
+
 /**
  * @param {*} _root
  * @param {object} args
@@ -30,7 +32,21 @@ async function total(root, _args, _context, _info) {
   return new VotesData().totalVoteAmount(measurementId);
 }
 
+/**
+ * @param {*} root
+ * @param {object} _args
+ * @param {Schema.Context} _context
+ * @param {object} _info
+ * @returns {Promise<Models.User>}
+ */
+async function oneByMeasurementId(root, _args, _context, _info) {
+  const measurementId = _.get(root, 'id', null);
+  const params = new Params({ measurementId });
+  return new VotesData().getOne(params);
+}
+
 module.exports = {
   measurementVote,
   total,
+  oneByMeasurementId,
 };

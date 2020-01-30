@@ -379,6 +379,10 @@ module FormComponent = {
   };
 };
 
+// @todo: The "refetchQueries" policy does not work
+// @todo: since components to update are destroyed in the DOM
+// @todo: at a moment of refetching.
+
 module Create = {
   let onSuccess' = response => onSuccess(response##measurableCreate);
 

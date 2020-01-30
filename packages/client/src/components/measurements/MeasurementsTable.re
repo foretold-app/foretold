@@ -132,7 +132,6 @@ module Helpers = {
         ) => {
       <MeasurementVote.Mutation>
         ...{(mutation, result: MeasurementVote.Mutation.renderPropObj) => {
-
           let sum = ref(0);
           let send =
             Debouncer.make(
@@ -145,11 +144,7 @@ module Helpers = {
             send(sum^);
           };
           let disabled = result.loading || max == currentVote;
-
-          <Antd_Tooltip
-            title={sum^ |> string_of_int |> Utils.ste} placement=`top>
-            <Antd.Button disabled onClick> children </Antd.Button>
-          </Antd_Tooltip>;
+          <Antd.Button disabled onClick> children </Antd.Button>;
         }}
       </MeasurementVote.Mutation>;
     };

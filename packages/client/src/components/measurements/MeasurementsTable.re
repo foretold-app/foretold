@@ -120,81 +120,6 @@ module Helpers = {
       |> E.O.React.defaultNull;
   };
 
-  module MeasurementVote = {
-    [@react.component]
-    let make =
-        (
-          ~measurement: Types.measurement,
-          ~amount,
-          ~max,
-          ~currentVote,
-          ~children,
-        ) => {
-      <MeasurementVote.Mutation>
-        ...{(mutation, result: MeasurementVote.Mutation.renderPropObj) => {
-          let sum = ref(0);
-          let send =
-            Debouncer.make(
-              ~wait=200,
-              MeasurementVote.mutate(mutation, measurement.id),
-            );
-          let onClick = _ => {
-            sum := sum^ + amount;
-            sum := Pervasives.abs(sum^) > Pervasives.abs(max) ? max : sum^;
-            send(sum^);
-          };
-          let disabled = result.loading || max == currentVote;
-          <Antd.Button disabled onClick> children </Antd.Button>;
-        }}
-      </MeasurementVote.Mutation>;
-    };
-  };
-
-  module MeasurementVoteDown = {
-    [@react.component]
-    let make = (~measurement: Types.measurement, ~currentVote) => {
-      <MeasurementVote measurement amount=(-1) max=(-10) currentVote>
-        {"<" |> Utils.ste}
-      </MeasurementVote>;
-    };
-  };
-
-  module MeasurementVoteUp = {
-    [@react.component]
-    let make = (~measurement: Types.measurement, ~currentVote) => {
-      <MeasurementVote measurement amount=1 max=10 currentVote>
-        {">" |> Utils.ste}
-      </MeasurementVote>;
-    };
-  };
-
-  module AgentVote = {
-    module Styles = {
-      open Css;
-      let vote = style([marginLeft(`px(5)), marginRight(`px(5))]);
-    };
-    [@react.component]
-    let make = (~measurement: Types.measurement) => {
-      let can =
-        Primary.Permissions.can(`MEASUREMENT_VOTE, measurement.permissions);
-
-      let currentVote =
-        measurement.vote
-        |> E.O.fmap((vote: Types.vote) => vote.voteAmount)
-        |> E.O.default(0);
-
-      can
-        ? <>
-            <MeasurementVoteDown measurement currentVote />
-            <span className=Styles.vote>
-              {string_of_int(currentVote) |> Utils.ste}
-            </span>
-            <MeasurementVoteUp measurement currentVote />
-          </>
-        : <Null />;
-    };
-  };
-
   module TotalVote = {
     [@react.component]
     let make = (~measurement: Types.measurement) => {
@@ -349,8 +274,7 @@ let agentVote =
       "Your Vote" |> Utils.ste;
     },
     ~flex=3,
-    ~render=
-      (measurement: Types.measurement) => <Helpers.AgentVote measurement />,
+    ~render=(measurement: Types.measurement) => <AgentVote measurement />,
     (),
   );
 

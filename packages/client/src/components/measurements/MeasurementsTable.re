@@ -150,6 +150,24 @@ module Helpers = {
     };
   };
 
+  module MeasurementVoteDown = {
+    [@react.component]
+    let make = (~measurement: Types.measurement, ~currentVote) => {
+      <MeasurementVote measurement amount=(-1) max=(-10) currentVote>
+        {"<" |> Utils.ste}
+      </MeasurementVote>;
+    };
+  };
+
+  module MeasurementVoteUp = {
+    [@react.component]
+    let make = (~measurement: Types.measurement, ~currentVote) => {
+      <MeasurementVote measurement amount=1 max=10 currentVote>
+        {">" |> Utils.ste}
+      </MeasurementVote>;
+    };
+  };
+
   module Vote = {
     module Styles = {
       open Css;
@@ -164,15 +182,11 @@ module Helpers = {
       | (true, totalVoteAmount) =>
         let currentVote = totalVoteAmount |> E.O.default(0);
         <>
-          <MeasurementVote measurement amount=(-1) max=(-10) currentVote>
-            {"<" |> Utils.ste}
-          </MeasurementVote>
+          <MeasurementVoteDown measurement currentVote />
           <span className=Styles.vote>
             {string_of_int(currentVote) |> Utils.ste}
           </span>
-          <MeasurementVote measurement amount=1 max=10 currentVote>
-            {">" |> Utils.ste}
-          </MeasurementVote>
+          <MeasurementVoteUp measurement currentVote />
         </>;
       | (false, Some(totalVoteAmount)) =>
         <>

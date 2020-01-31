@@ -120,6 +120,30 @@ module Helpers = {
       |> E.O.React.defaultNull;
   };
 
+  module MomentDate = {
+    [@react.component]
+    let make = (~date) =>
+      date
+      |> E.O.fmap(d =>
+           <div className=Styles.date>
+             {d |> MomentRe.Moment.fromNow(~withoutSuffix=None) |> Utils.ste}
+           </div>
+         )
+      |> E.O.default(<Null />);
+  };
+
+  module RelevantAt = {
+    [@react.component]
+    let make = (~m: Types.measurement) =>
+      m.relevantAt
+      |> E.O.fmap(d =>
+           <div className=Styles.date>
+             {d |> MomentRe.Moment.fromNow(~withoutSuffix=None) |> Utils.ste}
+           </div>
+         )
+      |> E.O.default(<Null />);
+  };
+
   module MeaurementVotes = {
     module Styles = {
       open Css;
@@ -150,6 +174,9 @@ module Helpers = {
                key={string_of_int(index) ++ "measurement-vote"}>
                <FC.Div flexDirection=`row className=Styles.subRow>
                  <FC.Div flex={`num(3.)}> agent </FC.Div>
+                 <FC.Div flex={`num(2.)} className=Styles.rightBlock>
+                   <MomentDate date=measurementVote.updatedAt />
+                 </FC.Div>
                  <FC.Div flex={`num(1.)} className=Styles.rightBlock>
                    {measurementVote.voteAmount |> string_of_int |> Utils.ste}
                  </FC.Div>
@@ -165,7 +192,7 @@ module Helpers = {
     [@react.component]
     let make = (~measurement: Types.measurement) => {
       let totalVoteAmount = measurement.totalVoteAmount |> E.O.default(0);
-      let overlayClassName = Css.style([Css.width(`px(250))]);
+      let overlayClassName = Css.style([Css.width(`px(350))]);
       totalVoteAmount != 0
         ? <Antd_Popover
             overlayClassName
@@ -189,18 +216,6 @@ module Helpers = {
         </div>
       };
     };
-  };
-
-  module RelevantAt = {
-    [@react.component]
-    let make = (~m: Types.measurement) =>
-      m.relevantAt
-      |> E.O.fmap(d =>
-           <div className=Styles.date>
-             {d |> MomentRe.Moment.fromNow(~withoutSuffix=None) |> Utils.ste}
-           </div>
-         )
-      |> E.O.default(<Null />);
   };
 
   let getFloatCdf = (e: Belt.Result.t(MeasurementValue.t, string)) =>

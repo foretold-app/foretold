@@ -85,7 +85,7 @@ module Alert = {
 module Text = {
   module LightBackground = {
     let main = textDark;
-    let p = "#777c88"->r;
+    let p = "#3c3c3c"->r;
     let light = accentBlue;
     let active = "#0C5CD9"->r;
   };

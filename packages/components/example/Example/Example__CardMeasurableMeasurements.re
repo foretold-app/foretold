@@ -15,6 +15,16 @@ let row =
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut vulputate tortor a sapien aliquet ullamcorper. Nunc non varius sapien, quis elementum sapien. Morbi ac tristique quam. Cras hendrerit accumsan pretium. Praesent id nisl sit amet eros imperdiet placerat. Vestibulum sodales posuere diam vel laoreet."
       |> ReasonReact.string,
     )}>
+    <Table.Cell flex={`num(1.0)} className=cellStyle>
+      <AgentLink
+        agent={AgentLink.Agent.makeUser(
+          ~name="Roger Adams",
+          ~image=
+            "https://lh3.googleusercontent.com/-1sj3EqkojJ4/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3rfWCVqnuJxxM41Zird4HZx0BbRpbQ/photo.jpg",
+          (),
+        )}
+      />
+    </Table.Cell>
     <Table.Cell
       flex={`num(2.0)}
       className=Css.(
@@ -28,16 +38,6 @@ let row =
         style([paddingTop(`em(0.2)), paddingBottom(`em(0.3))])
       )>
       <CdfChart__StatSummary cdf />
-    </Table.Cell>
-    <Table.Cell flex={`num(1.0)} className=cellStyle>
-      <AgentLink
-        agent={AgentLink.Agent.makeUser(
-          ~name="Roger Adams",
-          ~image=
-            "https://lh3.googleusercontent.com/-1sj3EqkojJ4/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3rfWCVqnuJxxM41Zird4HZx0BbRpbQ/photo.jpg",
-          (),
-        )}
-      />
     </Table.Cell>
     <Table.Cell flex={`num(1.0)} className=cellStyle>
       <span className=Css.(style([color(Settings.textMedium)]))>
@@ -50,6 +50,16 @@ let row =
 
 let row2 =
   <Table.Row>
+    <Table.Cell flex={`num(1.0)} className=cellStyle>
+      <AgentLink
+        agent={AgentLink.Agent.makeUser(
+          ~name="Samantha Hope",
+          ~image=
+            "https://lh3.googleusercontent.com/-1sj3EqkojJ4/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3rfWCVqnuJxxM41Zird4HZx0BbRpbQ/photo.jpg",
+          (),
+        )}
+      />
+    </Table.Cell>
     <Table.Cell
       flex={`num(2.0)}
       className=Css.(
@@ -63,16 +73,6 @@ let row2 =
         style([paddingTop(`em(0.2)), paddingBottom(`em(0.3))])
       )>
       <CdfChart__StatSummary cdf />
-    </Table.Cell>
-    <Table.Cell flex={`num(1.0)} className=cellStyle>
-      <AgentLink
-        agent={AgentLink.Agent.makeUser(
-          ~name="Samantha Hope",
-          ~image=
-            "https://lh3.googleusercontent.com/-1sj3EqkojJ4/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3rfWCVqnuJxxM41Zird4HZx0BbRpbQ/photo.jpg",
-          (),
-        )}
-      />
     </Table.Cell>
     <Table.Cell flex={`num(1.0)} className=cellStyle>
       <span className=Css.(style([color(Settings.textMedium)]))>

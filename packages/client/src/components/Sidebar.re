@@ -1,5 +1,6 @@
 open Utils;
 
+module FC = ForetoldComponents;
 module Styles = {
   open Css;
   let sidebar = style([display(`flex), flexDirection(`column)]);
@@ -12,22 +13,22 @@ module Styles = {
     ]);
   let minorHeader =
     style([
-      color(`rgba((0, 0, 0, 0.6))),
+      color(`rgba((0, 0, 0, 0.9))),
       fontSize(`em(1.15)),
       width(`percent(100.)),
-      padding4(~top=`px(4), ~bottom=`px(4), ~left=`px(14), ~right=`px(2)),
+      padding4(~top=`px(6), ~bottom=`px(6), ~left=`px(18), ~right=`px(2)),
     ]);
   let minorHeaderLink =
     style([
       float(`left),
-      color(`rgba((0, 0, 0, 0.6))),
+      color(`rgba((0, 0, 0, 0.8))),
       cursor(`pointer),
       selector(":hover", [color(`rgba((0, 0, 0, 0.9)))]),
     ]);
   let minorHeaderLinkPlus =
     style([
       float(`right),
-      color(`rgba((0, 0, 0, 0.6))),
+      color(`rgba((0, 0, 0, 0.8))),
       cursor(`pointer),
       paddingRight(`em(0.3)),
       marginTop(`em(-0.2)),
@@ -37,27 +38,30 @@ module Styles = {
   let item =
     style([
       flex(`num(1.)),
-      color(`rgba((0, 0, 0, 0.6))),
+      color(`rgba((0, 0, 0, 0.8))),
       padding4(~top=`px(4), ~bottom=`px(4), ~left=`px(14), ~right=`px(2)),
       cursor(`pointer),
       textDecoration(`none),
-      hover([background(`hex("435e90"))]),
+      hover([background(FC.Base.Colors.buttonHover)]),
       selector("a", [borderBottom(`px(2), `solid, hex("eee"))]),
       selector(
         ":hover",
-        [background(`hex("435e90")), color(`rgba((0, 0, 0, 0.6)))],
+        [
+          background(FC.Base.Colors.buttonHover),
+          color(`rgba((0, 0, 0, 0.6))),
+        ],
       ),
     ]);
   let selectedItem =
     style([
       flex(`num(1.)),
       color(`rgba((0, 0, 0, 0.8))),
-      background(`hex("3192ff")),
+      background(FC.Base.Colors.smokeWhite),
       cursor(`pointer),
       padding4(~top=`px(4), ~bottom=`px(4), ~left=`px(14), ~right=`px(2)),
       focus([textDecoration(`none)]),
       textDecoration(`none),
-      selector(":hover", [color(`rgba((0, 0, 0, 0.8)))]),
+      selector(":hover", [color(FC.Base.Colors.accentBlue)]),
     ]);
 };
 
@@ -92,13 +96,6 @@ module ChannelsList = {
 [@react.component]
 let make = (~channelId, ~loggedUser: option(Types.user)) => {
   <div className=Styles.sidebar>
-    <div className=Styles.over />
-    <div className=Styles.minorHeader>
-      <Link
-        linkType={Internal(ChannelIndex)} className=Styles.minorHeaderLink>
-        {"Communities" |> ste}
-      </Link>
-    </div>
     <div className=Styles.over>
       <Link
         key="channel-global-item"
@@ -107,6 +104,12 @@ let make = (~channelId, ~loggedUser: option(Types.user)) => {
           Some("home") == channelId ? Styles.selectedItem : Styles.item
         }>
         {Primary.Channel.presentGlobal(~className=Styles.hash, ())}
+      </Link>
+      <Link
+        key="channel-community-list"
+        linkType={Internal(ChannelIndex)}
+        className=Styles.item>
+        {Primary.Channel.presentCommunities(~className=Styles.hash, ())}
       </Link>
       {loggedUser
        |> E.O.React.fmapOrNull(loggedUser =>

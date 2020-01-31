@@ -371,6 +371,14 @@ module Channel = {
       <span> {"Home" |> ste} </span>
     </span>;
 
+  let presentCommunities = (~className="", ~symbolClassName=Styles.globeList, ()) =>
+    <span>
+      <span className>
+        <span className=symbolClassName> <Icon icon="LIST" /> </span>
+      </span>
+      <span> {"All Communities" |> ste} </span>
+    </span>;
+
   let make =
       (
         ~id,
@@ -992,25 +1000,14 @@ module Notebook = {
 module Vote = {
   type t = Types.vote;
 
-  let toVoteId = (json: Js.Json.t): Types.voteId =>
-    json |> E.J.toString;
+  let toVoteId = (json: Js.Json.t): Types.voteId => json |> E.J.toString;
 
-  let convertJs =
-      (
-        ~id: Js.Json.t,
-        ~voteAmount: int,
-        (),
-      )
-      : t => {
+  let convertJs = (~id: Js.Json.t, ~voteAmount: int, ()): t => {
     id: id |> toVoteId,
-    voteAmount: voteAmount ,
+    voteAmount,
   };
 
   let convertJsObject = vote => {
-    convertJs(
-      ~id=vote##id,
-      ~voteAmount=vote##voteAmount,
-      (),
-    );
+    convertJs(~id=vote##id, ~voteAmount=vote##voteAmount, ());
   };
 };

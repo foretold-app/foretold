@@ -132,18 +132,6 @@ module Helpers = {
       |> E.O.default(<Null />);
   };
 
-  module RelevantAt = {
-    [@react.component]
-    let make = (~m: Types.measurement) =>
-      m.relevantAt
-      |> E.O.fmap(d =>
-           <div className=Styles.date>
-             {d |> MomentRe.Moment.fromNow(~withoutSuffix=None) |> Utils.ste}
-           </div>
-         )
-      |> E.O.default(<Null />);
-  };
-
   module MeaurementVotes = {
     module Styles = {
       open Css;
@@ -162,7 +150,7 @@ module Helpers = {
       MeasurementVotesGet.component(
         ~measurementId=?Some(measurement.id), measurementVotes =>
         measurementVotes
-        |> Array.mapi((index, measurementVote: Types.vote) => {
+        |> E.A.fmapi((index, measurementVote: Types.vote) => {
              let agent =
                measurementVote.agent
                |> E.O.fmap(agent => <AgentLink agent />)
@@ -369,7 +357,7 @@ let time =
     ~flex=3,
     ~render=
       (measurement: Types.measurement) =>
-        <Helpers.RelevantAt m=measurement />,
+        <Helpers.MomentDate date=measurement.relevantAt />,
     (),
   );
 

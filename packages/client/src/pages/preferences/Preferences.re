@@ -35,7 +35,7 @@ module FormComponent = {
              field=FormConfig.StopAllEmails
              render={({handleChange, value}) =>
                <Antd.Form.Item label={"Do not send me emails" |> Utils.ste}>
-                 <AntdSwitch checked=value onChange={e => e |> handleChange} />
+                 <Antd_Switch checked=value onChange={e => e |> handleChange} />
                </Antd.Form.Item>
              }
            />
@@ -44,7 +44,7 @@ module FormComponent = {
              render={({handleChange, value}) =>
                <Antd.Form.Item
                  label={"Enable experimental features" |> Utils.ste}>
-                 <AntdSwitch checked=value onChange={e => e |> handleChange} />
+                 <Antd_Switch checked=value onChange={e => e |> handleChange} />
                </Antd.Form.Item>
              }
            />

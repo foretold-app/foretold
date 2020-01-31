@@ -183,7 +183,7 @@ module BotsSelect = {
           {name |> ste}
         </Antd.Select.Option>
         {bots
-         |> Array.mapi((index, bot: Types.bot) =>
+         |> E.A.fmapi((index, bot: Types.bot) =>
               <Antd.Select.Option
                 key={"bot" ++ string_of_int(index)}
                 value={

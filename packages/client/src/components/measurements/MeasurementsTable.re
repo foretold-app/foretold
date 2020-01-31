@@ -36,6 +36,13 @@ module Styles = {
       fontWeight(`num(800)),
       color(`hex("7d7ea2")),
     ]);
+
+  let measurementForm =
+    style([
+      padding(`em(1.0)),
+      borderRadius(`px(3)),
+      border(`px(1), `solid, `hex("D5D7DA")),
+    ]);
 };
 
 module Helpers = {
@@ -380,7 +387,89 @@ let getPredictionDistribution = (~bounds, ~width=230, ()) =>
     (),
   );
 
+module MeasurementDebugForm = {
+  let formatTime = r =>
+    r
+    |> E.O.fmap((m: MomentRe.Moment.t) => E.M.goFormat_standard(m))
+    |> E.O.default("")
+    |> Utils.ste;
+
+  [@react.component]
+  let make = (~measurement: Types.measurement) => {
+    <Antd.Form
+      layout=`vertical labelAlign=`left className=Styles.measurementForm>
+      <Antd.Form.Item label={"ID" |> Utils.ste}>
+        <Antd.Input value={measurement.id} readOnly=true />
+      </Antd.Form.Item>
+      <Antd.Form.Item label={"Competitor Type" |> Utils.ste}>
+        <Antd.Input
+          value={Primary.CompetitorType.toString(measurement.competitorType)}
+          readOnly=true
+        />
+      </Antd.Form.Item>
+      {E.React2.showIf(
+         measurement.competitorType === `AGGREGATION,
+         {<Antd.Form.Item label={"Tagged ID" |> Utils.ste}>
+            <Antd.Input
+              value={measurement.taggedMeasurementId |> E.O.default("")}
+              readOnly=true
+            />
+          </Antd.Form.Item>},
+       )}
+      <Antd.Form.Item label={"Created At" |> Utils.ste}>
+        {formatTime(measurement.createdAt)}
+      </Antd.Form.Item>
+      <Antd.Form.Item label={"Relevant At" |> Utils.ste}>
+        {formatTime(measurement.relevantAt)}
+      </Antd.Form.Item>
+      <Antd.Form.Item label={"Value" |> Utils.ste}>
+        <Antd.Input.TextArea
+          value={
+            switch (measurement.value) {
+            | Ok(r) => MeasurementValue.encode(r) |> Js.Json.stringify
+            | _ => ""
+            }
+          }
+          readonly=true
+          cols=3
+        />
+      </Antd.Form.Item>
+      <Antd.Form.Item label={"Text Input" |> Utils.ste}>
+        <Antd.Input
+          value={
+            switch (measurement.valueText) {
+            | Some(r) => r
+            | _ => ""
+            }
+          }
+          readOnly=true
+        />
+      </Antd.Form.Item>
+      <Antd.Form.Item label={"Description" |> Utils.ste}>
+        <Antd.Input.TextArea
+          value={measurement.description |> E.O.default("")}
+          readonly=true
+          cols=5
+        />
+      </Antd.Form.Item>
+    </Antd.Form>;
+  };
+};
+
 let bottomSubRowFn =
+  Some(
+    (measurement: Types.measurement) =>
+      Some([|
+        ForetoldComponents.Table.Row.textSection(
+          <>
+            <Helpers.Description m=measurement />
+            <MeasurementDebugForm measurement />
+          </>,
+        ),
+      |]),
+  );
+
+let bottomSubRowFn2 =
   Some(
     (measurement: Types.measurement) =>
       switch (measurement.description) {

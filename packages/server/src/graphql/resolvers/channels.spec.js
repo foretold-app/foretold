@@ -65,6 +65,8 @@ describe('Channels Resolvers', () => {
       return channels.one(root, args, context, info).then((result) => {
         expect(new ChannelsData().getOne).toHaveBeenCalledWith({ id: 'id1' }, {}, {
           agentId: 'agentId1',
+          attributes: true,
+          raw: true,
         });
         expect(result).toBe(true);
       });

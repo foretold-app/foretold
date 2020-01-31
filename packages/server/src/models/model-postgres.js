@@ -150,9 +150,7 @@ class ModelPostgres extends Model {
   }
 
   /**
-   * @todo: To "attributes".
-   * @todo: This is an anisotropy when pagination is defined {}
-   * @todo: instead of pagination = new Pagination().
+   * @todo: To use an order with attributes for the measurables.
    * @public
    * @param {Layers.AbstractModelsLayer.filter} [filter]
    * @param {Layers.AbstractModelsLayer.pagination} [pagination]
@@ -181,7 +179,6 @@ class ModelPostgres extends Model {
 
     // Block 2
     const { limit, offset } = pagination.getPagination();
-    const attributes = this._getAttributes(options);
     const order = pagination.isOrderSet()
       ? this._getDefaultOrder(pagination)
       : this._getOrder();
@@ -192,7 +189,6 @@ class ModelPostgres extends Model {
       limit,
       offset,
       order,
-      attributes,
     };
     this._extendGenericConditions(findCond, options);
     this._extendAdvancedConditions(findCond, options);

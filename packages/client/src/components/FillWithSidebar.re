@@ -10,7 +10,7 @@ module Styles = {
   let left =
     style([
       flex(`num(1.)),
-      backgroundColor(`hex("283c5b")),
+      backgroundColor(`hex("fff")),
       minWidth(`px(200)),
     ]);
   let right =

@@ -7,12 +7,12 @@ module Styles = {
   let hash =
     style([
       marginRight(`px(5)),
-      color(`rgba((255, 255, 255, 0.3))),
+      color(`rgba((0, 0, 0, 0.3))),
       float(`left),
     ]);
   let minorHeader =
     style([
-      color(`rgba((255, 255, 255, 0.6))),
+      color(`rgba((0, 0, 0, 0.6))),
       fontSize(`em(1.15)),
       width(`percent(100.)),
       padding4(~top=`px(4), ~bottom=`px(4), ~left=`px(14), ~right=`px(2)),
@@ -20,24 +20,24 @@ module Styles = {
   let minorHeaderLink =
     style([
       float(`left),
-      color(`rgba((255, 255, 255, 0.6))),
+      color(`rgba((0, 0, 0, 0.6))),
       cursor(`pointer),
-      selector(":hover", [color(`rgba((255, 255, 255, 0.9)))]),
+      selector(":hover", [color(`rgba((0, 0, 0, 0.9)))]),
     ]);
   let minorHeaderLinkPlus =
     style([
       float(`right),
-      color(`rgba((255, 255, 255, 0.6))),
+      color(`rgba((0, 0, 0, 0.6))),
       cursor(`pointer),
       paddingRight(`em(0.3)),
       marginTop(`em(-0.2)),
-      selector(":hover", [color(`rgba((255, 255, 255, 0.9)))]),
+      selector(":hover", [color(`rgba((0, 0, 0, 0.9)))]),
     ]);
   let sectionPadding = style([height(`em(1.0)), width(`percent(100.0))]);
   let item =
     style([
       flex(`num(1.)),
-      color(`rgba((255, 255, 255, 0.6))),
+      color(`rgba((0, 0, 0, 0.6))),
       padding4(~top=`px(4), ~bottom=`px(4), ~left=`px(14), ~right=`px(2)),
       cursor(`pointer),
       textDecoration(`none),
@@ -45,19 +45,19 @@ module Styles = {
       selector("a", [borderBottom(`px(2), `solid, hex("eee"))]),
       selector(
         ":hover",
-        [background(`hex("435e90")), color(`rgba((255, 255, 255, 0.6)))],
+        [background(`hex("435e90")), color(`rgba((0, 0, 0, 0.6)))],
       ),
     ]);
   let selectedItem =
     style([
       flex(`num(1.)),
-      color(`rgba((255, 255, 255, 0.8))),
+      color(`rgba((0, 0, 0, 0.8))),
       background(`hex("3192ff")),
       cursor(`pointer),
       padding4(~top=`px(4), ~bottom=`px(4), ~left=`px(14), ~right=`px(2)),
       focus([textDecoration(`none)]),
       textDecoration(`none),
-      selector(":hover", [color(`rgba((255, 255, 255, 0.8)))]),
+      selector(":hover", [color(`rgba((0, 0, 0, 0.8)))]),
     ]);
 };
 

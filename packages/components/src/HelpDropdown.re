@@ -16,10 +16,7 @@ module Overlay = {
         <PageCard.HeaderRow>
           <Div float=`left>
             <PageCard.HeaderRow.Title>
-              <span
-                className=Css.(
-                  style([marginRight(`em(0.4)), opacity(0.5)])
-                )>
+              <span className=Css.(style([marginRight(`em(0.4))]))>
                 <Icon.Questionmark isInteractive=false />
               </span>
               {content.headerContent}
@@ -48,4 +45,3 @@ let make = (~content) =>
   <Dropdown overlay={<Overlay content />} trigger=Dropdown.Hover>
     <span> <Icon.Questionmark isInteractive=true /> </span>
   </Dropdown>;
-

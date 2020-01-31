@@ -1,5 +1,5 @@
 [@bs.module "./ReactKitIcon.js"]
-external reactClass: ReasonReact.reactClass = "Icon";
+external reactClass: ReasonReact.reactClass = "ReactKitIcon";
 
 [@react.component]
 let make = (~icon=?, ~size=?, ~children=ReasonReact.null) =>

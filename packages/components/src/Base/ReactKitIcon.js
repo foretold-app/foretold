@@ -1,5 +1,6 @@
+/** @jsx React.DOM */
 import React from 'react';
-import { Icon as Iconn } from 'react-icons-kit';
+import { Icon } from 'react-icons-kit';
 import { home } from 'react-icons-kit/typicons/home';
 import { user } from 'react-icons-kit/ikons/user';
 import { arrowLeft2 } from 'react-icons-kit/icomoon/arrowLeft2';
@@ -45,15 +46,15 @@ let types = {
   'COPY': ic_content_copy,
   'MAGIC_WAND': magicWand,
   'PACMAN': pacman,
-  'LIST': list,
+  'LIST': list
 };
 
-export class Icon extends React.Component {
+export class ReactKitIcon extends React.Component {
   render() {
     const {
       iconType,
       size
     } = this.props;
-    return (<Iconn size={size} icon={types[iconType]}/>);
+    return (<Icon size={size} icon={types[iconType]}/>);
   }
 }

@@ -199,6 +199,7 @@ and vote = {
   voteAmount: int,
   createdAt: option(MomentRe.Moment.t),
   updatedAt: option(MomentRe.Moment.t),
+  agent: option(agent),
 }
 
 and timeAverageScore = {

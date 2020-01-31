@@ -10,6 +10,31 @@ module Query = [%graphql
         voteAmount
         createdAt
         updatedAt
+        agent {
+            id
+            name
+            user {
+                id
+                name
+                description
+                picture
+                agentId
+            }
+            bot {
+                id
+                name
+                description
+                picture
+                competitorType
+                user {
+                    id
+                    name
+                    description
+                    picture
+                    agentId
+                }
+            }
+        }
       }
     }
   |}
@@ -28,7 +53,7 @@ let component = (~measurementId: option(string)=?, fn) => {
       |> E.R.fmap(e =>
            e##votes
            |> E.A.O.concatSomes
-           |> E.A.fmap(Primary.Vote.convertJsObject)
+           |> E.A.fmap(Primary.Vote.convertJsObject2)
          )
       |> E.R.fmap(fn)
       |> E.R.id

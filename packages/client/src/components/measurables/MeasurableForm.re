@@ -215,7 +215,7 @@ module FormComponent = {
                          field=FormConfig.LabelOnDate
                          render={({handleChange, value}) =>
                            <Antd.Form.Item label={"'On' Date" |> Utils.ste}>
-                             <DatePicker
+                             <Antd_DatePicker
                                value={value |> MomentRe.moment}
                                onChange={e => {
                                  handleChange(e |> formatDate);
@@ -334,7 +334,7 @@ module FormComponent = {
                <Form.Field
                  field=FormConfig.ExpectedResolutionDate
                  render={({handleChange, value}) =>
-                   <DatePicker
+                   <Antd_DatePicker
                      value={value |> MomentRe.momentDefaultFormat}
                      onChange={e => {
                        handleChange(e |> formatDate);

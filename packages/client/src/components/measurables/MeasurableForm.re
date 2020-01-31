@@ -81,7 +81,7 @@ module FormComponent = {
          let context = React.useContext(Providers.app);
          switch (context.loggedUser) {
          | Some(loggedUser) =>
-           <AntdForm onSubmit>
+           <Antd_Form onSubmit>
              {E.React2.showIf(
                 creating,
                 <Form.Field
@@ -371,7 +371,7 @@ module FormComponent = {
                       {"Submit" |> ste}
                     </Antd.Button>}
              </Antd.Form.Item>
-           </AntdForm>
+           </Antd_Form>
          | _ => <Null />
          };
        }}

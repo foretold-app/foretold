@@ -36,7 +36,7 @@ module FormComponent = {
     <Form.Provider value=reform>
       {switch (result) {
        | Error(_error) => <Sorry />
-       | Data(_) => <AntdAlert message=Lang.memberInvited type_="success" />
+       | Data(_) => <Antd_Alert message={Lang.memberInvited |> Utils.ste} _type=`success />
        | _ =>
          <Antd.Form onSubmit>
            <Form.Field

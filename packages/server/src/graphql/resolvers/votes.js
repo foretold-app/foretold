@@ -62,7 +62,7 @@ async function all(_root, args, _context, _info) {
 
   const filter = new Filter({ measurementId });
   const pagination = new Pagination(args);
-  const options = new Options({ attributes: true, raw: true });
+  const options = new Options({ raw: true });
 
   const response = await new VotesData().getConnection(
     filter, pagination, options,

@@ -226,13 +226,32 @@ class ModelPostgres extends Model {
     restrictions = new Restrictions(),
     options = new Options(),
   ) {
-    const cond = await this._getPredicated(
-      params, query, restrictions, options,
-    );
+    this._assertInput({ params, query, restrictions, options });
+    const where = { ...params };
+
+    // if ('inspect' in params) params.inspect();
+    // if ('inspect' in restrictions) restrictions.inspect();
+
+    this.applyRestrictions(where, restrictions);
+
+    const order = this._getOrderForOne(query);
+    const distinct = !!query.distinct ? true : null;
+    const col = !!query.col ? query.col : null;
+
+    const cond = {
+      where,
+      order,
+      distinct,
+      col,
+    };
+    this._extendGenericConditions(cond, options);
+    this._extendAdvancedConditions(cond, options);
+
     return this.model.findOne(cond);
   }
 
   /**
+   * @todo: To fix a "spread".
    * @public
    * @param {Layers.AbstractModelsLayer.params} [params]
    * @param {Layers.AbstractModelsLayer.query} [query]
@@ -246,9 +265,25 @@ class ModelPostgres extends Model {
     restrictions = new Restrictions(),
     options = new Options(),
   ) {
-    const cond = await this._getPredicated(
-      params, query, restrictions, options,
-    );
+    this._assertInput({ params, query, restrictions, options });
+    const where = { ...params };
+
+    // if ('inspect' in params) params.inspect();
+    // if ('inspect' in restrictions) restrictions.inspect();
+
+    this.applyRestrictions(where, restrictions);
+
+    const distinct = !!query.distinct ? true : null;
+    const col = !!query.col ? query.col : null;
+
+    const cond = {
+      where,
+      distinct,
+      col,
+    };
+    this._extendGenericConditions(cond, options);
+    this._extendAdvancedConditions(cond, options);
+
     return this.model.count(cond);
   }
 
@@ -705,45 +740,6 @@ class ModelPostgres extends Model {
     }
 
     return where;
-  }
-
-  /**
-   * @todo: To fix a "spread".
-   * @protected
-   * @param {Layers.AbstractModelsLayer.params} [params]
-   * @param {Layers.AbstractModelsLayer.query} [query]
-   * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
-   * @param {Layers.AbstractModelsLayer.options} [options]
-   * @return {Promise<*>}
-   */
-  async _getPredicated(
-    params = new Params(),
-    query = new Query(),
-    restrictions = new Restrictions(),
-    options = new Options(),
-  ) {
-    this._assertInput({ params, query, restrictions, options });
-    const where = { ...params };
-
-    // if ('inspect' in params) params.inspect();
-    // if ('inspect' in restrictions) restrictions.inspect();
-
-    this.applyRestrictions(where, restrictions);
-
-    const order = this._getOrderForOne(query);
-    const distinct = !!query.distinct ? true : null;
-    const col = !!query.col ? query.col : null;
-
-    const cond = {
-      where,
-      order,
-      distinct,
-      col,
-    };
-    this._extendGenericConditions(cond, options);
-    this._extendAdvancedConditions(cond, options);
-
-    return cond;
   }
 
   /**

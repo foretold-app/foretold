@@ -38,11 +38,7 @@ module Styles = {
     ]);
 
   let measurementForm =
-    style([
-      padding(`em(1.0)),
-      borderRadius(`px(3)),
-      border(`px(1), `solid, `hex("D5D7DA")),
-    ]);
+    style([padding(`em(1.0)), border(`px(1), `solid, `hex("D5D7DA"))]);
 };
 
 module Helpers = {
@@ -170,7 +166,7 @@ module Helpers = {
                <FC.Div flexDirection=`row className=Styles.subRow>
                  <FC.Div flex={`num(3.)}> agent </FC.Div>
                  <FC.Div flex={`num(2.)} className=Styles.rightBlock>
-                   <MomentDate date=measurementVote.updatedAt />
+                   <MomentDate date={measurementVote.updatedAt} />
                  </FC.Div>
                  <FC.Div flex={`num(1.)} className=Styles.rightBlock>
                    {measurementVote.voteAmount |> string_of_int |> Utils.ste}
@@ -196,6 +192,94 @@ module Helpers = {
             {string_of_int(totalVoteAmount) |> Utils.ste}
           </Antd_Popover>
         : <Null />;
+    };
+  };
+
+  module MeasurementDebugForm = {
+    let formatTime = r =>
+      r
+      |> E.O.fmap((m: MomentRe.Moment.t) => E.M.goFormat_standard(m))
+      |> E.O.default("")
+      |> Utils.ste;
+
+    [@react.component]
+    let make = (~measurement: Types.measurement) => {
+      <Antd.Form layout=`vertical labelAlign=`left>
+        <Antd.Form.Item label={"ID" |> Utils.ste}>
+          <Antd.Input value={measurement.id} readOnly=true />
+        </Antd.Form.Item>
+        <Antd.Form.Item label={"Competitor Type" |> Utils.ste}>
+          <Antd.Input
+            value={Primary.CompetitorType.toString(
+              measurement.competitorType,
+            )}
+            readOnly=true
+          />
+        </Antd.Form.Item>
+        {E.React2.showIf(
+           measurement.competitorType === `AGGREGATION,
+           {<Antd.Form.Item label={"Tagged ID" |> Utils.ste}>
+              <Antd.Input
+                value={measurement.taggedMeasurementId |> E.O.default("")}
+                readOnly=true
+              />
+            </Antd.Form.Item>},
+         )}
+        <Antd.Form.Item label={"Created At" |> Utils.ste}>
+          {formatTime(measurement.createdAt)}
+        </Antd.Form.Item>
+        <Antd.Form.Item label={"Relevant At" |> Utils.ste}>
+          {formatTime(measurement.relevantAt)}
+        </Antd.Form.Item>
+        <Antd.Form.Item label={"Value" |> Utils.ste}>
+          <Antd.Input.TextArea
+            value={
+              switch (measurement.value) {
+              | Ok(r) => MeasurementValue.encode(r) |> Js.Json.stringify
+              | _ => ""
+              }
+            }
+            readonly=true
+            cols=3
+          />
+        </Antd.Form.Item>
+        <Antd.Form.Item label={"Text Input" |> Utils.ste}>
+          <Antd.Input
+            value={
+              switch (measurement.valueText) {
+              | Some(r) => r
+              | _ => ""
+              }
+            }
+            readOnly=true
+          />
+        </Antd.Form.Item>
+        <Antd.Form.Item label={"Description" |> Utils.ste}>
+          <Antd.Input.TextArea
+            value={measurement.description |> E.O.default("")}
+            readonly=true
+            cols=5
+          />
+        </Antd.Form.Item>
+      </Antd.Form>;
+    };
+  };
+
+  module Info = {
+    [@react.component]
+    let make = (~measurement: Types.measurement) => {
+      let overlayClassName = Css.style([Css.width(`em(40.))]);
+      <Antd_Popover
+        overlayClassName
+        placement=`left
+        content={<MeasurementDebugForm measurement />}>
+        <div
+          className=Css.(
+            style([fontSize(`em(1.1)), color(`hex("d1d1d1")), hover([color(`hex("999"))])])
+          )>
+          <Icon icon="COPY" />
+        </div>
+      </Antd_Popover>;
     };
   };
 
@@ -348,6 +432,16 @@ let totalVotes =
     (),
   );
 
+let info =
+  Table.Column.make(
+    ~name={
+      "Info" |> Utils.ste;
+    },
+    ~flex=1,
+    ~render=(measurement: Types.measurement) => <Helpers.Info measurement />,
+    (),
+  );
+
 let agent =
   Table.Column.make(
     ~name="Member" |> Utils.ste,
@@ -364,7 +458,7 @@ let time =
     ~flex=3,
     ~render=
       (measurement: Types.measurement) =>
-        <Helpers.MomentDate date=measurement.relevantAt />,
+        <Helpers.MomentDate date={measurement.relevantAt} />,
     (),
   );
 
@@ -439,89 +533,7 @@ let getPredictionDistribution = (~bounds, ~width=230, ()) =>
     (),
   );
 
-module MeasurementDebugForm = {
-  let formatTime = r =>
-    r
-    |> E.O.fmap((m: MomentRe.Moment.t) => E.M.goFormat_standard(m))
-    |> E.O.default("")
-    |> Utils.ste;
-
-  [@react.component]
-  let make = (~measurement: Types.measurement) => {
-    <Antd.Form
-      layout=`vertical labelAlign=`left className=Styles.measurementForm>
-      <Antd.Form.Item label={"ID" |> Utils.ste}>
-        <Antd.Input value={measurement.id} readOnly=true />
-      </Antd.Form.Item>
-      <Antd.Form.Item label={"Competitor Type" |> Utils.ste}>
-        <Antd.Input
-          value={Primary.CompetitorType.toString(measurement.competitorType)}
-          readOnly=true
-        />
-      </Antd.Form.Item>
-      {E.React2.showIf(
-         measurement.competitorType === `AGGREGATION,
-         {<Antd.Form.Item label={"Tagged ID" |> Utils.ste}>
-            <Antd.Input
-              value={measurement.taggedMeasurementId |> E.O.default("")}
-              readOnly=true
-            />
-          </Antd.Form.Item>},
-       )}
-      <Antd.Form.Item label={"Created At" |> Utils.ste}>
-        {formatTime(measurement.createdAt)}
-      </Antd.Form.Item>
-      <Antd.Form.Item label={"Relevant At" |> Utils.ste}>
-        {formatTime(measurement.relevantAt)}
-      </Antd.Form.Item>
-      <Antd.Form.Item label={"Value" |> Utils.ste}>
-        <Antd.Input.TextArea
-          value={
-            switch (measurement.value) {
-            | Ok(r) => MeasurementValue.encode(r) |> Js.Json.stringify
-            | _ => ""
-            }
-          }
-          readonly=true
-          cols=3
-        />
-      </Antd.Form.Item>
-      <Antd.Form.Item label={"Text Input" |> Utils.ste}>
-        <Antd.Input
-          value={
-            switch (measurement.valueText) {
-            | Some(r) => r
-            | _ => ""
-            }
-          }
-          readOnly=true
-        />
-      </Antd.Form.Item>
-      <Antd.Form.Item label={"Description" |> Utils.ste}>
-        <Antd.Input.TextArea
-          value={measurement.description |> E.O.default("")}
-          readonly=true
-          cols=5
-        />
-      </Antd.Form.Item>
-    </Antd.Form>;
-  };
-};
-
 let bottomSubRowFn =
-  Some(
-    (measurement: Types.measurement) =>
-      Some([|
-        ForetoldComponents.Table.Row.textSection(
-          <>
-            <Helpers.Description m=measurement />
-            <MeasurementDebugForm measurement />
-          </>,
-        ),
-      |]),
-  );
-
-let bottomSubRowFn2 =
   Some(
     (measurement: Types.measurement) =>
       switch (measurement.description) {
@@ -559,6 +571,7 @@ let make =
         agentVote,
         totalVotes,
         time,
+        info,
       |]
     | (`none, `none, `PERCENTAGE) => [|
         agent,
@@ -567,6 +580,7 @@ let make =
         agentVote,
         totalVotes,
         time,
+        info,
       |]
     | (`extended, `none, `FLOAT) => [|
         agent,
@@ -578,6 +592,7 @@ let make =
         agentVote,
         totalVotes,
         time,
+        info,
       |]
     | (`extended, `none, `PERCENTAGE) => [|
         agent,
@@ -588,6 +603,7 @@ let make =
         agentVote,
         totalVotes,
         time,
+        info,
       |]
     | (`none, `inside, `FLOAT) => [|
         agent,
@@ -596,6 +612,7 @@ let make =
         agentVote,
         totalVotes,
         time,
+        info,
       |]
     | (`none, `inside, `PERCENTAGE) => [|
         agent,
@@ -604,6 +621,7 @@ let make =
         agentVote,
         totalVotes,
         time,
+        info,
       |]
     | (`extended, `inside, `FLOAT) => [|
         agent,
@@ -614,6 +632,7 @@ let make =
         agentVote,
         totalVotes,
         time,
+        info,
       |]
     | (`extended, `inside, `PERCENTAGE) => [|
         agent,
@@ -623,6 +642,7 @@ let make =
         agentVote,
         totalVotes,
         time,
+        info,
       |]
     | _ => Js.Exn.raiseError("Date not supported")
     };

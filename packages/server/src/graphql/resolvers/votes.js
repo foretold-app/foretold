@@ -2,6 +2,9 @@ const _ = require('lodash');
 const { VotesData } = require('../../data');
 
 const { Params } = require('../../data/classes');
+const { Filter } = require('../../data/classes');
+const { Options } = require('../../data/classes');
+const { Pagination } = require('../../data/classes');
 
 /**
  * @param {*} _root
@@ -46,8 +49,31 @@ async function oneByMeasurementId(root, _args, context, _info) {
   return new VotesData().getOne(params);
 }
 
+/**
+ * @param {object | null} _root
+ * @param {object} args
+ * @param {Models.MeasurementID} args.measurementId
+ * @param {Schema.Context} _context
+ * @param {object} _info
+ * @returns {Promise<Models.Channel[]>}
+ */
+async function all(_root, args, _context, _info) {
+  const measurementId = _.get(args, 'measurementId', null);
+
+  const filter = new Filter({ measurementId });
+  const pagination = new Pagination(args);
+  const options = new Options({ raw: true });
+
+  const response = await new VotesData().getConnection(
+    filter, pagination, options,
+  );
+
+  return response.getData();
+}
+
 module.exports = {
+  all,
   measurementVote,
-  total,
   oneByMeasurementId,
+  total,
 };

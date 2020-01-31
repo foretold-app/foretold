@@ -57,7 +57,7 @@ const notebookUpdateInput = new graphql.GraphQLInputObjectType({
 const notebookEdge = new graphql.GraphQLObjectType({
   name: 'NotebookEdge',
   fields: () => ({
-    node: { type: require('./notebooks').notebook },
+    node: { type: notebook },
     cursor: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
   }),
 });
@@ -72,7 +72,7 @@ const notebooksConnection = new graphql.GraphQLObjectType({
       type: graphql.GraphQLNonNull(require('./common').pageInfoConnection),
     },
     edges: {
-      type: graphql.GraphQLList(require('./notebooks').notebookEdge),
+      type: graphql.GraphQLList(notebookEdge),
     },
   }),
 });

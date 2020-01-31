@@ -103,38 +103,43 @@ module Header = {
   let make = (~loggedUser: Types.user) =>
     switch (loggedUser.agent) {
     | Some((agent: Types.agent)) =>
-      <AntdDropdown
+      <Antd_Dropdown
+        trigger=[|"hover"|]
+        placement=`bottomLeft
         overlay={<UserDropdown agentId={agent.id} />}
         overlayClassName=StylesDropdown.dropdown>
-        <Div styles=[Css.style([Css.color(`hex("61738d"))])]>
-          <Div float=`left styles=[Css.style([Css.marginLeft(`em(0.2))])]>
-            {switch (agent.name) {
-             | Some("")
-             | None => "Please add a Username on the Profile page" |> ste
-             | Some(name) => name |> ste
-             }}
+        <div className=Css.style([Css.height(`em(1.5))])>
+          <Div styles=[Css.style([Css.color(`hex("61738d"))])]>
+            <Div
+              float=`left styles=[Css.style([Css.marginLeft(`em(0.2))])]>
+              {switch (agent.name) {
+               | Some("")
+               | None => "Please add a Username on the Profile page" |> ste
+               | Some(name) => name |> ste
+               }}
+            </Div>
+            <Div
+              float=`left
+              styles=[
+                Css.style([
+                  Css.marginLeft(`em(0.3)),
+                  Css.fontSize(`em(0.7)),
+                  Css.opacity(0.4),
+                ]),
+              ]>
+              <Icon icon="CHEVRON_DOWN" />
+            </Div>
+            {loggedUser.picture
+             |> E.O.React.fmapOrNull((picture: string) =>
+                  <Div
+                    float=`left
+                    styles=[Css.style([Css.marginLeft(`em(0.45))])]>
+                    <ForetoldComponents.Base.Avatar src=picture width=1.5 />
+                  </Div>
+                )}
           </Div>
-          <Div
-            float=`left
-            styles=[
-              Css.style([
-                Css.marginLeft(`em(0.3)),
-                Css.fontSize(`em(0.7)),
-                Css.opacity(0.4),
-              ]),
-            ]>
-            <Icon icon="CHEVRON_DOWN" />
-          </Div>
-          {loggedUser.picture
-           |> E.O.React.fmapOrNull((picture: string) =>
-                <Div
-                  float=`left
-                  styles=[Css.style([Css.marginLeft(`em(0.45))])]>
-                  <ForetoldComponents.Base.Avatar src=picture width=1.5 />
-                </Div>
-              )}
-        </Div>
-      </AntdDropdown>
+        </div>
+      </Antd_Dropdown>
     | None => <Null />
     };
 };

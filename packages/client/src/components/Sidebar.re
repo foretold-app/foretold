@@ -71,7 +71,7 @@ module ChannelsList = {
            ~order=ChannelsGet.orderAsSidebar,
            channels =>
            channels
-           |> Array.mapi((index, channel: Types.channel) =>
+           |> E.A.fmapi((index, channel: Types.channel) =>
                 <Link
                   key={index |> string_of_int}
                   linkType={Internal(Primary.Channel.showLink(channel))}

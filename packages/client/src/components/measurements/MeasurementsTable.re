@@ -120,13 +120,75 @@ module Helpers = {
       |> E.O.React.defaultNull;
   };
 
+  module MomentDate = {
+    [@react.component]
+    let make = (~date) =>
+      date
+      |> E.O.fmap(d =>
+           <div className=Styles.date>
+             {d |> MomentRe.Moment.fromNow(~withoutSuffix=None) |> Utils.ste}
+           </div>
+         )
+      |> E.O.default(<Null />);
+  };
+
+  module MeaurementVotes = {
+    module Styles = {
+      open Css;
+      let rightBlock = style([textAlign(`right)]);
+      let row =
+        style([
+          height(`em(3.)),
+          justifyContent(`spaceBetween),
+          alignItems(`center),
+        ]);
+      let subRow = style([width(`percent(100.))]);
+    };
+    module FC = ForetoldComponents;
+    [@react.component]
+    let make = (~measurement: Types.measurement) => {
+      MeasurementVotesGet.component(
+        ~measurementId=?Some(measurement.id), measurementVotes =>
+        measurementVotes
+        |> E.A.fmapi((index, measurementVote: Types.vote) => {
+             let agent =
+               measurementVote.agent
+               |> E.O.fmap(agent => <AgentLink agent />)
+               |> E.O.default(<Null />);
+
+             <FC.Div
+               flexDirection=`row
+               className=Styles.row
+               key={string_of_int(index) ++ "measurement-vote"}>
+               <FC.Div flexDirection=`row className=Styles.subRow>
+                 <FC.Div flex={`num(3.)}> agent </FC.Div>
+                 <FC.Div flex={`num(2.)} className=Styles.rightBlock>
+                   <MomentDate date=measurementVote.updatedAt />
+                 </FC.Div>
+                 <FC.Div flex={`num(1.)} className=Styles.rightBlock>
+                   {measurementVote.voteAmount |> string_of_int |> Utils.ste}
+                 </FC.Div>
+               </FC.Div>
+             </FC.Div>;
+           })
+        |> ReasonReact.array
+      );
+    };
+  };
+
   module TotalVote = {
     [@react.component]
     let make = (~measurement: Types.measurement) => {
       let totalVoteAmount = measurement.totalVoteAmount |> E.O.default(0);
-
+      let overlayClassName = Css.style([Css.width(`px(350))]);
       totalVoteAmount != 0
-        ? string_of_int(totalVoteAmount) |> Utils.ste : <Null />;
+        ? <Antd_Popover
+            overlayClassName
+            placement=`bottom
+            content={<MeaurementVotes measurement />}>
+            {string_of_int(totalVoteAmount) |> Utils.ste}
+          </Antd_Popover>
+        : <Null />;
     };
   };
 
@@ -142,18 +204,6 @@ module Helpers = {
         </div>
       };
     };
-  };
-
-  module RelevantAt = {
-    [@react.component]
-    let make = (~m: Types.measurement) =>
-      m.relevantAt
-      |> E.O.fmap(d =>
-           <div className=Styles.date>
-             {d |> MomentRe.Moment.fromNow(~withoutSuffix=None) |> Utils.ste}
-           </div>
-         )
-      |> E.O.default(<Null />);
   };
 
   let getFloatCdf = (e: Belt.Result.t(MeasurementValue.t, string)) =>
@@ -274,7 +324,9 @@ let agentVote =
       "" |> Utils.ste;
     },
     ~flex=2,
-    ~render=(measurement: Types.measurement) => <AgentVote measurement />,
+    ~render=
+      (measurement: Types.measurement) =>
+        <MeasurementAgentVote measurement />,
     (),
   );
 
@@ -305,7 +357,7 @@ let time =
     ~flex=3,
     ~render=
       (measurement: Types.measurement) =>
-        <Helpers.RelevantAt m=measurement />,
+        <Helpers.MomentDate date=measurement.relevantAt />,
     (),
   );
 

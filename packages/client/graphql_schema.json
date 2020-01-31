@@ -1149,6 +1149,37 @@
               "deprecationReason": null
             },
             {
+              "name": "votes",
+              "description": null,
+              "args": [
+                {
+                  "name": "measurementId",
+                  "description": null,
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "MeasurementId",
+                    "ofType": null
+                  },
+                  "defaultValue": null
+                }
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "Vote",
+                    "ofType": null
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "stats",
               "description": null,
               "args": [],
@@ -3350,6 +3381,18 @@
                   "name": "Date",
                   "ofType": null
                 }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "agent",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "Agent",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null

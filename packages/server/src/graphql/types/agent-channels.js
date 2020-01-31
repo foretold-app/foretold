@@ -36,7 +36,7 @@ const agentChannel = new graphql.GraphQLObjectType({
 const agentChannelsEdge = new graphql.GraphQLObjectType({
   name: 'AgentChannelsEdge',
   fields: () => ({
-    node: { type: require('./agent-channels').agentChannel },
+    node: { type: agentChannel },
     cursor: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
   }),
 });
@@ -49,7 +49,7 @@ const agentChannelsConnection = new graphql.GraphQLObjectType({
       type: graphql.GraphQLNonNull(require('./common').pageInfoConnection),
     },
     edges: {
-      type: graphql.GraphQLList(require('./agent-channels').agentChannelsEdge),
+      type: graphql.GraphQLList(agentChannelsEdge),
     },
   }),
 });

@@ -128,7 +128,7 @@ module FormComponent = {
                <Antd.Form.Item label={"Dates" |> Utils.ste}>
                  {value
                   |> E.L.fmapi((i, r) =>
-                       <DatePicker
+                       <Antd_DatePicker
                          value=r
                          onChange={e => {
                            value |> E.L.update(e, i) |> handleChange;

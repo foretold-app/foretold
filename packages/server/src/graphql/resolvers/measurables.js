@@ -62,6 +62,7 @@ async function all(root, args, context, _info) {
     isAdmin: _.get(context, 'agent.isAdmin', null),
     agentId: currentAgentId,
     measuredByAgentId: _.get(args, 'measuredByAgentId', null),
+    attributes: true,
   });
 
   return new MeasurablesData().getConnection(filter, pagination, options);

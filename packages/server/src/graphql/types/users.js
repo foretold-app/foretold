@@ -2,6 +2,8 @@ const graphql = require('graphql');
 const { DateType } = require('graphql-sequelize');
 
 const resolvers = require('../resolvers');
+const commonTypes = require('./common');
+const botsTypes = require('./bots');
 
 const userUpdateInput = new graphql.GraphQLInputObjectType({
   name: 'UserUpdateInput',
@@ -33,7 +35,7 @@ const user = new graphql.GraphQLObjectType({
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
     agentId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-    isMe: require('./common').isMe,
+    isMe: commonTypes.isMe,
 
     // @todo: security?
     agent: {
@@ -43,7 +45,7 @@ const user = new graphql.GraphQLObjectType({
 
     // @todo: security?
     bots: {
-      type: graphql.GraphQLNonNull(graphql.GraphQLList(require('./bots').bot)),
+      type: graphql.GraphQLNonNull(graphql.GraphQLList(botsTypes.bot)),
       resolve: resolvers.bots.allById,
     },
   }),

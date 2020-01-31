@@ -54,6 +54,7 @@ services:
   database:
     volumes:
       - ./.persistence/database-main:/var/lib/postgresql/data
+    command: ["postgres", "-c", "log_statement=all"]
     environment:
       - POSTGRES_PASSWORD=password # 6.2
 

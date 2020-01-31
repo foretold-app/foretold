@@ -992,24 +992,42 @@ module Notebook = {
 module Vote = {
   type t = Types.vote;
 
-  let toVoteId = (json: Js.Json.t): Types.voteId =>
-    json |> E.J.toString;
+  let toVoteId = (json: Js.Json.t): Types.voteId => json |> E.J.toString;
 
   let convertJs =
       (
         ~id: Js.Json.t,
         ~voteAmount: int,
+        ~createdAt: Js.Json.t,
+        ~updatedAt: Js.Json.t,
+        ~agent: option(Js.t('a))=None,
         (),
       )
       : t => {
     id: id |> toVoteId,
-    voteAmount: voteAmount ,
+    voteAmount,
+    createdAt: toCreatedAt(createdAt),
+    updatedAt: toUpdatedAt(updatedAt),
+    agent: agent |> E.O.fmap(AgentType.toAgent),
   };
 
   let convertJsObject = vote => {
     convertJs(
       ~id=vote##id,
       ~voteAmount=vote##voteAmount,
+      ~createdAt=vote##createdAt,
+      ~updatedAt=vote##updatedAt,
+      (),
+    );
+  };
+
+  let convertJsObject2 = vote => {
+    convertJs(
+      ~id=vote##id,
+      ~voteAmount=vote##voteAmount,
+      ~createdAt=vote##createdAt,
+      ~updatedAt=vote##updatedAt,
+      ~agent=vote##agent,
       (),
     );
   };

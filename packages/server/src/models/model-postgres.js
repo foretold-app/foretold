@@ -85,7 +85,7 @@ class ModelPostgres extends Model {
     this._assertInput({ params, data, restrictions, options });
 
     const cond = { where: { ...params } };
-    this._extendConditions(cond, options);
+    this._extendGenericConditions(cond, options);
 
     const entity = await this.model.findOne(cond);
     if (!!entity) await this.model.update(data, cond);
@@ -108,7 +108,7 @@ class ModelPostgres extends Model {
   ) {
     this._assertInput({ params, data, restrictions, options });
     const cond = { where: { ...params } };
-    this._extendConditions(cond, options);
+    this._extendGenericConditions(cond, options);
     return !!(await this.model.update(data, cond));
   }
 
@@ -142,16 +142,15 @@ class ModelPostgres extends Model {
       offset: pagination.offset,
       where,
     };
-    this._extendConditions(findCond, options);
+    this._extendGenericConditions(findCond, options);
+    this._extendAdvancedConditions(findCond, options);
     const data = await this.model.findAll(findCond);
 
     return data;
   }
 
   /**
-   * @todo: To "attributes".
-   * @todo: This is an anisotropy when pagination is defined {}
-   * @todo: instead of pagination = new Pagination().
+   * @todo: To use an order with attributes for the measurables.
    * @public
    * @param {Layers.AbstractModelsLayer.filter} [filter]
    * @param {Layers.AbstractModelsLayer.pagination} [pagination]
@@ -180,7 +179,6 @@ class ModelPostgres extends Model {
 
     // Block 2
     const { limit, offset } = pagination.getPagination();
-    const attributes = this._getAttributes(options);
     const order = pagination.isOrderSet()
       ? this._getDefaultOrder(pagination)
       : this._getOrder();
@@ -191,14 +189,14 @@ class ModelPostgres extends Model {
       limit,
       offset,
       order,
-      attributes,
     };
-    this._extendConditions(findCond, options);
+    this._extendGenericConditions(findCond, options);
+    this._extendAdvancedConditions(findCond, options);
     const data = await this.model.findAll(findCond);
 
     // Block 1
     const countCond = { where, include };
-    this._extendConditions(countCond, options);
+    this._extendGenericConditions(countCond, options);
     const total = await this.model.count(countCond);
 
     // Block 3
@@ -224,13 +222,32 @@ class ModelPostgres extends Model {
     restrictions = new Restrictions(),
     options = new Options(),
   ) {
-    const cond = await this._getPredicated(
-      params, query, restrictions, options,
-    );
+    this._assertInput({ params, query, restrictions, options });
+    const where = { ...params };
+
+    // if ('inspect' in params) params.inspect();
+    // if ('inspect' in restrictions) restrictions.inspect();
+
+    this.applyRestrictions(where, restrictions);
+
+    const order = this._getOrderForOne(query);
+    const distinct = !!query.distinct ? true : null;
+    const col = !!query.col ? query.col : null;
+
+    const cond = {
+      where,
+      order,
+      distinct,
+      col,
+    };
+    this._extendGenericConditions(cond, options);
+    this._extendAdvancedConditions(cond, options);
+
     return this.model.findOne(cond);
   }
 
   /**
+   * @todo: To fix a "spread".
    * @public
    * @param {Layers.AbstractModelsLayer.params} [params]
    * @param {Layers.AbstractModelsLayer.query} [query]
@@ -244,9 +261,25 @@ class ModelPostgres extends Model {
     restrictions = new Restrictions(),
     options = new Options(),
   ) {
-    const cond = await this._getPredicated(
-      params, query, restrictions, options,
-    );
+    this._assertInput({ params, query, restrictions, options });
+    const where = { ...params };
+
+    // if ('inspect' in params) params.inspect();
+    // if ('inspect' in restrictions) restrictions.inspect();
+
+    this.applyRestrictions(where, restrictions);
+
+    const distinct = !!query.distinct ? true : null;
+    const col = !!query.col ? query.col : null;
+
+    const cond = {
+      where,
+      distinct,
+      col,
+    };
+    this._extendGenericConditions(cond, options);
+    this._extendAdvancedConditions(cond, options);
+
     return this.model.count(cond);
   }
 
@@ -284,7 +317,7 @@ class ModelPostgres extends Model {
     if (entity) {
       const where = { ...params };
       const cond = { where };
-      this._extendConditions(cond, options);
+      this._extendGenericConditions(cond, options);
       await this.model.destroy(cond);
     }
     return entity;
@@ -706,44 +739,6 @@ class ModelPostgres extends Model {
   }
 
   /**
-   * @todo: To fix a "spread".
-   * @protected
-   * @param {Layers.AbstractModelsLayer.params} [params]
-   * @param {Layers.AbstractModelsLayer.query} [query]
-   * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
-   * @param {Layers.AbstractModelsLayer.options} [options]
-   * @return {Promise<*>}
-   */
-  async _getPredicated(
-    params = new Params(),
-    query = new Query(),
-    restrictions = new Restrictions(),
-    options = new Options(),
-  ) {
-    this._assertInput({ params, query, restrictions, options });
-    const where = { ...params };
-
-    // if ('inspect' in params) params.inspect();
-    // if ('inspect' in restrictions) restrictions.inspect();
-
-    this.applyRestrictions(where, restrictions);
-
-    const order = this._getOrderForOne(query);
-    const distinct = !!query.distinct ? true : null;
-    const col = !!query.col ? query.col : null;
-
-    const cond = {
-      where,
-      order,
-      distinct,
-      col,
-    };
-    this._extendConditions(cond, options);
-
-    return cond;
-  }
-
-  /**
    * @protected
    * @todo: see this._publicAndJoinedChannels()
    * @param {Models.AgentID} [agentId]
@@ -1004,7 +999,7 @@ class ModelPostgres extends Model {
   async _lockTable(name, options = {}) {
     this._assertInput({ options });
     const cond = {};
-    this._extendConditions(cond, options);
+    this._extendGenericConditions(cond, options);
     await this.sequelize.query('SET LOCAL lock_timeout = \'3s\'', cond);
     return this.sequelize.query(`LOCK TABLE "${name}"`, cond);
   }
@@ -1018,7 +1013,7 @@ class ModelPostgres extends Model {
   async _updateMaterializedView(name, options = {}) {
     this._assertInput({ options });
     const cond = {};
-    this._extendConditions(cond, options);
+    this._extendGenericConditions(cond, options);
     return this.sequelize.query(`REFRESH MATERIALIZED VIEW "${name}"`, cond);
   }
 
@@ -1027,7 +1022,7 @@ class ModelPostgres extends Model {
    * @param {object} cond
    * @param {Layers.AbstractModelsLayer.options} options
    */
-  _extendConditions(cond = {}, options = {}) {
+  _extendGenericConditions(cond = {}, options = {}) {
     if (_.has(options, 'transaction')) {
       cond.transaction = options.transaction;
     }
@@ -1037,6 +1032,15 @@ class ModelPostgres extends Model {
     if (_.has(options, 'skipLocked')) {
       cond.skipLocked = options.skipLocked;
     }
+    return cond;
+  }
+
+  /**
+   * @protected
+   * @param {object} cond
+   * @param {Layers.AbstractModelsLayer.options} options
+   */
+  _extendAdvancedConditions(cond = {}, options = {}) {
     if (_.has(options, 'raw')) {
       cond.raw = options.raw;
     }

@@ -62,16 +62,16 @@ class VotesData extends DataBase {
     try {
       const vote = await this._voteLocked(agentId, measurementId, transaction);
 
-      let voteAmountToUpdate = voteAmountInput;
+      let voteAmount = voteAmountInput;
 
-      if (voteAmountToUpdate < -10) {
-        voteAmountToUpdate = -10;
-      } else if (voteAmountToUpdate > 10) {
-        voteAmountToUpdate = 10;
+      if (voteAmount < -10) {
+        voteAmount = -10;
+      } else if (voteAmount > 10) {
+        voteAmount = 10;
       }
 
-      if (voteAmountToUpdate !== vote.voteAmount) {
-        await this._update(vote, voteAmountToUpdate, transaction);
+      if (voteAmount !== vote.voteAmount) {
+        await this._update(vote, voteAmount, transaction);
       }
       await this.commit(transaction);
       return this._vote(agentId, measurementId, transaction);

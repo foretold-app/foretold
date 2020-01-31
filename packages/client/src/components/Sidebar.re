@@ -11,35 +11,19 @@ module Styles = {
       color(`rgba((0, 0, 0, 0.3))),
       float(`left),
     ]);
-  let minorHeader =
-    style([
-      color(`rgba((0, 0, 0, 0.9))),
-      fontSize(`em(1.15)),
-      width(`percent(100.)),
-      padding4(~top=`px(6), ~bottom=`px(6), ~left=`px(18), ~right=`px(2)),
-    ]);
-  let minorHeaderLink =
-    style([
-      float(`left),
-      color(`rgba((0, 0, 0, 0.8))),
-      cursor(`pointer),
-      selector(":hover", [color(`rgba((0, 0, 0, 0.9)))]),
-    ]);
-  let minorHeaderLinkPlus =
-    style([
-      float(`right),
-      color(`rgba((0, 0, 0, 0.8))),
-      cursor(`pointer),
-      paddingRight(`em(0.3)),
-      marginTop(`em(-0.2)),
-      selector(":hover", [color(`rgba((0, 0, 0, 0.9)))]),
-    ]);
+  let itemPadding =
+    padding4(
+      ~top=`em(0.3),
+      ~bottom=`em(0.3),
+      ~left=`em(1.),
+      ~right=`em(1.),
+    );
   let sectionPadding = style([height(`em(1.0)), width(`percent(100.0))]);
   let item =
     style([
       flex(`num(1.)),
       color(`rgba((0, 0, 0, 0.8))),
-      padding4(~top=`px(4), ~bottom=`px(4), ~left=`px(14), ~right=`px(2)),
+      itemPadding,
       cursor(`pointer),
       textDecoration(`none),
       hover([background(FC.Base.Colors.buttonHover)]),
@@ -51,17 +35,6 @@ module Styles = {
           color(`rgba((0, 0, 0, 0.6))),
         ],
       ),
-    ]);
-  let selectedItem =
-    style([
-      flex(`num(1.)),
-      color(`rgba((0, 0, 0, 0.8))),
-      background(FC.Base.Colors.smokeWhite),
-      cursor(`pointer),
-      padding4(~top=`px(4), ~bottom=`px(4), ~left=`px(14), ~right=`px(2)),
-      focus([textDecoration(`none)]),
-      textDecoration(`none),
-      selector(":hover", [color(FC.Base.Colors.accentBlue)]),
     ]);
 };
 
@@ -79,10 +52,7 @@ module ChannelsList = {
                 <Link
                   key={index |> string_of_int}
                   linkType={Internal(Primary.Channel.showLink(channel))}
-                  className={
-                    Some(channel.id) == channelId
-                      ? Styles.selectedItem : Styles.item
-                  }>
+                  className=Styles.item>
                   {Primary.Channel.present(~className=Styles.hash, channel)}
                 </Link>
               )
@@ -100,9 +70,7 @@ let make = (~channelId, ~loggedUser: option(Types.user)) => {
       <Link
         key="channel-global-item"
         linkType={Internal(Primary.Channel.globalLink())}
-        className={
-          Some("home") == channelId ? Styles.selectedItem : Styles.item
-        }>
+        className=Styles.item>
         {Primary.Channel.presentGlobal(~className=Styles.hash, ())}
       </Link>
       <Link

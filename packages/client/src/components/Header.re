@@ -47,7 +47,7 @@ module Styles = {
 };
 
 module Logo = {
-  [@bs.module] external src: string = "../assets/logos/logo3.png";
+  [@bs.module] external src: string = "../assets/logos/logo4.png";
   let component = ReasonReact.statelessComponent("Logo");
 
   module Styless = {
@@ -56,7 +56,7 @@ module Logo = {
       style([
         marginRight(`em(1.)),
         marginTop(`px(-1)),
-        selector("img", [height(`rem(1.))]),
+        selector("img", [height(`rem(1.2))]),
       ]);
   };
 

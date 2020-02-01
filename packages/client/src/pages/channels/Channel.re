@@ -86,8 +86,11 @@ let make =
     [@react.component]
     let make = (~channel) =>
       switch (channelId) {
-      | "" => <TopGlobalChannel channel />
-      | _ => <TopOrdinaryChannel channel />
+      | "" => <Null />
+      | _ =>
+        <ForetoldComponents.GroupHeader>
+          <TopOrdinaryChannel channel />
+        </ForetoldComponents.GroupHeader>
       };
   };
 
@@ -100,9 +103,7 @@ let make =
       switch (channel) {
       | Some(channel) =>
         <>
-          <ForetoldComponents.GroupHeader>
-            <Top channel />
-          </ForetoldComponents.GroupHeader>
+          <Top channel />
           <ForetoldComponents.GroupHeader.SubHeader>
             <ChannelTabs tabSelected channel />
           </ForetoldComponents.GroupHeader.SubHeader>

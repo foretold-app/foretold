@@ -7,7 +7,7 @@ module Styles = {
 
   let width100 = style([width(`percent(100.))]);
   let headerText = style([color(`hex("486474"))]);
-  let descriptionText = style([color(`hex("aaa"))]);
+  let descriptionText = style([color(`hex("888"))]);
 
   let seriesText =
     style([
@@ -19,10 +19,11 @@ module Styles = {
 
   let channelText =
     style([
-      color(`hex("2c436e")),
-      fontSize(`em(1.15)),
+      color(`hex("2a456c")),
+      fontSize(`em(1.1)),
       fontWeight(`num(600)),
-      marginTop(`px(3)),
+      marginTop(`em(0.5)),
+      marginBottom(`em(0.1)),
       float(`left),
     ]);
 

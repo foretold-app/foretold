@@ -1,14 +1,15 @@
 open Utils;
 open Style.Grid;
 
-let linkColor = `hex("41505b");
+let colorBackground = `hex("2a456c");
+let linkColor = `hex("ffffffcf");
 module Styles = {
   open Css;
   let outer =
     style([
       padding2(~v=`em(0.2), ~h=`em(2.)),
       float(`left),
-      backgroundColor(`rgb((255, 255, 255))),
+      backgroundColor(colorBackground),
       width(`percent(100.)),
       borderBottom(`px(1), `solid, `rgb((234, 234, 234))),
     ]);
@@ -21,20 +22,14 @@ module Styles = {
       fontSize(`em(1.1)),
       color(linkColor),
       fontWeight(`num(400)),
-      hover([background(`hex("f0f2f5"))]),
-    ]);
-  let left =
-    style([
-      flex(`num(1.)),
-      backgroundColor(`hex("2c436e")),
-      minWidth(`px(200)),
+      hover([background(`hex("ffffff26")), color(`hex("ffffff99"))]),
     ]);
   let right = style([flex(`num(7.)), width(`percent(100.0))]);
   let headerLink =
     style([
       color(linkColor),
       fontWeight(`num(400)),
-      selector(":hover", [color(`hex("000"))]),
+      selector(":hover", [color(`hex("ffffffff"))]),
     ]);
   let headerIcon =
     style([
@@ -42,12 +37,12 @@ module Styles = {
       fontSize(`rem(1.2)),
       marginTop(`px(-2)),
       float(`left),
-      color(`hex("4d75b2")),
+      color(`hex("ffffff99")),
     ]);
 };
 
 module Logo = {
-  [@bs.module] external src: string = "../assets/logos/logo4.png";
+  [@bs.module] external src: string = "../assets/logos/logowhite.png";
   let component = ReasonReact.statelessComponent("Logo");
 
   module Styless = {

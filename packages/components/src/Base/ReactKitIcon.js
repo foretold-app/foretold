@@ -15,7 +15,7 @@ import { gavel } from 'react-icons-kit/fa/gavel';
 import { plus as circlePlus } from 'react-icons-kit/metrize/plus';
 import { chevronRight } from 'react-icons-kit/ionicons/chevronRight';
 import { chevronLeft } from 'react-icons-kit/ionicons/chevronLeft';
-import { lock } from 'react-icons-kit/icomoon/lock';
+import { lock } from 'react-icons-kit/entypo/lock';
 import { chevronDown } from 'react-icons-kit/fa/chevronDown';
 import { emailUnread } from 'react-icons-kit/ionicons/emailUnread';
 import { u26FA as tent } from 'react-icons-kit/noto_emoji_regular/u26FA';

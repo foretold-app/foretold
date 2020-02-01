@@ -71,6 +71,104 @@ module StylesDropdown = {
     ]);
 };
 
+module MyCommunities = {
+  let makeItem = (name, icon, r): ForetoldComponents.MyCommunities.item => {
+    name,
+    icon,
+    href: LinkType.toString(Internal(r)),
+    onClick: LinkType.onClick(Internal(r)),
+  };
+
+  let backgroundBox =
+    Css.(
+      style([
+        fontSize(`rem(1.1)),
+        width(`em(20.)),
+        border(`px(1), `solid, `hex("d5d2d2")),
+        padding2(~v=`em(0.5), ~h=`em(0.)),
+        borderRadius(`px(5)),
+        background(`hex("fff")),
+        boxShadows([
+          Shadow.box(
+            ~x=px(1),
+            ~y=px(1),
+            ~blur=px(5),
+            ~spread=px(1),
+            ~inset=false,
+            hex("dfd7d7"),
+          ),
+        ]),
+      ])
+    );
+
+  let headerIcon =
+    Css.(style([marginRight(`em(0.3)), fontSize(`rem(1.3))]));
+
+  module ChannelsList = {
+    [@react.component]
+    let make = (~loggedUser: Types.user) => {
+      loggedUser.agent
+      |> E.O.fmap((agent: Types.agent) =>
+           ChannelsGet.component(
+             ~channelMemberId=?Some(agent.id),
+             ~order=ChannelsGet.orderAsSidebar,
+             channels =>
+             channels
+             |> E.A.fmapi((index, channel: Types.channel) =>
+                  <ForetoldComponents.MyCommunities.Item
+                    item={Primary.Channel.toMyCommunitiesItem(channel)}
+                  />
+                )
+             |> ReasonReact.array
+           )
+         )
+      |> E.O.React.defaultNull;
+    };
+  };
+
+  module Primary = {
+    [@react.component]
+    let make = (~loggedUser: Types.user) => {
+      ForetoldComponents.(
+        <div className=backgroundBox>
+          <MyCommunities>
+            <MyCommunities.Header name="FEEDS" />
+            <MyCommunities.Item
+              item={makeItem("Home", "HOME", Primary.Channel.globalLink())}
+            />
+            <MyCommunities.Item
+              item={makeItem("All Communities", "LIST", ChannelIndex)}
+            />
+            <MyCommunities.Header name="MY COMMUNITIES" />
+            <ChannelsList loggedUser />
+            <MyCommunities.Header name="OPTIONS" />
+            <MyCommunities.Item
+              item={makeItem(
+                "Create a New Community",
+                "CIRCLE_PLUS",
+                ChannelNew,
+              )}
+            />
+          </MyCommunities>
+        </div>
+      );
+    };
+  };
+
+  [@react.component]
+  let make = (~loggedUser: Types.user) =>
+    <Antd_Dropdown
+      visible=true
+      trigger=[|"hover"|]
+      placement=`bottomLeft
+      overlay={<div> <Primary loggedUser /> </div>}>
+      <div className=Styles.headerLink>
+        <span className=headerIcon> <Icon icon="PEOPLE" /> </span>
+        {"My Communities" |> Utils.ste}
+      </div>
+    </Antd_Dropdown>;
+};
+
 let action = StylesDropdown.action;
 
 module LinkHeader = {
@@ -108,7 +206,7 @@ module Header = {
         placement=`bottomLeft
         overlay={<UserDropdown agentId={agent.id} />}
         overlayClassName=StylesDropdown.dropdown>
-        <div className=Css.style([Css.height(`em(1.5))])>
+        <div className={Css.style([Css.height(`em(1.5))])}>
           <Div styles=[Css.style([Css.color(`hex("61738d"))])]>
             <Div
               float=`left styles=[Css.style([Css.marginLeft(`em(0.2))])]>
@@ -147,6 +245,15 @@ module Header = {
 [@react.component]
 let make = (~loggedUser: option(Types.user)) => {
   <Div styles=[Styles.outer]>
+    <Div float=`left>
+      {switch (loggedUser) {
+       | Some(loggedUser) => <MyCommunities loggedUser />
+       | None =>
+         <Link linkType={Internal(ChannelIndex)} className=Styles.headerLink>
+           {"Communities" |> ste}
+         </Link>
+       }}
+    </Div>
     <Div float=`left>
       {switch (loggedUser) {
        | Some(loggedUser) =>

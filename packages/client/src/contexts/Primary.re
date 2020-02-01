@@ -380,6 +380,14 @@ module Channel = {
       <span> {"All Communities" |> ste} </span>
     </span>;
 
+  let toMyCommunitiesItem =
+      (channel: t): ForetoldComponents.MyCommunities.item => {
+    name: channel.name,
+    icon: channel.isPublic ? "PEOPLE" : "LOCK",
+    href: LinkType.toString(Internal(showLink(channel))),
+    onClick: LinkType.onClick(Internal(showLink(channel))),
+  };
+
   let make =
       (
         ~id,

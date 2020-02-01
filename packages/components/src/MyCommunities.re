@@ -7,8 +7,6 @@ type item = {
 
 module Styles = {
   open Css;
-  let backgroundComponent =
-    style([background(`hex("fff")), maxWidth(`em(20.))]);
   let item =
     style([
       flex(`num(1.)),
@@ -73,7 +71,5 @@ module Header = {
 
 [@react.component]
 let make = (~children) => {
-  <Div flexDirection=`column className=Styles.backgroundComponent>
-    children
-  </Div>;
+  <Div flexDirection=`column> children </Div>;
 };

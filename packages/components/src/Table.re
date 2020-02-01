@@ -22,8 +22,7 @@ module Styles = {
     Css.(
       style(
         [
-          padding2(~v=`em(0.8), ~h=`em(1.4)),
-          background(Colors.lightGrayBackground),
+          padding2(~v=`em(0.8), ~h=`em(1.0)),
           borderRadius(Colors.BorderRadius.tight),
           color(Colors.Text.LightBackground.p),
         ]
@@ -50,10 +49,9 @@ module Styles = {
         [
           padding2(~v=`zero, ~h=`em(0.4)),
           paddingBottom(`em(0.4)),
-          borderBottom(`px(1), `solid, Colors.accentBlueO8),
           display(`flex),
           flexDirection(`row),
-          selector(":last-child", BaseStyles.borderNone),
+          borderBottom(`px(1), `solid, Colors.accentBlue1a),
         ]
         @ BaseStyles.fullWidthFloatLeft,
       )

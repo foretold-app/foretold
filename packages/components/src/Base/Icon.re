@@ -1,24 +1,19 @@
 module Questionmark = {
   // Adapted to pagecard title
+  let backgroundBlue = Css.background(`hex("C0D0E9"));
+  let mainBlue = `hex("#1c67c8");
   let circle =
     Css.(
       style([
         width(`em(1.0)),
         height(`em(1.0)),
         borderRadius(`percent(50.)),
-        background(`hex("aaa")),
+        backgroundBlue,
       ])
     );
 
   let insideStyle =
-    Css.(
-      style([
-        color(`hex("333")),
-        cursor(`pointer),
-        fontSize(`em(0.9)),
-        marginLeft(`em(-0.18)),
-      ])
-    );
+    Css.(style([color(mainBlue), cursor(`pointer), fontSize(`em(0.9))]));
   // Local icon style
   let questionMarkstyle = isInteractive =>
     Css.(
@@ -28,11 +23,10 @@ module Questionmark = {
         textAlign(`center),
         borderRadius(`percent(50.)),
         display(`inlineBlock),
-        background(`hex("aaa")),
-        fontStyle(`italic),
-        lineHeight(`em(0.85)),
+        backgroundBlue,
+        lineHeight(`em(1.0)),
         fontSize(`em(1.0)),
-        opacity(0.5),
+        opacity(0.6),
         fontWeight(`num(600)),
         cursor(`pointer),
         hover(isInteractive ? [opacity(1.0)] : []),
@@ -42,7 +36,7 @@ module Questionmark = {
   [@react.component]
   let make = (~isInteractive=true) =>
     <div className={questionMarkstyle(isInteractive)}>
-      <span className=insideStyle> {React.string("i")} </span>
+      <span className=insideStyle> {React.string("?")} </span>
     </div>;
 };
 

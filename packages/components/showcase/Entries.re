@@ -1,5 +1,3 @@
-open FC.Base;
-
 let entries =
   EntryTypes.[
     Showcase_Buttons.entry,
@@ -7,20 +5,13 @@ let entries =
     Showcase_NumberShower.entry,
     Showcase_MeasurableForm.entry,
     Showcase_Colors.entry,
-    Scoring.entry,
     Showcase_AgentLink.entry,
-    Showcase_Alerts.entry,
+    Showcase_MyCommunities.entry,
     folder(
       ~title="Link",
       ~children=[
         entry(~title="Link1b", ~render=() =>
           <Link> "Test link"->React.string </Link>
-        ),
-        entry(~title="Link2", ~render=() =>
-          <Link> "Test link2"->React.string </Link>
-        ),
-        entry(~title="Link3", ~render=() =>
-          <Link> "Test link3"->React.string </Link>
         ),
       ],
     ),

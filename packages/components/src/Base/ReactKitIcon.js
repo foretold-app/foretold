@@ -1,5 +1,6 @@
+/** @jsx React.DOM */
 import React from 'react';
-import { Icon as Iconn } from 'react-icons-kit';
+import { Icon } from 'react-icons-kit';
 import { home } from 'react-icons-kit/typicons/home';
 import { user } from 'react-icons-kit/ikons/user';
 import { arrowLeft2 } from 'react-icons-kit/icomoon/arrowLeft2';
@@ -12,9 +13,9 @@ import { socialBuffer } from 'react-icons-kit/ionicons/socialBuffer';
 import { flash } from 'react-icons-kit/entypo/flash';
 import { gavel } from 'react-icons-kit/fa/gavel';
 import { plus as circlePlus } from 'react-icons-kit/metrize/plus';
-import { thinRight } from 'react-icons-kit/entypo/thinRight';
-import { thinLeft } from 'react-icons-kit/entypo/thinLeft';
-import { lock } from 'react-icons-kit/icomoon/lock';
+import { chevronRight } from 'react-icons-kit/ionicons/chevronRight';
+import { chevronLeft } from 'react-icons-kit/ionicons/chevronLeft';
+import { lock } from 'react-icons-kit/entypo/lock';
 import { chevronDown } from 'react-icons-kit/fa/chevronDown';
 import { emailUnread } from 'react-icons-kit/ionicons/emailUnread';
 import { u26FA as tent } from 'react-icons-kit/noto_emoji_regular/u26FA';
@@ -38,23 +39,22 @@ let types = {
   'CIRCLE_PLUS': circlePlus,
   'ARROW_RIGHT': arrowRight2,
   'ARROW_LEFT': arrowLeft2,
-  'CHEVRON_LEFT': thinLeft,
-  'CHEVRON_RIGHT': thinRight,
+  'CHEVRON_LEFT': chevronLeft,
+  'CHEVRON_RIGHT': chevronRight,
   'CHEVRON_DOWN': chevronDown,
-  'THIN_RIGHT': thinRight,
   'EMAIL_UNREAD': emailUnread,
   'COPY': ic_content_copy,
   'MAGIC_WAND': magicWand,
   'PACMAN': pacman,
-  'LIST': list,
+  'LIST': list
 };
 
-export class Icon extends React.Component {
+export class ReactKitIcon extends React.Component {
   render() {
     const {
       iconType,
       size
     } = this.props;
-    return (<Iconn size={size} icon={types[iconType]}/>);
+    return (React.createElement(Icon, {size: size, icon: types[iconType]}));
   }
 }

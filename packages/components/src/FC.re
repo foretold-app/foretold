@@ -14,6 +14,7 @@ module MeasurableForm = MeasurableForm;
 module NumberShower = NumberShower;
 module Button = Button;
 module HelpDropdown = HelpDropdown;
+module MyCommunities = MyCommunities;
 
 module Charts = {
   module Large = CdfChart__Large;

@@ -37,6 +37,7 @@ module Styles = {
     );
 
   let rightButton = Css.(style([marginLeft(`em(0.3))]));
+  let leftButton = Css.(style([marginLeft(`em(0.3))]));
 };
 
 let _directionLink = (t: directionButton, icon: string, positionStyles) =>
@@ -45,7 +46,7 @@ let _directionLink = (t: directionButton, icon: string, positionStyles) =>
     onClick={t.onClick}
     className=positionStyles
     size=Button.(Small)>
-    {icon |> ReasonReact.string}
+    <ReactKitIcon icon />
   </Button>;
 
 let make = (t: t) =>
@@ -53,6 +54,6 @@ let make = (t: t) =>
     <span className=Styles.buttonLabel>
       {_text(t) |> ReasonReact.string}
     </span>
-    {_directionLink(t.pageLeft, "<", "")}
-    {_directionLink(t.pageRight, ">", Styles.rightButton)}
+    {_directionLink(t.pageLeft, "CHEVRON_LEFT", "")}
+    {_directionLink(t.pageRight, "CHEVRON_RIGHT", Styles.rightButton)}
   </>;

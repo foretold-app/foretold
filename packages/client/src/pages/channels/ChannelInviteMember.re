@@ -11,13 +11,13 @@ let schema =
       Email,
       values =>
         Js.String.length(values.email) > 64
-          ? ReSchema.Error("Keep it short!") : Valid,
+          ? ReSchema.Error("Must be less than 64 characters.") : Valid,
     ),
     Custom(
       Email,
       values =>
         Js.String.length(values.email) < 3
-          ? Error("The name too short.") : Valid,
+          ? Error("Must be over 2 characters.") : Valid,
     ),
   |]);
 
@@ -36,7 +36,11 @@ module FormComponent = {
     <Form.Provider value=reform>
       {switch (result) {
        | Error(_error) => <Sorry />
-       | Data(_) => <Antd_Alert message={Lang.memberInvited |> Utils.ste} _type=`success />
+       | Data(_) =>
+         <Antd_Alert
+           message={Lang.memberInvited |> Utils.ste}
+           _type=`success
+         />
        | _ =>
          <Antd.Form onSubmit>
            <Form.Field

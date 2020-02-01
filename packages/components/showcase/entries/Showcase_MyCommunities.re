@@ -32,6 +32,19 @@ let myCommunities = () =>
           item={makeItem("Slate-Star-Codex 2019", "PEOPLE")}
         />
         <MyCommunities.Item item={makeItem("AI Questions", "PEOPLE")} />
+        <MyCommunities.Item item={makeItem("AI Questions", "PEOPLE")} />
+        <MyCommunities.Item item={makeItem("AI Questions", "PEOPLE")} />
+        <MyCommunities.Item item={makeItem("AI Questions", "PEOPLE")} />
+        <MyCommunities.Item item={makeItem("AI Questions", "PEOPLE")} />
+        <MyCommunities.Item item={makeItem("AI Questions", "PEOPLE")} />
+        <MyCommunities.Item item={makeItem("AI Questions", "PEOPLE")} />
+        <MyCommunities.Item item={makeItem("AI Questions", "PEOPLE")} />
+        <MyCommunities.Item item={makeItem("AI Questions", "PEOPLE")} />
+        <MyCommunities.Item item={makeItem("AI Questions", "PEOPLE")} />
+        <MyCommunities.Item item={makeItem("AI Questions", "PEOPLE")} />
+        <MyCommunities.Item item={makeItem("AI Questions", "PEOPLE")} />
+        <MyCommunities.Item item={makeItem("AI Questions", "PEOPLE")} />
+        <MyCommunities.Item item={makeItem("AI Questions", "PEOPLE")} />
         <MyCommunities.Item item={makeItem("Other AI Questions", "LOCK")} />
         <MyCommunities.Item
           item={makeItem(

@@ -19,13 +19,13 @@ let schema =
       Name,
       values =>
         Js.String.length(values.name) > 64
-          ? ReSchema.Error("Keep it short!") : Valid,
+          ? ReSchema.Error("Must be less than 64 characters.") : Valid,
     ),
     Custom(
       Name,
       values =>
         Js.String.length(values.name) < 3
-          ? Error("The name too short.") : Valid,
+          ? Error("Must be over 2 characters.") : Valid,
     ),
   |]);
 

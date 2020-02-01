@@ -36,13 +36,13 @@ let schema =
       Name,
       values =>
         Js.String.length(values.name) > 512
-          ? ReSchema.Error("Keep it short!") : Valid,
+          ? ReSchema.Error("Must be less than 512 characters.") : Valid,
     ),
     Custom(
       Name,
       values =>
         Js.String.length(values.name) < 3
-          ? Error("The name too short.") : Valid,
+          ? Error("Must be over 2 characters.") : Valid,
     ),
   |]);
 
@@ -445,11 +445,7 @@ module Create = {
                 };
             mutate(
               ~variables=MeasurableCreate.Query.make(~input, ())##variables,
-              ~refetchQueries=[|
-                "agent",
-                "measurable",
-                "measurements",
-              |],
+              ~refetchQueries=[|"agent", "measurable", "measurements"|],
               (),
             )
             |> Js.Promise.then_((result: result('a)) => {

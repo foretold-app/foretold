@@ -3,6 +3,8 @@ type agentId = string;
 type channelId = string;
 type notebookId = string;
 type voteId = string;
+type measurementId = string;
+type measurableId = string;
 type string0to255 = string;
 type string0to16K = string;
 type pageParams = {id: string};
@@ -195,6 +197,9 @@ and measurement = {
 and vote = {
   id: string,
   voteAmount: int,
+  createdAt: option(MomentRe.Moment.t),
+  updatedAt: option(MomentRe.Moment.t),
+  agent: option(agent),
 }
 
 and timeAverageScore = {

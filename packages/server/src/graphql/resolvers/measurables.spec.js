@@ -38,6 +38,7 @@ describe('Measurables Resolvers', () => {
           },
           {
             agentId: 'agentId2',
+            attributes: true,
             isAdmin: null,
             measuredByAgentId: null,
           },

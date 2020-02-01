@@ -84,7 +84,7 @@ module FormComponent = {
              field=FormConfig.IsPublic
              render={({handleChange, error, value}) =>
                <Antd.Form.Item label={"Community is public" |> Utils.ste}>
-                 <AntdSwitch
+                 <Antd_Switch
                    checked={value == "TRUE"}
                    onChange={e => handleChange(e ? "TRUE" : "FALSE")}
                  />
@@ -98,7 +98,7 @@ module FormComponent = {
                 field=FormConfig.IsArchived
                 render={({handleChange, error, value}) =>
                   <Antd.Form.Item label={"Archive community" |> Utils.ste}>
-                    <AntdSwitch
+                    <Antd_Switch
                       checked={value == "TRUE"}
                       onChange={e => handleChange(e ? "TRUE" : "FALSE")}
                     />

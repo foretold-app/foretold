@@ -3,6 +3,10 @@ const { DateType } = require('graphql-sequelize');
 
 const resolvers = require('../resolvers');
 
+const { measurementCompetitorType } = require('./enums');
+const commonTypes = require('./common');
+const permissionsTypes = require('./permissions');
+
 const bot = new graphql.GraphQLObjectType({
   name: 'Bot',
   fields: () => ({
@@ -10,19 +14,16 @@ const bot = new graphql.GraphQLObjectType({
     name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     description: { type: graphql.GraphQLString },
     picture: { type: graphql.GraphQLString },
-    competitorType: {
-      type:
-      require('./enums/measurement-competitor-type').measurementCompetitorType,
-    },
+    competitorType: { type: measurementCompetitorType },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
     agentId: { type: graphql.GraphQLString },
     userId: { type: graphql.GraphQLString },
-    iAmOwner: require('./common').iAmOwnerByUserId,
+    iAmOwner: commonTypes.iAmOwnerByUserId,
 
     // @todo: security?
     permissions: {
-      type: graphql.GraphQLNonNull(require('./permissions').permissions),
+      type: graphql.GraphQLNonNull(permissionsTypes.permissions),
       resolve: resolvers.permissions.botsPermissions,
     },
 
@@ -52,17 +53,14 @@ const botInput = new graphql.GraphQLInputObjectType({
     name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     description: { type: graphql.GraphQLString },
     picture: { type: graphql.GraphQLString },
-    competitorType: {
-      type:
-      require('./enums/measurement-competitor-type').measurementCompetitorType,
-    },
+    competitorType: { type: measurementCompetitorType },
   }),
 });
 
 const botsEdge = new graphql.GraphQLObjectType({
   name: 'BotsEdge',
   fields: () => ({
-    node: { type: require('./bots').bot },
+    node: { type: bot },
     cursor: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
   }),
 });
@@ -72,9 +70,9 @@ const botsConnection = new graphql.GraphQLObjectType({
   fields: () => ({
     total: { type: graphql.GraphQLInt },
     pageInfo: {
-      type: graphql.GraphQLNonNull(require('./common').pageInfoConnection),
+      type: graphql.GraphQLNonNull(commonTypes.pageInfoConnection),
     },
-    edges: { type: graphql.GraphQLList(require('./bots').botsEdge) },
+    edges: { type: graphql.GraphQLList(botsEdge) },
   }),
 });
 

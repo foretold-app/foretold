@@ -198,12 +198,12 @@ module Measurements = {
     | Some(count) =>
       let popoverContent =
         "Number of Predictions: " ++ string_of_int(count) |> ste;
-      <AntdPopover content=popoverContent trigger=`hover placement=`top>
+      <Antd_Popover content=popoverContent trigger=`hover placement=`top>
         <div className=Shared.Item.item>
           <Icon icon="BULB" />
           {count |> string_of_int |> ste}
         </div>
-      </AntdPopover>;
+      </Antd_Popover>;
     };
 };
 

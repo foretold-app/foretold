@@ -31,12 +31,12 @@ module Functor = (Ken: KenTools.KenModule) => {
          m
          |> attribute
          |> E.O.fmap(_d =>
-              <AntdPopover
+              <Antd_Popover
                 content={kenDisplay(attribute(m) |> E.O.default(""))}
                 trigger=`hover
                 placement=`top>
                 <span className> {r |> Utils.ste} </span>
-              </AntdPopover>
+              </Antd_Popover>
             )
        );
 

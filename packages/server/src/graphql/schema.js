@@ -252,6 +252,16 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.channels.all,
       },
 
+      votes: {
+        type: graphql.GraphQLNonNull(graphql.GraphQLList(
+          types.votes.vote,
+        )),
+        args: {
+          measurementId: { type: types.scalars.measurementId },
+        },
+        resolve: resolvers.votes.all,
+      },
+
       stats: {
         type: graphql.GraphQLNonNull(stats),
         resolve: () => true,

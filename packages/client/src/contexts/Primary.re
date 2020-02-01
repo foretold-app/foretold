@@ -371,7 +371,8 @@ module Channel = {
       <span> {"Home" |> ste} </span>
     </span>;
 
-  let presentCommunities = (~className="", ~symbolClassName=Styles.globeList, ()) =>
+  let presentCommunities =
+      (~className="", ~symbolClassName=Styles.globeList, ()) =>
     <span>
       <span className>
         <span className=symbolClassName> <Icon icon="LIST" /> </span>
@@ -1002,12 +1003,41 @@ module Vote = {
 
   let toVoteId = (json: Js.Json.t): Types.voteId => json |> E.J.toString;
 
-  let convertJs = (~id: Js.Json.t, ~voteAmount: int, ()): t => {
+  let convertJs =
+      (
+        ~id: Js.Json.t,
+        ~voteAmount: int,
+        ~createdAt: Js.Json.t,
+        ~updatedAt: Js.Json.t,
+        ~agent: option(Js.t('a))=None,
+        (),
+      )
+      : t => {
     id: id |> toVoteId,
     voteAmount,
+    createdAt: toCreatedAt(createdAt),
+    updatedAt: toUpdatedAt(updatedAt),
+    agent: agent |> E.O.fmap(AgentType.toAgent),
   };
 
   let convertJsObject = vote => {
-    convertJs(~id=vote##id, ~voteAmount=vote##voteAmount, ());
+    convertJs(
+      ~id=vote##id,
+      ~voteAmount=vote##voteAmount,
+      ~createdAt=vote##createdAt,
+      ~updatedAt=vote##updatedAt,
+      (),
+    );
+  };
+
+  let convertJsObject2 = vote => {
+    convertJs(
+      ~id=vote##id,
+      ~voteAmount=vote##voteAmount,
+      ~createdAt=vote##createdAt,
+      ~updatedAt=vote##updatedAt,
+      ~agent=vote##agent,
+      (),
+    );
   };
 };

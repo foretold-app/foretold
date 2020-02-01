@@ -46,7 +46,7 @@ let make = (~columns, ~rows, ~bottomSubRowFn=None, ~onRowClb=None) => {
   <ForetoldComponents.Table>
     <ForetoldComponents.Table.HeaderRow>
       {columns'
-       |> Array.mapi((columnIndex, column: column('a)) =>
+       |> E.A.fmapi((columnIndex, column: column('a)) =>
             <ForetoldComponents.Table.Cell
               flex={`num(column.flex |> float_of_int)}
               properties=headerCellStyles
@@ -69,10 +69,10 @@ let make = (~columns, ~rows, ~bottomSubRowFn=None, ~onRowClb=None) => {
        |> ReasonReact.array}
     </ForetoldComponents.Table.HeaderRow>
     {rows
-     |> Array.mapi((rowIndex, row: 'a) => {
+     |> E.A.fmapi((rowIndex, row: 'a) => {
           let columnsBody =
             columns'
-            |> Array.mapi((columnIndex, column: column('a)) =>
+            |> E.A.fmapi((columnIndex, column: column('a)) =>
                  <ForetoldComponents.Table.Cell
                    flex={`num(column.flex |> float_of_int)}
                    key={columnIndex |> string_of_int}>

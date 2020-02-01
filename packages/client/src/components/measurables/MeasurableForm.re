@@ -81,7 +81,7 @@ module FormComponent = {
          let context = React.useContext(Providers.app);
          switch (context.loggedUser) {
          | Some(loggedUser) =>
-           <AntdForm onSubmit>
+           <Antd_Form onSubmit>
              {E.React2.showIf(
                 creating,
                 <Form.Field
@@ -135,7 +135,7 @@ module FormComponent = {
                        ~order=ChannelsGet.orderAsSidebar,
                        channels =>
                        channels
-                       |> Array.mapi((index, channel: Types.channel) =>
+                       |> E.A.fmapi((index, channel: Types.channel) =>
                             <Antd.Select.Option
                               value={channel.id} key={index |> string_of_int}>
                               {channel.name |> Utils.ste}
@@ -203,7 +203,7 @@ module FormComponent = {
                     render={({handleChange, value}) =>
                       <Antd.Form.Item
                         label={"Include a Specific Date in Name" |> Utils.ste}>
-                        <AntdSwitch
+                        <Antd_Switch
                           checked={value == "TRUE"}
                           onChange={e => handleChange(e ? "TRUE" : "FALSE")}
                         />
@@ -215,7 +215,7 @@ module FormComponent = {
                          field=FormConfig.LabelOnDate
                          render={({handleChange, value}) =>
                            <Antd.Form.Item label={"'On' Date" |> Utils.ste}>
-                             <DatePicker
+                             <Antd_DatePicker
                                value={value |> MomentRe.moment}
                                onChange={e => {
                                  handleChange(e |> formatDate);
@@ -334,7 +334,7 @@ module FormComponent = {
                <Form.Field
                  field=FormConfig.ExpectedResolutionDate
                  render={({handleChange, value}) =>
-                   <DatePicker
+                   <Antd_DatePicker
                      value={value |> MomentRe.momentDefaultFormat}
                      onChange={e => {
                        handleChange(e |> formatDate);
@@ -371,7 +371,7 @@ module FormComponent = {
                       {"Submit" |> ste}
                     </Antd.Button>}
              </Antd.Form.Item>
-           </AntdForm>
+           </Antd_Form>
          | _ => <Null />
          };
        }}

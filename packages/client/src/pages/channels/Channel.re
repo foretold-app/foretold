@@ -11,6 +11,20 @@ let make =
   let channelId = channelPage.channelId;
 
   module TopOrdinaryChannel = {
+    let (showFullDescription, setShowFullDescription) =
+      React.useState(() => false);
+
+    let toggleClass =
+      Css.(
+        style([
+          color(`hex("485bc1")),
+          cursor(`pointer),
+          marginTop(`em(-0.9)),
+        ])
+      );
+
+    let maxLength = 130;
+
     [@react.component]
     let make = (~channel: Types.channel) => {
       module JoinButton = {
@@ -39,7 +53,30 @@ let make =
                 <Div
                   flex={`num(1.0)}
                   styles=[Css.(style([marginTop(`em(0.5))]))]>
-                  <Markdown source />
+                  <Markdown
+                    source={
+                      showFullDescription
+                        ? source : Utils.truncateByWords(~maxLength, source)
+                    }
+                  />
+                  {E.React2.showIf(
+                     !showFullDescription
+                     && Utils.truncateByWords(~maxLength, source) != source,
+                     <div
+                       onClick={_ => setShowFullDescription(_ => true)}
+                       className=toggleClass>
+                       {"(more)" |> Utils.ste}
+                     </div>,
+                   )}
+                  {E.React2.showIf(
+                     showFullDescription
+                     && Utils.truncateByWords(~maxLength, source) != source,
+                     <div
+                       onClick={_ => setShowFullDescription(_ => false)}
+                       className=toggleClass>
+                       {"close" |> Utils.ste}
+                     </div>,
+                   )}
                 </Div>
               )}
         </Div>
@@ -86,8 +123,11 @@ let make =
     [@react.component]
     let make = (~channel) =>
       switch (channelId) {
-      | "" => <TopGlobalChannel channel />
-      | _ => <TopOrdinaryChannel channel />
+      | "" => <Null />
+      | _ =>
+        <ForetoldComponents.GroupHeader>
+          <TopOrdinaryChannel channel />
+        </ForetoldComponents.GroupHeader>
       };
   };
 
@@ -100,9 +140,7 @@ let make =
       switch (channel) {
       | Some(channel) =>
         <>
-          <ForetoldComponents.GroupHeader>
-            <Top channel />
-          </ForetoldComponents.GroupHeader>
+          <Top channel />
           <ForetoldComponents.GroupHeader.SubHeader>
             <ChannelTabs tabSelected channel />
           </ForetoldComponents.GroupHeader.SubHeader>

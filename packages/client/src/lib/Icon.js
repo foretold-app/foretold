@@ -15,22 +15,26 @@ import { plus as circlePlus } from 'react-icons-kit/metrize/plus';
 import { thinRight } from 'react-icons-kit/entypo/thinRight';
 import { thinLeft } from 'react-icons-kit/entypo/thinLeft';
 import { lock } from 'react-icons-kit/icomoon/lock';
+import { map } from 'react-icons-kit/entypo/map';
 import { chevronDown } from 'react-icons-kit/fa/chevronDown';
 import { emailUnread } from 'react-icons-kit/ionicons/emailUnread';
 import { u26FA as tent } from 'react-icons-kit/noto_emoji_regular/u26FA';
 import { ic_content_copy } from 'react-icons-kit/md/ic_content_copy';
 import { magicWand } from 'react-icons-kit/icomoon/magicWand';
 import { pacman } from 'react-icons-kit/icomoon/pacman';
+import { iosNavigate } from 'react-icons-kit/ionicons/iosNavigate';
 import { thList as list } from 'react-icons-kit/typicons/thList';
 
 let types = {
   'HOME': home,
   'LOCK': lock,
   'USER': user,
+  'MAP': map,
   'COLUMNS': columns,
   'EARTH': earth,
   'TENT': tent,
   'LAYERS': socialBuffer,
+  'NAVIGATE': iosNavigate,
   'PEOPLE': ic_people,
   'FLASH': flash,
   'GAVEL': gavel,

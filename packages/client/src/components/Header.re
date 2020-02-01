@@ -1,6 +1,7 @@
 open Utils;
 open Style.Grid;
 
+let linkColor = `hex("41505b");
 module Styles = {
   open Css;
   let outer =
@@ -9,7 +10,7 @@ module Styles = {
       float(`left),
       backgroundColor(`rgb((255, 255, 255))),
       width(`percent(100.)),
-      borderBottom(`px(2), `solid, `rgb((234, 234, 234))),
+      borderBottom(`px(1), `solid, `rgb((234, 234, 234))),
     ]);
   let left =
     style([
@@ -23,10 +24,52 @@ module Styles = {
       cursor(`pointer),
       marginRight(`em(2.)),
       fontSize(`em(1.1)),
-      color(`hex("61738d")),
+      color(linkColor),
       fontWeight(`num(400)),
       selector(":hover", [color(`hex("000"))]),
     ]);
+  let headerIcon =
+    style([
+      marginRight(`em(0.4)),
+      fontSize(`rem(1.2)),
+      marginTop(`px(-2)),
+      float(`left),
+      color(`hex("4d75b2")),
+    ]);
+};
+
+module HeaderLink = {
+  [@react.component]
+  let make = (~name, ~icon, ~linkType) => {
+    <Link linkType className=Styles.headerLink>
+      <span className=Styles.headerIcon> <Icon icon /> </span>
+      {name |> ste}
+    </Link>;
+  };
+};
+
+module Logo = {
+  [@bs.module] external src: string = "../assets/logos/logo3.png";
+  let component = ReasonReact.statelessComponent("Logo");
+
+  module Styles = {
+    open Css;
+    let image =
+      style([
+        marginRight(`em(3.)),
+        marginTop(`px(-1)),
+        selector("img", [height(`rem(1.))]),
+      ]);
+  };
+
+  [@react.component]
+  let make = () => {
+    <Link
+      linkType={Internal(Primary.Channel.globalLink())}
+      className=Styles.image>
+      <img src />
+    </Link>;
+  };
 };
 
 module StylesDropdown = {
@@ -85,7 +128,7 @@ module MyCommunities = {
         fontSize(`rem(1.1)),
         width(`em(20.)),
         border(`px(1), `solid, `hex("d5d2d2")),
-        padding2(~v=`em(0.5), ~h=`em(0.)),
+        paddingBottom(`em(0.5)),
         borderRadius(`px(5)),
         background(`hex("fff")),
         boxShadows([
@@ -100,9 +143,6 @@ module MyCommunities = {
         ]),
       ])
     );
-
-  let headerIcon =
-    Css.(style([marginRight(`em(0.3)), fontSize(`rem(1.3))]));
 
   module ChannelsList = {
     [@react.component]
@@ -162,7 +202,7 @@ module MyCommunities = {
       placement=`bottomLeft
       overlay={<div> <Primary loggedUser /> </div>}>
       <div className=Styles.headerLink>
-        <span className=headerIcon> <Icon icon="PEOPLE" /> </span>
+        <span className=Styles.headerIcon> <Icon icon="PEOPLE" /> </span>
         {"My Communities" |> Utils.ste}
       </div>
     </Antd_Dropdown>;
@@ -206,7 +246,7 @@ module Header = {
         overlay={<UserDropdown agentId={agent.id} />}
         overlayClassName=StylesDropdown.dropdown>
         <div className={Css.style([Css.height(`em(1.5))])}>
-          <Div styles=[Css.style([Css.color(`hex("61738d"))])]>
+          <Div styles=[Css.style([Css.color(linkColor)])]>
             <Div
               float=`left styles=[Css.style([Css.marginLeft(`em(0.2))])]>
               {switch (agent.name) {
@@ -244,30 +284,29 @@ module Header = {
 [@react.component]
 let make = (~loggedUser: option(Types.user)) => {
   <Div styles=[Styles.outer]>
-    <Div float=`left>
-      {switch (loggedUser) {
-       | Some(loggedUser) => <MyCommunities loggedUser />
-       | None =>
-         <Link linkType={Internal(ChannelIndex)} className=Styles.headerLink>
-           {"Communities" |> ste}
-         </Link>
-       }}
-    </Div>
-    <Div float=`left>
-      {switch (loggedUser) {
-       | Some(loggedUser) =>
-         Primary.User.show(
-           loggedUser,
-           <Link linkType={Internal(EntityIndex)} className=Styles.headerLink>
-             {"Entity Explorer" |> ste}
-           </Link>,
-         )
-       | None =>
-         <Link linkType={Internal(ChannelIndex)} className=Styles.headerLink>
-           {"Communities" |> ste}
-         </Link>
-       }}
-    </Div>
+    <Div float=`left> <Logo /> </Div>
+    {switch (loggedUser) {
+     | Some(loggedUser) =>
+       <>
+         <Div float=`left> <MyCommunities loggedUser /> </Div>
+         <Div float=`left>
+           {Primary.User.show(
+              loggedUser,
+              <Link
+                linkType={Internal(EntityIndex)} className=Styles.headerLink>
+                <span className=Styles.headerIcon>
+                  <Icon icon="NAVIGATE" />
+                </span>
+                {"Entity Explorer" |> ste}
+              </Link>,
+            )}
+         </Div>
+       </>
+     | None =>
+       <Link linkType={Internal(ChannelIndex)} className=Styles.headerLink>
+         {"Communities" |> ste}
+       </Link>
+     }}
     <Div float=`left> <VerificationWarning /> </Div>
     <Div float=`right>
       {switch (loggedUser) {

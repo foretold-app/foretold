@@ -158,7 +158,6 @@ module MyCommunities = {
   [@react.component]
   let make = (~loggedUser: Types.user) =>
     <Antd_Dropdown
-      visible=true
       trigger=[|"hover"|]
       placement=`bottomLeft
       overlay={<div> <Primary loggedUser /> </div>}>

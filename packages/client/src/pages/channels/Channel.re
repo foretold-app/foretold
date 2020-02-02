@@ -89,36 +89,6 @@ let make =
     };
   };
 
-  module TopGlobalChannel = {
-    [@react.component]
-    let make = (~channel) => {
-      <Div float=`left flexDirection=`column>
-        <Div flex={`num(1.0)}> <ChannelLink channel /> </Div>
-        {channel.description
-         |> E.O.React.fmapOrNull(source =>
-              <Div
-                flex={`num(1.0)}
-                styles=[
-                  Css.(
-                    style([
-                      marginTop(`em(0.5)),
-                      selector(
-                        "p",
-                        [
-                          marginBottom(`zero),
-                          color(ForetoldComponents.Base.Colors.textDark),
-                        ],
-                      ),
-                    ])
-                  ),
-                ]>
-                <Markdown source />
-              </Div>
-            )}
-      </Div>;
-    };
-  };
-
   module Top = {
     [@react.component]
     let make = (~channel) =>

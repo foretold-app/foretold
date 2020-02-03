@@ -8,7 +8,6 @@ type state = {
   dataType: string,
   // ---> 3, Measurement.value
   floatCdf: ForetoldComponents.Types.Dist.t,
-  floatCdfAndPoint: ForetoldComponents.Types.Dist.t,
   cdfType: string,
   percentage: float,
   binary: bool,
@@ -35,7 +34,6 @@ A normal distribution with a mean of 5 and a standard deviation of 2.";
 type action =
   // -> Measurement.value
   | UpdateFloatCdf(ForetoldComponents.Types.Dist.t)
-  | UpdateFloatCdfAndPoint(ForetoldComponents.Types.Dist.t)
   | UpdateCdfType(string)
   | UpdateHasLimitError(bool)
   | UpdatePercentage(float)
@@ -97,9 +95,7 @@ module DataTypeSelect = {
 let getIsValid = (state): bool => {
   switch (state.dataType) {
   | "FLOAT_CDF" => E.A.length(state.floatCdf.xs) > 1
-  | "FLOAT_CDF_AND_POINT" =>
-    E.A.length(state.floatCdfAndPoint.xs) > 1
-    || E.A.length(state.floatCdfAndPoint.xs) == 1
+  | "FLOAT_CDF_AND_POINT" => E.A.length(state.floatCdf.xs) == 1
   | "PERCENTAGE_FLOAT" => true
   | "BINARY_BOOL" => true
   | "UNRESOLVABLE_RESOLUTION" => true
@@ -130,20 +126,17 @@ let getCompetitorTypeFromString = (str): Types.competitorType =>
 
 let getValueFromState = (state): MeasurementValue.t =>
   switch (state.dataType, state.cdfType) {
-  | ("FLOAT_CDF", _) =>
+  | ("FLOAT_CDF", _)
+  | ("FLOAT_CDF_AND_POINT", "CDF") =>
     `FloatCdf(
       MeasurementValue.FloatCdf.fromArrays(
         state.floatCdf |> (e => (e.ys, e.xs)),
       ),
     )
+
   | ("FLOAT_CDF_AND_POINT", "POINT") =>
-    `FloatPoint(Array.unsafe_get(state.floatCdfAndPoint.xs, 0))
-  | ("FLOAT_CDF_AND_POINT", "CDF") =>
-    `FloatCdf(
-      MeasurementValue.FloatCdf.fromArrays(
-        state.floatCdfAndPoint |> (e => (e.ys, e.xs)),
-      ),
-    )
+    `FloatPoint(Array.unsafe_get(state.floatCdf.xs, 0))
+
   | ("PERCENTAGE_FLOAT", _) => `Percentage(state.percentage)
   | ("BINARY_BOOL", _) => `Binary(state.binary)
   | ("UNRESOLVABLE_RESOLUTION", _) =>
@@ -225,49 +218,27 @@ module ValueInput = {
       input(measurable) |> E.O.fmap(r => [|r|]) |> E.O.default([||]);
 
     let floatCdf = (measurable: Types.measurable, send) => {
-      <GuesstimateInput
-        focusOnRender=true
-        sampleCount=30000
-        min={measurable.min}
-        max={measurable.max}
-        inputs={inputs(measurable)}
-        onUpdate={(event, _sampler) =>
-          {
-            let (ys, xs, hasLimitError) = event;
-            let asGroup: ForetoldComponents.Types.Dist.t = {xs, ys};
-            send(UpdateCdfType("POINT"));
-            send(UpdateHasLimitError(hasLimitError));
-            send(UpdateFloatCdf(asGroup));
+        <GuesstimateInput
+          focusOnRender=true
+          sampleCount=30000
+          min={measurable.min}
+          max={measurable.max}
+          inputs={inputs(measurable)}
+          onUpdate={(event, sampler) =>
+            {let (ys, xs, hasLimitError) = event
+             let asGroup: ForetoldComponents.Types.Dist.t = {xs, ys}
+
+             switch (sampler##isRangeDistribution) {
+             | true => send(UpdateCdfType("CDF"))
+             | _ => send(UpdateCdfType("POINT"))
+             }
+
+             send(UpdateHasLimitError(hasLimitError))
+             send(UpdateFloatCdf(asGroup))}
+            |> ignore
           }
-          |> ignore
-        }
-        onChange={text => send(UpdateValueText(text))}
-      />;
-    };
-
-    let floatCdfAndPoint = (measurable: Types.measurable, send) => {
-      <GuesstimateInput
-        focusOnRender=true
-        sampleCount=30000
-        min={measurable.min}
-        max={measurable.max}
-        onUpdate={(event, sampler) =>
-          {
-            let (ys, xs, hasLimitError) = event;
-            let asGroup: ForetoldComponents.Types.Dist.t = {xs, ys};
-
-            switch (sampler##isRangeDistribution) {
-            | true => send(UpdateCdfType("CDF"))
-            | _ => send(UpdateCdfType("POINT"))
-            };
-
-            send(UpdateHasLimitError(hasLimitError));
-            send(UpdateFloatCdfAndPoint(asGroup));
-          }
-          |> ignore
-        }
-        onChange={text => send(UpdateValueText(text))}
-      />;
+          onChange={text => send(UpdateValueText(text))}
+        />;
     };
   };
 
@@ -395,14 +366,10 @@ module ValueInputMapper = {
   [@react.component]
   let make = (~state, ~measurable, ~send, ~loggedUser) =>
     switch (state.dataType) {
-    | "FLOAT_CDF" =>
-      <DistributionInput state measurable>
-        {ValueInput.Distributions.floatCdf(measurable, send)}
-      </DistributionInput>
-
+    | "FLOAT_CDF"
     | "FLOAT_CDF_AND_POINT" =>
       <DistributionInput state measurable>
-        {ValueInput.Distributions.floatCdfAndPoint(measurable, send)}
+        {ValueInput.Distributions.floatCdf(measurable, send)}
       </DistributionInput>
 
     | "BINARY_BOOL" =>
@@ -486,17 +453,13 @@ module Main = {
     <div className=Styles.form>
       <div className=Styles.chartSection>
         {switch (state.dataType, state.cdfType) {
+         | ("FLOAT_CDF_AND_POINT", "CDF")
          | ("FLOAT_CDF", _) when E.A.length(state.floatCdf.xs) > 1 =>
            <ForetoldComponents.CdfChart__Large
              cdf={state.floatCdf}
              width={Some(0)}
            />
-         | ("FLOAT_CDF_AND_POINT", "CDF")
-             when E.A.length(state.floatCdfAndPoint.xs) > 1 =>
-           <ForetoldComponents.CdfChart__Large
-             cdf={state.floatCdfAndPoint}
-             width={Some(0)}
-           />
+
          | _ => <Null />
          }}
       </div>
@@ -542,8 +505,6 @@ let make =
 
   let (floatCdf, setFloatCdf) =
     React.useState(() => ForetoldComponents.Types.Dist.empty);
-  let (floatCdfAndPoint, setFloatCdfAndPoint) =
-    React.useState(() => ForetoldComponents.Types.Dist.empty);
   let (cdfType, setCdfType) = React.useState(() => "CDF");
 
   let (percentage, setPercentage) = React.useState(() => 50.);
@@ -565,7 +526,6 @@ let make =
   let state = {
     // Values
     floatCdf,
-    floatCdfAndPoint,
     cdfType,
     percentage,
     binary,
@@ -590,11 +550,6 @@ let make =
     switch (action) {
     | UpdateFloatCdf((floatCdf: ForetoldComponents.Types.Dist.t)) =>
       setFloatCdf(_ => floatCdf)
-
-    | UpdateFloatCdfAndPoint(
-        (floatCdfAndPoint: ForetoldComponents.Types.Dist.t),
-      ) =>
-      setFloatCdfAndPoint(_ => floatCdfAndPoint)
 
     | UpdateCdfType((cdfType: string)) => setCdfType(_ => cdfType)
 

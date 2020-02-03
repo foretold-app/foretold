@@ -2,17 +2,20 @@ module LeaveChannel = {
   [@react.component]
   let make = (~channelId) =>
     <ChannelLeave.Mutation>
-      ...{(mutation, result: ChannelLeave.Mutation.renderPropObj) =>
+      ...{(mutation, _) =>
         <Antd.Popconfirm
           title={Lang.areYouSure |> Utils.ste}
           onConfirm={_ => ChannelLeave.mutate(mutation, channelId)}>
-          <ForetoldComponents.Button
-            variant=ForetoldComponents.Button.Secondary
-            isDisabled=false
-            size=ForetoldComponents.Button.(Medium)
-            className=ForetoldComponents.GroupHeader.Styles.actionButtonPosition>
-            {"Leave Community" |> Utils.ste}
-          </ForetoldComponents.Button>
+          <div>
+            <ForetoldComponents.Button
+              variant=ForetoldComponents.Button.Secondary
+              isDisabled=false
+              size=ForetoldComponents.Button.(Medium)
+              className=ForetoldComponents.GroupHeader.Styles.actionButtonPosition>
+              {"Leave Community" |> Utils.ste}
+            </ForetoldComponents.Button>
+            <div className=ForetoldComponents.BaseStyles.clear />
+          </div>
         </Antd.Popconfirm>
       }
     </ChannelLeave.Mutation>;

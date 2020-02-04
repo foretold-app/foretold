@@ -4,9 +4,9 @@ module.exports = {
       await queryInterface.sequelize.query(`
         BEGIN;
 
-        DROP TABLE IF EXISTS "ChannelMemberships";
+        DROP TABLE "ChannelMemberships";
 
-        ALTER TABLE IF EXISTS "AgentsChannels"
+        ALTER TABLE "AgentsChannels"
         RENAME TO "ChannelMemberships";
 
         ALTER TABLE "ChannelMemberships" DROP CONSTRAINT "AgentsChannels_channelId_fkey";
@@ -34,9 +34,9 @@ module.exports = {
       await queryInterface.sequelize.query(`
         BEGIN;
 
-        DROP TABLE IF EXISTS "AgentsChannels";
+        DROP TABLE "AgentsChannels";
 
-        ALTER TABLE IF EXISTS "ChannelMemberships"
+        ALTER TABLE "ChannelMemberships"
         RENAME TO "AgentsChannels";
 
         ALTER TABLE "AgentsChannels" DROP CONSTRAINT "ChannelMemberships_channelId_fkey";

@@ -37,13 +37,13 @@ module.exports = {
 
       // Drops views
       await queryInterface.sequelize.query(
-        'DROP VIEW IF EXISTS "AgentChannels" CASCADE',
+        'DROP VIEW "AgentChannels" CASCADE',
       );
       await queryInterface.sequelize.query(
-        'DROP VIEW IF EXISTS "AgentMeasurable" CASCADE',
+        'DROP VIEW "AgentMeasurable" CASCADE',
       );
       await queryInterface.sequelize.query(
-        'DROP VIEW IF EXISTS "ChannelAgents" CASCADE',
+        'DROP VIEW "ChannelAgents" CASCADE',
       );
 
       // Alters tables
@@ -102,13 +102,13 @@ module.exports = {
 
       // Drops views
       await queryInterface.sequelize.query(
-        'DROP VIEW IF EXISTS "AgentChannels" CASCADE',
+        'DROP VIEW "AgentChannels" CASCADE',
       );
       await queryInterface.sequelize.query(
-        'DROP VIEW IF EXISTS "AgentMeasurable" CASCADE',
+        'DROP VIEW "AgentMeasurable" CASCADE',
       );
       await queryInterface.sequelize.query(
-        'DROP VIEW IF EXISTS "ChannelAgents" CASCADE;',
+        'DROP VIEW "ChannelAgents" CASCADE;',
       );
 
       // Alters tables

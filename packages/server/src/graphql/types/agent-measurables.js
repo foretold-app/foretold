@@ -2,6 +2,15 @@ const graphql = require('graphql');
 const { DateType } = require('graphql-sequelize');
 const resolvers = require('../resolvers');
 
+const agentsTypes = require('./agents');
+const measurablesTypes = require('./measurables');
+const commonTypes = require('./common');
+const measurementsTypes = require('./measurements');
+const { measurementCompetitorType } = require('./enums');
+const { marketScoreType } = require('./enums');
+const { startAt } = require('./enums');
+const { finalComparisonMeasurement } = require('./enums');
+
 const points = graphql.GraphQLList(new graphql.GraphQLObjectType({
   name: 'point',
   fields: () => ({
@@ -14,9 +23,7 @@ const activeTimeDistribution = new graphql.GraphQLObjectType({
   name: 'timeDistribution',
   fields: () => ({
     finalX: { type: graphql.GraphQLInt },
-    points: {
-      type: points,
-    },
+    points: { type: points },
   }),
 });
 
@@ -25,20 +32,19 @@ const timeAverageScore = new graphql.GraphQLObjectType({
   fields: () => ({
     score: { type: graphql.GraphQLFloat },
     agentPredictions: {
-      type: graphql.GraphQLList(require('./measurements').measurement),
+      type: graphql.GraphQLList(measurementsTypes.measurement),
     },
     aggregations: {
-      type: graphql.GraphQLList(require('./measurements').measurement),
+      type: graphql.GraphQLList(measurementsTypes.measurement),
     },
-    recentResult: {
-      type: require('./measurements').measurement,
-    },
+    recentResult: { type: measurementsTypes.measurement },
     scoringStartTime: { type: DateType.default },
     scoringEndTime: { type: DateType.default },
     measurableCreationTime: { type: DateType.default },
     finalResolutionTime: { type: DateType.default },
     timeActivityRatio: { type: graphql.GraphQLFloat },
     activeTimeDistribution: { type: activeTimeDistribution },
+    totalVotes: { type: graphql.GraphQLInt },
   }),
 });
 
@@ -56,17 +62,9 @@ const agentMeasurable = new graphql.GraphQLObjectType({
       type: timeAverageScore,
       resolve: resolvers.agentMeasurables.timeAverageScore,
       args: {
-        marketType: {
-          type: require('./enums/agent-measurable-score-params')
-            .marketScoreType,
-        },
-        startAt: {
-          type: require('./enums/agent-measurable-score-params').startAt,
-        },
-        finalComparisonMeasurement: {
-          type: require('./enums/agent-measurable-score-params')
-            .finalComparisonMeasurement,
-        },
+        marketType: { type: marketScoreType },
+        startAt: { type: startAt },
+        finalComparisonMeasurement: { type: finalComparisonMeasurement },
       },
     },
     predictionCountTotal: { type: graphql.GraphQLNonNull(graphql.GraphQLInt) },
@@ -75,25 +73,22 @@ const agentMeasurable = new graphql.GraphQLObjectType({
 
     // OK
     agent: {
-      type: graphql.GraphQLNonNull(require('./agents').agent),
+      type: graphql.GraphQLNonNull(agentsTypes.agent),
       resolve: resolvers.agents.one,
     },
 
     // OK
     measurable: {
-      type: graphql.GraphQLNonNull(require('./measurables').measurable),
+      type: graphql.GraphQLNonNull(measurablesTypes.measurable),
       resolve: resolvers.measurables.one,
     },
 
     // OK
     measurement: {
-      type: require('./measurements').measurement,
+      type: measurementsTypes.measurement,
       args: {
         competitorType: {
-          type: graphql.GraphQLList(
-            require('./enums/measurement-competitor-type')
-              .measurementCompetitorType,
-          ),
+          type: graphql.GraphQLList(measurementCompetitorType),
         },
       },
       resolve: resolvers.measurements.measurableMeasurement,
@@ -114,7 +109,7 @@ const agentMeasurablesConnection = new graphql.GraphQLObjectType({
   fields: () => ({
     total: { type: graphql.GraphQLInt },
     pageInfo: {
-      type: graphql.GraphQLNonNull(require('./common').pageInfoConnection),
+      type: graphql.GraphQLNonNull(commonTypes.pageInfoConnection),
     },
     edges: { type: graphql.GraphQLList(agentMeasurablesEdge) },
   }),
@@ -132,9 +127,7 @@ const orderAgentMeasurables = new graphql.GraphQLInputObjectType({
   fields: () => ({
     field: { type: graphql.GraphQLNonNull(orderFieldAgentMeasurables) },
     direction: {
-      type: graphql.GraphQLNonNull(
-        require('./common').orderDirection,
-      ),
+      type: graphql.GraphQLNonNull(commonTypes.orderDirection),
     },
   }),
 });

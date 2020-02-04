@@ -1,10 +1,12 @@
+// @todo: In this case "IF EXISTS" is necessary.
+
 module.exports = {
   up: async function (queryInterface) {
     try {
       await queryInterface.sequelize.query(`
         BEGIN;
 
-        DROP TABLE "ChannelMemberships";
+        DROP TABLE IF EXISTS "ChannelMemberships";
 
         ALTER TABLE "AgentsChannels"
         RENAME TO "ChannelMemberships";
@@ -34,7 +36,7 @@ module.exports = {
       await queryInterface.sequelize.query(`
         BEGIN;
 
-        DROP TABLE "AgentsChannels";
+        DROP TABLE IF EXISTS "AgentsChannels";
 
         ALTER TABLE "ChannelMemberships"
         RENAME TO "AgentsChannels";

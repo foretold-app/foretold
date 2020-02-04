@@ -1,12 +1,10 @@
 const graphql = require('graphql');
 
 const resolvers = require('../resolvers');
-const {
-  channelMembershipRoles,
-} = require('./enums/channel-membership-roles');
-const {
-  channelMembershipRolesOutput,
-} = require('./enums/channel-membership-roles-output');
+const { channelMembershipRoles } = require('./enums');
+const { channelMembershipRolesOutput } = require('./enums');
+
+const permissionsTypes = require('./permissions');
 
 const channelsMembership = new graphql.GraphQLObjectType({
   name: 'ChannelsMembership',
@@ -16,7 +14,7 @@ const channelsMembership = new graphql.GraphQLObjectType({
     role: { type: graphql.GraphQLNonNull(channelMembershipRoles) },
 
     permissions: {
-      type: graphql.GraphQLNonNull(require('./permissions').permissions),
+      type: graphql.GraphQLNonNull(permissionsTypes.permissions),
       resolve: resolvers.permissions.channelMembershipsPermissions,
     },
 

@@ -6,7 +6,6 @@ CREATE MATERIALIZED VIEW "AgentMeasurables" (
 AS
 
 SELECT
- DISTINCT ON ("Measurables".id, "ChannelAgents"."agentId")
  uuid_generate_v4() AS id,
  0.0 AS "primaryPointScore",
  "Measurables"."id" AS "measurableId",
@@ -26,11 +25,10 @@ SELECT
  0.0 AS "timeAverageScore",
  (
      SELECT SUM("Votes"."voteAmount") as "sum"
-     FROM "Votes", "Measurements", "Measurables"
-     WHERE "Measurables"."channelId" = "ChannelAgents"."channelId"
-       AND "Measurements"."agentId" = "ChannelAgents"."agentId"
+     FROM "Votes", "Measurements"
+     WHERE "Measurements"."agentId" = "ChannelAgents"."agentId"
        AND "Measurements"."id" = "Votes"."measurementId"
-       AND "Measurables"."id" = "Measurements"."measurableId"
+       AND "Measurements"."measurableId" = "Measurables"."id"
  ) AS "totalVotes"
 FROM "ChannelAgents", "Measurables"
 WHERE "ChannelAgents"."channelId" = "Measurables"."channelId"

@@ -68,6 +68,7 @@ const agentMeasurable = new graphql.GraphQLObjectType({
       },
     },
     predictionCountTotal: { type: graphql.GraphQLNonNull(graphql.GraphQLInt) },
+    totalVotes: { type: graphql.GraphQLInt },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
 

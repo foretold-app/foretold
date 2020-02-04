@@ -24,6 +24,7 @@ let toNode = node => {
     ~numberOfQuestionsScored=node##numberOfQuestionsScored,
     ~createdAt=node##createdAt,
     ~updatedAt=node##updatedAt,
+    ~totalVotes=node##totalVotes,
     ~agent,
     ~channel,
     (),
@@ -67,6 +68,7 @@ module Query = [%graphql
                 primaryPointScore
                 numberOfPredictions
                 numberOfQuestionsScored
+                totalVotes
                 createdAt @bsDecoder(fn: "E.J.toMoment")
                 updatedAt @bsDecoder(fn: "E.J.toMoment")
                 agent {

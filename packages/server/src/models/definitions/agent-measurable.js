@@ -26,6 +26,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    totalVotes: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
     createdAt: {
       type: DataTypes.DATE,
       defaultValue: sequelize.fn('statement_timestamp'),

@@ -163,6 +163,18 @@ module Columns = {
       (),
     );
 
+  let totalVotesReceived =
+    Table.Column.make(
+      ~name="Total Upvotes" |> Utils.ste,
+      ~render=
+        (r: record) =>
+          r.totalVotesReceived
+          |> E.O.fmap(E.I.toString)
+          |> E.O.default("")
+          |> Utils.ste,
+      (),
+    );
+
   let getMeasurement = measurement => {
     let bounds = MeasurementsTable.Helpers.bounds([|measurement|]);
     <MeasurementsTable.Helpers.SmallDistribution
@@ -201,6 +213,7 @@ module Columns = {
     timeAveragedScore2,
     timeActivityRatio,
     predictionCount,
+    totalVotesReceived,
   |];
 
   let measurables' = [|
@@ -208,6 +221,7 @@ module Columns = {
     timeAveragedScore2,
     timeActivityRatio,
     predictionCount,
+    totalVotesReceived,
   |];
 
   let notebooks = [|agent, timeAveragedScore2, timeActivityRatio|];
@@ -217,6 +231,7 @@ module Columns = {
     totalScore,
     predictedMeasurablesCount,
     predictionCount,
+    totalVotesReceived,
   |];
 
   let members' = [|
@@ -224,6 +239,7 @@ module Columns = {
     totalScore,
     predictedMeasurablesCount,
     predictionCount,
+    totalVotesReceived,
   |];
 };
 

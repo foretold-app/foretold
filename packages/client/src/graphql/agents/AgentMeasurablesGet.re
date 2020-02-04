@@ -34,6 +34,7 @@ let toNode = (marketType, finalComparisonMeasurement, node) => {
     ~id=node##id,
     ~createdAt=node##createdAt,
     ~predictionCountTotal=node##predictionCountTotal,
+    ~totalVotesReceived=node##totalVotesReceived,
     ~timeAverageScore,
     ~agent,
     ~measurable,
@@ -87,6 +88,7 @@ module Query = [%graphql
                     timeActivityRatio
                   }
                   predictionCountTotal
+                  totalVotesReceived
                   agent {
                       id
                       name

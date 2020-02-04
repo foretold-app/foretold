@@ -1,3 +1,5 @@
+// @todo: In this case "IF EXISTS" is necessary.
+
 module.exports = {
   up: async function (queryInterface) {
     try {
@@ -6,7 +8,7 @@ module.exports = {
 
         DROP TABLE IF EXISTS "ChannelMemberships";
 
-        ALTER TABLE IF EXISTS "AgentsChannels"
+        ALTER TABLE "AgentsChannels"
         RENAME TO "ChannelMemberships";
 
         ALTER TABLE "ChannelMemberships" DROP CONSTRAINT "AgentsChannels_channelId_fkey";
@@ -36,7 +38,7 @@ module.exports = {
 
         DROP TABLE IF EXISTS "AgentsChannels";
 
-        ALTER TABLE IF EXISTS "ChannelMemberships"
+        ALTER TABLE "ChannelMemberships"
         RENAME TO "AgentsChannels";
 
         ALTER TABLE "AgentsChannels" DROP CONSTRAINT "ChannelMemberships_channelId_fkey";

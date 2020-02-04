@@ -2,6 +2,10 @@ const graphql = require('graphql');
 const { DateType } = require('graphql-sequelize');
 const resolvers = require('../resolvers');
 
+const agentsTypes = require('./agents');
+const channelsTypes = require('./channels');
+const commonTypes = require('./common');
+
 const agentChannel = new graphql.GraphQLObjectType({
   name: 'AgentChannel',
   fields: () => ({
@@ -16,18 +20,17 @@ const agentChannel = new graphql.GraphQLObjectType({
     numberOfQuestionsScored: {
       type: graphql.GraphQLNonNull(graphql.GraphQLInt),
     },
+    totalVotesReceived: { type: graphql.GraphQLInt },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
 
-    // OK
     agent: {
-      type: graphql.GraphQLNonNull(require('./agents').agent),
+      type: graphql.GraphQLNonNull(agentsTypes.agent),
       resolve: resolvers.agents.one,
     },
 
-    // OK
     channel: {
-      type: graphql.GraphQLNonNull(require('./channels').channel),
+      type: graphql.GraphQLNonNull(channelsTypes.channel),
       resolve: resolvers.channels.one,
     },
   }),
@@ -46,11 +49,9 @@ const agentChannelsConnection = new graphql.GraphQLObjectType({
   fields: () => ({
     total: { type: graphql.GraphQLInt },
     pageInfo: {
-      type: graphql.GraphQLNonNull(require('./common').pageInfoConnection),
+      type: graphql.GraphQLNonNull(commonTypes.pageInfoConnection),
     },
-    edges: {
-      type: graphql.GraphQLList(agentChannelsEdge),
-    },
+    edges: { type: graphql.GraphQLList(agentChannelsEdge) },
   }),
 });
 

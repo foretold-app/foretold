@@ -782,6 +782,7 @@ module AgentMeasurable = {
         ~aggregationMeasurement=None,
         ~objectiveMeasurement=None,
         ~timeAverageScore=None,
+        ~totalVotesReceived=None,
         (),
       )
       : t => {
@@ -795,6 +796,7 @@ module AgentMeasurable = {
     competitiveMeasurement,
     aggregationMeasurement,
     objectiveMeasurement,
+    totalVotesReceived,
   };
 };
 
@@ -812,6 +814,7 @@ module AgentChannel = {
         ~numberOfQuestionsScored,
         ~createdAt,
         ~updatedAt,
+        ~totalVotesReceived=None,
         (),
       )
       : t => {
@@ -825,6 +828,7 @@ module AgentChannel = {
     numberOfQuestionsScored,
     createdAt,
     updatedAt,
+    totalVotesReceived,
   };
 };
 
@@ -845,6 +849,7 @@ module LeaderboardItem = {
         ~competitiveMeasurement=None,
         ~aggregationMeasurement=None,
         ~objectiveMeasurement=None,
+        ~totalVotesReceived=None,
         (),
       )
       : t => {
@@ -860,6 +865,7 @@ module LeaderboardItem = {
     competitiveMeasurement,
     aggregationMeasurement,
     objectiveMeasurement,
+    totalVotesReceived,
   };
 
   let fromAgentMeasurable = (agentMeasurable: Types.agentMeasurable) =>
@@ -872,6 +878,7 @@ module LeaderboardItem = {
       ~predictionCountTotal=Some(agentMeasurable.predictionCountTotal),
       ~createdAt=Some(agentMeasurable.createdAt),
       ~objectiveMeasurement=agentMeasurable.objectiveMeasurement,
+      ~totalVotesReceived=agentMeasurable.totalVotesReceived,
       (),
     );
 
@@ -883,6 +890,7 @@ module LeaderboardItem = {
       ~pointScore=agentChannel.primaryPointScore,
       ~predictionCountTotal=Some(agentChannel.numberOfPredictions),
       ~numberOfQuestionsScored=Some(agentChannel.numberOfQuestionsScored),
+      ~totalVotesReceived=agentChannel.totalVotesReceived,
       (),
     );
 };

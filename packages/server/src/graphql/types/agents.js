@@ -43,14 +43,12 @@ const agent = new graphql.GraphQLObjectType({
       resolve: resolvers.preferences.getOne,
     },
 
-    // OK
     measurements: {
       type: require('./measurements').agentMeasurementsConnection,
       args: commonTypes.connectionArguments,
       resolve: require('../resolvers/measurements').all,
     },
 
-    // OK
     channels: {
       type: graphql.GraphQLNonNull(
         graphql.GraphQLList(require('./channels').channel),
@@ -58,7 +56,6 @@ const agent = new graphql.GraphQLObjectType({
       resolve: require('../resolvers/channels').all,
     },
 
-    // OK
     channelMemberships: {
       type: graphql.GraphQLNonNull(graphql.GraphQLList(
         channelMemberships.channelsMembership,

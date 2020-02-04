@@ -71,19 +71,16 @@ const agentMeasurable = new graphql.GraphQLObjectType({
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
 
-    // OK
     agent: {
       type: graphql.GraphQLNonNull(agentsTypes.agent),
       resolve: resolvers.agents.one,
     },
 
-    // OK
     measurable: {
       type: graphql.GraphQLNonNull(measurablesTypes.measurable),
       resolve: resolvers.measurables.one,
     },
 
-    // OK
     measurement: {
       type: measurementsTypes.measurement,
       args: {

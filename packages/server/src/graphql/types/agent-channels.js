@@ -24,13 +24,11 @@ const agentChannel = new graphql.GraphQLObjectType({
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
 
-    // OK
     agent: {
       type: graphql.GraphQLNonNull(agentsTypes.agent),
       resolve: resolvers.agents.one,
     },
 
-    // OK
     channel: {
       type: graphql.GraphQLNonNull(channelsTypes.channel),
       resolve: resolvers.channels.one,

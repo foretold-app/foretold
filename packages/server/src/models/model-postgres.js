@@ -506,6 +506,12 @@ class ModelPostgres extends Model {
       });
     }
 
+    if (!!filter.taggedMeasurementId) {
+      where[this.and].push({
+        taggedMeasurementId: filter.taggedMeasurementId,
+      });
+    }
+
     if (!!filter.agentId) {
       where[this.and].push({
         agentId: filter.agentId,

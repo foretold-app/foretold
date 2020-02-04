@@ -74,6 +74,7 @@ const list = {
   seriesId: (v) => _.isString(v) || utils.none(v),
   states: (v) => _.isArray(v) || utils.none(v),
   status: (v) => _.isString(v) || utils.none(v),
+  taggedMeasurementId: (v) => _.isObject(v) || utils.none(v),
   type: (v) => _.isString(v) || utils.none(v),
   types: (v) => _.isArray(v) || utils.none(v),
   userId: (v) => _.isString(v) || utils.none(v),

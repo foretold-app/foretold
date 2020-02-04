@@ -66,6 +66,24 @@ async function all(root, args, context, _info) {
 
 /**
  * @param {*} root
+ * @param {Models.MeasurementID} root.taggedMeasurementId
+ * @param {object} _args
+ * @param {Schema.Context} _context
+ * @param {object} _info
+ * @returns {Promise<*>}
+ */
+async function allByTaggedMeasurementId(root, _args, _context, _info) {
+  const taggedMeasurementId = _.get(root, 'taggedMeasurementId', null);
+
+  const filter = new Filter({ taggedMeasurementId });
+  const pagination = new Pagination();
+  const options = new Options();
+
+  return new MeasurementsData().getAll(filter, pagination, options);
+}
+
+/**
+ * @param {*} root
  * @param {object} args
  * @param {number} args.last
  * @param {number} args.first
@@ -443,22 +461,23 @@ async function measurerCount(root, _args, _context, _info) {
 }
 
 module.exports = {
-  one,
   all,
+  allByTaggedMeasurementId,
   count,
   create,
   latest,
-  scoreSet,
-  prediction,
-  outcome,
-  outcomeByRootId,
-  nonMarketLogScore,
-  previousAggregate,
   latestAggregateByRootId,
-  primaryPointScore,
   measurableMeasurement,
-  truncateCdf,
   measurementCountByAgentId,
   measurementCountByMeasurableId,
   measurerCount,
+  nonMarketLogScore,
+  one,
+  outcome,
+  outcomeByRootId,
+  prediction,
+  previousAggregate,
+  primaryPointScore,
+  scoreSet,
+  truncateCdf,
 };

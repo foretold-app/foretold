@@ -1,9 +1,8 @@
 const graphql = require('graphql');
-const { resolver, DateType } = require('graphql-sequelize');
+const { DateType } = require('graphql-sequelize');
 const { MEASUREMENT_VALUE } = require('@foretold/measurement-value/enums');
 
 const resolvers = require('../resolvers');
-const models = require('../../models/definitions');
 
 const votesTypes = require('./votes');
 const measurablesTypes = require('./measurables');
@@ -151,10 +150,9 @@ const measurement = new graphql.GraphQLObjectType({
       resolve: resolvers.measurements.one,
     },
 
-    // @todo: Do not use resolver. Use common interfaces of Data layer.
     taggedBy: {
       type: graphql.GraphQLNonNull(graphql.GraphQLList(measurement)),
-      resolve: resolver(models.Measurement.TaggedBy),
+      resolve: resolvers.measurements.allByTaggedMeasurementId,
     },
 
     permissions: {

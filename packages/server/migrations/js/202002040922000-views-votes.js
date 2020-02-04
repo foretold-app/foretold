@@ -16,10 +16,10 @@ module.exports = {
 
       // Drops views
       await queryInterface.sequelize.query(
-        'DROP MATERIALIZED VIEW IF EXISTS "AgentChannels" CASCADE',
+        'DROP MATERIALIZED VIEW "AgentChannels" CASCADE',
       );
       await queryInterface.sequelize.query(
-        'DROP MATERIALIZED VIEW IF EXISTS "AgentMeasurable" CASCADE',
+        'DROP MATERIALIZED VIEW "AgentMeasurables" CASCADE',
       );
 
       const agentChannels = sql('202002040922000-views/agent-channels');
@@ -43,10 +43,10 @@ module.exports = {
 
       // Drops views
       await queryInterface.sequelize.query(
-        'DROP MATERIALIZED VIEW IF EXISTS "AgentChannels" CASCADE',
+        'DROP MATERIALIZED VIEW "AgentChannels" CASCADE',
       );
       await queryInterface.sequelize.query(
-        'DROP MATERIALIZED VIEW IF EXISTS "AgentMeasurable" CASCADE',
+        'DROP MATERIALIZED VIEW "AgentMeasurables" CASCADE',
       );
 
       const agentChannels = sql('202001131021000-views/agent-channels');

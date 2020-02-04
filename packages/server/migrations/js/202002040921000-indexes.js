@@ -43,7 +43,6 @@ const tables = [
   'Notifications',
   'NotificationStatuses',
   'Preferences',
-  'SequelizeMeta',
   'Series',
   'Templates',
   'Tokens',
@@ -65,7 +64,7 @@ module.exports = {
         );
       }
 
-      for (const table in tables) {
+      for (const table of tables) {
         await queryInterface.sequelize.query(
           `CREATE INDEX "${table}_createdAt" ON "${table}" ("createdAt")`
         );
@@ -92,7 +91,7 @@ module.exports = {
         );
       }
 
-      for (const table in tables) {
+      for (const table of tables) {
         await queryInterface.sequelize.query(
           `DROP INDEX "${table}_createdAt"`
         );

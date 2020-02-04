@@ -18,7 +18,8 @@ const { Query } = require('../../data/classes');
  */
 async function one(root, args, _context, _info) {
   const agentId = _.get(args, 'id', null)
-    || _.get(root, 'agentId', null);
+    || _.get(root, 'agentId', null)
+    || _.get(root, 'creatorId', null);
   const params = new Params({ id: agentId });
   const query = new Query();
   const options = new Options({ raw: true, attributes: true });

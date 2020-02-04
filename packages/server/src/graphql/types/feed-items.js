@@ -1,9 +1,8 @@
 const graphql = require('graphql');
-const { DateType, resolver } = require('graphql-sequelize');
-
-const models = require('../../models/definitions');
+const { DateType } = require('graphql-sequelize');
 
 const { FEED_ITEM_BODY } = require('../../enums');
+const resolvers = require('../resolvers');
 
 const commonTypes = require('./common');
 const channelsTypes = require('./channels');
@@ -42,10 +41,9 @@ const feedItem = new graphql.GraphQLObjectType({
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
 
-    // @todo: Do not use resolver. Use common interfaces of Data layer.
     channel: {
       type: graphql.GraphQLNonNull(channelsTypes.channel),
-      resolve: resolver(models.FeedItem.Channel),
+      resolve: resolvers.channels.one,
     },
   }),
 });

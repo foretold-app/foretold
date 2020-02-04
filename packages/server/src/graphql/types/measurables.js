@@ -1,12 +1,10 @@
 const graphql = require('graphql');
-const { resolver, DateType } = require('graphql-sequelize');
+const { DateType } = require('graphql-sequelize');
 
-const models = require('../../models/definitions');
 const resolvers = require('../resolvers');
 
 const { measurableValueType } = require('./enums');
 const { measurableState } = require('./enums');
-
 const scalars = require('./scalars');
 const commonTypes = require('./common');
 const permissionsTypes = require('./permissions');
@@ -79,22 +77,19 @@ const measurable = new graphql.GraphQLObjectType({
       resolve: resolvers.permissions.measurablesPermissions,
     },
 
-    // @todo: Do not use resolver. Use common interfaces of Data layer.
     series: {
       type: seriesTypes.series,
-      resolve: resolver(models.Measurable.Series),
+      resolve: resolvers.series.one,
     },
 
-    // @todo: Do not use resolver. Use common interfaces of Data layer.
     creator: {
       type: agentsTypes.agent,
-      resolve: resolver(models.Measurable.Creator),
+      resolve: resolvers.agents.one,
     },
 
-    // @todo: Do not use resolver. Use common interfaces of Data layer.
     channel: {
       type: channelsTypes.channel,
-      resolve: resolver(models.Measurable.Channel),
+      resolve: resolvers.channels.one,
     },
 
     recentMeasurement: {
@@ -107,14 +102,14 @@ const measurable = new graphql.GraphQLObjectType({
     outcome: {
       description: 'Returns latest objective measurement.',
       type: require('./measurements').measurement,
-      resolve: require('../resolvers/measurements').outcomeByRootId,
+      resolve: resolvers.measurements.outcomeByRootId,
     },
 
     previousAggregate: {
       deprecated: 'Will be renamed on latestAggregate.',
       description: 'Returns latest aggregation measurement.',
       type: require('./measurements').measurement,
-      resolve: require('../resolvers/measurements').latestAggregateByRootId,
+      resolve: resolvers.measurements.latestAggregateByRootId,
     },
   }),
 });

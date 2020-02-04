@@ -104,7 +104,8 @@ async function measurableMeasurement(root, args, context, _info) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function one(root, args, context, _info) {
-  const measurementId = _.get(args, 'id', null);
+  const measurementId = _.get(args, 'id', null)
+    || _.get(root, 'taggedMeasurementId', null);
   const currentAgentId = _.get(context, 'agent.id', null);
 
   const params = new Params({ id: measurementId });

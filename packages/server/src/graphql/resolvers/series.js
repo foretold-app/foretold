@@ -18,7 +18,7 @@ const { Data } = require('../../data/classes');
  * @returns {Promise<*|Array<Model>>}
  */
 async function one(root, args, context, _info) {
-  const seriesId = _.get(args, 'id', null);
+  const seriesId = _.get(args, 'id', null) || _.get(root, 'seriesId', null);
   const currentAgentId = _.get(context, 'agent.id', null);
 
   const params = new Params({ id: seriesId });

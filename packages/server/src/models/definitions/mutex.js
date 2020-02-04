@@ -25,18 +25,5 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
   });
-
-  /**
-   * @todo: fix it, remove it.
-   * @deprecated
-   * @param models
-   */
-  Mutex.associate = function associate(models) {
-    Mutex.Creator = Mutex.belongsTo(models.Agent, {
-      foreignKey: 'agentId',
-      as: 'agent',
-    });
-  };
-
   return Mutex;
 };

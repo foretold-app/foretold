@@ -163,12 +163,12 @@ module Columns = {
       (),
     );
 
-  let totalVotes =
+  let totalVotesReceived =
     Table.Column.make(
       ~name="Total Upvotes" |> Utils.ste,
       ~render=
         (r: record) =>
-          r.totalVotes
+          r.totalVotesReceived
           |> E.O.fmap(E.I.toString)
           |> E.O.default("")
           |> Utils.ste,
@@ -213,7 +213,7 @@ module Columns = {
     timeAveragedScore2,
     timeActivityRatio,
     predictionCount,
-    totalVotes,
+    totalVotesReceived,
   |];
 
   let measurables' = [|
@@ -221,7 +221,7 @@ module Columns = {
     timeAveragedScore2,
     timeActivityRatio,
     predictionCount,
-    totalVotes,
+    totalVotesReceived,
   |];
 
   let notebooks = [|agent, timeAveragedScore2, timeActivityRatio|];
@@ -231,7 +231,7 @@ module Columns = {
     totalScore,
     predictedMeasurablesCount,
     predictionCount,
-    totalVotes,
+    totalVotesReceived,
   |];
 
   let members' = [|
@@ -239,7 +239,7 @@ module Columns = {
     totalScore,
     predictedMeasurablesCount,
     predictionCount,
-    totalVotes,
+    totalVotesReceived,
   |];
 };
 

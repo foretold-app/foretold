@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    totalVotes: {
+    totalVotesReceived: {
       type: DataTypes.INTEGER,
       allowNull: true,
     },

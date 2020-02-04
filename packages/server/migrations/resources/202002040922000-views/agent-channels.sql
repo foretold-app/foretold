@@ -1,7 +1,7 @@
 CREATE MATERIALIZED VIEW "AgentChannels" (
  "id", "agentId", "channelId", "primaryPointScore", "createdAt",
  "updatedAt", "numberOfPredictions", "numberOfQuestionsScored",
- "totalVotes"
+ "totalVotesReceived"
 )
 
 AS
@@ -44,6 +44,6 @@ SELECT uuid_generate_v4() AS id,
     AND "Measurements"."agentId" = "ChannelAgents"."agentId"
     AND "Measurements"."id" = "Votes"."measurementId"
     AND "Measurables"."id" = "Measurements"."measurableId"
- ) AS "totalVotes"
+ ) AS "totalVotesReceived"
 
 FROM "ChannelAgents"

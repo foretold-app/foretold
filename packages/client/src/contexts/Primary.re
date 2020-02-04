@@ -782,7 +782,7 @@ module AgentMeasurable = {
         ~aggregationMeasurement=None,
         ~objectiveMeasurement=None,
         ~timeAverageScore=None,
-        ~totalVotes=None,
+        ~totalVotesReceived=None,
         (),
       )
       : t => {
@@ -796,7 +796,7 @@ module AgentMeasurable = {
     competitiveMeasurement,
     aggregationMeasurement,
     objectiveMeasurement,
-    totalVotes,
+    totalVotesReceived,
   };
 };
 
@@ -814,7 +814,7 @@ module AgentChannel = {
         ~numberOfQuestionsScored,
         ~createdAt,
         ~updatedAt,
-        ~totalVotes=None,
+        ~totalVotesReceived=None,
         (),
       )
       : t => {
@@ -828,7 +828,7 @@ module AgentChannel = {
     numberOfQuestionsScored,
     createdAt,
     updatedAt,
-    totalVotes,
+    totalVotesReceived,
   };
 };
 
@@ -849,7 +849,7 @@ module LeaderboardItem = {
         ~competitiveMeasurement=None,
         ~aggregationMeasurement=None,
         ~objectiveMeasurement=None,
-        ~totalVotes=None,
+        ~totalVotesReceived=None,
         (),
       )
       : t => {
@@ -865,7 +865,7 @@ module LeaderboardItem = {
     competitiveMeasurement,
     aggregationMeasurement,
     objectiveMeasurement,
-    totalVotes,
+    totalVotesReceived,
   };
 
   let fromAgentMeasurable = (agentMeasurable: Types.agentMeasurable) =>
@@ -878,7 +878,7 @@ module LeaderboardItem = {
       ~predictionCountTotal=Some(agentMeasurable.predictionCountTotal),
       ~createdAt=Some(agentMeasurable.createdAt),
       ~objectiveMeasurement=agentMeasurable.objectiveMeasurement,
-      ~totalVotes=agentMeasurable.totalVotes,
+      ~totalVotesReceived=agentMeasurable.totalVotesReceived,
       (),
     );
 
@@ -890,7 +890,7 @@ module LeaderboardItem = {
       ~pointScore=agentChannel.primaryPointScore,
       ~predictionCountTotal=Some(agentChannel.numberOfPredictions),
       ~numberOfQuestionsScored=Some(agentChannel.numberOfQuestionsScored),
-      ~totalVotes=agentChannel.totalVotes,
+      ~totalVotesReceived=agentChannel.totalVotesReceived,
       (),
     );
 };

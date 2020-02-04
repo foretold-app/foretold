@@ -1,6 +1,6 @@
 CREATE MATERIALIZED VIEW "AgentMeasurables" (
   "id", "primaryPointScore", "measurableId", "agentId", "createdAt",
-   "updatedAt", "predictionCountTotal", "timeAverageScore", "totalVotes"
+   "updatedAt", "predictionCountTotal", "timeAverageScore", "totalVotesReceived"
 )
 
 AS
@@ -29,6 +29,6 @@ SELECT
      WHERE "Measurements"."agentId" = "ChannelAgents"."agentId"
        AND "Measurements"."id" = "Votes"."measurementId"
        AND "Measurements"."measurableId" = "Measurables"."id"
- ) AS "totalVotes"
+ ) AS "totalVotesReceived"
 FROM "ChannelAgents", "Measurables"
 WHERE "ChannelAgents"."channelId" = "Measurables"."channelId"

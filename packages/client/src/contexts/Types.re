@@ -220,7 +220,7 @@ and agentMeasurable = {
   competitiveMeasurement: option(measurement),
   aggregationMeasurement: option(measurement),
   objectiveMeasurement: option(measurement),
-  totalVotes: option(int),
+  totalVotesReceived: option(int),
 }
 
 and agentChannel = {
@@ -232,7 +232,7 @@ and agentChannel = {
   numberOfQuestionsScored: int,
   createdAt: MomentRe.Moment.t,
   updatedAt: MomentRe.Moment.t,
-  totalVotes: option(int),
+  totalVotesReceived: option(int),
   agent,
   channel,
 }
@@ -250,7 +250,7 @@ and leaderboardItem = {
   competitiveMeasurement: option(measurement),
   aggregationMeasurement: option(measurement),
   objectiveMeasurement: option(measurement),
-  totalVotes: option(int),
+  totalVotesReceived: option(int),
 }
 
 and series = {

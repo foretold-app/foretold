@@ -20,7 +20,7 @@ const agentChannel = new graphql.GraphQLObjectType({
     numberOfQuestionsScored: {
       type: graphql.GraphQLNonNull(graphql.GraphQLInt),
     },
-    totalVotes: { type: graphql.GraphQLInt },
+    totalVotesReceived: { type: graphql.GraphQLInt },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
 

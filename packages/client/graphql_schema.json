@@ -5081,7 +5081,7 @@
               "deprecationReason": null
             },
             {
-              "name": "totalVotes",
+              "name": "totalVotesReceived",
               "description": null,
               "args": [],
               "type": {
@@ -5396,7 +5396,7 @@
               "deprecationReason": null
             },
             {
-              "name": "totalVotes",
+              "name": "totalVotesReceived",
               "description": null,
               "args": [],
               "type": {
@@ -5679,7 +5679,7 @@
               "deprecationReason": null
             },
             {
-              "name": "totalVotes",
+              "name": "totalVotesReceived",
               "description": null,
               "args": [],
               "type": {

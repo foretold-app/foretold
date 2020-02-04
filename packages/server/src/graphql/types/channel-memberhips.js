@@ -1,9 +1,9 @@
 const graphql = require('graphql');
 
 const resolvers = require('../resolvers');
+
 const { channelMembershipRoles } = require('./enums');
 const { channelMembershipRolesOutput } = require('./enums');
-
 const permissionsTypes = require('./permissions');
 
 const channelsMembership = new graphql.GraphQLObjectType({

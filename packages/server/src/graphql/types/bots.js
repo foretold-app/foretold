@@ -30,7 +30,7 @@ const bot = new graphql.GraphQLObjectType({
     // @todo: security?
     token: {
       type: graphql.GraphQLString,
-      resolve: require('../resolvers/authentications').getTokenByAgentId,
+      resolve: resolvers.authentications.getTokenByAgentId,
     },
 
     // @todo: security?

@@ -3,8 +3,7 @@ const graphql = require('graphql');
 const resolvers = require('../resolvers');
 const channelMemberships = require('./channel-memberhips');
 
-const { agentType } = require('./enums/agent-type');
-
+const { agentType } = require('./enums');
 const commonTypes = require('./common');
 const preferencesTypes = require('./preferences');
 const usersTypes = require('./users');
@@ -46,14 +45,14 @@ const agent = new graphql.GraphQLObjectType({
     measurements: {
       type: require('./measurements').agentMeasurementsConnection,
       args: commonTypes.connectionArguments,
-      resolve: require('../resolvers/measurements').all,
+      resolve: resolvers.measurements.all,
     },
 
     channels: {
       type: graphql.GraphQLNonNull(
         graphql.GraphQLList(require('./channels').channel),
       ),
-      resolve: require('../resolvers/channels').all,
+      resolve: resolvers.channels.all,
     },
 
     channelMemberships: {

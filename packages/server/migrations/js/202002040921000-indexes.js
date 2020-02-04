@@ -28,6 +28,29 @@ const indexes = {
   "Votes_measurementId": ["Votes", "measurementId"],
 };
 
+const tables = [
+  'Agents',
+  'Bots',
+  'ChannelMemberships',
+  'Channels',
+  'FeedItems',
+  'GlobalSettings',
+  'Invitations',
+  'Measurables',
+  'Measurements',
+  'Mutexes',
+  'Notebooks',
+  'Notifications',
+  'NotificationStatuses',
+  'Preferences',
+  'SequelizeMeta',
+  'Series',
+  'Templates',
+  'Tokens',
+  'Users',
+  'Votes',
+];
+
 module.exports = {
   up: async function (queryInterface) {
     try {
@@ -39,6 +62,15 @@ module.exports = {
         await queryInterface.sequelize.query(
           `CREATE INDEX "${indexName}" `
           + `ON "${table}" ("${column}")`
+        );
+      }
+
+      for (const table in tables) {
+        await queryInterface.sequelize.query(
+          `CREATE INDEX "${table}_createdAt" ON "${table}" ("createdAt")`
+        );
+        await queryInterface.sequelize.query(
+          `CREATE INDEX "${table}_updatedAt" ON "${table}" ("updatedAt")`
         );
       }
 
@@ -55,7 +87,18 @@ module.exports = {
       await queryInterface.sequelize.query('BEGIN');
 
       for (const indexName in indexes) {
-        await queryInterface.sequelize.query(`DROP INDEX "${indexName}"`);
+        await queryInterface.sequelize.query(
+          `DROP INDEX "${indexName}"`
+        );
+      }
+
+      for (const table in tables) {
+        await queryInterface.sequelize.query(
+          `DROP INDEX "${table}_createdAt"`
+        );
+        await queryInterface.sequelize.query(
+          `DROP INDEX "${table}_updatedAt"`
+        );
       }
 
       await queryInterface.sequelize.query('COMMIT');

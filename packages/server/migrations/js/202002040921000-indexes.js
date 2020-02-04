@@ -1,33 +1,46 @@
-const fs = require('fs');
-const path = require('path');
-
-function sql(version = '') {
-  const file = path.resolve(__dirname, `../resources/${version}.sql`);
-  return fs.readFileSync(file, 'utf8');
-}
-
-// It is a temporary solution.
-// Keywords: cache.
+const indexes = {
+  "Bots_agentId": ["Bots", "agentId"],
+  "Bots_userId": ["Bots", "userId"],
+  "ChannelMemberships_agentId": ["ChannelMemberships", "agentId"],
+  "ChannelMemberships_channelId": ["ChannelMemberships", "channelId"],
+  "Channels_creatorId": ["Channels", "creatorId"],
+  "FeedItems_agentId": ["FeedItems", "agentId"],
+  "FeedItems_channelId": ["FeedItems", "channelId"],
+  "Measurables_channelId": ["Measurables", "channelId"],
+  "Measurables_state": ["Measurables", "state"],
+  "Measurements_agentId": ["Measurements", "agentId"],
+  "Measurements_competitorType": ["Measurements", "competitorType"],
+  "Measurements_measurableId": ["Measurements", "measurableId"],
+  "Measurements_relevantAt": ["Measurements", "relevantAt"],
+  "Measurements_taggedMeasurementId": ["Measurements", "taggedMeasurementId"],
+  "Notebooks_channelId": ["Notebooks", "channelId"],
+  "Notebooks_ownerId": ["Notebooks", "ownerId"],
+  "NotificationStatuses_agentId": ["NotificationStatuses", "agentId"],
+  "NotificationStatuses_notificationId": ["NotificationStatuses", "notificationId"],
+  "NotificationStatuses_sentAt": ["NotificationStatuses", "sentAt"],
+  "Notifications_type": ["Notifications", "type"],
+  "Preferences_agentId": ["Preferences", "agentId"],
+  "Tokens_agentId": ["Tokens", "agentId"],
+  "Tokens_type": ["Tokens", "type"],
+  "Users_agentId": ["Users", "agentId"],
+  "Users_auth0Id": ["Users", "auth0Id"],
+  "Users_email": ["Users", "email"],
+  "Votes_measurementId": ["Votes", "measurementId"],
+};
 
 module.exports = {
   up: async function (queryInterface) {
     try {
       await queryInterface.sequelize.query('BEGIN');
 
-      // Drops views
-      await queryInterface.sequelize.query(
-        'DROP MATERIALIZED VIEW IF EXISTS "AgentChannels" CASCADE',
-      );
-      await queryInterface.sequelize.query(
-        'DROP MATERIALIZED VIEW IF EXISTS "AgentMeasurable" CASCADE',
-      );
-
-      const agentChannels = sql('202002031534000-views/agent-channels');
-      const agentMeasurables = sql('202002031534000-views/agent-measurables');
-
-      // Creates views
-      await queryInterface.sequelize.query(agentChannels);
-      await queryInterface.sequelize.query(agentMeasurables);
+      for (const indexName in indexes) {
+        const index = indexes[indexName];
+        const [table, column] = index;
+        await queryInterface.sequelize.query(
+          `CREATE INDEX "${indexName}" `
+          + `ON "${table}" ("${column}")`
+        );
+      }
 
       await queryInterface.sequelize.query('COMMIT');
     } catch (e) {
@@ -41,20 +54,9 @@ module.exports = {
     try {
       await queryInterface.sequelize.query('BEGIN');
 
-      // Drops views
-      await queryInterface.sequelize.query(
-        'DROP MATERIALIZED VIEW IF EXISTS "AgentChannels" CASCADE',
-      );
-      await queryInterface.sequelize.query(
-        'DROP MATERIALIZED VIEW IF EXISTS "AgentMeasurable" CASCADE',
-      );
-
-      const agentChannels = sql('202001131021000-views/agent-channels');
-      const agentMeasurables = sql('202001131021000-views/agent-measurables');
-
-      // Creates views
-      await queryInterface.sequelize.query(agentChannels);
-      await queryInterface.sequelize.query(agentMeasurables);
+      for (const indexName in indexes) {
+        await queryInterface.sequelize.query(`DROP INDEX "${indexName}"`);
+      }
 
       await queryInterface.sequelize.query('COMMIT');
     } catch (e) {

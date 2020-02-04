@@ -1,7 +1,6 @@
 const graphql = require('graphql');
-const { resolver, DateType } = require('graphql-sequelize');
+const { DateType } = require('graphql-sequelize');
 
-const models = require('../../models/definitions');
 const resolvers = require('../resolvers');
 
 const commonTypes = require('./common');
@@ -42,17 +41,15 @@ const series = new graphql.GraphQLObjectType({
     iAmOwner: commonTypes.iAmOwner,
 
     // @todo: security?
-    // @todo: Do not use resolver. Use common interfaces of Data layer.
     creator: {
       type: agentsTypes.agent,
-      resolve: resolver(models.Series.Creator),
+      resolve: resolvers.agents.one,
     },
 
     // @todo: security?
-    // @todo: Do not use resolver. Use common interfaces of Data layer.
     channel: {
       type: channelsTypes.channel,
-      resolve: resolver(models.Series.Channel),
+      resolve: resolvers.channels.one,
     },
   }),
 });

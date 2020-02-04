@@ -72,9 +72,21 @@ async function oneByAgentId(root, _args, _context, _info) {
   return new UsersData().getOne(params, query, options);
 }
 
+/**
+ * @param {object} _root
+ * @param {object} _args
+ * @param {Schema.Context} _context
+ * @param {object} _info
+ * @returns {Promise<*|Array<Model>>}
+ */
+async function count(_root, _args, _context, _info) {
+  return new UsersData().getCount();
+}
+
 module.exports = {
-  one,
-  update,
-  oneByAgentId,
   accessTokenUpdate,
+  count,
+  one,
+  oneByAgentId,
+  update,
 };

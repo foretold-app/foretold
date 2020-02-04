@@ -130,12 +130,24 @@ async function tokenRefresh(_root, args, _context, _info) {
   return { token };
 }
 
+/**
+ * @param {object} _root
+ * @param {object} _args
+ * @param {Schema.Context} _context
+ * @param {object} _info
+ * @returns {Promise<*|Array<Model>>}
+ */
+async function count(_root, _args, _context, _info) {
+  return new BotsData().getCount();
+}
+
 module.exports = {
   all,
-  one,
-  update,
-  create,
-  tokenRefresh,
-  oneByAgentId,
   allById,
+  count,
+  create,
+  one,
+  oneByAgentId,
+  tokenRefresh,
+  update,
 };

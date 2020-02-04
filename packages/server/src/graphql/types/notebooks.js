@@ -1,9 +1,9 @@
 const graphql = require('graphql');
-const { resolver, DateType } = require('graphql-sequelize');
+const { DateType } = require('graphql-sequelize');
 
-const models = require('../../models/definitions');
+const resolvers = require('../resolvers');
+
 const scalars = require('./scalars');
-
 const commonTypes = require('./common');
 const agentsTypes = require('./agents');
 const channelsTypes = require('./channels');
@@ -22,16 +22,14 @@ const notebook = new graphql.GraphQLObjectType({
     ownerId: { type: graphql.GraphQLNonNull(scalars.agentId) },
     channelId: { type: graphql.GraphQLNonNull(scalars.channelId) },
 
-    // @todo: Do not use resolver. Use common interfaces of Data layer.
     owner: {
       type: graphql.GraphQLNonNull(agentsTypes.agent),
-      resolve: resolver(models.Notebook.Agent),
+      resolve: resolvers.agents.one,
     },
 
-    // @todo: Do not use resolver. Use common interfaces of Data layer.
     channel: {
       type: graphql.GraphQLNonNull(channelsTypes.channel),
-      resolve: resolver(models.Notebook.Channel),
+      resolve: resolvers.channels.one,
     },
   }),
 });

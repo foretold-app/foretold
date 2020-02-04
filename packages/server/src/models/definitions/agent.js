@@ -55,7 +55,7 @@ module.exports = (sequelize, DataTypes) => {
   }
 
   /**
-   * @todo: fix it, remove it.
+   * @todo: To fix it, remove it!
    * @deprecated
    * @param models
    */
@@ -66,37 +66,6 @@ module.exports = (sequelize, DataTypes) => {
 
     Agent.Bot = Agent.hasOne(models.Bot, {
       foreignKey: 'agentId',
-    });
-
-    Agent.Preference = Agent.hasOne(models.Preference, {
-      foreignKey: 'agentId',
-    });
-
-    Agent.Measurements = Agent.hasMany(models.Measurement, {
-      foreignKey: 'agentId',
-      as: 'Measurements',
-    });
-
-    Agent.Measurables = Agent.hasMany(models.Measurable, {
-      foreignKey: 'creatorId',
-    });
-
-    //
-    // await (
-    //  await models.Agent.findByPk('4897a0f7-6b30-4ad3-a3d1-21c487a435ce')
-    // ).getChannels()
-    //
-    // models.Agent.findAll({ include: [models.Channel] })
-    //
-    // await (
-    //  await models.Agent.find({
-    //    where: { id: '4897a0f7-6b30-4ad3-a3d1-21c487a435ce' }
-    //  })).getChannels();
-    //
-    Agent.Channels = Agent.belongsToMany(models.Channel, {
-      through: models.ChannelMemberships,
-      foreignKey: 'agentId',
-      otherKey: 'channelId',
     });
   };
 

@@ -42,19 +42,5 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
-  /**
-   * @todo: fix it, remove it.
-   * @deprecated
-   * @param models
-   */
-  AgentMeasurable.associate = function associate(models) {
-    AgentMeasurable.Agent = AgentMeasurable.belongsTo(models.Agent, {
-      foreignKey: 'agentId',
-    });
-    AgentMeasurable.Measurable = AgentMeasurable.belongsTo(models.Measurable, {
-      foreignKey: 'measurableId',
-    });
-  };
-
   return AgentMeasurable;
 };

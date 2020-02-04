@@ -3,6 +3,8 @@ const graphql = require('graphql');
 const resolvers = require('../resolvers');
 const agents = require('./agents');
 const channelMemberships = require('./channel-memberhips');
+const permissionsTypes = require('./permissions');
+const commonTypes = require('./common');
 
 const { string3to255 } = require('./scalars');
 const { string3to4K } = require('./scalars');
@@ -23,12 +25,12 @@ const channel = new graphql.GraphQLObjectType({
     },
 
     myRole: {
-      type: graphql.GraphQLNonNull(require('./channel-memberhips').roleOutput),
+      type: graphql.GraphQLNonNull(channelMemberships.roleOutput),
       resolve: resolvers.channelMemberships.myRole,
     },
 
     permissions: {
-      type: graphql.GraphQLNonNull(require('./permissions').permissions),
+      type: graphql.GraphQLNonNull(permissionsTypes.permissions),
       resolve: resolvers.permissions.channelsPermissions,
     },
 
@@ -80,7 +82,7 @@ const orderChannels = new graphql.GraphQLInputObjectType({
   fields: () => ({
     field: { type: graphql.GraphQLNonNull(orderFieldChannel) },
     direction: {
-      type: graphql.GraphQLNonNull(require('./common').orderDirection),
+      type: graphql.GraphQLNonNull(commonTypes.orderDirection),
     },
   }),
 });

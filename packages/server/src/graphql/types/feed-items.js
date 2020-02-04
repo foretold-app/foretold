@@ -3,7 +3,10 @@ const { DateType, resolver } = require('graphql-sequelize');
 
 const models = require('../../models/definitions');
 
-const { FEED_ITEM_BODY } = require('../../enums/feed-item-body');
+const { FEED_ITEM_BODY } = require('../../enums');
+
+const commonTypes = require('./common');
+const channelsTypes = require('./channels');
 
 const feedItemBodyGeneric = new graphql.GraphQLObjectType({
   name: 'FeedItemBodyGeneric',
@@ -41,7 +44,7 @@ const feedItem = new graphql.GraphQLObjectType({
 
     // @todo: Do not use resolver. Use common interfaces of Data layer.
     channel: {
-      type: graphql.GraphQLNonNull(require('./channels').channel),
+      type: graphql.GraphQLNonNull(channelsTypes.channel),
       resolve: resolver(models.FeedItem.Channel),
     },
   }),
@@ -60,7 +63,7 @@ const feedItemsConnection = new graphql.GraphQLObjectType({
   fields: () => ({
     total: { type: graphql.GraphQLInt },
     pageInfo: {
-      type: graphql.GraphQLNonNull(require('./common').pageInfoConnection),
+      type: graphql.GraphQLNonNull(commonTypes.pageInfoConnection),
     },
     edges: { type: graphql.GraphQLList(feedItemEdge) },
   }),

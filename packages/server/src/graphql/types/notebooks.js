@@ -4,6 +4,10 @@ const { resolver, DateType } = require('graphql-sequelize');
 const models = require('../../models/definitions');
 const scalars = require('./scalars');
 
+const commonTypes = require('./common');
+const agentsTypes = require('./agents');
+const channelsTypes = require('./channels');
+
 const notebook = new graphql.GraphQLObjectType({
   name: 'Notebook',
   fields: () => ({
@@ -20,13 +24,13 @@ const notebook = new graphql.GraphQLObjectType({
 
     // @todo: Do not use resolver. Use common interfaces of Data layer.
     owner: {
-      type: graphql.GraphQLNonNull(require('./agents').agent),
+      type: graphql.GraphQLNonNull(agentsTypes.agent),
       resolve: resolver(models.Notebook.Agent),
     },
 
     // @todo: Do not use resolver. Use common interfaces of Data layer.
     channel: {
-      type: graphql.GraphQLNonNull(require('./channels').channel),
+      type: graphql.GraphQLNonNull(channelsTypes.channel),
       resolve: resolver(models.Notebook.Channel),
     },
   }),
@@ -69,7 +73,7 @@ const notebooksConnection = new graphql.GraphQLObjectType({
       type: graphql.GraphQLInt,
     },
     pageInfo: {
-      type: graphql.GraphQLNonNull(require('./common').pageInfoConnection),
+      type: graphql.GraphQLNonNull(commonTypes.pageInfoConnection),
     },
     edges: {
       type: graphql.GraphQLList(notebookEdge),

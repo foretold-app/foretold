@@ -4,10 +4,15 @@ const { resolver, DateType } = require('graphql-sequelize');
 const models = require('../../models/definitions');
 const resolvers = require('../resolvers');
 
-const { measurableValueType } = require('./enums/measurable-value-type');
-const { measurableState } = require('./enums/measurable-state');
+const { measurableValueType } = require('./enums');
+const { measurableState } = require('./enums');
 
 const scalars = require('./scalars');
+const commonTypes = require('./common');
+const permissionsTypes = require('./permissions');
+const seriesTypes = require('./series');
+const agentsTypes = require('./agents');
+const channelsTypes = require('./channels');
 
 const name = {
   type: graphql.GraphQLNonNull(scalars.string3to512),
@@ -65,30 +70,30 @@ const measurable = new graphql.GraphQLObjectType({
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
     creatorId: { type: graphql.GraphQLString },
     seriesId: { type: graphql.GraphQLString },
-    iAmOwner: require('./common').iAmOwner,
+    iAmOwner: commonTypes.iAmOwner,
     min: { type: graphql.GraphQLFloat },
     max: { type: graphql.GraphQLFloat },
 
     permissions: {
-      type: graphql.GraphQLNonNull(require('./permissions').permissions),
+      type: graphql.GraphQLNonNull(permissionsTypes.permissions),
       resolve: resolvers.permissions.measurablesPermissions,
     },
 
     // @todo: Do not use resolver. Use common interfaces of Data layer.
     series: {
-      type: require('./series').series,
+      type: seriesTypes.series,
       resolve: resolver(models.Measurable.Series),
     },
 
     // @todo: Do not use resolver. Use common interfaces of Data layer.
     creator: {
-      type: require('./agents').agent,
+      type: agentsTypes.agent,
       resolve: resolver(models.Measurable.Creator),
     },
 
     // @todo: Do not use resolver. Use common interfaces of Data layer.
     channel: {
-      type: require('./channels').channel,
+      type: channelsTypes.channel,
       resolve: resolver(models.Measurable.Channel),
     },
 
@@ -122,9 +127,7 @@ const measurableCreateInput = new graphql.GraphQLInputObjectType({
     labelSubject,
     labelOnDate,
     labelProperty,
-    valueType: {
-      type: require('./enums/measurable-value-type').measurableValueType,
-    },
+    valueType: { type: measurableValueType },
     channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     expectedResolutionDate: { type: DateType.default },
     resolutionEndpoint: { type: graphql.GraphQLString },
@@ -141,9 +144,7 @@ const measurableUpdateInput = new graphql.GraphQLInputObjectType({
     labelSubject,
     labelOnDate,
     labelProperty,
-    valueType: {
-      type: require('./enums/measurable-value-type').measurableValueType,
-    },
+    valueType: { type: measurableValueType },
     channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     expectedResolutionDate: { type: DateType.default },
     resolutionEndpoint: { type: graphql.GraphQLString },
@@ -167,7 +168,7 @@ const measurablesConnection = new graphql.GraphQLObjectType({
       type: graphql.GraphQLInt,
     },
     pageInfo: {
-      type: graphql.GraphQLNonNull(require('./common').pageInfoConnection),
+      type: graphql.GraphQLNonNull(commonTypes.pageInfoConnection),
     },
     edges: {
       type: graphql.GraphQLList(measurablesEdge),

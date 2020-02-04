@@ -39,19 +39,5 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
-  /**
-   * @todo: fix it, remove it.
-   * @deprecated
-   * @param models
-   */
-  Invitation.associate = function associate(models) {
-    Invitation.Inviter = Invitation.belongsTo(models.Agent, {
-      foreignKey: 'inviterAgentId',
-    });
-    Invitation.Channel = Invitation.belongsTo(models.Channel, {
-      foreignKey: 'channelId',
-    });
-  };
-
   return Invitation;
 };

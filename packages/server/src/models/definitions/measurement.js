@@ -106,7 +106,7 @@ module.exports = (sequelize, DataTypes) => {
   }
 
   /**
-   * @todo: fix it, remove it.
+   * @todo: fix it, remove it!
    * @deprecated
    * @param models
    */
@@ -117,16 +117,6 @@ module.exports = (sequelize, DataTypes) => {
 
     Measurement.Agent = Measurement.belongsTo(models.Agent, {
       foreignKey: 'agentId',
-    });
-
-    Measurement.TaggedMeasurement = Measurement.belongsTo(models.Measurement, {
-      foreignKey: 'taggedMeasurementId',
-      as: 'TaggedMeasurement',
-    });
-
-    Measurement.TaggedBy = Measurement.hasMany(models.Measurement, {
-      foreignKey: 'taggedMeasurementId',
-      as: 'TaggedBy',
     });
   };
 

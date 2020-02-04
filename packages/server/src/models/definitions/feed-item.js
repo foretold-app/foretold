@@ -30,19 +30,5 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
-  /**
-   * @todo: fix it, remove it.
-   * @deprecated
-   * @param models
-   */
-  FeedItem.associate = function associate(models) {
-    FeedItem.Channel = FeedItem.belongsTo(models.Channel, {
-      foreignKey: 'channelId',
-    });
-    FeedItem.Agent = FeedItem.belongsTo(models.Agent, {
-      foreignKey: 'agentId',
-    });
-  };
-
   return FeedItem;
 };

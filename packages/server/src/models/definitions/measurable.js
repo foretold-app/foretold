@@ -150,21 +150,11 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   /**
-   * @todo: fix it, remove it.
+   * @todo: fix it, remove it!
    * @deprecated
    * @param models
    */
   Measurable.associate = function associate(models) {
-    Measurable.Measurements = Measurable.hasMany(models.Measurement, {
-      foreignKey: 'measurableId',
-      as: 'Measurements',
-    });
-
-    Measurable.Series = Measurable.belongsTo(models.Series, {
-      foreignKey: 'seriesId',
-      as: 'series',
-    });
-
     Measurable.Creator = Measurable.belongsTo(models.Agent, {
       foreignKey: 'creatorId',
       as: 'creator',

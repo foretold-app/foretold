@@ -21,16 +21,11 @@ module.exports = {
       await queryInterface.sequelize.query(
         'DROP MATERIALIZED VIEW IF EXISTS "AgentMeasurable" CASCADE',
       );
-      await queryInterface.sequelize.query(
-        'DROP MATERIALIZED VIEW IF EXISTS "ChannelAgents" CASCADE;',
-      );
 
       const agentChannels = sql('202002031534000-views/agent-channels');
       const agentMeasurables = sql('202002031534000-views/agent-measurables');
-      const channelAgents = sql('202002031534000-views/channel-agents');
 
       // Creates views
-      await queryInterface.sequelize.query(channelAgents);
       await queryInterface.sequelize.query(agentChannels);
       await queryInterface.sequelize.query(agentMeasurables);
 
@@ -53,16 +48,11 @@ module.exports = {
       await queryInterface.sequelize.query(
         'DROP MATERIALIZED VIEW IF EXISTS "AgentMeasurable" CASCADE',
       );
-      await queryInterface.sequelize.query(
-        'DROP MATERIALIZED VIEW IF EXISTS "ChannelAgents" CASCADE;',
-      );
 
       const agentChannels = sql('202001131021000-views/agent-channels');
       const agentMeasurables = sql('202001131021000-views/agent-measurables');
-      const channelAgents = sql('202001131021000-views/channel-agents');
 
       // Creates views
-      await queryInterface.sequelize.query(channelAgents);
       await queryInterface.sequelize.query(agentChannels);
       await queryInterface.sequelize.query(agentMeasurables);
 

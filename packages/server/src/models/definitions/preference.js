@@ -32,17 +32,5 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
-  /**
-   * @todo: fix it, remove it.
-   * @deprecated
-   * @param models
-   */
-  Preference.associate = function associate(models) {
-    Preference.Agent = Preference.belongsTo(models.Agent, {
-      foreignKey: 'agentId',
-      as: 'agent',
-    });
-  };
-
   return Preference;
 };

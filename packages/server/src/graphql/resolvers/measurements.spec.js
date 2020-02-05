@@ -32,7 +32,7 @@ describe('Measurements Resolver', () => {
             first: 'first5',
             last: 'last5',
           },
-          { agentId: 'agentId1', isAdmin: null },
+          { agentId: 'agentId1', isAdmin: null, raw: true },
         );
         expect(result).toEqual(true);
       });
@@ -45,12 +45,12 @@ describe('Measurements Resolver', () => {
     const context = { agent: { id: 'agentId2' } };
     const info = {};
 
-    it('return a measurement', () => {
+    it('returns a measurement', () => {
       return measurements.one(root, args, context, info).then((result) => {
         expect(new MeasurementsData().getOne).toHaveBeenCalledWith(
           { id: 'id1' },
           {},
-          { agentId: 'agentId2', isAdmin: null },
+          { agentId: 'agentId2', isAdmin: null, raw: true },
         );
         expect(result).toEqual(true);
       });

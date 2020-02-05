@@ -129,6 +129,7 @@ and channel = {
   channelMemberships: option(Js.Array.t(channelMembership)),
   openedMeasurablesCount: option(int),
   permissions: option(permissions),
+  knowledgeGraph: option(string),
 }
 
 and channelMembership = {

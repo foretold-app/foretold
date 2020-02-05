@@ -50,6 +50,9 @@ const tables = [
   'Votes',
 ];
 
+/**
+ * Here we could use "queryInterface.addIndex".
+ */
 module.exports = {
   up: async function (queryInterface) {
     try {

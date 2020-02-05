@@ -8,6 +8,7 @@ const commonTypes = require('./common');
 
 const { string3to255 } = require('./scalars');
 const { string3to4K } = require('./scalars');
+const { string0to32K } = require('./scalars');
 
 const channel = new graphql.GraphQLObjectType({
   name: 'Channel',
@@ -18,6 +19,7 @@ const channel = new graphql.GraphQLObjectType({
     isArchived: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
     isPublic: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
     isCurated: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
+    knowledgeGraph: { type: string0to32K },
 
     membershipCount: {
       type: graphql.GraphQLNonNull(graphql.GraphQLInt),
@@ -65,6 +67,7 @@ const channelInput = new graphql.GraphQLInputObjectType({
     isPublic: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
     isArchived: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
     description: { type: string3to4K },
+    knowledgeGraph: { type: string0to32K },
   }),
 });
 

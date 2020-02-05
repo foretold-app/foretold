@@ -57,8 +57,9 @@ module Styles = {
   let inputBox = style([]);
   let submitButton = style([marginTop(px(20))]);
   let select = style([marginBottom(px(7))]);
-  let label = style([color(hex("888"))]);
+  let label = style([color(hex("888")), marginTop(px(5)), marginBottom(px(3))]);
   let fullWidth = style([minWidth(`percent(100.))]);
+  let clear = style([clear(`both)]);
 };
 
 module CompetitorTypeSelect = {
@@ -218,27 +219,29 @@ module ValueInput = {
       input(measurable) |> E.O.fmap(r => [|r|]) |> E.O.default([||]);
 
     let floatCdf = (measurable: Types.measurable, send) => {
-        <GuesstimateInput
-          focusOnRender=true
-          sampleCount=30000
-          min={measurable.min}
-          max={measurable.max}
-          inputs={inputs(measurable)}
-          onUpdate={(event, sampler) =>
-            {let (ys, xs, hasLimitError) = event
-             let asGroup: ForetoldComponents.Types.Dist.t = {xs, ys}
+      <GuesstimateInput
+        focusOnRender=true
+        sampleCount=30000
+        min={measurable.min}
+        max={measurable.max}
+        inputs={inputs(measurable)}
+        onUpdate={(event, sampler) =>
+          {
+            let (ys, xs, hasLimitError) = event;
+            let asGroup: ForetoldComponents.Types.Dist.t = {xs, ys};
 
-             switch (sampler##isRangeDistribution) {
-             | true => send(UpdateCdfType("CDF"))
-             | _ => send(UpdateCdfType("POINT"))
-             }
+            switch (sampler##isRangeDistribution) {
+            | true => send(UpdateCdfType("CDF"))
+            | _ => send(UpdateCdfType("POINT"))
+            };
 
-             send(UpdateHasLimitError(hasLimitError))
-             send(UpdateFloatCdf(asGroup))}
-            |> ignore
+            send(UpdateHasLimitError(hasLimitError));
+            send(UpdateFloatCdf(asGroup));
           }
-          onChange={text => send(UpdateValueText(text))}
-        />;
+          |> ignore
+        }
+        onChange={text => send(UpdateValueText(text))}
+      />;
     };
   };
 
@@ -357,6 +360,7 @@ module ValueInputMapper = {
             </span>
           </Div>
         </Div>
+        <div className=Styles.clear />
         <div className=Styles.inputBox>
           <h4 className=Styles.label> {"Reasoning" |> ste} </h4>
         </div>
@@ -469,13 +473,12 @@ module Main = {
         </div>
         dataTypeSelect
         <ValueInputMapper state measurable send loggedUser />
-        <Antd.Input.TextArea
+        <ForetoldComponents.ReAutosizeTextareaInput
           value={state.description}
-          style={ReactDOMRe.Style.make(~minHeight="9em", ())}
-          onChange={event => {
-            let value = ReactEvent.Form.target(event)##value;
-            send(UpdateDescription(value));
-          }}
+          placeholder="Comment"
+          inputClassName="ant-input"
+          style={ReactDOMRe.Style.make(~transition="", ())}
+          onChange={value => send(UpdateDescription(value))}
         />
         {Primary.User.show(loggedUser, botSelect)}
         <div className=Styles.submitButton>

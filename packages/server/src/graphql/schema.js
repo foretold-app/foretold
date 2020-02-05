@@ -1,8 +1,6 @@
 const graphql = require('graphql');
-const { resolver } = require('graphql-sequelize');
 const { applyMiddleware } = require('graphql-middleware');
 
-const models = require('../models/definitions');
 const resolvers = require('./resolvers');
 
 const types = require('./types');
@@ -42,10 +40,9 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.users.one,
       },
 
-      // @todo: Do not use resolver. Use common interfaces of Data layer.
       users: {
         type: graphql.GraphQLNonNull(graphql.GraphQLList(types.users.user)),
-        resolve: resolver(models.User),
+        resolve: resolvers.users.all,
       },
 
       measurement: {

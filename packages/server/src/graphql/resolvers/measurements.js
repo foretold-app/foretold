@@ -288,17 +288,17 @@ function translateValue(measurement) {
 
 /**
  * @todo: To move from resolvers.
- * @param prediction
- * @param aggregate
- * @param outcome
+ * @param {Models.Measurement} prediction$
+ * @param {Models.Measurement} aggregate$
+ * @param {Models.Measurement} outcome$
  * @returns {number|*}
  */
-function _marketLogScore({ prediction, aggregate, outcome }) {
-  if (!prediction || !aggregate || !outcome) {
+function _marketLogScore({ prediction$, aggregate$, outcome$ }) {
+  if (!prediction$ || !aggregate$ || !outcome$) {
     return { error: 'MeasurementScore Error: Missing needed data' };
   }
 
-  const { competitorType } = prediction;
+  const { competitorType } = prediction$;
 
   if (
     competitorType !== MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE
@@ -307,24 +307,24 @@ function _marketLogScore({ prediction, aggregate, outcome }) {
   }
 
   return new PredictionResolutionGroup({
-    agentPrediction: translateValue(prediction),
-    marketPrediction: translateValue(aggregate),
-    resolution: translateValue(outcome),
+    agentPrediction: translateValue(prediction$),
+    marketPrediction: translateValue(aggregate$),
+    resolution: translateValue(outcome$),
   }).pointScore(marketScore);
 }
 
 /**
  * @todo: To move from resolvers.
- * @param prediction
- * @param outcome
+ * @param {Models.Measurement} prediction$
+ * @param {Models.Measurement} outcome$
  * @returns {number|*}
  */
-function _nonMarketLogScore({ prediction, outcome }) {
-  if (!prediction || !outcome) {
+function _nonMarketLogScore({ prediction$, outcome$ }) {
+  if (!prediction$ || !outcome$) {
     return { error: '_nonMarketLogScore Error: Missing needed data' };
   }
 
-  const { competitorType } = prediction;
+  const { competitorType } = prediction$;
 
   if (
     competitorType !== MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE
@@ -334,9 +334,9 @@ function _nonMarketLogScore({ prediction, outcome }) {
   }
 
   return new PredictionResolutionGroup({
-    agentPrediction: translateValue(prediction),
+    agentPrediction: translateValue(prediction$),
     marketPrediction: undefined,
-    resolution: translateValue(outcome),
+    resolution: translateValue(outcome$),
   }).pointScore(nonMarketScore);
 }
 
@@ -349,9 +349,9 @@ function _nonMarketLogScore({ prediction, outcome }) {
  */
 async function primaryPointScore(root, args, context, info) {
   const result = _marketLogScore({
-    prediction: await prediction(root, args, context, info),
-    aggregate: await previousAggregate(root, args, context, info),
-    outcome: await outcome(root, args, context, info),
+    prediction$: await prediction(root, args, context, info),
+    aggregate$: await previousAggregate(root, args, context, info),
+    outcome$: await outcome(root, args, context, info),
   });
 
   if (result.error) {
@@ -372,8 +372,8 @@ async function primaryPointScore(root, args, context, info) {
  */
 async function nonMarketLogScore(root, args, context, info) {
   const result = _nonMarketLogScore({
-    prediction: await prediction(root, args, context, info),
-    outcome: await outcome(root, args, context, info),
+    prediction$: await prediction(root, args, context, info),
+    outcome$: await outcome(root, args, context, info),
   });
 
   if (result.error) {

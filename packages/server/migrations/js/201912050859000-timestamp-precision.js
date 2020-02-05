@@ -40,7 +40,7 @@ module.exports = {
         'DROP VIEW "AgentChannels" CASCADE',
       );
       await queryInterface.sequelize.query(
-        'DROP VIEW "AgentMeasurable" CASCADE',
+        'DROP VIEW "AgentMeasurables" CASCADE',
       );
       await queryInterface.sequelize.query(
         'DROP VIEW "ChannelAgents" CASCADE',
@@ -105,7 +105,7 @@ module.exports = {
         'DROP VIEW "AgentChannels" CASCADE',
       );
       await queryInterface.sequelize.query(
-        'DROP VIEW "AgentMeasurable" CASCADE',
+        'DROP VIEW "AgentMeasurables" CASCADE',
       );
       await queryInterface.sequelize.query(
         'DROP VIEW "ChannelAgents" CASCADE;',

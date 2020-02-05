@@ -54,7 +54,9 @@ async function accessTokenUpdate(root, args, _context) {
 async function one(root, args, _context) {
   const userId = _.get(args, 'id', null) || _.get(root, 'userId', null);
   const params = new Params({ id: userId });
-  return new UsersData().getOne(params);
+  const query = new Query();
+  const options = new Options({ raw: true });
+  return new UsersData().getOne(params, query, options);
 }
 
 /**
@@ -72,9 +74,21 @@ async function oneByAgentId(root, _args, _context, _info) {
   return new UsersData().getOne(params, query, options);
 }
 
+/**
+ * @param {object} _root
+ * @param {object} _args
+ * @param {Schema.Context} _context
+ * @param {object} _info
+ * @returns {Promise<*|Array<Model>>}
+ */
+async function count(_root, _args, _context, _info) {
+  return new UsersData().getCount();
+}
+
 module.exports = {
-  one,
-  update,
-  oneByAgentId,
   accessTokenUpdate,
+  count,
+  one,
+  oneByAgentId,
+  update,
 };

@@ -1,25 +1,21 @@
 const graphql = require('graphql');
 
-const models = require('../../models/definitions');
 const resolvers = require('../resolvers');
 
-/**
- * @todo: use resolvers! never use models this way.
- */
 const stats = new graphql.GraphQLObjectType({
   name: 'Stats',
   fields: {
     agentCount: {
       type: graphql.GraphQLNonNull(graphql.GraphQLInt),
-      resolve: async () => models.Agent.count(),
+      resolve: resolvers.agents.count,
     },
     userCount: {
       type: graphql.GraphQLNonNull(graphql.GraphQLInt),
-      resolve: async () => models.User.count(),
+      resolve: resolvers.users.count,
     },
     botCount: {
       type: graphql.GraphQLNonNull(graphql.GraphQLInt),
-      resolve: async () => models.Bot.count(),
+      resolve: resolvers.bots.count,
     },
     measurementCount: {
       type: graphql.GraphQLNonNull(graphql.GraphQLInt),

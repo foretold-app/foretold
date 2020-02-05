@@ -14,12 +14,12 @@ const { Data } = require('../../data/classes');
  * @param {object} _info
  * @returns {Promise<*>}
  */
-async function getOne(root, _args, _context, _info) {
+async function one(root, _args, _context, _info) {
   const agentId = _.get(root, 'id', null);
 
   const params = new Params({ agentId });
   const query = new Query();
-  const data = new Data({ agentId });
+  const data = new Data({ agentId, raw: true });
 
   return new PreferencesData().upsertOne(params, query, data);
 }
@@ -70,7 +70,7 @@ async function unsubscribe(_root, args, _context, _info) {
 }
 
 module.exports = {
-  getOne,
+  getOne: one,
   update,
   subscribe,
   unsubscribe,

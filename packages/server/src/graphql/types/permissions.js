@@ -1,16 +1,19 @@
 const graphql = require('graphql');
 
+const { queries } = require('./enums');
+const { mutations } = require('./enums');
+
 const permissionQueries = new graphql.GraphQLObjectType({
   name: 'PermissionQueries',
   fields: () => ({
     allow: {
       type: graphql.GraphQLNonNull(
-        graphql.GraphQLList(require('./enums/queries').queries),
+        graphql.GraphQLList(queries),
       ),
     },
     deny: {
       type: graphql.GraphQLNonNull(
-        graphql.GraphQLList(require('./enums/queries').queries),
+        graphql.GraphQLList(queries),
       ),
     },
   }),
@@ -21,12 +24,12 @@ const permissionMutations = new graphql.GraphQLObjectType({
   fields: () => ({
     allow: {
       type: graphql.GraphQLNonNull(
-        graphql.GraphQLList(require('./enums/mutations').mutations),
+        graphql.GraphQLList(mutations),
       ),
     },
     deny: {
       type: graphql.GraphQLNonNull(
-        graphql.GraphQLList(require('./enums/mutations').mutations),
+        graphql.GraphQLList(mutations),
       ),
     },
   }),

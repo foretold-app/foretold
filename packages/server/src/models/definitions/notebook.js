@@ -43,19 +43,5 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
-  /**
-   * @todo: fix it, remove it.
-   * @deprecated
-   * @param models
-   */
-  Notebook.associate = function associate(models) {
-    Notebook.Channel = Notebook.belongsTo(models.Channel, {
-      foreignKey: 'channelId',
-    });
-    Notebook.Agent = Notebook.belongsTo(models.Agent, {
-      foreignKey: 'ownerId',
-    });
-  };
-
   return Notebook;
 };

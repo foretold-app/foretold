@@ -43,7 +43,7 @@ async function all(_root, args, context, _info) {
     measurableId,
   });
   const pagination = new Pagination(args);
-  const options = new Options({ currentAgentId });
+  const options = new Options({ currentAgentId, raw: true });
 
   return new AgentMeasurablesData().getConnection(filter, pagination, options);
 }

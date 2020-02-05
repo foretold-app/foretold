@@ -5,6 +5,7 @@ const { Params } = require('../../data/classes');
 const { Filter } = require('../../data/classes');
 const { Options } = require('../../data/classes');
 const { Pagination } = require('../../data/classes');
+const { Query } = require('../../data/classes');
 
 /**
  * @param {*} _root
@@ -46,7 +47,9 @@ async function oneByMeasurementId(root, _args, context, _info) {
   const measurementId = _.get(root, 'id', null);
   const currentAgentId = _.get(context, 'agent.id', null);
   const params = new Params({ measurementId, agentId: currentAgentId });
-  return new VotesData().getOne(params);
+  const query = new Query();
+  const options = new Options({ raw: true });
+  return new VotesData().getOne(params, query, options);
 }
 
 /**

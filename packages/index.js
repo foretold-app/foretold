@@ -1,3 +1,3 @@
-// Single entry point for backend service
-require('./bots');
-require('./server');
+// Single entry point for the backend service
+require('./bots').run();
+require('./server').run();

@@ -7,6 +7,7 @@ const { Options } = require('../../data/classes');
 const { Filter } = require('../../data/classes');
 const { Params } = require('../../data/classes');
 const { Data } = require('../../data/classes');
+const { Query } = require('../../data/classes');
 
 /**
  * @param {*} _root
@@ -25,7 +26,7 @@ async function create(_root, args, context) {
   return new ChannelMembershipsData().upsertOne(new Params({
     channelId: input.channelId,
     agentId: input.agentId,
-  }), {}, new Data({
+  }), new Query(), new Data({
     channelId: input.channelId,
     agentId: input.agentId,
     inviterAgentId,
@@ -85,7 +86,7 @@ async function allByAgentId(root, _args, context, _info) {
 
   const filter = new Filter({ agentId });
   const pagination = new Pagination();
-  const options = new Options({ currentAgentId });
+  const options = new Options({ currentAgentId, raw: true });
 
   return new ChannelMembershipsData().getAll(filter, pagination, options);
 }
@@ -103,7 +104,7 @@ async function allByChannelId(root, _args, context, _info) {
 
   const filter = new Filter({ channelId });
   const pagination = new Pagination();
-  const options = new Options({ currentAgentId });
+  const options = new Options({ currentAgentId, raw: true });
 
   return new ChannelMembershipsData().getAll(filter, pagination, options);
 }

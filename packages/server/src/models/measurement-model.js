@@ -57,7 +57,7 @@ class MeasurementModel extends ModelPostgres {
 
   /**
    * @public
-   * @todo: To use "applyFilter" to use "transactions" later.
+   * @todo: To use "applyFilter" to use "transactions" later!
    * @param {Models.MeasurableID | null} measurableId
    * @returns {Promise<Model>}
    */
@@ -77,12 +77,13 @@ class MeasurementModel extends ModelPostgres {
       order: [
         ['createdAt', 'DESC'],
       ],
+      raw: true,
     });
   }
 
   /**
    * @public
-   * @todo: To use "applyFilter" to use "transactions" later.
+   * @todo: To use "applyFilter" to use "transactions" later!
    * @param {Models.MeasurableID | null} measurableId
    * @param {Models.AgentID | null} agentId
    * @param {Date} relevantAt
@@ -102,6 +103,7 @@ class MeasurementModel extends ModelPostgres {
       order: [
         ['relevantAt', 'DESC'],
       ],
+      raw: true,
     });
   }
 

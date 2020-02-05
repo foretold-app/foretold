@@ -1,9 +1,8 @@
 const graphql = require('graphql');
-const { resolver, DateType } = require('graphql-sequelize');
+const { DateType } = require('graphql-sequelize');
 const { MEASUREMENT_VALUE } = require('@foretold/measurement-value/enums');
 
 const resolvers = require('../resolvers');
-const models = require('../../models/definitions');
 
 const votesTypes = require('./votes');
 const measurablesTypes = require('./measurables');
@@ -107,7 +106,10 @@ const measurement = new graphql.GraphQLObjectType({
   name: 'Measurement',
   fields: () => ({
     id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-    value: { type: graphql.GraphQLNonNull(measurementValue) },
+    value: {
+      type: graphql.GraphQLNonNull(measurementValue),
+      resolve: resolvers.measurements.value,
+    },
     competitorType: {
       type: measurementCompetitorType,
     },
@@ -123,41 +125,37 @@ const measurement = new graphql.GraphQLObjectType({
 
     measurementScoreSet: {
       type: measurementScoreSet,
-      resolve: require('../resolvers/measurements').scoreSet,
+      resolve: resolvers.measurements.scoreSet,
     },
 
     totalVoteAmount: {
       type: graphql.GraphQLInt,
-      resolve: require('../resolvers/votes').total,
+      resolve: resolvers.votes.total,
     },
 
     vote: {
       type: votesTypes.vote,
-      resolve: require('../resolvers/votes').oneByMeasurementId,
+      resolve: resolvers.votes.oneByMeasurementId,
     },
 
-    // @todo: Do not use resolver. Use common interfaces of Data layer.
     measurable: {
       type: measurablesTypes.measurable,
-      resolve: resolver(models.Measurement.Measurable),
+      resolve: resolvers.measurables.one,
     },
 
-    // @todo: Do not use resolver. Use common interfaces of Data layer.
     agent: {
       type: agentsTypes.agent,
-      resolve: resolver(models.Measurement.Agent),
+      resolve: resolvers.agents.one,
     },
 
-    // @todo: Do not use resolver. Use common interfaces of Data layer.
     taggedMeasurement: {
       type: measurement,
-      resolve: resolver(models.Measurement.TaggedMeasurement),
+      resolve: resolvers.measurements.one,
     },
 
-    // @todo: Do not use resolver. Use common interfaces of Data layer.
     taggedBy: {
       type: graphql.GraphQLNonNull(graphql.GraphQLList(measurement)),
-      resolve: resolver(models.Measurement.TaggedBy),
+      resolve: resolvers.measurements.allByTaggedMeasurementId,
     },
 
     permissions: {
@@ -215,27 +213,27 @@ const measurementScoreSet = new graphql.GraphQLObjectType({
     prediction: {
       description: 'Returns itself.',
       type: graphql.GraphQLNonNull(measurement),
-      resolve: require('../resolvers/measurements').prediction,
+      resolve: resolvers.measurements.prediction,
     },
     outcome: {
       description: 'Returns latest objective measurement.',
       type: measurement,
-      resolve: require('../resolvers/measurements').outcome,
+      resolve: resolvers.measurements.outcome,
     },
     previousAggregate: {
       description: 'Returns latest aggregation measurement.',
       type: measurement,
-      resolve: require('../resolvers/measurements').previousAggregate,
+      resolve: resolvers.measurements.previousAggregate,
     },
     nonMarketLogScore: {
       description: 'Not fully implemented yet.',
       type: graphql.GraphQLFloat,
-      resolve: require('../resolvers/measurements').nonMarketLogScore,
+      resolve: resolvers.measurements.nonMarketLogScore,
     },
     primaryPointScore: {
       description: 'Not fully implemented yet.',
       type: graphql.GraphQLFloat,
-      resolve: require('../resolvers/measurements').primaryPointScore,
+      resolve: resolvers.measurements.primaryPointScore,
     },
   }),
 });

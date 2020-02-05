@@ -1,5 +1,13 @@
 const { runListeners } = require('./sync/listeners');
 const { runJobs } = require('./sync');
 
-runListeners();
-runJobs();
+function run() {
+  runListeners();
+  runJobs();
+}
+
+module.exports = {
+  run,
+  runJobs,
+  runListeners,
+};

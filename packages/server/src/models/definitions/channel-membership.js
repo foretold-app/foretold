@@ -49,29 +49,5 @@ module.exports = (sequelize, DataTypes) => {
 
   ChannelMemberships.ROLE = CHANNEL_MEMBERSHIP_ROLES;
 
-  /**
-   * @todo: fix it, remove it.
-   * @deprecated
-   * @param models
-   */
-  ChannelMemberships.associate = function associate(models) {
-    models.Agent.belongsToMany(models.Channel, {
-      through: ChannelMemberships,
-      foreignKey: 'agentId',
-      as: 'agentId',
-    });
-
-    models.Channel.belongsToMany(models.Agent, {
-      through: ChannelMemberships,
-      foreignKey: 'channelId',
-      as: 'channelId',
-    });
-
-    models.ChannelMemberships.belongsTo(models.Agent, {
-      foreignKey: 'inviterAgentId',
-      as: 'inviterAgent',
-    });
-  };
-
   return ChannelMemberships;
 };

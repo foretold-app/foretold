@@ -20,7 +20,7 @@ async function one(_root, args, _context, _info) {
 
   const params = new Params({ name });
   const query = new Query();
-  const options = new Options();
+  const options = new Options({ raw: true });
 
   return new GlobalSettingsData().getOne(
     params,

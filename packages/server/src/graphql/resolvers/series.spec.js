@@ -13,7 +13,7 @@ describe('Series Resolvers', () => {
         expect(new SeriesData().getOne).toHaveBeenCalledWith(
           { id: 'id1' },
           {},
-          { agentId: 'agentId1', isAdmin: null },
+          { agentId: 'agentId1', isAdmin: null, raw: true },
         );
         expect(result).toEqual(true);
       });
@@ -31,7 +31,7 @@ describe('Series Resolvers', () => {
         expect(new SeriesData().getAll).toHaveBeenCalledWith(
           { channelId: null },
           {},
-          { agentId: 'agentId2', isAdmin: null },
+          { agentId: 'agentId2', isAdmin: null, raw: true },
         );
         expect(result).toEqual(true);
       });

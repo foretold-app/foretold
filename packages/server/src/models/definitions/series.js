@@ -47,29 +47,5 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
-  /**
-   * @todo: fix it, remove it.
-   * @deprecated
-   * @param models
-   */
-  Series.associate = function associate(models) {
-    Series.Creator = Series.belongsTo(models.Agent, {
-      foreignKey: 'creatorId',
-      as: 'creator',
-    });
-
-    Series.Measurables = Series.hasMany(models.Measurable, {
-      foreignKey: 'seriesId',
-      as: 'Measurables',
-    });
-
-    // Usage
-    // const se = await models.Series.find();
-    // const ch = await se.getChannel();
-    Series.Channel = Series.belongsTo(models.Channel, {
-      foreignKey: 'channelId',
-    });
-  };
-
   return Series;
 };

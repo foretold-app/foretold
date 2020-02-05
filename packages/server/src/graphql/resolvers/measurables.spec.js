@@ -41,6 +41,7 @@ describe('Measurables Resolvers', () => {
             attributes: true,
             isAdmin: null,
             measuredByAgentId: null,
+            raw: true,
           },
         );
         expect(result).toEqual(true);
@@ -59,7 +60,7 @@ describe('Measurables Resolvers', () => {
         expect(new MeasurablesData().getOne).toHaveBeenCalledWith(
           { id: 'id1' },
           {},
-          { agentId: 'agentId2', isAdmin: null },
+          { agentId: 'agentId2', isAdmin: null, raw: true },
         );
         expect(result).toBe(true);
       });

@@ -18,7 +18,7 @@ const { Data } = require('../../data/classes');
  * @returns {Promise<*|Array<Model>>}
  */
 async function one(root, args, context, _info) {
-  const seriesId = _.get(args, 'id', null);
+  const seriesId = _.get(args, 'id', null) || _.get(root, 'seriesId', null);
   const currentAgentId = _.get(context, 'agent.id', null);
 
   const params = new Params({ id: seriesId });
@@ -26,6 +26,7 @@ async function one(root, args, context, _info) {
   const options = new Options({
     isAdmin: _.get(context, 'agent.isAdmin', null),
     agentId: currentAgentId,
+    raw: true,
   });
 
   return new SeriesData().getOne(params, query, options);
@@ -49,6 +50,7 @@ async function all(root, args, context, _info) {
   const options = new Options({
     isAdmin: _.get(context, 'agent.isAdmin', null),
     agentId: currentAgentId,
+    raw: true,
   });
 
   return new SeriesData().getAll(filter, pagination, options);

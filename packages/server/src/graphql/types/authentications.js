@@ -1,5 +1,9 @@
 const graphql = require('graphql');
 
+const usersTypes = require('./users');
+const botsTypes = require('./bots');
+const agentsTypes = require('./agents');
+
 const authenticationJwt = new graphql.GraphQLObjectType({
   name: 'AuthenticationJwt',
   fields: () => ({
@@ -17,9 +21,9 @@ const authenticationToken = new graphql.GraphQLObjectType({
 const authenticated = new graphql.GraphQLObjectType({
   name: 'Authenticated',
   fields: () => ({
-    user: { type: require('./users').user },
-    bot: { type: require('./bots').bot },
-    agent: { type: require('./agents').agent },
+    user: { type: usersTypes.user },
+    bot: { type: botsTypes.bot },
+    agent: { type: agentsTypes.agent },
   }),
 });
 

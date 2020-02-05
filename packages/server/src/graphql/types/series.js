@@ -1,8 +1,11 @@
 const graphql = require('graphql');
-const { resolver, DateType } = require('graphql-sequelize');
+const { DateType } = require('graphql-sequelize');
 
-const models = require('../../models/definitions');
 const resolvers = require('../resolvers');
+
+const commonTypes = require('./common');
+const channelsTypes = require('./channels');
+const agentsTypes = require('./agents');
 
 const seriesCreateInput = new graphql.GraphQLInputObjectType({
   name: 'SeriesCreateInput',
@@ -35,20 +38,18 @@ const series = new graphql.GraphQLObjectType({
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
     creatorId: { type: graphql.GraphQLString },
-    iAmOwner: require('./common').iAmOwner,
+    iAmOwner: commonTypes.iAmOwner,
 
     // @todo: security?
-    // @todo: Do not use resolver. Use common interfaces of Data layer.
     creator: {
-      type: require('./agents').agent,
-      resolve: resolver(models.Series.Creator),
+      type: agentsTypes.agent,
+      resolve: resolvers.agents.one,
     },
 
     // @todo: security?
-    // @todo: Do not use resolver. Use common interfaces of Data layer.
     channel: {
-      type: require('./channels').channel,
-      resolve: resolver(models.Series.Channel),
+      type: channelsTypes.channel,
+      resolve: resolvers.channels.one,
     },
   }),
 });

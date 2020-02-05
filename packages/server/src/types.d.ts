@@ -257,6 +257,7 @@ export namespace Schema {
     channelMembershipsRole?: Models.ChannelMembershipRole;
     notebook?: Models.Notebook;
     measurement?: Models.Measurement;
+    measurable?: Models.Measurable;
   }
 
   export interface ChannelsInput {
@@ -335,6 +336,7 @@ export namespace Layers {
       ownerId?: Models.AgentID;
       measurableIds?: Models.MeasurableID[];
       measurementId?: Models.MeasurementID;
+      taggedMeasurementId?: Models.MeasurementID;
 
       competitorType?: string;
       type?: string;
@@ -476,6 +478,7 @@ export namespace Layers {
       ownerId?: Models.AgentID;
       measurableIds?: Models.MeasurableID[];
       measurementId?: Models.MeasurementID;
+      taggedMeasurementId?: Models.MeasurementID;
 
       isArchived?: string[];
       types?: string[];

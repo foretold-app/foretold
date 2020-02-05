@@ -53,29 +53,11 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   /**
-   * @todo: fix it, remove it.
+   * @todo: fix it, remove it!
    * @deprecated
    * @param models
    */
   Channel.associate = function associate(models) {
-    // Usage:
-    //
-    // const ch = await models.Channel
-    //   .findByPk('406da139-e440-4c74-bb3c-514ed1872cea');
-    // const cr = await ch.getCreator();
-    //
-    // models.Channel.findAll({
-    //   include: [
-    //     {model: models.Agent, as: 'creator'},
-    //     {model: models.Agent}
-    //   ]
-    // })
-    //
-    Channel.Creator = Channel.belongsTo(models.Agent, {
-      foreignKey: 'creatorId',
-      as: 'creator',
-    });
-
     // const ch = await models.Channel
     //   .findByPk('406da139-e440-4c74-bb3c-514ed1872cea');
     // const ag = await ch.getAgents();

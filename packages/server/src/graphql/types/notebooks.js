@@ -1,8 +1,12 @@
 const graphql = require('graphql');
-const { resolver, DateType } = require('graphql-sequelize');
+const { DateType } = require('graphql-sequelize');
 
-const models = require('../../models/definitions');
+const resolvers = require('../resolvers');
+
 const scalars = require('./scalars');
+const commonTypes = require('./common');
+const agentsTypes = require('./agents');
+const channelsTypes = require('./channels');
 
 const notebook = new graphql.GraphQLObjectType({
   name: 'Notebook',
@@ -18,16 +22,14 @@ const notebook = new graphql.GraphQLObjectType({
     ownerId: { type: graphql.GraphQLNonNull(scalars.agentId) },
     channelId: { type: graphql.GraphQLNonNull(scalars.channelId) },
 
-    // @todo: Do not use resolver. Use common interfaces of Data layer.
     owner: {
-      type: graphql.GraphQLNonNull(require('./agents').agent),
-      resolve: resolver(models.Notebook.Agent),
+      type: graphql.GraphQLNonNull(agentsTypes.agent),
+      resolve: resolvers.agents.one,
     },
 
-    // @todo: Do not use resolver. Use common interfaces of Data layer.
     channel: {
-      type: graphql.GraphQLNonNull(require('./channels').channel),
-      resolve: resolver(models.Notebook.Channel),
+      type: graphql.GraphQLNonNull(channelsTypes.channel),
+      resolve: resolvers.channels.one,
     },
   }),
 });
@@ -69,7 +71,7 @@ const notebooksConnection = new graphql.GraphQLObjectType({
       type: graphql.GraphQLInt,
     },
     pageInfo: {
-      type: graphql.GraphQLNonNull(require('./common').pageInfoConnection),
+      type: graphql.GraphQLNonNull(commonTypes.pageInfoConnection),
     },
     edges: {
       type: graphql.GraphQLList(notebookEdge),

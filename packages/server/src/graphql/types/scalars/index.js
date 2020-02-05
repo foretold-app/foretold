@@ -36,6 +36,9 @@ const string3to512 = createLimitedString(3, 512);
 const string0to4K = createLimitedString(0, 4 * 1024);
 const string3to4K = createLimitedString(3, 4 * 1024);
 
+const string0to32K = createLimitedString(0, 32 * 1024);
+const string3to32K = createLimitedString(3, 32 * 1024);
+
 const string0to128K = createLimitedString(0, 128 * 1024);
 const string3to128K = createLimitedString(3, 128 * 1024);
 
@@ -78,6 +81,9 @@ module.exports = {
 
   string0to4K,
   string3to4K,
+
+  string0to32K,
+  string3to32K,
 
   string0to128K,
   string3to128K,

@@ -6,6 +6,7 @@ module FormConfig = [%lenses
     description: string,
     isPublic: string,
     isArchived: string,
+    knowledgeGraph: string,
   }
 ];
 
@@ -27,6 +28,12 @@ let schema =
         Js.String.length(values.name) < 3
           ? Error("Must be over 2 characters.") : Valid,
     ),
+    Custom(
+      KnowledgeGraph,
+      values =>
+        Js.String.length(values.knowledgeGraph) > 32 * 1024
+          ? Error("Must be less the 32K.") : Valid,
+    ),
   |]);
 
 let onSuccess = result => {
@@ -42,6 +49,8 @@ let onSuccess = result => {
 module FormComponent = {
   [@react.component]
   let make = (~creating, ~reform: Form.api, ~result: result('a)) => {
+    let context = React.useContext(Providers.app);
+
     let onSubmit = event => {
       ReactEvent.Synthetic.preventDefault(event);
       reform.submit();
@@ -80,6 +89,22 @@ module FormComponent = {
                </Antd.Form.Item>
              }
            />
+           {<Form.Field
+              field=FormConfig.KnowledgeGraph
+              render={({handleChange, error, value}) =>
+                <Antd.Form.Item
+                  label={"Knowledge graph" |> Utils.ste}
+                  help={"Markdown supported" |> Utils.ste}>
+                  <Antd.Input.TextArea
+                    value
+                    style={ReactDOMRe.Style.make(~minHeight="30em", ())}
+                    onChange={Helpers.handleChange(handleChange)}
+                  />
+                  <Warning error />
+                </Antd.Form.Item>
+              }
+            />
+            |> Primary.User.show2(context.loggedUser)}
            <Form.Field
              field=FormConfig.IsPublic
              render={({handleChange, error, value}) =>
@@ -142,6 +167,8 @@ module Create = {
                       state.values.description |> E.J.O.fromString,
                     "isPublic": state.values.isPublic |> E.Bool.fromString,
                     "isArchived": state.values.isArchived |> E.Bool.fromString,
+                    "knowledgeGraph":
+                      state.values.knowledgeGraph |> E.J.O.fromString,
                   },
                   (),
                 )##variables,
@@ -164,6 +191,7 @@ module Create = {
           description: "",
           isPublic: "TRUE",
           isArchived: "FALSE",
+          knowledgeGraph: "",
         },
         (),
       );
@@ -195,6 +223,8 @@ module Edit = {
                       state.values.description |> E.J.O.fromString,
                     "isPublic": state.values.isPublic |> E.Bool.fromString,
                     "isArchived": state.values.isArchived |> E.Bool.fromString,
+                    "knowledgeGraph":
+                      state.values.knowledgeGraph |> E.J.O.fromString,
                   },
                   (),
                 )##variables,
@@ -217,6 +247,7 @@ module Edit = {
           description: channel.description |> E.O.default(""),
           isPublic: channel.isPublic |> E.Bool.toString,
           isArchived: channel.isArchived |> E.Bool.toString,
+          knowledgeGraph: channel.knowledgeGraph |> E.O.default(""),
         },
         (),
       );

@@ -35,6 +35,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: false,
     },
+    knowledgeGraph: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
     // @entity: creator-link
     creatorId: {
       type: DataTypes.UUID(),

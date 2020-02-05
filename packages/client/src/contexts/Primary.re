@@ -183,6 +183,13 @@ module User = {
     showif(user) ? component : <Null />;
   };
 
+  let show2 = (user: option(t), component: ReasonReact.reactElement) => {
+    switch (user) {
+    | Some(user) => show(user, component)
+    | None => <Null />
+    };
+  };
+
   let authorized = (user: option(t), component: ReasonReact.reactElement) => {
     switch (user) {
     | Some(_) => component
@@ -403,6 +410,7 @@ module Channel = {
         ~notebooksCount=None,
         ~isCurated=false,
         ~permissions=None,
+        ~knowledgeGraph=None,
         (),
       )
       : t => {
@@ -419,6 +427,7 @@ module Channel = {
     notebooksCount,
     isCurated,
     permissions,
+    knowledgeGraph,
   };
 
   let toChannel = (channel: Js.t('a)) => {

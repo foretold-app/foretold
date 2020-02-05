@@ -12,6 +12,7 @@ module Query = [%graphql
         membershipCount
         notebooksCount
         myRole
+        knowledgeGraph
         permissions {
           mutations {
             allow
@@ -40,6 +41,7 @@ let toChannel = channel => {
     ~myRole=Some(channel##myRole),
     ~membershipCount=Some(channel##membershipCount),
     ~permissions=Some(permissions),
+    ~knowledgeGraph=channel##knowledgeGraph |> E.J.O.toString,
     (),
   );
 };

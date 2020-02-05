@@ -5,7 +5,7 @@ let make = (~measurable: Types.measurable, ~defaultValueText="") => {
   | Some(loggedUser) =>
     <MeasurementCreate.Mutation>
       ...{(mutation, data) =>
-        <CdfInput
+        <MeasurementCdfInput
           measurable
           defaultValueText
           onSubmit={(

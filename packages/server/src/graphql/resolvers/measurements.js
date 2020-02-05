@@ -59,6 +59,7 @@ async function all(root, args, context, _info) {
   const options = new Options({
     isAdmin: _.get(context, 'agent.isAdmin', null),
     agentId: _.get(context, 'agent.id', null),
+    raw: true,
   });
 
   return new MeasurementsData().getConnection(filter, pagination, options);
@@ -131,6 +132,7 @@ async function one(root, args, context, _info) {
   const options = new Options({
     isAdmin: _.get(context, 'agent.isAdmin', null),
     agentId: currentAgentId,
+    raw: true,
   });
 
   return new MeasurementsData().getOne(params, query, options);
@@ -201,7 +203,9 @@ async function scoreSet(root, _args, _context, _info) {
 async function prediction(root, _args, _context, _info) {
   const measurementId = _.get(root, 'id', null);
   const params = new Params({ id: measurementId });
-  return new MeasurementsData().getOne(params);
+  const query = new Query();
+  const options = new Options({ raw: true });
+  return new MeasurementsData().getOne(params, query, options);
 }
 
 /**
@@ -270,12 +274,12 @@ async function latestAggregateByRootId(root, _args, context, _info) {
 /**
  * @todo: To fix "dataValues".
  * @todo: duplicated.
- * @param r
+ * @param measurement
  * @returns {{data: *, dataType: *}}
  */
-function translateValue(r) {
-  let { data } = r.dataValues.value;
-  const { dataType } = r.dataValues.value;
+function translateValue(measurement) {
+  let data = _.get(measurement, 'value', null);
+  const dataType = _.get(measurement, 'value.dataType', null);
   if (dataType === 'percentage') {
     data /= 100;
   }
@@ -283,6 +287,7 @@ function translateValue(r) {
 }
 
 /**
+ * @todo: To move from resolvers.
  * @param prediction
  * @param aggregate
  * @param outcome
@@ -293,7 +298,7 @@ function _marketLogScore({ prediction, aggregate, outcome }) {
     return { error: 'MeasurementScore Error: Missing needed data' };
   }
 
-  const { competitorType } = prediction.dataValues;
+  const { competitorType } = prediction;
 
   if (
     competitorType !== MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE
@@ -309,6 +314,7 @@ function _marketLogScore({ prediction, aggregate, outcome }) {
 }
 
 /**
+ * @todo: To move from resolvers.
  * @param prediction
  * @param outcome
  * @returns {number|*}
@@ -318,7 +324,7 @@ function _nonMarketLogScore({ prediction, outcome }) {
     return { error: '_nonMarketLogScore Error: Missing needed data' };
   }
 
-  const { competitorType } = prediction.dataValues;
+  const { competitorType } = prediction;
 
   if (
     competitorType !== MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE
@@ -379,6 +385,7 @@ async function nonMarketLogScore(root, args, context, info) {
 }
 
 /**
+ * @todo: To move from resolvers.
  * @param {*} root
  * @param {object} args
  * @param {Schema.Context} _context
@@ -460,6 +467,26 @@ async function measurerCount(root, _args, _context, _info) {
   return new MeasurementsData().getCount(params, query);
 }
 
+/**
+ * @todo: It is copied from a measurement definition.
+ * @todo: But leave it here and remove from there.
+ * @param {object} root
+ * @param {Models.MeasurementID} root.id
+ * @param {object} _args
+ * @param {Schema.Context} _context
+ * @param {object} _info
+ * @returns {{}|undefined}
+ */
+function value(root, _args, _context, _info) {
+  const value$ = _.get(root, 'value');
+  const data = _.get(root, 'value.data');
+  const dataType = _.get(root, 'value.dataType');
+  if (dataType !== undefined && data !== undefined) {
+    return { [dataType]: data };
+  }
+  return value$;
+}
+
 module.exports = {
   all,
   allByTaggedMeasurementId,
@@ -480,4 +507,5 @@ module.exports = {
   primaryPointScore,
   scoreSet,
   truncateCdf,
+  value,
 };

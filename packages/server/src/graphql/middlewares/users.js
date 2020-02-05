@@ -19,7 +19,7 @@ async function setContextUser(root, args, context, _info) {
 
   log.trace('\x1b[36m ---> \x1b[0m Middleware (setContextUser)', { id });
 
-  // @todo: Don't understand what this means!
+  // @todo: Don't understand what this means!!!
   context.userAsObject = !!id
     ? await new UsersData().getOne({ id })
     : null;

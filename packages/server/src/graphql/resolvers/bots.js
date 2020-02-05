@@ -66,7 +66,7 @@ async function all(root, args, _context, _info) {
 
   const filter = new Filter({ userId: ownerId });
   const pagination = new Pagination(args);
-  const options = new Options();
+  const options = new Options({ raw: true });
 
   return new BotsData().getConnection(filter, pagination, options);
 }
@@ -99,7 +99,9 @@ async function allById(root, args, _context, _info) {
 async function one(root, args, _context, _info) {
   const botId = _.get(args, 'id', null);
   const params = new Params({ id: botId });
-  return new BotsData().getOne(params);
+  const query = new Query();
+  const options = new Options({ raw: true });
+  return new BotsData().getOne(params, query, options);
 }
 
 /**

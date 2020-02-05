@@ -6,10 +6,10 @@ const { MutexesData } = require('../../data');
  * @param {object} args
  * @param {object} args.input
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @returns {Promise<*|Array<Model>>}
  */
-async function take(root, args, context, info) {
+async function take(root, args, context, _info) {
   const agentId = _.get(context, 'agent.id', null);
   const name = _.get(args, 'input.name', null);
   return new MutexesData().take(agentId, name);
@@ -20,10 +20,10 @@ async function take(root, args, context, info) {
  * @param {object} args
  * @param {object} args.input
  * @param {Schema.Context} context
- * @param {object} info
+ * @param {object} _info
  * @returns {Promise<*|Array<Model>>}
  */
-async function free(root, args, context, info) {
+async function free(root, args, context, _info) {
   const agentId = _.get(context, 'agent.id', null);
   const mutexId = _.get(args, 'id', null);
   return new MutexesData().free(agentId, mutexId);

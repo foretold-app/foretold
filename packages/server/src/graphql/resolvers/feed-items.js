@@ -50,7 +50,7 @@ async function all(_root, args, context, _info) {
 
   const filter = new Filter({ agentId, channelId, withinJoinedChannels });
   const pagination = new Pagination(args);
-  const options = new Options({ currentAgentId });
+  const options = new Options({ currentAgentId, raw: true });
 
   return new FeedItemsData().getConnection(
     filter,

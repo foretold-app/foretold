@@ -106,7 +106,10 @@ const measurement = new graphql.GraphQLObjectType({
   name: 'Measurement',
   fields: () => ({
     id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-    value: { type: graphql.GraphQLNonNull(measurementValue) },
+    value: {
+      type: graphql.GraphQLNonNull(measurementValue),
+      resolve: resolvers.measurements.value,
+    },
     competitorType: {
       type: measurementCompetitorType,
     },

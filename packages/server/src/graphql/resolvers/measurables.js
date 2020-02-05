@@ -63,6 +63,7 @@ async function all(root, args, context, _info) {
     agentId: currentAgentId,
     measuredByAgentId: _.get(args, 'measuredByAgentId', null),
     attributes: true,
+    raw: true,
   });
 
   return new MeasurablesData().getConnection(filter, pagination, options);
@@ -86,6 +87,7 @@ async function one(root, args, context, _info) {
   const options = new Options({
     isAdmin: _.get(context, 'agent.isAdmin', null),
     agentId: currentAgentId,
+    raw: true,
   });
 
   return new MeasurablesData().getOne(params, query, options);

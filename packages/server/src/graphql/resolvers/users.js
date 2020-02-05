@@ -54,7 +54,9 @@ async function accessTokenUpdate(root, args, _context) {
 async function one(root, args, _context) {
   const userId = _.get(args, 'id', null) || _.get(root, 'userId', null);
   const params = new Params({ id: userId });
-  return new UsersData().getOne(params);
+  const query = new Query();
+  const options = new Options({ raw: true });
+  return new UsersData().getOne(params, query, options);
 }
 
 /**

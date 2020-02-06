@@ -94,12 +94,17 @@ module FormComponent = {
               render={({handleChange, error, value}) =>
                 <Antd.Form.Item
                   label={"Knowledge graph" |> Utils.ste}
-                  help={"Markdown supported" |> Utils.ste}>
+                  help={"Toml Supported" |> Utils.ste}>
                   <Antd.Input.TextArea
                     value
                     style={ReactDOMRe.Style.make(~minHeight="30em", ())}
                     onChange={Helpers.handleChange(handleChange)}
                   />
+                  {switch (Toml.realParse(value)) {
+                   | Ok(r) => Js.Json.stringify(r) |> Utils.ste
+                   | Error(error) =>
+                     <Antd_Alert message={error |> Utils.ste} _type=`error />
+                   }}
                   <Warning error />
                 </Antd.Form.Item>
               }

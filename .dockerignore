@@ -20,3 +20,4 @@ app.json
 .travis.yml
 .gitignore
 .directory
+env.local

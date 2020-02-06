@@ -2,3 +2,4 @@
 *.yml
 *.md
 *.spec.js
+env.local

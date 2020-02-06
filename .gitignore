@@ -6,3 +6,4 @@ DEV.md
 docker-compose.override.yml
 docker-compose.local.yml
 .persistence
+env.local

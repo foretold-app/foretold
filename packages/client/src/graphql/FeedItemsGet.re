@@ -1,19 +1,3 @@
-type generic = {
-  item: string,
-  description: string,
-};
-
-type measurable = {
-  item: string,
-  description: string,
-  measurableId: string,
-};
-
-type body = {
-  generic: option(generic),
-  measurable: option(measurable),
-};
-
 type channel = {
   id: string,
   name: string,
@@ -24,13 +8,14 @@ type channel = {
 type node = {
   id: string,
   channelId: string,
-  body,
+  body: FeedItemBody.t,
   channel,
   createdAt: MomentRe.Moment.t,
   updatedAt: MomentRe.Moment.t,
 };
 
-let toCommon = (m: option(generic)): option(FeedItemBody.Generic.t) => {
+let toCommon =
+    (m: option(FeedItemBody.generic)): option(FeedItemBody.Generic.t) => {
   switch (m) {
   | Some(generic) =>
     FeedItemBody.Generic.make(
@@ -44,7 +29,7 @@ let toCommon = (m: option(generic)): option(FeedItemBody.Generic.t) => {
 };
 
 let toMeasurable =
-    (m: option(measurable)): option(FeedItemBody.Measurable.t) => {
+    (m: option(FeedItemBody.measurable)): option(FeedItemBody.Measurable.t) => {
   switch (m) {
   | Some(measurable) =>
     FeedItemBody.Measurable.make(
@@ -58,15 +43,80 @@ let toMeasurable =
   };
 };
 
-let toBody = (m: body): FeedItemBody.t => {
+let toMeasurement =
+    (m: option(FeedItemBody.measurement))
+    : option(FeedItemBody.Measurement.t) => {
+  switch (m) {
+  | Some(measurement) =>
+    FeedItemBody.Measurement.make(
+      ~item=measurement.item,
+      ~description=measurement.description,
+      ~measurableId=measurement.measurableId,
+      ~measurementId=measurement.measurementId,
+      (),
+    )
+    |> E.O.some
+  | _ => None
+  };
+};
+
+let toNotebook =
+    (m: option(FeedItemBody.notebook)): option(FeedItemBody.Notebook.t) => {
+  switch (m) {
+  | Some(notebook) =>
+    FeedItemBody.Notebook.make(
+      ~item=notebook.item,
+      ~description=notebook.description,
+      ~notebookId=notebook.notebookId,
+      (),
+    )
+    |> E.O.some
+  | _ => None
+  };
+};
+
+let toJoinedMember =
+    (m: option(FeedItemBody.joinedMember))
+    : option(FeedItemBody.JoinedMember.t) => {
+  switch (m) {
+  | Some(joinedMember) =>
+    FeedItemBody.JoinedMember.make(
+      ~item=joinedMember.item,
+      ~description=joinedMember.description,
+      (),
+    )
+    |> E.O.some
+  | _ => None
+  };
+};
+
+let toChannel2 =
+    (m: option(FeedItemBody.channel)): option(FeedItemBody.Channel.t) => {
+  switch (m) {
+  | Some(channel2) =>
+    FeedItemBody.Channel.make(
+      ~item=channel2.item,
+      ~description=channel2.description,
+      (),
+    )
+    |> E.O.some
+  | _ => None
+  };
+};
+
+let toBody = (m: FeedItemBody.t) => {
   FeedItemBody.make(
     ~generic=toCommon(m.generic),
     ~measurable=toMeasurable(m.measurable),
+    ~measurement=toMeasurement(m.measurement),
+    ~notebook=toNotebook(m.notebook),
+    ~channel=toChannel2(m.channel),
+    ~joinedMember=toJoinedMember(m.joinedMember),
     (),
   );
 };
 
-let toChannel = (m: channel): Types.channel => {
+let toChannel = (m: channel) => {
   Primary.Channel.make(
     ~id=m.id,
     ~name=m.name,
@@ -76,7 +126,7 @@ let toChannel = (m: channel): Types.channel => {
   );
 };
 
-let toFeedItem = (m: node): Types.feedItem => {
+let toFeedItem = (m: node) => {
   Primary.FeedItem.make(
     ~id=m.id,
     ~channelId=m.channelId,
@@ -118,14 +168,32 @@ module Query = [%graphql
               id
               channelId
               body @bsRecord {
-                generic @bsRecord {
-                  item
-                  description
+                 generic @bsRecord {
+                   item
+                   description
                  }
-                measurable @bsRecord {
-                  item
-                  description
-                  measurableId
+                 measurable @bsRecord {
+                   item
+                   description
+                   measurableId
+                 }
+                 measurement @bsRecord {
+                   item
+                   description
+                   measurableId
+                   measurementId
+                 }
+                 joinedMember @bsRecord {
+                   item
+                   description
+                 }
+                 notebook @bsRecord {
+                   item
+                   description
+                 }
+                 channel @bsRecord {
+                   item
+                   description
                  }
               }
               channel @bsRecord {

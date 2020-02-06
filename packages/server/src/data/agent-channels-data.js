@@ -41,46 +41,10 @@ class AgentChannelsData extends DataBase {
    * @returns {Promise<number>}
    */
   async primaryPointScore(agentId, channelId) {
+    const measurables = await this._getMeasurables(channelId);
 
-    const response = await this.model.sequelize.query(`
-SELECT row_to_json(row (array_agg(
-      row ("measurableId", "agentId", "createdAt", "channelId", "aggragationMeasurements", "objectiveMeasurements", "agentMeasurements")))),
-      "channelId",
-      "agentId"
-FROM (
-      SELECT "AgentMeasurables"."measurableId",
-             "AgentMeasurables"."agentId",
-             "Measurables"."createdAt",
-             "Measurables"."channelId",
-             (
-               SELECT row_to_json(row (array_agg(row ("relevantAt", "value")))) as "aggragationMeasurements"
-               FROM "Measurements"
-               WHERE "measurableId" = "AgentMeasurables"."measurableId"
-                 AND "competitorType" = 'AGGREGATION'
-             ) as "aggragationMeasurements",
-             (
-               SELECT row_to_json(row (array_agg(row ("relevantAt", "value")))) as "objectiveMeasurements"
-               FROM "Measurements"
-               WHERE "measurableId" = "AgentMeasurables"."measurableId"
-                 AND "competitorType" = 'OBJECTIVE'
-               LIMIT 1
-             ) as "objectiveMeasurements",
-             (
-               SELECT row_to_json(row (array_agg(row ("relevantAt", "value")))) as "objectiveMeasurements"
-               FROM "Measurements"
-               WHERE "measurableId" = "AgentMeasurables"."measurableId"
-                 AND "agentId" = "AgentMeasurables"."agentId"
-                 AND "competitorType" = 'COMPETITIVE'
-             ) as "agentMeasurements"
-      FROM "AgentMeasurables"
-             LEFT JOIN "Measurables" ON "Measurables"."id" = "AgentMeasurables"."measurableId"
-    ) as "foo"
-WHERE "channelId" = '${channelId}' AND "agentId" = '${agentId}'
-GROUP BY "channelId", "agentId"
-`, { raw: true, type: this.model.sequelize.QueryTypes.SELECT });
-
-    const primaryPointScore$ = response.map((item) => {
-      return this.agentMeasurables.primaryPointScore2(agentId, item.row_to_json.f1);
+    const primaryPointScore$ = measurables.map((measurable) => {
+      return this.agentMeasurables.primaryPointScore(agentId, measurable.id);
     });
 
     const primaryPointScores = await Promise.all(primaryPointScore$);
@@ -101,8 +65,7 @@ GROUP BY "channelId", "agentId"
   async _getMeasurables(channelId) {
     const filter = new Filter({ channelId });
     const pagination = new Pagination();
-    const attributes = { fields: ['id'] };
-    const options = new Options({ raw: true, attributes });
+    const options = new Options({ raw: true });
     return this.measurables.getAll(filter, pagination, options);
   }
 }

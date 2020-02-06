@@ -1,5 +1,6 @@
 [@bs.config {jsx: 3}];
 let fn = (a: string) => ();
+let fn2 = () => ();
 
 [@bs.module "./AutosizeTextareaInput.js"]
 external guesstimateInput: ReasonReact.reactClass = "AutosizeTextareaInput";
@@ -7,22 +8,28 @@ external guesstimateInput: ReasonReact.reactClass = "AutosizeTextareaInput";
 [@react.component]
 let make =
     (
-      ~name="",
-      ~placeholder="",
+      ~rows: int=?,
+      ~maxRows: int=?,
+      ~minRows: int=?,
+      ~useCacheForDOMMeasurements: bool=?,
       ~value="",
       ~onChange=fn,
-      ~inputClassName: option(string)=?,
+      ~onHeightChange=fn2,
+      ~className: option(string)=?,
       ~style: option(ReactDOMRe.Style.t)=?,
       ~children=ReasonReact.null,
     ) =>
   ReasonReact.wrapJsForReason(
     ~reactClass=guesstimateInput,
     ~props={
-      "name": name,
-      "placeholder": placeholder,
+      "rows": rows,
+      "maxRows": maxRows,
+      "minRows": minRows,
+      "useCacheForDOMMeasurements": useCacheForDOMMeasurements,
       "value": value,
       "onChange": onChange,
-      "inputClassName": inputClassName,
+      "onHeightChange": onHeightChange,
+      "className": className,
       "style": style,
     },
     children,

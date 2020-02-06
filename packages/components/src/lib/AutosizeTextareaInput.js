@@ -1,4 +1,4 @@
-import AutosizeInput from 'react-input-autosize';
+import TextareaAutosize from 'react-textarea-autosize';
 import React from 'react';
 
 export class AutosizeTextareaInput extends React.Component {
@@ -9,6 +9,7 @@ export class AutosizeTextareaInput extends React.Component {
     super(props);
     this.state = { value: this.props.value || "" };
     this.handleChange = this.handleChange.bind(this);
+    this.handleHeightChange = this.handleHeightChange.bind(this);
   }
 
   handleChange(event) {
@@ -17,16 +18,22 @@ export class AutosizeTextareaInput extends React.Component {
     this.props.onChange(value);
   }
 
+  handleHeightChange() {
+    this.props.onHeightChange();
+  }
+
   render() {
-    return React.createElement(AutosizeInput, {
-      name: this.props.name,
-      placeholder: this.props.placeholder,
-      inputClassName: this.props.inputClassName,
-      injectStyles: false,
-      value: this.state.value,
+    return React.createElement(TextareaAutosize, {
       style: this.props.style,
-      inputStyle: { transition: "none" },
+      className: this.props.className,
+
+      rows: this.props.rows,
+      maxRows: this.props.maxRows,
+      minRows: this.props.minRows,
+      value: this.state.value,
       onChange: this.handleChange,
+      onHeightChange: this.handleHeightChange,
+      useCacheForDOMMeasurements: this.props.useCacheForDOMMeasurements,
     });
   }
 }

@@ -1,5 +1,12 @@
 # Foretold Application
 
+## Development
+
+To run all elements of the application use the docker.
+
+However it is still possible to run the server without docker. But be ready
+that in this case some parts of the application are not able to work.
+
 ## Run Docker Development Environment
 
 - Create file "docker.compose.override.yml" from 
@@ -18,7 +25,7 @@
 - Now you could change some configuration in "docker.compose.override.yml".
   Then run `docker-compose up -d` to update the application.
 
-Noq you could change the code and the application will be reloaded. The DB saves
+Now you could change the code and the application will be reloaded. The DB saves
 its state into ".persistence" folder. Do not remove this folder if you want
 to save DB state.
 
@@ -29,7 +36,27 @@ After work when you want to remove all:
 Notes:
 - These command line instructions are for Linux based OS. 
 
-# Development
+## Run Server Without Docker
+
+The minimal command to run the server:
+```
+NODE_ENV=development
+yarn dev
+```
+
+But the sever requires an environment. Copy "env.example" to "env.local" and
+change some settings. If you prefer to use a remote DB server just use
+"DB_USE_ENV_VARIABLE" (it is a long string with credentials). Be sure
+that "NODE_ENV" is in the "development" mode.
+
+Then use this command to run the server:
+```
+source ./env.local
+yarn dev
+```
+
+# IDE Tuning
+
 - Use "idea-colors.icls" to colorize ReasonML code.
 - Use ReasonML plugin for IDEs.
-- Use "Rainbow Brackets" plugin for IDEs.
+

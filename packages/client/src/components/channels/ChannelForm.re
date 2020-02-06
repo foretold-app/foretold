@@ -34,6 +34,14 @@ let schema =
         Js.String.length(values.knowledgeGraph) > 32 * 1024
           ? Error("Must be less the 32K.") : Valid,
     ),
+    Custom(
+      KnowledgeGraph,
+      values =>
+        switch (Toml.realParse(values.knowledgeGraph)) {
+        | Ok(_) => Valid
+        | Error(_) => Error("TOML Parsing Error")
+        },
+    ),
   |]);
 
 let onSuccess = result => {
@@ -80,10 +88,11 @@ module FormComponent = {
                <Antd.Form.Item
                  label={"Description" |> Utils.ste}
                  help={"Markdown supported" |> Utils.ste}>
-                 <Antd.Input.TextArea
+                 <ForetoldComponents.ReAutosizeTextareaInput
                    value
-                   style={ReactDOMRe.Style.make(~minHeight="30em", ())}
-                   onChange={Helpers.handleChange(handleChange)}
+                   className="ant-input"
+                   minRows=4
+                   onChange=handleChange
                  />
                  <Warning error />
                </Antd.Form.Item>
@@ -94,12 +103,18 @@ module FormComponent = {
               render={({handleChange, error, value}) =>
                 <Antd.Form.Item
                   label={"Knowledge graph" |> Utils.ste}
-                  help={"Markdown supported" |> Utils.ste}>
-                  <Antd.Input.TextArea
+                  help={"Toml Supported" |> Utils.ste}>
+                  <ForetoldComponents.ReAutosizeTextareaInput
                     value
-                    style={ReactDOMRe.Style.make(~minHeight="30em", ())}
-                    onChange={Helpers.handleChange(handleChange)}
+                    className="ant-input"
+                    minRows=4
+                    onChange=handleChange
                   />
+                  {switch (Toml.realParse(value)) {
+                   | Ok(r) => Js.Json.stringify(r) |> Utils.ste
+                   | Error(error) =>
+                     <Antd_Alert message={error |> Utils.ste} _type=`error />
+                   }}
                   <Warning error />
                 </Antd.Form.Item>
               }

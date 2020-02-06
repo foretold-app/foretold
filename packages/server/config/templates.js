@@ -148,6 +148,7 @@ module.exports = [
     envelopeTemplate: {
       item: '',
       description: '{{{ agent.name }}} made a notebook',
+      notebookId: '{{{ notebook.id }}}',
     },
   },
 ];

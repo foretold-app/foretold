@@ -1,7 +1,7 @@
 const { FeedItemGeneric } = require('./feed-item-generic');
 const { FEED_ITEM_BODY } = require('../../../enums');
 
-class FeedItemsJoinedMember extends FeedItemGeneric {
+class FeedItemJoinedMember extends FeedItemGeneric {
   /**
    * @public
    * @param {object} options
@@ -22,5 +22,5 @@ class FeedItemsJoinedMember extends FeedItemGeneric {
 }
 
 module.exports = {
-  FeedItemsJoinedMember,
+  FeedItemJoinedMember,
 };

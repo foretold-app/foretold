@@ -1,17 +1,17 @@
 const { FeedItem } = require('./feed-item');
 const { FeedItemGeneric } = require('./feed-item-generic');
-const { FeedItemsJoinedMember } = require('./feed-item-joined-member');
+const { FeedItemJoinedMember } = require('./feed-item-joined-member');
 const { FeedItemMeasurable } = require('./feed-item-measurable');
-const { FeedItemsMeasurement } = require('./feed-item-measurement');
 const { FeedItemChannel } = require('./feed-item-channel');
 const { FeedItemNotebook } = require('./feed-item-notebook');
+const { FeedItemMeasurement } = require('./feed-item-measurement');
 
 module.exports = {
   FeedItem,
   FeedItemGeneric,
-  FeedItemsJoinedMember,
+  FeedItemJoinedMember,
   FeedItemMeasurable,
-  FeedItemsMeasurement,
+  FeedItemMeasurement,
   FeedItemChannel,
   FeedItemNotebook,
 };

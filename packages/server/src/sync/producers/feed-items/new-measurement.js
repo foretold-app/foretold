@@ -19,7 +19,7 @@ class NewMeasurement extends ProducerFeedItems {
     );
     /** @type {Models.Measurable} */
     this.measurable = null;
-    this.FeedItem = Producer.FeedItemsMeasurement;
+    this.FeedItem = Producer.FeedItemMeasurement;
   }
 
   /**

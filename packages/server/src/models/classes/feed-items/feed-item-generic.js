@@ -55,7 +55,7 @@ class FeedItemGeneric extends FeedItem {
     const item = Mustache.render(this.item, replacements);
     const description = Mustache.render(this.description, replacements);
 
-    return new FeedItemGeneric({
+    return new this.constructor({
       item,
       description,
     });

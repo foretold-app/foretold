@@ -1,3 +1,5 @@
+const _ = require('lodash');
+
 const models = require('./definitions');
 const { MEASURABLE_STATE } = require('../enums');
 
@@ -84,11 +86,15 @@ class MeasurableModel extends ModelPostgres {
   }
 
   /**
-   * @param {Layers.AbstractModelsLayer.options} _options
+   * @param {Layers.AbstractModelsLayer.options} options
    * @return {{include: Sequelize.literal|*[]}}
    * @protected
    */
-  _getAttributes(_options = {}) {
+  _getAttributes(options = {}) {
+    const fields = _.get(options, 'attributes.fields');
+    if (fields) {
+      return fields;
+    }
     return {
       include: [this._getStateOrderField()],
     };

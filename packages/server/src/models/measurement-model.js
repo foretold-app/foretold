@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const assert = require('assert');
 
 const models = require('./definitions');
@@ -139,6 +140,21 @@ class MeasurementModel extends ModelPostgres {
   async getLatest({ measurable, agentId } = {}) {
     const measurableId = measurable.id;
     return this.getOne(new Params({ measurableId, agentId }));
+  }
+
+
+
+  /**
+   * @param {Layers.AbstractModelsLayer.options} options
+   * @return {{include: Sequelize.literal|*[]}}
+   * @protected
+   */
+  _getAttributes(options = {}) {
+    const fields = _.get(options, 'attributes.fields');
+    if (fields) {
+      return fields;
+    }
+    return null;
   }
 }
 

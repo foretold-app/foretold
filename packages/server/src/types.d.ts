@@ -315,7 +315,7 @@ export namespace Layers {
       isAdmin?: boolean;
       measuredByAgentId?: Models.AgentID;
 
-      attributes?: boolean;
+      attributes?: boolean | object;
       group?: boolean;
       lock?: lock;
       raw?: boolean;

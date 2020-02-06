@@ -17,7 +17,7 @@ class Options {
 }
 
 const list = {
-  attributes: (v) => _.isBoolean(v) || utils.none(v),
+  attributes: (v) => _.isBoolean(v) || _.isObject(v) || utils.none(v),
   group: (v) => _.isBoolean(v) || utils.none(v),
   lock: (v) => _.isBoolean(v) || _.isPlainObject(v) || utils.none(v),
   raw: (v) => _.isBoolean(v) || utils.none(v),

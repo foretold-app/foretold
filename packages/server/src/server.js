@@ -93,8 +93,8 @@ function run() {
   });
 
   // Limits the time for a response.
-  const timeoutSeconds = 15 * 1000;
-  server.setTimeout(timeoutSeconds);
+  // const timeoutSeconds = 15 * 1000;
+  // server.setTimeout(timeoutSeconds);
 
   return { server, app };
 }

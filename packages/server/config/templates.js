@@ -7,7 +7,8 @@ const { TEMPLATE_TYPE } = require('../src/enums');
  * This is why if you had decided to return to DB you would have needed
  * to migrate this data on DB table.
  *
- * @todo: To rename "envelopeTemplate" into something yet.
+ * @todo: To rename an "envelopeTemplate" into something yet.
+ * @todo: Copy to the DB (later).
  *
  */
 module.exports = [
@@ -125,7 +126,6 @@ module.exports = [
       description: '{{{ agent.name }}} has created a community',
     },
   },
-  // @todo: Copy to DB (later).
   {
     name: TEMPLATE_NAME.NEW_INVITATION,
     type: TEMPLATE_TYPE.FEED_ITEM,

@@ -70,6 +70,7 @@ module.exports = [
       item: '{{{ measurable.name }}}',
       description: '{{{ agent.name }}} made a prediction',
       measurableId: '{{{ measurable.id }}}',
+      measurementId: '{{{ measurement.id }}}',
     },
   },
   {
@@ -79,6 +80,7 @@ module.exports = [
       item: '{{{ measurable.name }}}',
       description: '{{{ agent.name }}} made a comment',
       measurableId: '{{{ measurable.id }}}',
+      measurementId: '{{{ measurement.id }}}',
     },
   },
   {
@@ -88,6 +90,7 @@ module.exports = [
       item: '{{{ measurable.name }}}',
       description: '{{{ agent.name }}} resolved the question with an answer',
       measurableId: '{{{ measurable.id }}}',
+      measurementId: '{{{ measurement.id }}}',
     },
   },
   {
@@ -97,6 +100,7 @@ module.exports = [
       item: '{{{ measurable.name }}}',
       description: '{{{ agent.name }}} has marked this question as unresolved',
       measurableId: '{{{ measurable.id }}}',
+      measurementId: '{{{ measurement.id }}}',
     },
   },
   {

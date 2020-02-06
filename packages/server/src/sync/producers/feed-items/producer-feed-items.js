@@ -18,14 +18,11 @@ class ProducerFeedItems extends Producer {
    */
   constructor(input) {
     super({});
-
     assert(_.isObject(input), 'Input should be an object.');
 
     this.input = input;
-
     /** @type {Models.AgentID} */
     this.agentId = null;
-
     /** @type {Models.ChannelID} */
     this.channelId = null;
 

@@ -20,6 +20,10 @@ const { EmailEnvelope } = require('../../models/classes/notifications');
 const { FeedItem } = require('../../models/classes');
 const { FeedItemGeneric } = require('../../models/classes');
 const { FeedItemMeasurable } = require('../../models/classes');
+const { FeedItemsMeasurement } = require('../../models/classes');
+const { FeedItemsJoinedMember } = require('../../models/classes');
+const { FeedItemChannel } = require('../../models/classes');
+const { FeedItemNotebook } = require('../../models/classes');
 
 /**
  * @abstract
@@ -115,6 +119,10 @@ Producer.EmailEnvelope = EmailEnvelope;
 Producer.FeedItem = FeedItem;
 Producer.FeedItemGeneric = FeedItemGeneric;
 Producer.FeedItemMeasurable = FeedItemMeasurable;
+Producer.FeedItemsMeasurement = FeedItemsMeasurement;
+Producer.FeedItemsJoinedMember = FeedItemsJoinedMember;
+Producer.FeedItemChannel = FeedItemChannel;
+Producer.FeedItemNotebook = FeedItemNotebook;
 
 module.exports = {
   Producer,

@@ -9,7 +9,7 @@ class NewNotebook extends ProducerFeedItems {
     super(notebook);
 
     this.templateName = Producer.TEMPLATE_NAME.NEW_NOTEBOOK_FEED_ITEM;
-    this.FeedItem = Producer.FeedItemGeneric;
+    this.FeedItem = Producer.FeedItemNotebook;
   }
 }
 

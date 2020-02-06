@@ -57,7 +57,8 @@ module Styles = {
   let inputBox = style([]);
   let submitButton = style([marginTop(px(20))]);
   let select = style([marginBottom(px(7))]);
-  let label = style([color(hex("888")), marginTop(px(5)), marginBottom(px(3))]);
+  let label =
+    style([color(hex("888")), marginTop(px(5)), marginBottom(px(3))]);
   let fullWidth = style([minWidth(`percent(100.))]);
   let clear = style([clear(`both)]);
 };
@@ -475,9 +476,8 @@ module Main = {
         <ValueInputMapper state measurable send loggedUser />
         <ForetoldComponents.ReAutosizeTextareaInput
           value={state.description}
-          placeholder="Comment"
-          inputClassName="ant-input"
-          style={ReactDOMRe.Style.make(~transition="", ())}
+          className="ant-input"
+          minRows=6
           onChange={value => send(UpdateDescription(value))}
         />
         {Primary.User.show(loggedUser, botSelect)}

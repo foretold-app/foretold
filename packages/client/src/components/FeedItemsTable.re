@@ -1,3 +1,10 @@
+module Styles = {
+  open Css;
+  let text = style([float(`left)]);
+  let icons = style([float(`left), marginLeft(`em(0.5))]);
+  let clear = style([clear(`both)]);
+};
+
 module Columns = {
   type record = Types.feedItem;
   type column = Table.column(record);
@@ -26,20 +33,23 @@ module Columns = {
     | Measurable(row) => row.description |> Utils.ste
     | Measurement(row) =>
       <>
-        {row.description |> Utils.ste}
-        {" " |> Utils.ste}
-        <MeasurementsTable.Helpers.Info2 measurementId={row.measurementId} />
+        <div className=Styles.text> {row.description |> Utils.ste} </div>
+        <div className=Styles.icons>
+          <MeasurementItems.Info.ById measurementId={row.measurementId} />
+        </div>
       </>
     | JoinedMember(row) => row.description |> Utils.ste
     | Channel(row) => row.description |> Utils.ste
     | Notebook(row) =>
       <>
-        {row.description |> Utils.ste}
-        {" " |> Utils.ste}
-        <Link
-          linkType={Internal(ChannelNotebook(r.channelId, row.notebookId))}>
-          <Icon icon="COPY" />
-        </Link>
+        <div className=Styles.text> {row.description |> Utils.ste} </div>
+        <div className=Styles.icons>
+          <Link
+            className=Style.iconGray
+            linkType={Internal(ChannelNotebook(r.channelId, row.notebookId))}>
+            <Icon icon="LINK" />
+          </Link>
+        </div>
       </>
     | _ => "" |> Utils.ste
     };

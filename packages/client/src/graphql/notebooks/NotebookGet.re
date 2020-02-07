@@ -58,7 +58,7 @@ let component = (~id: string, innerFn) => {
            e##notebook
            |> Rationale.Option.fmap(Primary.Notebook.convertJsObject)
          )
-      |> Rationale.Result.fmap(innerFn)
+      |> E.R.fmap(innerFn)
       |> E.R.id
     }
   </QueryComponent>;

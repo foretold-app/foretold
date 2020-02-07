@@ -32,26 +32,21 @@ type joinedMember = {
   description: string,
 };
 
-type t = {
-  generic: option(generic),
-  measurable: option(measurable),
-  measurement: option(measurement),
-  notebook: option(notebook),
-  channel: option(channel),
-  joinedMember: option(joinedMember),
-};
+type body =
+  | Generic(generic)
+  | Measurable(measurable)
+  | Measurement(measurement)
+  | Notebook(notebook)
+  | Channel(channel)
+  | JoinedMember(joinedMember)
+  | Empty;
 
 module Generic = {
   type t = generic;
   let make = (~item, ~description, ()): t => {item, description};
 
-  let toCommon = m => {
-    switch (m) {
-    | Some(generic) =>
-      make(~item=generic##item, ~description=generic##description, ())
-      |> E.O.some
-    | _ => None
-    };
+  let fromJson = m => {
+    make(~item=m##item, ~description=m##description, ());
   };
 };
 
@@ -64,18 +59,13 @@ module Measurable = {
     measurableId,
   };
 
-  let toMeasurable = m => {
-    switch (m) {
-    | Some(measurable) =>
-      make(
-        ~item=measurable##item,
-        ~description=measurable##description,
-        ~measurableId=measurable##measurableId,
-        (),
-      )
-      |> E.O.some
-    | _ => None
-    };
+  let fromJson = m => {
+    make(
+      ~item=m##item,
+      ~description=m##description,
+      ~measurableId=m##measurableId,
+      (),
+    );
   };
 };
 
@@ -89,19 +79,14 @@ module Measurement = {
     measurementId,
   };
 
-  let toMeasurement = m => {
-    switch (m) {
-    | Some(measurement) =>
-      make(
-        ~item=measurement##item,
-        ~description=measurement##description,
-        ~measurableId=measurement##measurableId,
-        ~measurementId=measurement##measurementId,
-        (),
-      )
-      |> E.O.some
-    | _ => None
-    };
+  let fromJson = m => {
+    make(
+      ~item=m##item,
+      ~description=m##description,
+      ~measurableId=m##measurableId,
+      ~measurementId=m##measurementId,
+      (),
+    );
   };
 };
 
@@ -114,18 +99,13 @@ module Notebook = {
     notebookId,
   };
 
-  let toNotebook = m => {
-    switch (m) {
-    | Some(notebook) =>
-      make(
-        ~item=notebook##item,
-        ~description=notebook##description,
-        ~notebookId=notebook##notebookId,
-        (),
-      )
-      |> E.O.some
-    | _ => None
-    };
+  let fromJson = m => {
+    make(
+      ~item=m##item,
+      ~description=m##description,
+      ~notebookId=m##notebookId,
+      (),
+    );
   };
 };
 
@@ -134,17 +114,8 @@ module JoinedMember = {
 
   let make = (~item, ~description, ()): t => {item, description};
 
-  let toJoinedMember = m => {
-    switch (m) {
-    | Some(joinedMember) =>
-      make(
-        ~item=joinedMember##item,
-        ~description=joinedMember##description,
-        (),
-      )
-      |> E.O.some
-    | _ => None
-    };
+  let fromJson = m => {
+    make(~item=m##item, ~description=m##description, ());
   };
 };
 
@@ -153,43 +124,26 @@ module Channel = {
 
   let make = (~item, ~description, ()): t => {item, description};
 
-  let toChannel2 = m => {
-    switch (m) {
-    | Some(channel2) =>
-      make(~item=channel2##item, ~description=channel2##description, ())
-      |> E.O.some
-    | _ => None
-    };
+  let fromJson = m => {
+    make(~item=m##item, ~description=m##description, ());
   };
 };
 
-let make =
-    (
-      ~generic,
-      ~measurable,
-      ~channel,
-      ~measurement,
-      ~notebook,
-      ~joinedMember,
-      (),
-    )
-    : t => {
-  generic,
-  measurable,
-  measurement,
-  channel,
-  joinedMember,
-  notebook,
-};
-
 let toBody = m => {
-  make(
-    ~generic=Generic.toCommon(m##generic),
-    ~measurable=Measurable.toMeasurable(m##measurable),
-    ~measurement=Measurement.toMeasurement(m##measurement),
-    ~notebook=Notebook.toNotebook(m##notebook),
-    ~channel=Channel.toChannel2(m##channel),
-    ~joinedMember=JoinedMember.toJoinedMember(m##joinedMember),
-    (),
-  );
+  switch (
+    m##generic,
+    m##measurable,
+    m##measurement,
+    m##notebook,
+    m##channel,
+    m##joinedMember,
+  ) {
+  | (Some(m), _, _, _, _, _) => Generic(Generic.fromJson(m))
+  | (_, Some(m), _, _, _, _) => Measurable(Measurable.fromJson(m))
+  | (_, _, Some(m), _, _, _) => Measurement(Measurement.fromJson(m))
+  | (_, _, _, Some(m), _, _) => Notebook(Notebook.fromJson(m))
+  | (_, _, _, _, Some(m), _) => Channel(Channel.fromJson(m))
+  | (_, _, _, _, _, Some(m)) => JoinedMember(JoinedMember.fromJson(m))
+  | _ => Empty
+  };
 };

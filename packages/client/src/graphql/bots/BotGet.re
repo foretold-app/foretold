@@ -30,8 +30,8 @@ let component = (~id, innerFn) => {
     ...{({result}) =>
       result
       |> ApolloUtils.apolloResponseToResult
-      |> Rationale.Result.fmap(e => e##bot |> Rationale.Option.fmap(toBot))
-      |> Rationale.Result.fmap(innerFn)
+      |> E.R.fmap(e => e##bot |> Rationale.Option.fmap(toBot))
+      |> E.R.fmap(innerFn)
       |> E.R.id
     }
   </QueryComponent>;

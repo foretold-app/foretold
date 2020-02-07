@@ -275,7 +275,37 @@ module Helpers = {
         content={<MeasurementDebugForm measurement />}>
         <div
           className=Css.(
-            style([fontSize(`em(1.1)), color(`hex("d1d1d1")), hover([color(`hex("999"))])])
+            style([
+              fontSize(`em(1.1)),
+              color(`hex("d1d1d1")),
+              hover([color(`hex("999"))]),
+            ])
+          )>
+          <Icon icon="COPY" />
+        </div>
+      </Antd_Popover>;
+    };
+  };
+
+  module Info2 = {
+    [@react.component]
+    let make = (~measurementId) => {
+      let overlayClassName = Css.style([Css.width(`em(40.))]);
+      <Antd_Popover
+        overlayClassName
+        placement=`left
+        content={MeasurementGet.component(~id=measurementId, measurement =>
+          measurement
+          |> E.O.fmap(measurement => <MeasurementDebugForm measurement />)
+          |> E.O.default("No Data" |> Utils.ste)
+        )}>
+        <div
+          className=Css.(
+            style([
+              fontSize(`em(1.1)),
+              color(`hex("d1d1d1")),
+              hover([color(`hex("999"))]),
+            ])
           )>
           <Icon icon="COPY" />
         </div>

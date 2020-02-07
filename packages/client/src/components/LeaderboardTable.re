@@ -2,7 +2,7 @@ module Columns = {
   type record = Types.leaderboardItem;
   type column = Table.column(record);
 
-  let getName = (r: record): ReasonReact.reactElement =>
+  let getName = (r: record) =>
     switch (r.measurable) {
     | Some(measurable) =>
       <Link

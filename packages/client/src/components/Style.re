@@ -41,3 +41,12 @@ module Grid = {
     };
   };
 };
+
+let iconGray =
+  Css.(
+    style([
+      fontSize(`em(1.1)),
+      color(`hex("d1d1d1")),
+      hover([color(`hex("999"))]),
+    ])
+  );

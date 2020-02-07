@@ -2,24 +2,21 @@ const assert = require('assert');
 const _ = require('lodash');
 const Mustache = require('mustache');
 
-const { FeedItem } = require('./feed-item');
+const { FeedItemGeneric } = require('./feed-item-generic');
 const { FEED_ITEM_BODY } = require('../../../enums');
 
-class FeedItemGeneric extends FeedItem {
+class FeedItemNotebook extends FeedItemGeneric {
   /**
+   * @public
    * @param {object} options
    * @param {string} options.item
    * @param {string} options.description
+   * @param {Models.NotebookID} options.notebookId
    */
   constructor(options) {
     super(options);
-    assert(!!_.has(options, 'item'), 'Item is required');
-    assert(!!_.has(options, 'description'), 'Description is required');
-    assert(_.isString(options.item), 'Item should be a string');
-    assert(_.isString(options.description), 'Item should be a string');
-
-    this.item = options.item;
-    this.description = options.description;
+    assert(_.isString(options.notebookId), 'NotebookId should be a string');
+    this.notebookId = options.notebookId;
   }
 
   /**
@@ -27,23 +24,15 @@ class FeedItemGeneric extends FeedItem {
    * @return {string}
    */
   getName() {
-    return FEED_ITEM_BODY.generic;
+    return FEED_ITEM_BODY.notebook;
   }
 
   /**
    * @public
    * @return {string}
    */
-  getItem() {
-    return this.item;
-  }
-
-  /**
-   * @public
-   * @return {string}
-   */
-  getDescription() {
-    return this.description;
+  getNotebookId() {
+    return this.notebookId;
   }
 
   /**
@@ -54,14 +43,16 @@ class FeedItemGeneric extends FeedItem {
   instanceFactory(replacements) {
     const item = Mustache.render(this.item, replacements);
     const description = Mustache.render(this.description, replacements);
+    const notebookId = Mustache.render(this.notebookId, replacements);
 
     return new this.constructor({
       item,
       description,
+      notebookId,
     });
   }
 }
 
 module.exports = {
-  FeedItemGeneric,
+  FeedItemNotebook,
 };

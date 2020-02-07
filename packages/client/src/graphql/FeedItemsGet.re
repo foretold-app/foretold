@@ -1,89 +1,21 @@
-type generic = {
-  item: string,
-  description: string,
-};
-
-type measurable = {
-  item: string,
-  description: string,
-  measurableId: string,
-};
-
-type body = {
-  generic: option(generic),
-  measurable: option(measurable),
-};
-
-type channel = {
-  id: string,
-  name: string,
-  isArchived: bool,
-  isPublic: bool,
-};
-
-type node = {
-  id: string,
-  channelId: string,
-  body,
-  channel,
-  createdAt: MomentRe.Moment.t,
-  updatedAt: MomentRe.Moment.t,
-};
-
-let toCommon = (m: option(generic)): option(FeedItemBody.Generic.t) => {
-  switch (m) {
-  | Some(generic) =>
-    FeedItemBody.Generic.make(
-      ~item=generic.item,
-      ~description=generic.description,
-      (),
-    )
-    |> E.O.some
-  | _ => None
-  };
-};
-
-let toMeasurable =
-    (m: option(measurable)): option(FeedItemBody.Measurable.t) => {
-  switch (m) {
-  | Some(measurable) =>
-    FeedItemBody.Measurable.make(
-      ~item=measurable.item,
-      ~description=measurable.description,
-      ~measurableId=measurable.measurableId,
-      (),
-    )
-    |> E.O.some
-  | _ => None
-  };
-};
-
-let toBody = (m: body): FeedItemBody.t => {
-  FeedItemBody.make(
-    ~generic=toCommon(m.generic),
-    ~measurable=toMeasurable(m.measurable),
-    (),
-  );
-};
-
-let toChannel = (m: channel): Types.channel => {
+let toChannel = m => {
   Primary.Channel.make(
-    ~id=m.id,
-    ~name=m.name,
-    ~isArchived=m.isArchived,
-    ~isPublic=m.isPublic,
+    ~id=m##id,
+    ~name=m##name,
+    ~isArchived=m##isArchived,
+    ~isPublic=m##isPublic,
     (),
   );
 };
 
-let toFeedItem = (m: node): Types.feedItem => {
+let toFeedItem = m => {
   Primary.FeedItem.make(
-    ~id=m.id,
-    ~channelId=m.channelId,
-    ~body=toBody(m.body),
-    ~channel=toChannel(m.channel),
-    ~createdAt=Some(m.createdAt),
-    ~updatedAt=Some(m.updatedAt),
+    ~id=m##id,
+    ~channelId=m##channelId,
+    ~body=FeedItemBody.toBody(m##body),
+    ~channel=toChannel(m##channel),
+    ~createdAt=Some(m##createdAt),
+    ~updatedAt=Some(m##updatedAt),
     (),
   );
 };
@@ -114,21 +46,40 @@ module Query = [%graphql
             endCursor
           }
           edges{
-            node @bsRecord{
+            node {
               id
               channelId
-              body @bsRecord {
-                generic @bsRecord {
-                  item
-                  description
+              body {
+                 generic {
+                   item
+                   description
                  }
-                measurable @bsRecord {
-                  item
-                  description
-                  measurableId
+                 measurable {
+                   item
+                   description
+                   measurableId
+                 }
+                 measurement {
+                   item
+                   description
+                   measurableId
+                   measurementId
+                 }
+                 joinedMember {
+                   item
+                   description
+                 }
+                 notebook {
+                   item
+                   description
+                   notebookId
+                 }
+                 channel {
+                   item
+                   description
                  }
               }
-              channel @bsRecord {
+              channel {
                 id
                 name @bsDecoder(fn: "E.J.toString")
                 isArchived

@@ -19,7 +19,7 @@ class NewMeasurement extends ProducerFeedItems {
     );
     /** @type {Models.Measurable} */
     this.measurable = null;
-    this.FeedItem = Producer.FeedItemMeasurable;
+    this.FeedItem = Producer.FeedItemMeasurement;
   }
 
   /**
@@ -30,6 +30,7 @@ class NewMeasurement extends ProducerFeedItems {
     await super._preload();
     this.measurable = await this.input.getMeasurable();
     this.channelId = _.get(this.measurable, 'channelId');
+    this.measurementId = _.get(this.input, 'id');
     return true;
   }
 
@@ -41,6 +42,7 @@ class NewMeasurement extends ProducerFeedItems {
     super._validateInput();
     assert(!!this.measurable, 'Measurable is required.');
     assert(!!_.get(this.measurable, 'id'), 'Measurable ID is required.');
+    assert(!!this.measurementId, 'Measurement ID is required.');
     return true;
   }
 
@@ -53,13 +55,20 @@ class NewMeasurement extends ProducerFeedItems {
    * @protected
    */
   async _getReplacements(agent) {
+    const agentName = (await _.get(agent, 'name')) || 'Somebody';
+    const measurableName = (await _.get(this.measurable, 'name')) || 'Question';
+    const measurableId = _.get(this.measurable, 'id');
+
     return {
       agent: {
-        name: (await _.get(agent, 'name')) || 'Somebody',
+        name: agentName,
       },
       measurable: {
-        name: (await _.get(this.measurable, 'name')) || 'Question',
-        id: _.get(this.measurable, 'id'),
+        name: measurableName,
+        id: measurableId,
+      },
+      measurement: {
+        id: this.measurementId,
       },
     };
   }

@@ -24,6 +24,7 @@ import { magicWand } from 'react-icons-kit/icomoon/magicWand';
 import { pacman } from 'react-icons-kit/icomoon/pacman';
 import { iosNavigate } from 'react-icons-kit/ionicons/iosNavigate';
 import { thList as list } from 'react-icons-kit/typicons/thList';
+import { link } from 'react-icons-kit/icomoon/link';
 
 let types = {
   'HOME': home,
@@ -51,6 +52,7 @@ let types = {
   'MAGIC_WAND': magicWand,
   'PACMAN': pacman,
   'LIST': list,
+  'LINK': link,
 };
 
 export class Icon extends React.Component {

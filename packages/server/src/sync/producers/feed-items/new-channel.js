@@ -11,7 +11,7 @@ class NewChannel extends ProducerFeedItems {
     super(channel);
 
     this.templateName = Producer.TEMPLATE_NAME.NEW_CHANNEL_FEED_ITEM;
-    this.FeedItem = Producer.FeedItemGeneric;
+    this.FeedItem = Producer.FeedItemChannel;
   }
 
   /**

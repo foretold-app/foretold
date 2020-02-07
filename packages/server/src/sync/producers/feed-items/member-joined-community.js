@@ -19,6 +19,7 @@ class MemberJoinedCommunity extends ProducerFeedItems {
 
     this.templateName = Producer.TEMPLATE_NAME
       .MEMBER_JOINED_COMMUNITY_FEED_ITEM;
+    this.FeedItem = Producer.FeedItemJoinedMember;
   }
 
   /**

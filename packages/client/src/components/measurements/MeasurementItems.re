@@ -195,3 +195,101 @@ module AgentPrediction = {
     />;
   };
 };
+
+module MeasurementDebugForm = {
+  let formatTime = r =>
+    r
+    |> E.O.fmap((m: MomentRe.Moment.t) => E.M.goFormat_standard(m))
+    |> E.O.default("")
+    |> Utils.ste;
+
+  [@react.component]
+  let make = (~measurement: Types.measurement) => {
+    <Antd.Form layout=`vertical labelAlign=`left>
+      <Antd.Form.Item label={"ID" |> Utils.ste}>
+        <Antd.Input value={measurement.id} readOnly=true />
+      </Antd.Form.Item>
+      <Antd.Form.Item label={"Competitor Type" |> Utils.ste}>
+        <Antd.Input
+          value={Primary.CompetitorType.toString(measurement.competitorType)}
+          readOnly=true
+        />
+      </Antd.Form.Item>
+      {E.React2.showIf(
+         measurement.competitorType === `AGGREGATION,
+         {<Antd.Form.Item label={"Tagged ID" |> Utils.ste}>
+            <Antd.Input
+              value={measurement.taggedMeasurementId |> E.O.default("")}
+              readOnly=true
+            />
+          </Antd.Form.Item>},
+       )}
+      <Antd.Form.Item label={"Created At" |> Utils.ste}>
+        {formatTime(measurement.createdAt)}
+      </Antd.Form.Item>
+      <Antd.Form.Item label={"Relevant At" |> Utils.ste}>
+        {formatTime(measurement.relevantAt)}
+      </Antd.Form.Item>
+      <Antd.Form.Item label={"Value" |> Utils.ste}>
+        <Antd.Input.TextArea
+          value={
+            switch (measurement.value) {
+            | Ok(r) => MeasurementValue.encode(r) |> Js.Json.stringify
+            | _ => ""
+            }
+          }
+          readonly=true
+          cols=3
+        />
+      </Antd.Form.Item>
+      <Antd.Form.Item label={"Text Input" |> Utils.ste}>
+        <Antd.Input
+          value={
+            switch (measurement.valueText) {
+            | Some(r) => r
+            | _ => ""
+            }
+          }
+          readOnly=true
+        />
+      </Antd.Form.Item>
+      <Antd.Form.Item label={"Description" |> Utils.ste}>
+        <Antd.Input.TextArea
+          value={measurement.description |> E.O.default("")}
+          readonly=true
+          cols=5
+        />
+      </Antd.Form.Item>
+    </Antd.Form>;
+  };
+};
+
+module Info = {
+  let overlayClassName = Css.style([Css.width(`em(40.))]);
+
+  module ById = {
+    [@react.component]
+    let make = (~measurementId) => {
+      <Antd_Popover
+        overlayClassName
+        placement=`left
+        content={MeasurementGet.component(~id=measurementId, measurement =>
+          measurement
+          |> E.O.fmap(measurement => <MeasurementDebugForm measurement />)
+          |> E.O.default("No Data" |> Utils.ste)
+        )}>
+        <div className=Style.iconGray> <Icon icon="COPY" /> </div>
+      </Antd_Popover>;
+    };
+  };
+
+  [@react.component]
+  let make = (~measurement: Types.measurement) => {
+    <Antd_Popover
+      overlayClassName
+      placement=`left
+      content={<MeasurementDebugForm measurement />}>
+      <div className=Style.iconGray> <Icon icon="COPY" /> </div>
+    </Antd_Popover>;
+  };
+};

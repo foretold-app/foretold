@@ -7,7 +7,8 @@ const { TEMPLATE_TYPE } = require('../src/enums');
  * This is why if you had decided to return to DB you would have needed
  * to migrate this data on DB table.
  *
- * @todo: To rename "envelopeTemplate" into something yet.
+ * @todo: To rename an "envelopeTemplate" into something yet.
+ * @todo: Copy to the DB (later).
  *
  */
 module.exports = [
@@ -69,6 +70,7 @@ module.exports = [
       item: '{{{ measurable.name }}}',
       description: '{{{ agent.name }}} made a prediction',
       measurableId: '{{{ measurable.id }}}',
+      measurementId: '{{{ measurement.id }}}',
     },
   },
   {
@@ -78,6 +80,7 @@ module.exports = [
       item: '{{{ measurable.name }}}',
       description: '{{{ agent.name }}} made a comment',
       measurableId: '{{{ measurable.id }}}',
+      measurementId: '{{{ measurement.id }}}',
     },
   },
   {
@@ -87,6 +90,7 @@ module.exports = [
       item: '{{{ measurable.name }}}',
       description: '{{{ agent.name }}} resolved the question with an answer',
       measurableId: '{{{ measurable.id }}}',
+      measurementId: '{{{ measurement.id }}}',
     },
   },
   {
@@ -96,6 +100,7 @@ module.exports = [
       item: '{{{ measurable.name }}}',
       description: '{{{ agent.name }}} has marked this question as unresolved',
       measurableId: '{{{ measurable.id }}}',
+      measurementId: '{{{ measurement.id }}}',
     },
   },
   {
@@ -125,7 +130,6 @@ module.exports = [
       description: '{{{ agent.name }}} has created a community',
     },
   },
-  // @todo: Copy to DB (later).
   {
     name: TEMPLATE_NAME.NEW_INVITATION,
     type: TEMPLATE_TYPE.FEED_ITEM,
@@ -144,6 +148,7 @@ module.exports = [
     envelopeTemplate: {
       item: '',
       description: '{{{ agent.name }}} made a notebook',
+      notebookId: '{{{ notebook.id }}}',
     },
   },
 ];

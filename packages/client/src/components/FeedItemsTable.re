@@ -1,23 +1,57 @@
+module Styles = {
+  open Css;
+  let text = style([float(`left)]);
+  let icons = style([float(`left), marginLeft(`em(0.5))]);
+  let clear = style([clear(`both)]);
+};
+
 module Columns = {
   type record = Types.feedItem;
   type column = Table.column(record);
 
-  let getName = (r: record): ReasonReact.reactElement =>
-    switch (r.body.generic, r.body.measurable) {
-    | (Some(row), _) => row.item |> Utils.ste
-    | (_, Some(row)) =>
+  let name = (r: record) =>
+    switch (r.body) {
+    | Measurable(row) =>
       <Link
         linkType={Internal(MeasurableShow(r.channelId, row.measurableId))}>
         {row.item |> Utils.ste}
       </Link>
+    | Measurement(row) =>
+      <Link
+        linkType={Internal(MeasurableShow(r.channelId, row.measurableId))}>
+        {row.item |> Utils.ste}
+      </Link>
+    | JoinedMember(row) => row.item |> Utils.ste
+    | Channel(row) => row.item |> Utils.ste
+    | Notebook(row) => row.item |> Utils.ste
     | _ => "" |> Utils.ste
     };
 
-  let getDescription = (r: record): string =>
-    switch (r.body.generic, r.body.measurable) {
-    | (Some(row), _) => row.description
-    | (_, Some(row)) => row.description
-    | _ => ""
+  let description = (r: record) =>
+    switch (r.body) {
+    | Generic(row) => row.description |> Utils.ste
+    | Measurable(row) => row.description |> Utils.ste
+    | Measurement(row) =>
+      <>
+        <div className=Styles.text> {row.description |> Utils.ste} </div>
+        <div className=Styles.icons>
+          <MeasurementItems.Info.ById measurementId={row.measurementId} />
+        </div>
+      </>
+    | JoinedMember(row) => row.description |> Utils.ste
+    | Channel(row) => row.description |> Utils.ste
+    | Notebook(row) =>
+      <>
+        <div className=Styles.text> {row.description |> Utils.ste} </div>
+        <div className=Styles.icons>
+          <Link
+            className=Style.iconGray
+            linkType={Internal(ChannelNotebook(r.channelId, row.notebookId))}>
+            <Icon icon="LINK" />
+          </Link>
+        </div>
+      </>
+    | _ => "" |> Utils.ste
     };
 
   let channel =
@@ -35,7 +69,7 @@ module Columns = {
   let item =
     Table.Column.make(
       ~name="Question" |> Utils.ste,
-      ~render=(r: record) => r |> getName,
+      ~render=(r: record) => r |> name,
       ~flex=3,
       (),
     );
@@ -43,7 +77,7 @@ module Columns = {
   let description =
     Table.Column.make(
       ~name="Description" |> Utils.ste,
-      ~render=(r: record) => r |> getDescription |> Utils.ste,
+      ~render=(r: record) => r |> description,
       ~flex=3,
       (),
     );

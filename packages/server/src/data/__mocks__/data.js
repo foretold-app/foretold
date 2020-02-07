@@ -102,6 +102,10 @@ const agentChannelsDataMethods = { ...dataBaseMethods() };
 const AgentChannelsData = jest.fn()
   .mockImplementation(() => agentChannelsDataMethods);
 
+const bookmarksDataMethods = { ...dataBaseMethods() };
+const BookmarksData = jest.fn()
+  .mockImplementation(() => bookmarksDataMethods);
+
 const dataBaseMethod$ = { ...dataBaseMethods() };
 const DataBase = jest.fn()
   .mockImplementation(() => dataBaseMethod$);
@@ -109,24 +113,26 @@ const DataBase = jest.fn()
 /* eslint-enable max-classes-per-file */
 
 module.exports = {
+  AgentChannelsData,
+  AgentMeasurablesData,
   AgentsData,
+  BookmarksData,
+  BotsData,
   ChannelMembershipsData,
   ChannelsData,
-  MeasurablesData,
-  MeasurementsData,
-  SeriesData,
-  UsersData,
-  BotsData,
-  TokensData,
-  PreferencesData,
-  TemplatesData,
-  NotificationsData,
-  NotificationStatusesData,
-  InvitationsData,
+  DataBase,
   FeedItemsData,
   GlobalSettingsData,
-  AgentMeasurablesData,
-  AgentChannelsData,
-  DataBase,
+  InvitationsData,
+  MeasurablesData,
+  MeasurementsData,
+  NotificationStatusesData,
+  NotificationsData,
+  PreferencesData,
+  SeriesData,
+  TemplatesData,
+  TokensData,
+  UsersData,
+
   dataBaseMethods,
 };

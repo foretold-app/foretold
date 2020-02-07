@@ -75,19 +75,29 @@ const FeedItem = {
   findAll: jest.fn(() => Promise.resolve(true)),
 };
 
+const Bookmark = {
+  findOne: jest.fn(() => Promise.resolve(true)),
+  create: jest.fn(() => Promise.resolve(true)),
+  findByPk: jest.fn(() => Promise.resolve(true)),
+  findOrCreate: jest.fn(() => Promise.resolve(true)),
+  findAll: jest.fn(() => Promise.resolve(true)),
+};
+
 const sequelize = {
 };
 
 module.exports = {
-  User,
   Agent,
+  Bookmark,
   Channel,
   ChannelMemberships,
+  FeedItem,
+  Invitation,
   Measurable,
   Measurement,
-  Series,
   Preference,
-  Invitation,
-  FeedItem,
+  Series,
+  User,
+
   sequelize,
 };

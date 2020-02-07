@@ -20,7 +20,7 @@ module.exports = {
         notebookId: {
           type: Sequelize.UUID,
           references: {
-            model: 'NotebookId',
+            model: 'Notebooks',
             key: 'id',
           },
           allowNull: true,
@@ -34,12 +34,12 @@ module.exports = {
           allowNull: true,
         },
         createdAt: {
-          type: Sequelize.DATE(3),
+          type: Sequelize.DATE,
           defaultValue: Sequelize.NOW,
           allowNull: false,
         },
         updatedAt: {
-          type: Sequelize.DATE(3),
+          type: Sequelize.DATE,
           defaultValue: Sequelize.NOW,
           allowNull: false,
         },
@@ -62,7 +62,15 @@ module.exports = {
       });
 
       await queryInterface.sequelize.query(
-        `ALTER TABLE "Bookmarks" SET UNLOGGED`,
+        'ALTER TABLE "Bookmarks" SET UNLOGGED',
+      );
+
+      const table = 'Bookmarks';
+      const timestampThree = 'timestamp(3) with time zone';
+      await queryInterface.sequelize.query(
+        `ALTER TABLE "${table}" `
+        + `ALTER COLUMN "createdAt" SET DATA TYPE ${timestampThree}, `
+        + `ALTER COLUMN "updatedAt" SET DATA TYPE ${timestampThree};`,
       );
 
       await queryInterface.sequelize.query('COMMIT');

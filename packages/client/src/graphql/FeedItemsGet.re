@@ -1,139 +1,21 @@
-type channel = {
-  id: string,
-  name: string,
-  isArchived: bool,
-  isPublic: bool,
-};
-
-type node = {
-  id: string,
-  channelId: string,
-  body: FeedItemBody.t,
-  channel,
-  createdAt: MomentRe.Moment.t,
-  updatedAt: MomentRe.Moment.t,
-};
-
-let toCommon =
-    (m: option(FeedItemBody.generic)): option(FeedItemBody.Generic.t) => {
-  switch (m) {
-  | Some(generic) =>
-    FeedItemBody.Generic.make(
-      ~item=generic.item,
-      ~description=generic.description,
-      (),
-    )
-    |> E.O.some
-  | _ => None
-  };
-};
-
-let toMeasurable =
-    (m: option(FeedItemBody.measurable)): option(FeedItemBody.Measurable.t) => {
-  switch (m) {
-  | Some(measurable) =>
-    FeedItemBody.Measurable.make(
-      ~item=measurable.item,
-      ~description=measurable.description,
-      ~measurableId=measurable.measurableId,
-      (),
-    )
-    |> E.O.some
-  | _ => None
-  };
-};
-
-let toMeasurement =
-    (m: option(FeedItemBody.measurement))
-    : option(FeedItemBody.Measurement.t) => {
-  switch (m) {
-  | Some(measurement) =>
-    FeedItemBody.Measurement.make(
-      ~item=measurement.item,
-      ~description=measurement.description,
-      ~measurableId=measurement.measurableId,
-      ~measurementId=measurement.measurementId,
-      (),
-    )
-    |> E.O.some
-  | _ => None
-  };
-};
-
-let toNotebook =
-    (m: option(FeedItemBody.notebook)): option(FeedItemBody.Notebook.t) => {
-  switch (m) {
-  | Some(notebook) =>
-    FeedItemBody.Notebook.make(
-      ~item=notebook.item,
-      ~description=notebook.description,
-      ~notebookId=notebook.notebookId,
-      (),
-    )
-    |> E.O.some
-  | _ => None
-  };
-};
-
-let toJoinedMember =
-    (m: option(FeedItemBody.joinedMember))
-    : option(FeedItemBody.JoinedMember.t) => {
-  switch (m) {
-  | Some(joinedMember) =>
-    FeedItemBody.JoinedMember.make(
-      ~item=joinedMember.item,
-      ~description=joinedMember.description,
-      (),
-    )
-    |> E.O.some
-  | _ => None
-  };
-};
-
-let toChannel2 =
-    (m: option(FeedItemBody.channel)): option(FeedItemBody.Channel.t) => {
-  switch (m) {
-  | Some(channel2) =>
-    FeedItemBody.Channel.make(
-      ~item=channel2.item,
-      ~description=channel2.description,
-      (),
-    )
-    |> E.O.some
-  | _ => None
-  };
-};
-
-let toBody = (m: FeedItemBody.t) => {
-  FeedItemBody.make(
-    ~generic=toCommon(m.generic),
-    ~measurable=toMeasurable(m.measurable),
-    ~measurement=toMeasurement(m.measurement),
-    ~notebook=toNotebook(m.notebook),
-    ~channel=toChannel2(m.channel),
-    ~joinedMember=toJoinedMember(m.joinedMember),
-    (),
-  );
-};
-
-let toChannel = (m: channel) => {
+let toChannel = m => {
   Primary.Channel.make(
-    ~id=m.id,
-    ~name=m.name,
-    ~isArchived=m.isArchived,
-    ~isPublic=m.isPublic,
+    ~id=m##id,
+    ~name=m##name,
+    ~isArchived=m##isArchived,
+    ~isPublic=m##isPublic,
     (),
   );
 };
 
-let toFeedItem = (m: node) => {
+let toFeedItem = m => {
   Primary.FeedItem.make(
-    ~id=m.id,
-    ~channelId=m.channelId,
-    ~body=toBody(m.body),
-    ~channel=toChannel(m.channel),
-    ~createdAt=Some(m.createdAt),
-    ~updatedAt=Some(m.updatedAt),
+    ~id=m##id,
+    ~channelId=m##channelId,
+    ~body=FeedItemBody.toBody(m##body),
+    ~channel=toChannel(m##channel),
+    ~createdAt=Some(m##createdAt),
+    ~updatedAt=Some(m##updatedAt),
     (),
   );
 };
@@ -164,39 +46,40 @@ module Query = [%graphql
             endCursor
           }
           edges{
-            node @bsRecord{
+            node {
               id
               channelId
-              body @bsRecord {
-                 generic @bsRecord {
+              body {
+                 generic {
                    item
                    description
                  }
-                 measurable @bsRecord {
+                 measurable {
                    item
                    description
                    measurableId
                  }
-                 measurement @bsRecord {
+                 measurement {
                    item
                    description
                    measurableId
                    measurementId
                  }
-                 joinedMember @bsRecord {
+                 joinedMember {
                    item
                    description
                  }
-                 notebook @bsRecord {
+                 notebook {
                    item
                    description
+                   notebookId
                  }
-                 channel @bsRecord {
+                 channel {
                    item
                    description
                  }
               }
-              channel @bsRecord {
+              channel {
                 id
                 name @bsDecoder(fn: "E.J.toString")
                 isArchived

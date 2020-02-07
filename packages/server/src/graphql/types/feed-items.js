@@ -47,6 +47,7 @@ const feedItemBodyNotebook = new graphql.GraphQLObjectType({
   fields: () => ({
     item: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     description: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    notebookId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
   }),
 });
 

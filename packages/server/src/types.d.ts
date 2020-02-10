@@ -5,22 +5,23 @@ export namespace Models {
   export type Json = string;
 
   export type AgentID = ObjectID;
-  export type ChannelID = ObjectID;
-  export type UserID = ObjectID;
+  export type BookmarkID = ObjectID;
   export type BotID = ObjectID;
+  export type ChannelID = ObjectID;
+  export type ChannelMembershipID = ObjectID;
+  export type FeedItemID = ObjectID;
+  export type GlobalSettingsID = ObjectID;
+  export type InvitationID = ObjectID;
   export type MeasurableID = ObjectID;
   export type MeasurementID = ObjectID;
-  export type NotificationID = ObjectID;
-  export type TemplateID = ObjectID;
-  export type GlobalSettingsID = ObjectID;
-  export type FeedItemID = ObjectID;
-  export type InvitationID = ObjectID;
-  export type NotificationStatusID = ObjectID;
-  export type SeriesID = ObjectID;
-  export type PreferenceID = ObjectID;
-  export type TokenID = ObjectID;
-  export type ChannelMembershipID = ObjectID;
   export type NotebookID = ObjectID;
+  export type NotificationID = ObjectID;
+  export type NotificationStatusID = ObjectID;
+  export type PreferenceID = ObjectID;
+  export type SeriesID = ObjectID;
+  export type TemplateID = ObjectID;
+  export type TokenID = ObjectID;
+  export type UserID = ObjectID;
 
   export interface Model {
     id: ObjectID;
@@ -232,6 +233,12 @@ export namespace Models {
     agentId: AgentID;
     measurementId: MeasurementID;
     voteAmount: number;
+  }
+
+  export interface Bookmark extends Model {
+    agentId: AgentID;
+    channelId: ChannelID;
+    notebookId: NotebookID;
   }
 
   export type Creator = Models.User | Models.Bot;

@@ -61,10 +61,6 @@ module.exports = {
         name: 'Bookmarks_updatedAt',
       });
 
-      await queryInterface.sequelize.query(
-        'ALTER TABLE "Bookmarks" SET UNLOGGED',
-      );
-
       const table = 'Bookmarks';
       const timestampThree = 'timestamp(3) with time zone';
       await queryInterface.sequelize.query(
@@ -72,6 +68,11 @@ module.exports = {
         + `ALTER COLUMN "createdAt" SET DATA TYPE ${timestampThree}, `
         + `ALTER COLUMN "updatedAt" SET DATA TYPE ${timestampThree};`,
       );
+
+      // @todo: To add a notebook-agent partial constrain.
+      // @todo: To add a channel-agent partial constrain.
+      // @todo: To add a channel-notebook not-null constrain.
+      // @todo: To add an authorizer.
 
       await queryInterface.sequelize.query('COMMIT');
     } catch (e) {

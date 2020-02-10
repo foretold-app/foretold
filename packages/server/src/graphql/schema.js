@@ -523,6 +523,28 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.notebooks.remove,
       },
 
+      bookmarkCreate: {
+        type: types.bookmarks.bookmark,
+        args: {
+          input: {
+            type: graphql.GraphQLNonNull(
+              types.bookmarks.bookmarkInput,
+            ),
+          },
+        },
+        resolve: resolvers.bookmarks.create,
+      },
+
+      bookmarkDelete: {
+        type: types.notebooks.notebook,
+        args: {
+          bookmarkId: {
+            type: graphql.GraphQLNonNull(types.scalars.bookmarkId),
+          },
+        },
+        resolve: resolvers.bookmarks.remove,
+      },
+
       preferenceUpdate: {
         type: types.preferences.preference,
         args: {

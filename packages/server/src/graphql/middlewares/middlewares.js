@@ -232,7 +232,7 @@ const middlewares = {
       return resolve(root, args, context, info);
     },
 
-    channelBookmarkDelete: async (resolve, root, args, context, info) => {
+    channelBookmarkToggle: async (resolve, root, args, context, info) => {
       await setContextChannelBookmark(root, args, context, info);
       return resolve(root, args, context, info);
     },

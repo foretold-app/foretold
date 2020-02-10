@@ -7793,34 +7793,7 @@
               "deprecationReason": null
             },
             {
-              "name": "channelBookmarkCreate",
-              "description": null,
-              "args": [
-                {
-                  "name": "channelId",
-                  "description": null,
-                  "type": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "SCALAR",
-                      "name": "ChannelId",
-                      "ofType": null
-                    }
-                  },
-                  "defaultValue": null
-                }
-              ],
-              "type": {
-                "kind": "OBJECT",
-                "name": "ChannelBookmark",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "channelBookmarkDelete",
+              "name": "channelBookmarkToggle",
               "description": null,
               "args": [
                 {

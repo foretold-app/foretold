@@ -35,12 +35,7 @@ const validators = {
       return resolve(root, args, context, info);
     },
 
-    channelBookmarkCreate: async (resolve, root, args, context, info) => {
-      await channelExistsValidation(root, args, context, info);
-      return resolve(root, args, context, info);
-    },
-
-    channelBookmarkDelete: async (resolve, root, args, context, info) => {
+    channelBookmarkToggle: async (resolve, root, args, context, info) => {
       await channelExistsValidation(root, args, context, info);
       return resolve(root, args, context, info);
     },

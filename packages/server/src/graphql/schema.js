@@ -524,8 +524,8 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.notebooks.remove,
       },
 
-      channelBookmarkCreate: {
-        type: types.channelBookmarks.channelBookmark,
+      channelBookmarkToggle: {
+        type: graphql.GraphQLBoolean,
         args: {
           channelId: {
             type: graphql.GraphQLNonNull(
@@ -533,19 +533,7 @@ const schema = new graphql.GraphQLSchema({
             ),
           },
         },
-        resolve: resolvers.channelBookmarks.create,
-      },
-
-      channelBookmarkDelete: {
-        type: types.channelBookmarks.channelBookmark,
-        args: {
-          channelId: {
-            type: graphql.GraphQLNonNull(
-              types.scalars.channelId,
-            ),
-          },
-        },
-        resolve: resolvers.channelBookmarks.remove,
+        resolve: resolvers.channelBookmarks.toggle,
       },
 
       preferenceUpdate: {

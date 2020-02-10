@@ -23,7 +23,6 @@ const { notebookIsOwnedByCurrentAgent } = require('./notebooks');
 const { rateLimit } = require('./rate-limit');
 const { measurementIsCompetitiveOrCommentOnly } = require('./measurements');
 const { measurementIsOwnedByCurrentAgent } = require('./measurements');
-const { channelBookmarkBelongsToCurrentAgent } = require('./channel-bookmarks');
 
 const currentAgentIsApplicationAdminOrChannelAdmin = or(
   currentAgentIsApplicationAdmin,
@@ -170,11 +169,7 @@ const rulesMeasurements = () => ({
 const rulesChannelBookmarks = () => ({
   Query: {},
   Mutation: {
-    channelBookmarkCreate: currentAgentIsAuthenticated,
-    channelBookmarkDelete: and(
-      currentAgentIsAuthenticated,
-      channelBookmarkBelongsToCurrentAgent,
-    ),
+    channelBookmarkToggle: currentAgentIsAuthenticated,
   },
 });
 

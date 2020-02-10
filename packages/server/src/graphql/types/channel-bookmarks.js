@@ -3,29 +3,17 @@ const { DateType } = require('graphql-sequelize');
 
 const scalars = require('./scalars');
 
-// @todo: Not-null
-const bookmark = new graphql.GraphQLObjectType({
-  name: 'Bookmark',
+const channelBookmark = new graphql.GraphQLObjectType({
+  name: 'ChannelBookmark',
   fields: () => ({
     id: { type: graphql.GraphQLNonNull(scalars.bookmarkId) },
-    channelId: { type: scalars.channelId },
-    notebookId: { type: scalars.notebookId },
+    channelId: { type: graphql.GraphQLNonNull(scalars.channelId) },
     agentId: { type: graphql.GraphQLNonNull(scalars.agentId) },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
   }),
 });
 
-// @todo: Not-null
-const bookmarkInput = new graphql.GraphQLInputObjectType({
-  name: 'BookmarkInput',
-  fields: () => ({
-    channelId: { type: scalars.channelId },
-    notebookId: { type: scalars.notebookId },
-  }),
-});
-
 module.exports = {
-  bookmark,
-  bookmarkInput,
+  channelBookmark,
 };

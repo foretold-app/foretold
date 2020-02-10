@@ -2,8 +2,8 @@ const agentChannels = require('./agent-channels');
 const agentMeasurables = require('./agent-measurables');
 const agents = require('./agents');
 const authentications = require('./authentications');
-const bookmarks = require('./bookmarks');
 const bots = require('./bots');
+const chanelBookmarks = require('./channel-bookmarks');
 const channelMemberships = require('./channel-memberhips');
 const channels = require('./channels');
 const common = require('./common');
@@ -25,8 +25,8 @@ module.exports = {
   agentMeasurables,
   agents,
   authentications,
-  bookmarks,
   bots,
+  chanelBookmarks,
   channelMemberships,
   channels,
   common,

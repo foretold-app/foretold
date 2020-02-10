@@ -1,4 +1,4 @@
-const bookmarks = require('./bookmarks');
+const bookmarks = require('./channel-bookmarks');
 
 describe('Bookmarks Resolvers', () => {
   it('class should be object', () => {

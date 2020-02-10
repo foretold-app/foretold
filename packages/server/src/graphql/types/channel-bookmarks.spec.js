@@ -1,6 +1,4 @@
-const graphql = require('graphql');
-
-const bookmarks = require('./bookmarks');
+const bookmarks = require('./channel-bookmarks');
 
 describe('bookmarks types', () => {
   it('class should be object', () => {

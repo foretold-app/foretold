@@ -128,6 +128,7 @@ module.exports = {
   competitiveMeasurementCanBeAddedToOpenMeasurable,
   measurementValueTypeValidation,
   measurementValueValidation,
+
   setContextMeasurement,
   setContextMeasurementByRoot,
 };

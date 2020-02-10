@@ -19,12 +19,17 @@ async function create(_root, args, context, _info) {
   const channelId = _.get(args, 'channelId', null);
   const currentAgentId = _.get(context, 'agent.id', null);
 
+  const params = new Params({
+    channelId,
+    agentId: currentAgentId,
+  });
+  const query = new Query();
   const data = new Data({
     channelId,
     agentId: currentAgentId,
   });
 
-  return new ChannelBookmarksData().createOne(data);
+  return new ChannelBookmarksData().upsertOne(params, query, data);
 }
 
 /**

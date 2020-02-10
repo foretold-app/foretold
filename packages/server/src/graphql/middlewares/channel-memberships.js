@@ -9,6 +9,7 @@ const { Params } = require('../../data/classes');
 const log = logger.module('middlewares/channel-memberships');
 
 /**
+ * @todo: Should be divided on two middleware.
  * @todo: To fix "||" a joined logic.
  * @param {object | null} root
  * @param {object} args

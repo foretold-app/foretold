@@ -29,9 +29,8 @@ async function setContextChannel(root, args, context, _info) {
   );
 
   if (!!channelId) {
-    context.channel = await new ChannelsData().getOne(new Params({
-      id: channelId,
-    }));
+    const params = new Params({ id: channelId });
+    context.channel = await new ChannelsData().getOne(params);
   } else {
     context.channel = null;
   }

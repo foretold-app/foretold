@@ -66,6 +66,7 @@ async function measurableNameValidation(root, args, _context, _info) {
 
 module.exports = {
   measurableNameValidation,
+
   setContextMeasurable,
   setContextMeasurableByRoot,
 };

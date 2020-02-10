@@ -9,6 +9,14 @@ module.exports = {
           primaryKey: true,
           type: Sequelize.UUID,
         },
+        agentId: {
+          type: Sequelize.UUID,
+          references: {
+            model: 'Agents',
+            key: 'id',
+          },
+          allowNull: false,
+        },
         channelId: {
           type: Sequelize.UUID,
           references: {
@@ -21,14 +29,6 @@ module.exports = {
           type: Sequelize.UUID,
           references: {
             model: 'Notebooks',
-            key: 'id',
-          },
-          allowNull: true,
-        },
-        agentId: {
-          type: Sequelize.UUID,
-          references: {
-            model: 'Agents',
             key: 'id',
           },
           allowNull: true,
@@ -61,17 +61,41 @@ module.exports = {
         name: 'Bookmarks_updatedAt',
       });
 
-      const table = 'Bookmarks';
-      const timestampThree = 'timestamp(3) with time zone';
+      // Unique Indexes
+      await queryInterface.addIndex('Bookmarks', ['agentId', 'channelId'], {
+        name: 'Bookmarks_agentId_channelId',
+        unique: true,
+        where: {
+          channelId: {
+            [Sequelize.Op.ne]: null,
+          },
+        },
+      });
+      await queryInterface.addIndex('Bookmarks', ['agentId', 'notebookId'], {
+        name: 'Bookmarks_agentId_notebookId',
+        unique: true,
+        where: {
+          channelId: {
+            [Sequelize.Op.ne]: null,
+          },
+        },
+      });
       await queryInterface.sequelize.query(
-        `ALTER TABLE "${table}" `
-        + `ALTER COLUMN "createdAt" SET DATA TYPE ${timestampThree}, `
-        + `ALTER COLUMN "updatedAt" SET DATA TYPE ${timestampThree};`,
+        'ALTER TABLE "Bookmarks" '
+        + 'ADD CONSTRAINT "one_is_null" '
+        + 'CHECK ( '
+        + '("notebookId" IS NOT NULL AND "channelId" IS NULL) '
+        + ' OR '
+        + '("notebookId" IS NULL AND "channelId" IS NOT NULL) '
+        + ')',
       );
 
-      // @todo: To add a notebook-agent partial constrain.
-      // @todo: To add a channel-agent partial constrain.
-      // @todo: To add a channel-notebook not-null constrain.
+      await queryInterface.sequelize.query(
+        'ALTER TABLE "Bookmarks" '
+        + 'ALTER COLUMN "createdAt" SET DATA TYPE timestamp(3) with time zone, '
+        + 'ALTER COLUMN "updatedAt" SET DATA TYPE timestamp(3) with time zone;',
+      );
+
       // @todo: To add an authorizer.
 
       await queryInterface.sequelize.query('COMMIT');

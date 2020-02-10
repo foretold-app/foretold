@@ -40,9 +40,9 @@ class ChannelBookmarksData extends DataBase {
    * @returns {Promise<boolean>}
    */
   async create(channelId, agentId) {
-    const params = new Params({ channelId, agentId });
     const data = new Data({ channelId, agentId });
-    return this.createOne(params, data);
+    const options = new Options({ raw: true });
+    return this.createOne(data, options);
   }
 
   /**
@@ -53,7 +53,7 @@ class ChannelBookmarksData extends DataBase {
   async one(channelId, agentId) {
     const params = new Params({ channelId, agentId });
     const query = new Query();
-    const options = new Options();
+    const options = new Options({ raw: true });
     return this.getOne(params, query, options);
   }
 
@@ -65,8 +65,7 @@ class ChannelBookmarksData extends DataBase {
   async delete(channelId, agentId) {
     const params = new Params({ channelId, agentId });
     const query = new Query();
-    const data = new Data({ channelId, agentId });
-    return this.deleteOne(params, query, data);
+    return this.deleteOne(params, query);
   }
 }
 

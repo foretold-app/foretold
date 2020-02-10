@@ -23,6 +23,7 @@ import { ic_content_copy } from 'react-icons-kit/md/ic_content_copy';
 import { magicWand } from 'react-icons-kit/icomoon/magicWand';
 import { pacman } from 'react-icons-kit/icomoon/pacman';
 import { thList as list } from 'react-icons-kit/typicons/thList';
+import { starFull } from 'react-icons-kit/icomoon/starFull';
 
 let types = {
   'HOME': home,
@@ -46,7 +47,8 @@ let types = {
   'COPY': ic_content_copy,
   'MAGIC_WAND': magicWand,
   'PACMAN': pacman,
-  'LIST': list
+  'LIST': list,
+  'STAR_FULL': starFull,
 };
 
 export class ReactKitIcon extends React.Component {

@@ -235,10 +235,9 @@ export namespace Models {
     voteAmount: number;
   }
 
-  export interface Bookmark extends Model {
+  export interface ChannelBookmark extends Model {
     agentId: AgentID;
     channelId: ChannelID;
-    notebookId: NotebookID;
   }
 
   export type Creator = Models.User | Models.Bot;
@@ -265,6 +264,7 @@ export namespace Schema {
     notebook?: Models.Notebook;
     measurement?: Models.Measurement;
     measurable?: Models.Measurable;
+    channelBookmark?: Models.ChannelBookmark;
   }
 
   export interface ChannelsInput {

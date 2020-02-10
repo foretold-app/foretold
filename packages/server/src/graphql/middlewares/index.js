@@ -1,11 +1,15 @@
 const _ = require('lodash');
 
 const { authenticationInputValidation } = require('./authentications');
+const { competitiveMeasurementCanBeAddedToOpenMeasurable } = require(
+  './measurements',
+);
 const { measurableNameValidation } = require('./measurables');
 const { measurementValueTypeValidation } = require('./measurements');
 const { measurementValueValidation } = require('./measurements');
 const { setContextBot } = require('./bots');
 const { setContextChannel, setContextChannelByRoot } = require('./channels');
+const { setContextChannelBookmark } = require('./channel-bookmarks');
 const { setContextChannelMemberships } = require('./channel-memberships');
 const { setContextChannelMembershipsAdmins } = require('./channel-memberships');
 const { setContextMeasurable } = require('./measurables');
@@ -16,8 +20,6 @@ const { setContextNotebook } = require('./notebooks');
 const { setContextPreferenceFromAgentId } = require('./preferences');
 const { setContextPreferenceFromId } = require('./preferences');
 const { setContextUser } = require('./users');
-const { competitiveMeasurementCanBeAddedToOpenMeasurable }
-  = require('./measurements');
 
 /**
  * Do not try to use DRY principle here.
@@ -247,6 +249,11 @@ const middlewares = {
 
     measurementVote: async (resolve, root, args, context, info) => {
       await setContextMeasurement(root, args, context, info);
+      return resolve(root, args, context, info);
+    },
+
+    channelBookmarkDelete: async (resolve, root, args, context, info) => {
+      await setContextChannelBookmark(root, args, context, info);
       return resolve(root, args, context, info);
     },
   },

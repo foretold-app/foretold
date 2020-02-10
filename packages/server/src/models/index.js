@@ -1,7 +1,7 @@
 const { AgentChannelModel } = require('./agent-channel-model');
 const { AgentMeasurableModel } = require('./agent-measurable-model');
 const { AgentModel } = require('./agent-model');
-const { BookmarkModel } = require('./bookmark-model');
+const { ChannelBookmarkModel } = require('./channel-bookmark-model');
 const { BotModel } = require('./bot-model');
 const { ChannelAgentModel } = require('./channel-agent-model');
 const { ChannelMembershipModel } = require('./channel-membership-model');
@@ -27,9 +27,9 @@ module.exports = {
   AgentChannelModel,
   AgentMeasurableModel,
   AgentModel,
-  BookmarkModel,
   BotModel,
   ChannelAgentModel,
+  ChannelBookmarkModel,
   ChannelMembershipModel,
   ChannelModel,
   FeedItemModel,

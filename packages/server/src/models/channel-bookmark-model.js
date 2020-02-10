@@ -4,15 +4,15 @@ const { ModelPostgres } = require('./model-postgres');
 /**
  * @implements {Layers.AbstractModelsLayer.AbstractModel}
  */
-class BookmarkModel extends ModelPostgres {
+class ChannelBookmarkModel extends ModelPostgres {
   constructor() {
     super({
-      model: models.Bookmark,
+      model: models.ChannelBookmark,
       sequelize: models.sequelize,
     });
   }
 }
 
 module.exports = {
-  BookmarkModel,
+  ChannelBookmarkModel,
 };

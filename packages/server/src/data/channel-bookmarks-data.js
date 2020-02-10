@@ -1,5 +1,5 @@
 const { DataBase } = require('./data-base');
-const { BookmarkModel } = require('../models');
+const { ChannelBookmarkModel } = require('../models');
 
 const logger = require('../lib/log');
 
@@ -7,14 +7,14 @@ const logger = require('../lib/log');
  * @implements {Layers.DataSourceLayer.DataSource}
  * @property {VoteModel} model
  */
-class BookmarksData extends DataBase {
+class ChannelBookmarksData extends DataBase {
   constructor() {
     super();
-    this.model = new BookmarkModel();
-    this.log = logger.module('BookmarksData');
+    this.model = new ChannelBookmarkModel();
+    this.log = logger.module('ChannelBookmarksData');
   }
 }
 
 module.exports = {
-  BookmarksData,
+  ChannelBookmarksData,
 };

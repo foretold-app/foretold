@@ -21,8 +21,8 @@ function init(db) {
   // Clear classes
   const agentChannel = db.sequelize.import('./agent-channel');
   const agentMeasurable = db.sequelize.import('./agent-measurable');
-  const bookmark = db.sequelize.import('./bookmark');
   const channelAgent = db.sequelize.import('./channel-agent');
+  const channelBookmark = db.sequelize.import('./channel-bookmark');
   const feedItem = db.sequelize.import('./feed-item');
   const globalSetting = db.sequelize.import('./global-setting');
   const invitation = db.sequelize.import('./invitation');
@@ -42,6 +42,7 @@ function init(db) {
   db.Bot = bot;
   db.Channel = channel;
   db.ChannelAgent = channelAgent;
+  db.ChannelBookmark = channelBookmark;
   db.ChannelMemberships = channelMembership;
   db.FeedItem = feedItem;
   db.GlobalSetting = globalSetting;
@@ -58,14 +59,13 @@ function init(db) {
   db.Token = token;
   db.User = user;
   db.Vote = vote;
-  db.Bookmark = bookmark;
 
   const initList = [
     'Agent', 'Bot', 'ChannelMemberships', 'Channel', 'Measurable',
     'Series', 'User', 'Token', 'Preference',
     'NotificationStatus', 'FeedItem', 'Measurement',
     'AgentMeasurable', 'AgentChannel', 'Invitation', 'Mutex',
-    'Notebook', 'ChannelAgent', 'Vote', 'Bookmark'
+    'Notebook', 'ChannelAgent', 'Vote', 'ChannelBookmark',
   ];
 
   // Associate All Models

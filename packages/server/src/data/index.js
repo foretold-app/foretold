@@ -1,9 +1,9 @@
 const { AgentChannelsData } = require('./agent-channels-data');
 const { AgentMeasurablesData } = require('./agent-measurables-data');
 const { AgentsData } = require('./agents-data');
-const { BookmarksData } = require('./bookmarks-data');
 const { BotsData } = require('./bots-data');
 const { ChannelAgentsData } = require('./channel-agents-data');
+const { ChannelBookmarksData } = require('./channel-bookmarks-data');
 const { ChannelMembershipsData } = require('./channel-memberships-data');
 const { ChannelsData } = require('./channels-data');
 const { FeedItemsData } = require('./feed-items-data');
@@ -26,9 +26,9 @@ module.exports = {
   AgentChannelsData,
   AgentMeasurablesData,
   AgentsData,
-  BookmarksData,
   BotsData,
   ChannelAgentsData,
+  ChannelBookmarksData,
   ChannelMembershipsData,
   ChannelsData,
   FeedItemsData,

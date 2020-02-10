@@ -3,7 +3,7 @@ module.exports = {
     try {
       await queryInterface.sequelize.query('BEGIN');
 
-      await queryInterface.createTable('Bookmarks', {
+      await queryInterface.createTable('ChannelBookmarks', {
         id: {
           allowNull: false,
           primaryKey: true,
@@ -23,15 +23,7 @@ module.exports = {
             model: 'Channels',
             key: 'id',
           },
-          allowNull: true,
-        },
-        notebookId: {
-          type: Sequelize.UUID,
-          references: {
-            model: 'Notebooks',
-            key: 'id',
-          },
-          allowNull: true,
+          allowNull: false,
         },
         createdAt: {
           type: Sequelize.DATE,
@@ -45,53 +37,30 @@ module.exports = {
         },
       });
 
-      await queryInterface.addIndex('Bookmarks', ['channelId'], {
-        name: 'Bookmarks_channelId',
+      await queryInterface.addIndex('ChannelBookmarks', ['channelId'], {
+        name: 'ChannelBookmarks_channelId',
       });
-      await queryInterface.addIndex('Bookmarks', ['notebookId'], {
-        name: 'Bookmarks_notebookId',
+      await queryInterface.addIndex('ChannelBookmarks', ['agentId'], {
+        name: 'ChannelBookmarks_agentId',
       });
-      await queryInterface.addIndex('Bookmarks', ['agentId'], {
-        name: 'Bookmarks_agentId',
+      await queryInterface.addIndex('ChannelBookmarks', ['createdAt'], {
+        name: 'ChannelBookmarks_createdAt',
       });
-      await queryInterface.addIndex('Bookmarks', ['createdAt'], {
-        name: 'Bookmarks_createdAt',
-      });
-      await queryInterface.addIndex('Bookmarks', ['updatedAt'], {
-        name: 'Bookmarks_updatedAt',
+      await queryInterface.addIndex('ChannelBookmarks', ['updatedAt'], {
+        name: 'ChannelBookmarks_updatedAt',
       });
 
       // Unique Indexes
-      await queryInterface.addIndex('Bookmarks', ['agentId', 'channelId'], {
-        name: 'Bookmarks_agentId_channelId',
+      await queryInterface.addIndex('ChannelBookmarks', [
+        'agentId',
+        'channelId',
+      ], {
+        name: 'ChannelBookmarks_agentId_channelId',
         unique: true,
-        where: {
-          channelId: {
-            [Sequelize.Op.ne]: null,
-          },
-        },
       });
-      await queryInterface.addIndex('Bookmarks', ['agentId', 'notebookId'], {
-        name: 'Bookmarks_agentId_notebookId',
-        unique: true,
-        where: {
-          channelId: {
-            [Sequelize.Op.ne]: null,
-          },
-        },
-      });
-      await queryInterface.sequelize.query(
-        'ALTER TABLE "Bookmarks" '
-        + 'ADD CONSTRAINT "one_is_null" '
-        + 'CHECK ( '
-        + '("notebookId" IS NOT NULL AND "channelId" IS NULL) '
-        + ' OR '
-        + '("notebookId" IS NULL AND "channelId" IS NOT NULL) '
-        + ')',
-      );
 
       await queryInterface.sequelize.query(
-        'ALTER TABLE "Bookmarks" '
+        'ALTER TABLE "ChannelBookmarks" '
         + 'ALTER COLUMN "createdAt" SET DATA TYPE timestamp(3) with time zone, '
         + 'ALTER COLUMN "updatedAt" SET DATA TYPE timestamp(3) with time zone;',
       );
@@ -109,7 +78,7 @@ module.exports = {
   down: async function (queryInterface) {
     try {
       await queryInterface.sequelize.query('BEGIN');
-      await queryInterface.dropTable('Bookmarks');
+      await queryInterface.dropTable('ChannelBookmarks');
       await queryInterface.sequelize.query('COMMIT');
     } catch (e) {
       console.error('Migration Down Error', e);

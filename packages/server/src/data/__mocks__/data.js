@@ -102,9 +102,9 @@ const agentChannelsDataMethods = { ...dataBaseMethods() };
 const AgentChannelsData = jest.fn()
   .mockImplementation(() => agentChannelsDataMethods);
 
-const bookmarksDataMethods = { ...dataBaseMethods() };
-const BookmarksData = jest.fn()
-  .mockImplementation(() => bookmarksDataMethods);
+const channelBookmarksDataMethods = { ...dataBaseMethods() };
+const ChannelBookmarksData = jest.fn()
+  .mockImplementation(() => channelBookmarksDataMethods);
 
 const dataBaseMethod$ = { ...dataBaseMethods() };
 const DataBase = jest.fn()
@@ -116,8 +116,8 @@ module.exports = {
   AgentChannelsData,
   AgentMeasurablesData,
   AgentsData,
-  BookmarksData,
   BotsData,
+  ChannelBookmarksData,
   ChannelMembershipsData,
   ChannelsData,
   DataBase,

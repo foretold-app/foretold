@@ -95,6 +95,10 @@ const AgentChannelModel = jest.fn().mockImplementation(() => ({
   ...ModelPostgres,
 }));
 
+const ChannelBookmarkModel = jest.fn().mockImplementation(() => ({
+  ...ModelPostgres,
+}));
+
 const Model = jest.fn().mockImplementation(() => ({
   ...ModelPostgres,
 }));
@@ -102,23 +106,24 @@ const Model = jest.fn().mockImplementation(() => ({
 /* eslint-enable */
 
 module.exports = {
+  AgentChannelModel,
+  AgentMeasurableModel,
   AgentModel,
+  BotModel,
+  ChannelBookmarkModel,
   ChannelMembershipModel,
   ChannelModel,
-  MeasurableModel,
-  MeasurementModel,
-  SeriesModel,
-  UserModel,
-  BotModel,
-  TokenModel,
-  PreferenceModel,
-  TemplateModel,
-  NotificationModel,
-  NotificationStatusModel,
-  InvitationModel,
   FeedItemModel,
   GlobalSettingModel,
-  AgentMeasurableModel,
-  AgentChannelModel,
+  InvitationModel,
+  MeasurableModel,
+  MeasurementModel,
   Model,
+  NotificationModel,
+  NotificationStatusModel,
+  PreferenceModel,
+  SeriesModel,
+  TemplateModel,
+  TokenModel,
+  UserModel,
 };

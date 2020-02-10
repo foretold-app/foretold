@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const Bookmark = sequelize.define('Bookmark', {
+  const ChannelBookmark = sequelize.define('ChannelBookmark', {
     id: {
       type: DataTypes.UUID(),
       primaryKey: true,
@@ -7,10 +7,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     channelId: {
-      type: DataTypes.UUID(),
-      allowNull: true,
-    },
-    notebookId: {
       type: DataTypes.UUID(),
       allowNull: true,
     },
@@ -30,5 +26,5 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
-  return Bookmark;
+  return ChannelBookmark;
 };

@@ -9,8 +9,8 @@ const bookmark = new graphql.GraphQLObjectType({
   fields: () => ({
     id: { type: graphql.GraphQLNonNull(scalars.bookmarkId) },
     channelId: { type: scalars.channelId },
-    agentId: { type: graphql.GraphQLNonNull(scalars.agentId) },
     notebookId: { type: scalars.notebookId },
+    agentId: { type: graphql.GraphQLNonNull(scalars.agentId) },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
   }),

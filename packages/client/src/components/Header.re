@@ -111,8 +111,10 @@ module MyCommunities = {
   let makeItem = (name, icon, r): ForetoldComponents.MyCommunities.item => {
     name,
     icon,
+    bookmark: false,
     href: LinkType.toString(Internal(r)),
     onClick: LinkType.onClick(Internal(r)),
+    onBookmark: LinkType.onClick(Internal(r)),
   };
 
   let backgroundBox =
@@ -147,7 +149,7 @@ module MyCommunities = {
              ~order=ChannelsGet.orderAsSidebar,
              channels =>
              channels
-             |> E.A.fmapi((index, channel: Types.channel) =>
+             |> E.A.fmap((channel: Types.channel) =>
                   <ForetoldComponents.MyCommunities.Item
                     item={Primary.Channel.toMyCommunitiesItem(channel)}
                     key={channel.id}

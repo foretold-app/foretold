@@ -1,23 +1,16 @@
 module Query = [%graphql
   {|
-    mutation notebookDelete(
-        $id: NotebookId!
+    mutation channelBookmarkToggle(
+        $channelId: ChannelId!
     ) {
-        notebookDelete(id: $id) {
-         id
-        }
+        channelBookmarkToggle(channelId: $channelId)
     }
   |}
 ];
 
 module Mutation = ReasonApollo.CreateMutation(Query);
 
-let mutate = (mutation: Mutation.apolloMutation, notebookId) => {
-  let m = Query.make(~id=E.J.fromString(notebookId), ());
-  mutation(
-    ~variables=m##variables,
-    ~refetchQueries=[|"notebooks", "channel"|],
-    (),
-  )
-  |> ignore;
+let mutate = (mutation: Mutation.apolloMutation, channelId) => {
+  let m = Query.make(~channelId=E.J.fromString(channelId), ());
+  mutation(~variables=m##variables, ~refetchQueries=[||], ()) |> ignore;
 };

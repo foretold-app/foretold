@@ -142,13 +142,10 @@ module MyCommunities = {
   module ChannelsListItem = {
     [@react.component]
     let make = (~channel: Types.channel, ~mutation) => {
-      let (isBookmarked, setIsBookmarked) =
-        React.useState(() => channel.isBookmarked |> E.O.toBool2);
-      let onBookmark = _ => {
-        setIsBookmarked(_ => {
-          ChannelBookmarkToogle.mutate(mutation, channel.id);
-          isBookmarked ? false : true;
-        });
+      let isBookmarked = channel.isBookmarked |> E.O.toBool2;
+      let onBookmark = e => {
+        ChannelBookmarkToogle.mutate(mutation, channel.id);
+        ReactEvent.Synthetic.stopPropagation(e);
       };
       <ForetoldComponents.MyCommunities.ChannelItem
         item={Primary.Channel.toMyCommunitiesItem(
@@ -179,12 +176,41 @@ module MyCommunities = {
            ChannelsGet.component(
              ~channelMemberId=?Some(user.agentId),
              ~order=ChannelsGet.orderAsSidebar,
-             channels =>
-             channels
-             |> E.A.fmap((channel: Types.channel) =>
-                  <ChannelsListItemWithMutation channel />
-                )
-             |> ReasonReact.array
+             channels => {
+               let (bookmarked, notBookmarked) =
+                 channels
+                 |> Belt.Array.partition(_, (c: Types.channel) =>
+                      c.isBookmarked |> E.O.toBool2
+                    );
+               <>
+                 {E.React2.showIf(
+                    E.A.length(bookmarked) > 0,
+                    <>
+                      <ForetoldComponents.MyCommunities.Header
+                        name="BOOKMARKED COMMUNITIES"
+                      />
+                      {bookmarked
+                       |> E.A.fmap((channel: Types.channel) =>
+                            <ChannelsListItemWithMutation channel />
+                          )
+                       |> ReasonReact.array}
+                    </>,
+                  )}
+                 {E.React2.showIf(
+                    E.A.length(notBookmarked) > 0,
+                    <>
+                      <ForetoldComponents.MyCommunities.Header
+                        name="MY COMMUNITIES"
+                      />
+                      {notBookmarked
+                       |> E.A.fmap((channel: Types.channel) =>
+                            <ChannelsListItemWithMutation channel />
+                          )
+                       |> ReasonReact.array}
+                    </>,
+                  )}
+               </>;
+             },
            )
          )
       |> E.O.React.defaultNull;
@@ -204,7 +230,6 @@ module MyCommunities = {
             <MyCommunities.Item
               item={makeItem("All Communities", "LIST", ChannelIndex)}
             />
-            <MyCommunities.Header name="MY COMMUNITIES" />
             <ChannelsList />
             <MyCommunities.Header name="OPTIONS" />
             <MyCommunities.Item

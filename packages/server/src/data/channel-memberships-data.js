@@ -101,10 +101,8 @@ class ChannelMembershipsData extends DataBase {
    * @return {Promise<Models.ChannelMemberships[]>}
    */
   async getAllOnlyAdmins(channelId) {
-    const filter = new Filter({
-      channelId,
-      role: ChannelMembershipModel.ROLES.ADMIN,
-    });
+    const role = ChannelMembershipModel.ROLES.ADMIN;
+    const filter = new Filter({ channelId, role });
     const pagination = new Pagination();
     const options = new Options({ raw: true });
     return this.getAll(filter, pagination, options);

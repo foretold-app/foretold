@@ -38,7 +38,7 @@ async function channelCreator(channel) {
  * @returns {Promise<Models.Channel[]>}
  */
 async function all(root, args, context, _info) {
-  const agentId = _.get(context, 'agent.id', null);
+  const currentAgentId = _.get(context, 'agent.id', null);
   const channelMemberId = _.get(args, 'channelMemberId', null)
     || _.get(root, 'id', null);
   const isArchived = _.get(args, 'isArchived', null);
@@ -48,7 +48,12 @@ async function all(root, args, context, _info) {
 
   const filter = new Filter({ withinJoinedChannels, isArchived });
   const pagination = new Pagination(args);
-  const options = new Options({ agentId, attributes: true, raw: true });
+  const attributes = { isBookmarked: { agentId: currentAgentId } };
+  const options = new Options({
+    raw: true,
+    attributes,
+    agentId: currentAgentId,
+  });
 
   const response = await new ChannelsData().getConnection(
     filter, pagination, options,

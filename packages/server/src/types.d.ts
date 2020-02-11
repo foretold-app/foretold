@@ -296,6 +296,13 @@ export namespace Layers {
     agentId: Models.AgentID;
   };
 
+  export type attributes = {
+    fields?: string[],
+    isBookmarked?: {
+      agentId: Models.AgentID,
+    },
+  };
+
   export type order = { field: string; direction: string };
   export type orderList = order[];
   export type lock = boolean | {
@@ -322,7 +329,7 @@ export namespace Layers {
       isAdmin?: boolean;
       measuredByAgentId?: Models.AgentID;
 
-      attributes?: boolean;
+      attributes?: boolean | attributes;
       group?: boolean;
       lock?: lock;
       raw?: boolean;
@@ -466,7 +473,7 @@ export namespace Layers {
       withinPublicChannels?: withinPublicChannels | null;
     };
     type options = {
-      attributes?: boolean;
+      attributes?: boolean | attributes;
       group?: boolean;
       lock?: lock;
       raw?: boolean;

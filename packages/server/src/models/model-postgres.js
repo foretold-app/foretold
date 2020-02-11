@@ -200,12 +200,8 @@ class ModelPostgres extends Model {
     const total = await this.model.count(countCond);
 
     // Block 3
-    return new ResponseAll(
-      data,
-      total,
-      offset,
-      filter.getSpacedLimit(),
-    );
+    const spacedLimit = filter.getSpacedLimit();
+    return new ResponseAll(data, total, offset, spacedLimit);
   }
 
   /**

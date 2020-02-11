@@ -65,8 +65,6 @@ module.exports = {
         + 'ALTER COLUMN "updatedAt" SET DATA TYPE timestamp(3) with time zone;',
       );
 
-      // @todo: To add an authorizer.
-
       await queryInterface.sequelize.query('COMMIT');
     } catch (e) {
       console.error('Migration Up Error', e);

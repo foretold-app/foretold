@@ -43,7 +43,8 @@ module MeasurementVotes = {
   };
 };
 
-// TODO: I think this would be cleaner if this module were a wrapper, similar to the <Mutation> used inside.
+// @todo: I think this would be cleaner
+// @todo: if this module were a wrapper, similar to the <Mutation> used inside.
 // I wasn't sure how to do this though.
 module WithMutation = {
   [@react.component]

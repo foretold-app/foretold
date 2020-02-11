@@ -150,10 +150,19 @@ module MyCommunities = {
              channels =>
              channels
              |> E.A.fmap((channel: Types.channel) =>
-                  <ForetoldComponents.MyCommunities.Item
-                    item={Primary.Channel.toMyCommunitiesItem(channel)}
-                    key={channel.id}
-                  />
+                  <ChannelBookmarkToogle.Mutation>
+                    ...{(mutation, _) => {
+                      let onBookmark = _ =>
+                        ChannelBookmarkToogle.mutate(mutation, channel.id);
+                      <ForetoldComponents.MyCommunities.Item
+                        item={Primary.Channel.toMyCommunitiesItem(
+                          channel,
+                          onBookmark,
+                        )}
+                        key={channel.id}
+                      />;
+                    }}
+                  </ChannelBookmarkToogle.Mutation>
                 )
              |> ReasonReact.array
            )

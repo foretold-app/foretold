@@ -388,13 +388,13 @@ module Channel = {
     </span>;
 
   let toMyCommunitiesItem =
-      (channel: t): ForetoldComponents.MyCommunities.item => {
+      (channel: t, onBookmark): ForetoldComponents.MyCommunities.item => {
     name: channel.name,
     icon: channel.isPublic ? "PEOPLE" : "LOCK",
     bookmark: false,
     href: LinkType.toString(Internal(showLink(channel))),
     onClick: LinkType.onClick(Internal(showLink(channel))),
-    onBookmark: LinkType.onClick(Internal(showLink(channel))),
+    onBookmark,
   };
 
   let make =

@@ -18,6 +18,7 @@ module Query = [%graphql
         membershipCount
         isPublic
         isCurated
+        isBookmarked
         openedMeasurablesCount
       }
     }
@@ -34,6 +35,7 @@ let toChannel = m =>
     ~isArchived=m##isArchived,
     ~isPublic=m##isPublic,
     ~isCurated=m##isCurated,
+    ~isBookmarked=m##isBookmarked,
     ~membershipCount=Some(m##membershipCount),
     ~openedMeasurablesCount=Some(m##openedMeasurablesCount),
     (),

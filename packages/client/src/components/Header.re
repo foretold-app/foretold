@@ -139,30 +139,50 @@ module MyCommunities = {
       ])
     );
 
+  module ChannelsListItem = {
+    [@react.component]
+    let make = (~channel: Types.channel, ~mutation) => {
+      let (isBookmarked, setIsBookmarked) =
+        React.useState(() => channel.isBookmarked |> E.O.toBool2);
+      let onBookmark = _ => {
+        setIsBookmarked(_ => {
+          ChannelBookmarkToogle.mutate(mutation, channel.id);
+          isBookmarked ? false : true;
+        });
+      };
+      <ForetoldComponents.MyCommunities.ChannelItem
+        item={Primary.Channel.toMyCommunitiesItem(
+          channel,
+          isBookmarked,
+          onBookmark,
+        )}
+        key={channel.id}
+      />;
+    };
+  };
+
+  module ChannelsListItemWithMutation = {
+    [@react.component]
+    let make = (~channel: Types.channel) => {
+      <ChannelBookmarkToogle.Mutation>
+        ...{(mutation, _) => <ChannelsListItem channel mutation />}
+      </ChannelBookmarkToogle.Mutation>;
+    };
+  };
+
   module ChannelsList = {
     [@react.component]
-    let make = (~loggedUser: Types.user) => {
-      loggedUser.agent
-      |> E.O.fmap((agent: Types.agent) =>
+    let make = () => {
+      let context = React.useContext(Providers.app);
+      context.loggedUser
+      |> E.O.fmap((user: Types.user) =>
            ChannelsGet.component(
-             ~channelMemberId=?Some(agent.id),
+             ~channelMemberId=?Some(user.agentId),
              ~order=ChannelsGet.orderAsSidebar,
              channels =>
              channels
              |> E.A.fmap((channel: Types.channel) =>
-                  <ChannelBookmarkToogle.Mutation>
-                    ...{(mutation, _) => {
-                      let onBookmark = _ =>
-                        ChannelBookmarkToogle.mutate(mutation, channel.id);
-                      <ForetoldComponents.MyCommunities.ChannelItem
-                        item={Primary.Channel.toMyCommunitiesItem(
-                          channel,
-                          onBookmark,
-                        )}
-                        key={channel.id}
-                      />;
-                    }}
-                  </ChannelBookmarkToogle.Mutation>
+                  <ChannelsListItemWithMutation channel />
                 )
              |> ReasonReact.array
            )
@@ -173,7 +193,7 @@ module MyCommunities = {
 
   module Primary = {
     [@react.component]
-    let make = (~loggedUser: Types.user) => {
+    let make = () => {
       ForetoldComponents.(
         <div className=backgroundBox>
           <MyCommunities>
@@ -185,7 +205,7 @@ module MyCommunities = {
               item={makeItem("All Communities", "LIST", ChannelIndex)}
             />
             <MyCommunities.Header name="MY COMMUNITIES" />
-            <ChannelsList loggedUser />
+            <ChannelsList />
             <MyCommunities.Header name="OPTIONS" />
             <MyCommunities.Item
               item={makeItem(
@@ -201,11 +221,11 @@ module MyCommunities = {
   };
 
   [@react.component]
-  let make = (~loggedUser: Types.user) =>
+  let make = () =>
     <Antd_Dropdown
       trigger=[|"hover"|]
       placement=`bottomLeft
-      overlay={<div> <Primary loggedUser /> </div>}>
+      overlay={<div> <Primary /> </div>}>
       <div className=Styles.button>
         <span className=Styles.headerIcon> <Icon icon="PEOPLE" /> </span>
         {"My Communities" |> Utils.ste}
@@ -297,7 +317,7 @@ let make = (~loggedUser: option(Types.user)) => {
     {switch (loggedUser) {
      | Some(loggedUser) =>
        <>
-         <Div float=`left> <MyCommunities loggedUser /> </Div>
+         <Div float=`left> <MyCommunities /> </Div>
          <Div float=`left>
            {Primary.User.show(
               loggedUser,

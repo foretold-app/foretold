@@ -55,6 +55,7 @@ module Styles = {
       color(`hex("f0f1f4")),
       fontSize(`rem(1.1)),
       marginTop(`em(-0.1)),
+      cursor(`pointer),
     ]);
 
   let bookmarkedIcon =
@@ -63,6 +64,7 @@ module Styles = {
       color(`hex("7e8aa1")),
       fontSize(`rem(1.1)),
       marginTop(`em(-0.1)),
+      cursor(`pointer),
     ]);
 };
 

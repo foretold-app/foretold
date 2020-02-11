@@ -130,6 +130,7 @@ and channel = {
   openedMeasurablesCount: option(int),
   permissions: option(permissions),
   knowledgeGraph: option(string),
+  isBookmarked: option(bool),
 }
 
 and channelMembership = {

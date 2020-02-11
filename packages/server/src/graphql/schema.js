@@ -8,6 +8,7 @@ const { stats } = require('./types/stats');
 
 const { permissions } = require('./authorizers');
 const { middlewares } = require('./middlewares');
+const { validators } = require('./middlewares');
 
 const schema = new graphql.GraphQLSchema({
   types: [
@@ -523,6 +524,18 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.notebooks.remove,
       },
 
+      channelBookmarkToggle: {
+        type: graphql.GraphQLBoolean,
+        args: {
+          channelId: {
+            type: graphql.GraphQLNonNull(
+              types.scalars.channelId,
+            ),
+          },
+        },
+        resolve: resolvers.channelBookmarks.toggle,
+      },
+
       preferenceUpdate: {
         type: types.preferences.preference,
         args: {
@@ -610,6 +623,7 @@ const schema = new graphql.GraphQLSchema({
 const schemaWithMiddlewares = applyMiddleware(
   schema,
   middlewares,
+  validators,
   permissions,
 );
 

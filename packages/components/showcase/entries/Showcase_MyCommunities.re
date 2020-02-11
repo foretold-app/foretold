@@ -1,8 +1,10 @@
-let makeItem = (name, icon): MyCommunities.item => {
+let makeItem = (name, icon, bookmark): MyCommunities.item => {
   name,
   icon,
+  bookmark,
   href: "",
   onClick: _ => (),
+  onBookmark: _ => (),
 };
 
 let backgroundBox =
@@ -25,36 +27,69 @@ let myCommunities = () =>
     <div className=innerBox>
       <MyCommunities>
         <MyCommunities.Header name="FEEDS" />
-        <MyCommunities.Item item={makeItem("Home", "HOME")} />
-        <MyCommunities.Item item={makeItem("All Communities", "LIST")} />
-        <MyCommunities.Header name="MY COMMUNITIES" />
+        <MyCommunities.Item item={makeItem("Home", "HOME", false)} />
         <MyCommunities.Item
-          item={makeItem("Slate-Star-Codex 2019", "PEOPLE")}
+          item={makeItem("All Communities", "LIST", false)}
         />
-        <MyCommunities.Item item={makeItem("AI Questions", "PEOPLE")} />
-        <MyCommunities.Item item={makeItem("AI Questions", "PEOPLE")} />
-        <MyCommunities.Item item={makeItem("AI Questions", "PEOPLE")} />
-        <MyCommunities.Item item={makeItem("AI Questions", "PEOPLE")} />
-        <MyCommunities.Item item={makeItem("AI Questions", "PEOPLE")} />
-        <MyCommunities.Item item={makeItem("AI Questions", "PEOPLE")} />
-        <MyCommunities.Item item={makeItem("AI Questions", "PEOPLE")} />
-        <MyCommunities.Item item={makeItem("AI Questions", "PEOPLE")} />
-        <MyCommunities.Item item={makeItem("AI Questions", "PEOPLE")} />
-        <MyCommunities.Item item={makeItem("AI Questions", "PEOPLE")} />
-        <MyCommunities.Item item={makeItem("AI Questions", "PEOPLE")} />
-        <MyCommunities.Item item={makeItem("AI Questions", "PEOPLE")} />
-        <MyCommunities.Item item={makeItem("AI Questions", "PEOPLE")} />
-        <MyCommunities.Item item={makeItem("AI Questions", "PEOPLE")} />
-        <MyCommunities.Item item={makeItem("Other AI Questions", "LOCK")} />
-        <MyCommunities.Item
+        <MyCommunities.Header name="MY COMMUNITIES" />
+        <MyCommunities.ChannelItem
+          item={makeItem("Slate-Star-Codex 2019", "PEOPLE", false)}
+        />
+        <MyCommunities.ChannelItem
+          item={makeItem("AI Questions", "PEOPLE", false)}
+        />
+        <MyCommunities.ChannelItem
+          item={makeItem("AI Questions", "PEOPLE", true)}
+        />
+        <MyCommunities.ChannelItem
+          item={makeItem("AI Questions", "PEOPLE", true)}
+        />
+        <MyCommunities.ChannelItem
+          item={makeItem("AI Questions", "PEOPLE", false)}
+        />
+        <MyCommunities.ChannelItem
+          item={makeItem("AI Questions", "PEOPLE", false)}
+        />
+        <MyCommunities.ChannelItem
+          item={makeItem("AI Questions", "PEOPLE", false)}
+        />
+        <MyCommunities.ChannelItem
+          item={makeItem("AI Questions", "PEOPLE", false)}
+        />
+        <MyCommunities.ChannelItem
+          item={makeItem("AI Questions", "PEOPLE", true)}
+        />
+        <MyCommunities.ChannelItem
+          item={makeItem("AI Questions", "PEOPLE", false)}
+        />
+        <MyCommunities.ChannelItem
+          item={makeItem("AI Questions", "PEOPLE", false)}
+        />
+        <MyCommunities.ChannelItem
+          item={makeItem("AI Questions", "PEOPLE", false)}
+        />
+        <MyCommunities.ChannelItem
+          item={makeItem("AI Questions", "PEOPLE", false)}
+        />
+        <MyCommunities.ChannelItem
+          item={makeItem("AI Questions", "PEOPLE", false)}
+        />
+        <MyCommunities.ChannelItem
+          item={makeItem("AI Questions", "PEOPLE", false)}
+        />
+        <MyCommunities.ChannelItem
+          item={makeItem("Other AI Questions", "LOCK", false)}
+        />
+        <MyCommunities.ChannelItem
           item={makeItem(
             "My Secret and Very Very Very Very Long-named Community",
             "LOCK",
+            false,
           )}
         />
         <MyCommunities.Header name="OPTIONS" />
         <MyCommunities.Item
-          item={makeItem("Create a New Community", "CIRCLE_PLUS")}
+          item={makeItem("Create a New Community", "CIRCLE_PLUS", true)}
         />
       </MyCommunities>
     </div>

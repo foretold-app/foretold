@@ -11,7 +11,11 @@ describe('Channels Middleware', () => {
       const context = {};
       const info = {};
       return setContextChannel(root, args, context, info).then((result) => {
-        expect(new ChannelsData().getOne).toHaveBeenCalledWith({ id: 'channelId1' });
+        expect(new ChannelsData().getOne).toHaveBeenCalledWith({
+          id: 'channelId1',
+        }, {}, {
+          raw: true
+        });
         expect(result).toBe(undefined);
         expect(context.channel).toBe(channelObj);
       });
@@ -23,7 +27,11 @@ describe('Channels Middleware', () => {
       const context = {};
       const info = {};
       return setContextChannel(root, args, context, info).then((result) => {
-        expect(new ChannelsData().getOne).toHaveBeenCalledWith({ id: 'channelId1' });
+        expect(new ChannelsData().getOne).toHaveBeenCalledWith({
+          id: 'channelId1',
+        }, {}, {
+          raw: true
+        });
         expect(result).toBe(undefined);
         expect(context.channel).toBe(channelObj);
       });
@@ -35,7 +43,11 @@ describe('Channels Middleware', () => {
       const context = { channelId: 'channelId1' };
       const info = {};
       return setContextChannel(root, args, context, info).then((result) => {
-        expect(new ChannelsData().getOne).toHaveBeenCalledWith({ id: 'channelId1' });
+        expect(new ChannelsData().getOne).toHaveBeenCalledWith({
+          id: 'channelId1',
+        }, {}, {
+          raw: true,
+        });
         expect(result).toBe(undefined);
         expect(context.channel).toBe(channelObj);
       });

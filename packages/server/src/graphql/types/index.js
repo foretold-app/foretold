@@ -1,52 +1,55 @@
+const agentChannels = require('./agent-channels');
+const agentMeasurables = require('./agent-measurables');
 const agents = require('./agents');
-const channels = require('./channels');
-const channelMemberships = require('./channel-memberhips');
-const measurables = require('./measurables');
-const measurements = require('./measurements');
-const series = require('./series');
-const users = require('./users');
-const bots = require('./bots');
-const permissions = require('./permissions');
 const authentications = require('./authentications');
+const channelBookmarks = require('./channel-bookmarks');
+const bots = require('./bots');
+const channelMemberships = require('./channel-memberhips');
+const channels = require('./channels');
 const common = require('./common');
-const measurementCompetitorType
-  = require('./enums/measurement-competitor-type');
-const invitationStatus = require('./enums/invitation-status');
-const preferences = require('./preferences');
-const invitations = require('./invitations');
 const feedItems = require('./feed-items');
 const globalSettings = require('./global-settings');
-const agentMeasurables = require('./agent-measurables');
-const agentChannels = require('./agent-channels');
+const invitationStatus = require('./enums/invitation-status');
+const invitations = require('./invitations');
+const jwt = require('./scalars/jwt');
+const measurables = require('./measurables');
+const measurementCompetitorType = require(
+  './enums/measurement-competitor-type',
+);
+const measurements = require('./measurements');
 const mutexes = require('./mutexes');
 const notebooks = require('./notebooks');
-const jwt = require('./scalars/jwt');
+const permissions = require('./permissions');
+const preferences = require('./preferences');
 const scalars = require('./scalars');
+const series = require('./series');
+const users = require('./users');
 const votes = require('./votes');
 
 module.exports = {
-  bots,
+  agentChannels,
+  agentMeasurables,
   agents,
-  channels,
-  channelMemberships,
-  measurables,
-  measurements,
-  series,
-  users,
-  permissions,
   authentications,
+  bots,
+  channelBookmarks,
+  channelMemberships,
+  channels,
   common,
-  measurementCompetitorType,
-  preferences,
-  invitationStatus,
-  invitations,
   feedItems,
   globalSettings,
-  agentMeasurables,
-  agentChannels,
+  invitationStatus,
+  invitations,
+  jwt,
+  measurables,
+  measurementCompetitorType,
+  measurements,
   mutexes,
   notebooks,
-  jwt,
+  permissions,
+  preferences,
   scalars,
+  series,
+  users,
   votes,
 };

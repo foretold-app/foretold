@@ -39,7 +39,7 @@ class MeasurableState extends ProducerNotifications {
   async _getReplacements(channel, measurable) {
     return {
       measurable: {
-        name: (await _.get(measurable, 'name') || 'Question'),
+        name: (await _.get(measurable, 'name', null) || 'Question'),
         link: getMeasurableLinkWithToken(channel, measurable),
       },
     };

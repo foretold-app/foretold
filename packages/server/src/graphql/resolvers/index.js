@@ -1,43 +1,45 @@
-const channels = require('./channels');
-const measurables = require('./measurables');
-const series = require('./series');
-const measurements = require('./measurements');
-const channelMemberships = require('./channel-memberhips');
-const users = require('./users');
+const agentChannels = require('./agent-channels');
+const agentMeasurables = require('./agent-measurables');
 const agents = require('./agents');
-const common = require('./common');
-const permissions = require('./permissions');
 const authentications = require('./authentications');
 const bots = require('./bots');
-const preferences = require('./preferences');
-const invitations = require('./invitations');
+const channelBookmarks = require('./channel-bookmarks');
+const channelMemberships = require('./channel-memberhips');
+const channels = require('./channels');
+const common = require('./common');
 const feedItems = require('./feed-items');
 const globalSettings = require('./global-settings');
-const agentMeasurables = require('./agent-measurables');
-const agentChannels = require('./agent-channels');
+const invitations = require('./invitations');
+const measurables = require('./measurables');
+const measurements = require('./measurements');
 const mutexes = require('./mutexes');
 const notebooks = require('./notebooks');
+const permissions = require('./permissions');
+const preferences = require('./preferences');
+const series = require('./series');
+const users = require('./users');
 const votes = require('./votes');
 
 module.exports = {
-  channels,
-  measurables,
-  series,
-  measurements,
-  channelMemberships,
-  users,
+  agentChannels,
+  agentMeasurables,
   agents,
-  common,
-  permissions,
   authentications,
   bots,
-  preferences,
-  invitations,
+  channelBookmarks,
+  channelMemberships,
+  channels,
+  common,
   feedItems,
   globalSettings,
-  agentMeasurables,
-  agentChannels,
+  invitations,
+  measurables,
+  measurements,
   mutexes,
   notebooks,
+  permissions,
+  preferences,
+  series,
+  users,
   votes,
 };

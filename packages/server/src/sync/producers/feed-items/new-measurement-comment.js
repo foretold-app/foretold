@@ -20,7 +20,7 @@ class NewMeasurementComment extends NewMeasurement {
    * @return {Promise<boolean>}
    */
   async _isActual() {
-    return !!_.get(this.input, ['value', MEASUREMENT_VALUE.comment]);
+    return !!_.get(this.input, ['value', MEASUREMENT_VALUE.comment], null);
   }
 }
 

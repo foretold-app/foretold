@@ -77,11 +77,11 @@ class Invitation extends ProducerNotifications {
   async _getReplacements(inviter, channel) {
     return {
       inviterAgent: {
-        name: (await _.get(inviter, 'name')) || 'Somebody',
+        name: (await _.get(inviter, 'name', null)) || 'Somebody',
         link: getAgentLink(inviter),
       },
       channel: {
-        name: _.get(channel, 'name') || 'Channel',
+        name: _.get(channel, 'name', null) || 'Channel',
         link: getChannelLink(channel),
       },
     };

@@ -147,7 +147,9 @@ module Helpers = {
         ]);
       let subRow = style([width(`percent(100.))]);
     };
+
     module FC = ForetoldComponents;
+
     [@react.component]
     let make = (~measurement: Types.measurement) => {
       MeasurementVotesGet.component(

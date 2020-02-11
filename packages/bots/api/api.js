@@ -170,7 +170,7 @@ class API {
   getEntity(alias) {
     return (result) => {
       this.proceedErrors(result);
-      return _.get(result, ['data', alias]);
+      return _.get(result, ['data', alias], null);
     };
   }
 
@@ -181,7 +181,7 @@ class API {
     const errors = _.get(result, 'errors', []);
     if (errors.length === 0) return;
     _.each(errors, (err) => {
-      const message = _.get(err, 'message');
+      const message = _.get(err, 'message', null);
       console.error(message);
     });
   }

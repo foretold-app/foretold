@@ -3,6 +3,10 @@ const _ = require('lodash');
 const { UsersData } = require('../../data');
 const logger = require('../../lib/log');
 
+const { Params } = require('../../data/classes');
+const { Query } = require('../../data/classes');
+const { Options } = require('../../data/classes');
+
 const log = logger.module('middlewares/users');
 
 /**
@@ -15,13 +19,17 @@ const log = logger.module('middlewares/users');
  * @return {Promise<void>}
  */
 async function setContextUser(root, args, context, _info) {
-  const id = _.get(args, 'id', null);
+  const userId = _.get(args, 'id', null);
 
-  log.trace('\x1b[36m ---> \x1b[0m Middleware (setContextUser)', { id });
+  log.trace('\x1b[36m ---> \x1b[0m Middleware (setContextUser)', { userId });
+
+  const params = new Params({ id: userId });
+  const query = new Query();
+  const options = new Options({ raw: true });
 
   // @todo: Don't understand what this means!!!
-  context.userAsObject = !!id
-    ? await new UsersData().getOne({ id })
+  context.userAsObject = !!userId
+    ? await new UsersData().getOne(params, query, options)
     : null;
 }
 

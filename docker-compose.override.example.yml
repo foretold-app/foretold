@@ -58,6 +58,16 @@ services:
     environment:
       - POSTGRES_PASSWORD=password # 6.2
 
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
+      PGADMIN_DEFAULT_PASSWORD: admin
+    volumes:
+      - ./.persistence/pgadmin:/root/.pgadmin
+    ports:
+      - "8081:80"
+
   nginx:
     links:
       - app

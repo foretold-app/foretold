@@ -5,22 +5,23 @@ export namespace Models {
   export type Json = string;
 
   export type AgentID = ObjectID;
-  export type ChannelID = ObjectID;
-  export type UserID = ObjectID;
+  export type BookmarkID = ObjectID;
   export type BotID = ObjectID;
+  export type ChannelID = ObjectID;
+  export type ChannelMembershipID = ObjectID;
+  export type FeedItemID = ObjectID;
+  export type GlobalSettingsID = ObjectID;
+  export type InvitationID = ObjectID;
   export type MeasurableID = ObjectID;
   export type MeasurementID = ObjectID;
-  export type NotificationID = ObjectID;
-  export type TemplateID = ObjectID;
-  export type GlobalSettingsID = ObjectID;
-  export type FeedItemID = ObjectID;
-  export type InvitationID = ObjectID;
-  export type NotificationStatusID = ObjectID;
-  export type SeriesID = ObjectID;
-  export type PreferenceID = ObjectID;
-  export type TokenID = ObjectID;
-  export type ChannelMembershipID = ObjectID;
   export type NotebookID = ObjectID;
+  export type NotificationID = ObjectID;
+  export type NotificationStatusID = ObjectID;
+  export type PreferenceID = ObjectID;
+  export type SeriesID = ObjectID;
+  export type TemplateID = ObjectID;
+  export type TokenID = ObjectID;
+  export type UserID = ObjectID;
 
   export interface Model {
     id: ObjectID;
@@ -234,6 +235,11 @@ export namespace Models {
     voteAmount: number;
   }
 
+  export interface ChannelBookmark extends Model {
+    agentId: AgentID;
+    channelId: ChannelID;
+  }
+
   export type Creator = Models.User | Models.Bot;
 }
 
@@ -258,6 +264,7 @@ export namespace Schema {
     notebook?: Models.Notebook;
     measurement?: Models.Measurement;
     measurable?: Models.Measurable;
+    channelBookmark?: Models.ChannelBookmark;
   }
 
   export interface ChannelsInput {
@@ -289,6 +296,13 @@ export namespace Layers {
     agentId: Models.AgentID;
   };
 
+  export type attributes = {
+    fields?: string[],
+    isBookmarked?: {
+      agentId: Models.AgentID,
+    },
+  };
+
   export type order = { field: string; direction: string };
   export type orderList = order[];
   export type lock = boolean | {
@@ -315,7 +329,7 @@ export namespace Layers {
       isAdmin?: boolean;
       measuredByAgentId?: Models.AgentID;
 
-      attributes?: boolean;
+      attributes?: boolean | attributes;
       group?: boolean;
       lock?: lock;
       raw?: boolean;
@@ -459,7 +473,7 @@ export namespace Layers {
       withinPublicChannels?: withinPublicChannels | null;
     };
     type options = {
-      attributes?: boolean;
+      attributes?: boolean | attributes;
       group?: boolean;
       lock?: lock;
       raw?: boolean;

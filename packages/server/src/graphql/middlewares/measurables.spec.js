@@ -12,7 +12,7 @@ describe('Measurables Middleware', () => {
       const info = {};
       return setContextMeasurable(root, args, context, info).then((result) => {
         expect(new MeasurablesData().getOne)
-          .toHaveBeenCalledWith({ id: 'measurableId1' });
+          .toHaveBeenCalledWith({ id: 'measurableId1' }, {}, { raw: true });
         expect(result).toBe(undefined);
         expect(context.measurable).toBe(measurableObj);
       });
@@ -25,7 +25,7 @@ describe('Measurables Middleware', () => {
       const info = {};
       return setContextMeasurable(root, args, context, info).then((result) => {
         expect(new MeasurablesData().getOne)
-          .toHaveBeenCalledWith({ id: 'measurableId1' });
+          .toHaveBeenCalledWith({ id: 'measurableId1' }, {}, { raw: true });
         expect(result).toBe(undefined);
         expect(context.measurable).toBe(measurableObj);
       });
@@ -38,7 +38,7 @@ describe('Measurables Middleware', () => {
       const info = {};
       return setContextMeasurable(root, args, context, info).then((result) => {
         expect(new MeasurablesData().getOne)
-          .toHaveBeenCalledWith({ id: 'measurableId1' });
+          .toHaveBeenCalledWith({ id: 'measurableId1' }, {}, { raw: true });
         expect(result).toBe(undefined);
         expect(context.measurable).toBe(measurableObj);
       });
@@ -51,7 +51,7 @@ describe('Measurables Middleware', () => {
       const info = {};
       return setContextMeasurable(root, args, context, info).then((result) => {
         expect(new MeasurablesData().getOne)
-          .toHaveBeenCalledWith({ id: 'measurableId1' });
+          .toHaveBeenCalledWith({ id: 'measurableId1' }, {}, { raw: true });
         expect(result).toBe(undefined);
         expect(context.measurable).toBe(measurableObj);
       });

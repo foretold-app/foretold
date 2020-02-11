@@ -7,7 +7,10 @@ const { UnresolvableResolution } = require('@foretold/measurement-value');
 const { Comment } = require('@foretold/measurement-value');
 
 const { MeasurementsData } = require('../../data');
+
 const { Params } = require('../../data/classes');
+const { Query } = require('../../data/classes');
+const { Options } = require('../../data/classes');
 
 const { MEASURABLE_STATE } = require('../../enums');
 const { MEASUREMENT_COMPETITOR_TYPE } = require('../../enums');
@@ -106,7 +109,11 @@ async function setContextMeasurement(root, args, context, _info) {
 
   if (!!measurementId) {
     const params = new Params({ id: measurementId });
-    context.measurement = await new MeasurementsData().getOne(params);
+    const query = new Query();
+    const options = new Options({ raw: true });
+    context.measurement = await new MeasurementsData().getOne(
+      params, query, options,
+    );
   } else {
     context.measurement = null;
   }
@@ -128,6 +135,7 @@ module.exports = {
   competitiveMeasurementCanBeAddedToOpenMeasurable,
   measurementValueTypeValidation,
   measurementValueValidation,
+
   setContextMeasurement,
   setContextMeasurementByRoot,
 };

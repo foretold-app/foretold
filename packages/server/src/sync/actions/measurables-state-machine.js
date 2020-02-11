@@ -47,7 +47,7 @@ class MeasurablesStateMachine {
           ));
 
           log.trace(
-            `\x1b[35mMeasurable ID = "${_.get(measurable, 'id')}", `
+            `\x1b[35mMeasurable ID = "${_.get(measurable, 'id', null)}", `
             + `Result = "${result}".\x1b[0m`,
           );
         } catch (err) {
@@ -90,7 +90,7 @@ class MeasurablesStateMachine {
           ));
 
           log.trace(
-            `\x1b[35mMeasurable ID = "${_.get(measurable, 'id')}", `
+            `\x1b[35mMeasurable ID = "${_.get(measurable, 'id', null)}", `
             + `Result = "${result}".\x1b[0m`,
           );
         } catch (err) {

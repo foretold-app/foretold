@@ -8,7 +8,7 @@ const log = logger.module('authorizers/rate-limit');
 
 const rateLimiter = getGraphQLRateLimiter({
   identifyContext: (context) => {
-    return _.get(context, 'ip');
+    return _.get(context, 'ip', null);
   },
 });
 

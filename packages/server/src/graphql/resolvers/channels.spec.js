@@ -47,7 +47,11 @@ describe('Channels Resolvers', () => {
           offset: 1,
         }, {
           agentId: '1',
-          attributes: true,
+          attributes: {
+            isBookmarked: {
+              agentId: '1',
+            }
+          },
           raw: true,
         });
         expect(result).toBe(true);

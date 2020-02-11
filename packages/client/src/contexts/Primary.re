@@ -388,7 +388,10 @@ module Channel = {
     </span>;
 
   let toMyCommunitiesItem =
-      (channel: t): ForetoldComponents.MyCommunities.item => {
+      (channel: t, bookmark, onBookmark)
+      : ForetoldComponents.MyCommunities.item => {
+    bookmark,
+    onBookmark,
     name: channel.name,
     icon: channel.isPublic ? "PEOPLE" : "LOCK",
     href: LinkType.toString(Internal(showLink(channel))),
@@ -411,6 +414,7 @@ module Channel = {
         ~isCurated=false,
         ~permissions=None,
         ~knowledgeGraph=None,
+        ~isBookmarked=None,
         (),
       )
       : t => {
@@ -428,6 +432,7 @@ module Channel = {
     isCurated,
     permissions,
     knowledgeGraph,
+    isBookmarked,
   };
 
   let toChannel = (channel: Js.t('a)) => {

@@ -46,7 +46,7 @@ class NewNotebook extends ProducerFeedItems {
    * @protected
    */
   async _getReplacements(agent) {
-    const agentName = (await _.get(agent, 'name')) || 'Somebody';
+    const agentName = (await _.get(agent, 'name', null)) || 'Somebody';
 
     return {
       agent: {

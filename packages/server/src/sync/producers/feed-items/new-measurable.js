@@ -25,10 +25,10 @@ class NewMeasurable extends ProducerFeedItems {
   async _getReplacements(agent) {
     return {
       agent: {
-        name: (await _.get(agent, 'name')) || 'Somebody',
+        name: (await _.get(agent, 'name', null)) || 'Somebody',
       },
       measurable: {
-        name: (await _.get(this.input, 'name')) || 'Question',
+        name: (await _.get(this.input, 'name', null)) || 'Question',
         id: this.input.id,
       },
     };

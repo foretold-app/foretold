@@ -29,8 +29,8 @@ class NewMeasurement extends ProducerFeedItems {
   async _preload() {
     await super._preload();
     this.measurable = await this.input.getMeasurable();
-    this.channelId = _.get(this.measurable, 'channelId');
-    this.measurementId = _.get(this.input, 'id');
+    this.channelId = _.get(this.measurable, 'channelId', null);
+    this.measurementId = _.get(this.input, 'id', null);
     return true;
   }
 
@@ -55,9 +55,10 @@ class NewMeasurement extends ProducerFeedItems {
    * @protected
    */
   async _getReplacements(agent) {
-    const agentName = (await _.get(agent, 'name')) || 'Somebody';
-    const measurableName = (await _.get(this.measurable, 'name')) || 'Question';
-    const measurableId = _.get(this.measurable, 'id');
+    const agentName = (await _.get(agent, 'name', null)) || 'Somebody';
+    const measurableName = (await _.get(this.measurable, 'name', null))
+      || 'Question';
+    const measurableId = _.get(this.measurable, 'id', null);
 
     return {
       agent: {

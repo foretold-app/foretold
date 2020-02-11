@@ -8,9 +8,10 @@ const { createLimitedString } = require('./limited-string');
 const { voteAmount } = require('./vote-amount');
 
 const agentId = createObjectId('AgentId');
+const bookmarkId = createObjectId('BookmarkId');
 const botId = createObjectId('BoteId');
-const channelMembershipId = createObjectId('ChannelMembershipId');
 const channelId = createObjectIdEmptiable('ChannelId');
+const channelMembershipId = createObjectId('ChannelMembershipId');
 const feedItemId = createObjectId('FeedItemId');
 const globalSettingId = createObjectId('GlobalSettingId');
 const invitationId = createObjectId('InvitationId');
@@ -54,9 +55,10 @@ module.exports = {
   voteAmount,
 
   agentId,
+  bookmarkId,
   botId,
-  channelMembershipId,
   channelId,
+  channelMembershipId,
   feedItemId,
   globalSettingId,
   invitationId,

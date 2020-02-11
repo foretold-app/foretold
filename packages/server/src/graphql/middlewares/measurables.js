@@ -1,7 +1,11 @@
 const _ = require('lodash');
 
 const { MeasurablesData } = require('../../data');
+
 const { Params } = require('../../data/classes');
+const { Query } = require('../../data/classes');
+const { Options } = require('../../data/classes');
+
 const { measurableEmptyName } = require('../../../config/lang');
 const logger = require('../../lib/log');
 
@@ -29,7 +33,11 @@ async function setContextMeasurable(root, args, context, _info) {
 
   if (!!measurableId) {
     const params = new Params({ id: measurableId });
-    context.measurable = await new MeasurablesData().getOne(params);
+    const query = new Query();
+    const options = new Options({ raw: true });
+    context.measurable = await new MeasurablesData().getOne(
+      params, query, options,
+    );
   } else {
     context.measurable = null;
   }
@@ -66,6 +74,7 @@ async function measurableNameValidation(root, args, _context, _info) {
 
 module.exports = {
   measurableNameValidation,
+
   setContextMeasurable,
   setContextMeasurableByRoot,
 };

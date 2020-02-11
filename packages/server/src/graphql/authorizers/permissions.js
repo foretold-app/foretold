@@ -166,6 +166,13 @@ const rulesMeasurements = () => ({
   },
 });
 
+const rulesChannelBookmarks = () => ({
+  Query: {},
+  Mutation: {
+    channelBookmarkToggle: currentAgentIsAuthenticated,
+  },
+});
+
 const rules = () => ({
   Bot: {
     token: botBelongsToCurrentUser,
@@ -236,6 +243,7 @@ const rules = () => ({
     ...rulesInvitations().Mutation,
     ...rulesNotebooks().Mutation,
     ...rulesMeasurements().Mutation,
+    ...rulesChannelBookmarks().Mutation,
   },
 });
 

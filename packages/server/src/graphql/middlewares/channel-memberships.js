@@ -3,12 +3,14 @@ const _ = require('lodash');
 const { ChannelMembershipsData } = require('../../data');
 const logger = require('../../lib/log');
 
-const { Filter } = require('../../data/classes');
 const { Params } = require('../../data/classes');
+const { Query } = require('../../data/classes');
+const { Options } = require('../../data/classes');
 
 const log = logger.module('middlewares/channel-memberships');
 
 /**
+ * @todo: Should be divided on two middleware.
  * @todo: To fix "||" a joined logic.
  * @param {object | null} root
  * @param {object} args
@@ -31,8 +33,12 @@ async function setContextChannelMemberships(root, args, context, _info) {
     + '(setContextChannelMemberships)', compoundId);
 
   if (!!channelId && !!agentId) {
-    const channelMembership = await new ChannelMembershipsData()
-      .getOne(new Params(compoundId));
+    const params = new Params(compoundId);
+    const query = new Query();
+    const options = new Options({ raw: true });
+    const channelMembership = await new ChannelMembershipsData().getOne(
+      params, query, options,
+    );
     context.channelMembership = channelMembership;
     context.channelMembershipsRole = _.get(channelMembership, 'role', null);
   } else {
@@ -62,7 +68,7 @@ async function setContextChannelMembershipsAdmins(root, args, context, _info) {
 
   if (!!channelId) {
     context.channelMembershipsAdmins = await new ChannelMembershipsData()
-      .getAllOnlyAdmins(new Filter({ channelId }));
+      .getAllOnlyAdmins(channelId);
   } else {
     context.channelMembershipsAdmins = null;
   }

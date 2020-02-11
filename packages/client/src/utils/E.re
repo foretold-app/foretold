@@ -31,6 +31,12 @@ module O = {
     | _ => false
     };
 
+  let toBool2 = opt =>
+    switch (opt) {
+    | Some(true) => true
+    | _ => false
+    };
+
   let ffmap = (fn, r) =>
     switch (r) {
     | Some(sm) => fn(sm)

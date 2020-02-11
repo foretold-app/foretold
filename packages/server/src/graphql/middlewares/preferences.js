@@ -3,6 +3,10 @@ const _ = require('lodash');
 const { PreferencesData } = require('../../data');
 const logger = require('../../lib/log');
 
+const { Params } = require('../../data/classes');
+const { Query } = require('../../data/classes');
+const { Options } = require('../../data/classes');
+
 const log = logger.module('middlewares/preferences');
 
 /**
@@ -14,15 +18,19 @@ const log = logger.module('middlewares/preferences');
  * @return {Promise<void>}
  */
 async function setContextPreferenceFromId(_root, args, context, _info) {
-  const id = _.get(args, 'id', null);
+  const preferenceId = _.get(args, 'id', null);
 
   log.trace(
     '\x1b[36m ---> \x1b[0m Middleware (setContextPreferenceFromId)',
-    { id },
+    { preferenceId },
   );
 
-  context.preference = !!id
-    ? await new PreferencesData().getOne({ id })
+  const params = new Params({ id: preferenceId });
+  const query = new Query();
+  const options = new Options({ raw: true });
+
+  context.preference = !!preferenceId
+    ? await new PreferencesData().getOne(params, query, options)
     : null;
 }
 
@@ -42,8 +50,12 @@ async function setContextPreferenceFromAgentId(_root, args, context, _info) {
     { agentId },
   );
 
+  const params = new Params({ agentId });
+  const query = new Query();
+  const options = new Options({ raw: true });
+
   context.preference = !!agentId
-    ? await new PreferencesData().getOne({ agentId })
+    ? await new PreferencesData().getOne(params, query, options)
     : null;
 }
 

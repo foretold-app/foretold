@@ -12,3 +12,7 @@ lib/*
 build
 yarn-error.log
 *.bs.js
+/src/JsExport/JsInterface.gen.js
+/src/Measurement/MeasurementValueJson.gen.js
+/src/Measurement/MeasurementValue.gen.js
+/src/Measures/MeasurementValueMeasures.gen.js

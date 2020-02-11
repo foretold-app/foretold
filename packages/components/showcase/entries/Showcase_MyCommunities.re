@@ -32,49 +32,55 @@ let myCommunities = () =>
           item={makeItem("All Communities", "LIST", false)}
         />
         <MyCommunities.Header name="MY COMMUNITIES" />
-        <MyCommunities.Item
+        <MyCommunities.ChannelItem
           item={makeItem("Slate-Star-Codex 2019", "PEOPLE", false)}
         />
-        <MyCommunities.Item
+        <MyCommunities.ChannelItem
           item={makeItem("AI Questions", "PEOPLE", false)}
         />
-        <MyCommunities.Item item={makeItem("AI Questions", "PEOPLE", true)} />
-        <MyCommunities.Item item={makeItem("AI Questions", "PEOPLE", true)} />
-        <MyCommunities.Item
+        <MyCommunities.ChannelItem
+          item={makeItem("AI Questions", "PEOPLE", true)}
+        />
+        <MyCommunities.ChannelItem
+          item={makeItem("AI Questions", "PEOPLE", true)}
+        />
+        <MyCommunities.ChannelItem
           item={makeItem("AI Questions", "PEOPLE", false)}
         />
-        <MyCommunities.Item
+        <MyCommunities.ChannelItem
           item={makeItem("AI Questions", "PEOPLE", false)}
         />
-        <MyCommunities.Item
+        <MyCommunities.ChannelItem
           item={makeItem("AI Questions", "PEOPLE", false)}
         />
-        <MyCommunities.Item
+        <MyCommunities.ChannelItem
           item={makeItem("AI Questions", "PEOPLE", false)}
         />
-        <MyCommunities.Item item={makeItem("AI Questions", "PEOPLE", true)} />
-        <MyCommunities.Item
+        <MyCommunities.ChannelItem
+          item={makeItem("AI Questions", "PEOPLE", true)}
+        />
+        <MyCommunities.ChannelItem
           item={makeItem("AI Questions", "PEOPLE", false)}
         />
-        <MyCommunities.Item
+        <MyCommunities.ChannelItem
           item={makeItem("AI Questions", "PEOPLE", false)}
         />
-        <MyCommunities.Item
+        <MyCommunities.ChannelItem
           item={makeItem("AI Questions", "PEOPLE", false)}
         />
-        <MyCommunities.Item
+        <MyCommunities.ChannelItem
           item={makeItem("AI Questions", "PEOPLE", false)}
         />
-        <MyCommunities.Item
+        <MyCommunities.ChannelItem
           item={makeItem("AI Questions", "PEOPLE", false)}
         />
-        <MyCommunities.Item
+        <MyCommunities.ChannelItem
           item={makeItem("AI Questions", "PEOPLE", false)}
         />
-        <MyCommunities.Item
+        <MyCommunities.ChannelItem
           item={makeItem("Other AI Questions", "LOCK", false)}
         />
-        <MyCommunities.Item
+        <MyCommunities.ChannelItem
           item={makeItem(
             "My Secret and Very Very Very Very Long-named Community",
             "LOCK",

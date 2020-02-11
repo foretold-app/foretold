@@ -154,7 +154,7 @@ module MyCommunities = {
                     ...{(mutation, _) => {
                       let onBookmark = _ =>
                         ChannelBookmarkToogle.mutate(mutation, channel.id);
-                      <ForetoldComponents.MyCommunities.Item
+                      <ForetoldComponents.MyCommunities.ChannelItem
                         item={Primary.Channel.toMyCommunitiesItem(
                           channel,
                           onBookmark,

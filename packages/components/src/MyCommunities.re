@@ -69,6 +69,20 @@ module Styles = {
 module Item = {
   [@react.component]
   let make = (~item) => {
+    <div className=Styles.item>
+      <Div flex={`num(1.)} onClick={item.onClick} className=Styles.itemIcon>
+        <ReactKitIcon icon={item.icon} />
+      </Div>
+      <Div flex={`num(7.)} onClick={item.onClick} className=Styles.itemText>
+        {item.name |> ReasonReact.string}
+      </Div>
+    </div>;
+  };
+};
+
+module ChannelItem = {
+  [@react.component]
+  let make = (~item) => {
     let bookmarkStyle =
       item.bookmark ? Styles.bookmarkedIcon : Styles.notBookmarkedIcon;
 

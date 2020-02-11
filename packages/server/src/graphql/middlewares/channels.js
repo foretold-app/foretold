@@ -54,7 +54,9 @@ async function setContextChannel(root, args, context, _info) {
 
   if (!!channelId) {
     const params = new Params({ id: channelId });
-    context.channel = await new ChannelsData().getOne(params);
+    const query = new Query();
+    const options = new Options({ raw: true });
+    context.channel = await new ChannelsData().getOne(params, query, options);
   } else {
     context.channel = null;
   }

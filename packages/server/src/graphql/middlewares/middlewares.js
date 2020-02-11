@@ -2,7 +2,6 @@ const _ = require('lodash');
 
 const { setContextBot } = require('./bots');
 const { setContextChannel, setContextChannelByRoot } = require('./channels');
-const { setContextChannelBookmark } = require('./channel-bookmarks');
 const { setContextChannelMemberships } = require('./channel-memberships');
 const { setContextChannelMembershipsAdmins } = require('./channel-memberships');
 const { setContextMeasurable } = require('./measurables');
@@ -229,11 +228,6 @@ const middlewares = {
 
     measurementVote: async (resolve, root, args, context, info) => {
       await setContextMeasurement(root, args, context, info);
-      return resolve(root, args, context, info);
-    },
-
-    channelBookmarkToggle: async (resolve, root, args, context, info) => {
-      await setContextChannelBookmark(root, args, context, info);
       return resolve(root, args, context, info);
     },
   },

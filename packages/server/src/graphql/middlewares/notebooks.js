@@ -4,6 +4,8 @@ const { NotebooksData } = require('../../data');
 const logger = require('../../lib/log');
 
 const { Params } = require('../../data/classes');
+const { Query } = require('../../data/classes');
+const { Options } = require('../../data/classes');
 
 const log = logger.module('middlewares/notebooks');
 
@@ -25,7 +27,9 @@ async function setContextNotebook(root, args, context, _info) {
 
   if (!!notebookId) {
     const params = new Params({ id: notebookId });
-    context.notebook = await new NotebooksData().getOne(params);
+    const query = new Query();
+    const options = new Options({ raw: true });
+    context.notebook = await new NotebooksData().getOne(params, query, options);
   } else {
     context.notebook = null;
   }

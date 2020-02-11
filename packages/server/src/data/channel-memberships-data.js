@@ -9,6 +9,8 @@ const { CHANNEL_MEMBERSHIP_TYPE } = require('../enums');
 const { Data } = require('../data/classes');
 const { Filter } = require('../data/classes');
 const { Params } = require('../data/classes');
+const { Pagination } = require('../data/classes');
+const { Options } = require('../data/classes');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
@@ -95,14 +97,17 @@ class ChannelMembershipsData extends DataBase {
 
   /**
    * @public
-   * @param {Layers.DataSourceLayer.filter} filter
+   * @param {Models.ChannelID} channelId
    * @return {Promise<Models.ChannelMemberships[]>}
    */
-  async getAllOnlyAdmins(filter) {
-    return this.getAll(new Filter({
-      ...filter,
+  async getAllOnlyAdmins(channelId) {
+    const filter = new Filter({
+      channelId,
       role: ChannelMembershipModel.ROLES.ADMIN,
-    }));
+    });
+    const pagination = new Pagination();
+    const options = new Options({ raw: true });
+    return this.getAll(filter, pagination, options);
   }
 
   /**

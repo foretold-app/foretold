@@ -56,10 +56,10 @@ class Emails extends Consumer {
           }
 
           log.trace(
-            `\x1b[35mNotification ID = "${_.get(notification, 'id')}", `
-            + `Transaction ID = "${_.get(transaction, 'id')}", `
-            + `Agent Preferences ID = "${_.get(preferences, 'id')}", `
-            + `Agent ID = "${_.get(agent, 'id')}", `
+            `\x1b[35mNotification ID = "${_.get(notification, 'id', null)}", `
+            + `Transaction ID = "${_.get(transaction, 'id', null)}", `
+            + `Agent Preferences ID = "${_.get(preferences, 'id', null)}", `
+            + `Agent ID = "${_.get(agent, 'id', null)}", `
             + `Result = "${result}".\x1b[0m`,
           );
         } catch (err) {

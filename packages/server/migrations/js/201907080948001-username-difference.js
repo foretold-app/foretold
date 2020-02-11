@@ -20,7 +20,7 @@ module.exports = {
 
         // Bunches of users [1, 2, 3, ...] with name A (then B, C, ...)
         for (let userIndex = 0; userIndex < users.length; userIndex++) {
-          const userId = _.get(users, [userIndex]);
+          const userId = _.get(users, [userIndex], null);
 
           // Adds integer prefix to each duplicated users' names
           await queryInterface.sequelize.query(

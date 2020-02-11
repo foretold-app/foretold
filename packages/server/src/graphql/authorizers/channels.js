@@ -16,7 +16,7 @@ function channelIsPublicRule(root, args, context, _info) {
 
   log.trace(
     '\x1b[33m Rule Channels (channelIsPublic) '
-    + `channelId "${_.get(context, 'channel.id')}", `
+    + `channelId "${_.get(context, 'channel.id', null)}", `
     + `channelIsPublic "${JSON.stringify(result)}".`
     + '\x1b[0m',
   );

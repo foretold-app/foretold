@@ -57,7 +57,7 @@ class ChannelsData extends DataBase {
    */
   async getCreatorByChannelId(channelId) {
     const channel = await this.getOne({ id: channelId });
-    const creatorId = _.get(channel, 'creatorId');
+    const creatorId = _.get(channel, 'creatorId', null);
     if (!creatorId) return null;
     return this.agents.getOne({ id: creatorId });
   }

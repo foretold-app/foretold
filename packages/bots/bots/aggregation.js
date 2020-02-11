@@ -32,10 +32,10 @@ class Aggregation {
    */
   async _aggregateFloatCdf(measurements) {
     const values = measurements.filter((measurement) => {
-      return !!_.get(measurement, 'value.floatCdf');
+      return !!_.get(measurement, 'value.floatCdf', null);
     }).map((measurement) => {
-      const xs = _.get(measurement, 'value.floatCdf.xs');
-      const ys = _.get(measurement, 'value.floatCdf.ys');
+      const xs = _.get(measurement, 'value.floatCdf.xs', null);
+      const ys = _.get(measurement, 'value.floatCdf.ys', null);
       return new Cdf(xs, ys);
     });
 

@@ -153,7 +153,7 @@ class AgentMeasurablesData extends DataBase {
 
     const startTime = (params.startAt === START_AT.QUESTION_CREATION_TIME)
       ? measurable.createdAt
-      : _.get(agentPredictions, '0.relevantAt');
+      : _.get(agentPredictions, '0.relevantAt', null);
 
     const marketScoreType = params.marketType === MARKET_TYPE.MARKET
       ? marketScore
@@ -177,7 +177,7 @@ class AgentMeasurablesData extends DataBase {
 
     const _timeActivityRatio = timeActivityRatio({
       initialTime: measurable.createdAt,
-      firstPredictionTime: _.get(agentPredictions, '0.relevantAt'),
+      firstPredictionTime: _.get(agentPredictions, '0.relevantAt', null),
       endingTime: resolutionMeasurement.relevantAt,
     });
 

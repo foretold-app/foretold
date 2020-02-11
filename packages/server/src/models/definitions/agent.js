@@ -48,10 +48,10 @@ module.exports = (sequelize, DataTypes) => {
   async function getName() {
     if (this.type === AGENT_TYPE.USER) {
       const user = await this.getUser();
-      return _.get(user, 'name');
+      return _.get(user, 'name', null);
     }
     const bot = await this.getBot();
-    return _.get(bot, 'name');
+    return _.get(bot, 'name', null);
   }
 
   /**

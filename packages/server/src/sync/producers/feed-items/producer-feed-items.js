@@ -101,7 +101,7 @@ class ProducerFeedItems extends Producer {
   async _getReplacements(agent) {
     return {
       agent: {
-        name: (await _.get(agent, 'name')) || 'Somebody',
+        name: (await _.get(agent, 'name', null)) || 'Somebody',
       },
     };
   }

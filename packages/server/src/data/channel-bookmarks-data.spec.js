@@ -1,7 +1,7 @@
-const data = require('./bookmarks-data');
+const { ChannelBookmarksData } = require('./channel-bookmarks-data');
 
-describe('Bookmarks Data', () => {
+describe('Channel Bookmarks Data', () => {
   it('class should be a constructor', () => {
-    expect(data.BotsData).toBeInstanceOf(Function);
+    expect(ChannelBookmarksData).toBeInstanceOf(Function);
   });
 });

@@ -4,7 +4,7 @@ let make = (~channelId) =>
     ...{(mutation, _) =>
       <ForetoldComponents.Button
         variant=ForetoldComponents.Button.Primary
-        size=ForetoldComponents.Button.(Small)
+        size=ForetoldComponents.Button.Medium
         className=ForetoldComponents.GroupHeader.Styles.actionButtonPosition
         onClick={_ => ChannelJoin.mutate(mutation, channelId)}>
         {"Join Community" |> Utils.ste}

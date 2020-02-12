@@ -48,9 +48,8 @@ describe('Channels Resolvers', () => {
         }, {
           agentId: '1',
           attributes: {
-            isBookmarked: {
-              agentId: '1',
-            }
+            bookmarksCount: true,
+            isBookmarked: { agentId: '1' },
           },
           raw: true,
         });
@@ -69,7 +68,10 @@ describe('Channels Resolvers', () => {
       return channels.one(root, args, context, info).then((result) => {
         expect(new ChannelsData().getOne).toHaveBeenCalledWith({ id: 'id1' }, {}, {
           agentId: 'agentId1',
-          attributes: true,
+          attributes: {
+            bookmarksCount: true,
+            isBookmarked: { agentId: 'agentId1' },
+          },
           raw: true,
         });
         expect(result).toBe(true);

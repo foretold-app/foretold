@@ -57,6 +57,7 @@ type permission = [
   | `SUBSCRIBE
   | `UNSUBSCRIBE
   | `MEASUREMENT_VOTE
+  | `CHANNEL_BOOKMARK_TOGGLE
 ];
 
 type marketType = [ | `MARKET | `NON_MARKET];
@@ -131,6 +132,7 @@ and channel = {
   permissions: option(permissions),
   knowledgeGraph: option(string),
   isBookmarked: option(bool),
+  bookmarksCount: option(int),
 }
 
 and channelMembership = {

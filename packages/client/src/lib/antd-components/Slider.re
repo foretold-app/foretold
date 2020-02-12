@@ -2,6 +2,7 @@
 
 [%bs.raw {|require("antd/lib/slider/style")|}];
 
+// @todo: To move this component into components package.
 [@bs.obj]
 external makeProps:
   (

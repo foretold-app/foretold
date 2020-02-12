@@ -13,6 +13,8 @@ module Query = [%graphql
         notebooksCount
         myRole
         knowledgeGraph
+        bookmarksCount
+        isBookmarked
         permissions {
           mutations {
             allow
@@ -42,6 +44,8 @@ let toChannel = channel => {
     ~membershipCount=Some(channel##membershipCount),
     ~permissions=Some(permissions),
     ~knowledgeGraph=channel##knowledgeGraph |> E.J.O.toString,
+    ~bookmarksCount=Some(channel##bookmarksCount),
+    ~isBookmarked=channel##isBookmarked,
     (),
   );
 };

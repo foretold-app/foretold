@@ -32,7 +32,7 @@ let make =
         let make = (~channelId) =>
           E.React2.showIf(
             Primary.Permissions.can(`JOIN_CHANNEL, channel.permissions),
-            <SimpleHeader.JoinChannel channelId />,
+            <JoinChannel channelId />,
           );
       };
 
@@ -41,7 +41,19 @@ let make =
         let make = (~channelId) =>
           E.React2.showIf(
             Primary.Permissions.can(`LEAVE_CHANNEL, channel.permissions),
-            <SimpleHeader.LeaveChannel channelId />,
+            <LeaveChannel channelId />,
+          );
+      };
+
+      module BookmarkButton = {
+        [@react.component]
+        let make = (~channelId) =>
+          E.React2.showIf(
+            Primary.Permissions.can(
+              `CHANNEL_BOOKMARK_TOGGLE,
+              channel.permissions,
+            ),
+            <BookmarkChannel channel />,
           );
       };
 
@@ -85,6 +97,7 @@ let make =
              ? <JoinButton channelId={channel.id} />
              : <LeaveButton channelId={channel.id} />}
         </Div>
+        <Div float=`right> <BookmarkButton channelId={channel.id} /> </Div>
       </>;
     };
   };

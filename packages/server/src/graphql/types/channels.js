@@ -21,6 +21,7 @@ const channel = new graphql.GraphQLObjectType({
     isCurated: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
     isBookmarked: { type: graphql.GraphQLBoolean },
     knowledgeGraph: { type: string0to32K },
+    bookmarksCount: { type: graphql.GraphQLNonNull(graphql.GraphQLInt) },
 
     membershipCount: {
       type: graphql.GraphQLNonNull(graphql.GraphQLInt),

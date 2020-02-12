@@ -3,7 +3,7 @@ open Style.Grid;
 open MeasurableIndex__Logic;
 
 module LoadedAndSelected = {
-  let header = (t: loadedAndSelected, send: Reducer.Types.send) =>
+  let header = (subState: loadedAndSelected, send: Reducer.Types.send) =>
     <>
       <Div
         float=`left
@@ -23,7 +23,7 @@ module LoadedAndSelected = {
             ForetoldComponents.PageCard.HeaderRow.Styles.itemBottomPadding,
           ]),
         ]>
-        {Reducer.Components.paginationItem(t.reducerParams)}
+        {Reducer.Components.paginationItem(subState.reducerParams)}
       </Div>
     </>;
 };
@@ -36,8 +36,7 @@ module LoadedAndUnselected = {
       number=num
       onClick={LinkType.onClick(
         Relative(
-          MeasurableQuery.make(Some(state))
-          |> MeasurableQuery.toUrlParams,
+          MeasurableQuery.make(Some(state)) |> MeasurableQuery.toUrlParams,
         ),
       )}>
       {text |> ste}
@@ -46,7 +45,7 @@ module LoadedAndUnselected = {
   // @todo: To make a component.
   let header =
       (
-        t: loadedAndUnselected,
+        subState: loadedAndUnselected,
         stats: measurablesStateStatsQuery,
         query: MeasurableQuery.query,
         channelId,
@@ -96,7 +95,7 @@ module LoadedAndUnselected = {
         {<ForetoldComponents.Button
            variant=ForetoldComponents.Button.Primary
            isDisabled=false
-           size=ForetoldComponents.Button.(Small)
+           size=ForetoldComponents.Button.Small
            className=Css.(style([marginRight(`em(1.5))]))
            onClick={e =>
              LinkType.onClick(Internal(MeasurableNew(channelId)), e)
@@ -104,15 +103,15 @@ module LoadedAndUnselected = {
            {"New Question" |> Utils.ste}
          </ForetoldComponents.Button>
          |> E.React2.showIf(channelId != "")}
-        {Reducer.Components.paginationPage(t.reducerParams)}
+        {Reducer.Components.paginationPage(subState.reducerParams)}
       </Div>
     </Div>;
 
   // @todo: To make a component.
-  let measurableIndexTable = (t: loadedAndUnselected) => {
+  let measurableIndexTable = (subState: loadedAndUnselected) => {
     let measurables =
       (
-        switch (t.reducerParams.response) {
+        switch (subState.reducerParams.response) {
         | Success(r) => Some(r.edges)
         | _ => None
         }
@@ -121,9 +120,9 @@ module LoadedAndUnselected = {
     <MeasurableIndexTable
       measurables
       showExtraData=true
-      channelId={Some(t.channel.id)}
+      channelId={Some(subState.channel.id)}
       onSelect={(e: Types.measurable) =>
-        Reducer.Components.sendSelectItem(t.reducerParams, e.id)
+        Reducer.Components.sendSelectItem(subState.reducerParams, e.id)
       }
     />;
   };
@@ -139,24 +138,30 @@ let toLayoutInput =
       channelId: string,
     ) => {
   switch (state) {
-  | LoadedAndUnselected(l) =>
+  | LoadedAndUnselected(subState) =>
     <SLayout
-      head={LoadedAndUnselected.header(l, stats, selectedState, channelId)}
+      head={LoadedAndUnselected.header(
+        subState,
+        stats,
+        selectedState,
+        channelId,
+      )}
       container=`fluid>
-      {LoadedAndUnselected.measurableIndexTable(l)}
+      {LoadedAndUnselected.measurableIndexTable(subState)}
     </SLayout>
 
-  | LoadedAndSelected(l) =>
+  | LoadedAndSelected(subState) =>
     <>
-      <SLayout head={LoadedAndSelected.header(l, send)} container=`fluid>
+      <SLayout
+        head={LoadedAndSelected.header(subState, send)} container=`fluid>
         <MeasurablePage
-          measurable={l.selectedMeasurable}
-          key={l.selectedMeasurable.id}
+          measurable={subState.selectedMeasurable}
+          key={subState.selectedMeasurable.id}
         />
       </SLayout>
       <MeasurableBottomSection
-        measurable={l.selectedMeasurable}
-        key={"measurable-bottom-section" ++ l.selectedMeasurable.id}
+        measurable={subState.selectedMeasurable}
+        key={"measurable-bottom-section" ++ subState.selectedMeasurable.id}
       />
     </>
 

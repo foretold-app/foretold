@@ -175,7 +175,7 @@ module MyCommunities = {
       |> E.O.fmap((user: Types.user) =>
            ChannelsGet.component(
              ~channelMemberId=?Some(user.agentId),
-             ~order=ChannelsGet.orderAsSidebar,
+             ~order=ChannelsGet.orderSidebar,
              channels => {
                let (bookmarked, notBookmarked) =
                  channels

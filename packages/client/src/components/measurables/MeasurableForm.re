@@ -132,7 +132,7 @@ module FormComponent = {
                 |> E.O.fmap((agent: Types.agent) =>
                      ChannelsGet.component(
                        ~channelMemberId=?Some(agent.id),
-                       ~order=ChannelsGet.orderAsSidebar,
+                       ~order=ChannelsGet.orderSidebar,
                        channels =>
                        channels
                        |> E.A.fmapi((index, channel: Types.channel) =>

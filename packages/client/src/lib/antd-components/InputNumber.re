@@ -3,6 +3,7 @@ external reactClass: ReasonReact.reactClass = "antd/lib/input-number";
 
 [%bs.raw {|require("antd/lib/input-number/style")|}];
 
+// @todo: To move this component into components package.
 [@react.component]
 let make =
     (

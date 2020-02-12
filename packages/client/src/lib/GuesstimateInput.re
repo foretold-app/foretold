@@ -19,6 +19,7 @@ let onChange = (_a: string) => ();
 [@bs.module "./GuesstimateInput.js"]
 external guesstimateInput: ReasonReact.reactClass = "GuesstimateInput";
 
+// @todo: To move this component into components package.
 [@react.component]
 let make =
     (

@@ -28,18 +28,18 @@ module Query = [%graphql
 
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
-let toChannel = m =>
+let toChannel = channel =>
   Primary.Channel.make(
-    ~id=m##id,
-    ~name=m##name |> E.J.toString,
-    ~description=m##description |> E.J.O.toString,
-    ~isArchived=m##isArchived,
-    ~isPublic=m##isPublic,
-    ~isCurated=m##isCurated,
-    ~isBookmarked=m##isBookmarked,
-    ~membershipCount=Some(m##membershipCount),
-    ~openedMeasurablesCount=Some(m##openedMeasurablesCount),
-    ~bookmarksCount=Some(m##bookmarksCount),
+    ~id=channel##id,
+    ~name=channel##name |> E.J.toString,
+    ~description=channel##description |> E.J.O.toString,
+    ~isArchived=channel##isArchived,
+    ~isPublic=channel##isPublic,
+    ~isCurated=channel##isCurated,
+    ~isBookmarked=channel##isBookmarked,
+    ~membershipCount=Some(channel##membershipCount),
+    ~openedMeasurablesCount=Some(channel##openedMeasurablesCount),
+    ~bookmarksCount=Some(channel##bookmarksCount),
     (),
   );
 

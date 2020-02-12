@@ -60,7 +60,7 @@ module.exports = [
     type: TEMPLATE_TYPE.EMAIL,
     envelopeTemplate: {
       item: '',
-      description: '{{{ agent.name }}} joined the community',
+      description: '<agent>{{{ agent.name }}}</agent> joined the community',
     },
   },
   {
@@ -68,7 +68,7 @@ module.exports = [
     type: TEMPLATE_TYPE.FEED_ITEM,
     envelopeTemplate: {
       item: '{{{ measurable.name }}}',
-      description: '{{{ agent.name }}} made a prediction',
+      description: '<agent>{{{ agent.name }}}</agent> made a prediction',
       measurableId: '{{{ measurable.id }}}',
       measurementId: '{{{ measurement.id }}}',
     },
@@ -78,7 +78,7 @@ module.exports = [
     type: TEMPLATE_TYPE.FEED_ITEM,
     envelopeTemplate: {
       item: '{{{ measurable.name }}}',
-      description: '{{{ agent.name }}} made a comment',
+      description: '<agent>{{{ agent.name }}}</agent> made a comment',
       measurableId: '{{{ measurable.id }}}',
       measurementId: '{{{ measurement.id }}}',
     },
@@ -88,7 +88,7 @@ module.exports = [
     type: TEMPLATE_TYPE.FEED_ITEM,
     envelopeTemplate: {
       item: '{{{ measurable.name }}}',
-      description: '{{{ agent.name }}} resolved the question with an answer',
+      description: '<agent>{{{ agent.name }}}</agent> resolved the question with an answer',
       measurableId: '{{{ measurable.id }}}',
       measurementId: '{{{ measurement.id }}}',
     },
@@ -98,7 +98,7 @@ module.exports = [
     type: TEMPLATE_TYPE.FEED_ITEM,
     envelopeTemplate: {
       item: '{{{ measurable.name }}}',
-      description: '{{{ agent.name }}} has marked this question as unresolved',
+      description: '<agent>{{{ agent.name }}}</agent> has marked this question as unresolved',
       measurableId: '{{{ measurable.id }}}',
       measurementId: '{{{ measurement.id }}}',
     },
@@ -118,7 +118,7 @@ module.exports = [
     type: TEMPLATE_TYPE.FEED_ITEM,
     envelopeTemplate: {
       item: '{{{ measurable.name }}}',
-      description: '{{{ agent.name }}} made a question',
+      description: '<agent>{{{ agent.name }}}</agent> made a question',
       measurableId: '{{{ measurable.id }}}',
     },
   },
@@ -127,12 +127,12 @@ module.exports = [
     type: TEMPLATE_TYPE.FEED_ITEM,
     envelopeTemplate: {
       item: '',
-      description: '{{{ agent.name }}} has created a community',
+      description: '<agent>{{{ agent.name }}}</agent> has created a community',
     },
   },
   {
     name: TEMPLATE_NAME.NEW_INVITATION,
-    type: TEMPLATE_TYPE.FEED_ITEM,
+    type: TEMPLATE_TYPE.EMAIL,
     envelopeTemplate: {
       subject: 'You have been invited to the Foretold community, '
         + '"{{{ channel.name }}}"',
@@ -147,7 +147,7 @@ module.exports = [
     type: TEMPLATE_TYPE.FEED_ITEM,
     envelopeTemplate: {
       item: '',
-      description: '{{{ agent.name }}} made a notebook',
+      description: '<agent>{{{ agent.name }}}</agent> made a notebook',
       notebookId: '{{{ notebook.id }}}',
     },
   },

@@ -41,6 +41,18 @@ module Columns = {
       (),
     );
 
+  let bookmarksCount =
+    Table.Column.make(
+      ~name="Bookmark Count" |> Utils.ste,
+      ~render=
+        (channel: record) =>
+          channel.bookmarksCount
+          |> E.O.fmap(string_of_int)
+          |> E.O.default("")
+          |> Utils.ste,
+      (),
+    );
+
   let labels =
     Table.Column.make(
       ~name="Curation" |> Utils.ste,
@@ -51,7 +63,13 @@ module Columns = {
       (),
     );
 
-  let all = [|nameDescription, memberCount, openedCount, labels|];
+  let all = [|
+    nameDescription,
+    memberCount,
+    openedCount,
+    bookmarksCount,
+    labels,
+  |];
 };
 
 [@react.component]

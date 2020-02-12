@@ -48,10 +48,12 @@ async function all(root, args, context, _info) {
 
   const filter = new Filter({ withinJoinedChannels, isArchived });
   const pagination = new Pagination(args);
-  const attributes = { isBookmarked: { agentId: currentAgentId } };
   const options = new Options({
     raw: true,
-    attributes,
+    attributes: {
+      bookmarksCount: true,
+      isBookmarked: { agentId: currentAgentId },
+    },
     agentId: currentAgentId,
   });
 
@@ -72,11 +74,18 @@ async function all(root, args, context, _info) {
  */
 async function one(root, args, context, _info) {
   const channelId = _.get(args, 'id', null) || _.get(root, 'channelId', null);
-  const agentId = _.get(context, 'agent.id', null);
+  const currentAgentId = _.get(context, 'agent.id', null);
 
   const params = new Params({ id: channelId });
   const query = new Query();
-  const options = new Options({ agentId, attributes: true, raw: true });
+  const options = new Options({
+    raw: true,
+    attributes: {
+      bookmarksCount: true,
+      isBookmarked: { agentId: currentAgentId },
+    },
+    agentId: currentAgentId,
+  });
 
   return new ChannelsData().getOne(params, query, options);
 }

@@ -5,7 +5,7 @@ export namespace Models {
   export type Json = string;
 
   export type AgentID = ObjectID;
-  export type BookmarkID = ObjectID;
+  export type ChannelBookmarkID = ObjectID;
   export type BotID = ObjectID;
   export type ChannelID = ObjectID;
   export type ChannelMembershipID = ObjectID;
@@ -301,6 +301,7 @@ export namespace Layers {
     isBookmarked?: {
       agentId: Models.AgentID,
     },
+    bookmarksCount?: boolean,
   };
 
   export type order = { field: string; direction: string };

@@ -46,6 +46,11 @@ class ChannelModel extends ModelPostgres {
       include.push([this._isBookmarkedLiteral(agentId), 'isBookmarked']);
     }
 
+    const bookmarksCount = _.get(options, 'attributes.bookmarksCount', null);
+    if (!!bookmarksCount) {
+      include.push([this._bookmarkCountLiteral(), 'bookmarksCount']);
+    }
+
     return { include };
   }
 
@@ -89,6 +94,14 @@ class ChannelModel extends ModelPostgres {
 
   /**
    * @protected
+   * @return {Sequelize.literal}
+   */
+  _bookmarkCountLiteral() {
+    return this.literal(this._bookmarkCount());
+  }
+
+  /**
+   * @protected
    * @return {string}
    */
   _membersCount() {
@@ -101,6 +114,7 @@ class ChannelModel extends ModelPostgres {
 
   /**
    * @protected
+   * @param {Models.AgentID} agentId
    * @return {string}
    */
   _isBookmarked(agentId) {
@@ -113,6 +127,18 @@ class ChannelModel extends ModelPostgres {
         WHERE "ChannelBookmarks"."channelId" = "Channel"."id"
         AND "ChannelBookmarks"."agentId" = '${agentId}'
         LIMIT 1
+    )`;
+  }
+
+  /**
+   * @protected
+   * @return {string}
+   */
+  _bookmarkCount() {
+    return `(
+        SELECT count(*) as "bookmarksCount"
+        FROM "ChannelBookmarks"
+        WHERE "ChannelBookmarks"."channelId" = "Channel"."id"
     )`;
   }
 }

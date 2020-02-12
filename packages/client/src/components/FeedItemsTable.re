@@ -5,6 +5,36 @@ module Styles = {
   let clear = style([clear(`both)]);
 };
 
+module Splitter = {
+  type block =
+    | Text(string)
+    | Agent(string);
+
+  type blocks = array(block);
+
+  let regExp = () => [%re "/^>([^\$&]+)<$/"];
+
+  let markdownToBlocks = (str: string): blocks => {
+    let splitUp = Js.String.splitByRe([%re "/<agent|\/agent>/"], str);
+    splitUp
+    |> E.A.fmap(e =>
+         switch (e) {
+         | Some(str) =>
+
+         let matching = regExp() |> Js.Re.exec(str);
+         switch(matching) {
+             | None => Some(Text(str))
+             | Some(_) => Some(Agent(str))
+         };
+
+
+         | _ => None
+         }
+       )
+    |> E.A.O.concatSome;
+  };
+};
+
 module Columns = {
   type record = Types.feedItem;
   type column = Table.column(record);
@@ -34,6 +64,17 @@ module Columns = {
     | Measurement(row) =>
       <>
         <div className=Styles.text> {row.description |> Utils.ste} </div>
+        <div className=Styles.text>
+          {row.description
+           |> Splitter.markdownToBlocks
+           |> E.A.fmapi((key, e) =>
+                switch (e) {
+                | Splitter.Text(str) => "Text: " ++ str ++ ". " |> Utils.ste
+                | Splitter.Agent(str) => "Agent: " ++ str ++ ". " |> Utils.ste
+                }
+              )
+           |> ReasonReact.array}
+        </div>
         <div className=Styles.icons>
           <MeasurementItems.Info.ById measurementId={row.measurementId} />
         </div>

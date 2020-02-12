@@ -32,7 +32,7 @@ let make =
         let make = (~channelId) =>
           E.React2.showIf(
             Primary.Permissions.can(`JOIN_CHANNEL, channel.permissions),
-            <SimpleHeader.JoinChannel channelId />,
+            <JoinChannel channelId />,
           );
       };
 
@@ -41,7 +41,7 @@ let make =
         let make = (~channelId) =>
           E.React2.showIf(
             Primary.Permissions.can(`LEAVE_CHANNEL, channel.permissions),
-            <SimpleHeader.LeaveChannel channelId />,
+            <LeaveChannel channelId />,
           );
       };
 
@@ -53,7 +53,7 @@ let make =
               `CHANNEL_BOOKMARK_TOGGLE,
               channel.permissions,
             ),
-            <SimpleHeader.BookmarkChannel channel />,
+            <BookmarkChannel channel />,
           );
       };
 

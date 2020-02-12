@@ -10,9 +10,7 @@ module ReducerConfig = {
 
   let onItemDeselected = (params: callFnParams) => {
     let st =
-      params.states
-      |> MeasurableQuery.make
-      |> MeasurableQuery.toUrlParams;
+      params.states |> MeasurableQuery.make |> MeasurableQuery.toUrlParams;
     let channelLink = Routing.Url.toString(ChannelShow(params.channelId));
     History.append(channelLink ++ st);
   };
@@ -47,17 +45,16 @@ module ReducerConfig = {
 
 module Reducer = PaginationFunctor.Make(ReducerConfig);
 
-type channel = Types.channel;
 type seriesCollection = array(SeriesCollectionGet.series);
 type reducerParams = Reducer.Types.reducerParams;
 type seriesQuery = HttpResponse.t(seriesCollection);
-type channelQuery = HttpResponse.t(channel);
+type channelQuery = HttpResponse.t(Types.channel);
 type measurablesStateStatsQuery =
   HttpResponse.t(option(MeasurablesStateStatsGet.stats));
 
 type loadedAndSelected = {
   reducerParams,
-  channel,
+  channel: Types.channel,
   seriesCollection,
   itemState: Reducer.Types.itemSelected,
   selectedMeasurable: ReducerConfig.itemType,
@@ -65,19 +62,19 @@ type loadedAndSelected = {
 
 type loadedAndUnselected = {
   reducerParams,
-  channel,
+  channel: Types.channel,
   seriesCollection,
 };
 
 type withChannelButNotQuery = {
   reducerParams,
-  channel,
+  channel: Types.channel,
   seriesQuery,
 };
 
 type state =
   | WithoutChannel(channelQuery)
-  | InvalidIndexError(channel)
+  | InvalidIndexError(Types.channel)
   | WithChannelButNotQuery(withChannelButNotQuery)
   | LoadedAndUnselected(loadedAndUnselected)
   | LoadedAndSelected(loadedAndSelected);
@@ -88,8 +85,7 @@ type input = {
   seriesQuery,
 };
 
-// @todo: To make a component.
-let make = (input: input) =>
+let getState = (input: input): state =>
   switch (
     input.reducerParams.itemState,
     input.channelQuery,

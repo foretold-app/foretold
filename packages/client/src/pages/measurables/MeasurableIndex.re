@@ -1,25 +1,30 @@
+module Reducer = PaginationFunctor.Make(MeasurableIndex__Logic.ReducerConfig);
+
 [@react.component]
 let make = (~channelId: string, ~searchParams: MeasurableQuery.query) => {
-  module Reducer =
-    PaginationFunctor.Make(MeasurableIndex__Logic.ReducerConfig);
-
   <Reducer
     callFnParams={channelId, states: searchParams.state}
     subComponent={(reducerParams: Reducer.Types.reducerParams) =>
       ChannelGet.component2(~id=channelId, channelQuery =>
         SeriesCollectionGet.component2(~channelId, seriesQuery =>
-          MeasurablesStateStatsGet.component2(~channelId, statsQuery =>
-            MeasurableIndex__Components.toLayoutInput(
-              reducerParams.send,
-              searchParams,
-              statsQuery,
-              MeasurableIndex__Logic.make({
-                reducerParams,
-                channelQuery,
-                seriesQuery,
-              }),
-              channelId,
-            )
+          MeasurablesStateStatsGet.component2(
+            ~channelId,
+            statsQuery => {
+              let state =
+                MeasurableIndex__Logic.getState({
+                  reducerParams,
+                  channelQuery,
+                  seriesQuery,
+                });
+
+              MeasurableIndex__Components.toLayoutInput(
+                reducerParams.send,
+                searchParams,
+                statsQuery,
+                state,
+                channelId,
+              );
+            },
           )
         )
       )

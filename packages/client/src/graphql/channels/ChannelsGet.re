@@ -20,6 +20,7 @@ module Query = [%graphql
         isCurated
         isBookmarked
         openedMeasurablesCount
+        bookmarksCount
       }
     }
   |}
@@ -38,6 +39,7 @@ let toChannel = m =>
     ~isBookmarked=m##isBookmarked,
     ~membershipCount=Some(m##membershipCount),
     ~openedMeasurablesCount=Some(m##openedMeasurablesCount),
+    ~bookmarksCount=Some(m##bookmarksCount),
     (),
   );
 
@@ -52,20 +54,20 @@ type order =
     ),
   );
 
-let orderAsCommunities: order =
+let orderCommunities: order =
   Some([|
     Some({"field": `isCurated, "direction": `DESC}),
     Some({"field": `membersCount, "direction": `DESC}),
   |]);
 
-let orderAsSidebar: order =
+let orderSidebar: order =
   Some([|Some({"field": `name, "direction": `ASC})|]);
 
 let component =
     (
       ~channelMemberId: option(string)=?,
       ~isArchived=[|Some(`FALSE)|],
-      ~order=orderAsCommunities,
+      ~order=orderCommunities,
       fn,
     ) => {
   let query = Query.make(~channelMemberId?, ~isArchived, ~order?, ());

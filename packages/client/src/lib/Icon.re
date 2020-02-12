@@ -1,5 +1,6 @@
 [@bs.module "./Icon.js"] external reactClass: ReasonReact.reactClass = "Icon";
 
+// @todo: To move this component into components package.
 [@react.component]
 let make = (~icon=?, ~size=?, ~children=<Null />) =>
   ReasonReact.wrapJsForReason(

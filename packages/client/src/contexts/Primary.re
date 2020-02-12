@@ -415,6 +415,7 @@ module Channel = {
         ~permissions=None,
         ~knowledgeGraph=None,
         ~isBookmarked=None,
+        ~bookmarksCount=None,
         (),
       )
       : t => {
@@ -433,6 +434,7 @@ module Channel = {
     permissions,
     knowledgeGraph,
     isBookmarked,
+    bookmarksCount,
   };
 
   let toChannel = (channel: Js.t('a)) => {

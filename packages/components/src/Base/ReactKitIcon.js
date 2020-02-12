@@ -55,8 +55,13 @@ export class ReactKitIcon extends React.Component {
   render() {
     const {
       iconType,
-      size
+      size,
+      className
     } = this.props;
-    return React.createElement(Icon, {size: size, icon: types[iconType]});
+    return React.createElement(Icon, {
+      size: size,
+      icon: types[iconType],
+      className: className
+    });
   }
 }

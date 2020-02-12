@@ -94,6 +94,7 @@ module Name = {
       | `Comment => isComment
       }
     );
+
   let toString =
     fun
     | `Cdf => "floatCdf"
@@ -102,6 +103,7 @@ module Name = {
     | `Percentage => "percentage"
     | `UnresolvableResolution => "unresolvableResolution"
     | `Comment => "comment";
+
   let fromString = str =>
     switch (str) {
     | "floatPoint" => Belt.Result.Ok(`Float)

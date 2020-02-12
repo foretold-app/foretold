@@ -10,6 +10,7 @@ module Styles = {
     ]);
 };
 
+// @todo: To move this component into components package.
 [@react.component]
 let make =
     (

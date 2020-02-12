@@ -45,6 +45,18 @@ let make =
           );
       };
 
+      module BookmarkButton = {
+        [@react.component]
+        let make = (~channelId) =>
+          E.React2.showIf(
+            Primary.Permissions.can(
+              `CHANNEL_BOOKMARK_TOGGLE,
+              channel.permissions,
+            ),
+            <SimpleHeader.BookmarkChannel channel />,
+          );
+      };
+
       <>
         <Div float=`left flexDirection=`column>
           <Div flex={`num(1.0)}> <ChannelLink channel /> </Div>
@@ -85,6 +97,7 @@ let make =
              ? <JoinButton channelId={channel.id} />
              : <LeaveButton channelId={channel.id} />}
         </Div>
+        <Div float=`right> <BookmarkButton channelId={channel.id} /> </Div>
       </>;
     };
   };

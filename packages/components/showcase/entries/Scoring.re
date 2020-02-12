@@ -35,7 +35,9 @@ module Scoring = {
       [|varA, varB, varC, distributionScoreDistribution|]
       |> E.A.O.concatSome
       |> Types.Dists.maxX(0.99);
+
     Js.log2("MIN", min);
+
     <div>
       <h3> {"Variable A" |> ReasonReact.string} </h3>
       <ReGuesstimateInput

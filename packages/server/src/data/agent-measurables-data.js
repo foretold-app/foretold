@@ -122,21 +122,45 @@ class AgentMeasurablesData extends DataBase {
    * scoringEndTime: *
    * }>}
    */
-  async primaryPointScore(agentId, measurableId, params = {
-    marketType: MARKET_TYPE.MARKET,
-    startAt: START_AT.QUESTION_CREATION_TIME,
-    finalComparisonMeasurement: LAST_OBJECTIVE_MEASUREMENT,
-  }) {
-    const {
+  async primaryPointScore(agentId, measurableId, params) {
+    const item = await this._getTimeScoringData(agentId, measurableId);
+    return this.primaryPointScore2(item, params);
+  }
+
+  /**
+   * Do not make any optimization here, it is early for this.
+   * For each optimization we need to do a researching of the performance.
+   * @param agentId
+   * @param measurableId
+   * @param params
+   * @returns {Promise<undefined|
+   * {
+   * score: *,
+   * agentPredictions: *,
+   * finalResolutionTime: *,
+   * scoringStartTime: *,
+   * timeActivityRatio: *,
+   * recentResult: *,
+   * activeTimeDistribution: {finalX: *, points: *},
+   * measurableCreationTime: *,
+   * aggregations: *,
+   * scoringEndTime: *
+   * }>}
+   */
+  async primaryPointScore2(
+    {
       agentPredictions,
       recentResult,
       allAggregations,
       measurable,
-    } = await this._getTimeScoringData(agentId, measurableId);
-
+    }, params = {
+      marketType: MARKET_TYPE.MARKET,
+      startAt: START_AT.QUESTION_CREATION_TIME,
+      finalComparisonMeasurement: LAST_OBJECTIVE_MEASUREMENT,
+    }) {
     // Checks
-    if (agentPredictions.length === 0) return undefined;
-    if (allAggregations.length === 0) return undefined;
+    if (_.size(agentPredictions) === 0) return undefined;
+    if (_.size(allAggregations) === 0) return undefined;
     if (
       params.finalComparisonMeasurement === LAST_OBJECTIVE_MEASUREMENT
       && !recentResult
@@ -264,52 +288,8 @@ class AgentMeasurablesData extends DataBase {
    * @returns {Promise<*>}
    */
   async _getTimeScoringData(agentId, measurableId) {
-    const measurable = await this._getMeasurable(measurableId);
-
-    const measurements = await this._getMeasurements(measurableId);
-
-    const allAggregations = _.filter(measurements, [
-      'competitorType', MEASUREMENT_COMPETITOR_TYPE.AGGREGATION,
-    ]);
-
-    const recentResult = _.find(measurements, [
-      'competitorType', MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE,
-    ]);
-
-    const agentPredictions = _.filter(measurements, {
-      competitorType: MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE,
-      agentId,
-    });
-
-    return {
-      agentPredictions,
-      recentResult,
-      allAggregations,
-      measurable,
-    };
-  }
-
-  /**
-   * Should return sorted measurements by the createdAt field.
-   * @param {Models.MeasurableID} measurableId
-   * @returns {Promise<*>}
-   */
-  async _getMeasurements(measurableId) {
-    const filter = new Filter({ measurableId });
-    const pagination = new Pagination();
-    const options = new Options({ raw: true });
-    return this.measurements.getAll(filter, pagination, options);
-  }
-
-  /**
-   * @param {Models.MeasurableID} measurableId
-   * @returns {Promise<*>}
-   */
-  async _getMeasurable(measurableId) {
-    const params = new Params({ id: measurableId });
-    const query = new Query();
-    const options = new Options({ raw: true });
-    return this.measurables.getOne(params, query, options);
+    const response = await this.model.query1(agentId, measurableId);
+    return response[0];
   }
 }
 

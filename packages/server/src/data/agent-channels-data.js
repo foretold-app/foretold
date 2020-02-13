@@ -41,10 +41,10 @@ class AgentChannelsData extends DataBase {
    * @returns {Promise<number>}
    */
   async primaryPointScore(agentId, channelId) {
-    const measurables = await this._getMeasurables(channelId);
+    const measurables = await this.model.query2(agentId, channelId);
 
-    const primaryPointScore$ = measurables.map((measurable) => {
-      return this.agentMeasurables.primaryPointScore(agentId, measurable.id);
+    const primaryPointScore$ = measurables.map((item) => {
+      return this.agentMeasurables.primaryPointScore2(item);
     });
 
     const primaryPointScores = await Promise.all(primaryPointScore$);

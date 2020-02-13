@@ -12,22 +12,19 @@ module Splitter = {
 
   type blocks = array(block);
 
-  let regExp = () => [%re "/^>([^\$&]+)<$/"];
+  let agentRegExp = () => [%re "/^<agent \/>$/"];
 
-  let markdownToBlocks = (str: string): blocks => {
-    let splitUp = Js.String.splitByRe([%re "/<agent|\/agent>/"], str);
+  let toBlocks = (str: string): blocks => {
+    let splitUp = Js.String.splitByRe([%re "/<split>|<\/split>/"], str);
     splitUp
     |> E.A.fmap(e =>
          switch (e) {
          | Some(str) =>
-
-         let matching = regExp() |> Js.Re.exec(str);
-         switch(matching) {
+             let matching = agentRegExp() |> Js.Re.exec(str);
+             switch(matching) {
              | None => Some(Text(str))
              | Some(_) => Some(Agent(str))
-         };
-
-
+             };
          | _ => None
          }
        )
@@ -57,33 +54,68 @@ module Columns = {
     | _ => "" |> Utils.ste
     };
 
+  let toDescription = (str: string, r: record) => {
+     str
+     |> Splitter.toBlocks
+     |> E.A.fmap((e) =>
+          switch (e) {
+          | Splitter.Text(str) => str |> Utils.ste
+          | Splitter.Agent(_) => <AgentLink agent={r.agent} />
+          }
+        )
+     |> ReasonReact.array;
+  }
+
   let description = (r: record) =>
     switch (r.body) {
-    | Generic(row) => row.description |> Utils.ste
-    | Measurable(row) => row.description |> Utils.ste
+    | Generic(row) => toDescription(row.description, r)
+    | Measurable(row) =>
+      <>
+        <div className=Styles.text>
+          {toDescription(row.description, r)}
+        </div>
+        <div className=Styles.icons>
+          <Link
+            className=Style.iconGray
+            linkType={Internal(MeasurableShow(r.channelId, row.measurableId))}>
+            <Icon icon="LINK" />
+          </Link>
+        </div>
+      </>
     | Measurement(row) =>
       <>
-        <div className=Styles.text> {row.description |> Utils.ste} </div>
         <div className=Styles.text>
-          {row.description
-           |> Splitter.markdownToBlocks
-           |> E.A.fmapi((key, e) =>
-                switch (e) {
-                | Splitter.Text(str) => "Text: " ++ str ++ ". " |> Utils.ste
-                | Splitter.Agent(str) => "Agent: " ++ str ++ ". " |> Utils.ste
-                }
-              )
-           |> ReasonReact.array}
+          {toDescription(row.description, r)}
         </div>
         <div className=Styles.icons>
           <MeasurementItems.Info.ById measurementId={row.measurementId} />
         </div>
       </>
-    | JoinedMember(row) => row.description |> Utils.ste
-    | Channel(row) => row.description |> Utils.ste
+    | JoinedMember(row) =>
+      <>
+        <div className=Styles.text> {toDescription(row.description, r)} </div>
+        <div className=Styles.icons>
+          <Link
+            className=Style.iconGray
+            linkType={Internal(ChannelShow(r.channelId))}>
+            <Icon icon="LINK" />
+          </Link>
+        </div>
+      </>
+    | Channel(row) =>
+      <>
+        <div className=Styles.text> {toDescription(row.description, r)} </div>
+        <div className=Styles.icons>
+          <Link
+            className=Style.iconGray
+            linkType={Internal(ChannelShow(r.channelId))}>
+            <Icon icon="LINK" />
+          </Link>
+        </div>
+      </>
     | Notebook(row) =>
       <>
-        <div className=Styles.text> {row.description |> Utils.ste} </div>
+        <div className=Styles.text> {toDescription(row.description, r)} </div>
         <div className=Styles.icons>
           <Link
             className=Style.iconGray

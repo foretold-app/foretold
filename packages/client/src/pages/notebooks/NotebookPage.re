@@ -57,6 +57,7 @@ module Tabs = {
             {"Edit" |> Utils.ste}
           </ForetoldComponents.Tab.Button>
         </ShowIfSameUser>
+        <Bookmarks.BookmarkNotebook notebook />
       </Div>
     </Div>;
   };

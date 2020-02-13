@@ -539,7 +539,7 @@ const schema = new graphql.GraphQLSchema({
       notebookBookmarkToggle: {
         type: graphql.GraphQLBoolean,
         args: {
-          channelId: {
+          notebookId: {
             type: graphql.GraphQLNonNull(
               types.scalars.notebookId,
             ),

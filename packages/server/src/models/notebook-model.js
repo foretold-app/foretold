@@ -64,7 +64,7 @@ class NotebookModel extends ModelPostgres {
     return `(
         SELECT CASE WHEN count(*) >= 1 THEN true ELSE false END
         FROM "NotebookBookmarks"
-        WHERE "NotebookBookmarks"."channelId" = "Channel"."id"
+        WHERE "NotebookBookmarks"."notebookId" = "Notebook"."id"
         AND "NotebookBookmarks"."agentId" = '${agentId}'
         LIMIT 1
     )`;
@@ -78,7 +78,7 @@ class NotebookModel extends ModelPostgres {
     return `(
         SELECT count(*) as "bookmarksCount"
         FROM "NotebookBookmarks"
-        WHERE "NotebookBookmarks"."channelId" = "Channel"."id"
+        WHERE "NotebookBookmarks"."notebookId" = "Notebook"."id"
     )`;
   }
 }

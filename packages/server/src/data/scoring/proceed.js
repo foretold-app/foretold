@@ -15,7 +15,7 @@ const { START_AT } = require('../../enums');
 const { FINAL_COMPARISON_MEASUREMENT } = require('../../enums');
 
 // The second level (.)
-const log = logger.module('data/agent-measurables-data');
+const log = logger.module('data/scoring/proceed');
 
 const { LAST_OBJECTIVE_MEASUREMENT } = FINAL_COMPARISON_MEASUREMENT;
 

@@ -2,35 +2,6 @@ const { ChannelsData } = require('../../data');
 const channels = require('./channels');
 
 describe('Channels Resolvers', () => {
-  it('class should be constructor', () => {
-    expect(channels.channelAgents).toBeInstanceOf(Function);
-    expect(channels.channelCreator).toBeInstanceOf(Function);
-  });
-
-  describe('channelAgents()', () => {
-    const channel = { id: '1' };
-
-    it('returns agent-channel model', () => {
-      return channels.channelAgents(channel).then((result) => {
-        expect(new ChannelsData().getAgentsByChannelId)
-          .toHaveBeenCalledWith(channel.id);
-        expect(result).toBe(true);
-      });
-    });
-  });
-
-  describe('channelCreator()', () => {
-    const channel = { id: '1' };
-
-    it('returns creator of channel', () => {
-      return channels.channelCreator(channel).then((result) => {
-        expect(new ChannelsData().getCreatorByChannelId)
-          .toHaveBeenCalledWith(channel.id);
-        expect(result).toBe(true);
-      });
-    });
-  });
-
   describe('all()', () => {
     const root = {};
     const context = { agent: { id: '1' } };

@@ -11,22 +11,6 @@ const { Data } = require('../../data/classes');
 const { structures } = require('../../data/classes');
 
 /**
- * @param {Models.Channel} channel
- * @returns {Promise<Model[]>}
- */
-async function channelAgents(channel) {
-  return new ChannelsData().getAgentsByChannelId(channel.id);
-}
-
-/**
- * @param {Models.Channel} channel
- * @returns {Promise<Model>}
- */
-async function channelCreator(channel) {
-  return new ChannelsData().getCreatorByChannelId(channel.id);
-}
-
-/**
  * @param {object | null} root
  * @param {object} args
  * @param {number} args.offset
@@ -130,6 +114,4 @@ module.exports = {
   one,
   create,
   update,
-  channelAgents,
-  channelCreator,
 };

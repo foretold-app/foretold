@@ -1,5 +1,3 @@
-const _ = require('lodash');
-
 const { DataBase } = require('./data-base');
 const { AgentsData } = require('./agents-data');
 
@@ -39,27 +37,6 @@ class ChannelsData extends DataBase {
       return Promise.reject(new Error('Channel exists.'));
     }
     return super.createOne(data);
-  }
-
-  /**
-   * @public
-   * @param {Models.ChannelID} channelId
-   * @return {Promise<Model[]>}
-   */
-  async getAgentsByChannelId(channelId) {
-    return this.model.getAgentsByChannelId(channelId);
-  }
-
-  /**
-   * @public
-   * @param {Models.ChannelID} channelId
-   * @return {Promise<Model>}
-   */
-  async getCreatorByChannelId(channelId) {
-    const channel = await this.getOne({ id: channelId });
-    const creatorId = _.get(channel, 'creatorId', null);
-    if (!creatorId) return null;
-    return this.agents.getOne({ id: creatorId });
   }
 }
 

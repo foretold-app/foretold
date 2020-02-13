@@ -62,8 +62,8 @@ class AgentMeasurablesData extends DataBase {
    * @returns {Promise<*>}
    */
   async _getTimeScoringData(agentId, measurableId) {
-    const response = await this.model.query1(agentId, measurableId);
-    return response[0];
+    const response = await this.model.scoringQuery(agentId, measurableId);
+    return _.head(response);
   }
 }
 

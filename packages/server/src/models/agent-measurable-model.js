@@ -21,11 +21,11 @@ class AgentMeasurableModel extends ModelPostgres {
   }
 
   /**
-   * @param agentId
-   * @param measurableId
+   * @param {Models.AgentID} agentId
+   * @param {Models.MeasurableID} measurableId
    * @returns {Promise<*>}
    */
-  async query1(agentId, measurableId) {
+  async scoringQuery(agentId, measurableId) {
     return this.sequelize.query(`
       SELECT (SELECT row_to_json("d")
               FROM (
@@ -46,7 +46,7 @@ class AgentMeasurableModel extends ModelPostgres {
                        FROM "Measurements"
                        WHERE "measurableId" = "Measurables"."id"
                          AND "competitorType" = 'COMPETITIVE'
-                         AND "agentId" = '${agentId}'
+                         AND "agentId" = :agentId
                    ) as "d") as "agentPredictions",
              (SELECT row_to_json("d")
               FROM (
@@ -57,8 +57,11 @@ class AgentMeasurableModel extends ModelPostgres {
                        LIMIT 1
                    ) "d")    as "recentResult"
       FROM "Measurables"
-      WHERE "id" = '${measurableId}'
-    `, { type: this.sequelize.QueryTypes.SELECT });
+      WHERE "id" = :measurableId
+    `, {
+      replacements: { measurableId, agentId },
+      type: this.sequelize.QueryTypes.SELECT,
+    });
   }
 }
 

@@ -21,11 +21,11 @@ class AgentChannelModel extends ModelPostgres {
   }
 
   /**
-   * @param agentId
-   * @param channelId
+   * @param {Models.AgentID} agentId
+   * @param {Models.ChannelID} channelId
    * @returns {Promise<*>}
    */
-  async query2(agentId, channelId) {
+  async scoringQuery(agentId, channelId) {
     return this.sequelize.query(`
       SELECT (SELECT row_to_json("d")
               FROM (
@@ -46,7 +46,7 @@ class AgentChannelModel extends ModelPostgres {
                        FROM "Measurements"
                        WHERE "measurableId" = "Measurables"."id"
                          AND "competitorType" = 'COMPETITIVE'
-                         AND "agentId" = '${agentId}'
+                         AND "agentId" = :agentId
                    ) as "d") as "agentPredictions",
 
              (SELECT row_to_json("d")
@@ -58,8 +58,11 @@ class AgentChannelModel extends ModelPostgres {
                        LIMIT 1
                    ) "d")    as "recentResult"
       FROM "Measurables"
-      WHERE "channelId" = '${channelId}'
-    `, { type: this.sequelize.QueryTypes.SELECT });
+      WHERE "channelId" = :channelId
+    `, {
+      replacements: { channelId, agentId },
+      type: this.sequelize.QueryTypes.SELECT,
+    });
   }
 }
 

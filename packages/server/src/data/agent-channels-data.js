@@ -33,15 +33,12 @@ class AgentChannelsData extends DataBase {
   }
 
   /**
-   * Do not make any optimization here, it is early for this.
-   * For each optimization we need to do a researching of the performance.
    * @param {Models.AgentID} agentId
    * @param {Models.ChannelID} channelId
    * @returns {Promise<number>}
    */
   async primaryPointScore(agentId, channelId) {
-    // return this.runWorker({ agentId, channelId });
-    return this.primaryPointScore2(agentId, channelId);
+    return this._primaryPointScore(agentId, channelId);
   }
 
   /**
@@ -51,7 +48,7 @@ class AgentChannelsData extends DataBase {
    * @param {Models.ChannelID} channelId
    * @returns {Promise<number>}
    */
-  async primaryPointScore2(agentId, channelId) {
+  async _primaryPointScore(agentId, channelId) {
     const measurables = await this.model.query2(agentId, channelId);
 
     const primaryPointScore$ = measurables.map((item) => {
@@ -67,23 +64,6 @@ class AgentChannelsData extends DataBase {
     return sum;
   }
 
-  /**
-   * @param workerData
-   * @returns {Promise<unknown>}
-   */
-  async runWorker(workerData) {
-    const file = path.resolve(__dirname, './scoring/worker.js');
-    return new Promise((resolve, reject) => {
-      const worker = new Worker(file, { workerData });
-      worker.on('message', resolve);
-      worker.on('error', reject);
-      worker.on('exit', (code) => {
-        if (code !== 0) {
-          reject(new Error(`Worker stopped with exit code ${code}`));
-        }
-      });
-    });
-  }
 }
 
 module.exports = {

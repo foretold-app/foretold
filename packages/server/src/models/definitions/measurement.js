@@ -66,6 +66,7 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   /**
+   * @todo: To rework (to remove).
    * @param {object} value
    */
   function setMeasurementValue(value) {
@@ -93,6 +94,7 @@ module.exports = (sequelize, DataTypes) => {
   }
 
   /**
+   * @todo: To rework (to remove).
    * @return {{}|*}
    */
   function getMeasurementValue() {

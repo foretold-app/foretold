@@ -20,7 +20,7 @@ module.exports = {
         notebookId: {
           type: Sequelize.UUID,
           references: {
-            model: 'Channels',
+            model: 'Notebooks',
             key: 'id',
           },
           allowNull: false,

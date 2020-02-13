@@ -28,6 +28,7 @@ function init(db) {
   const invitation = db.sequelize.import('./invitation');
   const mutex = db.sequelize.import('./mutex');
   const notebook = db.sequelize.import('./notebook');
+  const notebookBookmark = db.sequelize.import('./notebook-bookmark');
   const notification = db.sequelize.import('./notification');
   const notificationStatus = db.sequelize.import('./notification-status');
   const preference = db.sequelize.import('./preference');
@@ -51,6 +52,7 @@ function init(db) {
   db.Measurement = measurement;
   db.Mutex = mutex;
   db.Notebook = notebook;
+  db.NotebookBookmark = notebookBookmark;
   db.Notification = notification;
   db.NotificationStatus = notificationStatus;
   db.Preference = preference;
@@ -65,7 +67,7 @@ function init(db) {
     'Series', 'User', 'Token', 'Preference',
     'NotificationStatus', 'FeedItem', 'Measurement',
     'AgentMeasurable', 'AgentChannel', 'Invitation', 'Mutex',
-    'Notebook', 'ChannelAgent', 'Vote', 'ChannelBookmark',
+    'Notebook', 'NotebookBookmark', 'ChannelAgent', 'Vote', 'ChannelBookmark',
   ];
 
   // Associate All Models

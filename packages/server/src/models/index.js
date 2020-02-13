@@ -1,9 +1,9 @@
 const { AgentChannelModel } = require('./agent-channel-model');
 const { AgentMeasurableModel } = require('./agent-measurable-model');
 const { AgentModel } = require('./agent-model');
-const { ChannelBookmarkModel } = require('./channel-bookmark-model');
 const { BotModel } = require('./bot-model');
 const { ChannelAgentModel } = require('./channel-agent-model');
+const { ChannelBookmarkModel } = require('./channel-bookmark-model');
 const { ChannelMembershipModel } = require('./channel-membership-model');
 const { ChannelModel } = require('./channel-model');
 const { FeedItemModel } = require('./feed-item-model');
@@ -13,6 +13,7 @@ const { MeasurableModel } = require('./measurable-model');
 const { MeasurementModel } = require('./measurement-model');
 const { Model } = require('./model');
 const { MutexModel } = require('./mutex-model');
+const { NotebookBookmarkModel } = require('./notebook-bookmark-model');
 const { NotebookModel } = require('./notebook-model');
 const { NotificationModel } = require('./notification-model');
 const { NotificationStatusModel } = require('./notification-status-model');
@@ -39,6 +40,7 @@ module.exports = {
   MeasurementModel,
   Model,
   MutexModel,
+  NotebookBookmarkModel,
   NotebookModel,
   NotificationModel,
   NotificationStatusModel,

@@ -401,6 +401,7 @@ export namespace Layers {
       measurementId?: Models.MeasurementID;
       seriesId?: Models.SeriesID;
       channelId?: Models.ChannelID;
+      notebookId?: Models.NotebookID;
 
       auth0Id?: string;
       name?: string;
@@ -546,6 +547,7 @@ export namespace Layers {
       measurementId?: Models.MeasurementID;
       seriesId?: Models.SeriesID;
       channelId?: Models.ChannelID;
+      notebookId?: Models.NotebookID;
 
       auth0Id?: string;
       name?: string;

@@ -30,6 +30,18 @@ module Columns = {
       (),
     );
 
+  let bookmarksCount =
+    Table.Column.make(
+      ~name="Bookmark Count" |> Utils.ste,
+      ~render=
+        (notebook: record) =>
+          notebook.bookmarksCount
+          |> E.O.fmap(string_of_int)
+          |> E.O.default("")
+          |> Utils.ste,
+      (),
+    );
+
   let time =
     Table.Column.make(
       ~name="Last Updated" |> Utils.ste,
@@ -44,8 +56,8 @@ module Columns = {
       (),
     );
 
-  let all = [|name, channel, owner, time|];
-  let short = [|name, owner, time|];
+  let all = [|name, channel, owner, bookmarksCount, time|];
+  let short = [|name, owner, bookmarksCount, time|];
 };
 
 [@react.component]

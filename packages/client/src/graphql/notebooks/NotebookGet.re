@@ -42,6 +42,11 @@ module Query = [%graphql
                  }
                }
              }
+             permissions {
+               mutations {
+                 allow
+               }
+             }
            }
       }
     |}

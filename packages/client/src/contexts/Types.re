@@ -59,6 +59,8 @@ type permission = [
   | `MEASUREMENT_VOTE
   | `CHANNEL_BOOKMARK_TOGGLE
   | `NOTEBOOK_BOOKMARK_TOGGLE
+  | `NOTEBOOK_DELETE
+  | `NOTEBOOK_UPDATE
 ];
 
 type marketType = [ | `MARKET | `NON_MARKET];
@@ -317,4 +319,5 @@ and notebook = {
   channel,
   isBookmarked: option(bool),
   bookmarksCount: option(int),
+  permissions: option(permissions),
 };

@@ -1377,49 +1377,19 @@
           "interfaces": null,
           "enumValues": [
             {
-              "name": "MEASUREMENT_CREATE",
+              "name": "BOT_CREATE",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "MEASURABLE_CREATE",
+              "name": "BOT_UPDATE",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "SERIES_CREATE",
-              "description": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "MEASURABLE_ARCHIVE",
-              "description": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "MEASURABLE_UNARCHIVE",
-              "description": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "MEASURABLE_UPDATE",
-              "description": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "USER_UPDATE",
-              "description": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "CHANNEL_UPDATE",
+              "name": "CHANNEL_BOOKMARK_TOGGLE",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
@@ -1449,25 +1419,7 @@
               "deprecationReason": null
             },
             {
-              "name": "LEAVE_CHANNEL",
-              "description": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "JOIN_CHANNEL",
-              "description": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "BOT_CREATE",
-              "description": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "BOT_UPDATE",
+              "name": "CHANNEL_UPDATE",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
@@ -1479,7 +1431,79 @@
               "deprecationReason": null
             },
             {
+              "name": "INVITATION_CREATE",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "JOIN_CHANNEL",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "LEAVE_CHANNEL",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "MEASURABLE_ARCHIVE",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "MEASURABLE_CREATE",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "MEASURABLE_UNARCHIVE",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "MEASURABLE_UPDATE",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "MEASUREMENT_CREATE",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "MEASUREMENT_VOTE",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "NOTEBOOK_BOOKMARK_TOGGLE",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "NOTEBOOK_DELETE",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "PREFERENCE_UPDATE",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "SERIES_CREATE",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
@@ -1497,25 +1521,13 @@
               "deprecationReason": null
             },
             {
-              "name": "INVITATION_CREATE",
+              "name": "USER_UPDATE",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "MEASUREMENT_VOTE",
-              "description": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "CHANNEL_BOOKMARK_TOGGLE",
-              "description": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "NOTEBOOK_BOOKMARK_TOGGLE",
+              "name": "NOTEBOOK_UPDATE",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
@@ -6065,6 +6077,22 @@
                 "ofType": {
                   "kind": "SCALAR",
                   "name": "Int",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "permissions",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Permissions",
                   "ofType": null
                 }
               },

@@ -57,7 +57,13 @@ module Tabs = {
             {"Edit" |> Utils.ste}
           </ForetoldComponents.Tab.Button>
         </ShowIfSameUser>
-        <Bookmarks.BookmarkNotebook notebook />
+        {<Bookmarks.BookmarkNotebook notebook />
+         |> E.React2.showIf(
+              Primary.Permissions.can(
+                `NOTEBOOK_BOOKMARK_TOGGLE,
+                notebook.permissions,
+              ),
+            )}
       </Div>
     </Div>;
   };

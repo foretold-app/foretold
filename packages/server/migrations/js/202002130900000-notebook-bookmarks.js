@@ -38,16 +38,16 @@ module.exports = {
       });
 
       await queryInterface.addIndex('NotebookBookmarks', ['notebookId'], {
-        name: 'ChannelBookmarks_channelId',
+        name: 'NotebookBookmarks_notebookId',
       });
       await queryInterface.addIndex('NotebookBookmarks', ['agentId'], {
-        name: 'ChannelBookmarks_agentId',
+        name: 'NotebookBookmarks_agentId',
       });
       await queryInterface.addIndex('NotebookBookmarks', ['createdAt'], {
-        name: 'ChannelBookmarks_createdAt',
+        name: 'NotebookBookmarks_createdAt',
       });
       await queryInterface.addIndex('NotebookBookmarks', ['updatedAt'], {
-        name: 'ChannelBookmarks_updatedAt',
+        name: 'NotebookBookmarks_updatedAt',
       });
 
       // Unique Indexes
@@ -55,7 +55,7 @@ module.exports = {
         'agentId',
         'notebookId',
       ], {
-        name: 'ChannelBookmarks_agentId_channelId',
+        name: 'NotebookBookmarks_agentId_notebookId',
         unique: true,
       });
 

@@ -1,14 +1,13 @@
 const _ = require('lodash');
+const { Worker } = require('worker_threads');
+const path = require('path');
 
 const { DataBase } = require('./data-base');
 const { AgentMeasurablesData } = require('./agent-measurables-data');
 const { MeasurablesData } = require('./measurables-data');
 
-const { Filter } = require('./classes');
-const { Pagination } = require('./classes');
-const { Options } = require('./classes');
-
 const { AgentChannelModel } = require('../models');
+const { Proceed } = require('./scoring/proceed');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
@@ -41,15 +40,25 @@ class AgentChannelsData extends DataBase {
    * @returns {Promise<number>}
    */
   async primaryPointScore(agentId, channelId) {
+    // return this.runWorker({ agentId, channelId });
+    return this.primaryPointScore2(agentId, channelId);
+  }
+
+  /**
+   * Do not make any optimization here, it is early for this.
+   * For each optimization we need to do a researching of the performance.
+   * @param {Models.AgentID} agentId
+   * @param {Models.ChannelID} channelId
+   * @returns {Promise<number>}
+   */
+  async primaryPointScore2(agentId, channelId) {
     const measurables = await this.model.query2(agentId, channelId);
 
     const primaryPointScore$ = measurables.map((item) => {
-      return this.agentMeasurables.primaryPointScore2(item);
+      return new Proceed().primaryPointScore2(item);
     });
 
-    const primaryPointScores = await Promise.all(primaryPointScore$);
-
-    const sum = _.chain(primaryPointScores)
+    const sum = _.chain(primaryPointScore$)
       .remove(_.isObject)
       .map((r) => r.score)
       .sum()
@@ -59,14 +68,21 @@ class AgentChannelsData extends DataBase {
   }
 
   /**
-   * @param {Models.ChannelID} channelId
-   * @returns {Promise<*>}
+   * @param workerData
+   * @returns {Promise<unknown>}
    */
-  async _getMeasurables(channelId) {
-    const filter = new Filter({ channelId });
-    const pagination = new Pagination();
-    const options = new Options({ raw: true });
-    return this.measurables.getAll(filter, pagination, options);
+  async runWorker(workerData) {
+    const file = path.resolve(__dirname, './scoring/worker.js');
+    return new Promise((resolve, reject) => {
+      const worker = new Worker(file, { workerData });
+      worker.on('message', resolve);
+      worker.on('error', reject);
+      worker.on('exit', (code) => {
+        if (code !== 0) {
+          reject(new Error(`Worker stopped with exit code ${code}`));
+        }
+      });
+    });
   }
 }
 

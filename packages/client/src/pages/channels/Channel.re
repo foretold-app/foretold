@@ -53,7 +53,7 @@ let make =
               `CHANNEL_BOOKMARK_TOGGLE,
               channel.permissions,
             ),
-            <BookmarkChannel channel />,
+            <Bookmarks.BookmarkChannel channel />,
           );
       };
 

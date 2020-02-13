@@ -1008,6 +1008,8 @@ module Notebook = {
         ~channelId: Js.Json.t,
         ~createdAt: Js.Json.t,
         ~updatedAt: Js.Json.t,
+        ~isBookmarked: option(bool),
+        ~bookmarksCount: int,
         ~owner: Js.t('a),
         ~channel: Js.t('b),
         (),
@@ -1022,6 +1024,8 @@ module Notebook = {
     updatedAt: toUpdatedAt(updatedAt),
     owner: AgentType.toAgent(owner),
     channel: Channel.toChannel(channel),
+    isBookmarked,
+    bookmarksCount: Some(bookmarksCount),
   };
 
   let convertJsObject = notebook => {
@@ -1035,6 +1039,8 @@ module Notebook = {
       ~updatedAt=notebook##updatedAt,
       ~owner=notebook##owner,
       ~channel=notebook##channel,
+      ~isBookmarked=notebook##isBookmarked,
+      ~bookmarksCount=notebook##bookmarksCount,
       (),
     );
   };

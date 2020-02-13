@@ -58,6 +58,7 @@ type permission = [
   | `UNSUBSCRIBE
   | `MEASUREMENT_VOTE
   | `CHANNEL_BOOKMARK_TOGGLE
+  | `NOTEBOOK_BOOKMARK_TOGGLE
 ];
 
 type marketType = [ | `MARKET | `NON_MARKET];
@@ -314,4 +315,6 @@ and notebook = {
   updatedAt: option(MomentRe.Moment.t),
   owner: agent,
   channel,
+  isBookmarked: option(bool),
+  bookmarksCount: option(int),
 };

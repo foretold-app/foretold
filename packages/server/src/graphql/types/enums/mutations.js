@@ -26,6 +26,7 @@ const mutations = new graphql.GraphQLEnumType({
     INVITATION_CREATE: { value: 'INVITATION_CREATE' },
     MEASUREMENT_VOTE: { value: 'MEASUREMENT_VOTE' },
     CHANNEL_BOOKMARK_TOGGLE: { value: 'CHANNEL_BOOKMARK_TOGGLE' },
+    NOTEBOOK_BOOKMARK_TOGGLE: { value: 'NOTEBOOK_BOOKMARK_TOGGLE' },
   },
 });
 

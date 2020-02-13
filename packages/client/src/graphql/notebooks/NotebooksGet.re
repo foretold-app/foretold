@@ -32,6 +32,8 @@ module Query = [%graphql
               channelId
               createdAt
               updatedAt
+              isBookmarked
+              bookmarksCount
               channel {
                 id
                 name @bsDecoder(fn: "E.J.toString")

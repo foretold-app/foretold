@@ -8,7 +8,15 @@ let toChannel = m => {
   );
 };
 
+let toAgent = agent => {
+  let agentType = Primary.AgentType.getAgentType(~agent, ());
+
+  Primary.Agent.make(~id=agent##id, ~agentType, ~name=agent##name, ());
+};
+
 let toFeedItem = m => {
+  let agent = m##agent |> toAgent;
+
   Primary.FeedItem.make(
     ~id=m##id,
     ~channelId=m##channelId,
@@ -16,6 +24,7 @@ let toFeedItem = m => {
     ~channel=toChannel(m##channel),
     ~createdAt=Some(m##createdAt),
     ~updatedAt=Some(m##updatedAt),
+    ~agent,
     (),
   );
 };
@@ -84,6 +93,31 @@ module Query = [%graphql
                 name @bsDecoder(fn: "E.J.toString")
                 isArchived
                 isPublic
+              }
+              agent {
+                id
+                name
+                user {
+                  id
+                  name
+                  description
+                  agentId
+                  picture
+                }
+                bot {
+                  id
+                  name
+                  description
+                  picture
+                  competitorType
+                  user {
+                      id
+                      name
+                      description
+                      picture
+                      agentId
+                  }
+                }
               }
               createdAt @bsDecoder(fn: "E.J.toMoment")
               updatedAt @bsDecoder(fn: "E.J.toMoment")

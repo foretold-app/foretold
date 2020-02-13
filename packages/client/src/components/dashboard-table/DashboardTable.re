@@ -133,6 +133,7 @@ module Json = {
       Json.Decode.(optional(field("data", array(rowDecode(columns)))));
 
     let columns = columns(j);
+
     switch (columns) {
     | Belt.Result.Ok(columns) =>
       switch (rowsDecode(columns, j)) {

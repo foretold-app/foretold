@@ -273,6 +273,7 @@ and feedItem = {
   channel,
   createdAt: option(MomentRe.Moment.t),
   updatedAt: option(MomentRe.Moment.t),
+  agent,
 }
 
 and pageInfo = {

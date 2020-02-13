@@ -6,6 +6,7 @@ const resolvers = require('../resolvers');
 
 const commonTypes = require('./common');
 const channelsTypes = require('./channels');
+const agents = require('./agents');
 
 const feedItemBodyGeneric = new graphql.GraphQLObjectType({
   name: 'FeedItemBodyGeneric',
@@ -76,9 +77,15 @@ const feedItem = new graphql.GraphQLObjectType({
   fields: () => ({
     id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    agentId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     body: { type: graphql.GraphQLNonNull(feedItemBody) },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
+
+    agent: {
+      type: graphql.GraphQLNonNull(agents.agent),
+      resolve: resolvers.agents.one,
+    },
 
     channel: {
       type: graphql.GraphQLNonNull(channelsTypes.channel),

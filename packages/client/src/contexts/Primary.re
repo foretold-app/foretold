@@ -685,7 +685,16 @@ module FeedItem = {
   type t = Types.feedItem;
 
   let make =
-      (~id, ~channelId, ~body, ~channel, ~createdAt=None, ~updatedAt=None, ())
+      (
+        ~id,
+        ~channelId,
+        ~body,
+        ~channel,
+        ~createdAt=None,
+        ~updatedAt=None,
+        ~agent,
+        (),
+      )
       : t => {
     id,
     channelId,
@@ -693,6 +702,7 @@ module FeedItem = {
     channel,
     createdAt,
     updatedAt,
+    agent,
   };
 };
 

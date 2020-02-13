@@ -1,6 +1,4 @@
 const _ = require('lodash');
-const { Worker } = require('worker_threads');
-const path = require('path');
 
 const { DataBase } = require('./data-base');
 const { AgentMeasurablesData } = require('./agent-measurables-data');

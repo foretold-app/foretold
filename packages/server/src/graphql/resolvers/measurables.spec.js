@@ -29,6 +29,7 @@ describe('Measurables Resolvers', () => {
             states: ['states1'],
             withinJoinedChannels: null,
             measurableIds: null,
+            measuredByAgentId: null,
           },
           {
             after: 2,
@@ -40,7 +41,6 @@ describe('Measurables Resolvers', () => {
             agentId: 'agentId2',
             attributes: true,
             isAdmin: null,
-            measuredByAgentId: null,
             raw: true,
           },
         );

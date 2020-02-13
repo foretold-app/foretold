@@ -145,6 +145,7 @@ const rulesInvitations = () => ({
 const rulesNotebooks = () => ({
   Query: {},
   Mutation: {
+    channelBookmarkToggle: currentAgentIsAuthenticated,
     notebookDelete: and(
       currentAgentIsAuthenticated,
       notebookIsOwnedByCurrentAgent,

@@ -88,7 +88,8 @@ module.exports = [
     type: TEMPLATE_TYPE.FEED_ITEM,
     envelopeTemplate: {
       item: '{{{ measurable.name }}}',
-      description: '<split><agent /></split> resolved the question with an answer',
+      description: '<split><agent /></split> resolved the question with an'
+        + ' answer',
       measurableId: '{{{ measurable.id }}}',
       measurementId: '{{{ measurement.id }}}',
     },
@@ -98,7 +99,8 @@ module.exports = [
     type: TEMPLATE_TYPE.FEED_ITEM,
     envelopeTemplate: {
       item: '{{{ measurable.name }}}',
-      description: '<split><agent /></split> has marked this question as unresolved',
+      description: '<split><agent /></split> has marked this question as '
+        + 'unresolved',
       measurableId: '{{{ measurable.id }}}',
       measurementId: '{{{ measurement.id }}}',
     },

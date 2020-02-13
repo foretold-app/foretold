@@ -54,14 +54,12 @@ async function all(root, args, context, _info) {
     seriesId: _.get(args, 'seriesId', null),
     states: _.get(args, 'states', null),
     isArchived: _.get(args, 'isArchived', null),
+    measuredByAgentId: _.get(args, 'measuredByAgentId', null),
   });
   const pagination = new Pagination(args);
-
-  // @todo: move to filter "measuredByAgentId"
   const options = new Options({
     isAdmin: _.get(context, 'agent.isAdmin', null),
     agentId: currentAgentId,
-    measuredByAgentId: _.get(args, 'measuredByAgentId', null),
     attributes: true,
     raw: true,
   });

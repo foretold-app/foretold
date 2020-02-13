@@ -175,7 +175,7 @@ class ModelPostgres extends Model {
 
     this.applyRestrictions(where, restrictions);
     this.applyFilter(where, filter);
-    this.applyRestrictionsIncluding(include, restrictions);
+    this.applyFilterIncluding(include, filter);
 
     // Block 2
     const { limit, offset } = pagination.getPagination();
@@ -436,19 +436,19 @@ class ModelPostgres extends Model {
    * @protected
    * @todo: Try to fix it and do not use "this.models.Measurement".
    * @param {object} [include]
-   * @param {Layers.AbstractModelsLayer.restrictions} [restrictions]
+   * @param {Layers.AbstractModelsLayer.filter} [filter]
    * @return {*}
    */
-  applyRestrictionsIncluding(include = [], restrictions = new Restrictions()) {
+  applyFilterIncluding(include = [], filter = new Filter()) {
     if (!include) include = [];
 
-    // @todo: It is a filter, b͟u͟t͟ ͟n͟o͟t͟ ͟r͟e͟s͟t͟r͟i͟c͟t͟i͟o͟n͟
+    // @todo: To rework.
     // @todo: Use object structures.
-    if (!!restrictions.measuredByAgentId) {
+    if (!!filter.measuredByAgentId) {
       include.push({
         model: this.models.Measurement,
         as: 'Measurements',
-        where: { agentId: restrictions.measuredByAgentId },
+        where: { agentId: filter.measuredByAgentId },
       });
     }
 

@@ -22,7 +22,6 @@ const list = {
   channelIdAsId: (v) => _.isBoolean(v) || utils.none(v),
   isAdmin: (v) => _.isBoolean(v) || utils.none(v),
   measurableId: (v) => _.isBoolean(v) || utils.none(v),
-  measuredByAgentId: (v) => _.isString(v) || utils.none(v),
   userId: (v) => _.isString(v) || utils.none(v),
 
   withinJoinedChannels: (v) => _.isObject(v) || utils.none(v),

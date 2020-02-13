@@ -21,6 +21,8 @@ const notebook = new graphql.GraphQLObjectType({
     // @entity: creator-link
     ownerId: { type: graphql.GraphQLNonNull(scalars.agentId) },
     channelId: { type: graphql.GraphQLNonNull(scalars.channelId) },
+    isBookmarked: { type: graphql.GraphQLBoolean },
+    bookmarksCount: { type: graphql.GraphQLNonNull(graphql.GraphQLInt) },
 
     owner: {
       type: graphql.GraphQLNonNull(agentsTypes.agent),

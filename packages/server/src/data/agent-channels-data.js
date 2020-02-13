@@ -4,11 +4,8 @@ const { DataBase } = require('./data-base');
 const { AgentMeasurablesData } = require('./agent-measurables-data');
 const { MeasurablesData } = require('./measurables-data');
 
-const { Filter } = require('./classes');
-const { Pagination } = require('./classes');
-const { Options } = require('./classes');
-
 const { AgentChannelModel } = require('../models');
+const { Proceed } = require('./scoring/proceed');
 
 /**
  * @implements {Layers.DataSourceLayer.DataSource}
@@ -34,22 +31,29 @@ class AgentChannelsData extends DataBase {
   }
 
   /**
+   * @param {Models.AgentID} agentId
+   * @param {Models.ChannelID} channelId
+   * @returns {Promise<number>}
+   */
+  async primaryPointScore(agentId, channelId) {
+    return this._primaryPointScore(agentId, channelId);
+  }
+
+  /**
    * Do not make any optimization here, it is early for this.
    * For each optimization we need to do a researching of the performance.
    * @param {Models.AgentID} agentId
    * @param {Models.ChannelID} channelId
    * @returns {Promise<number>}
    */
-  async primaryPointScore(agentId, channelId) {
-    const measurables = await this._getMeasurables(channelId);
+  async _primaryPointScore(agentId, channelId) {
+    const measurables = await this.model.scoringQuery(agentId, channelId);
 
-    const primaryPointScore$ = measurables.map((measurable) => {
-      return this.agentMeasurables.primaryPointScore(agentId, measurable.id);
+    const primaryPointScore$ = measurables.map((item) => {
+      return new Proceed().primaryPointScore2(item);
     });
 
-    const primaryPointScores = await Promise.all(primaryPointScore$);
-
-    const sum = _.chain(primaryPointScores)
+    const sum = _.chain(primaryPointScore$)
       .remove(_.isObject)
       .map((r) => r.score)
       .sum()
@@ -58,16 +62,6 @@ class AgentChannelsData extends DataBase {
     return sum;
   }
 
-  /**
-   * @param {Models.ChannelID} channelId
-   * @returns {Promise<*>}
-   */
-  async _getMeasurables(channelId) {
-    const filter = new Filter({ channelId });
-    const pagination = new Pagination();
-    const options = new Options({ raw: true });
-    return this.measurables.getAll(filter, pagination, options);
-  }
 }
 
 module.exports = {

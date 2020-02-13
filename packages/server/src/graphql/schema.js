@@ -536,6 +536,18 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.channelBookmarks.toggle,
       },
 
+      notebookBookmarkToggle: {
+        type: graphql.GraphQLBoolean,
+        args: {
+          notebookId: {
+            type: graphql.GraphQLNonNull(
+              types.scalars.notebookId,
+            ),
+          },
+        },
+        resolve: resolvers.notebookBookmarks.toggle,
+      },
+
       preferenceUpdate: {
         type: types.preferences.preference,
         args: {

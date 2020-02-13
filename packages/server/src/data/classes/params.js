@@ -32,6 +32,7 @@ const list = {
   measurableIds: (v) => _.isArray(v) || utils.none(v),
   measurementId: (v) => _.isString(v) || utils.none(v),
   name: (v) => _.isString(v) || utils.none(v),
+  notebookId: (v) => _.isString(v) || utils.none(v),
   seriesId: (v) => _.isString(v) || utils.none(v),
 };
 

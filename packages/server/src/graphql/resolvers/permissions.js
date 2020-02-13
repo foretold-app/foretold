@@ -70,11 +70,25 @@ async function measurementsPermissions(root, args, context, info) {
   );
 }
 
+/**
+ * @param {object | null} root
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<*>}
+ */
+async function notebooksPermissions(root, args, context, info) {
+  return authorizers.availableNotebooksPermissions(
+    root, args, context, info,
+  );
+}
+
 module.exports = {
   all,
   botsPermissions,
+  channelMembershipsPermissions,
   channelsPermissions,
   measurablesPermissions,
-  channelMembershipsPermissions,
   measurementsPermissions,
+  notebooksPermissions,
 };

@@ -1,6 +1,6 @@
 const bookmarks = require('./channel-bookmarks');
 
-describe('Bookmarks Resolvers', () => {
+describe('Channel Bookmarks Resolvers', () => {
   it('class should be object', () => {
     expect(bookmarks).toBeInstanceOf(Object);
   });

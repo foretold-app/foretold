@@ -80,7 +80,15 @@ async function all(_root, args, context, _info) {
 
   const filter = new Filter({ ownerId, channelId, withinJoinedChannels });
   const pagination = new Pagination(args);
-  const options = new Options({ isAdmin, currentAgentId, raw: true });
+  const options = new Options({
+    isAdmin,
+    currentAgentId,
+    raw: true,
+    attributes: {
+      bookmarksCount: true,
+      isBookmarked: { agentId: currentAgentId },
+    },
+  });
 
   return new NotebooksData().getConnection(filter, pagination, options);
 }
@@ -101,7 +109,15 @@ async function one(_root, args, context, _info) {
 
   const params = new Params({ id: notebookId });
   const query = new Query();
-  const options = new Options({ isAdmin, currentAgentId, raw: true });
+  const options = new Options({
+    isAdmin,
+    currentAgentId,
+    raw: true,
+    attributes: {
+      bookmarksCount: true,
+      isBookmarked: { agentId: currentAgentId },
+    },
+  });
 
   return new NotebooksData().getOne(params, query, options);
 }
@@ -115,7 +131,8 @@ async function one(_root, args, context, _info) {
  */
 async function count(root, _args, _context, _info) {
   const channelId = _.get(root, 'id', null);
-  return new NotebooksData().getCount(new Params({ channelId }));
+  const params = new Params({ channelId });
+  return new NotebooksData().getCount(params);
 }
 
 

@@ -7,6 +7,7 @@ const scalars = require('./scalars');
 const commonTypes = require('./common');
 const agentsTypes = require('./agents');
 const channelsTypes = require('./channels');
+const permissionsTypes = require('./permissions');
 
 const notebook = new graphql.GraphQLObjectType({
   name: 'Notebook',
@@ -21,6 +22,13 @@ const notebook = new graphql.GraphQLObjectType({
     // @entity: creator-link
     ownerId: { type: graphql.GraphQLNonNull(scalars.agentId) },
     channelId: { type: graphql.GraphQLNonNull(scalars.channelId) },
+    isBookmarked: { type: graphql.GraphQLBoolean },
+    bookmarksCount: { type: graphql.GraphQLNonNull(graphql.GraphQLInt) },
+
+    permissions: {
+      type: graphql.GraphQLNonNull(permissionsTypes.permissions),
+      resolve: resolvers.permissions.notebooksPermissions,
+    },
 
     owner: {
       type: graphql.GraphQLNonNull(agentsTypes.agent),

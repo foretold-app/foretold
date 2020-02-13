@@ -145,6 +145,7 @@ const rulesInvitations = () => ({
 const rulesNotebooks = () => ({
   Query: {},
   Mutation: {
+    notebookBookmarkToggle: currentAgentIsAuthenticated,
     notebookDelete: and(
       currentAgentIsAuthenticated,
       notebookIsOwnedByCurrentAgent,
@@ -251,10 +252,11 @@ module.exports = {
   rules,
 
   rulesBots,
+  rulesChannelMemberships,
   rulesChannels,
   rulesMeasurables,
-  rulesChannelMemberships,
   rulesMeasurements,
+  rulesNotebooks,
 
   getPermissions,
 };

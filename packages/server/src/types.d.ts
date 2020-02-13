@@ -328,7 +328,6 @@ export namespace Layers {
       agentId?: Models.AgentID;
       currentAgentId?: Models.AgentID;
       isAdmin?: boolean;
-      measuredByAgentId?: Models.AgentID;
 
       attributes?: boolean | attributes;
       group?: boolean;
@@ -352,6 +351,7 @@ export namespace Layers {
       measurableIds?: Models.MeasurableID[];
       measurementId?: Models.MeasurementID;
       taggedMeasurementId?: Models.MeasurementID;
+      measuredByAgentId?: Models.AgentID;
 
       competitorType?: string;
       type?: string;
@@ -401,6 +401,7 @@ export namespace Layers {
       measurementId?: Models.MeasurementID;
       seriesId?: Models.SeriesID;
       channelId?: Models.ChannelID;
+      notebookId?: Models.NotebookID;
 
       auth0Id?: string;
       name?: string;
@@ -465,7 +466,6 @@ export namespace Layers {
       channelIdAsId?: boolean;
       isAdmin?: boolean;
       measurableId?: boolean;
-      measuredByAgentId?: Models.AgentID;
       userId?: Models.UserID;
 
       withinJoinedChannels?: withinJoinedChannels | null;
@@ -494,6 +494,7 @@ export namespace Layers {
       measurableIds?: Models.MeasurableID[];
       measurementId?: Models.MeasurementID;
       taggedMeasurementId?: Models.MeasurementID;
+      measuredByAgentId?: Models.AgentID;
 
       isArchived?: string[];
       types?: string[];
@@ -546,6 +547,7 @@ export namespace Layers {
       measurementId?: Models.MeasurementID;
       seriesId?: Models.SeriesID;
       channelId?: Models.ChannelID;
+      notebookId?: Models.NotebookID;
 
       auth0Id?: string;
       name?: string;

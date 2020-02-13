@@ -138,6 +138,9 @@ module J = {
   let fromString = Js.Json.string;
   let fromNumber = Js.Json.number;
 
+  let decodeBoolean = Js.Json.decodeBoolean;
+  let decodeInt = Js.Json.decodeNumber ||> O.fmap(r => r |> int_of_float);
+
   module O = {
     let toMoment = O.fmap(toMoment);
 

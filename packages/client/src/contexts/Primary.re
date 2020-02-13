@@ -1008,20 +1008,34 @@ module Notebook = {
         ~channelId: Js.Json.t,
         ~createdAt: Js.Json.t,
         ~updatedAt: Js.Json.t,
+        ~isBookmarked: option(bool),
+        ~bookmarksCount: int,
         ~owner: Js.t('a),
         ~channel: Js.t('b),
+        ~permissions: Js.t('c),
         (),
       )
       : t => {
-    id: toNotebookId(id),
-    name: name |> E.J.toString,
-    body: body |> E.J.toString,
-    ownerId: Agent.toAgentId(ownerId),
-    channelId: Channel.toChannelId(channelId),
-    createdAt: toCreatedAt(createdAt),
-    updatedAt: toUpdatedAt(updatedAt),
-    owner: AgentType.toAgent(owner),
-    channel: Channel.toChannel(channel),
+    let permissions' =
+      permissions##mutations##allow
+      |> E.A.O.concatSome
+      |> E.A.to_list
+      |> Permissions.make;
+
+    {
+      id: toNotebookId(id),
+      name: name |> E.J.toString,
+      body: body |> E.J.toString,
+      ownerId: Agent.toAgentId(ownerId),
+      channelId: Channel.toChannelId(channelId),
+      createdAt: toCreatedAt(createdAt),
+      updatedAt: toUpdatedAt(updatedAt),
+      owner: AgentType.toAgent(owner),
+      channel: Channel.toChannel(channel),
+      isBookmarked,
+      bookmarksCount: Some(bookmarksCount),
+      permissions: Some(permissions'),
+    };
   };
 
   let convertJsObject = notebook => {
@@ -1035,6 +1049,9 @@ module Notebook = {
       ~updatedAt=notebook##updatedAt,
       ~owner=notebook##owner,
       ~channel=notebook##channel,
+      ~isBookmarked=notebook##isBookmarked,
+      ~bookmarksCount=notebook##bookmarksCount,
+      ~permissions=notebook##permissions,
       (),
     );
   };

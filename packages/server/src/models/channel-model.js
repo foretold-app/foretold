@@ -15,24 +15,6 @@ class ChannelModel extends ModelPostgres {
   }
 
   /**
-   * @public
-   * @todo: To decline in use of "this.models".
-   * @todo: To use "applyFilter" to use "transactions" later.
-   * @param {Models.ChannelID} channelId
-   * @return {Promise<Model[]>}
-   */
-  async getAgentsByChannelId(channelId) {
-    const channel = await this.model.findOne({
-      where: { id: channelId },
-      include: [{
-        model: this.models.Agent,
-        as: 'agents',
-      }],
-    });
-    return _.get(channel, 'agents', []);
-  }
-
-  /**
    * @param {Layers.AbstractModelsLayer.options} options
    * @returns {*}
    * @protected

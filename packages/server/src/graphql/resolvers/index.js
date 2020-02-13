@@ -13,6 +13,7 @@ const invitations = require('./invitations');
 const measurables = require('./measurables');
 const measurements = require('./measurements');
 const mutexes = require('./mutexes');
+const notebookBookmarks = require('./notebook-bookmarks');
 const notebooks = require('./notebooks');
 const permissions = require('./permissions');
 const preferences = require('./preferences');
@@ -36,6 +37,7 @@ module.exports = {
   measurables,
   measurements,
   mutexes,
+  notebookBookmarks,
   notebooks,
   permissions,
   preferences,

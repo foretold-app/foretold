@@ -31,7 +31,6 @@ const list = {
   agentId: (v) => _.isString(v) || utils.none(v),
   currentAgentId: (v) => _.isString(v) || utils.none(v),
   isAdmin: (v) => _.isBoolean(v) || utils.none(v),
-  measuredByAgentId: (v) => _.isString(v) || utils.none(v),
 };
 
 Options.LIST = list;

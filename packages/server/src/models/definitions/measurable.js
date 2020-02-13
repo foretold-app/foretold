@@ -136,6 +136,7 @@ module.exports = (sequelize, DataTypes) => {
   }
 
   /**
+   * @todo: To rework (to remove).
    * @return {Promise<Models.Measurable>}
    */
   Measurable.prototype.archive = async function archive() {
@@ -143,6 +144,7 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   /**
+   * @todo: To rework (to remove).
    * @return {Promise<Models.Measurable>}
    */
   Measurable.prototype.unarchive = async function unarchive() {

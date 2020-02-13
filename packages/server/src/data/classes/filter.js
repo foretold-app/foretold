@@ -59,6 +59,7 @@ const list = {
   isNotEmailVerified: (v) => _.isBoolean(v) || utils.none(v),
   measurableId: (v) => _.isString(v) || utils.none(v),
   measurableIds: (v) => _.isArray(v) || utils.none(v),
+  measuredByAgentId: (v) => _.isString(v) || utils.none(v),
   measurementId: (v) => _.isString(v) || utils.none(v),
   minNumberOfPredictions: (v) => _.isNumber(v) || utils.none(v),
   minNumberOfQuestionsScored: (v) => _.isNumber(v) || utils.none(v),

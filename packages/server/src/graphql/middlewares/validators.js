@@ -1,5 +1,5 @@
 const { channelExistsValidation } = require('./channels');
-
+const { notebookExistsValidation } = require('./notebooks');
 const { authenticationInputValidation } = require('./authentications');
 const { competitiveMeasurementCanBeAddedToOpenMeasurable } = require(
   './measurements',
@@ -37,6 +37,11 @@ const validators = {
 
     channelBookmarkToggle: async (resolve, root, args, context, info) => {
       await channelExistsValidation(root, args, context, info);
+      return resolve(root, args, context, info);
+    },
+
+    notebookBookmarkToggle: async (resolve, root, args, context, info) => {
+      await notebookExistsValidation(root, args, context, info);
       return resolve(root, args, context, info);
     },
   },

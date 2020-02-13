@@ -2,11 +2,12 @@ const _ = require('lodash');
 const changeCase = require('change-case');
 
 const { rules } = require('./permissions');
+const { rulesBots } = require('./permissions');
 const { rulesChannelMemberships } = require('./permissions');
 const { rulesChannels } = require('./permissions');
 const { rulesMeasurables } = require('./permissions');
-const { rulesBots } = require('./permissions');
 const { rulesMeasurements } = require('./permissions');
+const { rulesNotebooks } = require('./permissions');
 
 /**
  * @param {object} rulesIn
@@ -135,6 +136,17 @@ async function availableMeasurementsPermissions(root, args, context, info) {
   return getAll(rulesMeasurements())(root, args, context, info);
 }
 
+/**
+ * @param {object | null} root
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @param {object} info
+ * @returns {Promise<*>}
+ */
+async function availableNotebooksPermissions(root, args, context, info) {
+  return getAll(rulesNotebooks())(root, args, context, info);
+}
+
 module.exports = {
   availableAll,
   availableBotsPermissions,
@@ -142,4 +154,5 @@ module.exports = {
   availableMeasurablesPermissions,
   availableChannelMembershipsPermissions,
   availableMeasurementsPermissions,
+  availableNotebooksPermissions,
 };

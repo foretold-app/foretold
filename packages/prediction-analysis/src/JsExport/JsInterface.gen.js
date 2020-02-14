@@ -7,7 +7,7 @@ const Curry = require('bs-platform/lib/js/curry.js');
 const JsInterfaceBS = require('./JsInterface.bs');
 
 const JsResult_fromResult = function (Arg1) {
-  const result = JsInterfaceBS.JsResult[0](Arg1);
+  const result = JsInterfaceBS.JsResult.fromResult(Arg1);
   return {data:result[0], error:result[1]}
 };;
 exports.JsResult_fromResult = JsResult_fromResult
@@ -18,38 +18,53 @@ exports.MarketType_marketScore = MarketType_marketScore
 const MarketType_nonMarketScore = "NonMarketScore";;
 exports.MarketType_nonMarketScore = MarketType_nonMarketScore
 
-const MeasurementValueI_make = JsInterfaceBS.MeasurementValueI[0];;
+const MeasurementValueI_make = JsInterfaceBS.MeasurementValueI.make;;
 exports.MeasurementValueI_make = MeasurementValueI_make
 
-const MeasurementValueI_differentialEntropy = JsInterfaceBS.MeasurementValueI[1];;
+const MeasurementValueI_differentialEntropy = JsInterfaceBS.MeasurementValueI.differentialEntropy;;
 exports.MeasurementValueI_differentialEntropy = MeasurementValueI_differentialEntropy
 
 const PredictionResolutionGroupI_make = function (Arg1, Arg2, Arg3) {
-  const result = Curry._3(JsInterfaceBS.PredictionResolutionGroupI[0], Arg1, (Arg2 == null ? undefined : Arg2), Arg3);
+  const result = Curry._3(JsInterfaceBS.PredictionResolutionGroupI.make, Arg1, (Arg2 == null ? undefined : Arg2), Arg3);
   return result
 };;
 exports.PredictionResolutionGroupI_make = PredictionResolutionGroupI_make
 
 const PredictionResolutionGroupI_pointScore = function (Arg1, Arg2) {
-  const result = Curry._2(JsInterfaceBS.PredictionResolutionGroupI[1], $$toRE824073253[Arg1], Arg2);
+  const result = Curry._2(JsInterfaceBS.PredictionResolutionGroupI.pointScore, $$toRE824073253[Arg1], Arg2);
   return result
 };;
 exports.PredictionResolutionGroupI_pointScore = PredictionResolutionGroupI_pointScore
 
 const PredictionResolutionOverTimeI_make = function (Arg1, Arg2, Arg3) {
-  const result = Curry._3(JsInterfaceBS.PredictionResolutionOverTimeI[2], Arg1.map(function _element(ArrayItem) { return [ArrayItem.measurement, ArrayItem.time]}), Arg2.map(function _element(ArrayItem1) { return [ArrayItem1.measurement, ArrayItem1.time]}), [Arg3.measurement, Arg3.time]);
+  const result = Curry._3(JsInterfaceBS.PredictionResolutionOverTimeI.make, Arg1.map(function _element(ArrayItem) { return [ArrayItem.measurement, ArrayItem.time]}), Arg2.map(function _element(ArrayItem1) { return [ArrayItem1.measurement, ArrayItem1.time]}), [Arg3.measurement, Arg3.time]);
   return result
 };;
 exports.PredictionResolutionOverTimeI_make = PredictionResolutionOverTimeI_make
 
 const PredictionResolutionOverTimeI_averagePointScore = function (Arg1, Arg2, Arg3) {
-  const result = Curry._3(JsInterfaceBS.PredictionResolutionOverTimeI[3], $$toRE824073253[Arg1], Arg2, Arg3);
+  const result = Curry._3(JsInterfaceBS.PredictionResolutionOverTimeI.averagePointScore, $$toRE824073253[Arg1], Arg2, Arg3);
   return result
 };;
 exports.PredictionResolutionOverTimeI_averagePointScore = PredictionResolutionOverTimeI_averagePointScore
 
 const PredictionResolutionOverTimeI_pointScoreDistribution = function (Arg1, Arg2) {
-  const result = Curry._2(JsInterfaceBS.PredictionResolutionOverTimeI[4], $$toRE824073253[Arg1], Arg2);
+  const result = Curry._2(JsInterfaceBS.PredictionResolutionOverTimeI.pointScoreDistribution, $$toRE824073253[Arg1], Arg2);
   return result
 };;
 exports.PredictionResolutionOverTimeI_pointScoreDistribution = PredictionResolutionOverTimeI_pointScoreDistribution
+
+const PredictionResolutionOverTimeI = JsInterfaceBS.PredictionResolutionOverTimeI;
+exports.PredictionResolutionOverTimeI = PredictionResolutionOverTimeI
+
+const MeasurementValueI = JsInterfaceBS.MeasurementValueI;
+exports.MeasurementValueI = MeasurementValueI
+
+const MarketType = JsInterfaceBS.MarketType;
+exports.MarketType = MarketType
+
+const PredictionResolutionGroupI = JsInterfaceBS.PredictionResolutionGroupI;
+exports.PredictionResolutionGroupI = PredictionResolutionGroupI
+
+const JsResult = JsInterfaceBS.JsResult;
+exports.JsResult = JsResult

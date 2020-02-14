@@ -3434,10 +3434,10 @@ d3-zoom@1:
     d3-selection "1"
     d3-transition "1"
 
-d3@5.9.7:
-  version "5.9.7"
-  resolved "https://registry.yarnpkg.com/d3/-/d3-5.9.7.tgz#f3835648a172b438e89ed57eb6c525bdabdcd7dc"
-  integrity sha512-jENytrmdXtGPw7HuSK2S4gxRM1eUGjKvWQkQ6ct4yK+DB8SG3VcnVrwesfnsv8rIcxMUg18TafT4Q8mOZUMP4Q==
+d3@5.15.0:
+  version "5.15.0"
+  resolved "https://registry.yarnpkg.com/d3/-/d3-5.15.0.tgz#ffd44958e6a3cb8a59a84429c45429b8bca5677a"
+  integrity sha512-C+E80SL2nLLtmykZ6klwYj5rPqB5nlfN5LdWEAVdWPppqTD8taoJi2PxLZjPeYT8FFRR2yucXq+kBlOnnvZeLg==
   dependencies:
     d3-array "1"
     d3-axis "1"
@@ -4333,10 +4333,10 @@ gauge@~2.7.3:
     strip-ansi "^3.0.1"
     wide-align "^1.1.0"
 
-gentype@3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/gentype/-/gentype-3.2.0.tgz#0409a2f99221ec9fc41f6b41b92382d00014258c"
-  integrity sha512-2uOhJSHNJJFRcvOIyA3/zKRMAEb7xVRoFiIFIDZ+onB4CdfH1le2JZn26UuqgRTtwBJQ3kkTunXnSIDHKLdZ8Q==
+gentype@3.7.1:
+  version "3.7.1"
+  resolved "https://registry.yarnpkg.com/gentype/-/gentype-3.7.1.tgz#7196d9a2dd61cda88300fbc3da5f4d3e9526d023"
+  integrity sha512-LL/M7NIiBH7509MbQmhIMHTSrqbeHPzwwvCFpY0i2KVLWz1XA3DeUAFCFm7w9pJpCtjH/XBQ/M3vQHKmULg0Qw==
 
 get-caller-file@^1.0.1:
   version "1.0.3"

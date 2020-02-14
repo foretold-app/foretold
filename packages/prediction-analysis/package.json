@@ -22,7 +22,7 @@
     "jest": "24.9.0"
   },
   "dependencies": {
-    "parcel-bundler": "1.12.3",
+    "parcel-bundler": "1.12.4",
     "babel-jest": "24.9.0",
     "@babel/core": "7.6.0",
     "@babel/preset-env": "7.6.0",
@@ -32,6 +32,6 @@
     "@foretold/cdf": "1.0.14",
     "@glennsl/bs-json": "5.0.2",
     "lodash": "4.17.15",
-    "rationale": "0.1.10"
+    "rationale": "0.2.0"
   }
 }

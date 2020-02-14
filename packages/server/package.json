@@ -44,7 +44,7 @@
     "@foretold/cdf": "1.0.14",
     "@foretold/measurement-value": "1.0.0",
     "@foretold/prediction-analysis": "0.0.7",
-    "bs-ken": "0.0.6",
+    "bs-ken": "0.0.8",
     "apollo-server": "2.9.16",
     "apollo-server-express": "2.9.16",
     "auth0": "2.21.0",

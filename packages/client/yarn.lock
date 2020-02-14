@@ -964,6 +964,13 @@
     call-me-maybe "^1.0.1"
     glob-to-regexp "^0.3.0"
 
+"@ncthbrt/re-secure-random-string@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@ncthbrt/re-secure-random-string/-/re-secure-random-string-2.0.0.tgz#ff2b5a875dfe672d39039e6df703527af7e02551"
+  integrity sha512-6vZoC161ByWX4q0vYiaC/QZa4F3a8DGPhwoNss9/+C7xgLyKvI0ojEBvP8PN8c+8V2VOieVPAvChE2WS7TvRwQ==
+  dependencies:
+    secure-random-string "^1.1.0"
+
 "@nodelib/fs.stat@^1.1.2":
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.stat/-/fs.stat-1.1.3.tgz#2b5a3ab3f918cca48a8c754c08168e3f03eba61b"
@@ -1904,6 +1911,21 @@ bs-css@11.0.0:
   integrity sha512-bpSwj1VvmWNMoJ5qnsHMQC+Mj0zjL9iwcOhl5ipP7Hfr7v+ZyKqjSMaMK+L1EdukuCp0rJmRD2I/MbS4BHnMmQ==
   dependencies:
     emotion "^10.0.7"
+
+bs-ken@0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/bs-ken/-/bs-ken-0.0.8.tgz#d10842ab176fb643a451da6db97536a948c4d92b"
+  integrity sha512-BWX0w3CA6Nas5neR+4dFPCI2463FWfOgwcrscOWHORpjL1qpcHjRFncJOoGDh4DslRdGKl0eMDbe8GMmPO2+9A==
+  dependencies:
+    "@glennsl/bs-jest" "0.4.9"
+    "@glennsl/bs-json" "5.0.2"
+    "@ncthbrt/re-secure-random-string" "2.0.0"
+    bs-platform "7.0.1"
+    gentype "3.7.1"
+    lodash "4.17.15"
+    parcel "1.12.4"
+    ramda "0.26.1"
+    rationale "0.2.0"
 
 bs-moment@0.4.5:
   version "0.4.5"
@@ -6323,6 +6345,71 @@ parcel-plugin-less-js-enabled@1.0.2:
   dependencies:
     parcel-bundler "^1.12.3"
 
+parcel@1.12.4:
+  version "1.12.4"
+  resolved "https://registry.yarnpkg.com/parcel/-/parcel-1.12.4.tgz#c8136085179c6382e632ca98126093e110be2ac5"
+  integrity sha512-qfc74e2/R4pCoU6L/ZZnK9k3iDS6ir4uHea0e9th9w52eehcAGf2ido/iABq9PBXdsIOe4NSY3oUm7Khe7+S3w==
+  dependencies:
+    "@babel/code-frame" "^7.0.0"
+    "@babel/core" "^7.4.4"
+    "@babel/generator" "^7.4.4"
+    "@babel/parser" "^7.4.4"
+    "@babel/plugin-transform-flow-strip-types" "^7.4.4"
+    "@babel/plugin-transform-modules-commonjs" "^7.4.4"
+    "@babel/plugin-transform-react-jsx" "^7.0.0"
+    "@babel/preset-env" "^7.4.4"
+    "@babel/runtime" "^7.4.4"
+    "@babel/template" "^7.4.4"
+    "@babel/traverse" "^7.4.4"
+    "@babel/types" "^7.4.4"
+    "@iarna/toml" "^2.2.0"
+    "@parcel/fs" "^1.11.0"
+    "@parcel/logger" "^1.11.1"
+    "@parcel/utils" "^1.11.0"
+    "@parcel/watcher" "^1.12.1"
+    "@parcel/workers" "^1.11.0"
+    ansi-to-html "^0.6.4"
+    babylon-walk "^1.0.2"
+    browserslist "^4.1.0"
+    chalk "^2.1.0"
+    clone "^2.1.1"
+    command-exists "^1.2.6"
+    commander "^2.11.0"
+    core-js "^2.6.5"
+    cross-spawn "^6.0.4"
+    css-modules-loader-core "^1.1.0"
+    cssnano "^4.0.0"
+    deasync "^0.1.14"
+    dotenv "^5.0.0"
+    dotenv-expand "^5.1.0"
+    envinfo "^7.3.1"
+    fast-glob "^2.2.2"
+    filesize "^3.6.0"
+    get-port "^3.2.0"
+    htmlnano "^0.2.2"
+    is-glob "^4.0.0"
+    is-url "^1.2.2"
+    js-yaml "^3.10.0"
+    json5 "^1.0.1"
+    micromatch "^3.0.4"
+    mkdirp "^0.5.1"
+    node-forge "^0.7.1"
+    node-libs-browser "^2.0.0"
+    opn "^5.1.0"
+    postcss "^7.0.11"
+    postcss-value-parser "^3.3.1"
+    posthtml "^0.11.2"
+    posthtml-parser "^0.4.0"
+    posthtml-render "^1.1.3"
+    resolve "^1.4.0"
+    semver "^5.4.1"
+    serialize-to-js "^3.0.0"
+    serve-static "^1.12.4"
+    source-map "0.6.1"
+    terser "^3.7.3"
+    v8-compile-cache "^2.0.0"
+    ws "^5.1.1"
+
 parse-asn1@^5.0.0:
   version "5.1.4"
   resolved "https://registry.yarnpkg.com/parse-asn1/-/parse-asn1-5.1.4.tgz#37f6628f823fbdeb2273b4d540434a22f3ef1fcc"
@@ -6991,7 +7078,7 @@ raf@^3.4.0, raf@^3.4.1:
   dependencies:
     performance-now "^2.1.0"
 
-ramda@^0.26:
+ramda@0.26.1, ramda@^0.26:
   version "0.26.1"
   resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.26.1.tgz#8d41351eb8111c55353617fc3bbffad8e4d35d06"
   integrity sha512-hLWjpy7EnsDBb0p+Z3B7rPi3GDeRG5ZtiI33kJhTt+ORCd38AbAIjB/9zRIUoeTbE/AVX5ZkU7m6bznsvrf8eQ==
@@ -8011,6 +8098,11 @@ scheduler@^0.18.0:
   dependencies:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
+
+secure-random-string@^1.1.0:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/secure-random-string/-/secure-random-string-1.1.2.tgz#9cade0678acff7eeaf4517d110ea29e66530ebdc"
+  integrity sha512-o5aaoY4mEh209vOmt4wkUMF/uxGJV87ImeQdv1BnVQ7TOjemUiT6xgED3VpHTGz2AlmMfqBxS8C+UMZAxSOATA==
 
 seed-random@2.2.0:
   version "2.2.0"

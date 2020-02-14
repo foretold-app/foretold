@@ -505,6 +505,7 @@ module Edit = {
               state.values.expectedResolutionDate
               |> E.M.momentDefaultFormat
               |> E.M.toJSON
+              |> E.O.default("")
               |> Js.Json.string
               |> Rationale.Option.some;
 

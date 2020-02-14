@@ -1920,10 +1920,10 @@ bs-platform@7.0.1:
   resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-7.0.1.tgz#1d7b0ef6088b998dceee5db74a7cd8f01c20a3bd"
   integrity sha512-UjStdtHhbtC/l6vKJ1XRDqrPk7rFf5PLYHtRX3akDXEYVnTbN36z0g4DEr5mU8S0N945e33HYts9x+i7hKKpZQ==
 
-bs-reform@9.5.0:
-  version "9.5.0"
-  resolved "https://registry.yarnpkg.com/bs-reform/-/bs-reform-9.5.0.tgz#353e0f2f3bb86661165e561dd81fabd466b2e4d9"
-  integrity sha512-7mBiXMzS6jnLEOD8aHox3n+RmLUsXOnd8brZqNmuCR3yreBzKSo8IZSMlFQOVm4dsn9Oy47fU1yuqkdWkcEMkw==
+bs-reform@9.7.1:
+  version "9.7.1"
+  resolved "https://registry.yarnpkg.com/bs-reform/-/bs-reform-9.7.1.tgz#d398e49b983dfd1f23c264ba0599f2a546bbe64f"
+  integrity sha512-Cj2PFJkmNm2sZvg1zBla382T00qmtWk8BNTJEnTKvfY71I8p8rw830dFEQY0Nhus/r/SiaYzbfhfKK2/k4emug==
   dependencies:
     reason-react-compat "^0.4.0"
     reason-react-update "^1.0.0"

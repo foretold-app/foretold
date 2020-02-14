@@ -17,15 +17,15 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "parcel": "^1.12.3",
+    "parcel": "1.12.4",
     "@glennsl/bs-jest": "0.4.9",
     "gentype": "3.7.1",
     "bs-platform": "7.0.1",
     "@glennsl/bs-json": "5.0.2",
-    "@ncthbrt/re-secure-random-string": "^2.0.0",
-    "lodash": "^4.17.15",
-    "ramda": "^0.26.1",
-    "rationale": "^0.2.0"
+    "@ncthbrt/re-secure-random-string": "2.0.0",
+    "lodash": "4.17.15",
+    "ramda": "0.26.1",
+    "rationale": "0.2.0"
   },
   "jest": {
     "testEnvironment": "node"

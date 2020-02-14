@@ -1,0 +1,34 @@
+{
+  "name": "bs-ken",
+  "version": "0.0.7",
+  "scripts": {
+    "parcel": "parcel build ./src/JS/index.js --no-source-maps --no-autoinstall",
+    "build": "export BS_CMT_POST_PROCESS_CMD=\"gentype\" && bsb -make-world",
+    "start": "export BS_CMT_POST_PROCESS_CMD=\"gentype\" && bsb -make-world -w",
+    "clean": "bsb -clean-world",
+    "test": "jest",
+    "watch:test": "jest --watchAll",
+    "watch:s": "yarn run jest -- Converter_test --watch"
+  },
+  "keywords": [
+    "BuckleScript",
+    "Ken"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "parcel": "^1.12.3",
+    "@glennsl/bs-jest": "0.4.9",
+    "gentype": "3.7.1",
+    "bs-platform": "7.0.1",
+    "@glennsl/bs-json": "5.0.2",
+    "@ncthbrt/re-secure-random-string": "^2.0.0",
+    "lodash": "^4.17.15",
+    "ramda": "^0.26.1",
+    "rationale": "^0.2.0"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "gitHead": "14862b10cc0ef1b133c1ef95598634dc878df615"
+}

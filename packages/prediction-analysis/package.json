@@ -30,7 +30,7 @@
     "gentype": "3.7.1",
     "bs-platform": "7.0.1",
     "@foretold/cdf": "1.0.14",
-    "@glennsl/bs-json": "4.0.0",
+    "@glennsl/bs-json": "5.0.2",
     "lodash": "4.17.15",
     "rationale": "0.1.10"
   }

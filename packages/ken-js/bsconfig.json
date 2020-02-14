@@ -1,0 +1,37 @@
+{
+  "name": "bs-ken",
+  "version": "0.1.1",
+  "sources": [{
+      "dir": "src",
+      "subdirs": true
+    },
+    {
+      "dir": "__tests__",
+      "type": "dev"
+    }
+  ],
+  "package-specs": {
+    "module": "commonjs",
+    "in-source": true
+  },
+  "suffix": ".bs.js",
+  "bs-dependencies": [
+    "@glennsl/bs-jest",
+    "@glennsl/bs-json",
+    "@ncthbrt/re-secure-random-string",
+    "rationale"
+  ],
+  "warnings": {
+    "error": "+5"
+  },
+  "namespace": true,
+  "refmt": 3,
+  "gentypeconfig": {
+    "language": "untyped",
+    "shims": {},
+    "debug": {
+      "all": true,
+      "basic": true
+    }
+  }
+}

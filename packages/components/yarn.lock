@@ -1512,10 +1512,10 @@ bs-moment@0.4.4:
   resolved "https://registry.yarnpkg.com/bs-moment/-/bs-moment-0.4.4.tgz#3d59767e8cd0107393c4f371e15b95bf862ceaac"
   integrity sha512-fAcofbF1bTj6fuwk4cCZ0Teod75dhXPulnNhRwx7+PTtccNMdn35SCb98JxwrprQgCvoZircIgmu8nGLsOaqaA==
 
-bs-platform@5.2.1:
-  version "5.2.1"
-  resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-5.2.1.tgz#3f76f6d4f4c7255296375a8104c8be332770b691"
-  integrity sha512-3ISP+RBC/NYILiJnphCY0W3RTYpQ11JGa2dBBLVug5fpFZ0qtSaL3ZplD8MyjNeXX2bC7xgrWfgBSn8Tc9om7Q==
+bs-platform@7.0.1:
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-7.0.1.tgz#1d7b0ef6088b998dceee5db74a7cd8f01c20a3bd"
+  integrity sha512-UjStdtHhbtC/l6vKJ1XRDqrPk7rFf5PLYHtRX3akDXEYVnTbN36z0g4DEr5mU8S0N945e33HYts9x+i7hKKpZQ==
 
 buffer-equal@0.0.1:
   version "0.0.1"

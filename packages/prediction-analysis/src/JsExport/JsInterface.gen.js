@@ -6,10 +6,7 @@ const Curry = require('bs-platform/lib/js/curry.js');
 
 const JsInterfaceBS = require('./JsInterface.bs');
 
-const JsResult_fromResult = function (Arg1) {
-  const result = JsInterfaceBS.JsResult.fromResult(Arg1);
-  return {data:result[0], error:result[1]}
-};;
+const JsResult_fromResult = JsInterfaceBS.JsResult.fromResult;;
 exports.JsResult_fromResult = JsResult_fromResult
 
 const MarketType_marketScore = "MarketScore";;
@@ -37,7 +34,7 @@ const PredictionResolutionGroupI_pointScore = function (Arg1, Arg2) {
 exports.PredictionResolutionGroupI_pointScore = PredictionResolutionGroupI_pointScore
 
 const PredictionResolutionOverTimeI_make = function (Arg1, Arg2, Arg3) {
-  const result = Curry._3(JsInterfaceBS.PredictionResolutionOverTimeI.make, Arg1.map(function _element(ArrayItem) { return [ArrayItem.measurement, ArrayItem.time]}), Arg2.map(function _element(ArrayItem1) { return [ArrayItem1.measurement, ArrayItem1.time]}), [Arg3.measurement, Arg3.time]);
+  const result = Curry._3(JsInterfaceBS.PredictionResolutionOverTimeI.make, Arg1, Arg2, Arg3);
   return result
 };;
 exports.PredictionResolutionOverTimeI_make = PredictionResolutionOverTimeI_make

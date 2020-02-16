@@ -1,13 +1,13 @@
 let kenDisplay = (g, id) => {
   KenTools.Subject.facts(g, id)
   |> E.A.of_list
-  |> E.A.fmapi((i, r: BsKen.Graph_T.T.fact) =>
+  |> E.A.fmapi((i, r: KenTools.Fact.fact) =>
        <div key={i |> string_of_int}>
          {KenTools.Subject.name(g, r.propertyId)
           |> E.O.default("no-name")
           |> Utils.ste
           |> E.React2.inH3}
-         BsKen.Graph_T.T.(
+         KenTools.(
            switch (r.value.valueType) {
            | String(s) => s |> Utils.ste
            | ThingId(s) =>

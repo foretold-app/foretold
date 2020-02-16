@@ -9,7 +9,7 @@ let display = id => {
           |> E.O.default("no-name")
           |> Utils.ste
           |> E.React2.inH3}
-         BsKen.Graph_T.T.(
+         KenTools.FactValue.(
            switch (r.value.valueType) {
            | String(s) => s |> Utils.ste
            | ThingId(s) =>

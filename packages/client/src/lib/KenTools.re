@@ -56,6 +56,24 @@ module SubjectPropertyPair = {
     |> E.O.bind(_, FactValue.toString);
 };
 
+module ValuePropertyPair = {
+  let allFacts = (g: g, propertyId, valueId) =>
+    g
+    |> BsKen.Graph_T.F.factList
+    |> BsKen.Graph_Fact_Filters.withValue(valueId)
+    |> BsKen.Graph_Fact_Filters.withProperty(propertyId);
+
+  let firstFact = (g: g, propertyId, subjectId) =>
+    allFacts(g, propertyId, subjectId) |> E.L.head;
+
+  let firstFactValue = (g: g, propertyId, subjectId) =>
+    firstFact(g, propertyId, subjectId) |> E.O.fmap(Fact.value);
+
+  let firstFactValueAsString = (g: g, propertyId, subjectId): option(string) =>
+    firstFactValue(g, propertyId, subjectId)
+    |> E.O.bind(_, FactValue.toString);
+};
+
 module Subject = {
   type id = string;
 
@@ -63,6 +81,9 @@ module Subject = {
 
   let facts = (g: g, id: id) =>
     g |> BsKen.Graph_T.F.factList |> BsKen.Graph_Fact_Filters.withSubject(id);
+
+  let isValueToFacts = (g: g, id: id) =>
+    g |> BsKen.Graph_T.F.factList |> BsKen.Graph_Fact_Filters.withValue(id);
 
   let name = (g: g, id: id) =>
     SubjectPropertyPair.firstFactValue(g, "@base/properties/p-name", id);
@@ -73,6 +94,14 @@ module Subject = {
       "@base/properties/p-instance-of",
       id,
     );
+
+  let nameWithLink = (g: g, id: id) =>
+    <Link linkType={Internal(EntityShow(id))}>
+      {name(g, id)
+       |> E.O.bind(_, FactValue.toString)
+       |> E.O.default("")
+       |> Utils.ste}
+    </Link>;
 };
 
 module Thing = {

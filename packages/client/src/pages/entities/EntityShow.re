@@ -1,9 +1,9 @@
 let display = id => {
-  let g = KenTools.graphFromContext();
+  let g = KenTools.Graph.fromContext();
 
   KenTools.Subject.facts(g, id)
   |> E.A.of_list
-  |> E.A.fmapi((i, r: BsKen.Graph_T.T.fact) =>
+  |> E.A.fmapi((i, r: KenTools.Fact.fact) =>
        <div key={i |> string_of_int}>
          {KenTools.Subject.name(g, r.propertyId)
           |> E.O.default("no-name")

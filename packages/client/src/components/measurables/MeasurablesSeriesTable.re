@@ -32,7 +32,7 @@ let make =
       ~selected: option(string),
       ~onClick,
     ) => {
-  let g = KenTools.graphFromContext();
+  let g = KenTools.Graph.fromContext();
 
   <div className=Styles.group>
     {measurables

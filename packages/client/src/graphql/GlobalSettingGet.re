@@ -1,7 +1,7 @@
 let toGlobalSetting = a =>
   Primary.GlobalSetting.make(
     ~id=a##id,
-    ~entityGraph=Some(KenTools.makeGraph(a##entityGraph)),
+    ~entityGraph=Some(KenTools.Graph.fromJson(a##entityGraph)),
     (),
   );
 

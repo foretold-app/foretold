@@ -70,7 +70,7 @@ module DateItem = {
 module LinkName = {
   [@react.component]
   let make = (~measurable: Types.measurable) => {
-    let g = KenTools.graphFromContext();
+    let g = KenTools.Graph.fromContext();
     <>
       {MeasurableEntityLinks.nameEntityLink(
          ~g,

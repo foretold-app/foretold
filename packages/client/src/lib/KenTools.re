@@ -1,18 +1,19 @@
-let makeGraph = (g: option(Js.Json.t)) =>
-  g
-  |> E.O.default(Js.Json.array([||]))
-  |> (e => BsKen.Interface.Graph.fromJson(e));
-
-let itemUrl = entityId => Routing.Url.toString(EntityShow(entityId));
-
 type g = BsKen.Graph_T.T.t;
 
-let withDefault = (g: option(g)) => g |> E.O.default(makeGraph(None));
+module Graph = {
+  let fromJson = (g: option(Js.Json.t)) =>
+    g
+    |> E.O.default(Js.Json.array([||]))
+    |> (e => BsKen.Interface.Graph.fromJson(e));
 
-let graphFromContext = () => {
-  let context = React.useContext(Providers.app);
-  context.globalSetting |> E.O.bind(_, r => r.entityGraph) |> withDefault;
+  let withDefault = (g: option(g)) => g |> E.O.default(fromJson(None));
+
+  let fromContext = () => {
+    let context = React.useContext(Providers.app);
+    context.globalSetting |> E.O.bind(_, r => r.entityGraph) |> withDefault;
+  };
 };
+
 module FactValue = {
   type value = BsKen.Graph_T.T.value;
 
@@ -68,6 +69,7 @@ module Subject = {
 };
 
 module Thing = {
+  type t = BsKen.Graph_T.T.thing;
   type thing = BsKen.Graph_T.Thing.t;
   let all = g => BsKen.Graph_T.F.thingArray(g);
   let id = BsKen.Graph_T.Thing.id;

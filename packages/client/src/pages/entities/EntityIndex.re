@@ -1,15 +1,15 @@
 open Utils;
 
-type record = BsKen.Graph_T.T.thing;
-type column = Table.column(BsKen.Graph_T.T.thing);
+type record = KenTools.Thing.t;
+type column = Table.column(KenTools.Thing.t);
 
 let nameColumn = g =>
   Table.Column.make(
     ~name="Name" |> ste,
     ~render=
       (r: record) =>
-        <Link linkType={Internal(EntityShow(r |> BsKen.Graph_T.Thing.id))}>
-          {r.thingId.thingIdString
+        <Link linkType={Internal(EntityShow(r |> KenTools.Thing.id))}>
+          {KenTools.Thing.id(r)
            |> KenTools.Subject.name(g)
            |> E.O.default("")
            |> ste}
@@ -23,17 +23,20 @@ let instanceOf = g =>
     ~name="Instance Of" |> ste,
     ~render=
       (r: record) =>
-        r.thingId.thingIdString
-        |> KenTools.Subject.instanceOf(g)
-        |> E.O.default("")
-        |> ste,
+        switch (KenTools.Subject.instanceOf(g, KenTools.Thing.id(r))) {
+        | Some(id) =>
+          <Link linkType={Internal(EntityShow(id))}>
+            {id |> KenTools.Subject.name(g) |> E.O.default("") |> Utils.ste}
+          </Link>
+        | None => ReasonReact.null
+        },
     (),
   );
 
 let idColumn = g =>
   Table.Column.make(
     ~name="Name" |> ste,
-    ~render=(r: record) => r |> BsKen.Graph_T.Thing.id |> ste,
+    ~render=(r: record) => r |> KenTools.Thing.id |> ste,
     (),
   );
 
@@ -41,7 +44,7 @@ let all = g => [|nameColumn(g), instanceOf(g), idColumn(g)|];
 
 [@react.component]
 let make = () => {
-  let g = KenTools.graphFromContext();
+  let g = KenTools.Graph.fromContext();
   <SLayout head={<SLayout.TextDiv text="All Entities" />}>
     <Table columns={all(g)} rows={KenTools.Thing.withNames(g)} />
   </SLayout>;

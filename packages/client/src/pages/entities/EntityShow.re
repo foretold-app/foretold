@@ -6,6 +6,7 @@ let display = id => {
   |> E.A.fmapi((i, r: KenTools.Fact.fact) =>
        <div key={i |> string_of_int}>
          {KenTools.Subject.name(g, r.propertyId)
+          |> E.O.bind(_, KenTools.FactValue.toString)
           |> E.O.default("no-name")
           |> Utils.ste
           |> E.React2.inH3}

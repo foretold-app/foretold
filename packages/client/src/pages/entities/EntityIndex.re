@@ -11,6 +11,7 @@ let nameColumn = g =>
         <Link linkType={Internal(EntityShow(r |> KenTools.Thing.id))}>
           {KenTools.Thing.id(r)
            |> KenTools.Subject.name(g)
+           |> E.O.bind(_, KenTools.FactValue.toString)
            |> E.O.default("")
            |> ste}
         </Link>,
@@ -23,10 +24,17 @@ let instanceOf = g =>
     ~name="Instance Of" |> ste,
     ~render=
       (r: record) =>
-        switch (KenTools.Subject.instanceOf(g, KenTools.Thing.id(r))) {
+        switch (
+          KenTools.Subject.instanceOf(g, KenTools.Thing.id(r))
+          |> E.O.bind(_, KenTools.FactValue.thingId)
+        ) {
         | Some(id) =>
           <Link linkType={Internal(EntityShow(id))}>
-            {id |> KenTools.Subject.name(g) |> E.O.default("") |> Utils.ste}
+            {id
+             |> KenTools.Subject.name(g)
+             |> E.O.bind(_, KenTools.FactValue.toString)
+             |> E.O.default("")
+             |> Utils.ste}
           </Link>
         | None => ReasonReact.null
         },

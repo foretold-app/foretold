@@ -4,6 +4,7 @@ let kenDisplay = (g, id) => {
   |> E.A.fmapi((i, r: KenTools.Fact.fact) =>
        <div key={i |> string_of_int}>
          {KenTools.Subject.name(g, r.propertyId)
+          |> E.O.bind(_, KenTools.FactValue.toString)
           |> E.O.default("no-name")
           |> Utils.ste
           |> E.React2.inH3}
@@ -26,6 +27,7 @@ let xEntityLink = (attribute, ~g, ~m: Types.measurable, ~className: string) =>
   m
   |> attribute
   |> E.O.bind(_, KenTools.Subject.name(g))
+  |> E.O.bind(_, KenTools.FactValue.toString)
   |> E.O.bind(_, r =>
        m
        |> attribute

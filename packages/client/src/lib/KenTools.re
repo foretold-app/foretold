@@ -23,12 +23,19 @@ module FactValue = {
     | ThingId(s) => Some(s)
     | _ => None
     };
+
+  let thingId = (value: value) =>
+    switch (value.valueType) {
+    | String(s) => None
+    | ThingId(s) => Some(s)
+    | _ => None
+    };
 };
 
 module Fact = {
   type fact = BsKen.Graph_T.T.fact;
 
-  let valueAsString = (fact: fact) => fact.value |> FactValue.toString;
+  let value = (fact: fact) => fact.value;
 };
 
 module SubjectPropertyPair = {
@@ -41,8 +48,12 @@ module SubjectPropertyPair = {
   let firstFact = (g: g, propertyId, subjectId) =>
     allFacts(g, propertyId, subjectId) |> E.L.head;
 
-  let firstFactValueAsString = (g: g, propertyId, subjectId) =>
-    firstFact(g, propertyId, subjectId) |> E.O.bind(_, Fact.valueAsString);
+  let firstFactValue = (g: g, propertyId, subjectId) =>
+    firstFact(g, propertyId, subjectId) |> E.O.fmap(Fact.value);
+
+  let firstFactValueAsString = (g: g, propertyId, subjectId): option(string) =>
+    firstFactValue(g, propertyId, subjectId)
+    |> E.O.bind(_, FactValue.toString);
 };
 
 module Subject = {
@@ -54,14 +65,10 @@ module Subject = {
     g |> BsKen.Graph_T.F.factList |> BsKen.Graph_Fact_Filters.withSubject(id);
 
   let name = (g: g, id: id) =>
-    SubjectPropertyPair.firstFactValueAsString(
-      g,
-      "@base/properties/p-name",
-      id,
-    );
+    SubjectPropertyPair.firstFactValue(g, "@base/properties/p-name", id);
 
   let instanceOf = (g: g, id: id) =>
-    SubjectPropertyPair.firstFactValueAsString(
+    SubjectPropertyPair.firstFactValue(
       g,
       "@base/properties/p-instance-of",
       id,

@@ -34,6 +34,7 @@ module FactValue = {
 
 module Fact = {
   type fact = BsKen.Graph_T.T.fact;
+  let all = g => g |> BsKen.Graph_T.F.factList;
 
   let value = (fact: fact) => fact.value;
 };

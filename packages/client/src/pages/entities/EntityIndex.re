@@ -10,7 +10,7 @@ let nameColumn = g =>
       (r: record) =>
         <Link linkType={Internal(EntityShow(r |> BsKen.Graph_T.Thing.id))}>
           {r.thingId.thingIdString
-           |> KenToolsAlt.Subject.name(g)
+           |> KenTools.Subject.name(g)
            |> E.O.default("")
            |> ste}
         </Link>,
@@ -24,7 +24,7 @@ let instanceOf = g =>
     ~render=
       (r: record) =>
         r.thingId.thingIdString
-        |> KenToolsAlt.Subject.instanceOf(g)
+        |> KenTools.Subject.instanceOf(g)
         |> E.O.default("")
         |> ste,
     (),
@@ -41,8 +41,8 @@ let all = g => [|nameColumn(g), instanceOf(g), idColumn(g)|];
 
 [@react.component]
 let make = () => {
-  let g = KenToolsAlt.graphFromContext();
+  let g = KenTools.graphFromContext();
   <SLayout head={<SLayout.TextDiv text="All Entities" />}>
-    <Table columns={all(g)} rows={KenToolsAlt.Thing.withNames(g)} />
+    <Table columns={all(g)} rows={KenTools.Thing.withNames(g)} />
   </SLayout>;
 };

@@ -32,7 +32,7 @@ let make =
       ~selected: option(string),
       ~onClick,
     ) => {
-  let g = KenToolsAlt.graphFromContext();
+  let g = KenTools.graphFromContext();
 
   <div className=Styles.group>
     {measurables
@@ -41,7 +41,7 @@ let make =
             className={Styles.row(Some(measurable.id) == selected)}
             onClick={_e => onClick(measurable.id)}>
             <div className=Styles.column>
-              {MeasurableEntityLinksAlt.nameEntityLink(
+              {MeasurableEntityLinks.nameEntityLink(
                  ~g,
                  ~m=measurable,
                  ~className=Shared.TagLink.item,
@@ -49,7 +49,7 @@ let make =
                |> E.O.React.defaultNull}
             </div>
             <div className=Styles.column>
-              {MeasurableEntityLinksAlt.propertyEntityLink(
+              {MeasurableEntityLinks.propertyEntityLink(
                  ~g,
                  ~m=measurable,
                  ~className=Shared.TagLink.property,

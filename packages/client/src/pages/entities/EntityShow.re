@@ -1,11 +1,11 @@
 let display = id => {
-  let g = KenToolsAlt.graphFromContext();
+  let g = KenTools.graphFromContext();
 
-  KenToolsAlt.Subject.facts(g, id)
+  KenTools.Subject.facts(g, id)
   |> E.A.of_list
   |> E.A.fmapi((i, r: BsKen.Graph_T.T.fact) =>
        <div key={i |> string_of_int}>
-         {KenToolsAlt.Subject.name(g, r.propertyId)
+         {KenTools.Subject.name(g, r.propertyId)
           |> E.O.default("no-name")
           |> Utils.ste
           |> E.React2.inH3}

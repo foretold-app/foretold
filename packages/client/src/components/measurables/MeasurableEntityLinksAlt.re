@@ -1,6 +1,4 @@
-let display = id => {
-  let g = KenToolsAlt.graphFromContext();
-
+let kenDisplay = (g, id) => {
   KenToolsAlt.Subject.facts(g, id)
   |> E.A.of_list
   |> E.A.fmapi((i, r: BsKen.Graph_T.T.fact) =>
@@ -24,11 +22,22 @@ let display = id => {
   |> ReasonReact.array;
 };
 
-[@react.component]
-let make = (~pageParams: Types.pageParams) => {
-  <SLayout head={<SLayout.TextDiv text={pageParams.id} />}>
-    <ForetoldComponents.PageCard.BodyPadding>
-      {display(pageParams.id)}
-    </ForetoldComponents.PageCard.BodyPadding>
-  </SLayout>;
-};
+let xEntityLink = (attribute, ~g, ~m: Types.measurable, ~className: string) =>
+  m
+  |> attribute
+  |> E.O.bind(_, KenToolsAlt.Subject.name(g))
+  |> E.O.bind(_, r =>
+       m
+       |> attribute
+       |> E.O.fmap(_d =>
+            <Antd_Popover
+              content={kenDisplay(g, attribute(m) |> E.O.default(""))}
+              trigger=`hover
+              placement=`top>
+              <span className> {r |> Utils.ste} </span>
+            </Antd_Popover>
+          )
+     );
+
+let nameEntityLink = xEntityLink(r => r.labelSubject);
+let propertyEntityLink = xEntityLink(r => r.labelProperty);

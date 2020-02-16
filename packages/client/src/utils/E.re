@@ -1,5 +1,4 @@
 /* O for option */
-open Rationale.Function.Infix;
 
 /* Utils */
 module U = {
@@ -15,7 +14,7 @@ module O = {
     | None => rFn()
     };
   ();
-  let fmap = Rationale.Option.fmap;
+  let fmap = (e, r) => Belt.Option.map(r, e);
   let bind = Rationale.Option.bind;
   let default = Rationale.Option.default;
   let isSome = Rationale.Option.isSome;
@@ -57,7 +56,7 @@ module O = {
 
   module React = {
     let defaultNull = default(ReasonReact.null);
-    let fmapOrNull = fn => fmap(fn) ||> default(ReasonReact.null);
+    let fmapOrNull = (fn, e) => e |> fmap(fn) |> default(ReasonReact.null);
     let flatten = default(ReasonReact.null);
   };
 };
@@ -122,7 +121,7 @@ module R = {
 };
 
 let safe_fn_of_string = (fn, s: string): option('a) =>
-  try (Some(fn(s))) {
+  try(Some(fn(s))) {
   | _ => None
   };
 
@@ -133,13 +132,14 @@ module S = {
 };
 
 module J = {
-  let toString = Js.Json.decodeString ||> O.default("");
-  let toMoment = toString ||> MomentRe.moment;
+  let toString = e => e |> Js.Json.decodeString |> O.default("");
+  let toMoment = e => e |> toString |> MomentRe.moment;
   let fromString = Js.Json.string;
   let fromNumber = Js.Json.number;
 
   let decodeBoolean = Js.Json.decodeBoolean;
-  let decodeInt = Js.Json.decodeNumber ||> O.fmap(r => r |> int_of_float);
+  let decodeInt = e =>
+    e |> Js.Json.decodeNumber |> O.fmap(r => r |> int_of_float);
 
   module O = {
     let toMoment = O.fmap(toMoment);
@@ -152,7 +152,8 @@ module J = {
 
     let toString = (str: option('a)) =>
       switch (str) {
-      | Some(str) => Some(str |> (Js.Json.decodeString ||> O.default("")))
+      | Some(str) =>
+        Some(str |> (e => e |> Js.Json.decodeString |> O.default("")))
       | _ => None
       };
   };
@@ -179,6 +180,11 @@ module JsDate = {
 
 /* List */
 module L = {
+  let head = xs =>
+    switch (List.hd(xs)) {
+    | exception _ => None
+    | a => Some(a)
+    };
   let fmap = List.map;
   let toArray = Array.of_list;
   let fmapi = List.mapi;
@@ -193,7 +199,6 @@ module L = {
   let filter_opt = Rationale.RList.filter_opt;
   let uniqBy = Rationale.RList.uniqBy;
   let join = Rationale.RList.join;
-  let head = Rationale.RList.head;
   let uniq = Rationale.RList.uniq;
   let flatten = List.flatten;
   let last = Rationale.RList.last;

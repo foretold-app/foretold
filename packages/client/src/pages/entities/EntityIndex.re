@@ -1,48 +1,48 @@
 open Utils;
 
-module ColumnsFunctor = (Ken: KenTools.KenModule) => {
-  type record = BsKen.Graph_T.T.thing;
-  type column = Table.column(BsKen.Graph_T.T.thing);
+type record = BsKen.Graph_T.T.thing;
+type column = Table.column(BsKen.Graph_T.T.thing);
 
-  let nameColumn =
-    Table.Column.make(
-      ~name="Name" |> ste,
-      ~render=
-        (r: record) =>
-          <Link linkType={Internal(EntityShow(r |> BsKen.Graph_T.Thing.id))}>
-            {r |> Ken.getName |> ste}
-          </Link>,
-      ~flex=2,
-      (),
-    );
+let nameColumn = g =>
+  Table.Column.make(
+    ~name="Name" |> ste,
+    ~render=
+      (r: record) =>
+        <Link linkType={Internal(EntityShow(r |> BsKen.Graph_T.Thing.id))}>
+          {r.thingId.thingIdString
+           |> KenToolsAlt.Subject.name(g)
+           |> E.O.default("")
+           |> ste}
+        </Link>,
+    ~flex=2,
+    (),
+  );
 
-  let instanceOf =
-    Table.Column.make(
-      ~name="Instance Of" |> ste,
-      ~render=(r: record) => r |> Ken.getInstanceOfName |> ste,
-      (),
-    );
+let instanceOf = g =>
+  Table.Column.make(
+    ~name="Instance Of" |> ste,
+    ~render=
+      (r: record) =>
+        r.thingId.thingIdString
+        |> KenToolsAlt.Subject.instanceOf(g)
+        |> E.O.default("")
+        |> ste,
+    (),
+  );
 
-  let idColumn =
-    Table.Column.make(
-      ~name="Name" |> ste,
-      ~render=(r: record) => r |> BsKen.Graph_T.Thing.id |> ste,
-      (),
-    );
+let idColumn = g =>
+  Table.Column.make(
+    ~name="Name" |> ste,
+    ~render=(r: record) => r |> BsKen.Graph_T.Thing.id |> ste,
+    (),
+  );
 
-  let all = [|nameColumn, instanceOf, idColumn|];
-};
+let all = g => [|nameColumn(g), instanceOf(g), idColumn(g)|];
 
 [@react.component]
 let make = () => {
-  let context = React.useContext(Providers.app);
-  module Config = {
-    let globalSetting = context.globalSetting;
-  };
-  module Ken = KenTools.Functor(Config);
-  module Columns = ColumnsFunctor(Ken);
-
+  let g = KenToolsAlt.graphFromContext();
   <SLayout head={<SLayout.TextDiv text="All Entities" />}>
-    <Table columns=Columns.all rows=Ken.dataSource />
+    <Table columns={all(g)} rows={KenToolsAlt.Thing.withNames(g)} />
   </SLayout>;
 };

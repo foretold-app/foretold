@@ -70,20 +70,16 @@ module DateItem = {
 module LinkName = {
   [@react.component]
   let make = (~measurable: Types.measurable) => {
-    let context = React.useContext(Providers.app);
-    module Config = {
-      let globalSetting = context.globalSetting;
-    };
-    module Ken = KenTools.Functor(Config);
-    module MeasurableEntityLinks = MeasurableEntityLinks.Functor(Ken);
-
+  let g = KenToolsAlt.graphFromContext();
     <>
-      {MeasurableEntityLinks.nameEntityLink(
+      {MeasurableEntityLinksAlt.nameEntityLink(
+         ~g,
          ~m=measurable,
          ~className=Shared.TagLink.item,
        )
        |> E.O.React.defaultNull}
-      {MeasurableEntityLinks.propertyEntityLink(
+      {MeasurableEntityLinksAlt.propertyEntityLink(
+         ~g,
          ~m=measurable,
          ~className=Shared.TagLink.property,
        )

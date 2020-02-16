@@ -48,9 +48,9 @@ let truncateByWords = (~maxLength=200, ~postfix="&hellip;", text) => {
   switch (String.length(text) > maxLength) {
   | true =>
     let text' = String.sub(text, 0, maxLength);
-    let spacePosion = Js.String.lastIndexOf(" ", text');
-    let spacePosion' = spacePosion > 0 ? spacePosion : maxLength;
-    String.sub(text, 0, spacePosion') ++ postfix;
+    let spacePosition = Js.String.lastIndexOf(" ", text');
+    let spacePosition' = spacePosition > 0 ? spacePosition : maxLength;
+    String.sub(text, 0, spacePosition') ++ postfix;
   | _ => text
   };
 };

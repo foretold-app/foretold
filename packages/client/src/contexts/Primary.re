@@ -771,7 +771,8 @@ module CompetitorType = {
 
 module GlobalSetting = {
   type t = Types.globalSetting;
-  let make = (~id: string, ~entityGraph: option(Js.Json.t)=None, ()): t => {
+  let make =
+      (~id: string, ~entityGraph: option(BsKen.Graph_T.T.t)=None, ()): t => {
     id,
     entityGraph,
   };

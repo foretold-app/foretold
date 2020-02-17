@@ -1,6 +1,6 @@
 open FC.Base;
 
-let chart1 = () => <div> "Chart 1"->React.string </div>;
+let chart1 = () => <div> <RePercentilesChart /> </div>;
 
 let chart2 = () => <div> "Chart 2"->React.string </div>;
 

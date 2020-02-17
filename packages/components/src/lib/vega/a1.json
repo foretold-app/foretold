@@ -1,0 +1,74 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "width": 400,
+  "height": 200,
+  "padding": 5,
+  "data": [
+    {
+      "name": "facet",
+      "values": [
+        {"year": "2021", "p5": 2, "p95": 3},
+        {"year": "2022", "p5": 3, "p95": 5},
+        {"year": "2023", "p5": 7, "p95": 8},
+        {"year": "2023", "p5": 2, "p95": 3},
+        {"year": "2024", "p5": 3, "p95": 50},
+        {"year": "2025", "p5": 2, "p95": 3}
+      ],
+      "format": {"type": "json", "parse": {"year": "date:'%Y'"}}
+    },
+    {
+      "name": "table",
+      "source": "facet",
+      "transform": [
+        {
+          "type": "aggregate",
+          "groupby": ["year"],
+          "ops": ["mean", "mean", "count"],
+          "fields": ["p5", "p95", "c"],
+          "as": ["p5", "p95", "c"]
+        }
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "name": "xscale",
+      "type": "time",
+      "nice": "year",
+      "domain": {"data": "facet", "field": "year"},
+      "range": "width"
+    },
+    {
+      "name": "yscale",
+      "type": "linear",
+      "range": "height",
+      "nice": true,
+      "zero": true,
+      "domain": {"data": "facet", "field": "p95"}
+    }
+  ],
+  "axes": [
+    {
+      "orient": "bottom",
+      "scale": "xscale",
+      "format": "%Y",
+      "title": "Barley Yield"
+    },
+    {"orient": "left", "scale": "yscale", "title": "Percentiles"}
+  ],
+  "marks": [
+    {
+      "type": "area",
+      "from": {"data": "table"},
+      "encode": {
+        "update": {
+          "x": {"scale": "xscale", "field": "year"},
+          "y": {"scale": "yscale", "field": "p5"},
+          "y2": {"scale": "yscale", "field": "p95"},
+          "opacity": {"value": 1}
+        },
+        "hover": {"fillOpacity": {"value": 0.8}}
+      }
+    }
+  ]
+}

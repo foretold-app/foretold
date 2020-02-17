@@ -49,9 +49,8 @@ function numDistinctValues(sortedValues, cutoff = Infinity) {
   return numDistinctValues
 }
 
-// Returns a sorted (desc) copy of the samples.
 /**
- *
+ * Returns a sorted (desc) copy of the samples.
  * @param samples
  * @return {Array<TestRunner.Test> | number | * | void}
  */
@@ -59,10 +58,9 @@ function sortDescending(samples) {
   return Object.assign([], samples).sort((a, b) => a - b)
 }
 
-// Returns the sample standard deviation.
-// If no samples are provided, returns 0. Sample can be unsorted.
 /**
- *
+ * If no samples are provided, returns 0. Sample can be unsorted.
+ * Returns the sample standard deviation.
  * @param samples
  * @return {number|{mean: *, stdev: *}}
  */
@@ -85,10 +83,10 @@ function sampleMeanAndStdev(samples) {
   }
 }
 
-// Returns the cutoff value of the specified percentile,
-// considering the samples array to be 'length' long.
-// samples must be sorted.
 /**
+ * Returns the cutoff value of the specified percentile,
+ * considering the samples array to be 'length' long.
+ * samples must be sorted.
  * @param samples
  * @param length
  * @param percentage
@@ -98,9 +96,9 @@ function percentile(samples, length, percentage) {
   return samples[Math.floor(length * (percentage / 100))];
 }
 
-// Returns the first index before length whose value is
-// greater than the supplied cutoff. Else returns -1.
 /**
+ * Returns the first index before length whose value is
+ * greater than the supplied cutoff. Else returns -1.
  * @param sortedValues
  * @param value
  * @param start

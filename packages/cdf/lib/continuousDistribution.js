@@ -54,14 +54,24 @@ class ContinuousDistribution {
     return xs.length === ys.length;
   }
 
+  /**
+   * @param xs
+   * @returns {boolean}
+   */
   validateHasLength(xs) {
     return xs.length > 0;
   }
 
+  /**
+   * @returns {number}
+   */
   minX() {
     return this.xs[0]
   }
 
+  /**
+    * @returns {number}
+   */
   maxX() {
     return this.xs[this.xs.length - 1]
   }

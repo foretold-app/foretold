@@ -13,6 +13,9 @@ class Samples {
     this.sorted = [];
   }
 
+  /**
+   *
+   */
   sort() {
     this.sorted = sortDescending(this.samples);
   }
@@ -32,8 +35,13 @@ class Samples {
     return percentile(this.sorted, length, perc);
   }
 
+  /**
+   * @param max
+   * @param min
+   * @returns {Samples}
+   */
   filter({max, min}) {
-    let samples = this.samples
+    let samples = this.samples;
     if (_.isFinite(min)) samples = _.filter(samples, r => r > min);
     if (_.isFinite(max)) samples = _.filter(samples, r => r < max);
     return new Samples(samples);
@@ -68,13 +76,16 @@ class Samples {
     return pdf.toCdf();
   }
 
-  /* We don't pass the min/max to the pdfast method, because it is buggy.
-     Mainly: when the max is very large (>100000), then almost nothing seems to render like expected. 
-     Second, if the inputed range starts lower than the min, problems happen, though this isn't shown
-     as these values are filtered out 5 lines above.
-     This does mean that the smoothing will lead to there being some probability mass outside the min-max range.
-  */ 
   /**
+   * We don't pass the min/max to the pdfast method, because it is buggy.
+   * Mainly: when the max is very large (>100000), then almost nothing seems
+   * to render like expected.
+   * Second, if the inputed range starts lower than the min, problems happen,
+   * though this isn't shown
+   * as these values are filtered out 5 lines above.
+   * This does mean that the smoothing will lead to there being some
+   * probability mass outside the min-max range.
+   *
    * @param min
    * @param max
    * @param size

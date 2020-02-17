@@ -1,11 +1,10 @@
 const _ = require('lodash');
 const { ContinuousDistributionCombination } = require('./continuousDistributionCombination');
 
-// Returns the cutoff value of the specified percentile,
-// considering the samples array to be 'length' long.
-// samples must be sorted.
-
 /**
+ * Returns the cutoff value of the specified percentile,
+ * considering the samples array to be 'length' long.
+ * samples must be sorted.
  * @param cdfs
  * @param fn
  * @param sampleCount

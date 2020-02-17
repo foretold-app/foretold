@@ -1,29 +1,34 @@
-import { Vega } from 'react-vega';
 import React from 'react';
-import spec from './spec-percentiles';
+import * as vega from 'vega';
 
-export class PercentilesChart extends React.Component {
-  /**
-   * @param props
-   */
+import spec from "./spec-percentiles";
+
+export class PercentilesChart extends React.PureComponent {
+
   constructor(props) {
     super(props);
-    this.handleHover = this.handleHover.bind(this);
-    this.props = {
-      data: {},
-      spec: {}
+    this.containerRef = React.createRef();
+    this.view = null;
+  }
+
+  componentDidMount() {
+    this.view = new vega.View(vega.parse(spec), {
+      renderer: 'canvas',
+      container: this.containerRef.current,
+      hover: false
+    });
+    return this.view.runAsync();
+  }
+
+  componentWillUnmount() {
+    if (this.view) {
+      this.view.finalize();
     }
   }
 
-
-  handleHover() {
-
-  }
-
   render() {
-    return React.createElement(Vega, {
-      spec: spec,
-      onSignalHover: this.handleHover,
+    return React.createElement("div", {
+      ref: this.containerRef,
     });
   }
 }

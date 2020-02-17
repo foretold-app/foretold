@@ -52,7 +52,12 @@
       "orient": "bottom",
       "scale": "xscale",
       "format": "%Y",
-      "title": "Barley Yield"
+      "grid": true,
+      "title": "Barley Yield",
+      "encode": {
+        "grid": {"enter": {"stroke": {"value": "#ccc"}}},
+        "ticks": {"enter": {"stroke": {"value": "#ccc"}}}
+      }
     },
     {
       "orient": "left",
@@ -78,12 +83,11 @@
           "x": {"scale": "xscale", "field": "year"},
           "y": {"scale": "yscale", "field": "p5"},
           "y2": {"scale": "yscale", "field": "p95"},
-          "opacity": {"value": 0.8}
+          "opacity": {"value": 0.75}
         },
         "hover": {"opacity": {"value": 0.5}}
       }
     },
-
     {
       "type": "line",
       "from": {"data": "table"},

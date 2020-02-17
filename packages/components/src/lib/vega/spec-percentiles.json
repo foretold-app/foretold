@@ -7,14 +7,14 @@
     {
       "name": "facet",
       "values": [
-        {"year": "2021", "p5": 2, "p95": 3, "p50": 2.5},
-        {"year": "2022", "p5": 3, "p95": 5, "p50": 4},
-        {"year": "2023", "p5": 7, "p95": 8, "p50": 7.5},
-        {"year": "2023", "p5": 2, "p95": 3, "p50": 2.5},
-        {"year": "2024", "p5": 3, "p95": 50, "p50": 40},
-        {"year": "2025", "p5": 2, "p95": 3, "p50": 2.5}
+        {"timestamp": "2020-01-20 14:55:01.412", "p5": 2, "p95": 3, "p50": 2.5},
+        {"timestamp": "2020-01-23 14:55:01.412", "p5": 3, "p95": 5, "p50": 4},
+        {"timestamp": "2020-01-24 14:55:01.412", "p5": 7, "p95": 8, "p50": 7.5},
+        {"timestamp": "2020-01-24 14:55:01.412", "p5": 2, "p95": 3, "p50": 2.5},
+        {"timestamp": "2020-01-28 14:55:01.412", "p5": 3, "p95": 50, "p50": 40},
+        {"timestamp": "2020-01-29 14:55:01.412", "p5": 2, "p95": 3, "p50": 2.5}
       ],
-      "format": {"type": "json", "parse": {"year": "date:'%Y'"}}
+      "format": {"type": "json", "parse": {"timestamp": "date"}}
     },
     {
       "name": "table",
@@ -22,7 +22,7 @@
       "transform": [
         {
           "type": "aggregate",
-          "groupby": ["year"],
+          "groupby": ["timestamp"],
           "ops": ["mean", "mean", "mean"],
           "fields": ["p5", "p95", "p50"],
           "as": ["p5", "p95", "p50"]
@@ -34,8 +34,8 @@
     {
       "name": "xscale",
       "type": "time",
-      "nice": "year",
-      "domain": {"data": "facet", "field": "year"},
+      "nice": "day",
+      "domain": {"data": "facet", "field": "timestamp"},
       "range": "width"
     },
     {
@@ -51,7 +51,7 @@
     {
       "orient": "bottom",
       "scale": "xscale",
-      "format": "%Y",
+      "format": "%m-%d",
       "grid": true,
       "title": "Barley Yield",
       "encode": {
@@ -80,7 +80,7 @@
         "enter": {"fill": {"value": "#C9D6E5"}},
         "update": {
           "interpolate": {"value": "monotone"},
-          "x": {"scale": "xscale", "field": "year"},
+          "x": {"scale": "xscale", "field": "timestamp"},
           "y": {"scale": "yscale", "field": "p5"},
           "y2": {"scale": "yscale", "field": "p95"},
           "opacity": {"value": 0.75}
@@ -100,7 +100,7 @@
         },
         "hover": {"opacity": {"value": 0.5}},
         "enter": {
-          "x": {"scale": "xscale", "field": "year"},
+          "x": {"scale": "xscale", "field": "timestamp"},
           "y": {"scale": "yscale", "field": "p50"}
         }
       }

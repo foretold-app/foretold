@@ -15,7 +15,7 @@ export class PercentilesChart extends React.PureComponent {
     this.view = new vega.View(vega.parse(spec), {
       renderer: 'canvas',
       container: this.containerRef.current,
-      hover: false
+      hover: true
     });
     return this.view.runAsync();
   }

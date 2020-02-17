@@ -304,7 +304,7 @@ and connectionInputType('a) =
 
 and globalSetting = {
   id: string,
-  entityGraph: option(Js.Json.t),
+  entityGraph: option(BsKen.Graph_T.T.t),
 }
 
 and notebook = {

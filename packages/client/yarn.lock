@@ -1912,10 +1912,10 @@ bs-css@11.0.0:
   dependencies:
     emotion "^10.0.7"
 
-bs-ken@0.0.8:
-  version "0.0.8"
-  resolved "https://registry.yarnpkg.com/bs-ken/-/bs-ken-0.0.8.tgz#d10842ab176fb643a451da6db97536a948c4d92b"
-  integrity sha512-BWX0w3CA6Nas5neR+4dFPCI2463FWfOgwcrscOWHORpjL1qpcHjRFncJOoGDh4DslRdGKl0eMDbe8GMmPO2+9A==
+bs-ken@0.0.10:
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/bs-ken/-/bs-ken-0.0.10.tgz#5558b68e34bbd0bc91c4412abfa75209b033faf7"
+  integrity sha512-znF6o73txei3pReP79t+ogx/vJgSRaJMLuPW+aum9xgKAnHjvkummzzcS53rRJgjob3bT2CodJuT3ntnF6Gh2w==
   dependencies:
     "@glennsl/bs-jest" "0.4.9"
     "@glennsl/bs-json" "5.0.2"

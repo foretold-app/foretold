@@ -32,12 +32,7 @@ let make =
       ~selected: option(string),
       ~onClick,
     ) => {
-  let context = React.useContext(Providers.app);
-  module Config = {
-    let globalSetting = context.globalSetting;
-  };
-  module Ken = KenTools.Functor(Config);
-  module MeasurableEntityLinks = MeasurableEntityLinks.Functor(Ken);
+  let g = KenTools.Graph.fromContext();
 
   <div className=Styles.group>
     {measurables
@@ -47,6 +42,7 @@ let make =
             onClick={_e => onClick(measurable.id)}>
             <div className=Styles.column>
               {MeasurableEntityLinks.nameEntityLink(
+                 ~g,
                  ~m=measurable,
                  ~className=Shared.TagLink.item,
                )
@@ -54,6 +50,7 @@ let make =
             </div>
             <div className=Styles.column>
               {MeasurableEntityLinks.propertyEntityLink(
+                 ~g,
                  ~m=measurable,
                  ~className=Shared.TagLink.property,
                )

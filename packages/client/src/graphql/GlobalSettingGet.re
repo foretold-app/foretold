@@ -1,5 +1,9 @@
 let toGlobalSetting = a =>
-  Primary.GlobalSetting.make(~id=a##id, ~entityGraph=a##entityGraph, ());
+  Primary.GlobalSetting.make(
+    ~id=a##id,
+    ~entityGraph=Some(KenTools.Graph.fromJson(a##entityGraph)),
+    (),
+  );
 
 module Query = [%graphql
   {|

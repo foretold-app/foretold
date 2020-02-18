@@ -28,6 +28,10 @@ class Cdf extends ContinuousDistribution {
     return new (require('./pdf').Pdf)(this.xs, newYs);
   }
 
+  /**
+   * @param sampleCount
+   * @returns {Cdf}
+   */
   toUniform(sampleCount) {
     return Cdf.createUniform({
       min: this.xs[0],
@@ -36,6 +40,12 @@ class Cdf extends ContinuousDistribution {
     });
   }
 
+  /**
+   * @param cdf
+   * @param uniformWeight
+   * @param sampleCount
+   * @returns {Cdf}
+   */
   combineWithUniformOfCdf({ cdf, uniformWeight, sampleCount }) {
     let _uniform = cdf.toUniform(sampleCount);
     let combination = new ContinuousDistributionCombination([this, _uniform]);

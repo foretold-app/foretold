@@ -1,10 +1,10 @@
-open FC.Base;
+[@bs.module] external data1: Js.Json.t = "./samples/sample-measurements.json";
+[@bs.module]
+external data2: Js.Json.t = "./samples/sample-measurements-aggregation.json";
 
-[@bs.module] external data: Js.Json.t = "./sample-measurements.json";
+let chart1 = () => <div> <RePercentilesChart data=data1 /> </div>;
 
-let chart1 = () => <div> <RePercentilesChart data /> </div>;
-
-let chart2 = () => <div> "Chart 2"->React.string </div>;
+let chart2 = () => <div> <RePercentilesChart data=data2 /> </div>;
 
 let entries =
   EntryTypes.[

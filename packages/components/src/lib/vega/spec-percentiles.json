@@ -53,7 +53,7 @@
       "scale": "xscale",
       "format": "%m-%d",
       "grid": true,
-      "title": "Barley Yield",
+      "title": "Days",
       "encode": {
         "grid": {"enter": {"stroke": {"value": "#ccc"}}},
         "ticks": {"enter": {"stroke": {"value": "#ccc"}}}
@@ -62,7 +62,7 @@
     {
       "orient": "left",
       "scale": "yscale",
-      "title": "Percentiles",
+      "title": "Values and Percentiles",
       "grid": true,
       "domain": false,
       "tickSize": 12,

@@ -4,20 +4,48 @@ import {
 } from './simulator-worker/simulator/evaluator';
 import _ from 'lodash';
 
+/**
+ * @param a
+ * @param b
+ * @returns {GCD.props}
+ * @constructor
+ */
 function GCD(a, b) {
   return !b ? a : GCD(b, a % b);
 }
 
+/**
+ * @param a
+ * @param b
+ * @returns {number}
+ * @constructor
+ */
 function LCM(a, b) {
   return (a * b) / GCD(a, b);
 }
 
+/**
+ * @param expr
+ * @param inputs
+ * @param maxSamples
+ * @returns {*}
+ */
 export function simulate(expr, inputs, maxSamples) {
   return Evaluate(expr, maxSamples, inputs);
 }
 
+/**
+ * @param text
+ * @returns {boolean}
+ */
 const hasStochasticFunction = text => _.some(STOCHASTIC_FUNCTIONS, e => text.indexOf(e) !== -1);
 
+/**
+ * @param text
+ * @param inputs
+ * @param n
+ * @returns {number|*}
+ */
 export function neededSamples(text, inputs, n) {
   if (hasStochasticFunction(text)) {
     return n;
@@ -38,10 +66,21 @@ export function neededSamples(text, inputs, n) {
   return Math.min(n, numInputs.reduce((x, y) => LCM(x, y)));
 }
 
+/**
+ * @param array
+ * @param newStart
+ * @returns {*[]}
+ */
 function rotate(array, newStart) {
   return [...array.slice(newStart), ...array.slice(0, newStart)];
 }
 
+/**
+ * @param array
+ * @param from
+ * @param to
+ * @returns {*[]|*}
+ */
 function modularSlice(array, from, to) {
   const len = array.length;
   if (len <= to - from) {
@@ -54,6 +93,11 @@ function modularSlice(array, from, to) {
   return [...array.slice(newFrom), array.slice(0, to)];
 }
 
+/**
+ * @param str
+ * @param replacementMap
+ * @returns {*}
+ */
 function replaceByMap(str, replacementMap) {
   if (!str || _.isEmpty(str) || _.isEmpty(replacementMap)) {
     return str;
@@ -62,6 +106,13 @@ function replaceByMap(str, replacementMap) {
   return str.replace(regex, match => replacementMap[match]);
 }
 
+/**
+ * @param rawExpr
+ * @param prevModularIndex
+ * @param numSamples
+ * @param inputs
+ * @returns {{numSamples: *, inputs: {}, expr: *}}
+ */
 function buildSimulationParams(rawExpr, prevModularIndex, numSamples, inputs) {
   let idMap = {};
   let takenReadableIds = [];
@@ -82,6 +133,11 @@ function buildSimulationParams(rawExpr, prevModularIndex, numSamples, inputs) {
   return { expr, numSamples, inputs: slicedInputs };
 }
 
+/**
+ * @param worker
+ * @param data
+ * @returns {Promise<unknown>}
+ */
 function simulateOnWorker(worker, data) {
   return new Promise(
     (resolve, reject) => {

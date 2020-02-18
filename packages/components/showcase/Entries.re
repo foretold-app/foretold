@@ -16,6 +16,7 @@ let entries =
       ],
     ),
   ]
+  @ Showcase_Charts.entries
   @ Showcase_Dropdown.entries
   @ Showcase_Menu.entries
   @ Showcase_DropdownMenu.entries

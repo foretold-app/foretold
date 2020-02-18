@@ -1,4 +1,3 @@
-[@bs.config {jsx: 3}];
 let fn = (a: string) => ();
 let fn2 = () => ();
 

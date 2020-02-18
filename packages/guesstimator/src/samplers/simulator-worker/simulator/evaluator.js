@@ -39,9 +39,9 @@ math.import(Distributions, { override: true });
 math.import(financeFunctions, { override: true });
 // Guesstimate constructs:
 math.import(ImpureConstructs, { override: true, wrap: true });
-// Filters
+// Filters.
 math.import(Filters, { override: true });
-// Multimodals
+// Multimodals.
 math.import(Multimodals, { override: true });
 
 // All of jStat's functions are impure

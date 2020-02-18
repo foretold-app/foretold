@@ -10,7 +10,10 @@ const ZERO_SAMPLES_REQUESTED_ERROR = 1;
 onmessage = ({ data }) => {
   let errors = [];
   if (!data) {
-    errors.push({ type: WORKER_ERROR, subType: NO_DATA_PASSED_ERROR });
+    errors.push({
+      type: WORKER_ERROR,
+      subType: NO_DATA_PASSED_ERROR,
+    });
     postMessage(JSON.stringify({ errors }));
     return;
   }
@@ -23,9 +26,15 @@ onmessage = ({ data }) => {
 
   if (!data.numSamples) {
     if (data.numSamples === 0) {
-      errors.push({ type: WORKER_ERROR, subType: ZERO_SAMPLES_REQUESTED_ERROR });
+      errors.push({
+        type: WORKER_ERROR,
+        subType: ZERO_SAMPLES_REQUESTED_ERROR
+      });
     } else {
-      errors.push({ type: WORKER_ERROR, subType: NO_NUMSAMPLES_PASSED_ERROR });
+      errors.push({
+        type: WORKER_ERROR,
+        subType: NO_NUMSAMPLES_PASSED_ERROR,
+      });
     }
   }
 

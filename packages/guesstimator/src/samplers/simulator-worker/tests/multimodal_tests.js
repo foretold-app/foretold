@@ -102,14 +102,16 @@ const multimodal_tests = [
 ];
 
 // Input cells
-let input2 = { text: '=bimodal(9,2)' }; //Ideally this should be more flexible
+let input2 = { text: '=bimodal(9,2)' }; // Ideally this should be more flexible
 let [error2, item2] = Guesstimator.parse(input2);
 let parsedInput2 = item2.parsedInput;
 let f = new Guesstimator({ parsedInput: parsedInput2 });
 let bk = f.sample(1000);
 const externalInputs = { AK: [55, 56, 57], BK: [1, 2, 3] }; // BK: bk.values};
 
-console.log('___\n\n ***Running bi and multimodal functions against some test cases**\n');
+console.log(
+  '___\n\n ***Running bi and multimodal functions against some test cases**\n',
+);
 for (var suite of [bimodal_tests, multimodal_tests]) {// .forEach( suite => {
   var t = 0;
   suite.forEach(Test => {// Main cell
@@ -129,9 +131,11 @@ for (var suite of [bimodal_tests, multimodal_tests]) {// .forEach( suite => {
   );
 }
 
-// Note 1: Foretold is not set up to test with cells initially, so one has to turn some placeholders arguments into variables
+// Note 1: Foretold is not set up to test with cells initially, so one has to
+// turn some placeholders arguments into variables
 // in other files to do that.
 // Note 2: Only tested with Foretold Guesstimator codebase, not Guesstimate yet.
-// Note 3: to run this file in VS code with node and ES6, I created a separate js file and ran that one, with contents:
+// Note 3: to run this file in VS code with node and ES6, I created a separate
+// js file and ran that one, with contents:
 // require = require("esm")(module /*, options*/);
 // module.exports = require("./multimodal_tests.js");

@@ -2,10 +2,10 @@
 external percentilesChart: ReasonReact.reactClass = "PercentilesChart";
 
 [@react.component]
-let make = (~children=ReasonReact.null) =>
+let make = (~data, ~children=ReasonReact.null) =>
   ReasonReact.wrapJsForReason(
     ~reactClass=percentilesChart,
-    ~props={},
+    ~props={"data": data},
     children,
   )
   |> ReasonReact.element;

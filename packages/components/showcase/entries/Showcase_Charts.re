@@ -1,6 +1,8 @@
 open FC.Base;
 
-let chart1 = () => <div> <RePercentilesChart /> </div>;
+[@bs.module] external data: Js.Json.t = "./sample-measurements.json";
+
+let chart1 = () => <div> <RePercentilesChart data /> </div>;
 
 let chart2 = () => <div> "Chart 2"->React.string </div>;
 

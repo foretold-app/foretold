@@ -38,10 +38,15 @@ function mean(sampleCount, vars) {
  * @param predictionCdf
  * @param resolutionCdf
  */
-function scoreNonMarketCdfCdf(sampleCount, predictionCdf, resolutionCdf, resolutionUniformAdditionWeight=0) {
+function scoreNonMarketCdfCdf(
+  sampleCount,
+  predictionCdf,
+  resolutionCdf,
+  resolutionUniformAdditionWeight = 0,
+) {
   let toCdf = (r) => (new Cdf(r.xs, r.ys));
   let prediction = toCdf(predictionCdf);
-  if (_.isFinite(resolutionUniformAdditionWeight)){
+  if (_.isFinite(resolutionUniformAdditionWeight)) {
     prediction = prediction.combineWithUniformOfCdf(
       {
         cdf: toCdf(resolutionCdf),
@@ -103,16 +108,13 @@ function findX(y, { xs, ys }) {
  * @returns {number[]}
  */
 function integral({ xs, ys }) {
-  if (_.includes(ys, NaN)){
+  if (_.includes(ys, NaN)) {
     return NaN;
-  }
-  else if (_.includes(ys, Infinity) && _.includes(ys, -Infinity)){
+  } else if (_.includes(ys, Infinity) && _.includes(ys, -Infinity)) {
     return NaN;
-  }
-  else if (_.includes(ys, Infinity)){
+  } else if (_.includes(ys, Infinity)) {
     return Infinity;
-  }
-  else if (_.includes(ys, -Infinity)){
+  } else if (_.includes(ys, -Infinity)) {
     return -Infinity;
   }
 
@@ -137,10 +139,10 @@ function integral({ xs, ys }) {
 
 module.exports = {
   cdfToPdf,
-  findY,
+  differentialEntropy,
   findX,
+  findY,
+  integral,
   mean,
   scoreNonMarketCdfCdf,
-  differentialEntropy,
-  integral,
 };

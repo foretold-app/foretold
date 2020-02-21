@@ -1,4 +1,4 @@
-export namespace Models {
+export namespace Definitions {
   export type ObjectID = string;
   export type ChannelMembershipRole = "ADMIN" | "VIEWER";
   export type float = number;
@@ -23,7 +23,7 @@ export namespace Models {
   export type TokenID = ObjectID;
   export type UserID = ObjectID;
 
-  export interface Model {
+  export interface Definition {
     id: ObjectID;
     createdAt: string;
     updatedAt: string;
@@ -35,30 +35,30 @@ export namespace Models {
     get(name: string): any;
   }
 
-  export interface Channel extends Model {
+  export interface Channel extends Definition {
     id: ChannelID;
     isPublic: boolean;
     creatorId: AgentID;
 
-    getAgents(): Models.Agent[];
+    getAgents(): Definitions.Agent[];
   }
 
-  export interface Bot extends Model {
+  export interface Bot extends Definition {
     id: BotID;
     name: string;
     agentId: AgentID;
 
-    getAgent(): Models.Agent;
+    getAgent(): Definitions.Agent;
   }
 
-  export interface Preference extends Model {
+  export interface Preference extends Definition {
     id: PreferenceID;
     agentId: AgentID;
     stopAllEmails: boolean;
     enableExperimentalFeatures: boolean;
   }
 
-  export interface User extends Model {
+  export interface User extends Definition {
     id: UserID;
     name: string;
     auth0Id: string;
@@ -69,10 +69,10 @@ export namespace Models {
     descriptions?: string;
     auth0AccessToken?: string;
 
-    getAgent(): Models.Agent;
+    getAgent(): Definitions.Agent;
   }
 
-  export interface Measurable extends Model {
+  export interface Measurable extends Definition {
     id: MeasurableID;
     name: Promise<string>;
     labelCustom: string;
@@ -92,14 +92,14 @@ export namespace Models {
     max: number;
     resolutionEndpointResponse: Function;
 
-    getCreator(): Models.Agent;
+    getCreator(): Definitions.Agent;
 
-    getChannel(): Models.Channel;
+    getChannel(): Definitions.Channel;
 
     set(name: string, value: any): Promise<any>;
   }
 
-  export interface Measurement extends Model {
+  export interface Measurement extends Definition {
     id: MeasurementID;
     value: any;
     competitorType: string;
@@ -115,19 +115,19 @@ export namespace Models {
     getAgent(): Agent;
   }
 
-  export interface Agent extends Model {
+  export interface Agent extends Definition {
     id: AgentID;
     isAdmin: boolean;
     type: "BOT" | "USER";
     name: Promise<string>;
     measurementCount: number;
 
-    getBot(): Models.Bot;
+    getBot(): Definitions.Bot;
 
-    getUser(): Models.User;
+    getUser(): Definitions.User;
   }
 
-  export interface Series extends Model {
+  export interface Series extends Definition {
     id: SeriesID;
     subjects: string[];
     properties: string[];
@@ -148,23 +148,23 @@ export namespace Models {
       | "ADDED_BY_EMAIL_BY_ADMIN";
   }
 
-  export interface Token extends Model {
+  export interface Token extends Definition {
     id: TokenID;
     token: string;
     isActive: boolean;
   }
 
-  export interface NotificationStatus extends Model {
+  export interface NotificationStatus extends Definition {
     id: NotificationStatusID;
     agentId: AgentID;
     notificationId: NotificationID;
   }
 
-  export interface Template extends Model {
+  export interface Template extends Definition {
     id: TemplateID;
   }
 
-  export interface Notification extends Model {
+  export interface Notification extends Definition {
     id: NotificationID;
     envelope: {
       replacements: Object;
@@ -174,7 +174,7 @@ export namespace Models {
     };
   }
 
-  export interface Invitation extends Model {
+  export interface Invitation extends Definition {
     id: InvitationID;
     email: string;
     channelId: ChannelID;
@@ -182,7 +182,7 @@ export namespace Models {
     status: "AWAITING" | "ACCEPTED";
   }
 
-  export interface FeedItem extends Model {
+  export interface FeedItem extends Definition {
     id: FeedItemID;
     channelId: ChannelID;
     agentId: AgentID;
@@ -192,13 +192,13 @@ export namespace Models {
     };
   }
 
-  export interface GlobalSetting extends Model {
+  export interface GlobalSetting extends Definition {
     id: GlobalSettingsID;
     entityGraph: null | object;
-    botAgentId: null | Models.AgentID;
+    botAgentId: null | Definitions.AgentID;
   }
 
-  export interface AgentMeasurable extends Model {
+  export interface AgentMeasurable extends Definition {
     id: MeasurableID;
     agentId: AgentID;
     measurableId: MeasurableID;
@@ -207,7 +207,7 @@ export namespace Models {
     predictionCountTotal: number;
   }
 
-  export interface AgentChannel extends Model {
+  export interface AgentChannel extends Definition {
     id: AgentID;
     agentId: AgentID;
     channelId: ChannelID;
@@ -216,7 +216,7 @@ export namespace Models {
     numberOfQuestionsScored: number;
   }
 
-  export interface Notebook extends Model {
+  export interface Notebook extends Definition {
     id: NotebookID;
     ownerId: AgentID;
     channelId: ChannelID;
@@ -224,47 +224,47 @@ export namespace Models {
     name: string;
   }
 
-  export interface Mutex extends Model {
+  export interface Mutex extends Definition {
     name: string;
     agentId: AgentID;
   }
 
-  export interface Vote extends Model {
+  export interface Vote extends Definition {
     agentId: AgentID;
     measurementId: MeasurementID;
     voteAmount: number;
   }
 
-  export interface ChannelBookmark extends Model {
+  export interface ChannelBookmark extends Definition {
     agentId: AgentID;
     channelId: ChannelID;
   }
 
-  export type Creator = Models.User | Models.Bot;
+  export type Creator = Definitions.User | Definitions.Bot;
 }
 
 export namespace Schema {
   export interface Context {
     // Authentication/authorization section
-    user?: Models.User;
-    bot?: Models.Bot;
-    agent: Models.Agent;
-    creator?: Models.User | Models.Bot;
+    user?: Definitions.User;
+    bot?: Definitions.Bot;
+    agent: Definitions.Agent;
+    creator?: Definitions.User | Definitions.Bot;
 
     // settings
-    botAgentId?: Models.AgentID;
+    botAgentId?: Definitions.AgentID;
 
     // After Middleware Interceptions
-    userAsObject?: Models.User;
-    preference?: Models.Preference;
-    channel?: Models.Channel;
-    channelMembership?: Models.ChannelMemberships;
-    channelMembershipsAdmins?: Models.ChannelMemberships[];
-    channelMembershipsRole?: Models.ChannelMembershipRole;
-    notebook?: Models.Notebook;
-    measurement?: Models.Measurement;
-    measurable?: Models.Measurable;
-    channelBookmark?: Models.ChannelBookmark;
+    userAsObject?: Definitions.User;
+    preference?: Definitions.Preference;
+    channel?: Definitions.Channel;
+    channelMembership?: Definitions.ChannelMemberships;
+    channelMembershipsAdmins?: Definitions.ChannelMemberships[];
+    channelMembershipsRole?: Definitions.ChannelMembershipRole;
+    notebook?: Definitions.Notebook;
+    measurement?: Definitions.Measurement;
+    measurable?: Definitions.Measurable;
+    channelBookmark?: Definitions.ChannelBookmark;
   }
 
   export interface ChannelsInput {
@@ -279,7 +279,7 @@ export namespace Layers {
   export type withinMeasurables = {
     as: string;
     states?: string[];
-    channelId?: Models.ChannelID;
+    channelId?: Definitions.ChannelID;
   };
 
   export type withinPublicChannels = {
@@ -288,18 +288,18 @@ export namespace Layers {
 
   export type withinJoinedChannels = {
     as: string;
-    agentId: Models.AgentID;
+    agentId: Definitions.AgentID;
   };
 
   export type withinPublicAndJoinedChannels = {
     as: string;
-    agentId: Models.AgentID;
+    agentId: Definitions.AgentID;
   };
 
   export type attributes = {
     fields?: string[],
     isBookmarked?: {
-      agentId: Models.AgentID,
+      agentId: Definitions.AgentID,
     },
     bookmarksCount?: boolean,
   };
@@ -328,8 +328,8 @@ export namespace Layers {
     }
 
     interface Options {
-      agentId?: Models.AgentID;
-      currentAgentId?: Models.AgentID;
+      agentId?: Definitions.AgentID;
+      currentAgentId?: Definitions.AgentID;
       isAdmin?: boolean;
 
       attributes?: boolean | attributes;
@@ -341,21 +341,21 @@ export namespace Layers {
     }
 
     interface Filter {
-      id?: Models.ObjectID;
-      creatorId?: Models.AgentID;
-      seriesId?: Models.SeriesID;
-      channelId?: Models.ChannelID;
-      measurableId?: Models.MeasurableID;
-      userId?: Models.UserID;
-      agentId?: Models.AgentID;
-      excludeChannelId?: Models.ChannelID;
-      notTaggedByAgent?: Models.AgentID;
-      notificationId?: Models.NotificationID;
-      ownerId?: Models.AgentID;
-      measurableIds?: Models.MeasurableID[];
-      measurementId?: Models.MeasurementID;
-      taggedMeasurementId?: Models.MeasurementID;
-      measuredByAgentId?: Models.AgentID;
+      id?: Definitions.ObjectID;
+      creatorId?: Definitions.AgentID;
+      seriesId?: Definitions.SeriesID;
+      channelId?: Definitions.ChannelID;
+      measurableId?: Definitions.MeasurableID;
+      userId?: Definitions.UserID;
+      agentId?: Definitions.AgentID;
+      excludeChannelId?: Definitions.ChannelID;
+      notTaggedByAgent?: Definitions.AgentID;
+      notificationId?: Definitions.NotificationID;
+      ownerId?: Definitions.AgentID;
+      measurableIds?: Definitions.MeasurableID[];
+      measurementId?: Definitions.MeasurementID;
+      taggedMeasurementId?: Definitions.MeasurementID;
+      measuredByAgentId?: Definitions.AgentID;
 
       competitorType?: string;
       type?: string;
@@ -401,14 +401,14 @@ export namespace Layers {
     }
 
     interface Params {
-      id?: Models.ObjectID;
+      id?: Definitions.ObjectID;
 
-      agentId?: Models.AgentID;
-      measurableId?: Models.MeasurableID;
-      measurementId?: Models.MeasurementID;
-      seriesId?: Models.SeriesID;
-      channelId?: Models.ChannelID;
-      notebookId?: Models.NotebookID;
+      agentId?: Definitions.AgentID;
+      measurableId?: Definitions.MeasurableID;
+      measurementId?: Definitions.MeasurementID;
+      seriesId?: Definitions.SeriesID;
+      channelId?: Definitions.ChannelID;
+      notebookId?: Definitions.NotebookID;
 
       auth0Id?: string;
       name?: string;
@@ -469,7 +469,7 @@ export namespace Layers {
     }
   }
 
-  namespace AbstractModels {
+  namespace Models {
     type compoundId = object;
     type id = string | compoundId;
 
@@ -477,12 +477,12 @@ export namespace Layers {
     }
 
     interface Restrictions {
-      agentId?: Models.AgentID;
-      channelId?: Models.ChannelID;
+      agentId?: Definitions.AgentID;
+      channelId?: Definitions.ChannelID;
       channelIdAsId?: boolean;
       isAdmin?: boolean;
       measurableId?: boolean;
-      userId?: Models.UserID;
+      userId?: Definitions.UserID;
 
       withinJoinedChannels?: withinJoinedChannels | null;
       withinMeasurables?: withinMeasurables | null;
@@ -500,24 +500,24 @@ export namespace Layers {
     }
 
     interface Filter {
-      agentId?: Models.AgentID;
-      excludeChannelId?: Models.ChannelID;
-      userId?: Models.UserID;
-      channelId?: Models.ChannelID;
-      measurableId?: Models.MeasurableID;
-      notTaggedByAgent?: Models.AgentID;
-      seriesId?: Models.SeriesID;
-      creatorId?: Models.AgentID;
-      ownerId?: Models.AgentID;
-      measurableIds?: Models.MeasurableID[];
-      measurementId?: Models.MeasurementID;
-      taggedMeasurementId?: Models.MeasurementID;
-      measuredByAgentId?: Models.AgentID;
+      agentId?: Definitions.AgentID;
+      excludeChannelId?: Definitions.ChannelID;
+      userId?: Definitions.UserID;
+      channelId?: Definitions.ChannelID;
+      measurableId?: Definitions.MeasurableID;
+      notTaggedByAgent?: Definitions.AgentID;
+      seriesId?: Definitions.SeriesID;
+      creatorId?: Definitions.AgentID;
+      ownerId?: Definitions.AgentID;
+      measurableIds?: Definitions.MeasurableID[];
+      measurementId?: Definitions.MeasurementID;
+      taggedMeasurementId?: Definitions.MeasurementID;
+      measuredByAgentId?: Definitions.AgentID;
 
       isArchived?: string[];
       types?: string[];
       sentAt?: string[];
-      notificationId?: Models.NotificationID[];
+      notificationId?: Definitions.NotificationID[];
       competitorType?: string[];
       states?: string[];
       attemptCounterMax?: number;
@@ -564,14 +564,14 @@ export namespace Layers {
     }
 
     interface Params {
-      id?: Models.ObjectID;
+      id?: Definitions.ObjectID;
 
-      agentId?: Models.AgentID;
-      measurableId?: Models.MeasurableID;
-      measurementId?: Models.MeasurementID;
-      seriesId?: Models.SeriesID;
-      channelId?: Models.ChannelID;
-      notebookId?: Models.NotebookID;
+      agentId?: Definitions.AgentID;
+      measurableId?: Definitions.MeasurableID;
+      measurementId?: Definitions.MeasurementID;
+      seriesId?: Definitions.SeriesID;
+      channelId?: Definitions.ChannelID;
+      notebookId?: Definitions.NotebookID;
 
       auth0Id?: string;
       name?: string;

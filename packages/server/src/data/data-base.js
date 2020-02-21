@@ -125,7 +125,7 @@ class DataBase {
    * @param {Models.AgentID} filter.userId
    * @param {Layers.DataSource.Pagination} [pagination]
    * @param {Layers.DataSource.Options} [options]
-   * @return {Promise<{data: Models.Model[], total: number}>}
+   * @return {Promise<{data: Models.Definition[], total: number}>}
    */
   async getConnection(filter, pagination, options = new DataOptions()) {
     const { restriction$, option$ } = this._getOptionsRestrictions(options);
@@ -169,8 +169,8 @@ class DataBase {
    * @protected
    * @param {Layers.DataSource.Options} [options]
    * @return {{
-   *  option$: Layers.AbstractModels.Options,
-   *  restriction$: Layers.AbstractModels.Restrictions,
+   *  option$: Layers.Models.Options,
+   *  restriction$: Layers.Models.Restrictions,
    * }}
    */
   _getOptionsRestrictions(options = new DataOptions()) {
@@ -186,7 +186,7 @@ class DataBase {
   /**
    * @protected
    * @param {Layers.DataSource.Options} [options]
-   * @return {Layers.AbstractModels.Options}
+   * @return {Layers.Models.Options}
    */
   _getModelOptions(options = new DataOptions()) {
     if (_.isEmpty(options)) return new ModelsOptions({});
@@ -200,7 +200,7 @@ class DataBase {
   /**
    * @protected
    * @param {Layers.DataSource.Options} [_options]
-   * @return {Layers.AbstractModels.Options}
+   * @return {Layers.Models.Options}
    */
   _getDefaultOptions(_options = new DataOptions()) {
     return {};
@@ -209,7 +209,7 @@ class DataBase {
   /**
    * @protected
    * @param {Layers.DataSource.Options} [options]
-   * @return {Layers.AbstractModels.Restrictions}
+   * @return {Layers.Models.Restrictions}
    */
   _getModelRestrictions(options = new DataOptions()) {
     if (_.isEmpty(options)) return new Restrictions({});
@@ -223,7 +223,7 @@ class DataBase {
   /**
    * @protected
    * @param {Layers.DataSource.Options} [_options]
-   * @return {Layers.AbstractModels.Restrictions}
+   * @return {Layers.Models.Restrictions}
    */
   _getDefaultRestrictions(_options = new DataOptions()) {
     return {};
@@ -232,7 +232,7 @@ class DataBase {
   /**
    * @protected
    * @param {Layers.DataSource.Options} [options]
-   * @return {Layers.AbstractModels.Restrictions}
+   * @return {Layers.Models.Restrictions}
    */
   _getDefaultRestrictionsForIncludedIntoChannel(options = new DataOptions()) {
     const currentAgentId = _.get(options, 'currentAgentId', null);
@@ -254,7 +254,7 @@ class DataBase {
   /**
    * @protected
    * @param {Layers.DataSource.Options} [options]
-   * @return {Layers.AbstractModels.Restrictions}
+   * @return {Layers.Models.Restrictions}
    */
   _getDefaultRestrictionsForIncludedIntoMeasurables(
     options = new DataOptions(),

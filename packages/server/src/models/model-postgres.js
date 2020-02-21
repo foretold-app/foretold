@@ -19,7 +19,7 @@ const { Query } = require('../data/classes');
 
 /**
  * @abstract
- * @implements {Layers.AbstractModels.Generic}
+ * @implements {Layers.Models.Generic}
  */
 class ModelPostgres extends Model {
   constructor(
@@ -54,9 +54,9 @@ class ModelPostgres extends Model {
 
   /**
    * @public
-   * @param {Layers.AbstractModels.Data} [data]
-   * @param {Layers.AbstractModels.Restrictions} [restrictions]
-   * @param {Layers.AbstractModels.Options} [options]
+   * @param {Layers.Models.Data} [data]
+   * @param {Layers.Models.Restrictions} [restrictions]
+   * @param {Layers.Models.Options} [options]
    * @return {Promise.<object>}
    */
   async createOne(
@@ -70,10 +70,10 @@ class ModelPostgres extends Model {
 
   /**
    * @public
-   * @param {Layers.AbstractModels.Params} [params]
-   * @param {Layers.AbstractModels.Data} [data]
-   * @param {Layers.AbstractModels.Restrictions} [restrictions]
-   * @param {Layers.AbstractModels.Options} [options]
+   * @param {Layers.Models.Params} [params]
+   * @param {Layers.Models.Data} [data]
+   * @param {Layers.Models.Restrictions} [restrictions]
+   * @param {Layers.Models.Options} [options]
    * @return {Promise.<object>}
    */
   async updateOne(
@@ -94,10 +94,10 @@ class ModelPostgres extends Model {
 
   /**
    * @public
-   * @param {Layers.AbstractModels.Params} [params]
-   * @param {Layers.AbstractModels.Data} [data]
-   * @param {Layers.AbstractModels.Restrictions} [restrictions]
-   * @param {Layers.AbstractModels.Options} [options]
+   * @param {Layers.Models.Params} [params]
+   * @param {Layers.Models.Data} [data]
+   * @param {Layers.Models.Restrictions} [restrictions]
+   * @param {Layers.Models.Options} [options]
    * @return {boolean}
    */
   async updateAll(
@@ -114,10 +114,10 @@ class ModelPostgres extends Model {
 
   /**
    * @public
-   * @param {Layers.AbstractModels.Filter} filter
-   * @param {Layers.AbstractModels.Pagination} [pagination]
-   * @param {Layers.AbstractModels.Restrictions} [restrictions]
-   * @param {Layers.AbstractModels.Options} [options]
+   * @param {Layers.Models.Filter} filter
+   * @param {Layers.Models.Pagination} [pagination]
+   * @param {Layers.Models.Restrictions} [restrictions]
+   * @param {Layers.Models.Options} [options]
    * @return {Promise<*[]>}
    */
   async getAll(
@@ -152,11 +152,11 @@ class ModelPostgres extends Model {
   /**
    * @todo: To use an order with attributes for the measurables.
    * @public
-   * @param {Layers.AbstractModels.Filter} [filter]
-   * @param {Layers.AbstractModels.Pagination} [pagination]
-   * @param {Layers.AbstractModels.Restrictions} [restrictions]
-   * @param {Layers.AbstractModels.Options} [options]
-   * @return {Promise<{data: Models.Model[], total: number}>}
+   * @param {Layers.Models.Filter} [filter]
+   * @param {Layers.Models.Pagination} [pagination]
+   * @param {Layers.Models.Restrictions} [restrictions]
+   * @param {Layers.Models.Options} [options]
+   * @return {Promise<{data: Models.Definition[], total: number}>}
    */
   async getAllWithConnections(
     filter = new Filter(),
@@ -206,11 +206,11 @@ class ModelPostgres extends Model {
 
   /**
    * @public
-   * @param {Layers.AbstractModels.Params} [params]
-   * @param {Layers.AbstractModels.Query} [query]
-   * @param {Layers.AbstractModels.Restrictions} [restrictions]
-   * @param {Layers.AbstractModels.Options} [options]
-   * @return {Promise<Models.Model>}
+   * @param {Layers.Models.Params} [params]
+   * @param {Layers.Models.Query} [query]
+   * @param {Layers.Models.Restrictions} [restrictions]
+   * @param {Layers.Models.Options} [options]
+   * @return {Promise<Models.Definition>}
    */
   async getOne(
     params = new Params(),
@@ -245,11 +245,11 @@ class ModelPostgres extends Model {
   /**
    * @todo: To fix a "spread".
    * @public
-   * @param {Layers.AbstractModels.Params} [params]
-   * @param {Layers.AbstractModels.Query} [query]
-   * @param {Layers.AbstractModels.Restrictions} [restrictions]
-   * @param {Layers.AbstractModels.Options} [options]
-   * @return {Promise<Models.Model>}
+   * @param {Layers.Models.Params} [params]
+   * @param {Layers.Models.Query} [query]
+   * @param {Layers.Models.Restrictions} [restrictions]
+   * @param {Layers.Models.Options} [options]
+   * @return {Promise<Models.Definition>}
    */
   async getCount(
     params = new Params(),
@@ -281,12 +281,12 @@ class ModelPostgres extends Model {
 
   /**
    * @public
-   * @param {Layers.AbstractModels.Params} [params]
-   * @param {Layers.AbstractModels.Query} [query]
-   * @param {Layers.AbstractModels.Data} data
-   * @param {Layers.AbstractModels.Restrictions} restrictions
-   * @param {Layers.AbstractModels.Options} options
-   * @return {Promise<Models.Model>}
+   * @param {Layers.Models.Params} [params]
+   * @param {Layers.Models.Query} [query]
+   * @param {Layers.Models.Data} data
+   * @param {Layers.Models.Restrictions} restrictions
+   * @param {Layers.Models.Options} options
+   * @return {Promise<Models.Definition>}
    */
   async upsertOne(params, query, data, restrictions, options) {
     return await this.getOne(params, query, restrictions, options)
@@ -296,11 +296,11 @@ class ModelPostgres extends Model {
   /**
    * @todo: To fix a "spread".
    * @public
-   * @param {Layers.AbstractModels.Params} [params]
-   * @param {Layers.AbstractModels.Query} [query]
-   * @param {Layers.AbstractModels.Restrictions} restrictions
-   * @param {Layers.AbstractModels.Options} options
-   * @return {Promise<Models.Model>}
+   * @param {Layers.Models.Params} [params]
+   * @param {Layers.Models.Query} [query]
+   * @param {Layers.Models.Restrictions} restrictions
+   * @param {Layers.Models.Options} options
+   * @return {Promise<Models.Definition>}
    */
   async deleteOne(
     params = new Params(),
@@ -349,7 +349,7 @@ class ModelPostgres extends Model {
    * @todo: To add mind map from Params to DB query.
    * @protected
    * @param {object} [where]
-   * @param {Layers.AbstractModels.Restrictions} [restrictions]
+   * @param {Layers.Models.Restrictions} [restrictions]
    * @return {object}
    */
   applyRestrictions(where = {}, restrictions = new Restrictions()) {
@@ -436,7 +436,7 @@ class ModelPostgres extends Model {
    * @protected
    * @todo: Try to fix it and do not use "this.models.Measurement".
    * @param {object} [include]
-   * @param {Layers.AbstractModels.Filter} [filter]
+   * @param {Layers.Models.Filter} [filter]
    * @return {*}
    */
   applyFilterIncluding(include = [], filter = new Filter()) {
@@ -465,7 +465,7 @@ class ModelPostgres extends Model {
    * @protected
    * Extend this method in child classes.
    * @param {object} [where]
-   * @param {Layers.AbstractModels.Filter} [filter]
+   * @param {Layers.Models.Filter} [filter]
    * @param {Models.AgentID} [filter.userId]
    */
   applyFilter(where = {}, filter = new Filter()) {
@@ -692,8 +692,8 @@ class ModelPostgres extends Model {
    * @protected
    * Extend this method in child classes.
    * @param {object} [where]
-   * @param {Layers.AbstractModels.Filter
-   * | Layers.AbstractModels.Restrictions} [abstractions]
+   * @param {Layers.Models.Filter
+   * | Layers.Models.Restrictions} [abstractions]
    */
   applyAbstracts(where = {}, abstractions = {}) {
     if (!where) where = {};
@@ -941,7 +941,7 @@ class ModelPostgres extends Model {
   }
 
   /**
-   * @param {Layers.AbstractModels.Pagination} pagination
+   * @param {Layers.Models.Pagination} pagination
    * @returns {[any, any][]}
    * @protected
    */
@@ -960,7 +960,7 @@ class ModelPostgres extends Model {
 
   /**
    * @todo: - To do what exactly?
-   * @param {Layers.AbstractModels.Query} query
+   * @param {Layers.Models.Query} query
    * @return {*[] | null}
    * @protected
    */
@@ -976,7 +976,7 @@ class ModelPostgres extends Model {
   }
 
   /**
-   * @param {Layers.AbstractModels.Options} _options
+   * @param {Layers.Models.Options} _options
    * @return {*}
    * @protected
    */
@@ -985,7 +985,7 @@ class ModelPostgres extends Model {
   }
 
   /**
-   * @param {Layers.AbstractModels.Options} _options
+   * @param {Layers.Models.Options} _options
    * @return {*}
    * @protected
    */
@@ -996,7 +996,7 @@ class ModelPostgres extends Model {
   /**
    * @protected
    * @param {string} name
-   * @param {Layers.AbstractModels.Options} options
+   * @param {Layers.Models.Options} options
    * @returns {Promise<*>}
    */
   async _lockTable(name, options = {}) {
@@ -1010,7 +1010,7 @@ class ModelPostgres extends Model {
   /**
    * @protected
    * @param {string} name
-   * @param {Layers.AbstractModels.Options} options
+   * @param {Layers.Models.Options} options
    * @returns {Promise<*>}
    */
   async _updateMaterializedView(name, options = {}) {
@@ -1023,7 +1023,7 @@ class ModelPostgres extends Model {
   /**
    * @protected
    * @param {object} cond
-   * @param {Layers.AbstractModels.Options} options
+   * @param {Layers.Models.Options} options
    */
   _extendGenericConditions(cond = {}, options = {}) {
     if (_.has(options, 'transaction')) {
@@ -1041,7 +1041,7 @@ class ModelPostgres extends Model {
   /**
    * @protected
    * @param {object} cond
-   * @param {Layers.AbstractModels.Options} options
+   * @param {Layers.Models.Options} options
    */
   _extendAdvancedConditions(cond = {}, options = {}) {
     if (_.has(options, 'raw')) {

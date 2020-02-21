@@ -4,7 +4,7 @@ const models = require('./definitions');
 const { ModelPostgres } = require('./model-postgres');
 
 /**
- * @implements {Layers.AbstractModels.Generic}
+ * @implements {Layers.Models.Generic}
  */
 class AgentModel extends ModelPostgres {
   constructor() {

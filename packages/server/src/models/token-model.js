@@ -4,7 +4,7 @@ const { TOKEN_TYPE } = require('../enums');
 const { ModelPostgres } = require('./model-postgres');
 
 /**
- * @implements {Layers.AbstractModels.Generic}
+ * @implements {Layers.Models.Generic}
  */
 class TokenModel extends ModelPostgres {
   constructor() {

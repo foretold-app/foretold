@@ -13,7 +13,7 @@ const { Data } = require('../../data/classes');
  * @param {string} args.name
  * @param {Schema.Context} _context
  * @param {object} _info
- * @returns {Promise<Models.Model>}
+ * @returns {Promise<Models.Definition>}
  */
 async function one(_root, args, _context, _info) {
   const name = _.get(args, 'name', null);

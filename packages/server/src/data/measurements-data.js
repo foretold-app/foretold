@@ -15,7 +15,7 @@ class MeasurementsData extends DataBase {
   /**
    * @public
    * @param {*} options
-   * @return {Promise<Models.Model>}
+   * @return {Promise<Models.Definition>}
    */
   async getLatest(options) {
     return this.model.getLatest(options);
@@ -24,7 +24,7 @@ class MeasurementsData extends DataBase {
   /**
    * @protected
    * @param {Layers.DataSource.Options} [options]
-   * @return {Layers.AbstractModels.Restrictions}
+   * @return {Layers.Models.Restrictions}
    */
   _getDefaultRestrictions(options = {}) {
     return {

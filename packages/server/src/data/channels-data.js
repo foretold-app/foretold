@@ -19,7 +19,7 @@ class ChannelsData extends DataBase {
   /**
    * @protected
    * @param {Layers.DataSource.Options} _options
-   * @return {Layers.AbstractModels.Restrictions}
+   * @return {Layers.Models.Restrictions}
    */
   _getDefaultRestrictions(_options) {
     return { channelIdAsId: true };

@@ -21,7 +21,7 @@ class GlobalSettingsData extends DataBase {
   /**
    * @public
    * @param {object} incomingData
-   * @return {Promise<Models.Model>}
+   * @return {Promise<Models.Definition>}
    */
   async updateEntityGraph(incomingData) {
     assert(_.isObject(incomingData), 'EntityGraph should be an object');

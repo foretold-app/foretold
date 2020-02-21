@@ -8,7 +8,7 @@ const { ModelPostgres } = require('./model-postgres');
 const { Params } = require('../data/classes');
 
 /**
- * @implements {Layers.AbstractModels.Generic}
+ * @implements {Layers.Models.Generic}
  */
 class MeasurementModel extends ModelPostgres {
   constructor() {
@@ -134,7 +134,7 @@ class MeasurementModel extends ModelPostgres {
    * @todo: To use "applyFilter" to use "transactions" later.
    * @param {Models.Measurable} measurable
    * @param {Models.AgentID | null} agentId
-   * @return {Promise<Models.Model>}
+   * @return {Promise<Models.Definition>}
    */
   async getLatest({ measurable, agentId } = {}) {
     const measurableId = measurable.id;

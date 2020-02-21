@@ -22,7 +22,7 @@ class AgentChannelsData extends DataBase {
   /**
    * @protected
    * @param {Layers.DataSource.Options} [options]
-   * @return {Layers.AbstractModels.Restrictions}
+   * @return {Layers.Models.Restrictions}
    */
   _getDefaultRestrictions(options = {}) {
     return {

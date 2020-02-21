@@ -32,6 +32,7 @@ type measurableState = [
 type isArchived = [ | `TRUE | `FALSE];
 type fieldChannels = [ | `membersCount | `isCurated | `name];
 type fieldAgentMeasurables = [ | `primaryPointScore];
+type fieldNotebooks = [ | `isBookmarked];
 type direction = [ | `ASC | `DESC];
 
 type permission = [

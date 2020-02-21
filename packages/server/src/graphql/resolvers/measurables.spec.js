@@ -36,6 +36,7 @@ describe('Measurables Resolvers', () => {
             before: 2,
             first: 'first1',
             last: 'last1',
+            _context: {}
           },
           {
             agentId: 'agentId2',

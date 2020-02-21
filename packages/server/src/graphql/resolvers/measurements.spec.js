@@ -31,6 +31,7 @@ describe('Measurements Resolver', () => {
             before: 4,
             first: 'first5',
             last: 'last5',
+            _context: {},
           },
           { agentId: 'agentId1', isAdmin: null, raw: true },
         );

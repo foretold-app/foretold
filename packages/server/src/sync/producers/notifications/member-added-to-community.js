@@ -3,7 +3,7 @@ const { MemberToCommunity } = require('./member-to-community');
 
 class MemberAddedToCommunity extends MemberToCommunity {
   /**
-   * @param {Models.ChannelMemberships} channelMembership
+   * @param {Definitions.ChannelMemberships} channelMembership
    */
   constructor(channelMembership) {
     super(channelMembership);

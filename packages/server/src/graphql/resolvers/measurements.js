@@ -27,10 +27,10 @@ const log = logger.module('resolvers/measurements');
  * @param {object} args
  * @param {number} args.last
  * @param {number} args.first
- * @param {Models.MeasurableID} args.measurableId
- * @param {Models.AgentID} args.agentId
- * @param {Models.AgentID} args.notTaggedByAgent
- * @param {Models.ChannelID} args.channelId
+ * @param {Definitions.MeasurableID} args.measurableId
+ * @param {Definitions.AgentID} args.agentId
+ * @param {Definitions.AgentID} args.notTaggedByAgent
+ * @param {Definitions.ChannelID} args.channelId
  *
  * @param {object} args.findInDateRange
  * @param {string} args.findInDateRange.startDate
@@ -67,7 +67,7 @@ async function all(root, args, context, _info) {
 
 /**
  * @param {*} root
- * @param {Models.MeasurementID} root.taggedMeasurementId
+ * @param {Definitions.MeasurementID} root.taggedMeasurementId
  * @param {object} _args
  * @param {Schema.Context} _context
  * @param {object} _info
@@ -116,7 +116,7 @@ async function measurableMeasurement(root, args, context, _info) {
 /**
  * @param {*} root
  * @param {object} args
- * @param {Models.MeasurementID} args.id
+ * @param {Definitions.MeasurementID} args.id
  * @param {string[]} args.competitorType
  * @param {Schema.Context} context
  * @param {object} _info
@@ -194,7 +194,7 @@ async function scoreSet(root, _args, _context, _info) {
  * Do not return "root".
  * @todo: rename to "predictionByRootId"
  * @param {object} root
- * @param {Models.MeasurementID} root.id
+ * @param {Definitions.MeasurementID} root.id
  * @param {object} _args
  * @param {Schema.Context} _context
  * @param {object} _info
@@ -211,7 +211,7 @@ async function prediction(root, _args, _context, _info) {
 /**
  * @todo: rename to "outcomeByRootMeasurableId"
  * @param {object} root
- * @param {Models.MeasurableID} root.measurableId
+ * @param {Definitions.MeasurableID} root.measurableId
  * @param {object} _args
  * @param {Schema.Context} _context
  * @param {object} _info
@@ -224,7 +224,7 @@ async function outcome(root, _args, _context, _info) {
 
 /**
  * @param {object} root
- * @param {Models.MeasurementID} root.id
+ * @param {Definitions.MeasurementID} root.id
  * @param {object} _args
  * @param {Schema.Context} _context
  * @param {object} _info
@@ -237,7 +237,7 @@ async function outcomeByRootId(root, _args, _context, _info) {
 
 /**
  * @param {object} root
- * @param {Models.MeasurableID} root.measurableId
+ * @param {Definitions.MeasurableID} root.measurableId
  * @param {Date} root.createdAt
  * @param {object} args
  * @param {Schema.Context} context
@@ -258,7 +258,7 @@ async function previousAggregate(root, args, context, _info) {
 
 /**
  * @param {object} root
- * @param {Models.MeasurementID} root.id
+ * @param {Definitions.MeasurementID} root.id
  * @param {object} _args
  * @param {Schema.Context} context
  * @param {object} _info
@@ -288,9 +288,9 @@ function translateValue(measurement) {
 
 /**
  * @todo: To move from resolvers.
- * @param {Models.Measurement} prediction$
- * @param {Models.Measurement} aggregate$
- * @param {Models.Measurement} outcome$
+ * @param {Definitions.Measurement} prediction$
+ * @param {Definitions.Measurement} aggregate$
+ * @param {Definitions.Measurement} outcome$
  * @returns {number|*}
  */
 function _marketLogScore({ prediction$, aggregate$, outcome$ }) {
@@ -315,8 +315,8 @@ function _marketLogScore({ prediction$, aggregate$, outcome$ }) {
 
 /**
  * @todo: To move from resolvers.
- * @param {Models.Measurement} prediction$
- * @param {Models.Measurement} outcome$
+ * @param {Definitions.Measurement} prediction$
+ * @param {Definitions.Measurement} outcome$
  * @returns {number|*}
  */
 function _nonMarketLogScore({ prediction$, outcome$ }) {
@@ -417,7 +417,7 @@ async function truncateCdf(root, args, _context, _info) {
 
 /**
  * @param {object} root
- * @param {Models.MeasurementID} root.id
+ * @param {Definitions.MeasurementID} root.id
  * @param {object} _args
  * @param {Schema.Context} _context
  * @param {object} _info
@@ -430,7 +430,7 @@ async function measurementCountByAgentId(root, _args, _context, _info) {
 
 /**
  * @param {object} root
- * @param {Models.MeasurementID} root.id
+ * @param {Definitions.MeasurementID} root.id
  * @param {object} _args
  * @param {Schema.Context} _context
  * @param {object} _info
@@ -454,7 +454,7 @@ async function count(_root, _args, _context, _info) {
 
 /**
  * @param {object} root
- * @param {Models.MeasurementID} root.id
+ * @param {Definitions.MeasurementID} root.id
  * @param {object} _args
  * @param {Schema.Context} _context
  * @param {object} _info
@@ -471,7 +471,7 @@ async function measurerCount(root, _args, _context, _info) {
  * @todo: It is copied from a measurement definition.
  * @todo: But leave it here and remove from there.
  * @param {object} root
- * @param {Models.MeasurementID} root.id
+ * @param {Definitions.MeasurementID} root.id
  * @param {object} _args
  * @param {Schema.Context} _context
  * @param {object} _info

@@ -9,8 +9,8 @@ const { Options } = require('../../data/classes');
 /**
  * @param {*} root
  * @param {object} args
- * @param {Models.ChannelID} args.channelId
- * @param {Models.AgentID} args.agentId
+ * @param {Definitions.ChannelID} args.channelId
+ * @param {Definitions.AgentID} args.agentId
  * @param {number} args.minNumberOfPredictions
  * @param {number} args.minNumberOfQuestionsScored
  * @param {string} args.after
@@ -46,8 +46,8 @@ async function all(root, args, context, _info) {
 
 /**
  * @param {*} root
- * @param {Models.Agent.id} root.agentId
- * @param {Models.Channel.id} root.channelId
+ * @param {Definitions.Agent.id} root.agentId
+ * @param {Definitions.Channel.id} root.channelId
  * @param {object} _args
  * @param {Schema.Context} _context
  * @param {object} _info

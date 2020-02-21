@@ -4,7 +4,7 @@ const { NewMeasurement } = require('./new-measurement');
 
 class NewMeasurementNotAvailable extends NewMeasurement {
   /**
-   * @param {Models.Measurement} measurement
+   * @param {Definitions.Measurement} measurement
    */
   constructor(measurement) {
     super(measurement);

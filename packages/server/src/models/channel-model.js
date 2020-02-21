@@ -71,7 +71,7 @@ class ChannelModel extends ModelPostgres {
 
   /**
    * @protected
-   * @param {Models.AgentID} agentId
+   * @param {Definitions.AgentID} agentId
    * @return {Sequelize.literal}
    */
   _isBookmarkedLiteral(agentId) {
@@ -100,7 +100,7 @@ class ChannelModel extends ModelPostgres {
 
   /**
    * @protected
-   * @param {Models.AgentID} agentId
+   * @param {Definitions.AgentID} agentId
    * @return {string}
    */
   _isBookmarked(agentId) {

@@ -33,7 +33,7 @@ class MeasurablesData extends DataBase {
   /**
    * @todo: rework
    * @public
-   * @param {Models.MeasurableID} measurableId
+   * @param {Definitions.MeasurableID} measurableId
    * @return {Promise<Models.Measurable>}
    */
   async unArchive(measurableId) {
@@ -43,7 +43,7 @@ class MeasurablesData extends DataBase {
   }
 
   /**
-   * @param {Models.ChannelID} channelId
+   * @param {Definitions.ChannelID} channelId
    * @return {Promise<*>}
    */
   async getOpenedCount(channelId) {

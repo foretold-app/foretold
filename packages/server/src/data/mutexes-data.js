@@ -17,7 +17,7 @@ class MutexesData extends DataBase {
 
   /**
    * @public
-   * @param {Models.AgentID} agentId
+   * @param {Definitions.AgentID} agentId
    * @param {string} name
    * @returns {Promise<*>}
    */
@@ -77,7 +77,7 @@ class MutexesData extends DataBase {
 
   /**
    * @public
-   * @param {Models.AgentID} agentId
+   * @param {Definitions.AgentID} agentId
    * @param {string} mutexId
    * @returns {Promise<*>}
    */

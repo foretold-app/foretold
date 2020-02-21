@@ -27,7 +27,7 @@ async function one(root, _args, _context, _info) {
 /**
  * @param {*} _root
  * @param {object} args
- * @param {Models.PreferenceID} args.id
+ * @param {Definitions.PreferenceID} args.id
  * @param {object} args.input
  * @param {Schema.Context} _context
  * @param {object} _info
@@ -46,7 +46,7 @@ async function update(_root, args, _context, _info) {
 /**
  * @param {*} _root
  * @param {object} args
- * @param {Models.AgentID} args.id
+ * @param {Definitions.AgentID} args.id
  * @param {Schema.Context} _context
  * @param {object} _info
  * @returns {Promise<boolean>}
@@ -59,7 +59,7 @@ async function subscribe(_root, args, _context, _info) {
 /**
  * @param {*} _root
  * @param {object} args
- * @param {Models.AgentID} args.id
+ * @param {Definitions.AgentID} args.id
  * @param {Schema.Context} _context
  * @param {object} _info
  * @returns {Promise<boolean>}

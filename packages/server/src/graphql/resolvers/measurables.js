@@ -21,10 +21,10 @@ const { HOME_CHANNEL_ID } = require('../../../config/well-known');
  * @todo: update input of getAll
  * @param {*} root
  * @param {object} args
- * @param {Models.AgentID} args.creatorId
- * @param {Models.SeriesID} args.seriesId
- * @param {Models.ChannelID} args.channelId
- * @param {Models.AgentID} args.measuredByAgentId
+ * @param {Definitions.AgentID} args.creatorId
+ * @param {Definitions.SeriesID} args.seriesId
+ * @param {Definitions.ChannelID} args.channelId
+ * @param {Definitions.AgentID} args.measuredByAgentId
  * @param {string[]} args.states
  * @param {string[]} args.isArchived
  * @param {string} args.after
@@ -112,7 +112,7 @@ async function create(root, args, context, _info) {
 /**
  * @param {*} root
  * @param {object} args
- * @param {Models.MeasurableID} args.id
+ * @param {Definitions.MeasurableID} args.id
  * @param {Schema.Context} _context
  * @param {object} _info
  * @returns {Promise<*|Array<Model>>}
@@ -125,7 +125,7 @@ async function archive(root, args, _context, _info) {
 /**
  * @param {*} root
  * @param {object} args
- * @param {Models.MeasurableID} args.id
+ * @param {Definitions.MeasurableID} args.id
  * @param {Schema.Context} _context
  * @param {object} _info
  * @returns {Promise<*|Array<Model>>}
@@ -138,7 +138,7 @@ async function unarchive(root, args, _context, _info) {
 /**
  * @param {*} root
  * @param {object} args
- * @param {Models.MeasurableID} args.id
+ * @param {Definitions.MeasurableID} args.id
  * @param {object} args.input
  * @param {Schema.Context} _context
  * @param {object} _info
@@ -154,7 +154,7 @@ async function update(root, args, _context, _info) {
 
 /**
  * @param {*} root
- * @param {Models.MeasurableID} root.id
+ * @param {Definitions.MeasurableID} root.id
  * @param {object} _args
  * @param {Schema.Context} _context
  * @param {object} _info

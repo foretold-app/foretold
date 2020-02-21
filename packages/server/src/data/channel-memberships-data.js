@@ -25,8 +25,8 @@ class ChannelMembershipsData extends DataBase {
   /**
    * @public
    * @param {object} filter
-   * @param {Models.AgentID} [filter.agentId]
-   * @param {Models.ChannelID} [filter.channelId]
+   * @param {Definitions.AgentID} [filter.agentId]
+   * @param {Definitions.ChannelID} [filter.channelId]
    * @returns {Promise<string[]>}
    */
   async getAllChannelIds(filter) {
@@ -35,8 +35,8 @@ class ChannelMembershipsData extends DataBase {
 
   /**
    * @param {object} options
-   * @param {Models.ChannelID} options.channelId
-   * @param {Models.AgentID} options.agentId
+   * @param {Definitions.ChannelID} options.channelId
+   * @param {Definitions.AgentID} options.agentId
    * @return {Promise<Models.ChannelMemberships>}
    */
   async join(options) {
@@ -56,8 +56,8 @@ class ChannelMembershipsData extends DataBase {
   /**
    * @public
    * @param {object} options
-   * @param {Models.AgentID} options.agentId
-   * @param {Models.ChannelID} options.channelId
+   * @param {Definitions.AgentID} options.agentId
+   * @param {Definitions.ChannelID} options.channelId
    * @return {Promise<Models.ChannelMemberships|null>}
    */
   async leave(options) {
@@ -75,8 +75,8 @@ class ChannelMembershipsData extends DataBase {
   /**
    * @public
    * @param {object} params
-   * @param {Models.AgentID} params.agentId
-   * @param {Models.ChannelID} params.channelId
+   * @param {Definitions.AgentID} params.agentId
+   * @param {Definitions.ChannelID} params.channelId
    * @return {Promise<string>}
    */
   async getOneOnlyRole(params) {
@@ -97,7 +97,7 @@ class ChannelMembershipsData extends DataBase {
 
   /**
    * @public
-   * @param {Models.ChannelID} channelId
+   * @param {Definitions.ChannelID} channelId
    * @return {Promise<Models.ChannelMemberships[]>}
    */
   async getAllOnlyAdmins(channelId) {

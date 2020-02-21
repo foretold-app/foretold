@@ -466,7 +466,7 @@ class ModelPostgres extends Model {
    * Extend this method in child classes.
    * @param {object} [where]
    * @param {Layers.Models.ModelFilter} [filter]
-   * @param {Models.AgentID} [filter.userId]
+   * @param {Definitions.AgentID} [filter.userId]
    */
   applyFilter(where = {}, filter = new Filter()) {
     if (!where) where = {};
@@ -743,7 +743,7 @@ class ModelPostgres extends Model {
   /**
    * @protected
    * @todo: see this._publicAndJoinedChannels()
-   * @param {Models.AgentID} [agentId]
+   * @param {Definitions.AgentID} [agentId]
    * @param {string} [name]
    * @return {Sequelize.literal}
    */
@@ -755,7 +755,7 @@ class ModelPostgres extends Model {
    * @todo: sequelize.dialect.QueryGenerator.selectQuery
    * @todo: To use SQL replacements or bindings.
    * @protected
-   * @param {Models.AgentID} [agentId]
+   * @param {Definitions.AgentID} [agentId]
    * @param {string} [name]
    * @return {string}
    */
@@ -799,7 +799,7 @@ class ModelPostgres extends Model {
   /**
    * @todo: Rename to "withinJoinedChannels" + "Literal"?
    * @protected
-   * @param {Models.AgentID} [agentId]
+   * @param {Definitions.AgentID} [agentId]
    * @param {string} [name]
    * @return {Sequelize.literal}
    */
@@ -811,7 +811,7 @@ class ModelPostgres extends Model {
    * @todo: To use SQL replacements or bindings.
    * @todo: Rename to "withinJoinedChannels"?
    * @protected
-   * @param {Models.AgentID} [agentId]
+   * @param {Definitions.AgentID} [agentId]
    * @param {string} [name]
    * @return {string}
    */
@@ -831,7 +831,7 @@ class ModelPostgres extends Model {
 
   /**
    * @protected
-   * @param {Models.AgentID} [agentId]
+   * @param {Definitions.AgentID} [agentId]
    * @param {string} [name]
    * @return {Sequelize.literal}
    */
@@ -843,7 +843,7 @@ class ModelPostgres extends Model {
 
   /**
    * @todo: To use SQL replacements or bindings.
-   * @param {Models.AgentID} [agentId]
+   * @param {Definitions.AgentID} [agentId]
    * @param {string} [name]
    * @return {string}
    * @protected
@@ -887,7 +887,7 @@ class ModelPostgres extends Model {
   /**
    * @protected
    * @param {string[]} statesIn
-   * @param {Models.ChannelID} channelIdIn
+   * @param {Definitions.ChannelID} channelIdIn
    * @param {string} [name]
    * @return {Sequelize.literal}
    */
@@ -900,7 +900,7 @@ class ModelPostgres extends Model {
   /**
    * @todo: To use SQL replacements or bindings.
    * @param {string[] | null} statesIn
-   * @param {Models.ChannelID | null} channelIdIn
+   * @param {Definitions.ChannelID | null} channelIdIn
    * @param {string} [name]
    * @return {string}
    * @protected

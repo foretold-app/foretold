@@ -16,7 +16,7 @@ const log = logger.module('notifications/member-to-community');
  */
 class MemberToCommunity extends ProducerNotifications {
   /**
-   * @param {Models.ChannelMemberships} channelMembership
+   * @param {Definitions.ChannelMemberships} channelMembership
    */
   constructor(channelMembership) {
     super({});
@@ -43,15 +43,15 @@ class MemberToCommunity extends ProducerNotifications {
     }
 
     try {
-      /** @type {Models.Channel} */
+      /** @type {Definitions.Channel} */
       const channel = await this.channels.getOne(new Params({
         id: this.channelMembership.channelId,
       }));
-      /** @type {Models.Agent} */
+      /** @type {Definitions.Agent} */
       const agent = await this.agents.getOne(new Params({
         id: this.channelMembership.agentId,
       }));
-      /** @type {Models.Agent} */
+      /** @type {Definitions.Agent} */
       const inviter = await this.users.getOne(new Params({
         agentId: this.channelMembership.inviterAgentId,
       }));
@@ -65,7 +65,7 @@ class MemberToCommunity extends ProducerNotifications {
         channel,
       );
 
-      /** @type {Models.Notification} */
+      /** @type {Definitions.Notification} */
       const notification = await this._queueEmail(replacements);
       await this._assignNotification(agent, notification);
 
@@ -80,8 +80,8 @@ class MemberToCommunity extends ProducerNotifications {
 
   /**
    * @protected
-   * @param {Models.Agent} inviter
-   * @param {Models.Channel} channel
+   * @param {Definitions.Agent} inviter
+   * @param {Definitions.Channel} channel
    * @return {object}
    */
   async _getReplacements(inviter, channel) {

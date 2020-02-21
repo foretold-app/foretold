@@ -16,7 +16,7 @@ class UserUpdater {
 
   /**
    * @public
-   * @param {Models.User} user
+   * @param {Definitions.User} user
    * @returns {Promise<boolean>}
    */
   async updateUser(user) {

@@ -12,7 +12,7 @@ const { Query } = require('../../data/classes');
  * @param {object} args
  * @param {object} args.input
  * @param {number} args.input.voteAmount
- * @param {Models.MeasurementID} args.measurementId
+ * @param {Definitions.MeasurementID} args.measurementId
  * @param {Schema.Context} context
  * @param {object} _info
  * @returns {Promise<*|Array<Model>>}
@@ -55,7 +55,7 @@ async function oneByMeasurementId(root, _args, context, _info) {
 /**
  * @param {object | null} _root
  * @param {object} args
- * @param {Models.MeasurementID} args.measurementId
+ * @param {Definitions.MeasurementID} args.measurementId
  * @param {Schema.Context} _context
  * @param {object} _info
  * @returns {Promise<Models.Channel[]>}

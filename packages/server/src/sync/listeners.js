@@ -45,7 +45,7 @@ async function updateMaterializedViews() {
 }
 
 /**
- * @param {Models.User} user
+ * @param {Definitions.User} user
  * @returns {Promise<boolean>}
  */
 async function updateUser(user) {
@@ -64,7 +64,7 @@ async function updateUser(user) {
 }
 
 /**
- * @param {Models.User} user
+ * @param {Definitions.User} user
  * @returns {Promise<boolean>}
  */
 async function invitations(user) {
@@ -83,7 +83,7 @@ async function invitations(user) {
 }
 
 /**
- * @param {Models.Channel} channel
+ * @param {Definitions.Channel} channel
  * @returns {Promise<boolean>}
  */
 async function createChannelMembership(channel) {
@@ -102,7 +102,7 @@ async function createChannelMembership(channel) {
 }
 
 /**
- * @param {Models.Bot} bot
+ * @param {Definitions.Bot} bot
  * @returns {Promise<boolean>}
  */
 async function createBotAgent(bot) {
@@ -121,7 +121,7 @@ async function createBotAgent(bot) {
 }
 
 /**
- * @param {Models.User} user
+ * @param {Definitions.User} user
  * @returns {Promise<boolean>}
  */
 async function createUserAgent(user) {
@@ -140,7 +140,7 @@ async function createUserAgent(user) {
 }
 
 /**
- * @param {Models.Measurable} measurable
+ * @param {Definitions.Measurable} measurable
  * @returns {Promise<boolean>}
  */
 async function checkMeasurable(measurable) {
@@ -159,7 +159,7 @@ async function checkMeasurable(measurable) {
 }
 
 /**
- * @param {Models.Measurement} measurement
+ * @param {Definitions.Measurement} measurement
  * @returns {Promise<boolean>}
  */
 async function checkMeasurement(measurement) {
@@ -178,7 +178,7 @@ async function checkMeasurement(measurement) {
 }
 
 /**
- * @param {Models.Measurement} measurement
+ * @param {Definitions.Measurement} measurement
  * @returns {Promise<boolean>}
  */
 async function measurableStateTransition(measurement) {
@@ -197,7 +197,7 @@ async function measurableStateTransition(measurement) {
 }
 
 /**
- * @param {Models.Series} series
+ * @param {Definitions.Series} series
  * @returns {Promise<boolean>}
  */
 async function createNewMeasurables(series) {
@@ -216,7 +216,7 @@ async function createNewMeasurables(series) {
 }
 
 /**
- * @param {Models.Measurement} measurement
+ * @param {Definitions.Measurement} measurement
  * @returns {Promise<boolean>}
  */
 async function newMeasurementSlackNotification(measurement) {
@@ -237,7 +237,7 @@ async function newMeasurementSlackNotification(measurement) {
 }
 
 /**
- * @param {Models.Measurable} measurable
+ * @param {Definitions.Measurable} measurable
  * @returns {Promise<boolean>}
  */
 async function newMeasurableSlackNotification(measurable) {
@@ -258,7 +258,7 @@ async function newMeasurableSlackNotification(measurable) {
 }
 
 /**
- * @param {Models.Measurable} measurable
+ * @param {Definitions.Measurable} measurable
  * @returns {Promise<boolean>}
  */
 async function updateMeasurableSlackNotification(measurable) {

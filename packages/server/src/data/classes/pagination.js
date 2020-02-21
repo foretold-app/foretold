@@ -4,6 +4,7 @@ const utils = require('../../lib/utils');
 
 /**
  * See "filter.js" comments.
+ * @implements {Layers.DataSource.DataPagination}
  */
 class Pagination {
   /**

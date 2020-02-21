@@ -6,7 +6,7 @@ const { clientUrl } = require('../../../config/client-urls');
 class Notifications {
   /**
    * @public
-   * @param {Models.Measurement} measurement
+   * @param {Definitions.Measurement} measurement
    * @returns {Promise<boolean>}
    */
   async newMeasurementSlackNotification(measurement) {
@@ -31,7 +31,7 @@ class Notifications {
 
   /**
    * @public
-   * @param {Models.Measurable} measurable
+   * @param {Definitions.Measurable} measurable
    * @return {Promise<boolean>}
    */
   async newMeasurableSlackNotification(measurable) {
@@ -53,7 +53,7 @@ class Notifications {
 
   /**
    * @public
-   * @param {Models.Measurable} measurable
+   * @param {Definitions.Measurable} measurable
    * @return {Promise<boolean>}
    */
   async updateMeasurableSlackNotification(measurable) {
@@ -75,9 +75,9 @@ class Notifications {
 
   /**
    * @protected
-   * @param {Models.Measurement} measurement
-   * @param {Models.Measurable} measurable
-   * @param {Models.Agent} agent
+   * @param {Definitions.Measurement} measurement
+   * @param {Definitions.Measurable} measurable
+   * @param {Definitions.Agent} agent
    * @returns {Promise<*>}
    */
   async getNotificationNewMeasurement(measurement, measurable, agent) {
@@ -103,8 +103,8 @@ class Notifications {
 
   /**
    * @protected
-   * @param {Models.Measurable} measurable
-   * @param {Models.Creator} agent
+   * @param {Definitions.Measurable} measurable
+   * @param {Definitions.Creator} agent
    * @return {Promise<*>}
    */
   async getNotificationNewMeasurable(measurable, agent) {
@@ -131,8 +131,8 @@ class Notifications {
 
   /**
    * @protected
-   * @param {Models.Measurable} measurable
-   * @param {Models.Creator} agent
+   * @param {Definitions.Measurable} measurable
+   * @param {Definitions.Creator} agent
    * @return {Promise<*>}
    */
   async getNotificationUpdateMeasurable(measurable, agent) {
@@ -152,7 +152,7 @@ class Notifications {
 
   /**
    * @protected
-   * @param {Models.Measurable} _measurable
+   * @param {Definitions.Measurable} _measurable
    * @return {string[]}
    */
   changedFields(_measurable) {

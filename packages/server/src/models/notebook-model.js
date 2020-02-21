@@ -54,7 +54,7 @@ class NotebookModel extends ModelPostgres {
 
   /**
    * @protected
-   * @param {Models.AgentID} agentId
+   * @param {Definitions.AgentID} agentId
    * @return {string}
    */
   _isBookmarked(agentId) {

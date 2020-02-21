@@ -15,7 +15,7 @@ const { Params } = require('../../../data/classes');
  */
 class MeasurableState extends ProducerNotifications {
   /**
-   * @param {Models.Measurable} measurable
+   * @param {Definitions.Measurable} measurable
    */
   constructor(measurable) {
     super({});
@@ -31,8 +31,8 @@ class MeasurableState extends ProducerNotifications {
   }
 
   /**
-   * @param {Models.Channel} channel
-   * @param {Models.Measurable} measurable
+   * @param {Definitions.Channel} channel
+   * @param {Definitions.Measurable} measurable
    * @return {{measurable: {name: string, link: string}}}
    * @protected
    */

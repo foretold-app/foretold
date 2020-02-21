@@ -12,7 +12,7 @@ const { Data } = require('../../data/classes');
 /**
  * @param {*} root
  * @param {object} args
- * @param {Models.SeriesID} args.id
+ * @param {Definitions.SeriesID} args.id
  * @param {Schema.Context} context
  * @param {object} _info
  * @returns {Promise<*|Array<Model>>}
@@ -36,7 +36,7 @@ async function one(root, args, context, _info) {
  * @todo: To use "getConnection" to limit queries.
  * @param {*} root
  * @param {object} args
- * @param {Models.ChannelID} args.channelId
+ * @param {Definitions.ChannelID} args.channelId
  * @param {Schema.Context} context
  * @param {object} _info
  * @returns {Promise<*|Array<Model>>}

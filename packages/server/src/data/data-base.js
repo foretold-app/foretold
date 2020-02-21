@@ -122,7 +122,7 @@ class DataBase {
   /**
    * @public
    * @param {Layers.DataSource.DataFilter} [filter]
-   * @param {Models.AgentID} filter.userId
+   * @param {Definitions.AgentID} filter.userId
    * @param {Layers.DataSource.DataPagination} [pagination]
    * @param {Layers.DataSource.DataOptions} [options]
    * @return {Promise<{data: Models.Definition[], total: number}>}

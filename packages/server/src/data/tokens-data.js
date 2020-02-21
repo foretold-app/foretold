@@ -46,7 +46,7 @@ class TokensData extends DataBase {
   /**
    * @todo: add transaction
    * @public
-   * @param {Models.AgentID} agentId
+   * @param {Definitions.AgentID} agentId
    * @param {string} [type]
    * @return {Promise<string>}
    */
@@ -84,7 +84,7 @@ class TokensData extends DataBase {
 
   /**
    * @public
-   * @param {Models.AgentID} agentId
+   * @param {Definitions.AgentID} agentId
    * @return {Promise<Models.Token>}
    */
   async createAuthToken(agentId) {
@@ -106,7 +106,7 @@ class TokensData extends DataBase {
 
   /**
    * @protected
-   * @param {Models.AgentID} [agentId]
+   * @param {Definitions.AgentID} [agentId]
    * @param {string} [token]
    * @param {string} [type]
    * @param {number} [usageCount]
@@ -122,7 +122,7 @@ class TokensData extends DataBase {
 
   /**
    * @protected
-   * @param {Models.AgentID} agentId
+   * @param {Definitions.AgentID} agentId
    * @param {string} [type]
    * @param {Date | null} [expiresAt]
    * @param {number | null} [usageCount]

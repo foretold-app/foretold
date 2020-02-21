@@ -24,7 +24,7 @@ class Invitations {
   /**
    * @public
    * @todo: To add transactions.
-   * @param {Models.User} user
+   * @param {Definitions.User} user
    * @returns {Promise<boolean>}
    */
   async transition(user) {

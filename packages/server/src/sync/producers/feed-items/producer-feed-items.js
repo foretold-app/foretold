@@ -21,9 +21,9 @@ class ProducerFeedItems extends Producer {
     assert(_.isObject(input), 'Input should be an object.');
 
     this.input = input;
-    /** @type {Models.AgentID} */
+    /** @type {Definitions.AgentID} */
     this.agentId = null;
-    /** @type {Models.ChannelID} */
+    /** @type {Definitions.ChannelID} */
     this.channelId = null;
 
     this.FeedItem = Producer.FeedItemGeneric;
@@ -47,7 +47,7 @@ class ProducerFeedItems extends Producer {
     }
 
     try {
-      /** @type {Models.Agent} */
+      /** @type {Definitions.Agent} */
       const agent = await this.agents.getOne(new Params({ id: this.agentId }));
       assert(!!_.get(agent, 'id'), 'Agent ID is required.');
 
@@ -94,7 +94,7 @@ class ProducerFeedItems extends Producer {
   }
 
   /**
-   * @param {Models.Agent} agent
+   * @param {Definitions.Agent} agent
    * @return {Promise.<{agent: {name: string}}>}
    * @protected
    */
@@ -108,8 +108,8 @@ class ProducerFeedItems extends Producer {
 
   /**
    * @param {object} replacements
-   * @param {Models.ChannelID} channelId
-   * @param {Models.AgentID | null} agentId
+   * @param {Definitions.ChannelID} channelId
+   * @param {Definitions.AgentID | null} agentId
    * @return {Promise<Models.FeedItem>}
    * @protected
    */
@@ -122,8 +122,8 @@ class ProducerFeedItems extends Producer {
 
   /**
    * @param {FeedItem} feedItem
-   * @param {Models.ChannelID} channelId
-   * @param {Models.AgentID | null} agentId
+   * @param {Definitions.ChannelID} channelId
+   * @param {Definitions.AgentID | null} agentId
    * @return {Promise<Models.FeedItem>}
    * @protected
    */

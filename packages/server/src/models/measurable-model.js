@@ -33,7 +33,7 @@ class MeasurableModel extends ModelPostgres {
    * @protected
    * @param {object} [where]
    * @param {Layers.Models.ModelFilter} [filter]
-   * @param {Models.AgentID} [filter.userId]
+   * @param {Definitions.AgentID} [filter.userId]
    */
   applyFilter(where = {}, filter = {}) {
     super.applyFilter(where, filter);

@@ -9,7 +9,7 @@ const { Producer } = require('../producer');
  */
 class NewMeasurement extends ProducerFeedItems {
   /**
-   * @param {Models.Measurement} measurement
+   * @param {Definitions.Measurement} measurement
    */
   constructor(measurement) {
     super(measurement);
@@ -17,7 +17,7 @@ class NewMeasurement extends ProducerFeedItems {
       typeof _.get(measurement, 'getMeasurable') === 'function',
       'getMeasurable is required.',
     );
-    /** @type {Models.Measurable} */
+    /** @type {Definitions.Measurable} */
     this.measurable = null;
     this.FeedItem = Producer.FeedItemMeasurement;
   }
@@ -47,7 +47,7 @@ class NewMeasurement extends ProducerFeedItems {
   }
 
   /**
-   * @param {Models.Agent} agent
+   * @param {Definitions.Agent} agent
    * @return {Promise.<{agent: {
    * name: string},
    * measurable: {id: string, name: string}

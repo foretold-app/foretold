@@ -11,7 +11,7 @@ class FeedItemNotebook extends FeedItemGeneric {
    * @param {object} options
    * @param {string} options.item
    * @param {string} options.description
-   * @param {Models.NotebookID} options.notebookId
+   * @param {Definitions.NotebookID} options.notebookId
    */
   constructor(options) {
     super(options);

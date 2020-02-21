@@ -11,7 +11,7 @@ class FeedItemMeasurable extends FeedItemGeneric {
    * @param {object} options
    * @param {string} options.item
    * @param {string} options.description
-   * @param {Models.MeasurableID} options.measurableId
+   * @param {Definitions.MeasurableID} options.measurableId
    */
   constructor(options) {
     super(options);

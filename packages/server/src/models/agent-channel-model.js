@@ -21,8 +21,8 @@ class AgentChannelModel extends ModelPostgres {
   }
 
   /**
-   * @param {Models.AgentID} agentId
-   * @param {Models.ChannelID} channelId
+   * @param {Definitions.AgentID} agentId
+   * @param {Definitions.ChannelID} channelId
    * @returns {Promise<*>}
    */
   async scoringQuery(agentId, channelId) {

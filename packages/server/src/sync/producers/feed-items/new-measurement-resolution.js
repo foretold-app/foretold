@@ -4,7 +4,7 @@ const { NewMeasurement } = require('./new-measurement');
 
 class NewMeasurementResolution extends NewMeasurement {
   /**
-   * @param {Models.Measurement} measurement
+   * @param {Definitions.Measurement} measurement
    */
   constructor(measurement) {
     super(measurement);

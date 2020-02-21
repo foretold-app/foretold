@@ -10,7 +10,7 @@ const log = logger.module('notifications/measurable-state-resolved');
 
 class MeasurableStateResolved extends MeasurableState {
   /**
-   * @param {Models.Measurable} measurable
+   * @param {Definitions.Measurable} measurable
    */
   constructor(measurable) {
     super(measurable);
@@ -42,11 +42,11 @@ class MeasurableStateResolved extends MeasurableState {
     }
 
     try {
-      /** @type {Models.Channel} */
+      /** @type {Definitions.Channel} */
       const channel = await this.measurable.getChannel();
       assert(!!_.get(channel, 'id'), 'Channel ID is required.');
 
-      /** @type {Models.Agent[]} */
+      /** @type {Definitions.Agent[]} */
       const agents = await channel.getAgents();
       assert(_.isArray(agents),
         'Channel Members are required.');
@@ -55,7 +55,7 @@ class MeasurableStateResolved extends MeasurableState {
       assert(_.every(agents, (agent) => _.get(agent, 'id')),
         'Agent ID is required');
 
-      /** @type {Models.Measurement} */
+      /** @type {Definitions.Measurement} */
       const lastMeasurement = await this._getLastResolvedMeasurement();
       assert(!!_.get(lastMeasurement, 'agentId'), 'Agent ID is required');
 

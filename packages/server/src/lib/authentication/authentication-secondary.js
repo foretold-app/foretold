@@ -80,7 +80,7 @@ class AuthenticationSecondary {
 
   /**
    * @protected
-   * @param {Models.AgentID} agentId
+   * @param {Definitions.AgentID} agentId
    * @return {Promise<{
    *  agent: Models.Agent,
    *  creator: Models.Creator,

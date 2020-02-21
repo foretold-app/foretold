@@ -37,11 +37,11 @@ class ChannelModel extends ModelPostgres {
   }
 
   /**
-   * @param pagination
+   * @param {Layers.AbstractModelsLayer.pagination} pagination
    * @returns {[any, any][]}
    * @protected
    */
-  _getDefaultOrder(pagination) {
+  _getOrderFromPagination(pagination) {
     return pagination.getOrder()
       .map((item) => ([this._switchField(item.field), item.direction]));
   }

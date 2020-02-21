@@ -481,6 +481,7 @@ export namespace Layers {
       skipLocked?: boolean;
       transaction?: object;
     };
+    // @todo: To change on the interface.
     type filter = {
       agentId?: Models.AgentID;
       excludeChannelId?: Models.ChannelID;
@@ -522,6 +523,7 @@ export namespace Layers {
 
       getSpacedLimit?(): number | undefined;
     };
+    // @todo: To change on the interface.
     type pagination = {
       limit?: number;
       offset?: number;

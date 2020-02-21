@@ -180,8 +180,8 @@ class ModelPostgres extends Model {
     // Block 2
     const { limit, offset } = pagination.getPagination();
     const order = pagination.isOrderSet()
-      ? this._getDefaultOrder(pagination)
-      : this._getOrder();
+      ? this._getOrderFromPagination(pagination)
+      : this._getDefaultOrder();
 
     const findCond = {
       where,
@@ -941,11 +941,11 @@ class ModelPostgres extends Model {
   }
 
   /**
-   * @param pagination
+   * @param {Layers.AbstractModelsLayer.pagination} pagination
    * @returns {[any, any][]}
    * @protected
    */
-  _getDefaultOrder(pagination) {
+  _getOrderFromPagination(pagination) {
     return pagination.getOrder()
       .map((item) => ([item.field, item.direction]));
   }
@@ -954,12 +954,13 @@ class ModelPostgres extends Model {
    * @return {*[] | null}
    * @protected
    */
-  _getOrder() {
+  _getDefaultOrder() {
     return [['createdAt', 'DESC']];
   }
 
   /**
-   * @todo:
+   * @todo: - To do what exactly?
+   * @param {Layers.AbstractModelsLayer.query} query
    * @return {*[] | null}
    * @protected
    */
@@ -1057,7 +1058,7 @@ class ModelPostgres extends Model {
 
   /**
    * @todo: It is a temporary solution. Just to clean the application.
-   * @param input
+   * @param {object} input
    * @protected
    */
   _assertInput(input = {}) {

@@ -51,15 +51,15 @@ class Pagination {
    * @protected
    */
   _getOrder(options) {
-    const orderInput = _.get(options, 'order');
+    const orderInput = _.get(options, 'order', []);
     const orderArray = _.isArray(orderInput) ? orderInput : [];
     return orderArray
-      .filter((item) => _.has(item, 'field'))
-      .filter((item) => _.has(item, 'direction'))
       .map((item) => ({
-        field: _.get(item, 'field'),
-        direction: _.get(item, 'direction'),
-      }));
+        field: _.get(item, 'field', null),
+        direction: _.get(item, 'direction', null),
+      }))
+      .filter((item) => _.isString(item.field))
+      .filter((item) => _.isString(item.direction));
   }
 
   /**
@@ -72,7 +72,7 @@ class Pagination {
 
   /**
    * @public
-   * @returns {{field: any, direction: any}[]}
+   * @returns {{field: string, direction: string}[]}
    */
   getOrder() {
     return this.order;

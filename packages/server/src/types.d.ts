@@ -535,6 +535,7 @@ export namespace Layers {
 
       getPagination(): { limit: number; offset: number };
       isOrderSet(): boolean;
+      getOrder(): orderList;
     };
     type query = {
       col?: string;

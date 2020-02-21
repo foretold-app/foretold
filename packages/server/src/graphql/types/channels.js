@@ -77,6 +77,7 @@ const orderFieldChannel = new graphql.GraphQLEnumType({
   name: 'OrderFieldChannel',
   values: {
     isCurated: { value: 'isCurated' },
+    isBookmarked: { value: 'isBookmarked' },
     membersCount: { value: 'membersCount' },
     name: { value: 'name' },
   },

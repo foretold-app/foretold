@@ -47,13 +47,16 @@ class ChannelModel extends ModelPostgres {
   }
 
   /**
-   * @param name
-   * @returns {*}
-   * @private
+   * @param {string} name
+   * @returns {object | string}
+   * @protected
    */
   _switchField(name = '') {
     if (name === 'membersCount') {
       return this._membersCountLiteral();
+    }
+    if (name === 'isBookmarked') {
+      return this._isBookmarkedLiteral();
     }
     return name;
   }
@@ -68,6 +71,7 @@ class ChannelModel extends ModelPostgres {
 
   /**
    * @protected
+   * @param {Models.AgentID} agentId
    * @return {Sequelize.literal}
    */
   _isBookmarkedLiteral(agentId) {

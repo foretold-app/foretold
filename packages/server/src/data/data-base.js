@@ -48,8 +48,8 @@ class DataBase {
 
   /**
    * @public
-   * @param {Layers.DataSourceLayer.Data} [data]
-   * @param {Layers.DataSourceLayer.Options} [options]
+   * @param {Layers.DataSource.Data} [data]
+   * @param {Layers.DataSource.Options} [options]
    * @return {Promise<*>}
    */
   async createOne(data, options = new DataOptions()) {
@@ -59,9 +59,9 @@ class DataBase {
 
   /**
    * @public
-   * @param {Layers.DataSourceLayer.Params} [params]
-   * @param {Layers.DataSourceLayer.Query} [query]
-   * @param {Layers.DataSourceLayer.Options} [options]
+   * @param {Layers.DataSource.Params} [params]
+   * @param {Layers.DataSource.Query} [query]
+   * @param {Layers.DataSource.Options} [options]
    * @return {Promise<*>}
    */
   async getOne(params, query, options = new DataOptions()) {
@@ -72,9 +72,9 @@ class DataBase {
   /**
    * @todo: later fix "col" argument
    * @public
-   * @param {Layers.DataSourceLayer.Params} [params]
-   * @param {Layers.DataSourceLayer.Query} [query]
-   * @param {Layers.DataSourceLayer.Options} [options]
+   * @param {Layers.DataSource.Params} [params]
+   * @param {Layers.DataSource.Query} [query]
+   * @param {Layers.DataSource.Options} [options]
    * @return {Promise<*>}
    */
   async getCount(params, query, options = new DataOptions()) {
@@ -84,9 +84,9 @@ class DataBase {
 
   /**
    * @public
-   * @param {Layers.DataSourceLayer.Params} [params]
-   * @param {Layers.DataSourceLayer.Data} [data]
-   * @param {Layers.DataSourceLayer.Options} options
+   * @param {Layers.DataSource.Params} [params]
+   * @param {Layers.DataSource.Data} [data]
+   * @param {Layers.DataSource.Options} options
    * @return {Promise<*>}
    */
   async updateOne(params, data, options = new DataOptions()) {
@@ -96,9 +96,9 @@ class DataBase {
 
   /**
    * @public
-   * @param {Layers.DataSourceLayer.Params} [params]
-   * @param {Layers.DataSourceLayer.Query} [query]
-   * @param {Layers.DataSourceLayer.Options} [options]
+   * @param {Layers.DataSource.Params} [params]
+   * @param {Layers.DataSource.Query} [query]
+   * @param {Layers.DataSource.Options} [options]
    * @return {Promise<*>}
    */
   async deleteOne(params, query, options = new DataOptions()) {
@@ -108,10 +108,10 @@ class DataBase {
 
   /**
    * @public
-   * @param {Layers.DataSourceLayer.Params} [params]
-   * @param {Layers.DataSourceLayer.Query} [query]
-   * @param {Layers.DataSourceLayer.Data} [data]
-   * @param {Layers.DataSourceLayer.Options} [options]
+   * @param {Layers.DataSource.Params} [params]
+   * @param {Layers.DataSource.Query} [query]
+   * @param {Layers.DataSource.Data} [data]
+   * @param {Layers.DataSource.Options} [options]
    * @return {Promise<*>}
    */
   async upsertOne(params, query, data, options = new DataOptions()) {
@@ -121,10 +121,10 @@ class DataBase {
 
   /**
    * @public
-   * @param {Layers.DataSourceLayer.Filter} [filter]
+   * @param {Layers.DataSource.Filter} [filter]
    * @param {Models.AgentID} filter.userId
-   * @param {Layers.DataSourceLayer.Pagination} [pagination]
-   * @param {Layers.DataSourceLayer.Options} [options]
+   * @param {Layers.DataSource.Pagination} [pagination]
+   * @param {Layers.DataSource.Options} [options]
    * @return {Promise<{data: Models.Model[], total: number}>}
    */
   async getConnection(filter, pagination, options = new DataOptions()) {
@@ -136,9 +136,9 @@ class DataBase {
 
   /**
    * @public
-   * @param {Layers.DataSourceLayer.Filter} [filter]
-   * @param {Layers.DataSourceLayer.Pagination} [pagination]
-   * @param {Layers.DataSourceLayer.Options} [options]
+   * @param {Layers.DataSource.Filter} [filter]
+   * @param {Layers.DataSource.Pagination} [pagination]
+   * @param {Layers.DataSource.Options} [options]
    */
   async getAll(filter, pagination, options = new DataOptions()) {
     const { restriction$, option$ } = this._getOptionsRestrictions(options);
@@ -147,7 +147,7 @@ class DataBase {
 
   /**
    * @public
-   * @param {Layers.DataSourceLayer.Options} [options]
+   * @param {Layers.DataSource.Options} [options]
    * @return {Promise<*>}
    */
   async lock(options = new DataOptions()) {
@@ -157,7 +157,7 @@ class DataBase {
 
   /**
    * @public
-   * @param {Layers.DataSourceLayer.Options} [options]
+   * @param {Layers.DataSource.Options} [options]
    * @return {Promise<*>}
    */
   async updateMaterializedView(options = new DataOptions()) {
@@ -167,10 +167,10 @@ class DataBase {
 
   /**
    * @protected
-   * @param {Layers.DataSourceLayer.Options} [options]
+   * @param {Layers.DataSource.Options} [options]
    * @return {{
-   *  option$: Layers.AbstractModelsLayer.Options,
-   *  restriction$: Layers.AbstractModelsLayer.Restrictions,
+   *  option$: Layers.AbstractModels.Options,
+   *  restriction$: Layers.AbstractModels.Restrictions,
    * }}
    */
   _getOptionsRestrictions(options = new DataOptions()) {
@@ -185,8 +185,8 @@ class DataBase {
 
   /**
    * @protected
-   * @param {Layers.DataSourceLayer.Options} [options]
-   * @return {Layers.AbstractModelsLayer.Options}
+   * @param {Layers.DataSource.Options} [options]
+   * @return {Layers.AbstractModels.Options}
    */
   _getModelOptions(options = new DataOptions()) {
     if (_.isEmpty(options)) return new ModelsOptions({});
@@ -199,8 +199,8 @@ class DataBase {
 
   /**
    * @protected
-   * @param {Layers.DataSourceLayer.Options} [_options]
-   * @return {Layers.AbstractModelsLayer.Options}
+   * @param {Layers.DataSource.Options} [_options]
+   * @return {Layers.AbstractModels.Options}
    */
   _getDefaultOptions(_options = new DataOptions()) {
     return {};
@@ -208,8 +208,8 @@ class DataBase {
 
   /**
    * @protected
-   * @param {Layers.DataSourceLayer.Options} [options]
-   * @return {Layers.AbstractModelsLayer.Restrictions}
+   * @param {Layers.DataSource.Options} [options]
+   * @return {Layers.AbstractModels.Restrictions}
    */
   _getModelRestrictions(options = new DataOptions()) {
     if (_.isEmpty(options)) return new Restrictions({});
@@ -222,8 +222,8 @@ class DataBase {
 
   /**
    * @protected
-   * @param {Layers.DataSourceLayer.Options} [_options]
-   * @return {Layers.AbstractModelsLayer.Restrictions}
+   * @param {Layers.DataSource.Options} [_options]
+   * @return {Layers.AbstractModels.Restrictions}
    */
   _getDefaultRestrictions(_options = new DataOptions()) {
     return {};
@@ -231,8 +231,8 @@ class DataBase {
 
   /**
    * @protected
-   * @param {Layers.DataSourceLayer.Options} [options]
-   * @return {Layers.AbstractModelsLayer.Restrictions}
+   * @param {Layers.DataSource.Options} [options]
+   * @return {Layers.AbstractModels.Restrictions}
    */
   _getDefaultRestrictionsForIncludedIntoChannel(options = new DataOptions()) {
     const currentAgentId = _.get(options, 'currentAgentId', null);
@@ -253,8 +253,8 @@ class DataBase {
 
   /**
    * @protected
-   * @param {Layers.DataSourceLayer.Options} [options]
-   * @return {Layers.AbstractModelsLayer.Restrictions}
+   * @param {Layers.DataSource.Options} [options]
+   * @return {Layers.AbstractModels.Restrictions}
    */
   _getDefaultRestrictionsForIncludedIntoMeasurables(
     options = new DataOptions(),
@@ -269,7 +269,7 @@ class DataBase {
 
   /**
    * @protected
-   * @param {Layers.DataSourceLayer.Options} [options]
+   * @param {Layers.DataSource.Options} [options]
    * @return {{separatedOptions: Object, separatedRestrictions: Object}}
    */
   _separateDataOptions(options = new DataOptions()) {

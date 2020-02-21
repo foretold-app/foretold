@@ -12,7 +12,7 @@ const { Data } = require('./classes');
 const logger = require('../lib/log');
 
 /**
- * @implements {Layers.DataSourceLayer.DataSource}
+ * @implements {Layers.DataSource.Generic}
  * @property {VoteModel} model
  */
 class VotesData extends DataBase {

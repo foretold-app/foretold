@@ -2,7 +2,7 @@ const { DataBase } = require('./data-base');
 const { NotebookModel } = require('../models');
 
 /**
- * @implements {Layers.DataSourceLayer.DataSource}
+ * @implements {Layers.DataSource.Generic}
  * @property {NotebookModel} model
  */
 class NotebooksData extends DataBase {
@@ -13,8 +13,8 @@ class NotebooksData extends DataBase {
 
   /**
    * @protected
-   * @param {Layers.DataSourceLayer.Options} [options]
-   * @return {Layers.AbstractModelsLayer.Restrictions}
+   * @param {Layers.DataSource.Options} [options]
+   * @return {Layers.AbstractModels.Restrictions}
    */
   _getDefaultRestrictions(options = {}) {
     return {

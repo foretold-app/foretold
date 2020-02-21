@@ -1,5 +1,5 @@
 /**
- * @implements {Layers.AbstractModelsLayer.AbstractModel}
+ * @implements {Layers.AbstractModels.Generic}
  */
 class Model {
   getTransaction() {

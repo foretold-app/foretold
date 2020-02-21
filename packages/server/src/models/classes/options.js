@@ -1,9 +1,12 @@
 const _ = require('lodash');
 const utils = require('../../lib/utils');
 
+/**
+ * @implements {Layers.AbstractModels.Options}
+ */
 class Options {
   /**
-   * @param {Layers.AbstractModelsLayer.Options} [options]
+   * @param {object} [options]
    */
   constructor(options = {}) {
     utils.extend(this.constructor.name, options, Options.LIST, this);

@@ -320,7 +320,7 @@ export namespace Layers {
     rollback(): void;
   }
 
-  namespace DataSourceLayer {
+  namespace DataSource {
     type compoundId = object;
     type id = string | compoundId;
 
@@ -427,7 +427,7 @@ export namespace Layers {
     }
 
     // @todo: To fix response types.
-    interface DataSource {
+    interface Generic {
       createOne(data: Data, options: Options): Promise<Response>;
 
       getOne(params: Params, query: Query, options: Options): Promise<Response>;
@@ -469,7 +469,7 @@ export namespace Layers {
     }
   }
 
-  namespace AbstractModelsLayer {
+  namespace AbstractModels {
     type compoundId = object;
     type id = string | compoundId;
 
@@ -590,7 +590,7 @@ export namespace Layers {
     }
 
     // @todo: To fix response types.
-    interface AbstractModel {
+    interface Generic {
       deleteOne(
         params: Params,
         restrictions: Restrictions,

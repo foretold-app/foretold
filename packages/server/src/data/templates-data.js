@@ -2,7 +2,7 @@ const { DataBase } = require('./data-base');
 const { TemplateModel } = require('../models');
 
 /**
- * @implements {Layers.DataSourceLayer.DataSource}
+ * @implements {Layers.DataSource.Generic}
  * @property {TemplateModel} model
  */
 class TemplatesData extends DataBase {

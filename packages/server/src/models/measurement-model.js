@@ -8,7 +8,7 @@ const { ModelPostgres } = require('./model-postgres');
 const { Params } = require('../data/classes');
 
 /**
- * @implements {Layers.AbstractModelsLayer.AbstractModel}
+ * @implements {Layers.AbstractModels.Generic}
  */
 class MeasurementModel extends ModelPostgres {
   constructor() {

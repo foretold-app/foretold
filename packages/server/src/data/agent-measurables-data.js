@@ -9,7 +9,7 @@ const { MeasurablesData } = require('./measurables-data');
 const { Proceed } = require('./scoring/proceed');
 
 /**
- * @implements {Layers.DataSourceLayer.DataSource}
+ * @implements {Layers.DataSource.Generic}
  * @property {AgentMeasurableModel} model
  */
 class AgentMeasurablesData extends DataBase {
@@ -22,8 +22,8 @@ class AgentMeasurablesData extends DataBase {
 
   /**
    * @protected
-   * @param {Layers.DataSourceLayer.Options} [options]
-   * @return {Layers.AbstractModelsLayer.Restrictions}
+   * @param {Layers.DataSource.Options} [options]
+   * @return {Layers.AbstractModels.Restrictions}
    */
   _getDefaultRestrictions(options = {}) {
     return {

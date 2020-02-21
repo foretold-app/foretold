@@ -9,7 +9,7 @@ const logger = require('../lib/log');
 const log = logger.module('data/measurables-data');
 
 /**
- * @implements {Layers.DataSourceLayer.DataSource}
+ * @implements {Layers.DataSource.Generic}
  * @property {MeasurableModel} model
  */
 class MeasurablesData extends DataBase {
@@ -52,8 +52,8 @@ class MeasurablesData extends DataBase {
 
   /**
    * @protected
-   * @param {Layers.DataSourceLayer.Options} [options]
-   * @return {Layers.AbstractModelsLayer.Restrictions}
+   * @param {Layers.DataSource.Options} [options]
+   * @return {Layers.AbstractModels.Restrictions}
    */
   _getDefaultRestrictions(options = {}) {
     return {

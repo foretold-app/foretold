@@ -3,7 +3,7 @@ const utils = require('../../lib/utils');
 
 class Restrictions {
   /**
-   * @param {Layers.AbstractModelsLayer.Restrictions} [options]
+   * @param {Layers.AbstractModels.Restrictions} [options]
    */
   constructor(options) {
     utils.extend(this.constructor.name, options, Restrictions.LIST, this);

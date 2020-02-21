@@ -9,7 +9,7 @@ const { Data, Params, Query } = require('./classes');
 const { InvitationModel } = require('../models');
 
 /**
- * @implements {Layers.DataSourceLayer.DataSource}
+ * @implements {Layers.DataSource.Generic}
  * @property {InvitationModel} model
  */
 class InvitationsData extends DataBase {

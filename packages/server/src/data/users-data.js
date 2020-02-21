@@ -8,7 +8,7 @@ const { Params, Query, Data } = require('./classes');
 const { UserModel } = require('../models');
 
 /**
- * @implements {Layers.DataSourceLayer.DataSource}
+ * @implements {Layers.DataSource.Generic}
  * @property {UserModel} model
  */
 class UsersData extends DataBase {

@@ -2,7 +2,7 @@ const models = require('./definitions');
 const { ModelPostgres } = require('./model-postgres');
 
 /**
- * @implements {Layers.AbstractModelsLayer.AbstractModel}
+ * @implements {Layers.AbstractModels.Generic}
  */
 class VoteModel extends ModelPostgres {
   constructor() {
@@ -24,7 +24,7 @@ class VoteModel extends ModelPostgres {
   }
 
   /**
-   * @param {Layers.AbstractModelsLayer.Options} _options
+   * @param {Layers.AbstractModels.Options} _options
    * @protected
    */
   _getGroups(_options = {}) {

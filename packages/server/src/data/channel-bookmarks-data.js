@@ -9,7 +9,7 @@ const { Query } = require('../data/classes');
 const logger = require('../lib/log');
 
 /**
- * @implements {Layers.DataSourceLayer.DataSource}
+ * @implements {Layers.DataSource.Generic}
  * @property {VoteModel} model
  */
 class ChannelBookmarksData extends DataBase {

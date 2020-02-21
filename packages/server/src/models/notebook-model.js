@@ -37,6 +37,33 @@ class NotebookModel extends ModelPostgres {
   }
 
   /**
+   * @param {Layers.Pagination} pagination
+   * @returns {[*, string][]}
+   * @protected
+   */
+  _getOrderFromPagination(pagination) {
+    const order = pagination.getOrder();
+    const agentId = pagination.getContext('agentId');
+    return order.map((item) => ([
+      this._switchField(item.field, agentId),
+      item.direction,
+    ]));
+  }
+
+  /**
+   * @param {string} name
+   * @param {Defs.AgentID} agentId
+   * @returns {object | string}
+   * @protected
+   */
+  _switchField(name = '', agentId) {
+    if (name === 'isBookmarked') {
+      return this._isBookmarkedLiteral(agentId);
+    }
+    return name;
+  }
+
+  /**
    * @protected
    * @return {Sequelize.literal}
    */

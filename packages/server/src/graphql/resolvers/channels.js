@@ -31,7 +31,9 @@ async function all(root, args, context, _info) {
     ? null : structures.withinJoinedChannelsById(channelMemberId);
 
   const filter = new Filter({ withinJoinedChannels, isArchived });
-  const pagination = new Pagination(args);
+  const pagination = new Pagination(args, {
+    agentId: currentAgentId,
+  });
   const options = new Options({
     raw: true,
     attributes: {

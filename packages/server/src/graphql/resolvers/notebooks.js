@@ -79,7 +79,9 @@ async function all(_root, args, context, _info) {
     ? structures.withinJoinedChannelsByChannelId(currentAgentId) : null;
 
   const filter = new Filter({ ownerId, channelId, withinJoinedChannels });
-  const pagination = new Pagination(args);
+  const pagination = new Pagination(args, {
+    agentId: currentAgentId,
+  });
   const options = new Options({
     isAdmin,
     currentAgentId,

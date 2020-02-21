@@ -320,6 +320,14 @@ export namespace Layers {
     rollback(): void;
   }
 
+  /**
+   * @todo: Why "DataSource" and "Models" both have the same
+   * @todo: interfaces "Filter", "Params", "Query", "Pagination"?
+   * @todo: It is confusing.
+   * @todo: Should we separate these terms in the code similar?
+   * @todo: Either we should remove "duplicated" interfaces?
+   */
+
   namespace DataSource {
     type compoundId = object;
     type id = string | compoundId;
@@ -341,21 +349,21 @@ export namespace Layers {
     }
 
     interface DataFilter {
-      id?: Definitions.ObjectID;
-      creatorId?: Definitions.AgentID;
-      seriesId?: Definitions.SeriesID;
-      channelId?: Definitions.ChannelID;
-      measurableId?: Definitions.MeasurableID;
-      userId?: Definitions.UserID;
       agentId?: Definitions.AgentID;
+      channelId?: Definitions.ChannelID;
+      creatorId?: Definitions.AgentID;
       excludeChannelId?: Definitions.ChannelID;
+      id?: Definitions.ObjectID;
+      measurableId?: Definitions.MeasurableID;
+      measurableIds?: Definitions.MeasurableID[];
+      measuredByAgentId?: Definitions.AgentID;
+      measurementId?: Definitions.MeasurementID;
       notTaggedByAgent?: Definitions.AgentID;
       notificationId?: Definitions.NotificationID;
       ownerId?: Definitions.AgentID;
-      measurableIds?: Definitions.MeasurableID[];
-      measurementId?: Definitions.MeasurementID;
+      seriesId?: Definitions.SeriesID;
       taggedMeasurementId?: Definitions.MeasurementID;
-      measuredByAgentId?: Definitions.AgentID;
+      userId?: Definitions.UserID;
 
       competitorType?: string;
       type?: string;
@@ -383,6 +391,8 @@ export namespace Layers {
       states?: string[];
       isArchived?: string[];
       types?: string[];
+
+      getSpacedLimit?(): number | undefined;
     }
 
     interface DataPagination {
@@ -501,18 +511,19 @@ export namespace Layers {
 
     interface ModelFilter {
       agentId?: Definitions.AgentID;
-      excludeChannelId?: Definitions.ChannelID;
-      userId?: Definitions.UserID;
       channelId?: Definitions.ChannelID;
-      measurableId?: Definitions.MeasurableID;
-      notTaggedByAgent?: Definitions.AgentID;
-      seriesId?: Definitions.SeriesID;
       creatorId?: Definitions.AgentID;
-      ownerId?: Definitions.AgentID;
+      excludeChannelId?: Definitions.ChannelID;
+      id?: Definitions.ObjectID;
+      measurableId?: Definitions.MeasurableID;
       measurableIds?: Definitions.MeasurableID[];
-      measurementId?: Definitions.MeasurementID;
-      taggedMeasurementId?: Definitions.MeasurementID;
       measuredByAgentId?: Definitions.AgentID;
+      measurementId?: Definitions.MeasurementID;
+      notTaggedByAgent?: Definitions.AgentID;
+      ownerId?: Definitions.AgentID;
+      seriesId?: Definitions.SeriesID;
+      taggedMeasurementId?: Definitions.MeasurementID;
+      userId?: Definitions.UserID;
 
       isArchived?: string[];
       types?: string[];
@@ -533,6 +544,7 @@ export namespace Layers {
       needsResolutionResponse?: boolean;
       role?: string;
 
+      findInDateRange?: object;
       withinMeasurables?: withinMeasurables | null;
       withinPublicChannels?: withinPublicChannels | null;
       withinJoinedChannels?: withinJoinedChannels | null;

@@ -37,7 +37,7 @@ class ChannelModel extends ModelPostgres {
   }
 
   /**
-   * @param {Layers.Models.ModelPagination} pagination
+   * @param {Layers.Pagination} pagination
    * @returns {[any, any][]}
    * @protected
    */

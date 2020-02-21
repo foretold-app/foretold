@@ -70,7 +70,7 @@ class ModelPostgres extends Model {
 
   /**
    * @public
-   * @param {Layers.Models.ModelParams} [params]
+   * @param {Layers.Params} [params]
    * @param {Layers.Models.Data} [data]
    * @param {Layers.Models.ModelRestrictions} [restrictions]
    * @param {Layers.Models.ModelOptions} [options]
@@ -94,7 +94,7 @@ class ModelPostgres extends Model {
 
   /**
    * @public
-   * @param {Layers.Models.ModelParams} [params]
+   * @param {Layers.Params} [params]
    * @param {Layers.Models.Data} [data]
    * @param {Layers.Models.ModelRestrictions} [restrictions]
    * @param {Layers.Models.ModelOptions} [options]
@@ -114,8 +114,8 @@ class ModelPostgres extends Model {
 
   /**
    * @public
-   * @param {Layers.Models.ModelFilter} filter
-   * @param {Layers.Models.ModelPagination} [pagination]
+   * @param {Layers.Filter} filter
+   * @param {Layers.Pagination} [pagination]
    * @param {Layers.Models.ModelRestrictions} [restrictions]
    * @param {Layers.Models.ModelOptions} [options]
    * @return {Promise<*[]>}
@@ -152,8 +152,8 @@ class ModelPostgres extends Model {
   /**
    * @todo: To use an order with attributes for the measurables.
    * @public
-   * @param {Layers.Models.ModelFilter} [filter]
-   * @param {Layers.Models.ModelPagination} [pagination]
+   * @param {Layers.Filter} [filter]
+   * @param {Layers.Pagination} [pagination]
    * @param {Layers.Models.ModelRestrictions} [restrictions]
    * @param {Layers.Models.ModelOptions} [options]
    * @return {Promise<{data: Models.Definition[], total: number}>}
@@ -206,8 +206,8 @@ class ModelPostgres extends Model {
 
   /**
    * @public
-   * @param {Layers.Models.ModelParams} [params]
-   * @param {Layers.Models.ModelQuery} [query]
+   * @param {Layers.Params} [params]
+   * @param {Layers.Query} [query]
    * @param {Layers.Models.ModelRestrictions} [restrictions]
    * @param {Layers.Models.ModelOptions} [options]
    * @return {Promise<Models.Definition>}
@@ -245,8 +245,8 @@ class ModelPostgres extends Model {
   /**
    * @todo: To fix a "spread".
    * @public
-   * @param {Layers.Models.ModelParams} [params]
-   * @param {Layers.Models.ModelQuery} [query]
+   * @param {Layers.Params} [params]
+   * @param {Layers.Query} [query]
    * @param {Layers.Models.ModelRestrictions} [restrictions]
    * @param {Layers.Models.ModelOptions} [options]
    * @return {Promise<Models.Definition>}
@@ -281,8 +281,8 @@ class ModelPostgres extends Model {
 
   /**
    * @public
-   * @param {Layers.Models.ModelParams} [params]
-   * @param {Layers.Models.ModelQuery} [query]
+   * @param {Layers.Params} [params]
+   * @param {Layers.Query} [query]
    * @param {Layers.Models.Data} data
    * @param {Layers.Models.ModelRestrictions} restrictions
    * @param {Layers.Models.ModelOptions} options
@@ -296,8 +296,8 @@ class ModelPostgres extends Model {
   /**
    * @todo: To fix a "spread".
    * @public
-   * @param {Layers.Models.ModelParams} [params]
-   * @param {Layers.Models.ModelQuery} [query]
+   * @param {Layers.Params} [params]
+   * @param {Layers.Query} [query]
    * @param {Layers.Models.ModelRestrictions} restrictions
    * @param {Layers.Models.ModelOptions} options
    * @return {Promise<Models.Definition>}
@@ -436,7 +436,7 @@ class ModelPostgres extends Model {
    * @protected
    * @todo: Try to fix it and do not use "this.models.Measurement".
    * @param {object} [include]
-   * @param {Layers.Models.ModelFilter} [filter]
+   * @param {Layers.Filter} [filter]
    * @return {*}
    */
   applyFilterIncluding(include = [], filter = new Filter()) {
@@ -465,7 +465,7 @@ class ModelPostgres extends Model {
    * @protected
    * Extend this method in child classes.
    * @param {object} [where]
-   * @param {Layers.Models.ModelFilter} [filter]
+   * @param {Layers.Filter} [filter]
    * @param {Definitions.AgentID} [filter.userId]
    */
   applyFilter(where = {}, filter = new Filter()) {
@@ -692,7 +692,7 @@ class ModelPostgres extends Model {
    * @protected
    * Extend this method in child classes.
    * @param {object} [where]
-   * @param {Layers.Models.ModelFilter
+   * @param {Layers.Filter
    * | Layers.Models.ModelRestrictions} [abstractions]
    */
   applyAbstracts(where = {}, abstractions = {}) {
@@ -941,8 +941,8 @@ class ModelPostgres extends Model {
   }
 
   /**
-   * @param {Layers.Models.ModelPagination} pagination
-   * @returns {[any, any][]}
+   * @param {Layers.Pagination} pagination
+   * @returns {[string, string][]}
    * @protected
    */
   _getOrderFromPagination(pagination) {
@@ -951,7 +951,7 @@ class ModelPostgres extends Model {
   }
 
   /**
-   * @return {*[] | null}
+   * @return {string[][] | null}
    * @protected
    */
   _getDefaultOrder() {
@@ -960,8 +960,8 @@ class ModelPostgres extends Model {
 
   /**
    * @todo: - To do what exactly?
-   * @param {Layers.Models.ModelQuery} query
-   * @return {*[] | null}
+   * @param {Layers.Query} query
+   * @return {string[][] | null}
    * @protected
    */
   _getOrderForOne(query) {

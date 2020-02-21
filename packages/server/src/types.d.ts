@@ -320,13 +320,91 @@ export namespace Layers {
     rollback(): void;
   }
 
-  /**
-   * @todo: Why "DataSource" and "Models" both have the same
-   * @todo: interfaces "Filter", "Params", "Query", "Pagination"?
-   * @todo: It is confusing.
-   * @todo: Should we separate these terms in the code similar?
-   * @todo: Either we should remove "duplicated" interfaces?
-   */
+  interface Pagination {
+    limit?: number;
+    offset?: number;
+    last?: number;
+    first?: number;
+    after?: string;
+    before?: string;
+    order?: orderList;
+
+    getPagination(): { limit: number; offset: number };
+
+    isOrderSet(): boolean;
+
+    getOrder(): orderList;
+  }
+
+  interface Filter {
+    agentId?: Definitions.AgentID;
+    channelId?: Definitions.ChannelID;
+    creatorId?: Definitions.AgentID;
+    excludeChannelId?: Definitions.ChannelID;
+    id?: Definitions.ObjectID;
+    measurableId?: Definitions.MeasurableID;
+    measurableIds?: Definitions.MeasurableID[];
+    measuredByAgentId?: Definitions.AgentID;
+    measurementId?: Definitions.MeasurementID;
+    notTaggedByAgent?: Definitions.AgentID;
+    notificationId?: Definitions.NotificationID;
+    ownerId?: Definitions.AgentID;
+    seriesId?: Definitions.SeriesID;
+    taggedMeasurementId?: Definitions.MeasurementID;
+    userId?: Definitions.UserID;
+
+    competitorType?: string;
+    type?: string;
+    attemptCounterMax?: number;
+    sentAt?: string | null;
+    minPredictionCountTotal?: number | null;
+    minNumberOfPredictions?: number | null;
+    minNumberOfQuestionsScored?: number | null;
+    email?: string;
+    status?: string;
+    isEmailVerified?: boolean[];
+    notAuth0AccessToken?: boolean;
+    isNotEmailVerified?: boolean;
+    needsToBePending?: boolean;
+    needsResolutionResponse?: boolean;
+    role?: string;
+
+    // @todo: Object? Give definition!
+    findInDateRange?: object;
+    withinMeasurables?: withinMeasurables | null;
+    withinPublicChannels?: withinPublicChannels | null;
+    withinJoinedChannels?: withinJoinedChannels | null;
+    withinPublicAndJoinedChannels?: withinPublicAndJoinedChannels | null;
+
+    states?: string[];
+    isArchived?: string[];
+    types?: string[];
+
+    getSpacedLimit?(): number | undefined;
+  }
+
+  interface Query {
+    sort?: number;
+    distinct?: boolean;
+    col?: string;
+  }
+
+  interface Params {
+    id?: Definitions.ObjectID;
+
+    agentId?: Definitions.AgentID;
+    measurableId?: Definitions.MeasurableID;
+    measurementId?: Definitions.MeasurementID;
+    seriesId?: Definitions.SeriesID;
+    channelId?: Definitions.ChannelID;
+    notebookId?: Definitions.NotebookID;
+
+    auth0Id?: string;
+    name?: string;
+    competitorType?: string;
+    email?: string;
+    isEmailVerified?: boolean;
+  }
 
   namespace DataSource {
     type compoundId = object;
@@ -348,85 +426,6 @@ export namespace Layers {
       transaction?: object;
     }
 
-    interface DataFilter {
-      agentId?: Definitions.AgentID;
-      channelId?: Definitions.ChannelID;
-      creatorId?: Definitions.AgentID;
-      excludeChannelId?: Definitions.ChannelID;
-      id?: Definitions.ObjectID;
-      measurableId?: Definitions.MeasurableID;
-      measurableIds?: Definitions.MeasurableID[];
-      measuredByAgentId?: Definitions.AgentID;
-      measurementId?: Definitions.MeasurementID;
-      notTaggedByAgent?: Definitions.AgentID;
-      notificationId?: Definitions.NotificationID;
-      ownerId?: Definitions.AgentID;
-      seriesId?: Definitions.SeriesID;
-      taggedMeasurementId?: Definitions.MeasurementID;
-      userId?: Definitions.UserID;
-
-      competitorType?: string;
-      type?: string;
-      attemptCounterMax?: number;
-      sentAt?: string | null;
-      minPredictionCountTotal?: number | null;
-      minNumberOfPredictions?: number | null;
-      minNumberOfQuestionsScored?: number | null;
-      email?: string;
-      status?: string;
-      isEmailVerified?: boolean[];
-      notAuth0AccessToken?: boolean;
-      isNotEmailVerified?: boolean;
-      needsToBePending?: boolean;
-      needsResolutionResponse?: boolean;
-      role?: string;
-
-      // @todo: Object? Give definition!
-      findInDateRange?: object;
-      withinMeasurables?: withinMeasurables | null;
-      withinPublicChannels?: withinPublicChannels | null;
-      withinJoinedChannels?: withinJoinedChannels | null;
-      withinPublicAndJoinedChannels?: withinPublicAndJoinedChannels | null;
-
-      states?: string[];
-      isArchived?: string[];
-      types?: string[];
-
-      getSpacedLimit?(): number | undefined;
-    }
-
-    interface DataPagination {
-      limit?: number;
-      offset?: number;
-      last?: number;
-      first?: number;
-      after?: string;
-      before?: string;
-    }
-
-    interface DataQuery {
-      sort?: number;
-      distinct?: boolean;
-      col?: string;
-    }
-
-    interface DataParams {
-      id?: Definitions.ObjectID;
-
-      agentId?: Definitions.AgentID;
-      measurableId?: Definitions.MeasurableID;
-      measurementId?: Definitions.MeasurementID;
-      seriesId?: Definitions.SeriesID;
-      channelId?: Definitions.ChannelID;
-      notebookId?: Definitions.NotebookID;
-
-      auth0Id?: string;
-      name?: string;
-      competitorType?: string;
-      email?: string;
-      isEmailVerified?: boolean;
-    }
-
     interface DataResponse {
       data: any
     }
@@ -440,29 +439,29 @@ export namespace Layers {
     interface DataGeneric {
       createOne(data: Data, options: DataOptions): Promise<DataResponse>;
 
-      getOne(params: DataParams, query: DataQuery, options: DataOptions): Promise<DataResponse>;
+      getOne(params: Params, query: Query, options: DataOptions): Promise<DataResponse>;
 
-      getCount(params: DataParams, query: DataQuery, options: DataOptions): Promise<number>;
+      getCount(params: Params, query: Query, options: DataOptions): Promise<number>;
 
-      updateOne(params: DataParams, data: Data, options: DataOptions): Promise<DataResponse>;
+      updateOne(params: Params, data: Data, options: DataOptions): Promise<DataResponse>;
 
-      deleteOne(params: DataParams, options: DataOptions): Promise<DataResponse>;
+      deleteOne(params: Params, options: DataOptions): Promise<DataResponse>;
 
       getAll(
-        filter: DataFilter,
-        pagination: DataPagination,
+        filter: Filter,
+        pagination: Pagination,
         options: DataOptions
       ): Promise<DataResponseList>;
 
       getConnection(
-        filter: DataFilter,
-        pagination: DataPagination,
+        filter: Filter,
+        pagination: Pagination,
         options: DataOptions
       ): Promise<DataResponseList>;
 
       upsertOne(
-        params: DataParams,
-        query: DataQuery,
+        params: Params,
+        query: Query,
         data: Data,
         options: DataOptions
       ): Promise<DataResponse>;
@@ -509,89 +508,6 @@ export namespace Layers {
       transaction?: object;
     }
 
-    interface ModelFilter {
-      agentId?: Definitions.AgentID;
-      channelId?: Definitions.ChannelID;
-      creatorId?: Definitions.AgentID;
-      excludeChannelId?: Definitions.ChannelID;
-      id?: Definitions.ObjectID;
-      measurableId?: Definitions.MeasurableID;
-      measurableIds?: Definitions.MeasurableID[];
-      measuredByAgentId?: Definitions.AgentID;
-      measurementId?: Definitions.MeasurementID;
-      notTaggedByAgent?: Definitions.AgentID;
-      ownerId?: Definitions.AgentID;
-      seriesId?: Definitions.SeriesID;
-      taggedMeasurementId?: Definitions.MeasurementID;
-      userId?: Definitions.UserID;
-
-      isArchived?: string[];
-      types?: string[];
-      sentAt?: string[];
-      notificationId?: Definitions.NotificationID[];
-      competitorType?: string[];
-      states?: string[];
-      attemptCounterMax?: number;
-      minPredictionCountTotal?: number | null;
-      minNumberOfPredictions?: number | null;
-      minNumberOfQuestionsScored?: number | null;
-      email?: string;
-      status?: string;
-      isEmailVerified?: boolean[];
-      notAuth0AccessToken?: boolean;
-      isNotEmailVerified?: boolean;
-      needsToBePending?: boolean;
-      needsResolutionResponse?: boolean;
-      role?: string;
-
-      findInDateRange?: object;
-      withinMeasurables?: withinMeasurables | null;
-      withinPublicChannels?: withinPublicChannels | null;
-      withinJoinedChannels?: withinJoinedChannels | null;
-      withinPublicAndJoinedChannels?: withinPublicAndJoinedChannels | null;
-
-      getSpacedLimit?(): number | undefined;
-    }
-
-    interface ModelPagination {
-      limit?: number;
-      offset?: number;
-      last?: number;
-      first?: number;
-      after?: string;
-      before?: string;
-      order?: orderList;
-
-      getPagination(): { limit: number; offset: number };
-
-      isOrderSet(): boolean;
-
-      getOrder(): orderList;
-    }
-
-    interface ModelQuery {
-      col?: string;
-      distinct?: boolean;
-      sort?: number;
-    }
-
-    interface ModelParams {
-      id?: Definitions.ObjectID;
-
-      agentId?: Definitions.AgentID;
-      measurableId?: Definitions.MeasurableID;
-      measurementId?: Definitions.MeasurementID;
-      seriesId?: Definitions.SeriesID;
-      channelId?: Definitions.ChannelID;
-      notebookId?: Definitions.NotebookID;
-
-      auth0Id?: string;
-      name?: string;
-      competitorType?: string;
-      email?: string;
-      isEmailVerified?: boolean;
-    }
-
     interface ModelResponse {
       data: any
     }
@@ -604,13 +520,13 @@ export namespace Layers {
     // @todo: To fix response types.
     interface ModelGeneric {
       deleteOne(
-        params: ModelParams,
+        params: Params,
         restrictions: ModelRestrictions,
         options: ModelOptions
       ): Promise<ModelResponse>;
 
       updateOne(
-        params: ModelParams,
+        params: Params,
         data: Data,
         restrictions: ModelRestrictions,
         options: ModelOptions
@@ -619,46 +535,46 @@ export namespace Layers {
       createOne(data: Data, restrictions: ModelRestrictions): Promise<ModelResponse>;
 
       getOne(
-        params: ModelParams,
-        query: ModelQuery,
+        params: Params,
+        query: Query,
         restrictions: ModelRestrictions,
         options: ModelOptions
       ): Promise<ModelResponse>;
 
       upsertOne(
-        params: ModelParams,
-        query: ModelQuery,
+        params: Params,
+        query: Query,
         data: Data,
         restrictions: ModelRestrictions,
         options: ModelOptions
       ): Promise<ModelResponse>;
 
       getCount(
-        params: ModelParams,
-        query: ModelQuery,
+        params: Params,
+        query: Query,
         restrictions: ModelRestrictions,
         options: ModelOptions
       ): Promise<number>;
 
       getAll(
-        filter: ModelFilter,
-        pagination: ModelPagination,
+        filter: Filter,
+        pagination: Pagination,
         restrictions: ModelRestrictions,
         options: ModelOptions
       ): Promise<ModelResponseList>;
 
       getAllWithConnections(
-        filter: ModelFilter,
-        pagination: ModelPagination,
+        filter: Filter,
+        pagination: Pagination,
         restrictions: ModelRestrictions,
         options: ModelOptions
       ): Promise<ModelResponseList>;
 
-      updateAll(params: ModelParams, data: Data, options: ModelOptions): Promise<boolean>;
+      updateAll(params: Params, data: Data, options: ModelOptions): Promise<boolean>;
 
       upsertOne(
-        params: ModelParams,
-        query: ModelQuery,
+        params: Params,
+        query: Query,
         data: Data,
         restrictions: ModelRestrictions,
         options: ModelOptions

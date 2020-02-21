@@ -59,8 +59,8 @@ class DataBase {
 
   /**
    * @public
-   * @param {Layers.DataSource.DataParams} [params]
-   * @param {Layers.DataSource.DataQuery} [query]
+   * @param {Layers.Params} [params]
+   * @param {Layers.Query} [query]
    * @param {Layers.DataSource.DataOptions} [options]
    * @return {Promise<*>}
    */
@@ -72,8 +72,8 @@ class DataBase {
   /**
    * @todo: later fix "col" argument
    * @public
-   * @param {Layers.DataSource.DataParams} [params]
-   * @param {Layers.DataSource.DataQuery} [query]
+   * @param {Layers.Params} [params]
+   * @param {Layers.Query} [query]
    * @param {Layers.DataSource.DataOptions} [options]
    * @return {Promise<*>}
    */
@@ -84,7 +84,7 @@ class DataBase {
 
   /**
    * @public
-   * @param {Layers.DataSource.DataParams} [params]
+   * @param {Layers.Params} [params]
    * @param {Layers.DataSource.Data} [data]
    * @param {Layers.DataSource.DataOptions} options
    * @return {Promise<*>}
@@ -96,8 +96,8 @@ class DataBase {
 
   /**
    * @public
-   * @param {Layers.DataSource.DataParams} [params]
-   * @param {Layers.DataSource.DataQuery} [query]
+   * @param {Layers.Params} [params]
+   * @param {Layers.Query} [query]
    * @param {Layers.DataSource.DataOptions} [options]
    * @return {Promise<*>}
    */
@@ -108,8 +108,8 @@ class DataBase {
 
   /**
    * @public
-   * @param {Layers.DataSource.DataParams} [params]
-   * @param {Layers.DataSource.DataQuery} [query]
+   * @param {Layers.Params} [params]
+   * @param {Layers.Query} [query]
    * @param {Layers.DataSource.Data} [data]
    * @param {Layers.DataSource.DataOptions} [options]
    * @return {Promise<*>}
@@ -121,9 +121,8 @@ class DataBase {
 
   /**
    * @public
-   * @param {Layers.DataSource.DataFilter} [filter]
-   * @param {Definitions.AgentID} filter.userId
-   * @param {Layers.DataSource.DataPagination} [pagination]
+   * @param {Layers.Filter} [filter]
+   * @param {Layers.Pagination} [pagination]
    * @param {Layers.DataSource.DataOptions} [options]
    * @return {Promise<{data: Models.Definition[], total: number}>}
    */
@@ -136,8 +135,8 @@ class DataBase {
 
   /**
    * @public
-   * @param {Layers.DataSource.DataFilter} [filter]
-   * @param {Layers.DataSource.DataPagination} [pagination]
+   * @param {Layers.Filter} [filter]
+   * @param {Layers.Pagination} [pagination]
    * @param {Layers.DataSource.DataOptions} [options]
    */
   async getAll(filter, pagination, options = new DataOptions()) {

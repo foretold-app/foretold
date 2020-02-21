@@ -32,7 +32,7 @@ class MeasurableModel extends ModelPostgres {
   /**
    * @protected
    * @param {object} [where]
-   * @param {Layers.Models.ModelFilter} [filter]
+   * @param {Layers.Filter} [filter]
    * @param {Definitions.AgentID} [filter.userId]
    */
   applyFilter(where = {}, filter = {}) {

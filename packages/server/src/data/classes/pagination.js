@@ -4,7 +4,7 @@ const utils = require('../../lib/utils');
 
 /**
  * See "filter.js" comments.
- * @implements {Layers.DataSource.DataPagination}
+ * @implements {Layers.Pagination}
  */
 class Pagination {
   /**
@@ -17,8 +17,12 @@ class Pagination {
    * @param {number} [options.limit]
    * @param {number} [options.offset]
    * @param {Layers.orderList} [options.order]
+   * @param {object} [context]
+   * @param {Definitions.AgentID} [context.agentId]
    */
-  constructor(options = {}) {
+  constructor(options = {}, context = {}) {
+    this._context = {};
+
     if (_.has(options, 'last')) {
       this.last = _.get(options, 'last', 0);
     }
@@ -42,6 +46,9 @@ class Pagination {
 
     if (_.has(options, 'order')) {
       this.order = this._getOrder(options);
+    }
+    if (_.has(context, 'agentId')) {
+      this._context.agentId = _.get(context, 'agentId', null);
     }
   }
 
@@ -106,6 +113,14 @@ class Pagination {
    */
   inspect() {
     utils.inspect(this);
+  }
+
+  /**
+   * @param {string} name
+   * @returns {*}
+   */
+  getContext(name) {
+    return _.get(this._context, name);
   }
 }
 

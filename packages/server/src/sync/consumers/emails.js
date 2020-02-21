@@ -90,7 +90,7 @@ class Emails extends Consumer {
   }
 
   /**
-   * @param {Definitions.NotificationStatus} notificationStatus
+   * @param {Defs.NotificationStatus} notificationStatus
    * @return {Promise<Models.Notification>}
    * @protected
    */
@@ -102,7 +102,7 @@ class Emails extends Consumer {
   }
 
   /**
-   * @param {Definitions.NotificationStatus} notificationStatus
+   * @param {Defs.NotificationStatus} notificationStatus
    * @return {Promise<Models.Agent>}
    * @protected
    */
@@ -116,7 +116,7 @@ class Emails extends Consumer {
   }
 
   /**
-   * @param {Definitions.NotificationStatus} notificationStatus
+   * @param {Defs.NotificationStatus} notificationStatus
    * @param {object} transaction
    * @return {Promise<Models.NotificationStatus>}
    * @protected
@@ -129,7 +129,7 @@ class Emails extends Consumer {
   }
 
   /**
-   * @param {Definitions.NotificationStatus} notificationStatus
+   * @param {Defs.NotificationStatus} notificationStatus
    * @param {CustomError} err
    * @param {object} transaction
    * @return {Promise<Models.NotificationStatus>}
@@ -150,7 +150,7 @@ class Emails extends Consumer {
   }
 
   /**
-   * @param {Definitions.NotificationStatus} notificationStatus
+   * @param {Defs.NotificationStatus} notificationStatus
    * @return {Promise<Models.Preference | null>}
    * @protected
    */
@@ -164,7 +164,7 @@ class Emails extends Consumer {
   }
 
   /**
-   * @param {Definitions.Agent} agent
+   * @param {Defs.Agent} agent
    * @return {Promise<Models.User | null>}
    * @protected
    */
@@ -178,8 +178,8 @@ class Emails extends Consumer {
   }
 
   /**
-   * @param {Definitions.Preference} agentPreferences
-   * @param {Definitions.User} user
+   * @param {Defs.Preference} agentPreferences
+   * @param {Defs.User} user
    * @return {Promise<boolean>}
    * @protected
    */
@@ -196,9 +196,9 @@ class Emails extends Consumer {
   }
 
   /**
-   * @param {Definitions.Notification} notification
-   * @param {Definitions.User} user
-   * @param {Definitions.Agent} agent
+   * @param {Defs.Notification} notification
+   * @param {Defs.User} user
+   * @param {Defs.Agent} agent
    * @return {Promise<boolean>}
    * @protected
    */
@@ -227,7 +227,7 @@ class Emails extends Consumer {
   }
 
   /**
-   * @param {Definitions.Agent} agent
+   * @param {Defs.Agent} agent
    * @return {Promise<string | null>}
    * @protected
    */

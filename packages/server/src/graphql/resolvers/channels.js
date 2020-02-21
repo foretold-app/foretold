@@ -15,7 +15,7 @@ const { structures } = require('../../data/classes');
  * @param {object} args
  * @param {number} args.offset
  * @param {number} args.limit
- * @param {Definitions.AgentID} args.channelMemberId
+ * @param {Defs.AgentID} args.channelMemberId
  * @param {string[]} args.isArchived
  * @param {Schema.Context} context
  * @param {object} _info
@@ -51,7 +51,7 @@ async function all(root, args, context, _info) {
 /**
  * @param {object | null} root
  * @param {object} args
- * @param {Definitions.ChannelID} args.id
+ * @param {Defs.ChannelID} args.id
  * @param {Schema.Context} context
  * @param {object} _info
  * @returns {Promise<Models.Channel>}
@@ -77,7 +77,7 @@ async function one(root, args, context, _info) {
 /**
  * @param {object | null} root
  * @param {object} args
- * @param {Definitions.ChannelID} args.id
+ * @param {Defs.ChannelID} args.id
  * @param {object} args.input
  * @param {Schema.Context} _context
  * @param {object} _info

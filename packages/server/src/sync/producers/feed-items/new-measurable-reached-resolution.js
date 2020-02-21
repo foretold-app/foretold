@@ -7,7 +7,7 @@ const { MEASURABLE_STATE } = require('../../../enums');
  */
 class NewMeasurableReachedResolution extends NewMeasurable {
   /**
-   * @param {Definitions.Measurable} measurable
+   * @param {Defs.Measurable} measurable
    */
   constructor(measurable) {
     super(measurable);

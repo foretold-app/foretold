@@ -20,8 +20,8 @@ class NotebookBookmarksData extends DataBase {
   }
 
   /**
-   * @param {Definitions.NotebookID} notebookId
-   * @param {Definitions.AgentID} agentId
+   * @param {Defs.NotebookID} notebookId
+   * @param {Defs.AgentID} agentId
    * @returns {Promise<boolean>}
    */
   async toggle(notebookId, agentId) {
@@ -35,8 +35,8 @@ class NotebookBookmarksData extends DataBase {
   }
 
   /**
-   * @param {Definitions.NotebookID} notebookId
-   * @param {Definitions.AgentID} agentId
+   * @param {Defs.NotebookID} notebookId
+   * @param {Defs.AgentID} agentId
    * @returns {Promise<boolean>}
    */
   async create(notebookId, agentId) {
@@ -46,8 +46,8 @@ class NotebookBookmarksData extends DataBase {
   }
 
   /**
-   * @param {Definitions.NotebookID} notebookId
-   * @param {Definitions.AgentID} agentId
+   * @param {Defs.NotebookID} notebookId
+   * @param {Defs.AgentID} agentId
    * @returns {Promise<boolean>}
    */
   async one(notebookId, agentId) {
@@ -58,8 +58,8 @@ class NotebookBookmarksData extends DataBase {
   }
 
   /**
-   * @param {Definitions.NotebookID} notebookId
-   * @param {Definitions.AgentID} agentId
+   * @param {Defs.NotebookID} notebookId
+   * @param {Defs.AgentID} agentId
    * @returns {Promise<boolean>}
    */
   async delete(notebookId, agentId) {

@@ -10,7 +10,7 @@ const log = logger.module('notifications/measurable-state-changed');
 
 class MeasurableStateChanged extends MeasurableState {
   /**
-   * @param {Definitions.Measurable} measurable
+   * @param {Defs.Measurable} measurable
    */
   constructor(measurable) {
     super(measurable);
@@ -43,11 +43,11 @@ class MeasurableStateChanged extends MeasurableState {
     }
 
     try {
-      /** @type {Definitions.Agent} */
+      /** @type {Defs.Agent} */
       const creator = await this.measurable.getCreator();
       assert(!!_.get(creator, 'id'), 'Creator ID is required.');
 
-      /** @type {Definitions.Channel} */
+      /** @type {Defs.Channel} */
       const channel = await this.measurable.getChannel();
       assert(!!_.get(channel, 'id'), 'Channel ID is required.');
 

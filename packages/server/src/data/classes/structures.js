@@ -6,7 +6,7 @@ const assert = require('assert');
  */
 
 /**
- * @param {Definitions.AgentID} agentId
+ * @param {Defs.AgentID} agentId
  * @return {Layers.withinJoinedChannels}
  */
 module.exports.withinJoinedChannelsByChannelId = (agentId) => {
@@ -15,7 +15,7 @@ module.exports.withinJoinedChannelsByChannelId = (agentId) => {
 };
 
 /**
- * @param {Definitions.AgentID} agentId
+ * @param {Defs.AgentID} agentId
  * @return {Layers.withinJoinedChannels}
  */
 module.exports.withinJoinedChannelsById = (agentId) => {
@@ -24,7 +24,7 @@ module.exports.withinJoinedChannelsById = (agentId) => {
 };
 
 /**
- * @param {Definitions.AgentID} agentId
+ * @param {Defs.AgentID} agentId
  * @return {Layers.withinPublicAndJoinedChannels}
  */
 module.exports.withinPublicAndJoinedChannelsByChannelId = (agentId) => {
@@ -33,7 +33,7 @@ module.exports.withinPublicAndJoinedChannelsByChannelId = (agentId) => {
 };
 
 /**
- * @param {Definitions.AgentID} agentId
+ * @param {Defs.AgentID} agentId
  * @return {Layers.withinPublicAndJoinedChannels}
  */
 module.exports.withinPublicAndJoinedChannelsById = (agentId) => {
@@ -57,7 +57,7 @@ module.exports.withinPublicChannelsById = () => {
 
 /**
  * @param {string[] | null} states
- * @param {Definitions.Channel.id | null} channelId
+ * @param {Defs.Channel.id | null} channelId
  * @return {Layers.withinMeasurables | null}
  */
 module.exports.withinMeasurables = (states, channelId) => {

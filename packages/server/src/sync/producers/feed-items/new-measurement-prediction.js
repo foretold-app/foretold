@@ -4,7 +4,7 @@ const { NewMeasurement } = require('./new-measurement');
 
 class NewMeasurementPrediction extends NewMeasurement {
   /**
-   * @param {Definitions.Measurement} measurement
+   * @param {Defs.Measurement} measurement
    */
   constructor(measurement) {
     super(measurement);

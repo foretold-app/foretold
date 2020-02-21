@@ -17,7 +17,7 @@ class TokenModel extends ModelPostgres {
   /**
    * @public
    * @todo: To use "applyFilter" to use "transactions" later.
-   * @param {Definitions.AgentID} [agentId]
+   * @param {Defs.AgentID} [agentId]
    * @param {string} [token]
    * @param {string} [type]
    * @param {number} [usageCount]

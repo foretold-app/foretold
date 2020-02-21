@@ -19,7 +19,7 @@ class PreferencesData extends DataBase {
 
   /**
    * @public
-   * @param {Definitions.AgentID} agentId
+   * @param {Defs.AgentID} agentId
    * @return {Promise<*>}
    */
   async getOneByAgentId(agentId) {
@@ -32,7 +32,7 @@ class PreferencesData extends DataBase {
 
   /**
    * @public
-   * @param {Definitions.AgentID} agentId
+   * @param {Defs.AgentID} agentId
    * @return {Promise<boolean>}
    */
   async subscribe(agentId) {
@@ -51,7 +51,7 @@ class PreferencesData extends DataBase {
 
   /**
    * @public
-   * @param {Definitions.AgentID} agentId
+   * @param {Defs.AgentID} agentId
    * @return {Promise<boolean>}
    */
   async unsubscribe(agentId) {

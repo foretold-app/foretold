@@ -10,7 +10,7 @@ const { Data } = require('../../data/classes');
 /**
  * @param {*} root
  * @param {object} args
- * @param {Definitions.UserID} args.id
+ * @param {Defs.UserID} args.id
  * @param {object} args.input
  * @param {Schema.Context} _context
  * @returns {Promise<Models.User>}
@@ -28,7 +28,7 @@ async function update(root, args, _context) {
 /**
  * @param {*} root
  * @param {object} args
- * @param {Definitions.UserID} args.id
+ * @param {Defs.UserID} args.id
  * @param {object} args.input
  * @param {String} args.input.auth0AccessToken
  * @param {Schema.Context} _context
@@ -47,7 +47,7 @@ async function accessTokenUpdate(root, args, _context) {
 /**
  * @param {*} root
  * @param {object} args
- * @param {Definitions.UserID} args.id
+ * @param {Defs.UserID} args.id
  * @param {Schema.Context} _context
  * @returns {Promise<Models.User>}
  */

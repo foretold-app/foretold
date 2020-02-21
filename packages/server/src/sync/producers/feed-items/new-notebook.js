@@ -6,7 +6,7 @@ const { Producer } = require('../producer');
 
 class NewNotebook extends ProducerFeedItems {
   /**
-   * @param {Definitions.Notebook} notebook
+   * @param {Defs.Notebook} notebook
    */
   constructor(notebook) {
     super(notebook);
@@ -38,7 +38,7 @@ class NewNotebook extends ProducerFeedItems {
   }
 
   /**
-   * @param {Definitions.Agent} agent
+   * @param {Defs.Agent} agent
    * @return {Promise.<{
    * agent: { name: string },
    * notebook: { id: string }

@@ -5,7 +5,7 @@ const { ChannelBookmarksData } = require('../../data');
 /**
  * @param {*} _root
  * @param {object} args
- * @param {Definitions.ChannelID} args.channelId
+ * @param {Defs.ChannelID} args.channelId
  * @param {Schema.Context} context
  * @param {object} _info
  * @returns {Promise<boolean>}

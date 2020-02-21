@@ -12,7 +12,7 @@ const log = logger.module('sync/producers/notifications/invitation');
 
 class Invitation extends ProducerNotifications {
   /**
-   * @param {Definitions.Invitation} invitation
+   * @param {Defs.Invitation} invitation
    */
   constructor(invitation) {
     super({});
@@ -36,11 +36,11 @@ class Invitation extends ProducerNotifications {
    */
   async main() {
     try {
-      /** @type {Definitions.Channel} */
+      /** @type {Defs.Channel} */
       const channel = await this.channels.getOne({
         id: this.invitation.channelId,
       });
-      /** @type {Definitions.Agent} */
+      /** @type {Defs.Agent} */
       const inviter = await this.agents.getOne({
         id: this.invitation.inviterAgentId,
       });
@@ -55,7 +55,7 @@ class Invitation extends ProducerNotifications {
 
       const email = this.invitation.email;
 
-      /** @type {Definitions.Notification} */
+      /** @type {Defs.Notification} */
       const notification = await this._queueEmail(replacements, email);
       await this._assignNotification(null, notification);
 
@@ -70,8 +70,8 @@ class Invitation extends ProducerNotifications {
 
   /**
    * @protected
-   * @param {Definitions.Agent} inviter
-   * @param {Definitions.Channel} channel
+   * @param {Defs.Agent} inviter
+   * @param {Defs.Channel} channel
    * @return {object}
    */
   async _getReplacements(inviter, channel) {

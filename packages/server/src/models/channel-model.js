@@ -38,25 +38,30 @@ class ChannelModel extends ModelPostgres {
 
   /**
    * @param {Layers.Pagination} pagination
-   * @returns {[any, any][]}
+   * @returns {[*, string][]}
    * @protected
    */
   _getOrderFromPagination(pagination) {
-    return pagination.getOrder()
-      .map((item) => ([this._switchField(item.field), item.direction]));
+    const order = pagination.getOrder();
+    const agentId = pagination.getContext('agentId');
+    return order.map((item) => ([
+      this._switchField(item.field, agentId),
+      item.direction,
+    ]));
   }
 
   /**
    * @param {string} name
+   * @param {Defs.AgentID} agentId
    * @returns {object | string}
    * @protected
    */
-  _switchField(name = '') {
+  _switchField(name = '', agentId) {
     if (name === 'membersCount') {
       return this._membersCountLiteral();
     }
     if (name === 'isBookmarked') {
-      return this._isBookmarkedLiteral();
+      return this._isBookmarkedLiteral(agentId);
     }
     return name;
   }
@@ -71,7 +76,7 @@ class ChannelModel extends ModelPostgres {
 
   /**
    * @protected
-   * @param {Definitions.AgentID} agentId
+   * @param {Defs.AgentID} agentId
    * @return {Sequelize.literal}
    */
   _isBookmarkedLiteral(agentId) {
@@ -100,7 +105,7 @@ class ChannelModel extends ModelPostgres {
 
   /**
    * @protected
-   * @param {Definitions.AgentID} agentId
+   * @param {Defs.AgentID} agentId
    * @return {string}
    */
   _isBookmarked(agentId) {

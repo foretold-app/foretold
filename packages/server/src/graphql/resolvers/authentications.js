@@ -40,7 +40,7 @@ async function _exchangeAuthToken(_root, args, _context, _info) {
 
 /**
  * @param {object | null} root
- * @param {Definitions.AgentID} root.agentId
+ * @param {Defs.AgentID} root.agentId
  * @param {object} _args
  * @param {Schema.Context} _context
  * @param {object} _info

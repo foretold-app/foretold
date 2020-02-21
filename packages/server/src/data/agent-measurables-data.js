@@ -57,8 +57,8 @@ class AgentMeasurablesData extends DataBase {
   }
 
   /**
-   * @param {Definitions.AgentID} agentId
-   * @param {Definitions.MeasurableID} measurableId
+   * @param {Defs.AgentID} agentId
+   * @param {Defs.MeasurableID} measurableId
    * @returns {Promise<*>}
    */
   async _getTimeScoringData(agentId, measurableId) {

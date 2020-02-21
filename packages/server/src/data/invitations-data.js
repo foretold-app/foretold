@@ -60,8 +60,8 @@ class InvitationsData extends DataBase {
 
   /**
    * @param {string} email
-   * @param {Definitions.ChannelID} channelId
-   * @param {Definitions.AgentID} inviterAgentId
+   * @param {Defs.ChannelID} channelId
+   * @param {Defs.AgentID} inviterAgentId
    * @returns {Promise<*>}
    */
   async upsert(email, channelId, inviterAgentId) {
@@ -73,8 +73,8 @@ class InvitationsData extends DataBase {
 
   /**
    * @param {string} email
-   * @param {Definitions.ChannelID} channelId
-   * @param {Definitions.AgentID} inviterAgentId
+   * @param {Defs.ChannelID} channelId
+   * @param {Defs.AgentID} inviterAgentId
    * @returns {Promise<boolean>}
    */
   async addMemberships(email, channelId, inviterAgentId) {

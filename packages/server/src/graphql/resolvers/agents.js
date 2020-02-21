@@ -11,7 +11,7 @@ const { Query } = require('../../data/classes');
 /**
  * @param {object | null} root
  * @param {object} args
- * @param {Definitions.AgentID} args.id
+ * @param {Defs.AgentID} args.id
  * @param {Schema.Context} _context
  * @param {object} _info
  * @returns {Promise<Models.Agent>}
@@ -31,7 +31,7 @@ async function one(root, args, _context, _info) {
  * @todo: To use "getConnection" to limit queries.
  * @param {*} root
  * @param {object} args
- * @param {Definitions.ChannelID} args.excludeChannelId
+ * @param {Defs.ChannelID} args.excludeChannelId
  * @param {string[]} args.types
  * @param {Schema.Context} _context
  * @param {object} _info

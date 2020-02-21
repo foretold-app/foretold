@@ -14,7 +14,7 @@ const log = logger.module('middlewares/notebooks');
 /**
  * @param {*} root
  * @param {object} args
- * @param {Definitions.NotebookID} args.notebookId
+ * @param {Defs.NotebookID} args.notebookId
  * @param {Schema.Context} _context
  * @param {object} _info
  * @return {Promise<boolean>}
@@ -35,7 +35,7 @@ async function notebookExistsValidation(root, args, _context, _info) {
 /**
  * @param {object | null} root
  * @param {object} args
- * @param {Definitions.NotebookID} args.notebookId
+ * @param {Defs.NotebookID} args.notebookId
  * @param {Schema.Context} context
  * @param {object} _info
  * @return {Promise<void>}

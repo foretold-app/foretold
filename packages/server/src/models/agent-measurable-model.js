@@ -21,8 +21,8 @@ class AgentMeasurableModel extends ModelPostgres {
   }
 
   /**
-   * @param {Definitions.AgentID} agentId
-   * @param {Definitions.MeasurableID} measurableId
+   * @param {Defs.AgentID} agentId
+   * @param {Defs.MeasurableID} measurableId
    * @returns {Promise<*>}
    */
   async scoringQuery(agentId, measurableId) {

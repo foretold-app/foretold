@@ -23,7 +23,7 @@ class VotesData extends DataBase {
   }
 
   /**
-   * @param {Definitions.MeasurementID} measurementId
+   * @param {Defs.MeasurementID} measurementId
    * @returns {Promise<number | null>}
    * @public
    */
@@ -37,8 +37,8 @@ class VotesData extends DataBase {
 
 
   /**
-   * @param {Definitions.AgentID} agentId
-   * @param {Definitions.MeasurementID} measurementId
+   * @param {Defs.AgentID} agentId
+   * @param {Defs.MeasurementID} measurementId
    * @param {number} voteAmountInput
    * @returns {Promise<Models.Vote>}
    * @public
@@ -83,8 +83,8 @@ class VotesData extends DataBase {
   }
 
   /**
-   * @param {Definitions.AgentID} agentId
-   * @param {Definitions.MeasurementID} measurementId
+   * @param {Defs.AgentID} agentId
+   * @param {Defs.MeasurementID} measurementId
    * @param {Layers.Transaction} transaction
    * @returns {Promise<*>}
    * @protected
@@ -99,8 +99,8 @@ class VotesData extends DataBase {
   }
 
   /**
-   * @param {Definitions.AgentID} agentId
-   * @param {Definitions.MeasurementID} measurementId
+   * @param {Defs.AgentID} agentId
+   * @param {Defs.MeasurementID} measurementId
    * @param {Layers.Transaction} transaction
    * @returns {Promise<*>}
    * @protected
@@ -113,7 +113,7 @@ class VotesData extends DataBase {
   }
 
   /**
-   * @param {Definitions.Vote} vote
+   * @param {Defs.Vote} vote
    * @param {number} voteAmount
    * @param {Layers.Transaction} transaction
    * @returns {Promise<*>}

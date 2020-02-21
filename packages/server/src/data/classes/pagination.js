@@ -18,7 +18,7 @@ class Pagination {
    * @param {number} [options.offset]
    * @param {Layers.orderList} [options.order]
    * @param {object} [context]
-   * @param {Definitions.AgentID} [context.agentId]
+   * @param {Defs.AgentID} [context.agentId]
    */
   constructor(options = {}, context = {}) {
     this._context = {};

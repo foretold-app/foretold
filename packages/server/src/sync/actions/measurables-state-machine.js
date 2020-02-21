@@ -108,7 +108,7 @@ class MeasurablesStateMachine {
   }
 
   /**
-   * @param {Definitions.Measurement} measurement
+   * @param {Defs.Measurement} measurement
    * @returns {Promise<boolean>}
    */
   async measurableStateTransition(measurement) {
@@ -157,7 +157,7 @@ class MeasurablesStateMachine {
   }
 
   /**
-   * @param {Definitions.Measurable} measurable
+   * @param {Defs.Measurable} measurable
    * @param {object} transaction
    * @return {Promise<boolean>}
    * @protected
@@ -187,7 +187,7 @@ class MeasurablesStateMachine {
   }
 
   /**
-   * @param {Definitions.Measurable} measurable
+   * @param {Defs.Measurable} measurable
    * @param {object | null} transaction
    * @return {Promise<Models.NotificationStatus>}
    * @protected
@@ -198,7 +198,7 @@ class MeasurablesStateMachine {
   }
 
   /**
-   * @param {Definitions.Measurable} measurable
+   * @param {Defs.Measurable} measurable
    * @param {object | null} transaction
    * @return {Promise<Models.NotificationStatus>}
    * @protected
@@ -209,7 +209,7 @@ class MeasurablesStateMachine {
   }
 
   /**
-   * @param {Definitions.Measurable} measurable
+   * @param {Defs.Measurable} measurable
    * @param {object | null} transaction
    * @return {Promise<Models.NotificationStatus>}
    * @protected
@@ -220,7 +220,7 @@ class MeasurablesStateMachine {
   }
 
   /**
-   * @param {Definitions.Measurable} measurable
+   * @param {Defs.Measurable} measurable
    * @param {string} state
    * @param {object | null} transaction
    * @return {Promise<Models.NotificationStatus>}

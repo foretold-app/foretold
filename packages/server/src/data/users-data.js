@@ -32,7 +32,7 @@ class UsersData extends DataBase {
 
   /**
    * @public
-   * @param {Definitions.UserID} userId
+   * @param {Defs.UserID} userId
    * @param {Auth0UserInfoResponse} userInfo
    * @return {Promise<Models.User>}
    */
@@ -85,7 +85,7 @@ class UsersData extends DataBase {
 
   /**
    * @public
-   * @param {Definitions.UserID} userId
+   * @param {Defs.UserID} userId
    * @param {string} auth0AccessToken
    * @returns {Promise<*>}
    */

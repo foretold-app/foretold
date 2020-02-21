@@ -19,7 +19,7 @@ class MeasurementModel extends ModelPostgres {
   }
 
   /**
-   * @param {Definitions.AgentID} agentId
+   * @param {Defs.AgentID} agentId
    * @param {string} [name]
    * @return {string}
    */
@@ -29,7 +29,7 @@ class MeasurementModel extends ModelPostgres {
 
   /**
    * @protected
-   * @param {Definitions.AgentID} agentId
+   * @param {Defs.AgentID} agentId
    * @param {string} name
    * @return {string}
    */
@@ -58,7 +58,7 @@ class MeasurementModel extends ModelPostgres {
   /**
    * @public
    * @todo: To use "applyFilter" to use "transactions" later!
-   * @param {Definitions.MeasurableID | null} measurableId
+   * @param {Defs.MeasurableID | null} measurableId
    * @returns {Promise<Model>}
    */
   async getOutcome(measurableId) {
@@ -84,8 +84,8 @@ class MeasurementModel extends ModelPostgres {
   /**
    * @public
    * @todo: To use "applyFilter" to use "transactions" later!
-   * @param {Definitions.MeasurableID | null} measurableId
-   * @param {Definitions.AgentID | null} agentId
+   * @param {Defs.MeasurableID | null} measurableId
+   * @param {Defs.AgentID | null} agentId
    * @param {Date} relevantAt
    * @returns {Promise<Model>}
    */
@@ -110,8 +110,8 @@ class MeasurementModel extends ModelPostgres {
   /**
    * @public
    * @todo: To use "applyFilter" to use "transactions" later.
-   * @param {Definitions.MeasurableID | null} measurableId
-   * @param {Definitions.AgentID | null} agentId
+   * @param {Defs.MeasurableID | null} measurableId
+   * @param {Defs.AgentID | null} agentId
    * @returns {Promise<Model>}
    */
   async getLatestAggregate(measurableId, agentId) {
@@ -132,8 +132,8 @@ class MeasurementModel extends ModelPostgres {
   /**
    * @public
    * @todo: To use "applyFilter" to use "transactions" later.
-   * @param {Definitions.Measurable} measurable
-   * @param {Definitions.AgentID | null} agentId
+   * @param {Defs.Measurable} measurable
+   * @param {Defs.AgentID | null} agentId
    * @return {Promise<Models.Definition>}
    */
   async getLatest({ measurable, agentId } = {}) {

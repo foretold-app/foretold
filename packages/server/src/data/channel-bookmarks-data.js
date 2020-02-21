@@ -20,8 +20,8 @@ class ChannelBookmarksData extends DataBase {
   }
 
   /**
-   * @param {Definitions.ChannelID} channelId
-   * @param {Definitions.AgentID} agentId
+   * @param {Defs.ChannelID} channelId
+   * @param {Defs.AgentID} agentId
    * @returns {Promise<boolean>}
    */
   async toggle(channelId, agentId) {
@@ -35,8 +35,8 @@ class ChannelBookmarksData extends DataBase {
   }
 
   /**
-   * @param {Definitions.ChannelID} channelId
-   * @param {Definitions.AgentID} agentId
+   * @param {Defs.ChannelID} channelId
+   * @param {Defs.AgentID} agentId
    * @returns {Promise<boolean>}
    */
   async create(channelId, agentId) {
@@ -46,8 +46,8 @@ class ChannelBookmarksData extends DataBase {
   }
 
   /**
-   * @param {Definitions.ChannelID} channelId
-   * @param {Definitions.AgentID} agentId
+   * @param {Defs.ChannelID} channelId
+   * @param {Defs.AgentID} agentId
    * @returns {Promise<boolean>}
    */
   async one(channelId, agentId) {
@@ -58,8 +58,8 @@ class ChannelBookmarksData extends DataBase {
   }
 
   /**
-   * @param {Definitions.ChannelID} channelId
-   * @param {Definitions.AgentID} agentId
+   * @param {Defs.ChannelID} channelId
+   * @param {Defs.AgentID} agentId
    * @returns {Promise<boolean>}
    */
   async delete(channelId, agentId) {

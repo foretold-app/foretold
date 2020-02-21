@@ -24,7 +24,7 @@ class VoteModel extends ModelPostgres {
   }
 
   /**
-   * @param {Layers.AbstractModelsLayer.options} _options
+   * @param {Layers.AbstractModelsLayer.Options} _options
    * @protected
    */
   _getGroups(_options = {}) {

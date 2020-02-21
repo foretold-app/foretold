@@ -3,11 +3,12 @@ const utils = require('../../lib/utils');
 
 /**
  * See "filter.js" comments.
+ * @implements {Layers.DataSourceLayer.Query}
  */
 class Query {
   /**
    * @todo: sort or Pagination.order?
-   * @param {Layers.DataSourceLayer.query} [query]
+   * @param {object} [query]
    */
   constructor(query = {}) {
     utils.copy(this.constructor.name, query, this);

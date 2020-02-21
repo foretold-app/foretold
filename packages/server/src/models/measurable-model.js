@@ -32,7 +32,7 @@ class MeasurableModel extends ModelPostgres {
   /**
    * @protected
    * @param {object} [where]
-   * @param {Layers.AbstractModelsLayer.filter} [filter]
+   * @param {Layers.AbstractModelsLayer.Filter} [filter]
    * @param {Models.AgentID} [filter.userId]
    */
   applyFilter(where = {}, filter = {}) {
@@ -84,7 +84,7 @@ class MeasurableModel extends ModelPostgres {
   }
 
   /**
-   * @param {Layers.AbstractModelsLayer.options} _options
+   * @param {Layers.AbstractModelsLayer.Options} _options
    * @return {{include: Sequelize.literal|*[]}}
    * @protected
    */

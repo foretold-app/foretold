@@ -15,7 +15,7 @@ class NotebookModel extends ModelPostgres {
   }
 
   /**
-   * @param {Layers.AbstractModelsLayer.options} options
+   * @param {Layers.AbstractModelsLayer.Options} options
    * @returns {*}
    * @protected
    */

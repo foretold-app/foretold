@@ -13,7 +13,7 @@ class AgentMeasurableModel extends ModelPostgres {
   }
 
   /**
-   * @param {Layers.AbstractModelsLayer.options} options
+   * @param {Layers.AbstractModelsLayer.Options} options
    * @returns {Promise<*>}
    */
   async updateMaterializedView(options) {

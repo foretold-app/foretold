@@ -22,8 +22,8 @@ class TemplateModel extends ModelPostgres {
    * @param {object} [params]
    * @param {string} params.name
    * @param {object} [_query]
-   * @param {Layers.AbstractModelsLayer.restrictions} [_restrictions]
-   * @param {Layers.AbstractModelsLayer.options} [_options]
+   * @param {Layers.AbstractModelsLayer.Restrictions} [_restrictions]
+   * @param {Layers.AbstractModelsLayer.Options} [_options]
    * @return {Promise<Models.Model>}
    */
   async getOne(params = {}, _query = {}, _restrictions = {}, _options = {}) {

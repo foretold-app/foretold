@@ -17,10 +17,12 @@ const utils = require('../../lib/utils');
  * new NotificationDate().getAll(filter);
  *
  */
-
+/**
+ * @implements {Layers.DataSourceLayer.Filter}
+ */
 class Filter {
   /**
-   * @param {Layers.DataSourceLayer.filter} [filter]
+   * @param {object} [filter]
    */
   constructor(filter = {}) {
     utils.extend(this.constructor.name, filter, Filter.LIST, this);

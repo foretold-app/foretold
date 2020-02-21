@@ -23,8 +23,8 @@ class MeasurementsData extends DataBase {
 
   /**
    * @protected
-   * @param {Layers.DataSourceLayer.options} [options]
-   * @return {Layers.AbstractModelsLayer.restrictions}
+   * @param {Layers.DataSourceLayer.Options} [options]
+   * @return {Layers.AbstractModelsLayer.Restrictions}
    */
   _getDefaultRestrictions(options = {}) {
     return {

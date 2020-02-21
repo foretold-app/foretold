@@ -323,8 +323,11 @@ export namespace Layers {
   namespace DataSourceLayer {
     type compoundId = object;
     type id = string | compoundId;
-    type data = object;
-    type options = {
+
+    interface Data extends Object {
+    }
+
+    interface Options {
       agentId?: Models.AgentID;
       currentAgentId?: Models.AgentID;
       isAdmin?: boolean;
@@ -335,8 +338,9 @@ export namespace Layers {
       raw?: boolean;
       skipLocked?: boolean;
       transaction?: object;
-    };
-    type filter = {
+    }
+
+    interface Filter {
       id?: Models.ObjectID;
       creatorId?: Models.AgentID;
       seriesId?: Models.SeriesID;
@@ -379,21 +383,24 @@ export namespace Layers {
       states?: string[];
       isArchived?: string[];
       types?: string[];
-    };
-    type pagination = {
+    }
+
+    interface Pagination {
       limit?: number;
       offset?: number;
       last?: number;
       first?: number;
       after?: string;
       before?: string;
-    };
-    type query = {
+    }
+
+    interface Query {
       sort?: number;
       distinct?: boolean;
       col?: string;
-    };
-    type params = {
+    }
+
+    interface Params {
       id?: Models.ObjectID;
 
       agentId?: Models.AgentID;
@@ -408,40 +415,47 @@ export namespace Layers {
       competitorType?: string;
       email?: string;
       isEmailVerified?: boolean;
-    };
-    type response = { data: any };
-    type responseList = { data: any[]; total: number };
+    }
+
+    interface Response {
+      data: any
+    }
+
+    interface ResponseList {
+      data: any[];
+      total: number
+    }
 
     // @todo: To fix response types.
     interface DataSource {
-      createOne(data: data, options: options): Promise<response>;
+      createOne(data: Data, options: Options): Promise<Response>;
 
-      getOne(params: params, query: query, options: options): Promise<response>;
+      getOne(params: Params, query: Query, options: Options): Promise<Response>;
 
-      getCount(params: params, query: query, options: options): Promise<number>;
+      getCount(params: Params, query: Query, options: Options): Promise<number>;
 
-      updateOne(params: params, data: data, options: options): Promise<response>;
+      updateOne(params: Params, data: Data, options: Options): Promise<Response>;
 
-      deleteOne(params: params, options: options): Promise<response>;
+      deleteOne(params: Params, options: Options): Promise<Response>;
 
       getAll(
-        filter: filter,
-        pagination: pagination,
-        options: options
-      ): Promise<responseList>;
+        filter: Filter,
+        pagination: Pagination,
+        options: Options
+      ): Promise<ResponseList>;
 
       getConnection(
-        filter: filter,
-        pagination: pagination,
-        options: options
-      ): Promise<responseList>;
+        filter: Filter,
+        pagination: Pagination,
+        options: Options
+      ): Promise<ResponseList>;
 
       upsertOne(
-        params: params,
-        query: query,
-        data: data,
-        options: options
-      ): Promise<response>;
+        params: Params,
+        query: Query,
+        data: Data,
+        options: Options
+      ): Promise<Response>;
 
       getTransaction(): Promise<Transaction>;
 
@@ -459,8 +473,10 @@ export namespace Layers {
     type compoundId = object;
     type id = string | compoundId;
 
-    type data = object;
-    type restrictions = {
+    interface Data extends Object {
+    }
+
+    interface Restrictions {
       agentId?: Models.AgentID;
       channelId?: Models.ChannelID;
       channelIdAsId?: boolean;
@@ -472,17 +488,18 @@ export namespace Layers {
       withinMeasurables?: withinMeasurables | null;
       withinPublicAndJoinedChannels?: withinPublicAndJoinedChannels | null;
       withinPublicChannels?: withinPublicChannels | null;
-    };
-    type options = {
+    }
+
+    interface Options {
       attributes?: boolean | attributes;
       group?: boolean;
       lock?: lock;
       raw?: boolean;
       skipLocked?: boolean;
       transaction?: object;
-    };
-    // @todo: To change on the interface.
-    type filter = {
+    }
+
+    interface Filter {
       agentId?: Models.AgentID;
       excludeChannelId?: Models.ChannelID;
       userId?: Models.UserID;
@@ -522,9 +539,9 @@ export namespace Layers {
       withinPublicAndJoinedChannels?: withinPublicAndJoinedChannels | null;
 
       getSpacedLimit?(): number | undefined;
-    };
-    // @todo: To change on the interface.
-    type pagination = {
+    }
+
+    interface Pagination {
       limit?: number;
       offset?: number;
       last?: number;
@@ -534,15 +551,19 @@ export namespace Layers {
       order?: orderList;
 
       getPagination(): { limit: number; offset: number };
+
       isOrderSet(): boolean;
+
       getOrder(): orderList;
-    };
-    type query = {
+    }
+
+    interface Query {
       col?: string;
       distinct?: boolean;
       sort?: number;
-    };
-    type params = {
+    }
+
+    interface Params {
       id?: Models.ObjectID;
 
       agentId?: Models.AgentID;
@@ -557,72 +578,79 @@ export namespace Layers {
       competitorType?: string;
       email?: string;
       isEmailVerified?: boolean;
-    };
-    type response = { data: any };
-    type responseList = { data: any[]; total: number };
+    }
+
+    interface Response {
+      data: any
+    }
+
+    interface ResponseList {
+      data: any[];
+      total: number
+    }
 
     // @todo: To fix response types.
     interface AbstractModel {
       deleteOne(
-        params: params,
-        restrictions: restrictions,
-        options: options
-      ): Promise<response>;
+        params: Params,
+        restrictions: Restrictions,
+        options: Options
+      ): Promise<Response>;
 
       updateOne(
-        params: params,
-        data: data,
-        restrictions: restrictions,
-        options: options
-      ): Promise<response>;
+        params: Params,
+        data: Data,
+        restrictions: Restrictions,
+        options: Options
+      ): Promise<Response>;
 
-      createOne(data: data, restrictions: restrictions): Promise<response>;
+      createOne(data: Data, restrictions: Restrictions): Promise<Response>;
 
       getOne(
-        params: params,
-        query: query,
-        restrictions: restrictions,
-        options: options
-      ): Promise<response>;
+        params: Params,
+        query: Query,
+        restrictions: Restrictions,
+        options: Options
+      ): Promise<Response>;
 
       upsertOne(
-        params: params,
-        query: query,
-        data: data,
-        restrictions: restrictions,
-        options: options
-      ): Promise<response>;
+        params: Params,
+        query: Query,
+        data: Data,
+        restrictions: Restrictions,
+        options: Options
+      ): Promise<Response>;
 
       getCount(
-        params: params,
-        query: query,
-        restrictions: restrictions,
-        options: options
+        params: Params,
+        query: Query,
+        restrictions: Restrictions,
+        options: Options
       ): Promise<number>;
 
       getAll(
-        filter: filter,
-        pagination: pagination,
-        restrictions: restrictions,
-        options: options
-      ): Promise<responseList>;
+        filter: Filter,
+        pagination: Pagination,
+        restrictions: Restrictions,
+        options: Options
+      ): Promise<ResponseList>;
 
       getAllWithConnections(
-        filter: filter,
-        pagination: pagination,
-        restrictions: restrictions,
-        options: options
-      ): Promise<responseList>;
+        filter: Filter,
+        pagination: Pagination,
+        restrictions: Restrictions,
+        options: Options
+      ): Promise<ResponseList>;
 
-      updateAll(params: params, data: data, options: options): Promise<boolean>;
+      updateAll(params: Params, data: Data, options: Options): Promise<boolean>;
 
       upsertOne(
-        params: params,
-        query: query,
-        data: data,
-        restrictions: restrictions,
-        options: options
-      ): Promise<response>;
+        params: Params,
+        query: Query,
+        data: Data,
+        restrictions: Restrictions,
+        options: Options
+      ): Promise<Response>;
 
       getTransaction(): Promise<Transaction>;
 

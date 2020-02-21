@@ -15,7 +15,7 @@ class ChannelModel extends ModelPostgres {
   }
 
   /**
-   * @param {Layers.AbstractModelsLayer.options} options
+   * @param {Layers.AbstractModelsLayer.Options} options
    * @returns {*}
    * @protected
    */
@@ -37,7 +37,7 @@ class ChannelModel extends ModelPostgres {
   }
 
   /**
-   * @param {Layers.AbstractModelsLayer.pagination} pagination
+   * @param {Layers.AbstractModelsLayer.Pagination} pagination
    * @returns {[any, any][]}
    * @protected
    */

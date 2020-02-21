@@ -18,16 +18,16 @@ class ChannelsData extends DataBase {
 
   /**
    * @protected
-   * @param {Layers.DataSourceLayer.options} [_options]
-   * @return {Layers.AbstractModelsLayer.restrictions}
+   * @param {Layers.DataSourceLayer.Options} _options
+   * @return {Layers.AbstractModelsLayer.Restrictions}
    */
-  _getDefaultRestrictions(_options = {}) {
+  _getDefaultRestrictions(_options) {
     return { channelIdAsId: true };
   }
 
   /**
    * @public
-   * @param {Layers.DataSourceLayer.data} data
+   * @param {Layers.DataSourceLayer.Data} data
    * @param {string} data.name
    * @return {Promise<Models.Channel>}
    */

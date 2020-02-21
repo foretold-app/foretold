@@ -3,7 +3,7 @@ const utils = require('../../lib/utils');
 
 class Options {
   /**
-   * @param {Layers.AbstractModelsLayer.options} [options]
+   * @param {Layers.AbstractModelsLayer.Options} [options]
    */
   constructor(options = {}) {
     utils.extend(this.constructor.name, options, Options.LIST, this);

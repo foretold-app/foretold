@@ -13,7 +13,7 @@ class MutexModel extends ModelPostgres {
   }
 
   /**
-   * @param {Layers.AbstractModelsLayer.options} options
+   * @param {Layers.AbstractModelsLayer.Options} options
    * @returns {Promise<*>}
    */
   async lock(options) {

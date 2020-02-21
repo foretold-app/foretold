@@ -3,7 +3,7 @@ const utils = require('../../lib/utils');
 
 /**
  * See "filter.js" comments.
- * @implements {Layers.DataSource.Options}
+ * @implements {Layers.DataSource.DataOptions}
  */
 class Options {
   /**

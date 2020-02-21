@@ -18,7 +18,7 @@ const utils = require('../../lib/utils');
  *
  */
 /**
- * @implements {Layers.DataSource.Filter}
+ * @implements {Layers.DataSource.DataFilter}
  */
 class Filter {
   /**

@@ -13,7 +13,7 @@ const { Pagination } = require('../data/classes');
 const { Options } = require('../data/classes');
 
 /**
- * @implements {Layers.DataSource.Generic}
+ * @implements {Layers.DataSource.DataGeneric}
  * @property {ChannelMembershipModel} model
  */
 class ChannelMembershipsData extends DataBase {
@@ -110,8 +110,8 @@ class ChannelMembershipsData extends DataBase {
 
   /**
    * @protected
-   * @param {Layers.DataSource.Options} [options]
-   * @return {Layers.Models.Restrictions}
+   * @param {Layers.DataSource.DataOptions} [options]
+   * @return {Layers.Models.ModelRestrictions}
    */
   _getDefaultRestrictions(options = {}) {
     return {

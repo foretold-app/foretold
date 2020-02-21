@@ -6,7 +6,7 @@ const { Params, Query, Data, Options } = require('./classes');
 const { MutexModel } = require('../models');
 
 /**
- * @implements {Layers.DataSource.Generic}
+ * @implements {Layers.DataSource.DataGeneric}
  * @property {MutexModel} model
  */
 class MutexesData extends DataBase {

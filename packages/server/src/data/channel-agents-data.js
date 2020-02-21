@@ -2,7 +2,7 @@ const { DataBase } = require('./data-base');
 const { ChannelAgentModel } = require('../models');
 
 /**
- * @implements {Layers.DataSource.Generic}
+ * @implements {Layers.DataSource.DataGeneric}
  * @property {AgentChannelModel} model
  */
 class ChannelAgentsData extends DataBase {

@@ -4,7 +4,7 @@ const models = require('./definitions');
 const { ModelPostgres } = require('./model-postgres');
 
 /**
- * @implements {Layers.Models.Generic}
+ * @implements {Layers.Models.ModelGeneric}
  */
 class ChannelModel extends ModelPostgres {
   constructor() {
@@ -15,7 +15,7 @@ class ChannelModel extends ModelPostgres {
   }
 
   /**
-   * @param {Layers.Models.Options} options
+   * @param {Layers.Models.ModelOptions} options
    * @returns {*}
    * @protected
    */
@@ -37,7 +37,7 @@ class ChannelModel extends ModelPostgres {
   }
 
   /**
-   * @param {Layers.Models.Pagination} pagination
+   * @param {Layers.Models.ModelPagination} pagination
    * @returns {[any, any][]}
    * @protected
    */

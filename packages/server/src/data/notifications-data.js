@@ -2,7 +2,7 @@ const { DataBase } = require('./data-base');
 const { NotificationModel } = require('../models');
 
 /**
- * @implements {Layers.DataSource.Generic}
+ * @implements {Layers.DataSource.DataGeneric}
  * @property {NotificationModel} model
  */
 class NotificationsData extends DataBase {

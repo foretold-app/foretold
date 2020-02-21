@@ -2,7 +2,7 @@ const models = require('./definitions');
 const { ModelPostgres } = require('./model-postgres');
 
 /**
- * @implements {Layers.Models.Generic}
+ * @implements {Layers.Models.ModelGeneric}
  */
 class PreferenceModel extends ModelPostgres {
   constructor() {

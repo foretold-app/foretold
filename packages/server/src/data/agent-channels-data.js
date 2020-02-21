@@ -8,7 +8,7 @@ const { AgentChannelModel } = require('../models');
 const { Proceed } = require('./scoring/proceed');
 
 /**
- * @implements {Layers.DataSource.Generic}
+ * @implements {Layers.DataSource.DataGeneric}
  * @property {AgentChannelModel} model
  */
 class AgentChannelsData extends DataBase {
@@ -21,8 +21,8 @@ class AgentChannelsData extends DataBase {
 
   /**
    * @protected
-   * @param {Layers.DataSource.Options} [options]
-   * @return {Layers.Models.Restrictions}
+   * @param {Layers.DataSource.DataOptions} [options]
+   * @return {Layers.Models.ModelRestrictions}
    */
   _getDefaultRestrictions(options = {}) {
     return {

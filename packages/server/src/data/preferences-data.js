@@ -7,7 +7,7 @@ const logger = require('../lib/log');
 const { PreferenceModel } = require('../models');
 
 /**
- * @implements {Layers.DataSource.Generic}
+ * @implements {Layers.DataSource.DataGeneric}
  * @property {PreferenceModel} model
  */
 class PreferencesData extends DataBase {

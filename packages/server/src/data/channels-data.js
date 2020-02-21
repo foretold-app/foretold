@@ -6,7 +6,7 @@ const { ChannelModel } = require('../models');
 const { Params } = require('./classes');
 
 /**
- * @implements {Layers.DataSource.Generic}
+ * @implements {Layers.DataSource.DataGeneric}
  * @property {ChannelModel} model
  */
 class ChannelsData extends DataBase {
@@ -18,8 +18,8 @@ class ChannelsData extends DataBase {
 
   /**
    * @protected
-   * @param {Layers.DataSource.Options} _options
-   * @return {Layers.Models.Restrictions}
+   * @param {Layers.DataSource.DataOptions} _options
+   * @return {Layers.Models.ModelRestrictions}
    */
   _getDefaultRestrictions(_options) {
     return { channelIdAsId: true };

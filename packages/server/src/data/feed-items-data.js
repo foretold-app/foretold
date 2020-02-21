@@ -2,7 +2,7 @@ const { DataBase } = require('./data-base');
 const { FeedItemModel } = require('../models');
 
 /**
- * @implements {Layers.DataSource.Generic}
+ * @implements {Layers.DataSource.DataGeneric}
  * @property {FeedItemModel} model
  */
 class FeedItemsData extends DataBase {
@@ -13,8 +13,8 @@ class FeedItemsData extends DataBase {
 
   /**
    * @protected
-   * @param {Layers.DataSource.Options} [options]
-   * @return {Layers.Models.Restrictions}
+   * @param {Layers.DataSource.DataOptions} [options]
+   * @return {Layers.Models.ModelRestrictions}
    */
   _getDefaultRestrictions(options = {}) {
     return {

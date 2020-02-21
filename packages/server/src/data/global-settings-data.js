@@ -9,7 +9,7 @@ const { Params } = require('./classes');
 const { Data } = require('./classes');
 
 /**
- * @implements {Layers.DataSource.Generic}
+ * @implements {Layers.DataSource.DataGeneric}
  * @property {FeedItemModel} model
  */
 class GlobalSettingsData extends DataBase {

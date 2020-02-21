@@ -2,7 +2,7 @@ const models = require('./definitions');
 const { ModelPostgres } = require('./model-postgres');
 
 /**
- * @implements {Layers.Models.Generic}
+ * @implements {Layers.Models.ModelGeneric}
  */
 class ChannelAgentModel extends ModelPostgres {
   constructor() {
@@ -13,7 +13,7 @@ class ChannelAgentModel extends ModelPostgres {
   }
 
   /**
-   * @param {Layers.Models.Options} options
+   * @param {Layers.Models.ModelOptions} options
    * @returns {Promise<*>}
    */
   async updateMaterializedView(options) {

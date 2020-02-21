@@ -4,7 +4,7 @@ const models = require('./definitions');
 const { ModelPostgres } = require('./model-postgres');
 
 /**
- * @implements {Layers.Models.Generic}
+ * @implements {Layers.Models.ModelGeneric}
  */
 class NotebookModel extends ModelPostgres {
   constructor() {
@@ -15,7 +15,7 @@ class NotebookModel extends ModelPostgres {
   }
 
   /**
-   * @param {Layers.Models.Options} options
+   * @param {Layers.Models.ModelOptions} options
    * @returns {*}
    * @protected
    */

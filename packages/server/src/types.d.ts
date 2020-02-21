@@ -327,7 +327,7 @@ export namespace Layers {
     interface Data extends Object {
     }
 
-    interface Options {
+    interface DataOptions {
       agentId?: Definitions.AgentID;
       currentAgentId?: Definitions.AgentID;
       isAdmin?: boolean;
@@ -340,7 +340,7 @@ export namespace Layers {
       transaction?: object;
     }
 
-    interface Filter {
+    interface DataFilter {
       id?: Definitions.ObjectID;
       creatorId?: Definitions.AgentID;
       seriesId?: Definitions.SeriesID;
@@ -385,7 +385,7 @@ export namespace Layers {
       types?: string[];
     }
 
-    interface Pagination {
+    interface DataPagination {
       limit?: number;
       offset?: number;
       last?: number;
@@ -394,13 +394,13 @@ export namespace Layers {
       before?: string;
     }
 
-    interface Query {
+    interface DataQuery {
       sort?: number;
       distinct?: boolean;
       col?: string;
     }
 
-    interface Params {
+    interface DataParams {
       id?: Definitions.ObjectID;
 
       agentId?: Definitions.AgentID;
@@ -417,45 +417,45 @@ export namespace Layers {
       isEmailVerified?: boolean;
     }
 
-    interface Response {
+    interface DataResponse {
       data: any
     }
 
-    interface ResponseList {
+    interface DataResponseList {
       data: any[];
       total: number
     }
 
     // @todo: To fix response types.
-    interface Generic {
-      createOne(data: Data, options: Options): Promise<Response>;
+    interface DataGeneric {
+      createOne(data: Data, options: DataOptions): Promise<DataResponse>;
 
-      getOne(params: Params, query: Query, options: Options): Promise<Response>;
+      getOne(params: DataParams, query: DataQuery, options: DataOptions): Promise<DataResponse>;
 
-      getCount(params: Params, query: Query, options: Options): Promise<number>;
+      getCount(params: DataParams, query: DataQuery, options: DataOptions): Promise<number>;
 
-      updateOne(params: Params, data: Data, options: Options): Promise<Response>;
+      updateOne(params: DataParams, data: Data, options: DataOptions): Promise<DataResponse>;
 
-      deleteOne(params: Params, options: Options): Promise<Response>;
+      deleteOne(params: DataParams, options: DataOptions): Promise<DataResponse>;
 
       getAll(
-        filter: Filter,
-        pagination: Pagination,
-        options: Options
-      ): Promise<ResponseList>;
+        filter: DataFilter,
+        pagination: DataPagination,
+        options: DataOptions
+      ): Promise<DataResponseList>;
 
       getConnection(
-        filter: Filter,
-        pagination: Pagination,
-        options: Options
-      ): Promise<ResponseList>;
+        filter: DataFilter,
+        pagination: DataPagination,
+        options: DataOptions
+      ): Promise<DataResponseList>;
 
       upsertOne(
-        params: Params,
-        query: Query,
+        params: DataParams,
+        query: DataQuery,
         data: Data,
-        options: Options
-      ): Promise<Response>;
+        options: DataOptions
+      ): Promise<DataResponse>;
 
       getTransaction(): Promise<Transaction>;
 
@@ -476,7 +476,7 @@ export namespace Layers {
     interface Data extends Object {
     }
 
-    interface Restrictions {
+    interface ModelRestrictions {
       agentId?: Definitions.AgentID;
       channelId?: Definitions.ChannelID;
       channelIdAsId?: boolean;
@@ -490,7 +490,7 @@ export namespace Layers {
       withinPublicChannels?: withinPublicChannels | null;
     }
 
-    interface Options {
+    interface ModelOptions {
       attributes?: boolean | attributes;
       group?: boolean;
       lock?: lock;
@@ -499,7 +499,7 @@ export namespace Layers {
       transaction?: object;
     }
 
-    interface Filter {
+    interface ModelFilter {
       agentId?: Definitions.AgentID;
       excludeChannelId?: Definitions.ChannelID;
       userId?: Definitions.UserID;
@@ -541,7 +541,7 @@ export namespace Layers {
       getSpacedLimit?(): number | undefined;
     }
 
-    interface Pagination {
+    interface ModelPagination {
       limit?: number;
       offset?: number;
       last?: number;
@@ -557,13 +557,13 @@ export namespace Layers {
       getOrder(): orderList;
     }
 
-    interface Query {
+    interface ModelQuery {
       col?: string;
       distinct?: boolean;
       sort?: number;
     }
 
-    interface Params {
+    interface ModelParams {
       id?: Definitions.ObjectID;
 
       agentId?: Definitions.AgentID;
@@ -580,77 +580,77 @@ export namespace Layers {
       isEmailVerified?: boolean;
     }
 
-    interface Response {
+    interface ModelResponse {
       data: any
     }
 
-    interface ResponseList {
+    interface ModelResponseList {
       data: any[];
       total: number
     }
 
     // @todo: To fix response types.
-    interface Generic {
+    interface ModelGeneric {
       deleteOne(
-        params: Params,
-        restrictions: Restrictions,
-        options: Options
-      ): Promise<Response>;
+        params: ModelParams,
+        restrictions: ModelRestrictions,
+        options: ModelOptions
+      ): Promise<ModelResponse>;
 
       updateOne(
-        params: Params,
+        params: ModelParams,
         data: Data,
-        restrictions: Restrictions,
-        options: Options
-      ): Promise<Response>;
+        restrictions: ModelRestrictions,
+        options: ModelOptions
+      ): Promise<ModelResponse>;
 
-      createOne(data: Data, restrictions: Restrictions): Promise<Response>;
+      createOne(data: Data, restrictions: ModelRestrictions): Promise<ModelResponse>;
 
       getOne(
-        params: Params,
-        query: Query,
-        restrictions: Restrictions,
-        options: Options
-      ): Promise<Response>;
+        params: ModelParams,
+        query: ModelQuery,
+        restrictions: ModelRestrictions,
+        options: ModelOptions
+      ): Promise<ModelResponse>;
 
       upsertOne(
-        params: Params,
-        query: Query,
+        params: ModelParams,
+        query: ModelQuery,
         data: Data,
-        restrictions: Restrictions,
-        options: Options
-      ): Promise<Response>;
+        restrictions: ModelRestrictions,
+        options: ModelOptions
+      ): Promise<ModelResponse>;
 
       getCount(
-        params: Params,
-        query: Query,
-        restrictions: Restrictions,
-        options: Options
+        params: ModelParams,
+        query: ModelQuery,
+        restrictions: ModelRestrictions,
+        options: ModelOptions
       ): Promise<number>;
 
       getAll(
-        filter: Filter,
-        pagination: Pagination,
-        restrictions: Restrictions,
-        options: Options
-      ): Promise<ResponseList>;
+        filter: ModelFilter,
+        pagination: ModelPagination,
+        restrictions: ModelRestrictions,
+        options: ModelOptions
+      ): Promise<ModelResponseList>;
 
       getAllWithConnections(
-        filter: Filter,
-        pagination: Pagination,
-        restrictions: Restrictions,
-        options: Options
-      ): Promise<ResponseList>;
+        filter: ModelFilter,
+        pagination: ModelPagination,
+        restrictions: ModelRestrictions,
+        options: ModelOptions
+      ): Promise<ModelResponseList>;
 
-      updateAll(params: Params, data: Data, options: Options): Promise<boolean>;
+      updateAll(params: ModelParams, data: Data, options: ModelOptions): Promise<boolean>;
 
       upsertOne(
-        params: Params,
-        query: Query,
+        params: ModelParams,
+        query: ModelQuery,
         data: Data,
-        restrictions: Restrictions,
-        options: Options
-      ): Promise<Response>;
+        restrictions: ModelRestrictions,
+        options: ModelOptions
+      ): Promise<ModelResponse>;
 
       getTransaction(): Promise<Transaction>;
 

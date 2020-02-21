@@ -11,7 +11,7 @@ const { Data } = require('./classes');
 const { Params } = require('./classes');
 
 /**
- * @implements {Layers.DataSource.Generic}
+ * @implements {Layers.DataSource.DataGeneric}
  * @property {TokenModel} model
  */
 class TokensData extends DataBase {

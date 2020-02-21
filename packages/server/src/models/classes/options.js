@@ -2,7 +2,7 @@ const _ = require('lodash');
 const utils = require('../../lib/utils');
 
 /**
- * @implements {Layers.Models.Options}
+ * @implements {Layers.Models.ModelOptions}
  */
 class Options {
   /**

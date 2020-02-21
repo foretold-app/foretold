@@ -3,7 +3,7 @@ const { DataBase } = require('./data-base');
 const { MeasurementModel } = require('../models');
 
 /**
- * @implements {Layers.DataSource.Generic}
+ * @implements {Layers.DataSource.DataGeneric}
  * @property {MeasurementModel} model
  */
 class MeasurementsData extends DataBase {
@@ -23,8 +23,8 @@ class MeasurementsData extends DataBase {
 
   /**
    * @protected
-   * @param {Layers.DataSource.Options} [options]
-   * @return {Layers.Models.Restrictions}
+   * @param {Layers.DataSource.DataOptions} [options]
+   * @return {Layers.Models.ModelRestrictions}
    */
   _getDefaultRestrictions(options = {}) {
     return {

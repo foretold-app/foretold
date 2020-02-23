@@ -2,7 +2,7 @@ const models = require('./definitions');
 const { ModelPostgres } = require('./model-postgres');
 
 /**
- * @implements {Layers.AbstractModelsLayer.AbstractModel}
+ * @implements {Layers.Models.ModelGeneric}
  */
 class AgentChannelModel extends ModelPostgres {
   constructor() {
@@ -13,7 +13,7 @@ class AgentChannelModel extends ModelPostgres {
   }
 
   /**
-   * @param {Layers.AbstractModelsLayer.options} options
+   * @param {Layers.Models.ModelOptions} options
    * @returns {Promise<*>}
    */
   async updateMaterializedView(options) {
@@ -21,8 +21,8 @@ class AgentChannelModel extends ModelPostgres {
   }
 
   /**
-   * @param {Models.AgentID} agentId
-   * @param {Models.ChannelID} channelId
+   * @param {Defs.AgentID} agentId
+   * @param {Defs.ChannelID} channelId
    * @returns {Promise<*>}
    */
   async scoringQuery(agentId, channelId) {

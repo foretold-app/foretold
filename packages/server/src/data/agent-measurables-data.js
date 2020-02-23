@@ -9,7 +9,7 @@ const { MeasurablesData } = require('./measurables-data');
 const { Proceed } = require('./scoring/proceed');
 
 /**
- * @implements {Layers.DataSourceLayer.DataSource}
+ * @implements {Layers.DataSource.DataGeneric}
  * @property {AgentMeasurableModel} model
  */
 class AgentMeasurablesData extends DataBase {
@@ -22,8 +22,8 @@ class AgentMeasurablesData extends DataBase {
 
   /**
    * @protected
-   * @param {Layers.DataSourceLayer.options} [options]
-   * @return {Layers.AbstractModelsLayer.restrictions}
+   * @param {Layers.DataSource.DataOptions} [options]
+   * @return {Layers.Models.ModelRestrictions}
    */
   _getDefaultRestrictions(options = {}) {
     return {
@@ -57,8 +57,8 @@ class AgentMeasurablesData extends DataBase {
   }
 
   /**
-   * @param {Models.AgentID} agentId
-   * @param {Models.MeasurableID} measurableId
+   * @param {Defs.AgentID} agentId
+   * @param {Defs.MeasurableID} measurableId
    * @returns {Promise<*>}
    */
   async _getTimeScoringData(agentId, measurableId) {

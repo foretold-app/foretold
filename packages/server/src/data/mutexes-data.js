@@ -6,7 +6,7 @@ const { Params, Query, Data, Options } = require('./classes');
 const { MutexModel } = require('../models');
 
 /**
- * @implements {Layers.DataSourceLayer.DataSource}
+ * @implements {Layers.DataSource.DataGeneric}
  * @property {MutexModel} model
  */
 class MutexesData extends DataBase {
@@ -17,7 +17,7 @@ class MutexesData extends DataBase {
 
   /**
    * @public
-   * @param {Models.AgentID} agentId
+   * @param {Defs.AgentID} agentId
    * @param {string} name
    * @returns {Promise<*>}
    */
@@ -77,7 +77,7 @@ class MutexesData extends DataBase {
 
   /**
    * @public
-   * @param {Models.AgentID} agentId
+   * @param {Defs.AgentID} agentId
    * @param {string} mutexId
    * @returns {Promise<*>}
    */

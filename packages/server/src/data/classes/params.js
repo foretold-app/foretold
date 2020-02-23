@@ -3,10 +3,11 @@ const utils = require('../../lib/utils');
 
 /**
  * See "filter.js" comments.
+ * @implements {Layers.Params}
  */
 class Params {
   /**
-   * @param {Layers.DataSourceLayer.params} [params]
+   * @param {object} [params]
    */
   constructor(params = {}) {
     utils.extend(this.constructor.name, params, Params.LIST, this);

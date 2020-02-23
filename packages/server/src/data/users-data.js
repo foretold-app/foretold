@@ -8,7 +8,7 @@ const { Params, Query, Data } = require('./classes');
 const { UserModel } = require('../models');
 
 /**
- * @implements {Layers.DataSourceLayer.DataSource}
+ * @implements {Layers.DataSource.DataGeneric}
  * @property {UserModel} model
  */
 class UsersData extends DataBase {
@@ -32,7 +32,7 @@ class UsersData extends DataBase {
 
   /**
    * @public
-   * @param {Models.UserID} userId
+   * @param {Defs.UserID} userId
    * @param {Auth0UserInfoResponse} userInfo
    * @return {Promise<Models.User>}
    */
@@ -85,7 +85,7 @@ class UsersData extends DataBase {
 
   /**
    * @public
-   * @param {Models.UserID} userId
+   * @param {Defs.UserID} userId
    * @param {string} auth0AccessToken
    * @returns {Promise<*>}
    */

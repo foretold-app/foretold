@@ -4,7 +4,7 @@ const { MEASURABLE_STATE } = require('../enums');
 const { ModelPostgres } = require('./model-postgres');
 
 /**
- * @implements {Layers.AbstractModelsLayer.AbstractModel}
+ * @implements {Layers.Models.ModelGeneric}
  */
 class MeasurableModel extends ModelPostgres {
   constructor() {
@@ -32,8 +32,8 @@ class MeasurableModel extends ModelPostgres {
   /**
    * @protected
    * @param {object} [where]
-   * @param {Layers.AbstractModelsLayer.filter} [filter]
-   * @param {Models.AgentID} [filter.userId]
+   * @param {Layers.Filter} [filter]
+   * @param {Defs.AgentID} [filter.userId]
    */
   applyFilter(where = {}, filter = {}) {
     super.applyFilter(where, filter);
@@ -84,7 +84,7 @@ class MeasurableModel extends ModelPostgres {
   }
 
   /**
-   * @param {Layers.AbstractModelsLayer.options} _options
+   * @param {Layers.Models.ModelOptions} _options
    * @return {{include: Sequelize.literal|*[]}}
    * @protected
    */

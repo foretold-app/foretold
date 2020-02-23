@@ -9,7 +9,7 @@ const logger = require('../lib/log');
 const log = logger.module('data/measurables-data');
 
 /**
- * @implements {Layers.DataSourceLayer.DataSource}
+ * @implements {Layers.DataSource.DataGeneric}
  * @property {MeasurableModel} model
  */
 class MeasurablesData extends DataBase {
@@ -33,7 +33,7 @@ class MeasurablesData extends DataBase {
   /**
    * @todo: rework
    * @public
-   * @param {Models.MeasurableID} measurableId
+   * @param {Defs.MeasurableID} measurableId
    * @return {Promise<Models.Measurable>}
    */
   async unArchive(measurableId) {
@@ -43,7 +43,7 @@ class MeasurablesData extends DataBase {
   }
 
   /**
-   * @param {Models.ChannelID} channelId
+   * @param {Defs.ChannelID} channelId
    * @return {Promise<*>}
    */
   async getOpenedCount(channelId) {
@@ -52,8 +52,8 @@ class MeasurablesData extends DataBase {
 
   /**
    * @protected
-   * @param {Layers.DataSourceLayer.options} [options]
-   * @return {Layers.AbstractModelsLayer.restrictions}
+   * @param {Layers.DataSource.DataOptions} [options]
+   * @return {Layers.Models.ModelRestrictions}
    */
   _getDefaultRestrictions(options = {}) {
     return {

@@ -32,7 +32,7 @@ async function create(_root, args, context, _info) {
 /**
  * @param {*} _root
  * @param {object} args
- * @param {Models.BotID} args.id
+ * @param {Defs.BotID} args.id
  * @param {object} args.input
  * @param {Schema.Context} _context
  * @param {object} _info
@@ -50,9 +50,9 @@ async function update(_root, args, _context, _info) {
 
 /**
  * @param {*} root
- * @param {Models.UserID} root.userId
+ * @param {Defs.UserID} root.userId
  * @param {object} args
- * @param {Models.AgentID} args.ownerId
+ * @param {Defs.AgentID} args.ownerId
  * @param {string} args.after
  * @param {string} args.before
  * @param {number} args.last
@@ -73,7 +73,7 @@ async function all(root, args, _context, _info) {
 
 /**
  * @param {*} root
- * @param {Models.UserID} root.userId
+ * @param {Defs.UserID} root.userId
  * @param {object} args
  * @param {Schema.Context} _context
  * @param {object} _info

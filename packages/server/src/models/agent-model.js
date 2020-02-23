@@ -4,7 +4,7 @@ const models = require('./definitions');
 const { ModelPostgres } = require('./model-postgres');
 
 /**
- * @implements {Layers.AbstractModelsLayer.AbstractModel}
+ * @implements {Layers.Models.ModelGeneric}
  */
 class AgentModel extends ModelPostgres {
   constructor() {
@@ -17,7 +17,7 @@ class AgentModel extends ModelPostgres {
   /**
    * @todo: see this._publicAndJoinedChannels()
    * @protected
-   * @param {Models.ChannelID} channelId
+   * @param {Defs.ChannelID} channelId
    * @return {Sequelize.literal}
    */
   _agentsIdsLiteral(channelId) {
@@ -28,7 +28,7 @@ class AgentModel extends ModelPostgres {
    * @todo: Use ORM opportunities to join tables.
    * @todo: No, do not this ORM for this.
    * @protected
-   * @param {Models.ChannelID} channelId
+   * @param {Defs.ChannelID} channelId
    * @return {string}
    */
   _agentsIds(channelId) {

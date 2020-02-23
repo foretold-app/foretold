@@ -17,7 +17,15 @@ module Columns = {
   let name =
     Table.Column.make(
       ~name="Name" |> Utils.ste,
-      ~render=(r: record) => r.name |> Utils.ste,
+      ~render=
+        (r: record) => {
+          <>
+            {r.name |> Utils.ste}
+            {" (starred)"
+             |> Utils.ste
+             |> E.React2.showIf(r.isBookmarked |> E.O.toBool2)}
+          </>
+        },
       ~flex=3,
       (),
     );

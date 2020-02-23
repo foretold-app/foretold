@@ -2,7 +2,7 @@ const models = require('./definitions');
 const { ModelPostgres } = require('./model-postgres');
 
 /**
- * @implements {Layers.AbstractModelsLayer.AbstractModel}
+ * @implements {Layers.Models.ModelGeneric}
  */
 class MutexModel extends ModelPostgres {
   constructor() {
@@ -13,7 +13,7 @@ class MutexModel extends ModelPostgres {
   }
 
   /**
-   * @param {Layers.AbstractModelsLayer.options} options
+   * @param {Layers.Models.ModelOptions} options
    * @returns {Promise<*>}
    */
   async lock(options) {

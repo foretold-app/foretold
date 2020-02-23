@@ -7,7 +7,7 @@ const logger = require('../lib/log');
 const { PreferenceModel } = require('../models');
 
 /**
- * @implements {Layers.DataSourceLayer.DataSource}
+ * @implements {Layers.DataSource.DataGeneric}
  * @property {PreferenceModel} model
  */
 class PreferencesData extends DataBase {
@@ -19,7 +19,7 @@ class PreferencesData extends DataBase {
 
   /**
    * @public
-   * @param {Models.AgentID} agentId
+   * @param {Defs.AgentID} agentId
    * @return {Promise<*>}
    */
   async getOneByAgentId(agentId) {
@@ -32,7 +32,7 @@ class PreferencesData extends DataBase {
 
   /**
    * @public
-   * @param {Models.AgentID} agentId
+   * @param {Defs.AgentID} agentId
    * @return {Promise<boolean>}
    */
   async subscribe(agentId) {
@@ -51,7 +51,7 @@ class PreferencesData extends DataBase {
 
   /**
    * @public
-   * @param {Models.AgentID} agentId
+   * @param {Defs.AgentID} agentId
    * @return {Promise<boolean>}
    */
   async unsubscribe(agentId) {

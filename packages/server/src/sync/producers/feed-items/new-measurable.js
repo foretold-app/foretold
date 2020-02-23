@@ -5,7 +5,7 @@ const { Producer } = require('../producer');
 
 class NewMeasurable extends ProducerFeedItems {
   /**
-   * @param {Models.Measurable} measurable
+   * @param {Defs.Measurable} measurable
    */
   constructor(measurable) {
     super(measurable);
@@ -15,7 +15,7 @@ class NewMeasurable extends ProducerFeedItems {
   }
 
   /**
-   * @param {Models.Agent} agent
+   * @param {Defs.Agent} agent
    * @return {Promise.<{
    * agent: {name: string},
    * measurable: {name: string, id: string}

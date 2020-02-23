@@ -7,7 +7,7 @@ const { Producer } = require('../producer');
 
 class MemberJoinedCommunity extends ProducerFeedItems {
   /**
-   * @param {Models.ChannelMembership} input
+   * @param {Defs.ChannelMembership} input
    */
   constructor(input) {
     super(input);

@@ -5,7 +5,7 @@ const { Producer } = require('../producer');
 
 class NewChannel extends ProducerFeedItems {
   /**
-   * @param {Models.Channel} channel
+   * @param {Defs.Channel} channel
    */
   constructor(channel) {
     super(channel);

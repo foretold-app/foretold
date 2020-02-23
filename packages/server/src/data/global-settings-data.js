@@ -9,7 +9,7 @@ const { Params } = require('./classes');
 const { Data } = require('./classes');
 
 /**
- * @implements {Layers.DataSourceLayer.DataSource}
+ * @implements {Layers.DataSource.DataGeneric}
  * @property {FeedItemModel} model
  */
 class GlobalSettingsData extends DataBase {
@@ -21,7 +21,7 @@ class GlobalSettingsData extends DataBase {
   /**
    * @public
    * @param {object} incomingData
-   * @return {Promise<Models.Model>}
+   * @return {Promise<Models.Definition>}
    */
   async updateEntityGraph(incomingData) {
     assert(_.isObject(incomingData), 'EntityGraph should be an object');

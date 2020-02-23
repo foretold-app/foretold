@@ -8,7 +8,7 @@ const { ModelPostgres } = require('./model-postgres');
 const { Params } = require('../data/classes');
 
 /**
- * @implements {Layers.AbstractModelsLayer.AbstractModel}
+ * @implements {Layers.Models.ModelGeneric}
  */
 class MeasurementModel extends ModelPostgres {
   constructor() {
@@ -19,7 +19,7 @@ class MeasurementModel extends ModelPostgres {
   }
 
   /**
-   * @param {Models.AgentID} agentId
+   * @param {Defs.AgentID} agentId
    * @param {string} [name]
    * @return {string}
    */
@@ -29,7 +29,7 @@ class MeasurementModel extends ModelPostgres {
 
   /**
    * @protected
-   * @param {Models.AgentID} agentId
+   * @param {Defs.AgentID} agentId
    * @param {string} name
    * @return {string}
    */
@@ -58,7 +58,7 @@ class MeasurementModel extends ModelPostgres {
   /**
    * @public
    * @todo: To use "applyFilter" to use "transactions" later!
-   * @param {Models.MeasurableID | null} measurableId
+   * @param {Defs.MeasurableID | null} measurableId
    * @returns {Promise<Model>}
    */
   async getOutcome(measurableId) {
@@ -84,8 +84,8 @@ class MeasurementModel extends ModelPostgres {
   /**
    * @public
    * @todo: To use "applyFilter" to use "transactions" later!
-   * @param {Models.MeasurableID | null} measurableId
-   * @param {Models.AgentID | null} agentId
+   * @param {Defs.MeasurableID | null} measurableId
+   * @param {Defs.AgentID | null} agentId
    * @param {Date} relevantAt
    * @returns {Promise<Model>}
    */
@@ -110,8 +110,8 @@ class MeasurementModel extends ModelPostgres {
   /**
    * @public
    * @todo: To use "applyFilter" to use "transactions" later.
-   * @param {Models.MeasurableID | null} measurableId
-   * @param {Models.AgentID | null} agentId
+   * @param {Defs.MeasurableID | null} measurableId
+   * @param {Defs.AgentID | null} agentId
    * @returns {Promise<Model>}
    */
   async getLatestAggregate(measurableId, agentId) {
@@ -132,9 +132,9 @@ class MeasurementModel extends ModelPostgres {
   /**
    * @public
    * @todo: To use "applyFilter" to use "transactions" later.
-   * @param {Models.Measurable} measurable
-   * @param {Models.AgentID | null} agentId
-   * @return {Promise<Models.Model>}
+   * @param {Defs.Measurable} measurable
+   * @param {Defs.AgentID | null} agentId
+   * @return {Promise<Models.Definition>}
    */
   async getLatest({ measurable, agentId } = {}) {
     const measurableId = measurable.id;

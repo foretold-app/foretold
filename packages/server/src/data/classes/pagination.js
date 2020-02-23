@@ -4,6 +4,7 @@ const utils = require('../../lib/utils');
 
 /**
  * See "filter.js" comments.
+ * @implements {Layers.Pagination}
  */
 class Pagination {
   /**
@@ -16,8 +17,12 @@ class Pagination {
    * @param {number} [options.limit]
    * @param {number} [options.offset]
    * @param {Layers.orderList} [options.order]
+   * @param {object} [context]
+   * @param {Defs.AgentID} [context.agentId]
    */
-  constructor(options = {}) {
+  constructor(options = {}, context = {}) {
+    this._context = {};
+
     if (_.has(options, 'last')) {
       this.last = _.get(options, 'last', 0);
     }
@@ -42,6 +47,9 @@ class Pagination {
     if (_.has(options, 'order')) {
       this.order = this._getOrder(options);
     }
+    if (_.has(context, 'agentId')) {
+      this._context.agentId = _.get(context, 'agentId', null);
+    }
   }
 
   /**
@@ -51,15 +59,15 @@ class Pagination {
    * @protected
    */
   _getOrder(options) {
-    const orderInput = _.get(options, 'order');
+    const orderInput = _.get(options, 'order', []);
     const orderArray = _.isArray(orderInput) ? orderInput : [];
     return orderArray
-      .filter((item) => _.has(item, 'field'))
-      .filter((item) => _.has(item, 'direction'))
       .map((item) => ({
-        field: _.get(item, 'field'),
-        direction: _.get(item, 'direction'),
-      }));
+        field: _.get(item, 'field', null),
+        direction: _.get(item, 'direction', null),
+      }))
+      .filter((item) => _.isString(item.field))
+      .filter((item) => _.isString(item.direction));
   }
 
   /**
@@ -72,7 +80,7 @@ class Pagination {
 
   /**
    * @public
-   * @returns {{field: any, direction: any}[]}
+   * @returns {{field: string, direction: string}[]}
    */
   getOrder() {
     return this.order;
@@ -105,6 +113,14 @@ class Pagination {
    */
   inspect() {
     utils.inspect(this);
+  }
+
+  /**
+   * @param {string} name
+   * @returns {*}
+   */
+  getContext(name) {
+    return _.get(this._context, name);
   }
 }
 

@@ -87,10 +87,29 @@ const notebooksConnection = new graphql.GraphQLObjectType({
   }),
 });
 
+
+const orderFieldNotebook = new graphql.GraphQLEnumType({
+  name: 'OrderFieldNotebook',
+  values: {
+    isBookmarked: { value: 'isBookmarked' },
+  },
+});
+
+const orderNotebooks = new graphql.GraphQLInputObjectType({
+  name: 'OrderNotebooks',
+  fields: () => ({
+    field: { type: graphql.GraphQLNonNull(orderFieldNotebook) },
+    direction: {
+      type: graphql.GraphQLNonNull(commonTypes.orderDirection),
+    },
+  }),
+});
+
 module.exports = {
   notebook,
   notebookCreateInput,
-  notebookUpdateInput,
   notebookEdge,
+  notebookUpdateInput,
   notebooksConnection,
+  orderNotebooks,
 };

@@ -8,7 +8,7 @@ const { NewMeasurement } = require('./new-measurement');
 
 class NewMeasurementComment extends NewMeasurement {
   /**
-   * @param {Models.Measurement} measurement
+   * @param {Defs.Measurement} measurement
    */
   constructor(measurement) {
     super(measurement);

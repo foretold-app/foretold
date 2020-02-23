@@ -7,6 +7,7 @@ module Query = [%graphql
         $last: Int500
         $after: Cursor
         $before: Cursor
+        $order: [OrderNotebooks]
     ) {
         notebooks (
             channelId: $channelId
@@ -15,6 +16,7 @@ module Query = [%graphql
             last: $last
             after: $after
             before: $before
+            order: $order
         ) {
           total
           pageInfo{
@@ -83,8 +85,30 @@ let unpackEdges = a =>
   a##notebooks
   |> E.O.fmap(Primary.Connection.fromJson(Primary.Notebook.convertJsObject));
 
-let queryDirection = (~channelId=?, ~ownerId=?, ~pageLimit, ~direction, ()) => {
-  let fn = Query.make(~channelId?, ~ownerId?);
+type order =
+  option(
+    array(
+      option({
+        .
+        "direction": Types.direction,
+        "field": Types.fieldNotebooks,
+      }),
+    ),
+  );
+
+let orderNotebooks: order =
+  Some([|Some({"field": `isBookmarked, "direction": `DESC})|]);
+
+let queryDirection =
+    (
+      ~channelId=?,
+      ~ownerId=?,
+      ~order=orderNotebooks,
+      ~pageLimit,
+      ~direction,
+      (),
+    ) => {
+  let fn = Query.make(~channelId?, ~ownerId?, ~order?);
   switch ((direction: Primary.Connection.direction)) {
   | None => fn(~first=pageLimit, ())
   | After(after) => fn(~first=pageLimit, ~after, ())

@@ -9,7 +9,7 @@ const { Data, Params, Query } = require('./classes');
 const { InvitationModel } = require('../models');
 
 /**
- * @implements {Layers.DataSourceLayer.DataSource}
+ * @implements {Layers.DataSource.DataGeneric}
  * @property {InvitationModel} model
  */
 class InvitationsData extends DataBase {
@@ -60,8 +60,8 @@ class InvitationsData extends DataBase {
 
   /**
    * @param {string} email
-   * @param {Models.ChannelID} channelId
-   * @param {Models.AgentID} inviterAgentId
+   * @param {Defs.ChannelID} channelId
+   * @param {Defs.AgentID} inviterAgentId
    * @returns {Promise<*>}
    */
   async upsert(email, channelId, inviterAgentId) {
@@ -73,8 +73,8 @@ class InvitationsData extends DataBase {
 
   /**
    * @param {string} email
-   * @param {Models.ChannelID} channelId
-   * @param {Models.AgentID} inviterAgentId
+   * @param {Defs.ChannelID} channelId
+   * @param {Defs.AgentID} inviterAgentId
    * @returns {Promise<boolean>}
    */
   async addMemberships(email, channelId, inviterAgentId) {

@@ -54,7 +54,7 @@ type order =
     ),
   );
 
-let orderCommunities: order =
+let orderChannels: order =
   Some([|
     Some({"field": `isCurated, "direction": `DESC}),
     Some({"field": `membersCount, "direction": `DESC}),
@@ -67,7 +67,7 @@ let component =
     (
       ~channelMemberId: option(string)=?,
       ~isArchived=[|Some(`FALSE)|],
-      ~order=orderCommunities,
+      ~order=orderChannels,
       fn,
     ) => {
   let query = Query.make(~channelMemberId?, ~isArchived, ~order?, ());

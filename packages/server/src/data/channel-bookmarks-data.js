@@ -9,7 +9,7 @@ const { Query } = require('../data/classes');
 const logger = require('../lib/log');
 
 /**
- * @implements {Layers.DataSourceLayer.DataSource}
+ * @implements {Layers.DataSource.DataGeneric}
  * @property {VoteModel} model
  */
 class ChannelBookmarksData extends DataBase {
@@ -20,8 +20,8 @@ class ChannelBookmarksData extends DataBase {
   }
 
   /**
-   * @param {Models.ChannelID} channelId
-   * @param {Models.AgentID} agentId
+   * @param {Defs.ChannelID} channelId
+   * @param {Defs.AgentID} agentId
    * @returns {Promise<boolean>}
    */
   async toggle(channelId, agentId) {
@@ -35,8 +35,8 @@ class ChannelBookmarksData extends DataBase {
   }
 
   /**
-   * @param {Models.ChannelID} channelId
-   * @param {Models.AgentID} agentId
+   * @param {Defs.ChannelID} channelId
+   * @param {Defs.AgentID} agentId
    * @returns {Promise<boolean>}
    */
   async create(channelId, agentId) {
@@ -46,8 +46,8 @@ class ChannelBookmarksData extends DataBase {
   }
 
   /**
-   * @param {Models.ChannelID} channelId
-   * @param {Models.AgentID} agentId
+   * @param {Defs.ChannelID} channelId
+   * @param {Defs.AgentID} agentId
    * @returns {Promise<boolean>}
    */
   async one(channelId, agentId) {
@@ -58,8 +58,8 @@ class ChannelBookmarksData extends DataBase {
   }
 
   /**
-   * @param {Models.ChannelID} channelId
-   * @param {Models.AgentID} agentId
+   * @param {Defs.ChannelID} channelId
+   * @param {Defs.AgentID} agentId
    * @returns {Promise<boolean>}
    */
   async delete(channelId, agentId) {

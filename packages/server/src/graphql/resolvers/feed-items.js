@@ -18,8 +18,8 @@ const { HOME_CHANNEL_ID } = require('../../../config/well-known');
  *
  * @param {*} _root
  * @param {object} args
- * @param {Models.ChannelID} args.channelId
- * @param {Models.AgentID} args.agentId
+ * @param {Defs.ChannelID} args.channelId
+ * @param {Defs.AgentID} args.agentId
  * @param {string} args.after
  * @param {string} args.before
  * @param {number} args.last
@@ -29,11 +29,11 @@ const { HOME_CHANNEL_ID } = require('../../../config/well-known');
  * @returns {Promise<*>}
  */
 async function all(_root, args, context, _info) {
-  /** @type {Models.ChannelID | null} */
+  /** @type {Defs.ChannelID | null} */
   const channelId = _.get(args, 'channelId', null);
-  /** @type {Models.AgentID | null} */
+  /** @type {Defs.AgentID | null} */
   const agentId = _.get(args, 'agentId', null);
-  /** @type {Models.AgentID | null} */
+  /** @type {Defs.AgentID | null} */
   const currentAgentId = _.get(context, 'agent.id', null);
 
   /**

@@ -175,6 +175,7 @@ const schema = new graphql.GraphQLSchema({
           ...types.common.connectionArguments,
           ownerId: { type: types.scalars.agentId },
           channelId: { type: types.scalars.channelId },
+          order: { type: graphql.GraphQLList(types.notebooks.orderNotebooks) },
         },
         resolve: resolvers.notebooks.all,
       },

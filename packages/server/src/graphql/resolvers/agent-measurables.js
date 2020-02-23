@@ -12,8 +12,8 @@ const {
 /**
  * @param {*} _root
  * @param {object} args
- * @param {Models.Channel.id} args.channelId
- * @param {Models.Measurable.id} args.measurableId
+ * @param {Defs.Channel.id} args.channelId
+ * @param {Defs.Measurable.id} args.measurableId
  * @param {string[]} args.measurableState
  * @param {number} args.minPredictionCountTotal
  * @param {string} args.after
@@ -50,8 +50,8 @@ async function all(_root, args, context, _info) {
 
 /**
  * @param {*} root
- * @param {Models.Agent.id} root.agentId
- * @param {Models.Measurable.id} root.measurableId
+ * @param {Defs.Agent.id} root.agentId
+ * @param {Defs.Measurable.id} root.measurableId
  * @param {object} _args
  * @param {Schema.Context} _context
  * @param {object} _info
@@ -74,8 +74,8 @@ async function primaryPointScore(root, _args, _context, _info) {
 
 /**
  * @param {*} root
- * @param {Models.Agent.id} root.agentId
- * @param {Models.Measurable.id} root.measurableId
+ * @param {Defs.Agent.id} root.agentId
+ * @param {Defs.Measurable.id} root.measurableId
  * @param {object} args
  * @param {Schema.Context} _context
  * @param {object} _info

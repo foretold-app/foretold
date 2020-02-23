@@ -30,7 +30,7 @@ describe('Series Resolvers', () => {
       return series.all(root, args, context, info).then((result) => {
         expect(new SeriesData().getAll).toHaveBeenCalledWith(
           { channelId: null },
-          {},
+          { _context: {} },
           { agentId: 'agentId2', isAdmin: null, raw: true },
         );
         expect(result).toEqual(true);

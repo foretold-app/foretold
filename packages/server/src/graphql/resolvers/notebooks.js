@@ -35,7 +35,7 @@ async function create(_root, args, context, _info) {
 /**
  * @param {*} root
  * @param {object} args
- * @param {Models.NotebookID} args.id
+ * @param {Defs.NotebookID} args.id
  * @param {object} args.input
  * @param {Schema.Context} _context
  * @param {object} _info
@@ -50,8 +50,8 @@ async function update(root, args, _context, _info) {
 /**
  * @param {*} _root
  * @param {object} args
- * @param {Models.AgentID} args.ownerId
- * @param {Models.ChannelID} args.channelId
+ * @param {Defs.AgentID} args.ownerId
+ * @param {Defs.ChannelID} args.channelId
  * @param {string} args.after
  * @param {string} args.before
  * @param {number} args.last
@@ -61,14 +61,14 @@ async function update(root, args, _context, _info) {
  * @returns {Promise<*>}
  */
 async function all(_root, args, context, _info) {
-  /** @type {Models.AgentID | null} */
+  /** @type {Defs.AgentID | null} */
   const ownerId = _.get(args, 'ownerId', null);
-  /** @type {Models.ChannelID | null} */
+  /** @type {Defs.ChannelID | null} */
   const channelId = _.get(args, 'channelId', null);
 
   /** @type {boolean | null} */
   const isAdmin = _.get(context, 'agent.isAdmin', null);
-  /** @type {Models.AgentID | null} */
+  /** @type {Defs.AgentID | null} */
   const currentAgentId = _.get(context, 'agent.id', null);
 
   /**
@@ -79,7 +79,9 @@ async function all(_root, args, context, _info) {
     ? structures.withinJoinedChannelsByChannelId(currentAgentId) : null;
 
   const filter = new Filter({ ownerId, channelId, withinJoinedChannels });
-  const pagination = new Pagination(args);
+  const pagination = new Pagination(args, {
+    agentId: currentAgentId,
+  });
   const options = new Options({
     isAdmin,
     currentAgentId,
@@ -96,7 +98,7 @@ async function all(_root, args, context, _info) {
 /**
  * @param {*} _root
  * @param {object} args
- * @param {Models.NotebookID} args.id
+ * @param {Defs.NotebookID} args.id
  * @param {Schema.Context} context
  * @param {object} _info
  * @returns {Promise<Model>}
@@ -139,7 +141,7 @@ async function count(root, _args, _context, _info) {
 /**
  * @param {*} _root
  * @param {object} args
- * @param {Models.NotebookID} args.id
+ * @param {Defs.NotebookID} args.id
  * @param {Schema.Context} context
  * @param {object} _info
  * @returns {Promise<Model>}

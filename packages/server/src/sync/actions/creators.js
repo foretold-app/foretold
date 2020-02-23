@@ -19,7 +19,7 @@ class Creators {
   }
 
   /**
-   * @param {Models.Series} series
+   * @param {Defs.Series} series
    * @returns {Promise<void>}
    */
   async createMeasurables(series) {
@@ -49,7 +49,7 @@ class Creators {
   }
 
   /**
-   * @param {Models.Channel} channel
+   * @param {Defs.Channel} channel
    * @returns {Promise<boolean>}
    */
   async createChannelMembership(channel) {
@@ -65,7 +65,7 @@ class Creators {
   }
 
   /**
-   * @param {Models.Bot} instance
+   * @param {Defs.Bot} instance
    * @returns {Promise<boolean>}
    */
   async createBotAgent(instance) {
@@ -76,7 +76,7 @@ class Creators {
   }
 
   /**
-   * @param {Models.User} instance
+   * @param {Defs.User} instance
    * @returns {Promise<boolean>}
    */
   async createUserAgent(instance) {
@@ -87,7 +87,7 @@ class Creators {
   }
 
   /**
-   * @param {Models.Measurable} instance
+   * @param {Defs.Measurable} instance
    * @returns {Promise<boolean>}
    */
   async checkMeasurableState(instance) {
@@ -100,7 +100,7 @@ class Creators {
   }
 
   /**
-   * @param {Models.Measurement} instance
+   * @param {Defs.Measurement} instance
    * @returns {Promise<boolean>}
    */
   async checkMeasurement(instance) {

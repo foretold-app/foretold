@@ -5,7 +5,7 @@ const { ModelPostgres } = require('./model-postgres');
 const templates = require('../../config/templates');
 
 /**
- * @implements {Layers.AbstractModelsLayer.AbstractModel}
+ * @implements {Layers.Models.ModelGeneric}
  */
 class TemplateModel extends ModelPostgres {
   constructor() {
@@ -22,9 +22,9 @@ class TemplateModel extends ModelPostgres {
    * @param {object} [params]
    * @param {string} params.name
    * @param {object} [_query]
-   * @param {Layers.AbstractModelsLayer.restrictions} [_restrictions]
-   * @param {Layers.AbstractModelsLayer.options} [_options]
-   * @return {Promise<Models.Model>}
+   * @param {Layers.Models.ModelRestrictions} [_restrictions]
+   * @param {Layers.Models.ModelOptions} [_options]
+   * @return {Promise<Models.Definition>}
    */
   async getOne(params = {}, _query = {}, _restrictions = {}, _options = {}) {
     if (!params.name) return null;

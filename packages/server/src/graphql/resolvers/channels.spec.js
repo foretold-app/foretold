@@ -14,6 +14,9 @@ describe('Channels Resolvers', () => {
           isArchived: null,
           withinJoinedChannels: { agentId: 'channelMemberId1', as: 'id' },
         }, {
+          _context: {
+            agentId: '1',
+          },
           limit: 2,
           offset: 1,
         }, {

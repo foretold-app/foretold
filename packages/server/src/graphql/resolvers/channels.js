@@ -15,7 +15,7 @@ const { structures } = require('../../data/classes');
  * @param {object} args
  * @param {number} args.offset
  * @param {number} args.limit
- * @param {Models.AgentID} args.channelMemberId
+ * @param {Defs.AgentID} args.channelMemberId
  * @param {string[]} args.isArchived
  * @param {Schema.Context} context
  * @param {object} _info
@@ -31,7 +31,9 @@ async function all(root, args, context, _info) {
     ? null : structures.withinJoinedChannelsById(channelMemberId);
 
   const filter = new Filter({ withinJoinedChannels, isArchived });
-  const pagination = new Pagination(args);
+  const pagination = new Pagination(args, {
+    agentId: currentAgentId,
+  });
   const options = new Options({
     raw: true,
     attributes: {
@@ -51,7 +53,7 @@ async function all(root, args, context, _info) {
 /**
  * @param {object | null} root
  * @param {object} args
- * @param {Models.ChannelID} args.id
+ * @param {Defs.ChannelID} args.id
  * @param {Schema.Context} context
  * @param {object} _info
  * @returns {Promise<Models.Channel>}
@@ -77,7 +79,7 @@ async function one(root, args, context, _info) {
 /**
  * @param {object | null} root
  * @param {object} args
- * @param {Models.ChannelID} args.id
+ * @param {Defs.ChannelID} args.id
  * @param {object} args.input
  * @param {Schema.Context} _context
  * @param {object} _info

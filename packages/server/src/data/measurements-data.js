@@ -3,7 +3,7 @@ const { DataBase } = require('./data-base');
 const { MeasurementModel } = require('../models');
 
 /**
- * @implements {Layers.DataSourceLayer.DataSource}
+ * @implements {Layers.DataSource.DataGeneric}
  * @property {MeasurementModel} model
  */
 class MeasurementsData extends DataBase {
@@ -15,7 +15,7 @@ class MeasurementsData extends DataBase {
   /**
    * @public
    * @param {*} options
-   * @return {Promise<Models.Model>}
+   * @return {Promise<Models.Definition>}
    */
   async getLatest(options) {
     return this.model.getLatest(options);
@@ -23,8 +23,8 @@ class MeasurementsData extends DataBase {
 
   /**
    * @protected
-   * @param {Layers.DataSourceLayer.options} [options]
-   * @return {Layers.AbstractModelsLayer.restrictions}
+   * @param {Layers.DataSource.DataOptions} [options]
+   * @return {Layers.Models.ModelRestrictions}
    */
   _getDefaultRestrictions(options = {}) {
     return {
@@ -36,7 +36,7 @@ class MeasurementsData extends DataBase {
 
   /**
    * @public
-   * @param {Models.MeasurableID | null} measurableId
+   * @param {Defs.MeasurableID | null} measurableId
    * @returns {Promise<Model>}
    */
   async getOutcome(measurableId) {
@@ -45,8 +45,8 @@ class MeasurementsData extends DataBase {
 
   /**
    * @public
-   * @param {Models.MeasurableID | null} measurableId
-   * @param {Models.AgentID | null} agentId
+   * @param {Defs.MeasurableID | null} measurableId
+   * @param {Defs.AgentID | null} agentId
    * @param {Date} relevantAt
    * @returns {Promise<Model>}
    */
@@ -60,8 +60,8 @@ class MeasurementsData extends DataBase {
 
   /**
    * @public
-   * @param {Models.MeasurableID | null} measurableId
-   * @param {Models.AgentID | null} agentId
+   * @param {Defs.MeasurableID | null} measurableId
+   * @param {Defs.AgentID | null} agentId
    * @returns {Promise<Model>}
    */
   async getLatestAggregate(measurableId, agentId) {

@@ -4,7 +4,7 @@ const models = require('./definitions');
 const { ModelPostgres } = require('./model-postgres');
 
 /**
- * @implements {Layers.AbstractModelsLayer.AbstractModel}
+ * @implements {Layers.Models.ModelGeneric}
  */
 class ChannelModel extends ModelPostgres {
   constructor() {
@@ -15,7 +15,7 @@ class ChannelModel extends ModelPostgres {
   }
 
   /**
-   * @param {Layers.AbstractModelsLayer.options} options
+   * @param {Layers.Models.ModelOptions} options
    * @returns {*}
    * @protected
    */
@@ -37,23 +37,31 @@ class ChannelModel extends ModelPostgres {
   }
 
   /**
-   * @param pagination
-   * @returns {[any, any][]}
+   * @param {Layers.Pagination} pagination
+   * @returns {[*, string][]}
    * @protected
    */
-  _getDefaultOrder(pagination) {
-    return pagination.getOrder()
-      .map((item) => ([this._switchField(item.field), item.direction]));
+  _getOrderFromPagination(pagination) {
+    const order = pagination.getOrder();
+    const agentId = pagination.getContext('agentId');
+    return order.map((item) => ([
+      this._switchField(item.field, agentId),
+      item.direction,
+    ]));
   }
 
   /**
-   * @param name
-   * @returns {*}
-   * @private
+   * @param {string} name
+   * @param {Defs.AgentID} agentId
+   * @returns {object | string}
+   * @protected
    */
-  _switchField(name = '') {
+  _switchField(name = '', agentId) {
     if (name === 'membersCount') {
       return this._membersCountLiteral();
+    }
+    if (name === 'isBookmarked') {
+      return this._isBookmarkedLiteral(agentId);
     }
     return name;
   }
@@ -68,6 +76,7 @@ class ChannelModel extends ModelPostgres {
 
   /**
    * @protected
+   * @param {Defs.AgentID} agentId
    * @return {Sequelize.literal}
    */
   _isBookmarkedLiteral(agentId) {
@@ -96,7 +105,7 @@ class ChannelModel extends ModelPostgres {
 
   /**
    * @protected
-   * @param {Models.AgentID} agentId
+   * @param {Defs.AgentID} agentId
    * @return {string}
    */
   _isBookmarked(agentId) {

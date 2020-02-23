@@ -71,8 +71,8 @@ class ProducerNotifications extends Producer {
   }
 
   /**
-   * @param {Models.Agent} agent
-   * @param {Models.Notification} notification
+   * @param {Defs.Agent} agent
+   * @param {Defs.Notification} notification
    * @return {Promise<Models.NotificationStatus>}
    * @protected
    */

@@ -8,7 +8,7 @@ const { AgentChannelModel } = require('../models');
 const { Proceed } = require('./scoring/proceed');
 
 /**
- * @implements {Layers.DataSourceLayer.DataSource}
+ * @implements {Layers.DataSource.DataGeneric}
  * @property {AgentChannelModel} model
  */
 class AgentChannelsData extends DataBase {
@@ -21,8 +21,8 @@ class AgentChannelsData extends DataBase {
 
   /**
    * @protected
-   * @param {Layers.DataSourceLayer.options} [options]
-   * @return {Layers.AbstractModelsLayer.restrictions}
+   * @param {Layers.DataSource.DataOptions} [options]
+   * @return {Layers.Models.ModelRestrictions}
    */
   _getDefaultRestrictions(options = {}) {
     return {
@@ -31,8 +31,8 @@ class AgentChannelsData extends DataBase {
   }
 
   /**
-   * @param {Models.AgentID} agentId
-   * @param {Models.ChannelID} channelId
+   * @param {Defs.AgentID} agentId
+   * @param {Defs.ChannelID} channelId
    * @returns {Promise<number>}
    */
   async primaryPointScore(agentId, channelId) {
@@ -42,8 +42,8 @@ class AgentChannelsData extends DataBase {
   /**
    * Do not make any optimization here, it is early for this.
    * For each optimization we need to do a researching of the performance.
-   * @param {Models.AgentID} agentId
-   * @param {Models.ChannelID} channelId
+   * @param {Defs.AgentID} agentId
+   * @param {Defs.ChannelID} channelId
    * @returns {Promise<number>}
    */
   async _primaryPointScore(agentId, channelId) {

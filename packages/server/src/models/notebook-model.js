@@ -4,7 +4,7 @@ const models = require('./definitions');
 const { ModelPostgres } = require('./model-postgres');
 
 /**
- * @implements {Layers.AbstractModelsLayer.AbstractModel}
+ * @implements {Layers.Models.ModelGeneric}
  */
 class NotebookModel extends ModelPostgres {
   constructor() {
@@ -15,7 +15,7 @@ class NotebookModel extends ModelPostgres {
   }
 
   /**
-   * @param {Layers.AbstractModelsLayer.options} options
+   * @param {Layers.Models.ModelOptions} options
    * @returns {*}
    * @protected
    */
@@ -37,6 +37,33 @@ class NotebookModel extends ModelPostgres {
   }
 
   /**
+   * @param {Layers.Pagination} pagination
+   * @returns {[*, string][]}
+   * @protected
+   */
+  _getOrderFromPagination(pagination) {
+    const order = pagination.getOrder();
+    const agentId = pagination.getContext('agentId');
+    return order.map((item) => ([
+      this._switchField(item.field, agentId),
+      item.direction,
+    ]));
+  }
+
+  /**
+   * @param {string} name
+   * @param {Defs.AgentID} agentId
+   * @returns {object | string}
+   * @protected
+   */
+  _switchField(name = '', agentId) {
+    if (name === 'isBookmarked') {
+      return this._isBookmarkedLiteral(agentId);
+    }
+    return name;
+  }
+
+  /**
    * @protected
    * @return {Sequelize.literal}
    */
@@ -54,7 +81,7 @@ class NotebookModel extends ModelPostgres {
 
   /**
    * @protected
-   * @param {Models.AgentID} agentId
+   * @param {Defs.AgentID} agentId
    * @return {string}
    */
   _isBookmarked(agentId) {

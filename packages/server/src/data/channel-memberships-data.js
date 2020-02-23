@@ -13,7 +13,7 @@ const { Pagination } = require('../data/classes');
 const { Options } = require('../data/classes');
 
 /**
- * @implements {Layers.DataSourceLayer.DataSource}
+ * @implements {Layers.DataSource.DataGeneric}
  * @property {ChannelMembershipModel} model
  */
 class ChannelMembershipsData extends DataBase {
@@ -25,8 +25,8 @@ class ChannelMembershipsData extends DataBase {
   /**
    * @public
    * @param {object} filter
-   * @param {Models.AgentID} [filter.agentId]
-   * @param {Models.ChannelID} [filter.channelId]
+   * @param {Defs.AgentID} [filter.agentId]
+   * @param {Defs.ChannelID} [filter.channelId]
    * @returns {Promise<string[]>}
    */
   async getAllChannelIds(filter) {
@@ -35,8 +35,8 @@ class ChannelMembershipsData extends DataBase {
 
   /**
    * @param {object} options
-   * @param {Models.ChannelID} options.channelId
-   * @param {Models.AgentID} options.agentId
+   * @param {Defs.ChannelID} options.channelId
+   * @param {Defs.AgentID} options.agentId
    * @return {Promise<Models.ChannelMemberships>}
    */
   async join(options) {
@@ -56,8 +56,8 @@ class ChannelMembershipsData extends DataBase {
   /**
    * @public
    * @param {object} options
-   * @param {Models.AgentID} options.agentId
-   * @param {Models.ChannelID} options.channelId
+   * @param {Defs.AgentID} options.agentId
+   * @param {Defs.ChannelID} options.channelId
    * @return {Promise<Models.ChannelMemberships|null>}
    */
   async leave(options) {
@@ -75,8 +75,8 @@ class ChannelMembershipsData extends DataBase {
   /**
    * @public
    * @param {object} params
-   * @param {Models.AgentID} params.agentId
-   * @param {Models.ChannelID} params.channelId
+   * @param {Defs.AgentID} params.agentId
+   * @param {Defs.ChannelID} params.channelId
    * @return {Promise<string>}
    */
   async getOneOnlyRole(params) {
@@ -97,7 +97,7 @@ class ChannelMembershipsData extends DataBase {
 
   /**
    * @public
-   * @param {Models.ChannelID} channelId
+   * @param {Defs.ChannelID} channelId
    * @return {Promise<Models.ChannelMemberships[]>}
    */
   async getAllOnlyAdmins(channelId) {
@@ -110,8 +110,8 @@ class ChannelMembershipsData extends DataBase {
 
   /**
    * @protected
-   * @param {Layers.DataSourceLayer.options} [options]
-   * @return {Layers.AbstractModelsLayer.restrictions}
+   * @param {Layers.DataSource.DataOptions} [options]
+   * @return {Layers.Models.ModelRestrictions}
    */
   _getDefaultRestrictions(options = {}) {
     return {

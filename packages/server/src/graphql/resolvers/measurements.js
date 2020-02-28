@@ -272,13 +272,12 @@ async function latestAggregateByRootId(root, _args, context, _info) {
 }
 
 /**
- * @todo: To fix "dataValues".
  * @todo: duplicated.
- * @param measurement
+ * @param {Defs.Measurement} measurement
  * @returns {{data: *, dataType: *}}
  */
 function translateValue(measurement) {
-  let data = _.get(measurement, 'value', null);
+  let data = _.get(measurement, 'value.data', null);
   const dataType = _.get(measurement, 'value.dataType', null);
   if (dataType === 'percentage') {
     data /= 100;
@@ -294,23 +293,27 @@ function translateValue(measurement) {
  * @returns {number|*}
  */
 function _marketLogScore({ prediction$, aggregate$, outcome$ }) {
-  if (!prediction$ || !aggregate$ || !outcome$) {
-    return { error: 'MeasurementScore Error: Missing needed data' };
+  if (!prediction$) {
+    return { error: '_marketLogScore: Missing a prediction.' };
   }
-
-  const { competitorType } = prediction$;
+  if (!aggregate$) {
+    return { error: '_marketLogScore: Missing an aggregate.' };
+  }
+  if (!outcome$) {
+    return { error: '_marketLogScore: Missing an outcome.' };
+  }
 
   if (
-    competitorType !== MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE
+    prediction$.competitorType !== MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE
   ) {
-    return { error: 'MeasurementScore Exception: Measurement not competitive' };
+    return { error: '_marketLogScore: Measurement is not competitive' };
   }
-
-  return new PredictionResolutionGroup({
+  const input = {
     agentPrediction: translateValue(prediction$),
     marketPrediction: translateValue(aggregate$),
     resolution: translateValue(outcome$),
-  }).pointScore(marketScore);
+  };
+  return new PredictionResolutionGroup(input).pointScore(marketScore);
 }
 
 /**
@@ -320,24 +323,29 @@ function _marketLogScore({ prediction$, aggregate$, outcome$ }) {
  * @returns {number|*}
  */
 function _nonMarketLogScore({ prediction$, outcome$ }) {
-  if (!prediction$ || !outcome$) {
-    return { error: '_nonMarketLogScore Error: Missing needed data' };
+  if (!prediction$) {
+    return { error: '_nonMarketLogScore: Missing a prediction.' };
   }
-
-  const { competitorType } = prediction$;
+  if (!outcome$) {
+    return { error: '_nonMarketLogScore: Missing an outcome.' };
+  }
 
   if (
-    competitorType !== MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE
-    && competitorType !== MEASUREMENT_COMPETITOR_TYPE.AGGREGATION
+    prediction$.competitorType !== MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE
+    && prediction$.competitorType !== MEASUREMENT_COMPETITOR_TYPE.AGGREGATION
   ) {
-    return { error: 'False' };
+    return {
+      error: '_nonMarketLogScore: prediction.competitorType'
+        + ' is not COMPETITIVE and not AGGREGATION.',
+    };
   }
 
-  return new PredictionResolutionGroup({
+  const input = {
     agentPrediction: translateValue(prediction$),
     marketPrediction: undefined,
     resolution: translateValue(outcome$),
-  }).pointScore(nonMarketScore);
+  };
+  return new PredictionResolutionGroup(input).pointScore(nonMarketScore);
 }
 
 /**
@@ -348,14 +356,15 @@ function _nonMarketLogScore({ prediction$, outcome$ }) {
  * @returns {Promise<*|Array<Model>>}
  */
 async function primaryPointScore(root, args, context, info) {
-  const result = _marketLogScore({
+  const input = {
     prediction$: await prediction(root, args, context, info),
     aggregate$: await previousAggregate(root, args, context, info),
     outcome$: await outcome(root, args, context, info),
-  });
+  };
+  const result = _marketLogScore(input);
 
   if (result.error) {
-    log.trace('ERROR: ', result.error);
+    log.trace('ERROR:', result.error);
     return undefined;
   }
 
@@ -371,13 +380,14 @@ async function primaryPointScore(root, args, context, info) {
  * @returns {Promise<number>}
  */
 async function nonMarketLogScore(root, args, context, info) {
-  const result = _nonMarketLogScore({
+  const input = {
     prediction$: await prediction(root, args, context, info),
     outcome$: await outcome(root, args, context, info),
-  });
+  };
+  const result = _nonMarketLogScore(input);
 
   if (result.error) {
-    log.trace('ERROR: ', result.error);
+    log.trace('ERROR:', result.error);
     return undefined;
   }
 

@@ -294,8 +294,14 @@ function translateValue(measurement) {
  * @returns {number|*}
  */
 function _marketLogScore({ prediction$, aggregate$, outcome$ }) {
-  if (!prediction$ || !aggregate$ || !outcome$) {
-    return { error: 'MeasurementScore Error: Missing needed data' };
+  if (!prediction$) {
+    return { error: 'MeasurementScore Error: Missing a prediction.' };
+  }
+  if (!aggregate$) {
+    return { error: 'MeasurementScore Error: Missing an aggregate.' };
+  }
+  if (!outcome$) {
+    return { error: 'MeasurementScore Error: Missing an outcome.' };
   }
 
   const { competitorType } = prediction$;
@@ -303,7 +309,7 @@ function _marketLogScore({ prediction$, aggregate$, outcome$ }) {
   if (
     competitorType !== MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE
   ) {
-    return { error: 'MeasurementScore Exception: Measurement not competitive' };
+    return { error: 'MeasurementScore: Measurement is not competitive' };
   }
 
   return new PredictionResolutionGroup({
@@ -320,8 +326,11 @@ function _marketLogScore({ prediction$, aggregate$, outcome$ }) {
  * @returns {number|*}
  */
 function _nonMarketLogScore({ prediction$, outcome$ }) {
-  if (!prediction$ || !outcome$) {
-    return { error: '_nonMarketLogScore Error: Missing needed data' };
+  if (!prediction$) {
+    return { error: '_nonMarketLogScore Error: Missing a prediction.' };
+  }
+  if (!outcome$) {
+    return { error: '_nonMarketLogScore Error: Missing an outcome.' };
   }
 
   const { competitorType } = prediction$;
@@ -330,7 +339,7 @@ function _nonMarketLogScore({ prediction$, outcome$ }) {
     competitorType !== MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE
     && competitorType !== MEASUREMENT_COMPETITOR_TYPE.AGGREGATION
   ) {
-    return { error: 'False' };
+    return { error: 'competitorType is not COMPETITIVE and not AGGREGATION.' };
   }
 
   return new PredictionResolutionGroup({

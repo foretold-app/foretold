@@ -62,10 +62,11 @@ class Pagination {
     const orderInput = _.get(options, 'order', []);
     const orderArray = _.isArray(orderInput) ? orderInput : [];
     return orderArray
-      .map((item) => ({
-        field: _.get(item, 'field', null),
-        direction: _.get(item, 'direction', null),
-      }))
+      .map((item) => {
+        const field = _.get(item, 'field', null);
+        const direction = _.get(item, 'direction', null);
+        return { field, direction };
+      })
       .filter((item) => _.isString(item.field))
       .filter((item) => _.isString(item.direction));
   }

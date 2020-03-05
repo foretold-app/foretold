@@ -84,6 +84,31 @@ class MeasurableModel extends ModelPostgres {
   }
 
   /**
+   * @param {Layers.Pagination} pagination
+   * @returns {[*, string][]}
+   * @protected
+   */
+  _getOrderFromPagination(pagination) {
+    const order = pagination.getOrder();
+    return order.map((orderItem) => {
+      const switchedOrderName = this._switchField(orderItem.field);
+      return [switchedOrderName, orderItem.direction];
+    });
+  }
+
+  /**
+   * @param {string} name
+   * @returns {object | string}
+   * @protected
+   */
+  _switchField(name = '') {
+    if (name === 'refreshedAt') {
+      return this._refreshedAtLiteral();
+    }
+    return name;
+  }
+
+  /**
    * @param {Layers.Models.ModelOptions} _options
    * @return {{include: Sequelize.literal|*[]}}
    * @protected
@@ -92,6 +117,14 @@ class MeasurableModel extends ModelPostgres {
     return {
       include: [this._getStateOrderField()],
     };
+  }
+
+  /**
+   * @protected
+   * @return {Sequelize.literal}
+   */
+  _refreshedAtLiteral() {
+    return this.literal(this._refreshedAt());
   }
 
   /**
@@ -113,6 +146,20 @@ class MeasurableModel extends ModelPostgres {
       + `WHEN "state"='${CLOSED_AS_UNRESOLVED}' THEN 3 `
       + 'ELSE 5 END) AS "stateOrder"',
     );
+  }
+
+  /**
+   * @protected
+   * @return {string}
+   */
+  _refreshedAt() {
+    return `(
+        SELECT "updatedAt" as "refreshedAt"
+        FROM "Measurements"
+        WHERE "Measurements"."measurableId" = "Measurable"."id"
+        ORDER BY "Measurements"."updatedAt"
+        LIMIT 1
+    )`;
   }
 }
 

@@ -171,6 +171,23 @@ const measurablesConnection = new graphql.GraphQLObjectType({
   }),
 });
 
+const orderFieldMeasurables = new graphql.GraphQLEnumType({
+  name: 'OrderFieldMeasurables',
+  values: {
+    refreshedAt: { value: 'refreshedAt' },
+  },
+});
+
+const orderMeasurables = new graphql.GraphQLInputObjectType({
+  name: 'OrderMeasurables',
+  fields: () => ({
+    field: { type: graphql.GraphQLNonNull(orderFieldMeasurables) },
+    direction: {
+      type: graphql.GraphQLNonNull(commonTypes.orderDirection),
+    },
+  }),
+});
+
 module.exports = {
   measurableState,
   measurable,
@@ -178,4 +195,5 @@ module.exports = {
   measurableUpdateInput,
   measurablesEdge,
   measurablesConnection,
+  orderMeasurables,
 };

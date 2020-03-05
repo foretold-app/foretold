@@ -21,7 +21,7 @@ function listen(Producer, method = 'main') {
   log.trace(`Listen: ${name}.${method}.`);
 
   return async function listenForProducer(input) {
-    log.trace(`Run listener: ${name}.`);
+    log.trace(`Run: ${name}.${method}.`);
 
     try {
       const job = new Producer(input);

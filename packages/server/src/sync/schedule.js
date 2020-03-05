@@ -16,7 +16,7 @@ const log = logger.module('sync/listeners');
  * @param {string} method
  * @returns {function(*=): boolean}
  */
-function listenFor(Producer, method = 'main') {
+function listen(Producer, method = 'main') {
   const name = `${Producer.name}`;
   log.trace(`Listen: ${name}.${method}.`);
 
@@ -39,30 +39,30 @@ function runListeners() {
   console.log('Listeners are in a queue.');
   try {
     emitter.on(events.SERVER_IS_READY,
-      listenFor(GitHubApi, 'addHook'));
+      listen(GitHubApi, 'addHook'));
 
     emitter.on(events.EVERY_HOUR,
-      listenFor(actions.MeasurablesStateMachine, 'toJudgementPending'));
+      listen(actions.MeasurablesStateMachine, 'toJudgementPending'));
     emitter.on(events.EVERY_HOUR,
-      listenFor(actions.MeasurablesStateMachine, 'toResolving'));
+      listen(actions.MeasurablesStateMachine, 'toResolving'));
     emitter.on(events.EVERY_MINUTE,
-      listenFor(consumers.Emails));
+      listen(consumers.Emails));
     emitter.on(events.EVERY_MINUTE,
-      listenFor(actions.UserUpdater));
+      listen(actions.UserUpdater));
     emitter.on(events.EVERY_HOUR,
-      listenFor(actions.MaterializedViewsUpdater));
+      listen(actions.MaterializedViewsUpdater));
     emitter.on(events.MAIL,
-      listenFor(Mailer));
+      listen(Mailer));
 
     /**
      * MEASURABLE_CHANGED
      */
     emitter.on(events.MEASURABLE_CHANGED,
-      listenFor(producers.notifications.MeasurableStateChanged));
+      listen(producers.notifications.MeasurableStateChanged));
     emitter.on(events.MEASURABLE_CHANGED,
-      listenFor(producers.notifications.MeasurableStateResolved));
+      listen(producers.notifications.MeasurableStateResolved));
     emitter.on(events.MEASURABLE_CHANGED,
-      listenFor(producers.feedItems.NewMeasurableReachedResolution));
+      listen(producers.feedItems.NewMeasurableReachedResolution));
     // emitter.on(events.MEASURABLE_CHANGED,
     //   listenFor(actions.Notifications, 'updateMeasurableSlackNotification'));
 
@@ -70,31 +70,31 @@ function runListeners() {
      * NEW_MEMBERSHIP
      */
     emitter.on(events.NEW_MEMBERSHIP,
-      listenFor(producers.notifications.MemberAddedToCommunity));
+      listen(producers.notifications.MemberAddedToCommunity));
     emitter.on(events.NEW_MEMBERSHIP,
-      listenFor(producers.feedItems.MemberJoinedCommunity));
+      listen(producers.feedItems.MemberJoinedCommunity));
 
     /**
      * NEW_MEASUREMENT
      */
     emitter.on(events.NEW_MEASUREMENT,
-      listenFor(producers.feedItems.NewMeasurementPrediction));
+      listen(producers.feedItems.NewMeasurementPrediction));
     emitter.on(events.NEW_MEASUREMENT,
-      listenFor(producers.feedItems.NewMeasurementComment));
+      listen(producers.feedItems.NewMeasurementComment));
     emitter.on(events.NEW_MEASUREMENT,
-      listenFor(producers.feedItems.NewMeasurementResolution));
+      listen(producers.feedItems.NewMeasurementResolution));
     emitter.on(events.NEW_MEASUREMENT,
-      listenFor(producers.feedItems.NewMeasurementNotAvailable));
+      listen(producers.feedItems.NewMeasurementNotAvailable));
     // emitter.on(events.NEW_MEASUREMENT,
     //   listenFor(actions.Notifications, 'newMeasurementSlackNotification'));
     emitter.on(events.NEW_MEASUREMENT,
-      listenFor(actions.MeasurablesStateMachine, 'measurableStateTransition'));
+      listen(actions.MeasurablesStateMachine, 'measurableStateTransition'));
 
     /**
      * NEW_MEASURABLE
      */
     emitter.on(events.NEW_MEASURABLE,
-      listenFor(producers.feedItems.NewMeasurable));
+      listen(producers.feedItems.NewMeasurable));
     // emitter.on(events.NEW_MEASURABLE,
     //   listenFor(actions.Notifications, 'newMeasurableSlackNotification'));
 
@@ -102,34 +102,34 @@ function runListeners() {
      * NEW_CHANNEL
      */
     emitter.on(events.NEW_CHANNEL,
-      listenFor(producers.feedItems.NewChannel));
+      listen(producers.feedItems.NewChannel));
     emitter.on(events.NEW_CHANNEL,
-      listenFor(actions.Creators, 'createChannelMembership'));
+      listen(actions.Creators, 'createChannelMembership'));
 
     /**
      * Common.
      */
     emitter.on(events.NEW_SERIES,
-      listenFor(actions.Creators, 'createMeasurables'));
+      listen(actions.Creators, 'createMeasurables'));
     emitter.on(events.CREATING_BOT,
-      listenFor(actions.Creators, 'createBotAgent'));
+      listen(actions.Creators, 'createBotAgent'));
     emitter.on(events.CREATING_USER,
-      listenFor(actions.Creators, 'createUserAgent'));
+      listen(actions.Creators, 'createUserAgent'));
     emitter.on(events.UPDATING_MEASURABLE,
-      listenFor(actions.Creators, 'checkMeasurableState'));
+      listen(actions.Creators, 'checkMeasurableState'));
     emitter.on(events.VALIDATING_MEASUREMENT,
-      listenFor(actions.Creators, 'checkMeasurement'));
+      listen(actions.Creators, 'checkMeasurement'));
     emitter.on(events.NEW_INVITATION,
-      listenFor(producers.notifications.Invitation));
+      listen(producers.notifications.Invitation));
     emitter.on(events.NEW_USER,
-      listenFor(actions.Invitations, 'transition'));
+      listen(actions.Invitations, 'transition'));
     emitter.on(events.USER_CHANGED,
-      listenFor(actions.Invitations, 'transition'));
+      listen(actions.Invitations, 'transition'));
     emitter.on(events.USER_CHANGED,
-      listenFor(actions.UserUpdater, 'updateUser'));
+      listen(actions.UserUpdater, 'updateUser'));
 
     emitter.on(events.NEW_NOTEBOOK,
-      listenFor(producers.feedItems.NewNotebook));
+      listen(producers.feedItems.NewNotebook));
   } catch (e) {
     console.error('Listener error', e);
   }

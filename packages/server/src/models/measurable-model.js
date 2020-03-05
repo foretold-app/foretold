@@ -73,6 +73,7 @@ class MeasurableModel extends ModelPostgres {
   }
 
   /**
+   * Default order.
    * @return {*[]}
    * @protected
    */
@@ -104,6 +105,9 @@ class MeasurableModel extends ModelPostgres {
   _switchField(name = '') {
     if (name === 'refreshedAt') {
       return this._refreshedAtLiteral();
+    }
+    if (name === 'stateOrder') {
+      return this.sequelize.col('stateOrder');
     }
     return name;
   }

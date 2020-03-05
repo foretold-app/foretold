@@ -174,6 +174,7 @@ const measurablesConnection = new graphql.GraphQLObjectType({
 const orderFieldMeasurables = new graphql.GraphQLEnumType({
   name: 'OrderFieldMeasurables',
   values: {
+    stateOrder: { value: 'stateOrder' },
     refreshedAt: { value: 'refreshedAt' },
   },
 });

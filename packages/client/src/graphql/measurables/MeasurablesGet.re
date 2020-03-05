@@ -112,6 +112,7 @@ module Query = [%graphql
         $last: Int500
         $after: Cursor
         $before: Cursor
+        $order: [OrderMeasurables]
     ) {
         measurables (
             measurableIds: $measurableIds
@@ -123,6 +124,7 @@ module Query = [%graphql
             last: $last
             after: $after
             before: $before
+            order: $order
         ) {
           total
           pageInfo{
@@ -244,6 +246,23 @@ module QueryComponent = ReasonApollo.CreateQuery(Query);
 let unpackEdges = a =>
   a##measurables |> E.O.fmap(Primary.Connection.fromJson(toMeasurable));
 
+type order =
+  option(
+    array(
+      option({
+        .
+        "direction": Types.direction,
+        "field": Types.fieldMeasurables,
+      }),
+    ),
+  );
+
+let orderMeasurables: order =
+  Some([|
+    Some({"field": `stateOrder, "direction": `ASC}),
+    Some({"field": `refreshedAt, "direction": `DESC}),
+  |]);
+
 let queryDirection =
     (
       ~states=?,
@@ -253,6 +272,7 @@ let queryDirection =
       ~measurableIds,
       ~pageLimit,
       ~direction,
+      ~order=orderMeasurables,
       (),
     ) => {
   let fn =
@@ -262,6 +282,7 @@ let queryDirection =
       ~creatorId?,
       ~measurableIds?,
       ~states?,
+      ~order?,
     );
   switch ((direction: Primary.Connection.direction)) {
   | None => fn(~first=pageLimit, ())

@@ -1,27 +1,58 @@
+const logger = require('../lib/log');
+
 const emitter = require('./emitter');
 const events = require('./events');
 const producers = require('./producers');
-const listeners = require('./listeners');
-const { listenFor } = require('./listeners');
+
+const actions = require('./actions');
+const consumers = require('./consumers');
+const { Mailer } = require('./mailer');
+const { GitHubApi } = require('./github/git-hub-api');
+
+const log = logger.module('sync/listeners');
+
+/**
+ * @param {function} Producer
+ * @param {string} method
+ * @returns {function(*=): boolean}
+ */
+function listenFor(Producer, method = 'main') {
+  const name = `${Producer.name}`;
+  log.trace(`Listen: ${name}.${method}.`);
+
+  return async function listenForProducer(input) {
+    log.trace(`Run listener: ${name}.`);
+
+    try {
+      const job = new Producer(input);
+      const result = await job[method](input);
+      log.trace(name, 'all done', result);
+    } catch (e) {
+      console.error(name, e.message, e);
+    }
+
+    return true;
+  };
+}
 
 function runListeners() {
   console.log('Listeners are in a queue.');
   try {
     emitter.on(events.SERVER_IS_READY,
-      listeners.addGitHubWebHook);
+      listenFor(GitHubApi, 'addHook'));
 
     emitter.on(events.EVERY_HOUR,
-      listeners.toJudgementPendingTransition);
+      listenFor(actions.MeasurablesStateMachine, 'toJudgementPending'));
     emitter.on(events.EVERY_HOUR,
-      listeners.toResolving);
+      listenFor(actions.MeasurablesStateMachine, 'toResolving'));
     emitter.on(events.EVERY_MINUTE,
-      listeners.emailConsumer);
+      listenFor(consumers.Emails));
     emitter.on(events.EVERY_MINUTE,
-      listeners.updateUsers);
+      listenFor(actions.UserUpdater));
     emitter.on(events.EVERY_HOUR,
-      listeners.updateMaterializedViews);
+      listenFor(actions.MaterializedViewsUpdater));
     emitter.on(events.MAIL,
-      listeners.mailer);
+      listenFor(Mailer));
 
     /**
      * MEASURABLE_CHANGED
@@ -33,7 +64,7 @@ function runListeners() {
     emitter.on(events.MEASURABLE_CHANGED,
       listenFor(producers.feedItems.NewMeasurableReachedResolution));
     // emitter.on(events.MEASURABLE_CHANGED,
-    //   listeners.updateMeasurableSlackNotification);
+    //   listenFor(actions.Notifications, 'updateMeasurableSlackNotification'));
 
     /**
      * NEW_MEMBERSHIP
@@ -55,9 +86,9 @@ function runListeners() {
     emitter.on(events.NEW_MEASUREMENT,
       listenFor(producers.feedItems.NewMeasurementNotAvailable));
     // emitter.on(events.NEW_MEASUREMENT,
-    //   listeners.newMeasurementSlackNotification);
+    //   listenFor(actions.Notifications, 'newMeasurementSlackNotification'));
     emitter.on(events.NEW_MEASUREMENT,
-      listeners.measurableStateTransition);
+      listenFor(actions.MeasurablesStateMachine, 'measurableStateTransition'));
 
     /**
      * NEW_MEASURABLE
@@ -65,7 +96,7 @@ function runListeners() {
     emitter.on(events.NEW_MEASURABLE,
       listenFor(producers.feedItems.NewMeasurable));
     // emitter.on(events.NEW_MEASURABLE,
-    //   listeners.newMeasurableSlackNotification);
+    //   listenFor(actions.Notifications, 'newMeasurableSlackNotification'));
 
     /**
      * NEW_CHANNEL
@@ -73,29 +104,29 @@ function runListeners() {
     emitter.on(events.NEW_CHANNEL,
       listenFor(producers.feedItems.NewChannel));
     emitter.on(events.NEW_CHANNEL,
-      listeners.createChannelMembership);
+      listenFor(actions.Creators, 'createChannelMembership'));
 
     /**
      * Common.
      */
     emitter.on(events.NEW_SERIES,
-      listeners.createNewMeasurables);
+      listenFor(actions.Creators, 'createMeasurables'));
     emitter.on(events.CREATING_BOT,
-      listeners.createBotAgent);
+      listenFor(actions.Creators, 'createBotAgent'));
     emitter.on(events.CREATING_USER,
-      listeners.createUserAgent);
+      listenFor(actions.Creators, 'createUserAgent'));
     emitter.on(events.UPDATING_MEASURABLE,
-      listeners.checkMeasurable);
+      listenFor(actions.Creators, 'checkMeasurableState'));
     emitter.on(events.VALIDATING_MEASUREMENT,
-      listeners.checkMeasurement);
+      listenFor(actions.Creators, 'checkMeasurement'));
     emitter.on(events.NEW_INVITATION,
       listenFor(producers.notifications.Invitation));
     emitter.on(events.NEW_USER,
-      listeners.invitations);
+      listenFor(actions.Invitations, 'transition'));
     emitter.on(events.USER_CHANGED,
-      listeners.invitations);
+      listenFor(actions.Invitations, 'transition'));
     emitter.on(events.USER_CHANGED,
-      listeners.updateUser);
+      listenFor(actions.UserUpdater, 'updateUser'));
 
     emitter.on(events.NEW_NOTEBOOK,
       listenFor(producers.feedItems.NewNotebook));

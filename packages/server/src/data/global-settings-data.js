@@ -2,7 +2,7 @@ const assert = require('assert');
 const _ = require('lodash');
 
 const { DataBase } = require('./data-base');
-const { GlobalSettingModel } = require('../models');
+const { GlobalSettingModel } = require('./models');
 const { KenFacade } = require('../lib/ken-facade');
 
 const { Params } = require('./classes');

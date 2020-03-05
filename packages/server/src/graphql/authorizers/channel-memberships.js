@@ -1,7 +1,7 @@
 const _ = require('lodash');
 const { rule } = require('graphql-shield');
 
-const models = require('../../models/definitions');
+const models = require('../../data/models/definitions');
 const { CHANNEL_MEMBERSHIP_ROLES } = require('../../enums');
 const logger = require('../../lib/log');
 

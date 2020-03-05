@@ -6,7 +6,7 @@ const { ChannelMembershipsData } = require('./channel-memberships-data');
 const { UsersData } = require('./users-data');
 const { Data, Params, Query } = require('./classes');
 
-const { InvitationModel } = require('../models');
+const { InvitationModel } = require('./models');
 
 /**
  * @implements {Layers.DataSource.DataGeneric}

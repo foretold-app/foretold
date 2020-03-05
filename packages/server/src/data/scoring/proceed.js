@@ -72,22 +72,6 @@ class Proceed {
   /**
    * Do not make any optimization here, it is early for this.
    * For each optimization we need to do a researching of the performance.
-   * @param agentId
-   * @param measurableId
-   * @param params
-   * @returns {Promise<undefined|
-   * {
-   * score: *,
-   * agentPredictions: *,
-   * finalResolutionTime: *,
-   * scoringStartTime: *,
-   * timeActivityRatio: *,
-   * recentResult: *,
-   * activeTimeDistribution: {finalX: *, points: *},
-   * measurableCreationTime: *,
-   * aggregations: *,
-   * scoringEndTime: *
-   * }>}
    */
   primaryPointScore2(
     {
@@ -99,7 +83,8 @@ class Proceed {
       marketType: MARKET_TYPE.MARKET,
       startAt: START_AT.QUESTION_CREATION_TIME,
       finalComparisonMeasurement: LAST_OBJECTIVE_MEASUREMENT,
-    }) {
+    },
+  ) {
     // Checks
     if (_.size(agentPredictions) === 0) return undefined;
     if (_.size(allAggregations) === 0) return undefined;

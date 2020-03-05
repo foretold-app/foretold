@@ -1,7 +1,7 @@
 const { DataBase } = require('./data-base');
 const { AgentsData } = require('./agents-data');
 
-const { ChannelModel } = require('../models');
+const { ChannelModel } = require('./models');
 
 const { Params } = require('./classes');
 

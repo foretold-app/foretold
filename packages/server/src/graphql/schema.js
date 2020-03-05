@@ -107,6 +107,11 @@ const schema = new graphql.GraphQLSchema({
             ),
           },
           isArchived: { type: graphql.GraphQLList(types.common.isArchived) },
+          order: {
+            type: graphql.GraphQLList(
+              types.measurables.orderMeasurables,
+            ),
+          },
         },
         resolve: resolvers.measurables.all,
       },

@@ -1,5 +1,7 @@
 const { TEMPLATE_NAME } = require('../../src/enums');
-const { EmailEnvelopeTemplate } = require('../../src/models/classes/templates');
+const {
+  EmailEnvelopeTemplate,
+} = require('../../src/data/models/classes/templates');
 
 module.exports = {
   up: async function (queryInterface, Sequelize) {

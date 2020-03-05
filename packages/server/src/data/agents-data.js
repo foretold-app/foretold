@@ -1,6 +1,6 @@
 const { DataBase } = require('./data-base');
 
-const { AgentModel } = require('../models');
+const { AgentModel } = require('./models');
 
 /**
  * @implements {Layers.DataSource.DataGeneric}

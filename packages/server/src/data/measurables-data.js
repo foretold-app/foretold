@@ -3,7 +3,7 @@ const fetch = require('node-fetch');
 const { Params } = require('./classes');
 const { DataBase } = require('./data-base');
 
-const { MeasurableModel } = require('../models');
+const { MeasurableModel } = require('./models');
 const logger = require('../lib/log');
 
 const log = logger.module('data/measurables-data');

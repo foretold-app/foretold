@@ -15,15 +15,15 @@ const { Params } = require('../../data/classes');
 
 const { TEMPLATE_NAME } = require('../../enums');
 const { NOTIFICATION_TYPE } = require('../../enums');
-const { EmailEnvelope } = require('../../models/classes/notifications');
+const { EmailEnvelope } = require('../../data/models/classes/notifications');
 
-const { FeedItem } = require('../../models/classes');
-const { FeedItemGeneric } = require('../../models/classes');
-const { FeedItemMeasurable } = require('../../models/classes');
-const { FeedItemMeasurement } = require('../../models/classes');
-const { FeedItemJoinedMember } = require('../../models/classes');
-const { FeedItemChannel } = require('../../models/classes');
-const { FeedItemNotebook } = require('../../models/classes');
+const { FeedItem } = require('../../data/models/classes');
+const { FeedItemGeneric } = require('../../data/models/classes');
+const { FeedItemMeasurable } = require('../../data/models/classes');
+const { FeedItemMeasurement } = require('../../data/models/classes');
+const { FeedItemJoinedMember } = require('../../data/models/classes');
+const { FeedItemChannel } = require('../../data/models/classes');
+const { FeedItemNotebook } = require('../../data/models/classes');
 
 /**
  * @abstract

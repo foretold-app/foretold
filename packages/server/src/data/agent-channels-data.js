@@ -4,7 +4,7 @@ const { DataBase } = require('./data-base');
 const { AgentMeasurablesData } = require('./agent-measurables-data');
 const { MeasurablesData } = require('./measurables-data');
 
-const { AgentChannelModel } = require('../models');
+const { AgentChannelModel } = require('./models');
 const { Proceed } = require('./scoring/proceed');
 
 /**

@@ -1,7 +1,7 @@
 const _ = require('lodash');
 const Sequelize = require('sequelize');
 
-const { AGENT_TYPE } = require('../../enums');
+const { AGENT_TYPE } = require('../../../enums');
 
 module.exports = (sequelize, DataTypes) => {
   const Agent = sequelize.define('Agent', {

@@ -1,5 +1,5 @@
-const { CHANNEL_MEMBERSHIP_ROLES } = require('../../enums');
-const { CHANNEL_MEMBERSHIP_TYPE } = require('../../enums');
+const { CHANNEL_MEMBERSHIP_ROLES } = require('../../../enums');
+const { CHANNEL_MEMBERSHIP_TYPE } = require('../../../enums');
 
 /**
  * @param sequelize

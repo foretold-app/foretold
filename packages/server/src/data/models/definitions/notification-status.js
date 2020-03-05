@@ -1,4 +1,4 @@
-const { NOTIFICATION_ERROR_REASON } = require('../../enums');
+const { NOTIFICATION_ERROR_REASON } = require('../../../enums');
 
 module.exports = (sequelize, DataTypes) => {
   const NotificationStatus = sequelize.define('NotificationStatus', {

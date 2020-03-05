@@ -1,5 +1,5 @@
 const models = require('./definitions');
-const { MEASURABLE_STATE } = require('../enums');
+const { MEASURABLE_STATE } = require('../../enums');
 
 const { ModelPostgres } = require('./model-postgres');
 

@@ -2,7 +2,7 @@ jest.mock('./models/index');
 jest.mock('./data/index', () => require('./data/__mocks__/data'));
 jest.mock('./lib/slack');
 jest.mock('./lib/log', () => require('./lib/log/__mocks__/log'));
-jest.mock('./models/index', () => require('./models/__mocks__/models'));
+jest.mock('./models/index', () => require('./data/models/__mocks__/models'));
 jest.mock('@foretold/prediction-analysis', () => require('./__mocks__/prediction-analysis'));
 
 process.env.SERVER_URL = 'SERVER_URL1';

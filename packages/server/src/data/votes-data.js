@@ -2,7 +2,7 @@ const _ = require('lodash');
 const assert = require('assert');
 
 const { DataBase } = require('./data-base');
-const { VoteModel } = require('../models');
+const { VoteModel } = require('./models');
 
 const { Params } = require('./classes');
 const { Query } = require('./classes');

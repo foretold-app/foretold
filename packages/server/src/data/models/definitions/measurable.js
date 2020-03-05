@@ -1,7 +1,7 @@
 const moment = require('moment');
 
-const { MEASURABLE_STATE } = require('../../enums');
-const { MEASURABLE_VALUE_TYPE } = require('../../enums');
+const { MEASURABLE_STATE } = require('../../../enums');
+const { MEASURABLE_VALUE_TYPE } = require('../../../enums');
 
 module.exports = (sequelize, DataTypes) => {
   const Measurable = sequelize.define('Measurable', {
@@ -118,7 +118,7 @@ module.exports = (sequelize, DataTypes) => {
    */
   async function getName() {
     if (this.labelSubject && this.labelProperty) {
-      const { GlobalSettingsData } = require('../../data');
+      const { GlobalSettingsData } = require('../../index');
       const globalSettings = new GlobalSettingsData();
       const kenFacade = await globalSettings.getKen();
       const names = kenFacade.names(

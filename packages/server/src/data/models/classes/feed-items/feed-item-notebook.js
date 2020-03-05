@@ -3,20 +3,20 @@ const _ = require('lodash');
 const Mustache = require('mustache');
 
 const { FeedItemGeneric } = require('./feed-item-generic');
-const { FEED_ITEM_BODY } = require('../../../enums');
+const { FEED_ITEM_BODY } = require('../../../../enums');
 
-class FeedItemMeasurable extends FeedItemGeneric {
+class FeedItemNotebook extends FeedItemGeneric {
   /**
    * @public
    * @param {object} options
    * @param {string} options.item
    * @param {string} options.description
-   * @param {Defs.MeasurableID} options.measurableId
+   * @param {Defs.NotebookID} options.notebookId
    */
   constructor(options) {
     super(options);
-    assert(_.isString(options.measurableId), 'MeasurableId should be a string');
-    this.measurableId = options.measurableId;
+    assert(_.isString(options.notebookId), 'NotebookId should be a string');
+    this.notebookId = options.notebookId;
   }
 
   /**
@@ -24,15 +24,15 @@ class FeedItemMeasurable extends FeedItemGeneric {
    * @return {string}
    */
   getName() {
-    return FEED_ITEM_BODY.measurable;
+    return FEED_ITEM_BODY.notebook;
   }
 
   /**
    * @public
    * @return {string}
    */
-  getMeasurableId() {
-    return this.measurableId;
+  getNotebookId() {
+    return this.notebookId;
   }
 
   /**
@@ -43,16 +43,16 @@ class FeedItemMeasurable extends FeedItemGeneric {
   instanceFactory(replacements) {
     const item = Mustache.render(this.item, replacements);
     const description = Mustache.render(this.description, replacements);
-    const measurableId = Mustache.render(this.measurableId, replacements);
+    const notebookId = Mustache.render(this.notebookId, replacements);
 
-    return new FeedItemMeasurable({
+    return new this.constructor({
       item,
       description,
-      measurableId,
+      notebookId,
     });
   }
 }
 
 module.exports = {
-  FeedItemMeasurable,
+  FeedItemNotebook,
 };

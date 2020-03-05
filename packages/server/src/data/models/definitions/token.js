@@ -1,31 +1,40 @@
-const { INVITATION_STATUS } = require('../../enums');
+const { TOKEN_TYPE } = require('../../../enums');
 
 module.exports = (sequelize, DataTypes) => {
-  const Invitation = sequelize.define('Invitation', {
+  const Token = sequelize.define('Token', {
     id: {
       type: DataTypes.UUID(),
       primaryKey: true,
       defaultValue: sequelize.fn('uuid_generate_v4'),
       allowNull: false,
     },
-    email: {
+    agentId: {
+      type: DataTypes.UUID(),
+      allowNull: false,
+    },
+    token: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
-    inviterAgentId: {
-      type: DataTypes.UUID(),
+    isActive: {
+      type: DataTypes.BOOLEAN,
       allowNull: false,
+      defaultValue: true,
     },
-    channelId: {
-      type: DataTypes.UUID(),
-      allowNull: false,
-    },
-    status: {
+    type: {
       type: DataTypes.ENUM([
-        INVITATION_STATUS.AWAITING,
-        INVITATION_STATUS.ACCEPTED,
+        TOKEN_TYPE.ACCESS_TOKEN,
+        TOKEN_TYPE.AUTH_TOKEN,
       ]),
-      defaultValue: INVITATION_STATUS.AWAITING,
+      defaultValue: TOKEN_TYPE.ACCESS_TOKEN,
+    },
+    usageCount: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    expiresAt: {
+      type: DataTypes.DATE,
+      defaultValue: sequelize.fn('statement_timestamp'),
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -39,5 +48,5 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
-  return Invitation;
+  return Token;
 };

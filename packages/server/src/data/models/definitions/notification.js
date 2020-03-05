@@ -1,4 +1,4 @@
-const { NOTIFICATION_TYPE } = require('../../enums');
+const { NOTIFICATION_TYPE } = require('../../../enums');
 
 /**
  * KISS

@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const utils = require('../../lib/utils');
+const utils = require('../../../lib/utils');
 
 /**
  * @implements {Layers.Models.ModelOptions}

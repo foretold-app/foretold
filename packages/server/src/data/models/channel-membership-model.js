@@ -3,7 +3,7 @@ const { ModelPostgres } = require('./model-postgres');
 
 const {
   CHANNEL_MEMBERSHIP_ROLES,
-} = require('../enums/channel-membership-roles');
+} = require('../../enums/channel-membership-roles');
 
 class ChannelMembershipModel extends ModelPostgres {
   constructor() {

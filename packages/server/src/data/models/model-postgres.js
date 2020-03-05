@@ -3,7 +3,7 @@ const assert = require('assert');
 const { Op } = require('sequelize');
 
 const models = require('./definitions');
-const logger = require('../lib/log');
+const logger = require('../../lib/log');
 
 const { Model } = require('./model');
 
@@ -11,11 +11,11 @@ const { Options } = require('./classes');
 const { Restrictions } = require('./classes');
 const { ResponseAll } = require('./classes');
 
-const { Data } = require('../data/classes');
-const { Filter } = require('../data/classes');
-const { Pagination } = require('../data/classes');
-const { Params } = require('../data/classes');
-const { Query } = require('../data/classes');
+const { Data } = require('../classes');
+const { Filter } = require('../classes');
+const { Pagination } = require('../classes');
+const { Params } = require('../classes');
+const { Query } = require('../classes');
 
 /**
  * @abstract

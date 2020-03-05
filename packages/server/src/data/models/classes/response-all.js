@@ -1,7 +1,7 @@
 const _ = require('lodash');
-const utils = require('../../lib/utils');
+const utils = require('../../../lib/utils');
 
-const { splitBy } = require('../../lib/functions');
+const { splitBy } = require('../../../lib/functions');
 
 class ResponseAll {
   /**

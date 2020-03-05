@@ -1,6 +1,6 @@
 const _ = require("lodash");
 
-const models = require("../src/models/definitions");
+const models = require("../src/data/models/definitions");
 
 const users = [
   {

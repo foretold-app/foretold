@@ -1,11 +1,11 @@
 const assert = require('assert');
 
 const models = require('./definitions');
-const { MEASUREMENT_COMPETITOR_TYPE } = require('../enums');
+const { MEASUREMENT_COMPETITOR_TYPE } = require('../../enums');
 
 const { ModelPostgres } = require('./model-postgres');
 
-const { Params } = require('../data/classes');
+const { Params } = require('../classes');
 
 /**
  * @implements {Layers.Models.ModelGeneric}

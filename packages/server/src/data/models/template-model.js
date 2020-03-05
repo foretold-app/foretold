@@ -2,7 +2,7 @@ const _ = require('lodash');
 
 const models = require('./definitions');
 const { ModelPostgres } = require('./model-postgres');
-const templates = require('../../config/templates');
+const templates = require('../../../config/templates');
 
 /**
  * @implements {Layers.Models.ModelGeneric}

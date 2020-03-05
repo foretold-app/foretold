@@ -1,4 +1,4 @@
-const logger = require('../../lib/log');
+const logger = require('../../../lib/log');
 
 const log = logger.module('models/init');
 

@@ -3,7 +3,7 @@ const moment = require('moment');
 const { DataBase } = require('./data-base');
 const { Params, Query, Data, Options } = require('./classes');
 
-const { MutexModel } = require('../models');
+const { MutexModel } = require('./models');
 
 /**
  * @implements {Layers.DataSource.DataGeneric}

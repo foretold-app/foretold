@@ -1,5 +1,5 @@
 const { FeedItemGeneric } = require('./feed-item-generic');
-const { FEED_ITEM_BODY } = require('../../../enums');
+const { FEED_ITEM_BODY } = require('../../../../enums');
 
 class FeedItemJoinedMember extends FeedItemGeneric {
   /**

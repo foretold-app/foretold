@@ -1,5 +1,5 @@
 const { DataBase } = require('./data-base');
-const { TemplateModel } = require('../models');
+const { TemplateModel } = require('./models');
 
 /**
  * @implements {Layers.DataSource.DataGeneric}

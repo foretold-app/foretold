@@ -1,5 +1,5 @@
 const { DataBase } = require('./data-base');
-const { NotebookBookmarkModel } = require('../models');
+const { NotebookBookmarkModel } = require('./models');
 
 const { Options } = require('../data/classes');
 const { Params } = require('../data/classes');

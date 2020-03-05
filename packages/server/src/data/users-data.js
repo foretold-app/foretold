@@ -5,7 +5,7 @@ const { DataBase } = require('./data-base');
 const { MeasurementsData } = require('./measurements-data');
 const { Params, Query, Data } = require('./classes');
 
-const { UserModel } = require('../models');
+const { UserModel } = require('./models');
 
 /**
  * @implements {Layers.DataSource.DataGeneric}

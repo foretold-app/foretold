@@ -93,7 +93,8 @@ class MeasurableModel extends ModelPostgres {
     const order = pagination.getOrder();
     return order.map((orderItem) => {
       const switchedOrderName = this._switchField(orderItem.field);
-      return [switchedOrderName, orderItem.direction];
+      const switchedDirection = this._switchDirection(orderItem.direction);
+      return [switchedOrderName, switchedDirection];
     });
   }
 
@@ -108,6 +109,21 @@ class MeasurableModel extends ModelPostgres {
     }
     if (name === 'stateOrder') {
       return this.sequelize.col('stateOrder');
+    }
+    return name;
+  }
+
+  /**
+   * @param {string} name
+   * @returns {object | string}
+   * @protected
+   */
+  _switchDirection(name = '') {
+    if (name === 'ASC') {
+      return 'ASC NULLS LAST';
+    }
+    if (name === 'DESC') {
+      return 'DESC NULLS LAST';
     }
     return name;
   }
@@ -158,10 +174,10 @@ class MeasurableModel extends ModelPostgres {
    */
   _refreshedAt() {
     return `(
-        SELECT "updatedAt" as "refreshedAt"
+        SELECT "updatedAt"
         FROM "Measurements"
         WHERE "Measurements"."measurableId" = "Measurable"."id"
-        ORDER BY "Measurements"."updatedAt"
+        ORDER BY "Measurements"."updatedAt" DESC
         LIMIT 1
     )`;
   }

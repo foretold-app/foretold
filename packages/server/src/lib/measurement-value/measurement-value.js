@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-const { MEASUREMENT_VALUE } = require('./enums');
+const { MEASUREMENT_VALUE } = require('../../enums');
 
 class MeasurementValue {
   constructor(input) {
@@ -11,7 +11,7 @@ class MeasurementValue {
     this.value = null;
     this.type = MEASUREMENT_VALUE.none;
 
-    for (const type in map) {
+    for (const type of map) {
       const value = _.get(input, type);
       if (value !== null && value !== undefined) {
         this.value = value;

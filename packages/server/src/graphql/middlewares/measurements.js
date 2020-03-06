@@ -1,7 +1,6 @@
 const _ = require('lodash');
 
 const { MeasurementValue } = require('../../lib/measurement-value');
-const { MEASUREMENT_VALUE } = require('../../lib/measurement-value/enums');
 
 const { MeasurementsData } = require('../../data');
 
@@ -11,6 +10,7 @@ const { Options } = require('../../data/classes');
 
 const { MEASURABLE_STATE } = require('../../enums');
 const { MEASUREMENT_COMPETITOR_TYPE } = require('../../enums');
+const { MEASUREMENT_VALUE } = require('../../enums');
 const { MEASURABLE_VALUE_TYPE } = require('../../enums');
 const lang = require('../../../config/lang');
 const logger = require('../../lib/log');

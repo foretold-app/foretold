@@ -1,12 +1,12 @@
 const _ = require('lodash');
 const moment = require('moment');
-const { MEASUREMENT_VALUE } = require('@foretold/measurement-value/enums');
 
 const { MeasurablesData } = require('../../data');
 const { MeasurementsData } = require('../../data');
 
 const { MEASUREMENT_COMPETITOR_TYPE } = require('../../enums');
 const { MEASURABLE_STATE } = require('../../enums');
+const { MEASUREMENT_VALUE } = require('../../enums');
 
 const { Pagination } = require('../../data/classes');
 const { Filter } = require('../../data/classes');

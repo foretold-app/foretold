@@ -1,7 +1,7 @@
 const graphql = require('graphql');
 const { DateType } = require('graphql-sequelize');
-const { MEASUREMENT_VALUE } = require('@foretold/measurement-value/enums');
 
+const { MEASUREMENT_VALUE } = require('../../enums');
 const resolvers = require('../resolvers');
 
 const votesTypes = require('./votes');

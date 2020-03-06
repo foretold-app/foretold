@@ -5,6 +5,7 @@ const MEASUREMENT_VALUE = {
   binary: 'binary',
   unresolvableResolution: 'unresolvableResolution',
   comment: 'comment',
+  none: 'none',
 };
 
 module.exports = {

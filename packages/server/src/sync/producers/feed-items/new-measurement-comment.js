@@ -1,7 +1,7 @@
 const _ = require('lodash');
 const {
   MEASUREMENT_VALUE,
-} = require('@foretold/measurement-value/enums/measurement-value');
+} = require('../../../enums');
 
 const { Producer } = require('../producer');
 const { NewMeasurement } = require('./new-measurement');

@@ -22,6 +22,7 @@ const { NOTIFICATION_TYPE } = require('./notification-type');
 const { TEMPLATE_NAME } = require('./template-name');
 const { TOKEN_TYPE } = require('./token-type');
 const { TEMPLATE_TYPE } = require('./template-type');
+const { MEASUREMENT_VALUE } = require('./measurement-value');
 
 module.exports = {
   MARKET_TYPE,
@@ -42,4 +43,5 @@ module.exports = {
   TEMPLATE_NAME,
   TOKEN_TYPE,
   TEMPLATE_TYPE,
+  MEASUREMENT_VALUE,
 };

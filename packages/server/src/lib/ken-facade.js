@@ -55,7 +55,7 @@ class KenFacade {
   thingProperty(thing) {
     if (!thing) return '';
     const facts = thing.propertyIdFacts(this.NAME);
-    const datas = facts.map(e => e.value().data());
+    const datas = facts.map((e) => e.value().data());
     const data = _.head(datas);
     return thing.id() + data;
   }

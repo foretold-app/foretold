@@ -1,7 +1,7 @@
 const _ = require('lodash');
-const { MEASUREMENT_VALUE } = require('@foretold/measurement-value/enums');
 
 const { MEASUREMENT_COMPETITOR_TYPE } = require('../../../enums');
+const { MEASUREMENT_VALUE } = require('../../../enums');
 
 module.exports = (sequelize, DataTypes) => {
   const Measurement = sequelize.define('Measurement', {

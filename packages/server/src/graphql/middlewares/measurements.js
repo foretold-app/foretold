@@ -1,10 +1,7 @@
 const _ = require('lodash');
 
-const { MeasurementValue } = require('@foretold/measurement-value');
-const { FloatPoint, FloatCdf } = require('@foretold/measurement-value');
-const { Binary, Percentage } = require('@foretold/measurement-value');
-const { UnresolvableResolution } = require('@foretold/measurement-value');
-const { Comment } = require('@foretold/measurement-value');
+const { MeasurementValue } = require('../../lib/measurement-value');
+const { MEASUREMENT_VALUE } = require('../../lib/measurement-value/enums');
 
 const { MeasurementsData } = require('../../data');
 
@@ -31,7 +28,7 @@ const log = logger.module('middlewares/measurement');
  */
 async function measurementValueValidation(root, args, _context, _info) {
   const value = _.get(args, ['input', 'value'], null);
-  return MeasurementValue.factory(value).validate();
+  return new MeasurementValue(value).validate();
 }
 
 /**
@@ -76,18 +73,18 @@ async function measurementValueTypeValidation(root, args, context, _info) {
 
   if (!type) throw new Error(lang.measurableValueType());
 
-  const value = MeasurementValue.factory(inputValue);
+  const value = new MeasurementValue(inputValue);
 
   if (type === MEASURABLE_VALUE_TYPE.FLOAT) {
-    if (value instanceof FloatCdf) return true;
-    if (value instanceof FloatPoint) return true;
+    if (value.getType() === MEASUREMENT_VALUE.floatCdf) return true;
+    if (value.getType() === MEASUREMENT_VALUE.floatPoint) return true;
   }
   if (type === MEASURABLE_VALUE_TYPE.PERCENTAGE) {
-    if (value instanceof Binary) return true;
-    if (value instanceof Percentage) return true;
+    if (value.getType() === MEASUREMENT_VALUE.binary) return true;
+    if (value.getType() === MEASUREMENT_VALUE.percentage) return true;
   }
-  if (value instanceof UnresolvableResolution) return true;
-  if (value instanceof Comment) return true;
+  if (value.getType() === MEASUREMENT_VALUE.unresolvableResolution) return true;
+  if (value.getType() === MEASUREMENT_VALUE.comment) return true;
 
   throw new Error(lang.measurementValueTypeWrong());
 }

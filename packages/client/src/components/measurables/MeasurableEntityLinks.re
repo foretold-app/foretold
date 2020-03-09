@@ -11,6 +11,7 @@ let kenDisplay = (g, id) => {
          KenTools.(
            switch (r.value.valueType) {
            | String(s) => s |> Utils.ste
+           | JSON(s) => "" |> Utils.ste
            | ThingId(s) =>
              <Link linkType={Internal(EntityShow(s))}>
                {s |> Utils.ste}
@@ -23,23 +24,24 @@ let kenDisplay = (g, id) => {
   |> ReasonReact.array;
 };
 
-let xEntityLink = (attribute, ~g, ~m: Types.measurable, ~className: string) =>
-  m
-  |> attribute
+let showAttribute = (~attribute: option(string), ~g, ~className) =>
+  attribute
   |> E.O.bind(_, KenTools.Subject.name(g))
   |> E.O.bind(_, KenTools.FactValue.toString)
   |> E.O.bind(_, r =>
-       m
-       |> attribute
+       attribute
        |> E.O.fmap(_d =>
             <Antd_Popover
-              content={kenDisplay(g, attribute(m) |> E.O.default(""))}
+              content={kenDisplay(g, attribute |> E.O.default(""))}
               trigger=`hover
               placement=`top>
               <span className> {r |> Utils.ste} </span>
             </Antd_Popover>
           )
      );
+
+let xEntityLink = (attribute, ~g, ~m: Types.measurable, ~className: string) =>
+  showAttribute(~attribute=attribute(m), ~g, ~className);
 
 let nameEntityLink = xEntityLink(r => r.labelSubject);
 let propertyEntityLink = xEntityLink(r => r.labelProperty);

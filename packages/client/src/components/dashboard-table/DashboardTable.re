@@ -6,6 +6,7 @@ type domain = {
 type columnType =
   | String
   | MeasurableId(domain)
+  | KenId
   | MeasurementValue;
 
 module Column = {
@@ -30,6 +31,7 @@ module Column = {
 type cell =
   | String(string)
   | MeasurableId(string)
+  | KenId(string)
   | MeasurementValue(MeasurementValue.t)
   | Empty;
 
@@ -83,6 +85,7 @@ module Json = {
                 xMax: decodeField(Json.Decode.float, "xMax", json),
               })
             | "MeasurementValue" => MeasurementValue
+            | "KenId" => KenId
             | _ => String
             },
         })
@@ -109,6 +112,11 @@ module Json = {
              json
              |> Json.Decode.(optional(field(column.id, string)))
              |> E.O.fmap(r => String(r))
+             |> E.O.default(Empty)
+           | KenId =>
+             json
+             |> Json.Decode.(optional(field(column.id, string)))
+             |> E.O.fmap(r => KenId(r))
              |> E.O.default(Empty)
            | MeasurementValue =>
              switch (

@@ -16,10 +16,18 @@ module DashboardTableToTable = {
       ~name=column.name |> Utils.ste,
       ~flex=column.width,
       ~render=
-        (c: DashboardTable.Row.t) =>
+        (c: DashboardTable.Row.t) => {
+          let g = KenTools.Graph.fromContext();
           switch (Belt.Array.get(c, index)) {
           | Some(String(str)) => str |> Utils.ste
           | Some(MeasurementValue(_)) => "MeasurementValue" |> Utils.ste
+          | Some(KenId(r)) =>
+            MeasurableEntityLinks.showAttribute(
+              ~attribute=Some(r),
+              ~g,
+              ~className=Shared.TagLink.item,
+            )
+            |> E.O.React.defaultNull
           | Some(MeasurableId(str)) =>
             measurables
             |> E.A.getBy(_, r => r.id == str)
@@ -60,7 +68,8 @@ module DashboardTableToTable = {
             )
           | Some(Empty)
           | None => "" |> Utils.ste
-          },
+          };
+        },
       (),
     );
 

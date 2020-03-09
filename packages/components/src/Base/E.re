@@ -53,16 +53,8 @@ module I = {
   let decrement = n => n - 1;
 };
 
-/* R for Result */
-module R = {
-  let result = Rationale.Result.result;
-  let id = e => e |> result(U.id, U.id);
-  let fmap = Rationale.Result.fmap;
-  let bind = Rationale.Result.bind;
-};
-
 let safe_fn_of_string = (fn, s: string): option('a) =>
-  try (Some(fn(s))) {
+  try(Some(fn(s))) {
   | _ => None
   };
 
@@ -81,7 +73,6 @@ module JsDate = {
 
 /* List */
 module L = {
-  open Rationale;
   let fmap = List.map;
   let toArray = Array.of_list;
   let fmapi = List.mapi;
@@ -108,7 +99,10 @@ module L = {
   let iter = List.iter;
   let findIndex = Rationale.RList.findIndex;
   let withIdx = xs =>
-    xs |> RList.zip(RList.times(Function.identity, length(xs)));
+    xs
+    |> Rationale.RList.zip(
+         Rationale.RList.times(Rationale.Function.identity, length(xs)),
+       );
   module React = {
     let fmap = (f, xs) => xs |> fmap(f) |> toArray |> React.array;
     let fmapi = (f, xs) => xs |> fmapi(f) |> toArray |> React.array;

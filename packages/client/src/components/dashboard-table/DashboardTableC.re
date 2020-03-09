@@ -19,14 +19,15 @@ module DashboardTableToTable = {
         (c: DashboardTable.Row.t) => {
           let g = KenTools.Graph.fromContext();
           switch (Belt.Array.get(c, index)) {
-          | Some(String(str)) =>
+          | Some(String(str)) => str |> Utils.ste
+          | Some(MeasurementValue(_)) => "MeasurementValue" |> Utils.ste
+          | Some(KenId(r)) =>
             MeasurableEntityLinks.showAttribute(
-              ~attribute=Some(str),
+              ~attribute=Some(r),
               ~g,
               ~className=Shared.TagLink.item,
             )
             |> E.O.React.defaultNull
-          | Some(MeasurementValue(_)) => "MeasurementValue" |> Utils.ste
           | Some(MeasurableId(str)) =>
             measurables
             |> E.A.getBy(_, r => r.id == str)

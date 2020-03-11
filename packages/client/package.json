@@ -36,8 +36,8 @@
   },
   "dependencies": {
     "@foretold/cdf": "1.0.14",
-    "@foretold/guesstimator": "1.0.10",
-    "@foretold/components": "0.0.2",
+    "@foretold/guesstimator": "1.0.11",
+    "@foretold/components": "0.0.4",
     "@glennsl/bs-jest": "0.4.9",
     "@glennsl/bs-json": "5.0.2",
     "antd": "3.17.0",

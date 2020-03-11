@@ -1,6 +1,6 @@
 {
     "name": "@foretold/components",
-    "version": "0.0.2",
+    "version": "0.0.5",
     "description": "Kit-demo of UX components",
     "private": false,
     "scripts": {
@@ -20,8 +20,8 @@
     "author": "Ozzie Gooen <ozzieagooen@gmail.com>",
     "license": "MIT",
     "dependencies": {
-        "@foretold/cdf": "1.0.10",
-        "@foretold/guesstimator": "1.0.1",
+        "@foretold/cdf": "1.0.16",
+        "@foretold/guesstimator": "1.0.11",
         "bs-css": "11.0.0",
         "bs-moment": "0.4.5",
         "bs-platform": "7.0.1",

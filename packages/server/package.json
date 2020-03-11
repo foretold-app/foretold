@@ -41,8 +41,8 @@
   "dependencies": {
     "lodash": "4.17.15",
     "@slack/client": "5.0.2",
-    "@foretold/cdf": "1.0.14",
-    "@foretold/prediction-analysis": "0.0.7",
+    "@foretold/cdf": "1.0.16",
+    "@foretold/prediction-analysis": "0.0.9",
     "bs-ken": "0.0.8",
     "apollo-server": "2.11.0",
     "apollo-server-express": "2.11.0",

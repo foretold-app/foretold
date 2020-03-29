@@ -14,7 +14,7 @@
   "scripts": {
     "build-bsb": "bsb -make-world",
     "clean": "bsb -clean-world",
-    "bsb-watch": "bsb -w -ws _",
+    "bsb-watch": "bsb -make-world -clean-world -w",
     "reset": "yarn run clean && yarn run build-bsb && yarn run bsb-watch",
     "parcel": "API_URL=${API_URL:-http://localhost:4000/graphql} AUTH0_DOMAIN=${AUTH0_DOMAIN:-foretold.auth0.com} AUTH0_CLIENT_ID=${AUTH0_CLIENT_ID:-TBKYEQPqhp3Q0q9JcdHlzlG6WlJPBc3A} INTERCOM_APP_ID=${INTERCOM_APP_ID:-gx67sx4f} parcel ./src/index.html --public-url / --no-autoinstall -- watch",
     "parcel-staging": "API_URL=${API_URL:-http://localhost:4000/graphql} AUTH0_DOMAIN=${AUTH0_DOMAIN:-foretold.auth0.com} AUTH0_CLIENT_ID=${AUTH0_CLIENT_ID:-TBKYEQPqhp3Q0q9JcdHlzlG6WlJPBc3A} INTERCOM_APP_ID=${INTERCOM_APP_ID:-gx67sx4f} parcel build ./src/index.html --no-source-maps --no-autoinstall",

@@ -26,7 +26,7 @@ module FactValue = {
 
   let thingId = (value: value) =>
     switch (value.valueType) {
-    | String(s) => None
+    | String(_) => None
     | ThingId(s) => Some(s)
     | _ => None
     };

@@ -15,6 +15,7 @@
   "namespace": true,
   "bs-dependencies": [
     "@foretold/components",
+    "@foretold/bs-distplus",
     "@glennsl/bs-json",
     "@glennsl/bs-jest",
     "bs-css",

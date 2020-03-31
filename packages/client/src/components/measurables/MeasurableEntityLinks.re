@@ -8,17 +8,14 @@ let kenDisplay = (g, id) => {
           |> E.O.default("no-name")
           |> Utils.ste
           |> E.React2.inH3}
-         KenTools.(
-           switch (r.value.valueType) {
-           | String(s) => s |> Utils.ste
-           | JSON(s) => "" |> Utils.ste
-           | ThingId(s) =>
-             <Link linkType={Internal(EntityShow(s))}>
-               {s |> Utils.ste}
-             </Link>
-           | _ => "no-name" |> Utils.ste
-           }
-         )
+         {switch (r.value.valueType) {
+          | String(s) => s |> Utils.ste
+          | JSON(_s) => "" |> Utils.ste
+          | ThingId(s) =>
+            <Link linkType={Internal(EntityShow(s))}>
+              {s |> Utils.ste}
+            </Link>
+          }}
        </div>
      )
   |> ReasonReact.array;

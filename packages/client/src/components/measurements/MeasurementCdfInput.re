@@ -562,6 +562,7 @@ let make =
     | UpdateCompetitorType(competitorType) =>
       let dataType = getDataTypeAsString(competitorType, measurable);
       setCompetitorType(_ => competitorType);
+      let foo = 3;
       setDataType(_ => dataType);
 
     | UpdateDataType((dataType: string)) => setDataType(_ => dataType)

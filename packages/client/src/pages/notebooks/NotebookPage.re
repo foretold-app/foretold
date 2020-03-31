@@ -2,9 +2,10 @@ open Style.Grid;
 
 module Styles = {
   open Css;
-  let full = style([float(`left), width(`percent(100.))]);
+  let full = style([Css.float(`left), width(`percent(100.))]);
   let sidebarOutside = style([background(`hex("f0f2f5"))]);
-  let sidebar = style([position(`sticky), top(`em(2.0)), float(`left)]);
+  let sidebar =
+    style([position(`sticky), top(`em(2.0)), Css.float(`left)]);
 };
 
 type tab =

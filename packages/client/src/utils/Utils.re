@@ -7,7 +7,7 @@ let resolveRegex = (exp, str) => {
     | Some(s) => s
     };
 
-  let res = exp |> Js.Re.exec(str);
+  let res = exp |> Js.Re.exec_(_, str);
   switch (res) {
   | None => ""
   | Some(result) =>

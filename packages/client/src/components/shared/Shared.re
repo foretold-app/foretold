@@ -1,9 +1,8 @@
 open Css;
-
 module Item = {
   let id =
     style([
-      float(`left),
+      Css.float(`left),
       marginTop(`em(0.3)),
       color(`hex("b2b2b2")),
       fontSize(`em(0.8)),
@@ -11,7 +10,7 @@ module Item = {
 
   let item =
     style([
-      float(`left),
+      Css.float(`left),
       fontSize(`em(1.0)),
       marginRight(`px(18)),
       color(`hex("bbb")),
@@ -55,7 +54,7 @@ module Item = {
       borderRadius(`px(2)),
       padding2(~v=`px(1), ~h=`px(4)),
       cursor(`pointer),
-      float(`left),
+      Css.float(`left),
       backgroundColor(hex(colors.background)),
       selector(
         ":hover",

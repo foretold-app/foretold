@@ -1,6 +1,6 @@
 {
-  "name": "distplus",
-  "version": "0.0.1",
+  "name": "@foretold/bs-distplus",
+  "version": "0.0.2",
   "scripts": {
     "build": "bsb -make-world",
     "start": "bsb -make-world -w -ws _ ",

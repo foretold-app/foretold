@@ -1,6 +1,6 @@
 ####{BSB GENERATED: NO EDIT
 B lib/bs
-FLG -open DistPlus
+FLG -open BsDistplus
 FLG -ppx '/Users/ozziegooen/Exercism/reasonml/prediction-app/packages/distplus/node_modules/bs-platform/lib/bsppx.exe -bs-jsx 3'
 S /Users/ozziegooen/Exercism/reasonml/prediction-app/packages/distplus/node_modules/bs-platform/lib/ocaml
 B /Users/ozziegooen/Exercism/reasonml/prediction-app/packages/distplus/node_modules/bs-platform/lib/ocaml

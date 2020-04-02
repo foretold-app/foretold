@@ -1,9 +1,7 @@
 # Foretold
-An Open-Source Prediction Registry for Judgemental Forecasting
+**An Open-Source Prediction Registry for Judgemental Forecasting**
 
-Foretold is an open-source prediction registry targeted to sophisticated audiences that want flexibility and rigor.
-
-It places an emphasis on distributional predictions, tables of predictions, and API support.
+Foretold places an emphasis on distributional predictions, tables of predictions, and API support.
 
 ## The Main Concept
 

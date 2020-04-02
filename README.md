@@ -76,8 +76,19 @@ If you’re interested in collaborating on either the platform, formal experimen
 
 ## Select Screenshots  
 
-**Index View**  
-![index-view](https://i.ibb.co/q0YgwWN/image.png)
+**Community Page**  
+![community-view](https://raw.githubusercontent.com/foretold-app/foretold/master/docs/images/screenshot-community-page.png)
 
-**Question View**  
-![https://i.ibb.co/2gNSFtc/image.png](https://i.ibb.co/2gNSFtc/image.png)
+**Communities List**  
+![communities-list](https://raw.githubusercontent.com/foretold-app/foretold/master/docs/images/screenshot-communities.png)
+
+**Question Page**  
+![question-page](https://raw.githubusercontent.com/foretold-app/foretold/master/docs/images/screenshot-question-page.png)
+
+**Notebook Table**  
+![question-page](https://raw.githubusercontent.com/foretold-app/foretold/master/docs/images/screenshot-table.png)
+
+**Notebook Table With Sidebar Open**  
+![question-page](https://raw.githubusercontent.com/foretold-app/foretold/master/docs/images/screenshot-table-with-sidebar.png)
+
+

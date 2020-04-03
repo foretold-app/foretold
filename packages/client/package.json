@@ -86,9 +86,7 @@
   },
   "alias": {
     "react": "./node_modules/react",
-    "react-dom": "./node_modules/react-dom",
-    "rationale": "./node_modules/rationale",
-    "@glennsl": "./node_modules/@glennsl"
+    "react-dom": "./node_modules/react-dom"
   },
   "externals": {
     "/env.js": false

@@ -1,5 +1,5 @@
 {
-    "name": "bs-distplus",
+    "name": "@foretold/bs-distplus",
     "reason": {
         "react-jsx": 3
     },

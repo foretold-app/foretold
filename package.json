@@ -54,6 +54,7 @@
       "packages/components/*",
       "packages/guesstimator/*",
       "packages/tests/*",
+      "packages/distplus/*",
       "*.spec.js"
     ],
     "delay": 50

@@ -20,11 +20,11 @@ module Splitter = {
     |> E.A.fmap(e =>
          switch (e) {
          | Some(str) =>
-             let matching = agentRegExp() |> Js.Re.exec(str);
-             switch(matching) {
-             | None => Some(Text(str))
-             | Some(_) => Some(Agent(str))
-             };
+           let matching = agentRegExp() |> Js.Re.exec_(_, str);
+           switch (matching) {
+           | None => Some(Text(str))
+           | Some(_) => Some(Agent(str))
+           };
          | _ => None
          }
        )
@@ -55,38 +55,36 @@ module Columns = {
     };
 
   let toDescription = (str: string, r: record) => {
-     str
-     |> Splitter.toBlocks
-     |> E.A.fmap((e) =>
-          switch (e) {
-          | Splitter.Text(str) => str |> Utils.ste
-          | Splitter.Agent(_) => <AgentLink agent={r.agent} />
-          }
-        )
-     |> ReasonReact.array;
-  }
+    str
+    |> Splitter.toBlocks
+    |> E.A.fmap(e =>
+         switch (e) {
+         | Splitter.Text(str) => str |> Utils.ste
+         | Splitter.Agent(_) => <AgentLink agent={r.agent} />
+         }
+       )
+    |> ReasonReact.array;
+  };
 
   let description = (r: record) =>
     switch (r.body) {
     | Generic(row) => toDescription(row.description, r)
     | Measurable(row) =>
       <>
-        <div className=Styles.text>
-          {toDescription(row.description, r)}
-        </div>
+        <div className=Styles.text> {toDescription(row.description, r)} </div>
         <div className=Styles.icons>
           <Link
             className=Style.iconGray
-            linkType={Internal(MeasurableShow(r.channelId, row.measurableId))}>
+            linkType={
+              Internal(MeasurableShow(r.channelId, row.measurableId))
+            }>
             <Icon icon="LINK" />
           </Link>
         </div>
       </>
     | Measurement(row) =>
       <>
-        <div className=Styles.text>
-          {toDescription(row.description, r)}
-        </div>
+        <div className=Styles.text> {toDescription(row.description, r)} </div>
         <div className=Styles.icons>
           <MeasurementItems.Info.ById measurementId={row.measurementId} />
         </div>

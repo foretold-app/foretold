@@ -63,7 +63,7 @@ module Comment = {
 };
 
 let decodeResult = (fn, json) =>
-  try (Ok(json |> fn)) {
+  try(Ok(json |> fn)) {
   | Json_decode.DecodeError(e) => Error(e)
   | _ => Error("Unknown Error.")
   };
@@ -115,7 +115,7 @@ module MakeCdf = (Item: Point) => {
   let toDict = (t: t) =>
     t
     |> toArray
-    |> Array.map(((y, x)) => (string_of_float(y), x))
+    |> Array.map(((y, x)) => (Js.Float.toString(y), x))
     |> Js.Dict.fromArray;
 
   let fromArray = a => a |> Belt.Map.fromArray(~id=(module Id));
@@ -152,7 +152,7 @@ module MakeCdf = (Item: Point) => {
   let fromArrays = (a: (array(Item.t), array(float))): t => {
     let (xs, ys) = a;
     Belt.Array.zip(xs, ys)
-    |> Array.map(((x, y)) => (string_of_float(y), x))
+    |> Array.map(((x, y)) => (Js.Float.toString(y), x))
     |> Js.Dict.fromArray
     |> fromDict;
   };
@@ -162,7 +162,7 @@ module MakeCdf = (Item: Point) => {
     let ys =
       j |> Json.Decode.field("ys", Json.Decode.array(Json.Decode.float));
     Belt.Array.zip(xs, ys)
-    |> Array.map(((a, b)) => (string_of_float(b), a))
+    |> Array.map(((a, b)) => (Js.Float.toString(b), a))
     |> Js.Dict.fromArray;
   };
 
@@ -272,7 +272,7 @@ let nameToType =
 
 let stringOfValue = (t: t) =>
   switch (t) {
-  | `FloatPoint(k) => string_of_float(k)
+  | `FloatPoint(k) => Js.Float.toString(k)
   | `FloatCdf(t) =>
     let per = perc =>
       Belt.Map.getWithDefault(t, perc, 0.0) |> int_of_float |> string_of_int;
@@ -280,7 +280,7 @@ let stringOfValue = (t: t) =>
     let p50 = per(50.0);
     let p75 = per(75.0);
     {j|{25: $(p25), 50: $(p50), 75: $(p75)} |j};
-  | `Percentage(k) => string_of_float(k)
+  | `Percentage(k) => Js.Float.toString(k)
   | `Binary(k) => string_of_bool(k)
   | `UnresolvableResolution(k) => UnresolvableResolution.toString(k)
   | `Comment(k) => Comment.toString(k)
@@ -409,6 +409,5 @@ let encodeToGraphQLMutation = (e: t) => {
       "unresolvableResolution": None,
       "comment": Some(k),
     })
-  | _ => None
   };
 };

@@ -4,6 +4,7 @@ module type dist = {
   let minX: t => float;
   let maxX: t => float;
   let mapY: (float => float, t) => t;
+  let mapX: (float => float, t) => t;
   let xToY: (float, t) => DistTypes.mixedPoint;
   let toShape: t => DistTypes.shape;
   let toContinuous: t => option(DistTypes.continuousShape);
@@ -26,6 +27,7 @@ module Dist = (T: dist) => {
   let maxX = T.maxX;
   let xTotalRange = (t: t) => maxX(t) -. minX(t);
   let mapY = T.mapY;
+  let mapX = T.mapX;
   let xToY = T.xToY;
   let truncate = T.truncate;
   let toShape = T.toShape;
@@ -85,6 +87,7 @@ module Continuous = {
       let maxX = shapeFn(XYShape.T.maxX);
       let toDiscreteProbabilityMass = _ => 0.0;
       let mapY = fn => shapeMap(XYShape.T.mapY(fn));
+      let mapX = fn => shapeMap(XYShape.T.mapX(fn))
       let toShape = (t: t): DistTypes.shape => Continuous(t);
       let xToY = (f, {interpolation, xyShape}: t) => {
         (
@@ -163,6 +166,7 @@ module Discrete = {
       let maxX = XYShape.T.maxX;
       let toDiscreteProbabilityMass = _ => 1.0;
       let mapY = XYShape.T.mapY;
+      let mapX = XYShape.T.mapX;
       let toShape = (t: t): DistTypes.shape => Discrete(t);
       let toContinuous = _ => None;
       let toDiscrete = t => Some(t);
@@ -244,6 +248,16 @@ module Mixed = {
       let toContinuous = ({continuous}: t) => Some(continuous);
       let toDiscrete = ({discrete}: t) => Some(discrete);
       let toDiscreteProbabilityMass = ({discreteProbabilityMassFraction}: t) => discreteProbabilityMassFraction;
+      let mapX = (fn, {discrete, continuous, discreteProbabilityMassFraction}:t):t => {
+        continuous: Continuous.T.mapX(fn, continuous),
+        discrete: Discrete.T.mapX(fn, discrete),
+        discreteProbabilityMassFraction
+      }
+      let mapY = (fn, {discrete, continuous, discreteProbabilityMassFraction}:t):t => {
+        continuous: Continuous.T.mapY(fn, continuous),
+        discrete: Discrete.T.mapY(fn, discrete),
+        discreteProbabilityMassFraction
+      }
       let xToY = (f, {discrete, continuous} as t: t) => {
         let c =
           continuous
@@ -468,6 +482,12 @@ module Shape = {
           Discrete.T.mapY(fn),
           Continuous.T.mapY(fn),
         ));
+      let mapX = fn =>
+        fmap((
+          Mixed.T.mapY(fn),
+          Discrete.T.mapY(fn),
+          Continuous.T.mapY(fn),
+        ));
     });
 };
 
@@ -568,6 +588,9 @@ module DistPlus = {
       // todo: adjust for limit, maybe?
       let mapY = (fn, {shape, _} as t: t): t =>
         Shape.T.mapY(fn, shape) |> updateShape(_, t);
+
+      let mapX = (fn, {shape, _} as t: t): t =>
+        Shape.T.mapX(fn, shape) |> updateShape(_, t);
 
       let integralEndY = (~cache as _, t: t) =>
         Shape.T.Integral.sum(~cache=Some(t.integralCache), toShape(t));

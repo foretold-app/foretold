@@ -137,6 +137,10 @@ module Float = {
   let sample = (t: t) => t;
   let toString = Js.Float.toString;
   let contType: contType = `Discrete;
+  let toShape = (t: t): DistTypes.shape => {
+    let discrete:DistTypes.discreteShape = {xs: [|t|], ys: [|1.0|]};
+    Discrete(discrete);
+  };
 };
 
 module GenericSimple = {
@@ -155,7 +159,7 @@ module GenericSimple = {
     | `Float(n) => Float.pdf(x, n)
     };
 
-  let contType = (dist:dist):contType =>
+  let contType = (dist: dist): contType =>
     switch (dist) {
     | `Normal(_) => Normal.contType
     | `Triangular(_) => Triangular.contType
@@ -233,7 +237,7 @@ module GenericSimple = {
     };
   };
 
-  let toShape =
+  let toShapeContinuous =
       (~xSelection: [ | `Linear | `ByWeight]=`Linear, dist: dist, sampleCount)
       : DistTypes.shape => {
     let xs = interpolateXs(~xSelection, dist, sampleCount);
@@ -241,6 +245,15 @@ module GenericSimple = {
     XYShape.T.fromArrays(xs, ys)
     |> Distributions.Continuous.make(`Linear, _)
     |> Distributions.Continuous.T.toShape;
+  };
+
+  let toShape =
+      (~xSelection: [ | `Linear | `ByWeight]=`Linear, dist: dist, sampleCount)
+      : DistTypes.shape => {
+    switch (dist) {
+    | `Float(f) => Float.toShape(f)
+    | dist => toShapeContinuous(~xSelection, dist, sampleCount)
+    };
   };
 };
 
@@ -263,17 +276,25 @@ module PointwiseAddDistributionsWeighted = {
   let max = (dists: t) =>
     dists |> E.A.fmap(d => d |> fst |> GenericSimple.max) |> E.A.max;
 
-  let discreteShape = (dists:t, sampleCount: int) => {
-    let discrete = dists |> E.A.fmap((((r,e)) => r |> fun
-      | `Float(r) => Some((r,e))
-      | _ => None
-    )) |> E.A.O.concatSomes
-    |> E.A.fmap(((x, y)):DistTypes.xyShape => ({xs: [|x|], ys: [|y|]}))
-    |> Distributions.Discrete.reduce((+.))
-    discrete
-  }
+  let discreteShape = (dists: t, sampleCount: int) => {
+    let discrete =
+      dists
+      |> E.A.fmap(((dist, scale)) =>
+           dist
+           |> (
+             fun
+             | `Float(dist) => Some((dist |> Float.toShape |> Distributions.Shape.T.scaleBy(~scale)))
+             | _ => None
+           )
+         )
+      |> E.A.O.concatSomes
+      |> E.A.fmap(Distributions.Shape.T.toDiscrete)
+      |> E.A.O.concatSomes
+      |> Distributions.Discrete.reduce((+.));
+    discrete;
+  };
 
-  let continuousShape = (dists:t, sampleCount: int) => {
+  let continuousShape = (dists: t, sampleCount: int) => {
     let xs =
       dists
       |> E.A.fmap(r =>
@@ -288,16 +309,22 @@ module PointwiseAddDistributionsWeighted = {
       |> E.A.concatMany;
     xs |> Array.fast_sort(compare);
     let ys = xs |> E.A.fmap(pdf(_, dists));
-    XYShape.T.fromArrays(xs, ys)
-    |> Distributions.Continuous.make(`Linear, _)
-  }
+    XYShape.T.fromArrays(xs, ys) |> Distributions.Continuous.make(`Linear, _);
+  };
 
   let toShape = (dists: t, sampleCount: int) => {
     let normalized = normalizeWeights(dists);
-    let continuous = normalized |> E.A.filter(((r,_)) => GenericSimple.contType(r) == `Continuous) |> continuousShape(_, sampleCount);
-    let discrete = normalized |> E.A.filter(((r,_)) => GenericSimple.contType(r) == `Discrete) |> discreteShape(_, sampleCount);
-    let shape = MixedShapeBuilder.buildSimple(~continuous=Some(continuous), ~discrete);
-    shape |> E.O.toExt("")
+    let continuous =
+      normalized
+      |> E.A.filter(((r, _)) => GenericSimple.contType(r) == `Continuous)
+      |> continuousShape(_, sampleCount);
+    let discrete =
+      normalized
+      |> E.A.filter(((r, _)) => GenericSimple.contType(r) == `Discrete)
+      |> discreteShape(_, sampleCount);
+    let shape =
+      MixedShapeBuilder.buildSimple(~continuous=Some(continuous), ~discrete);
+    shape |> E.O.toExt("");
   };
 
   let toString = (dists: t) => {

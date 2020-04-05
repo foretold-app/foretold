@@ -114,6 +114,9 @@ module MathAdtToDistDst = {
     | [|Value(low), Value(high)|] when low < high => {
         Ok(`Simple(SymbolicDist.Lognormal.from90PercentCI(low, high)));
       }
+    | [|Value(low), Value(high)|] when high > low => {
+        Ok(`Simple(SymbolicDist.Lognormal.from90PercentCI(high, low)));
+      }
     | [|Value(low), _|] when low <= 0.0 => {
         Error("Low value cannot be less than 0.");
       }

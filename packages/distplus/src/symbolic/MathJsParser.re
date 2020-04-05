@@ -1,3 +1,5 @@
+// todo: rename to SymbolicParser
+
 module MathJsonToMathJsAdt = {
   type arg =
     | Symbol(string)
@@ -32,6 +34,7 @@ module MathJsonToMathJsAdt = {
       | "ConstantNode" =>
         optional(field("value", Json.Decode.float), j)
         |> E.O.fmap(r => Value(r))
+      | "ParenthesisNode" => j |> field("content", run)
       | "ObjectNode" =>
         let properties = j |> field("properties", dict(run));
         Js.Dict.entries(properties)
@@ -71,6 +74,7 @@ module MathAdtToDistDst = {
       fun
       | Fn({name: "multiply", args: [|Value(f), Symbol(s)|]}) =>
         Value(transformWithSymbol(f, s))
+      | Fn({name: "unaryMinus", args: [|Value(f)|]}) => Value((-1.0) *. f)
       | Fn({name, args}) => Fn({name, args: args |> E.A.fmap(run)})
       | Array(args) => Array(args |> E.A.fmap(run))
       | Symbol(s) => Symbol(s)
@@ -110,6 +114,9 @@ module MathAdtToDistDst = {
     | [|Value(low), Value(high)|] when low < high => {
         Ok(`Simple(SymbolicDist.Lognormal.from90PercentCI(low, high)));
       }
+    | [|Value(low), _|] when low <= 0.0 => {
+        Error("Low value cannot be less than 0.");
+      }
     | [|Value(_), Value(_)|] =>
       Error("Low value must be less than high value.")
     | _ => Error("Wrong number of variables in lognormal distribution");
@@ -144,20 +151,25 @@ module MathAdtToDistDst = {
   let multiModal =
       (
         args: array(result(SymbolicDist.bigDist, string)),
-        weights: array(float),
+        weights: option(array(float)),
       ) => {
+    let weights = weights |> E.O.default([||]);
     let dists =
       args
       |> E.A.fmap(
            fun
-           | Ok(`Simple(n)) => Some(n)
-           | _ => None,
-         )
-      |> E.A.O.concatSomes;
-    switch (dists |> E.A.length) {
-    | 0 => Error("Multimodals need at least one input")
+           | Ok(`Simple(n)) => Ok(n)
+           | Error(e) => Error(e)
+           | Ok(k) => Error(SymbolicDist.toString(k)),
+         );
+    let firstWithError = dists |> Belt.Array.getBy(_, Belt.Result.isError);
+    let withoutErrors = dists |> E.A.fmap(E.R.toOption) |> E.A.O.concatSomes;
+    switch (firstWithError) {
+    | Some(Error(e)) => Error(e)
+    | None when withoutErrors |> E.A.length == 0 =>
+      Error("Multimodals need at least one input")
     | _ =>
-      dists
+      withoutErrors
       |> E.A.fmapi((index, item) =>
            (item, weights |> E.A.get(_, index) |> E.O.default(1.0))
          )
@@ -177,8 +189,8 @@ module MathAdtToDistDst = {
       | Fn({name: "exponential", args}) => exponential(args)
       | Fn({name: "cauchy", args}) => cauchy(args)
       | Fn({name: "triangular", args}) => triangular(args)
+      | Value(f) => Ok(`Simple(`Float(f)))
       | Fn({name: "mm", args}) => {
-          let dists = args |> E.A.fmap(functionParser);
           let weights =
             args
             |> E.A.last
@@ -188,17 +200,26 @@ module MathAdtToDistDst = {
                  | Array(values) => Some(values)
                  | _ => None,
                )
-            |> E.A.O.defaultEmpty
-            |> E.A.fmap(
-                 fun
-                 | Value(r) => Some(r)
-                 | _ => None,
-               )
-            |> E.A.O.concatSomes;
+            |> E.O.fmap(o =>
+                 o
+                 |> E.A.fmap(
+                      fun
+                      | Value(r) => Some(r)
+                      | _ => None,
+                    )
+                 |> E.A.O.concatSomes
+               );
+          let possibleDists =
+            E.O.isSome(weights)
+              ? Belt.Array.slice(args, ~offset=0, ~len=E.A.length(args) - 1)
+              : args;
+          let dists = possibleDists |> E.A.fmap(functionParser);
           multiModal(dists, weights);
         }
       | Fn({name}) => Error(name ++ ": function not supported")
-      | _ => Error("This type not currently supported")
+      | _ => {
+          Error("This type not currently supported");
+        }
     );
 
   let topLevel = (r): result(SymbolicDist.bigDist, string) =>
@@ -206,7 +227,7 @@ module MathAdtToDistDst = {
     |> (
       fun
       | Fn(_) => functionParser(r)
-      | Value(_) => Error("Top level can't be value")
+      | Value(r) => Ok(`Simple(`Float(r)))
       | Array(_) => Error("Array not valid as top level")
       | Symbol(_) => Error("Symbol not valid as top level")
       | Object(_) => Error("Object not valid as top level")
@@ -226,6 +247,5 @@ let fromString = str => {
       }
     );
   let value = E.R.bind(mathJsParse, MathAdtToDistDst.run);
-  Js.log4("fromString", mathJsToJson, mathJsParse, value);
   value;
 };

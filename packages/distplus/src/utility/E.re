@@ -86,6 +86,7 @@ module O = {
 
   let min = compare((<));
   let max = compare((>));
+
 };
 
 /* Functions */

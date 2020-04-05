@@ -38,8 +38,7 @@
   "dependencies": {
     "@apollo/react-hooks": "3.1.3",
     "@baransu/graphql_ppx_re": "0.6.1",
-    "@foretold/bs-distplus": "0.0.2",
-    "@foretold/cdf": "1.0.16",
+    "@foretold/bs-distplus": "0.0.3",
     "@foretold/components": "0.0.5",
     "@glennsl/bs-jest": "0.4.9",
     "@glennsl/bs-json": "5.0.2",

@@ -2,18 +2,18 @@
 B lib/bs
 FLG -open ForetoldBsDistplus
 FLG -ppx '/Users/ozziegooen/Exercism/reasonml/prediction-app/packages/client/node_modules/bs-platform/lib/bsppx.exe -bs-jsx 3'
-S /Users/ozziegooen/Exercism/reasonml/prediction-app/packages/client/node_modules/@foretold/components/node_modules/bs-platform/lib/ocaml
-B /Users/ozziegooen/Exercism/reasonml/prediction-app/packages/client/node_modules/@foretold/components/node_modules/bs-platform/lib/ocaml
+S /Users/ozziegooen/Exercism/reasonml/prediction-app/packages/client/node_modules/bs-platform/lib/ocaml
+B /Users/ozziegooen/Exercism/reasonml/prediction-app/packages/client/node_modules/bs-platform/lib/ocaml
 FLG -nostdlib
 FLG -w -30-40+6+7+27+32..39+44+45+101
-S /Users/ozziegooen/Exercism/reasonml/prediction-app/packages/client/node_modules/@foretold/bs-distplus/node_modules/@glennsl/bs-jest/lib/ocaml
-B /Users/ozziegooen/Exercism/reasonml/prediction-app/packages/client/node_modules/@foretold/bs-distplus/node_modules/@glennsl/bs-jest/lib/ocaml
-S /Users/ozziegooen/Exercism/reasonml/prediction-app/packages/client/node_modules/@foretold/bs-distplus/node_modules/@glennsl/bs-json/lib/ocaml
-B /Users/ozziegooen/Exercism/reasonml/prediction-app/packages/client/node_modules/@foretold/bs-distplus/node_modules/@glennsl/bs-json/lib/ocaml
-S /Users/ozziegooen/Exercism/reasonml/prediction-app/packages/client/node_modules/@foretold/components/node_modules/rationale/lib/ocaml
-B /Users/ozziegooen/Exercism/reasonml/prediction-app/packages/client/node_modules/@foretold/components/node_modules/rationale/lib/ocaml
-S /Users/ozziegooen/Exercism/reasonml/prediction-app/packages/client/node_modules/@foretold/components/node_modules/bs-moment/lib/ocaml
-B /Users/ozziegooen/Exercism/reasonml/prediction-app/packages/client/node_modules/@foretold/components/node_modules/bs-moment/lib/ocaml
+S /Users/ozziegooen/Exercism/reasonml/prediction-app/packages/client/node_modules/@glennsl/bs-jest/lib/ocaml
+B /Users/ozziegooen/Exercism/reasonml/prediction-app/packages/client/node_modules/@glennsl/bs-jest/lib/ocaml
+S /Users/ozziegooen/Exercism/reasonml/prediction-app/packages/client/node_modules/@glennsl/bs-json/lib/ocaml
+B /Users/ozziegooen/Exercism/reasonml/prediction-app/packages/client/node_modules/@glennsl/bs-json/lib/ocaml
+S /Users/ozziegooen/Exercism/reasonml/prediction-app/packages/client/node_modules/rationale/lib/ocaml
+B /Users/ozziegooen/Exercism/reasonml/prediction-app/packages/client/node_modules/rationale/lib/ocaml
+S /Users/ozziegooen/Exercism/reasonml/prediction-app/packages/client/node_modules/bs-moment/lib/ocaml
+B /Users/ozziegooen/Exercism/reasonml/prediction-app/packages/client/node_modules/bs-moment/lib/ocaml
 S src/utility
 B lib/bs/src/utility
 S src/symbolic

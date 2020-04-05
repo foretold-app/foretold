@@ -1,0 +1,39 @@
+{
+  "name": "@foretold/bs-distplus",
+  "version": "0.0.2",
+  "scripts": {
+    "build": "bsb -make-world",
+    "start": "bsb -make-world -w -ws _ ",
+    "clean": "bsb -clean-world",
+    "test": "jest",
+    "test:ci": "yarn jest",
+    "watch:test": "jest --watchAll",
+    "watch:s": "yarn jest -- Converter_test --watch"
+  },
+  "keywords": [
+    "BuckleScript",
+    "ReasonReact",
+    "reason-react"
+  ],
+  "author": "Ozzie Gooen",
+  "license": "MIT",
+  "dependencies": {
+    "@glennsl/bs-jest": "0.4.9",
+    "@glennsl/bs-json": "5.0.2",
+    "autoprefixer": "9.7.4",
+    "bs-moment": "0.4.4",
+    "bs-platform": "7.0.1",
+    "bsb-js": "1.1.7",
+    "gh-pages": "2.2.0",
+    "jest": "25.1.0",
+    "jstat": "1.9.2",
+    "less": "3.10.3",
+    "lodash": "4.17.15",
+    "mathjs": "5.10.3",
+    "moduleserve": "0.9.1",
+    "moment": "2.24.0",
+    "parcel-bundler": "1.12.4",
+    "pdfast": "0.2.0",
+    "rationale": "0.2.0"
+  }
+}

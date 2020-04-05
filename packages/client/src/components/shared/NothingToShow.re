@@ -1,5 +1,3 @@
-open Utils;
-
 module Styles = {
   open Css;
   let centerBlock = style([textAlign(`center), margin(`em(2.))]);

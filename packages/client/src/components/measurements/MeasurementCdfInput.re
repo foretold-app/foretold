@@ -197,51 +197,26 @@ module BotsSelect = {
 
 module ValueInput = {
   module Distributions = {
-    let toGuesstimateInputs = ((ys, xs)): GuesstimateInput.input => {
-      "name": "AG",
-      "xs": xs,
-      "ys": ys,
-    };
-
-    let input =
-        (measurable: Types.measurable): option(GuesstimateInput.input) =>
-      measurable.previousAggregate
-      |> E.O.bind(_, agg =>
-           switch (agg.value) {
-           | Ok(`FloatCdf(e)) =>
-             Some(
-               e |> MeasurementValue.FloatCdf.toArrays |> toGuesstimateInputs,
-             )
-           | _ => None
-           }
-         );
-
-    let inputs = measurable =>
-      input(measurable) |> E.O.fmap(r => [|r|]) |> E.O.default([||]);
 
     let floatCdf = (measurable: Types.measurable, send) => {
-      <GuesstimateInput
-        focusOnRender=true
-        sampleCount=30000
-        min={measurable.min}
-        max={measurable.max}
-        inputs={inputs(measurable)}
-        onUpdate={(event, sampler) =>
-          {
-            let (ys, xs, hasLimitError) = event;
-            let asGroup: ForetoldComponents.Types.Dist.t = {xs, ys};
-
-            switch (sampler##isRangeDistribution) {
-            | true => send(UpdateCdfType("CDF"))
-            | _ => send(UpdateCdfType("POINT"))
-            };
-
-            send(UpdateHasLimitError(hasLimitError));
-            send(UpdateFloatCdf(asGroup));
-          }
-          |> ignore
+      <Antd.Input
+        onChange={e =>
+          ReactEvent.Form.target(e)##value
+          |> (r => {
+            let distPlusInput = DistPlusInput.run(r);
+            switch(distPlusInput){
+              | `Float(f) => {
+                send(UpdateCdfType("POINT"))
+                send(UpdateFloatCdf(f))
+                }
+              | `Dist(f) => {
+                send(UpdateCdfType("CDF"))
+                send(UpdateFloatCdf(f))
+              }
+            }
+            send(UpdateValueText(r))
+          })
         }
-        onChange={text => send(UpdateValueText(text))}
       />;
     };
   };

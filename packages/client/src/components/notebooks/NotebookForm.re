@@ -44,7 +44,7 @@ module FormComponent = {
     <Form.Provider value=reform>
       {switch (result) {
        | Error(_error) => <Sorry />
-       | Loading(_)
+       | Loading
        | Data(_) => <Spin />
        | _ =>
          let notebookRedux = NotebookRedux.reducer();

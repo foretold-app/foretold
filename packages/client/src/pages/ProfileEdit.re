@@ -13,7 +13,7 @@ module Form = ReForm.Make(FormConfig);
 
 let testName = (str: string) => {
   let exp = () => [%re "/^[a-z0-9._]{0,30}$/i"];
-  let res = exp() |> Js.Re.exec(str);
+  let res = exp() |> Js.Re.exec_(_, str);
   switch (res) {
   | Some(_) => true
   | _ => false

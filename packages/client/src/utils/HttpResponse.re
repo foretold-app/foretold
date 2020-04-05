@@ -45,7 +45,7 @@ let isSuccess = (result: t('a)) =>
 let withReactDefaults = (result: t(ReasonReact.reactElement)) =>
   switch (result) {
   | Success(response) => response
-  | Error(e) => <Sorry />
+  | Error(_) => <Sorry />
   | Loading => <Spin />
   };
 

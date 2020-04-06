@@ -85,7 +85,9 @@
   },
   "alias": {
     "react": "./node_modules/react",
-    "react-dom": "./node_modules/react-dom"
+    "react-dom": "./node_modules/react-dom",
+    "bs-platform": "./node_modules/bs-platform",
+    "remark-parse": "./node_modules/remark-parse"
   },
   "externals": {
     "/env.js": false

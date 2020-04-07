@@ -5,14 +5,14 @@ FLG -ppx '/home/roman/PhpstormProjects/foretold-app/foretold/packages/client/nod
 S /home/roman/PhpstormProjects/foretold-app/foretold/packages/client/node_modules/bs-platform/lib/ocaml
 B /home/roman/PhpstormProjects/foretold-app/foretold/packages/client/node_modules/bs-platform/lib/ocaml
 FLG -w +a-4-9-40-41-42-50-61-102
-S /home/roman/PhpstormProjects/foretold-app/foretold/packages/client/node_modules/@glennsl/bs-jest/lib/ocaml
-B /home/roman/PhpstormProjects/foretold-app/foretold/packages/client/node_modules/@glennsl/bs-jest/lib/ocaml
-S /home/roman/PhpstormProjects/foretold-app/foretold/packages/client/node_modules/@glennsl/bs-json/lib/ocaml
-B /home/roman/PhpstormProjects/foretold-app/foretold/packages/client/node_modules/@glennsl/bs-json/lib/ocaml
-S /home/roman/PhpstormProjects/foretold-app/foretold/packages/client/node_modules/rationale/lib/ocaml
-B /home/roman/PhpstormProjects/foretold-app/foretold/packages/client/node_modules/rationale/lib/ocaml
-S /home/roman/PhpstormProjects/foretold-app/foretold/packages/client/node_modules/bs-moment/lib/ocaml
-B /home/roman/PhpstormProjects/foretold-app/foretold/packages/client/node_modules/bs-moment/lib/ocaml
+S /home/roman/PhpstormProjects/foretold-app/foretold/packages/client/node_modules/@foretold/bs-distplus/node_modules/@glennsl/bs-jest/lib/ocaml
+B /home/roman/PhpstormProjects/foretold-app/foretold/packages/client/node_modules/@foretold/bs-distplus/node_modules/@glennsl/bs-jest/lib/ocaml
+S /home/roman/PhpstormProjects/foretold-app/foretold/packages/client/node_modules/@foretold/bs-distplus/node_modules/@glennsl/bs-json/lib/ocaml
+B /home/roman/PhpstormProjects/foretold-app/foretold/packages/client/node_modules/@foretold/bs-distplus/node_modules/@glennsl/bs-json/lib/ocaml
+S /home/roman/PhpstormProjects/foretold-app/foretold/packages/client/node_modules/@foretold/components/node_modules/rationale/lib/ocaml
+B /home/roman/PhpstormProjects/foretold-app/foretold/packages/client/node_modules/@foretold/components/node_modules/rationale/lib/ocaml
+S /home/roman/PhpstormProjects/foretold-app/foretold/packages/client/node_modules/@foretold/components/node_modules/bs-moment/lib/ocaml
+B /home/roman/PhpstormProjects/foretold-app/foretold/packages/client/node_modules/@foretold/components/node_modules/bs-moment/lib/ocaml
 S src/distribution
 B lib/bs/src/distribution
 S src/symbolic

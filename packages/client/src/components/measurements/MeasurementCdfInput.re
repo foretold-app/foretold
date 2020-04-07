@@ -197,25 +197,24 @@ module BotsSelect = {
 
 module ValueInput = {
   module Distributions = {
-
     let floatCdf = (measurable: Types.measurable, send) => {
       <Antd.Input
         onChange={e =>
           ReactEvent.Form.target(e)##value
-          |> (r => {
-            let distPlusInput = DistPlusInput.run(r);
-            switch(distPlusInput){
-              | `Float(f) => {
-                send(UpdateCdfType("POINT"))
-                send(UpdateFloatCdf(f))
-                }
-              | `Dist(f) => {
-                send(UpdateCdfType("CDF"))
-                send(UpdateFloatCdf(f))
-              }
+          |> (
+            r => {
+              let distPlusInput = DistPlusInput.run(r);
+              switch (distPlusInput) {
+              | `Float(f) =>
+                send(UpdateCdfType("POINT"));
+                send(UpdateFloatCdf(f));
+              | `Dist(f) =>
+                send(UpdateCdfType("CDF"));
+                send(UpdateFloatCdf(f));
+              };
+              send(UpdateValueText(r));
             }
-            send(UpdateValueText(r))
-          })
+          )
         }
       />;
     };
@@ -581,7 +580,7 @@ let make =
   <Style.BorderedBox>
     {switch (data.result) {
      | Loading => <Spin />
-     | Error(e) => <> {"Error: " ++ e##message |> ste} block </>
+     | Error(e) => <> {"Error: " ++ e.message |> ste} block </>
      | Data(_) => "Form submitted successfully." |> ste |> E.React2.inH2
      | NotCalled => block
      }}

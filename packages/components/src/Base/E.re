@@ -111,13 +111,13 @@ module L = {
 
 /* A for Array */
 module A = {
-  let fmap = Array.map;
+  let fmap: ('a => 'b, array('a)) => array('b) = Array.map;
   let fmapi = Array.mapi;
   let to_list = Array.to_list;
   let of_list = Array.of_list;
   let length = Array.length;
   let append = Array.append;
-  let empty = [||];
+  //  let empty = [||];
   let unsafe_get = Array.unsafe_get;
   let get = Belt.Array.get;
   let fold_left = Array.fold_left;

@@ -6,7 +6,7 @@ type t('a) =
 let fromApollo = (b: ReasonApolloTypes.queryResponse('a)) =>
   switch (b) {
   | Loading => Loading
-  | Error(e) => Error(e##message)
+  | Error(e) => Error(e.message)
   | Data(c) => Success(c)
   };
 

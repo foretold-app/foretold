@@ -6,6 +6,7 @@ module FormConfig = [%lenses
     description: string,
     isPublic: string,
     isArchived: string,
+    requireVerification: string,
     knowledgeGraph: string,
   }
 ];
@@ -147,6 +148,18 @@ module FormComponent = {
                 }
               />,
             )}
+           <Form.Field
+             field=FormConfig.RequireVerification
+             render={({handleChange, error, value}) =>
+               <Antd.Form.Item label={"Require verification" |> Utils.ste}>
+                 <Antd_Switch
+                   checked={value == "TRUE"}
+                   onChange={e => handleChange(e ? "TRUE" : "FALSE")}
+                 />
+                 <Warning error />
+               </Antd.Form.Item>
+             }
+           />
            <Antd.Form.Item>
              {reform.state.formState == Submitting
                 ? <Spin />
@@ -182,6 +195,8 @@ module Create = {
                       state.values.description |> E.J.O.fromString,
                     "isPublic": state.values.isPublic |> E.Bool.fromString,
                     "isArchived": state.values.isArchived |> E.Bool.fromString,
+                    "requireVerification":
+                      state.values.requireVerification |> E.Bool.fromString,
                     "knowledgeGraph":
                       state.values.knowledgeGraph |> E.J.O.fromString,
                   },
@@ -206,6 +221,7 @@ module Create = {
           description: "",
           isPublic: "TRUE",
           isArchived: "FALSE",
+          requireVerification: "FALSE",
           knowledgeGraph: "",
         },
         (),
@@ -238,6 +254,8 @@ module Edit = {
                       state.values.description |> E.J.O.fromString,
                     "isPublic": state.values.isPublic |> E.Bool.fromString,
                     "isArchived": state.values.isArchived |> E.Bool.fromString,
+                    "requireVerification":
+                      state.values.requireVerification |> E.Bool.fromString,
                     "knowledgeGraph":
                       state.values.knowledgeGraph |> E.J.O.fromString,
                   },
@@ -262,6 +280,7 @@ module Edit = {
           description: channel.description |> E.O.default(""),
           isPublic: channel.isPublic |> E.Bool.toString,
           isArchived: channel.isArchived |> E.Bool.toString,
+          requireVerification: channel.requireVerification |> E.Bool.toString,
           knowledgeGraph: channel.knowledgeGraph |> E.O.default(""),
         },
         (),

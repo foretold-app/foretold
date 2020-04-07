@@ -20,7 +20,9 @@ const channel = new graphql.GraphQLObjectType({
     isPublic: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
     isCurated: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
     isBookmarked: { type: graphql.GraphQLBoolean },
-    requireVerification: { type: graphql.GraphQLBoolean },
+    requireVerification: {
+      type: graphql.GraphQLNonNull(graphql.GraphQLBoolean),
+    },
     knowledgeGraph: { type: string0to32K },
     bookmarksCount: { type: graphql.GraphQLNonNull(graphql.GraphQLInt) },
 

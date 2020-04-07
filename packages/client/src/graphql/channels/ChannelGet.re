@@ -9,6 +9,7 @@ module Query = [%graphql
         description
         isArchived
         isPublic
+        requireVerification
         membershipCount
         notebooksCount
         myRole
@@ -46,6 +47,7 @@ let toChannel = channel => {
     ~knowledgeGraph=channel##knowledgeGraph |> E.J.O.toString,
     ~bookmarksCount=Some(channel##bookmarksCount),
     ~isBookmarked=channel##isBookmarked,
+    ~requireVerification=channel##requireVerification,
     (),
   );
 };

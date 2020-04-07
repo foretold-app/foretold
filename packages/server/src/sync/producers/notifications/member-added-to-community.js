@@ -1,4 +1,4 @@
-const { Producer } = require('./../producer');
+const { Producer } = require('../producer');
 const { MemberToCommunity } = require('./member-to-community');
 
 class MemberAddedToCommunity extends MemberToCommunity {

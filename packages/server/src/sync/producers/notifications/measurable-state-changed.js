@@ -1,7 +1,7 @@
 const assert = require('assert');
 const _ = require('lodash');
 
-const { Producer } = require('./../producer');
+const { Producer } = require('../producer');
 const { MeasurableState } = require('./measurable-state');
 const { MEASURABLE_STATE } = require('../../../enums');
 const logger = require('../../../lib/log');

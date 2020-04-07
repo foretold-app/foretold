@@ -20,6 +20,9 @@ const channel = new graphql.GraphQLObjectType({
     isPublic: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
     isCurated: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
     isBookmarked: { type: graphql.GraphQLBoolean },
+    requireVerification: {
+      type: graphql.GraphQLNonNull(graphql.GraphQLBoolean),
+    },
     knowledgeGraph: { type: string0to32K },
     bookmarksCount: { type: graphql.GraphQLNonNull(graphql.GraphQLInt) },
 
@@ -68,6 +71,9 @@ const channelInput = new graphql.GraphQLInputObjectType({
     name: { type: graphql.GraphQLNonNull(string3to255) },
     isPublic: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
     isArchived: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
+    requireVerification: {
+      type: graphql.GraphQLNonNull(graphql.GraphQLBoolean),
+    },
     description: { type: string3to4K },
     knowledgeGraph: { type: string0to32K },
   }),

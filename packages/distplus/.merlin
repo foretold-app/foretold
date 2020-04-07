@@ -1,21 +1,20 @@
 ####{BSB GENERATED: NO EDIT
 B lib/bs
 FLG -open ForetoldBsDistplus
-FLG -ppx '/Users/ozziegooen/Exercism/reasonml/prediction-app/packages/client/node_modules/bs-platform/lib/bsppx.exe -bs-jsx 3'
-S /Users/ozziegooen/Exercism/reasonml/prediction-app/packages/client/node_modules/bs-platform/lib/ocaml
-B /Users/ozziegooen/Exercism/reasonml/prediction-app/packages/client/node_modules/bs-platform/lib/ocaml
-FLG -nostdlib
-FLG -w -30-40+6+7+27+32..39+44+45+101
-S /Users/ozziegooen/Exercism/reasonml/prediction-app/packages/client/node_modules/@glennsl/bs-jest/lib/ocaml
-B /Users/ozziegooen/Exercism/reasonml/prediction-app/packages/client/node_modules/@glennsl/bs-jest/lib/ocaml
-S /Users/ozziegooen/Exercism/reasonml/prediction-app/packages/client/node_modules/@glennsl/bs-json/lib/ocaml
-B /Users/ozziegooen/Exercism/reasonml/prediction-app/packages/client/node_modules/@glennsl/bs-json/lib/ocaml
-S /Users/ozziegooen/Exercism/reasonml/prediction-app/packages/client/node_modules/rationale/lib/ocaml
-B /Users/ozziegooen/Exercism/reasonml/prediction-app/packages/client/node_modules/rationale/lib/ocaml
-S /Users/ozziegooen/Exercism/reasonml/prediction-app/packages/client/node_modules/bs-moment/lib/ocaml
-B /Users/ozziegooen/Exercism/reasonml/prediction-app/packages/client/node_modules/bs-moment/lib/ocaml
-S src/utility
-B lib/bs/src/utility
+FLG -ppx '/home/roman/PhpstormProjects/foretold-app/foretold/packages/client/node_modules/bs-platform/linux/bsc.exe -as-ppx -bs-jsx 3'
+S /home/roman/PhpstormProjects/foretold-app/foretold/packages/client/node_modules/bs-platform/lib/ocaml
+B /home/roman/PhpstormProjects/foretold-app/foretold/packages/client/node_modules/bs-platform/lib/ocaml
+FLG -w +a-4-9-40-41-42-50-61-102
+S /home/roman/PhpstormProjects/foretold-app/foretold/packages/client/node_modules/@foretold/bs-distplus/node_modules/@glennsl/bs-jest/lib/ocaml
+B /home/roman/PhpstormProjects/foretold-app/foretold/packages/client/node_modules/@foretold/bs-distplus/node_modules/@glennsl/bs-jest/lib/ocaml
+S /home/roman/PhpstormProjects/foretold-app/foretold/packages/client/node_modules/@foretold/bs-distplus/node_modules/@glennsl/bs-json/lib/ocaml
+B /home/roman/PhpstormProjects/foretold-app/foretold/packages/client/node_modules/@foretold/bs-distplus/node_modules/@glennsl/bs-json/lib/ocaml
+S /home/roman/PhpstormProjects/foretold-app/foretold/packages/client/node_modules/@foretold/components/node_modules/rationale/lib/ocaml
+B /home/roman/PhpstormProjects/foretold-app/foretold/packages/client/node_modules/@foretold/components/node_modules/rationale/lib/ocaml
+S /home/roman/PhpstormProjects/foretold-app/foretold/packages/client/node_modules/@foretold/components/node_modules/bs-moment/lib/ocaml
+B /home/roman/PhpstormProjects/foretold-app/foretold/packages/client/node_modules/@foretold/components/node_modules/bs-moment/lib/ocaml
+S src/distribution
+B lib/bs/src/distribution
 S src/symbolic
 B lib/bs/src/symbolic
 S src/distribution

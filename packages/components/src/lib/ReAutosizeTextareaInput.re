@@ -7,10 +7,10 @@ external guesstimateInput: ReasonReact.reactClass = "AutosizeTextareaInput";
 [@react.component]
 let make =
     (
-      ~rows: int=?,
-      ~maxRows: int=?,
-      ~minRows: int=?,
-      ~useCacheForDOMMeasurements: bool=?,
+      ~rows: option(int)=?,
+      ~maxRows: option(int)=?,
+      ~minRows: option(int)=?,
+      ~useCacheForDOMMeasurements: option(bool)=?,
       ~value="",
       ~onChange=fn,
       ~onHeightChange=fn2,

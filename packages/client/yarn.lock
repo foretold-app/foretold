@@ -1891,10 +1891,10 @@ browserslist@^4.0.0, browserslist@^4.1.0, browserslist@^4.6.0, browserslist@^4.7
     electron-to-chromium "^1.3.295"
     node-releases "^1.1.38"
 
-bs-ant-design-alt@2.0.0-alpha.32:
-  version "2.0.0-alpha.32"
-  resolved "https://registry.yarnpkg.com/bs-ant-design-alt/-/bs-ant-design-alt-2.0.0-alpha.32.tgz#544319a084ae870bfb7514d492f8ea4aa61a3982"
-  integrity sha512-FTf+SHAIbUBGT6VClbUZrd1TjNJXTdq1hMv2DSowWWJpXlVOH0NjXxUvTkL8cAwNTd6peWTaLLkdk79frI7kLA==
+bs-ant-design-alt@2.0.0-alpha.33:
+  version "2.0.0-alpha.33"
+  resolved "https://registry.yarnpkg.com/bs-ant-design-alt/-/bs-ant-design-alt-2.0.0-alpha.33.tgz#13dc94f4fe4e7525485515cca2d2eae298940045"
+  integrity sha512-C+REAjuxExzQnPP5KySwNd8Pizs0VGnrrF/6YlraErWr/Bjf3fqn6and3UXyHqi+DAj15IxY6e7lkaghQgO0eA==
   dependencies:
     antd "3.17.0"
     bs-moment "^0.4.4"
@@ -1936,6 +1936,11 @@ bs-platform@7.0.1:
   version "7.0.1"
   resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-7.0.1.tgz#1d7b0ef6088b998dceee5db74a7cd8f01c20a3bd"
   integrity sha512-UjStdtHhbtC/l6vKJ1XRDqrPk7rFf5PLYHtRX3akDXEYVnTbN36z0g4DEr5mU8S0N945e33HYts9x+i7hKKpZQ==
+
+bs-platform@7.2.2:
+  version "7.2.2"
+  resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-7.2.2.tgz#76fdc63e4889458ae3d257a0132107a792f2309c"
+  integrity sha512-PWcFfN+jCTtT/rMaHDhKh+W9RUTpaRunmSF9vbLYcrJbpgCNW6aFKAY33u0P3mLxwuhshN3b4FxqGUBPj6exZQ==
 
 bs-reform@9.7.1:
   version "9.7.1"
@@ -7406,10 +7411,10 @@ reason-apollo-hooks@2.4.0:
   resolved "https://registry.yarnpkg.com/reason-apollo-hooks/-/reason-apollo-hooks-2.4.0.tgz#afc24f9e3d14333b852af8f7007e2f5ddd70e441"
   integrity sha512-tdfQH8oxfLx0qWHJak2roMZB1+YPdqY1lY3qBJXhc2TMQ8m5aQIVJO5n3ujeC2UVeqCHyoLC3wDjLOR9krqs7A==
 
-reason-apollo@0.18.0:
-  version "0.18.0"
-  resolved "https://registry.yarnpkg.com/reason-apollo/-/reason-apollo-0.18.0.tgz#cc970da88de7ac603753eed68984c8492f0665c6"
-  integrity sha512-lw+IoIZ8qoX3iGOFFK//yMVC+Xmf+OcSyKkRgbBn0uG5GomLLMLiKRgjkhUsjAqJ4b3Se7H9JFnso5nL+GFEMA==
+reason-apollo@0.19.0:
+  version "0.19.0"
+  resolved "https://registry.yarnpkg.com/reason-apollo/-/reason-apollo-0.19.0.tgz#16940916cd5c912a74fb9da57f4de063b20b6e6f"
+  integrity sha512-VpKHvdzBiLtIg+T/AC100ZNztr7KklIXzlnSd4o/T2vGnwFgVgHIG6//c+Hz8nFjaVUXfk1tFlxnVfBhhKQC4g==
   dependencies:
     apollo-cache-inmemory "^1.6.0"
     apollo-client "^2.6.3"

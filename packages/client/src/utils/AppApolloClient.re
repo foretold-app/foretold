@@ -10,16 +10,16 @@ let httpLink = _ => ApolloLinks.createHttpLink(~uri=Env.serverUrl, ());
 let contextLink = (tokens: ServerJwt.t) =>
   ApolloLinks.createContextLink(() => {"headers": storageToHeaders(tokens)});
 
-let isUnauthenticated = error =>
-  error##graphQLErrors
+let isUnauthenticated = (error: ReasonApolloTypes.errorResponse): bool =>
+  error.graphQLErrors
   |> Js.Nullable.toOption
-  |> E.O.fmap(graphQLErrors =>
+  |> E.O.fmap((graphQLErrors: Js.Array.t(ReasonApolloTypes.graphqlError)) =>
        graphQLErrors
-       |> Js.Array.find(err =>
-            err##extensions
+       |> Js.Array.find((err: ReasonApolloTypes.graphqlError) =>
+            err.extensions
             |> Js.Nullable.toOption
-            |> E.O.fmap(extensions =>
-                 extensions##code
+            |> E.O.fmap((extensions: ReasonApolloTypes.apolloErrorExtensions) =>
+                 extensions.code
                  |> Js.Nullable.toOption
                  |> E.O.fmap(code => code === "UNAUTHENTICATED")
                  |> E.O.default(false)
@@ -31,21 +31,25 @@ let isUnauthenticated = error =>
      )
   |> E.O.default(false);
 
-let isCode400 = error =>
-  error##networkError
+let isCode400 = (error: ReasonApolloTypes.errorResponse): bool =>
+  error.networkError
   |> Js.Nullable.toOption
-  |> E.O.fmap(networkError => networkError##statusCode == 400)
+  |> E.O.fmap((networkError: ReasonApolloTypes.networkError) =>
+       networkError.statusCode == 400
+     )
   |> E.O.default(false);
 
 let errorLink = _ =>
-  ApolloLinks.apolloLinkOnError(error => {
-    Js.log2("GraphQL Error!", Js.Json.stringifyAny(error));
+  ApolloLinks.apolloLinkOnError((error: ReasonApolloTypes.errorResponse) => {
+    //    Js.log2("GraphQL Error!", Js.Json.stringifyAny(error));
 
     switch (error |> isUnauthenticated, error |> isCode400, Env.clientEnv) {
     | (true, _, _)
     | (_, true, Production) => Auth.Actions.logout()
     | _ => ()
     };
+
+    ();
   });
 
 let link = serverJwt =>

@@ -4291,6 +4291,22 @@
               "deprecationReason": null
             },
             {
+              "name": "requireVerification",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "knowledgeGraph",
               "description": null,
               "args": [],
@@ -9167,6 +9183,20 @@
             },
             {
               "name": "isArchived",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "requireVerification",
               "description": null,
               "type": {
                 "kind": "NON_NULL",

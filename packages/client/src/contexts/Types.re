@@ -128,6 +128,7 @@ and channel = {
   isArchived: bool,
   isPublic: bool,
   isCurated: bool,
+  requireVerification: bool,
   membershipCount: option(int),
   creator: option(agent),
   myRole: option(myMembershipRole),

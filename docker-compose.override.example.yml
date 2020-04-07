@@ -57,6 +57,8 @@ services:
     command: ["postgres", "-c", "log_statement=all"]
     environment:
       - POSTGRES_PASSWORD=password # 6.2
+    ports:
+      - "31001:5432"
 
   pgadmin:
     image: dpage/pgadmin4

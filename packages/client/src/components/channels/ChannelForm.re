@@ -151,7 +151,10 @@ module FormComponent = {
            <Form.Field
              field=FormConfig.RequireVerification
              render={({handleChange, error, value}) =>
-               <Antd.Form.Item label={"Require verification" |> Utils.ste}>
+               <Antd.Form.Item
+                 label={
+                   "Restrict forecasting to verified members" |> Utils.ste
+                 }>
                  <Antd_Switch
                    checked={value == "TRUE"}
                    onChange={e => handleChange(e ? "TRUE" : "FALSE")}

@@ -80,6 +80,14 @@ const rulesChannelMemberships = () => ({
         not(membershipBelongsToCurrentAgent),
       ),
     ),
+    channelMembershipVerify: and(
+      currentAgentIsAuthenticated,
+      currentAgentIsApplicationAdminOrChannelAdmin,
+    ),
+    channelMembershipUnverify: and(
+      currentAgentIsAuthenticated,
+      currentAgentIsApplicationAdminOrChannelAdmin,
+    ),
   },
 });
 

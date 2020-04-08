@@ -15,21 +15,12 @@ module Mutation = ReasonApollo.CreateMutation(Query);
 let mutate = (mutation: Mutation.apolloMutation, agentId, channelId) => {
   let m =
     Query.make(
-      ~input={
-        "channelId": Some(channelId),
-        "agentId": Some(agentId),
-        "role": `VIEWER,
-      },
+      ~input={"channelId": channelId, "agentId": agentId, "role": `VIEWER},
       (),
     );
   mutation(
     ~variables=m##variables,
-    ~refetchQueries=[|
-      "channels",
-      "user",
-      "channel",
-      "channelMemberships",
-    |],
+    ~refetchQueries=[|"channels", "user", "channel", "channelMemberships"|],
     (),
   )
   |> ignore;

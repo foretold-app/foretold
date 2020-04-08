@@ -16,11 +16,7 @@ let mutate =
     (mutation: Mutation.apolloMutation, ~agentId: string, ~channelId, ~role) => {
   let m =
     Query.make(
-      ~input={
-        "agentId": Some(agentId),
-        "channelId": Some(channelId),
-        "role": role,
-      },
+      ~input={"agentId": agentId, "channelId": channelId, "role": role},
       (),
     );
   mutation(

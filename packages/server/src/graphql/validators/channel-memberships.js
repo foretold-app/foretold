@@ -26,7 +26,7 @@ async function channelMembershipExistsValidation(root, args, _context, _info) {
   log.trace('\x1b[36m ---> \x1b[0m Validator '
     + '(agentIsInChannel)', { channelId, agentId });
 
-  if (!!channelId || !!agentId) throw new Error(agentIsNotInAChannel());
+  if (!channelId || !agentId) throw new Error(agentIsNotInAChannel());
 
   const params = new Params({ channelId, agentId });
   const query = new Query();

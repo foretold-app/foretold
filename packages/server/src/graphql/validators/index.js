@@ -8,6 +8,7 @@ const { measurableNameValidation } = require('./measurables');
 const { measurementValueTypeValidation } = require('./measurements');
 const { measurementValueValidation } = require('./measurements');
 const { agentExistsValidation } = require('./agents');
+const { channelAgentExistsValidation } = require('./channel-memberships');
 
 /**
  * Do not try to use DRY principle here.
@@ -44,12 +45,14 @@ const validators = {
     channelMembershipVerify: async (resolve, root, args, context, info) => {
       await channelExistsValidation(root, args, context, info);
       await agentExistsValidation(root, args, context, info);
+      await channelAgentExistsValidation(root, args, context, info);
       return resolve(root, args, context, info);
     },
 
     channelMembershipUnverify: async (resolve, root, args, context, info) => {
       await channelExistsValidation(root, args, context, info);
       await agentExistsValidation(root, args, context, info);
+      await channelAgentExistsValidation(root, args, context, info);
       return resolve(root, args, context, info);
     },
 

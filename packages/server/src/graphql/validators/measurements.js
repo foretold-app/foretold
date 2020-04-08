@@ -1,21 +1,11 @@
 const _ = require('lodash');
 
 const { MeasurementValue } = require('../../lib/measurement-value');
-
-const { MeasurementsData } = require('../../data');
-
-const { Params } = require('../../data/classes');
-const { Query } = require('../../data/classes');
-const { Options } = require('../../data/classes');
-
 const { MEASURABLE_STATE } = require('../../enums');
 const { MEASUREMENT_COMPETITOR_TYPE } = require('../../enums');
 const { MEASUREMENT_VALUE } = require('../../enums');
 const { MEASURABLE_VALUE_TYPE } = require('../../enums');
 const lang = require('../../../config/lang');
-const logger = require('../../lib/log');
-
-const log = logger.module('middlewares/measurement');
 
 /**
  * @param {*} root

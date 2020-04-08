@@ -8,3 +8,4 @@ module.exports.measurementValueTypeWrong = () => 'Measurement'
 module.exports.channelDoesNotExists = () => 'A channel is required.';
 module.exports.agentDoesNotExists = () => 'An agent is required.';
 module.exports.notebookDoesNotExists = () => 'A notebook is required.';
+module.exports.agentIsNotInAChannel = () => 'An agent is not in a channel.';

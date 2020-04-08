@@ -5,6 +5,7 @@ const resolvers = require('../resolvers');
 const { channelMembershipRoles } = require('./enums');
 const { channelMembershipRolesOutput } = require('./enums');
 const permissionsTypes = require('./permissions');
+const scalars = require('./scalars');
 
 const channelsMembership = new graphql.GraphQLObjectType({
   name: 'ChannelsMembership',
@@ -60,8 +61,8 @@ const joiningChannelInput = new graphql.GraphQLInputObjectType({
 const channelMembershipVerifyInput = new graphql.GraphQLInputObjectType({
   name: 'ChannelMembershipVerifyInput',
   fields: () => ({
-    agentId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-    channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    agentId: { type: graphql.GraphQLNonNull(scalars.agentId) },
+    channelId: { type: graphql.GraphQLNonNull(scalars.channelId) },
   }),
 });
 

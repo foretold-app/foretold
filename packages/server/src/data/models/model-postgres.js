@@ -137,10 +137,16 @@ class ModelPostgres extends Model {
     this.applyRestrictions(where, restrictions);
     this.applyFilter(where, filter);
 
+    // Block 2
+    const order = pagination.isOrderSet()
+      ? this._getOrderFromPagination(pagination)
+      : this._getDefaultOrder();
+
     const findCond = {
       limit: pagination.limit,
       offset: pagination.offset,
       where,
+      order,
     };
     this._extendGenericConditions(findCond, options);
     this._extendAdvancedConditions(findCond, options);
@@ -194,12 +200,12 @@ class ModelPostgres extends Model {
     this._extendAdvancedConditions(findCond, options);
     const data = await this.model.findAll(findCond);
 
-    // Block 1
+    // Block 3
     const countCond = { where, include };
     this._extendGenericConditions(countCond, options);
     const total = await this.model.count(countCond);
 
-    // Block 3
+    // Block 4
     const spacedLimit = filter.getSpacedLimit();
     return new ResponseAll(data, total, offset, spacedLimit);
   }

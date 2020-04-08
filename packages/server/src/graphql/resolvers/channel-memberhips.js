@@ -184,9 +184,8 @@ async function membershipCount(root, _args, _context, _info) {
 async function verify(_root, args) {
   const channelId = _.get(args, 'input.channelId', null);
   const agentId = _.get(args, 'input.agentId', null);
-  const params = new Params({ channelId, agentId });
   const isVerified = true;
-  return new ChannelMembershipsData().verify(params, isVerified);
+  return new ChannelMembershipsData().verify(channelId, agentId, isVerified);
 }
 
 /**
@@ -200,9 +199,8 @@ async function verify(_root, args) {
 async function unverify(_root, args) {
   const channelId = _.get(args, 'input.channelId', null);
   const agentId = _.get(args, 'input.agentId', null);
-  const params = new Params({ channelId, agentId });
-  const isVerified = true;
-  return new ChannelMembershipsData().verify(params, isVerified);
+  const isVerified = false;
+  return new ChannelMembershipsData().verify(channelId, agentId, isVerified);
 }
 
 module.exports = {

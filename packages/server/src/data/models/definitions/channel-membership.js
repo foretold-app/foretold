@@ -39,6 +39,10 @@ module.exports = (sequelize, DataTypes) => {
       ]),
       defaultValue: CHANNEL_MEMBERSHIP_TYPE.ADDED_IN_APP_BY_ADMIN,
     },
+    isVerified: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
     createdAt: {
       type: DataTypes.DATE,
       defaultValue: sequelize.fn('statement_timestamp'),

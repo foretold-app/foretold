@@ -34,8 +34,8 @@ const channelsMembership = new graphql.GraphQLObjectType({
 const channelMembershipRoleInput = new graphql.GraphQLInputObjectType({
   name: 'ChannelMembershipRoleInput',
   fields: () => ({
-    agentId: { type: graphql.GraphQLString },
-    channelId: { type: graphql.GraphQLString },
+    agentId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     role: {
       type: graphql.GraphQLNonNull(channelMembershipRoles),
     },
@@ -45,15 +45,15 @@ const channelMembershipRoleInput = new graphql.GraphQLInputObjectType({
 const channelMembershipDeleteInput = new graphql.GraphQLInputObjectType({
   name: 'ChannelMembershipDeleteInput',
   fields: () => ({
-    agentId: { type: graphql.GraphQLString },
-    channelId: { type: graphql.GraphQLString },
+    agentId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
   }),
 });
 
 const joiningChannelInput = new graphql.GraphQLInputObjectType({
   name: 'JoiningChannelInput',
   fields: () => ({
-    channelId: { type: graphql.GraphQLString },
+    channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
   }),
 });
 

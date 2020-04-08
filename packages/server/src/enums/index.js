@@ -24,6 +24,10 @@ const { TOKEN_TYPE } = require('./token-type');
 const { TEMPLATE_TYPE } = require('./template-type');
 const { MEASUREMENT_VALUE } = require('./measurement-value');
 
+/**
+ * @todo: Combine all small enum file in this file.
+ */
+
 module.exports = {
   MARKET_TYPE,
   START_AT,

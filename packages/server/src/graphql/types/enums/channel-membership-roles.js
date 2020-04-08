@@ -11,6 +11,9 @@ const channelMembershipRoles = new graphql.GraphQLEnumType({
     [CHANNEL_MEMBERSHIP_ROLES.VIEWER]: {
       value: CHANNEL_MEMBERSHIP_ROLES.VIEWER,
     },
+    [CHANNEL_MEMBERSHIP_ROLES.VERIFIED]: {
+      value: CHANNEL_MEMBERSHIP_ROLES.VERIFIED,
+    },
   },
 });
 

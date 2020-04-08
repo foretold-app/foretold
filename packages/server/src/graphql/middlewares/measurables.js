@@ -5,8 +5,6 @@ const { MeasurablesData } = require('../../data');
 const { Params } = require('../../data/classes');
 const { Query } = require('../../data/classes');
 const { Options } = require('../../data/classes');
-
-const { measurableEmptyName } = require('../../../config/lang');
 const logger = require('../../lib/log');
 
 const log = logger.module('middlewares/measurables');
@@ -55,26 +53,7 @@ async function setContextMeasurableByRoot(root, args, context, _info) {
   context.measurable = root || null;
 }
 
-/**
- * @param {*} root
- * @param {object} args
- * @param {Schema.Context} _context
- * @param {object} _info
- * @return {Promise<boolean>}
- */
-async function measurableNameValidation(root, args, _context, _info) {
-  const name = _.get(args, 'input.name', null);
-  const labelSubject = _.get(args, 'input.labelSubject', null);
-  const isName = !!name || !!labelSubject;
-
-  if (!isName) throw new Error(measurableEmptyName());
-
-  return true;
-}
-
 module.exports = {
-  measurableNameValidation,
-
   setContextMeasurable,
   setContextMeasurableByRoot,
 };

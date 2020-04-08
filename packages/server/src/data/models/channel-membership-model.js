@@ -1,9 +1,7 @@
 const models = require('./definitions');
 const { ModelPostgres } = require('./model-postgres');
 
-const {
-  CHANNEL_MEMBERSHIP_ROLES,
-} = require('../../enums/channel-membership-roles');
+const { CHANNEL_MEMBERSHIP_ROLES } = require('../../enums');
 
 class ChannelMembershipModel extends ModelPostgres {
   constructor() {

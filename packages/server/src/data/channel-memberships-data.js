@@ -77,6 +77,33 @@ class ChannelMembershipsData extends DataBase {
    * @param {object} params
    * @param {Defs.AgentID} params.agentId
    * @param {Defs.ChannelID} params.channelId
+   * @param {boolean} isVerified
+   * @return {Promise<boolean>}
+   */
+  async verify(params, isVerified) {
+    assert(!!_.get(params, 'agentId'), 'verify::agentId is required.');
+    assert(!!_.get(params, 'channelId'), 'verify::channelId is required.');
+    assert(_.isBoolean(isVerified), 'isVerified should be boolean.');
+
+    try {
+      const param$ = new Params({
+        agentId: params.agentId,
+        channelId: params.channelId,
+      });
+      const data = new Data({ isVerified });
+      const result = await this.updateOne(param$, data);
+      return !!result;
+    } catch (e) {
+      this.log.error(e.message);
+    }
+    return false;
+  }
+
+  /**
+   * @public
+   * @param {object} params
+   * @param {Defs.AgentID} params.agentId
+   * @param {Defs.ChannelID} params.channelId
    * @return {Promise<string>}
    */
   async getOneOnlyRole(params) {

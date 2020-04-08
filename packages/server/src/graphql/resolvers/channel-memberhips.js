@@ -173,6 +173,38 @@ async function membershipCount(root, _args, _context, _info) {
   return _.get(root, 'membersCount', 0);
 }
 
+/**
+ * @param _root
+ * @param {{input: {
+ * channelId: Models.ChannelID,
+ * agentId: Models.AgentID,
+ * }}} args
+ * @returns {Promise<boolean>}
+ */
+async function verify(_root, args) {
+  const channelId = _.get(args, 'input.channelId', null);
+  const agentId = _.get(args, 'input.agentId', null);
+  const params = new Params({ channelId, agentId });
+  const isVerified = true;
+  return new ChannelMembershipsData().verify(params, isVerified);
+}
+
+/**
+ * @param _root
+ * @param {{input: {
+ * channelId: Models.ChannelID,
+ * agentId: Models.AgentID,
+ * }}} args
+ * @returns {Promise<boolean>}
+ */
+async function unverify(_root, args) {
+  const channelId = _.get(args, 'input.channelId', null);
+  const agentId = _.get(args, 'input.agentId', null);
+  const params = new Params({ channelId, agentId });
+  const isVerified = true;
+  return new ChannelMembershipsData().verify(params, isVerified);
+}
+
 module.exports = {
   allByAgentId,
   allByChannelId,
@@ -183,4 +215,6 @@ module.exports = {
   leave,
   myRole,
   membershipCount,
+  verify,
+  unverify,
 };

@@ -408,6 +408,30 @@ const schema = new graphql.GraphQLSchema({
         resolve: resolvers.channels.create,
       },
 
+      channelMembershipVerify: {
+        type: graphql.GraphQLNonNull(graphql.GraphQLBoolean),
+        args: {
+          input: {
+            type: graphql.GraphQLNonNull(
+              types.channelMemberships.channelMembershipVerifyInput,
+            ),
+          },
+        },
+        resolve: resolvers.channelMemberships.verify,
+      },
+
+      channelMembershipUnverify: {
+        type: graphql.GraphQLNonNull(graphql.GraphQLBoolean),
+        args: {
+          input: {
+            type: graphql.GraphQLNonNull(
+              types.channelMemberships.channelMembershipVerifyInput,
+            ),
+          },
+        },
+        resolve: resolvers.channelMemberships.unverify,
+      },
+
       channelMembershipCreate: {
         type: types.channelMemberships.channelsMembership,
         args: {

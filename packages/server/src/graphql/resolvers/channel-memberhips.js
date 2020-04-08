@@ -23,15 +23,19 @@ async function create(_root, args, context) {
   const input = _.get(args, 'input') || {};
   const inviterAgentId = _.get(context, 'agent.id', null);
 
-  return new ChannelMembershipsData().upsertOne(new Params({
+  const params = new Params({
     channelId: input.channelId,
     agentId: input.agentId,
-  }), new Query(), new Data({
-    channelId: input.channelId,
-    agentId: input.agentId,
+  });
+  const query = new Query();
+  const data = new Data({
     inviterAgentId,
     role: input.role,
-  }));
+    agentId: input.agentId,
+    channelId: input.channelId,
+  });
+
+  return new ChannelMembershipsData().upsertOne(params, query, data);
 }
 
 /**
@@ -46,14 +50,17 @@ async function create(_root, args, context) {
 async function update(_root, args) {
   const input = _.get(args, 'input') || {};
 
-  return new ChannelMembershipsData().updateOne(new Params({
+  const params = new Params({
     channelId: input.channelId,
     agentId: input.agentId,
-  }), new Data({
+  });
+  const data = new Data({
     channelId: input.channelId,
     agentId: input.agentId,
     role: input.role,
-  }));
+  });
+
+  return new ChannelMembershipsData().updateOne(params, data);
 }
 
 /**
@@ -66,10 +73,11 @@ async function update(_root, args) {
  */
 async function remove(_root, args) {
   const input = _.get(args, 'input') || {};
-  return new ChannelMembershipsData().deleteOne(new Params({
+  const params = new Params({
     channelId: input.channelId,
     agentId: input.agentId,
-  }));
+  });
+  return new ChannelMembershipsData().deleteOne(params);
 }
 
 /**
@@ -120,10 +128,8 @@ async function join(_root, args, context, _info) {
   const channelId = _.get(args, 'input.channelId', null);
   const agentId = _.get(context, 'agent.id', null);
 
-  return new ChannelMembershipsData().join({
-    channelId,
-    agentId,
-  });
+  const options = { channelId, agentId };
+  return new ChannelMembershipsData().join(options);
 }
 
 /**
@@ -137,10 +143,8 @@ async function leave(_root, args, context, _info) {
   const channelId = _.get(args, 'input.channelId', null);
   const agentId = _.get(context, 'agent.id', null);
 
-  return new ChannelMembershipsData().leave({
-    channelId,
-    agentId,
-  });
+  const options = { channelId, agentId };
+  return new ChannelMembershipsData().leave(options);
 }
 
 /**
@@ -154,10 +158,8 @@ async function myRole(root, _args, context, _info) {
   const channelId = _.get(root, 'id', null);
   const agentId = _.get(context, 'agent.id', null);
 
-  return new ChannelMembershipsData().getOneOnlyRole(new Params({
-    channelId,
-    agentId,
-  }));
+  const params = new Params({ channelId, agentId });
+  return new ChannelMembershipsData().getOneOnlyRole(params);
 }
 
 /**

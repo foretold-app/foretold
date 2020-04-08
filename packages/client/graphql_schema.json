@@ -4581,6 +4581,18 @@
               "deprecationReason": null
             },
             {
+              "name": "isVerified",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "permissions",
               "description": null,
               "args": [],

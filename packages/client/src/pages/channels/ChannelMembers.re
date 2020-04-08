@@ -55,16 +55,25 @@ module Columns = {
       ~name="Role" |> Utils.ste,
       ~render=
         (membership: Types.channelMembership) =>
-          switch (membership.role) {
-          | `ADMIN =>
-            <div className="ant-tag ant-tag-blue">
-              {"Admin" |> Utils.ste}
-            </div>
-          | `VIEWER =>
-            <div className="ant-tag ant-tag-green">
-              {"Member" |> Utils.ste}
-            </div>
-          },
+          <>
+            {switch (membership.role) {
+             | `ADMIN =>
+               <div className="ant-tag ant-tag-blue">
+                 {"Admin" |> Utils.ste}
+               </div>
+             | `VIEWER =>
+               <div className="ant-tag ant-tag-green">
+                 {"Member" |> Utils.ste}
+               </div>
+             }}
+            {switch (membership.isVerified) {
+             | Some(true) =>
+               <div className="ant-tag ant-tag-magenta">
+                 {"Verified" |> Utils.ste}
+               </div>
+             | _ => <Null />
+             }}
+          </>,
       (),
     );
 
@@ -191,7 +200,11 @@ let succesFn = (~channelId: string, ~channel: Types.channel, ~memberships) => {
   let table =
     <Table columns={Columns.all(channelId, channel)} rows=memberships />;
 
-  <SLayout head> <ForetoldComponents.PageCard.Body> table </ForetoldComponents.PageCard.Body> </SLayout>;
+  <SLayout head>
+    <ForetoldComponents.PageCard.Body>
+      table
+    </ForetoldComponents.PageCard.Body>
+  </SLayout>;
 };
 
 let errorFn = _ => <NotFoundPage />;

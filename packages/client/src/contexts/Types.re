@@ -146,6 +146,7 @@ and channel = {
 and channelMembership = {
   channel: option(channel),
   role: channelMembershipRole,
+  isVerified: option(bool),
   agent: option(agent),
   permissions: option(permissions),
 }

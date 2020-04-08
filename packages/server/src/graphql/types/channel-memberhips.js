@@ -13,6 +13,7 @@ const channelsMembership = new graphql.GraphQLObjectType({
     agentId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     role: { type: graphql.GraphQLNonNull(channelMembershipRoles) },
+    isVerified: { type: graphql.GraphQLBoolean },
 
     permissions: {
       type: graphql.GraphQLNonNull(permissionsTypes.permissions),

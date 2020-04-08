@@ -67,6 +67,14 @@ const channelMembershipVerifyInput = new graphql.GraphQLInputObjectType({
   }),
 });
 
+const channelMembershipUnverifyInput = new graphql.GraphQLInputObjectType({
+  name: 'ChannelMembershipUnverifyInput',
+  fields: () => ({
+    agentId: { type: graphql.GraphQLNonNull(scalars.agentId) },
+    channelId: { type: graphql.GraphQLNonNull(scalars.channelId) },
+  }),
+});
+
 module.exports = {
   role: channelMembershipRoles,
   roleOutput: channelMembershipRolesOutput,
@@ -75,4 +83,5 @@ module.exports = {
   channelMembershipDeleteInput,
   joiningChannelInput,
   channelMembershipVerifyInput,
+  channelMembershipUnverifyInput,
 };

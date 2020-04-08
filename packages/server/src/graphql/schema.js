@@ -425,7 +425,7 @@ const schema = new graphql.GraphQLSchema({
         args: {
           input: {
             type: graphql.GraphQLNonNull(
-              types.channelMemberships.channelMembershipVerifyInput,
+              types.channelMemberships.channelMembershipUnverifyInput,
             ),
           },
         },

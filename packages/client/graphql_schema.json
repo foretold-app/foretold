@@ -7830,7 +7830,7 @@
                     "name": null,
                     "ofType": {
                       "kind": "INPUT_OBJECT",
-                      "name": "ChannelMembershipVerifyInput",
+                      "name": "ChannelMembershipUnverifyInput",
                       "ofType": null
                     }
                   },
@@ -9323,6 +9323,45 @@
         {
           "kind": "INPUT_OBJECT",
           "name": "ChannelMembershipVerifyInput",
+          "description": null,
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "agentId",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "AgentId",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "channelId",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ChannelId",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            }
+          ],
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "ChannelMembershipUnverifyInput",
           "description": null,
           "fields": null,
           "inputFields": [

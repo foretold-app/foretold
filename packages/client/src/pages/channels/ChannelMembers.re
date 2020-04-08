@@ -19,6 +19,40 @@ let changeRoleAction = (agentId, channelId, role, text) =>
     }
   </ChannelMembershipRoleUpdate.Mutation>;
 
+let verify = (agentId, channelId, text) =>
+  <ChannelMembershipVerify.Mutation>
+    ...{(mutation, _) =>
+      <Link
+        linkType={
+          Action(
+            _ =>
+              ChannelMembershipVerify.mutate(mutation, ~agentId, ~channelId),
+          )
+        }>
+        {text |> Utils.ste}
+      </Link>
+    }
+  </ChannelMembershipVerify.Mutation>;
+
+let unverify = (agentId, channelId, text) =>
+  <ChannelMembershipUnverify.Mutation>
+    ...{(mutation, _) =>
+      <Link
+        linkType={
+          Action(
+            _ =>
+              ChannelMembershipUnverify.mutate(
+                mutation,
+                ~agentId,
+                ~channelId,
+              ),
+          )
+        }>
+        {text |> Utils.ste}
+      </Link>
+    }
+  </ChannelMembershipUnverify.Mutation>;
+
 // @todo: To make component.
 let removeFromChannel = (agentId, channelId) =>
   <ChannelMembershipDelete.Mutation>
@@ -116,6 +150,35 @@ module Columns = {
       (),
     );
 
+  let verificationChange = channelId =>
+    Table.Column.make(
+      ~name="Change Verification" |> Utils.ste,
+      ~render=
+        (membership: Types.channelMembership) =>
+          <div>
+            {switch (membership.isVerified, membership.agent) {
+             | (Some(true), Some(agent)) =>
+               E.React2.showIf(
+                 Primary.Permissions.can(
+                   `CHANNEL_MEMBERSHIP_UNVERIFY,
+                   membership.permissions,
+                 ),
+                 unverify(agent.id, channelId, "Remove Verification"),
+               )
+             | (_, Some(agent)) =>
+               E.React2.showIf(
+                 Primary.Permissions.can(
+                   `CHANNEL_MEMBERSHIP_VERIFY,
+                   membership.permissions,
+                 ),
+                 verify(agent.id, channelId, "Verify"),
+               )
+             | _ => <Null />
+             }}
+          </div>,
+      (),
+    );
+
   let removeFromChannel = channelId =>
     Table.Column.make(
       ~name="Remove" |> Utils.ste,
@@ -140,6 +203,7 @@ module Columns = {
         agent,
         role,
         roleChange(channelId),
+        verificationChange(channelId),
         removeFromChannel(channelId),
       |]
     | _ => [|agent, role|]

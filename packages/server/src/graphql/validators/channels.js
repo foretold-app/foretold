@@ -16,7 +16,8 @@ const { Options } = require('../../data/classes');
  * @return {Promise<boolean>}
  */
 async function channelExistsValidation(root, args, _context, _info) {
-  const channelId = _.get(args, 'channelId', null);
+  const channelId = _.get(args, 'channelId', null)
+    || _.get(args, 'input.channelId', null);
 
   const params = new Params({ id: channelId });
   const query = new Query();

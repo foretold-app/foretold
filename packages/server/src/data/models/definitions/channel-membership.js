@@ -23,7 +23,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
     },
     role: {
-      type: DataTypes.STRING(8),
+      // @todo: To change DB schema.
+      type: DataTypes.ENUM([
+        CHANNEL_MEMBERSHIP_ROLES.ADMIN,
+        CHANNEL_MEMBERSHIP_ROLES.VIEWER,
+      ]),
       allowNull: false,
       defaultValue: CHANNEL_MEMBERSHIP_ROLES.VIEWER,
     },

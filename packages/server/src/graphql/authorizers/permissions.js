@@ -23,6 +23,7 @@ const { notebookIsOwnedByCurrentAgent } = require('./notebooks');
 const { rateLimit } = require('./rate-limit');
 const { measurementIsCompetitiveOrCommentOnly } = require('./measurements');
 const { measurementIsOwnedByCurrentAgent } = require('./measurements');
+const { currentAgentIsChannelAdminFromRoot } = require('./channel-memberships');
 
 const currentAgentIsApplicationAdminOrChannelAdmin = or(
   currentAgentIsApplicationAdmin,
@@ -84,11 +85,13 @@ const rulesChannelMemberships = () => ({
       currentAgentIsAuthenticated,
       currentAgentIsApplicationAdminOrChannelAdmin,
       not(membershipBelongsToCurrentAgent),
+      not(currentAgentIsChannelAdminFromRoot),
     ),
     channelMembershipUnverify: and(
       currentAgentIsAuthenticated,
       currentAgentIsApplicationAdminOrChannelAdmin,
       not(membershipBelongsToCurrentAgent),
+      not(currentAgentIsChannelAdminFromRoot),
     ),
   },
 });

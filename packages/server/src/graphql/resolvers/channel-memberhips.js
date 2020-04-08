@@ -48,17 +48,12 @@ async function create(_root, args, context) {
  * @returns {Promise<Models.ChannelMemberships>}
  */
 async function update(_root, args) {
-  const input = _.get(args, 'input') || {};
+  const channelId = _.get(args, 'input.channelId', null);
+  const agentId = _.get(args, 'input.agentId', null);
+  const role = _.get(args, 'input.role', null);
 
-  const params = new Params({
-    channelId: input.channelId,
-    agentId: input.agentId,
-  });
-  const data = new Data({
-    channelId: input.channelId,
-    agentId: input.agentId,
-    role: input.role,
-  });
+  const params = new Params({ channelId, agentId });
+  const data = new Data({ channelId, agentId, role });
 
   return new ChannelMembershipsData().updateOne(params, data);
 }

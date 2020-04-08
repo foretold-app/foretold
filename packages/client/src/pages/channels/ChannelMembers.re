@@ -235,7 +235,8 @@ let addMembersButtonSection = (channelId: string) =>
     </ForetoldComponents.Base.Button>
   </ForetoldComponents.Base.Div>;
 
-// Currently seems broken, so I removed it for now. Add to "SuccesFn" later when fixed.
+// Currently seems broken, so I removed it for now.
+// Add to "SuccesFn" later when fixed.
 let inviteMemberButtonSection = (channelId: string) =>
   <ForetoldComponents.Base.Div
     float=`right

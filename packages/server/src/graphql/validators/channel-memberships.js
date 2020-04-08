@@ -19,7 +19,7 @@ const log = logger.module('middlewares/channel-memberships');
  * @param {object} _info
  * @return {Promise<boolean>}
  */
-async function channelAgentExistsValidation(root, args, _context, _info) {
+async function channelMembershipExistsValidation(root, args, _context, _info) {
   const channelId = _.get(args, 'input.channelId', null);
   const agentId = _.get(args, 'input.agentId', null);
 
@@ -41,5 +41,5 @@ async function channelAgentExistsValidation(root, args, _context, _info) {
 }
 
 module.exports = {
-  channelAgentExistsValidation,
+  channelMembershipExistsValidation,
 };

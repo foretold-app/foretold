@@ -109,10 +109,11 @@ function channelHasMultipleAdminsRule(_root, _args, context, _info) {
  */
 function membershipBelongsToCurrentAgentRule(root, args, context, _info) {
   const membershipAgentId = _.get(args, 'input.agentId', null)
-    || _.get(root, 'agentId', null);
+    || _.get(root, 'agentId', null)
+    || _.get(context, 'channelMembership.agentId', null);
   const currentAgentId = _.get(context, 'agent.id', null);
 
-  const result = (!!membershipAgentId && !!currentAgentId )
+  const result = (!!membershipAgentId && !!currentAgentId)
     && membershipAgentId === currentAgentId;
 
   log.trace(

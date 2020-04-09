@@ -112,7 +112,8 @@ class MeasurementModel extends ModelPostgres {
    */
   async getLatest({ measurable, agentId } = {}) {
     const measurableId = measurable.id;
-    return this.getOne(new Params({ measurableId, agentId }));
+    const params = new Params({ measurableId, agentId });
+    return this.getOne(params);
   }
 }
 

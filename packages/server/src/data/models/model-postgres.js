@@ -890,9 +890,11 @@ class ModelPostgres extends Model {
   _verifiedMeasurements(name = '') {
     return `(
       /* Verified Channel Memberships (${name}) */
-      SELECT "agentId"
+      SELECT "ChannelMemberships"."agentId"
       FROM "ChannelMemberships"
-      WHERE "isVerified" = TRUE
+      LEFT JOIN "Channels" ON "Channels"."id" = "ChannelMemberships"."channelId"
+      WHERE "ChannelMemberships"."isVerified" = TRUE
+      OR "Channels"."requireVerification" != TRUE
     )`;
   }
 

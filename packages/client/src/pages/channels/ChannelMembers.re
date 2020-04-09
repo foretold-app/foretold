@@ -176,6 +176,22 @@ module Columns = {
              | _ => <Null />
              }}
           </div>,
+      ~show=
+        (membership: Types.channelMembership) => {
+          switch (membership.isVerified, membership.agent) {
+          | (Some(true), Some(agent)) =>
+            Primary.Permissions.can(
+              `CHANNEL_MEMBERSHIP_UNVERIFY,
+              membership.permissions,
+            )
+          | (_, Some(agent)) =>
+            Primary.Permissions.can(
+              `CHANNEL_MEMBERSHIP_VERIFY,
+              membership.permissions,
+            )
+          | _ => false
+          }
+        },
       (),
     );
 

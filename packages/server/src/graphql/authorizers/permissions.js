@@ -23,6 +23,7 @@ const { rateLimit } = require('./rate-limit');
 const { measurementIsCompetitiveOrCommentOnly } = require('./measurements');
 const { measurementIsOwnedByCurrentAgent } = require('./measurements');
 const { currentAgentIsChannelAdminFromRoot } = require('./channel-memberships');
+const { channelRequiresVerification } = require('./channels');
 
 const currentAgentIsApplicationAdminOrChannelAdmin = or(
   currentAgentIsApplicationAdmin,
@@ -78,12 +79,14 @@ const rulesChannelMemberships = () => ({
       currentAgentIsApplicationAdminOrChannelAdmin,
       not(membershipBelongsToCurrentAgent),
       not(currentAgentIsChannelAdminFromRoot),
+      channelRequiresVerification,
     ),
     channelMembershipUnverify: and(
       currentAgentIsAuthenticated,
       currentAgentIsApplicationAdminOrChannelAdmin,
       not(membershipBelongsToCurrentAgent),
       not(currentAgentIsChannelAdminFromRoot),
+      channelRequiresVerification,
     ),
   },
 });

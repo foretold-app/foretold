@@ -1,6 +1,6 @@
 const cron = require('node-schedule');
 
-const logger = require('./log');
+const logger = require('../log');
 
 const emitter = require('./emitter');
 const events = require('./events');

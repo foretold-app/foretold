@@ -160,11 +160,13 @@ const middlewares = {
     },
 
     channelMembershipVerify: async (resolve, root, args, context, info) => {
+      await setContextChannel(root, args, context, info);
       await setContextChannelMemberships(root, args, context, info);
       return resolve(root, args, context, info);
     },
 
     channelMembershipUnverify: async (resolve, root, args, context, info) => {
+      await setContextChannel(root, args, context, info);
       await setContextChannelMemberships(root, args, context, info);
       return resolve(root, args, context, info);
     },

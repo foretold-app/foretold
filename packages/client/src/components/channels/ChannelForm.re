@@ -205,7 +205,12 @@ module Create = {
                   },
                   (),
                 )##variables,
-              ~refetchQueries=[|"channels", "user", "channel"|],
+              ~refetchQueries=[|
+                "channels",
+                "user",
+                "channel",
+                "channelMemberships",
+              |],
               (),
             )
             |> Js.Promise.then_((result: result('a)) => {

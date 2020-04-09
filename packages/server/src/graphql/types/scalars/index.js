@@ -1,4 +1,5 @@
 const { GraphQLInputInt } = require('graphql-input-number');
+const graphql = require('graphql');
 
 const cursor = require('./cursor');
 const jwt = require('./jwt');
@@ -27,6 +28,28 @@ const templateId = createObjectId('TemplateId');
 const tokenId = createObjectId('TokenId');
 const userId = createObjectId('UserId');
 const voteId = createObjectId('VoteId');
+
+// @todo: These "scalars" for migration to upper ^ scalars.
+const $agentId = graphql.GraphQLString;
+const $bookmarkId = graphql.GraphQLString;
+const $botId = graphql.GraphQLString;
+const $channelId = graphql.GraphQLString;
+const $channelMembershipId = graphql.GraphQLString;
+const $feedItemId = graphql.GraphQLString;
+const $globalSettingId = graphql.GraphQLString;
+const $invitationId = graphql.GraphQLString;
+const $measurableId = graphql.GraphQLString;
+const $measurementId = graphql.GraphQLString;
+const $mutexId = graphql.GraphQLString;
+const $notebookId = graphql.GraphQLString;
+const $notificationId = graphql.GraphQLString;
+const $notificationStatusId = graphql.GraphQLString;
+const $preferenceId = graphql.GraphQLString;
+const $seriesId = graphql.GraphQLString;
+const $templateId = graphql.GraphQLString;
+const $tokenId = graphql.GraphQLString;
+const $userId = graphql.GraphQLString;
+const $voteId = graphql.GraphQLString;
 
 const string0to255 = createLimitedString(0, 255);
 const string3to255 = createLimitedString(3, 255);
@@ -74,6 +97,27 @@ module.exports = {
   tokenId,
   userId,
   voteId,
+
+  $agentId,
+  $bookmarkId,
+  $botId,
+  $channelId,
+  $channelMembershipId,
+  $feedItemId,
+  $globalSettingId,
+  $invitationId,
+  $measurableId,
+  $measurementId,
+  $mutexId,
+  $notebookId,
+  $notificationId,
+  $notificationStatusId,
+  $preferenceId,
+  $seriesId,
+  $templateId,
+  $tokenId,
+  $userId,
+  $voteId,
 
   string0to255,
   string3to255,

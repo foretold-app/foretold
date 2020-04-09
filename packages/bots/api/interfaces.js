@@ -7,7 +7,7 @@ query {
 `;
 
 const measurables = `
-query measurables {
+query {
   measurables(
     first: 500
     states: [OPEN, JUDGEMENT_PENDING] 
@@ -26,7 +26,7 @@ query measurables {
 `;
 
 const measurements = `
-query search (
+query search(
   $measurableId: String
   $competitorType: [competitorType!]
   $notTaggedByAgent: String
@@ -69,7 +69,7 @@ mutation measurementCreate(
 `;
 
 const mutexTake = `
-mutation mutexTake (
+mutation mutexTake(
   $name: String
 ) {
   mutexTake(input:{
@@ -81,7 +81,7 @@ mutation mutexTake (
 `;
 
 const mutexFree = `
-mutation mutexFree (
+mutation mutexFree(
   $id: String!
 ) {
   mutexFree(id: $id)

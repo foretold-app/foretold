@@ -10,7 +10,6 @@ const {
 } = require('./channel-memberships');
 const { channelHasMultipleAdmins } = require('./channel-memberships');
 const { membershipBelongsToCurrentAgent } = require('./channel-memberships');
-const { membershipHasAdminRole } = require('./channel-memberships');
 const { measurableIsOwnedByCurrentAgent } = require('./measurables');
 const { measurableIsArchived } = require('./measurables');
 const { botBelongsToCurrentUser } = require('./bots');
@@ -67,19 +66,12 @@ const rulesChannelMemberships = () => ({
     channelMembershipDelete: and(
       currentAgentIsAuthenticated,
       currentAgentIsApplicationAdminOrChannelAdmin,
-      or(
-        and(membershipHasAdminRole, channelHasMultipleAdmins),
-        not(membershipBelongsToCurrentAgent),
-      ),
+      not(membershipBelongsToCurrentAgent),
     ),
     channelMembershipRoleUpdate: and(
       currentAgentIsAuthenticated,
       currentAgentIsApplicationAdminOrChannelAdmin,
-      or(
-        and(channelHasMultipleAdmins, membershipBelongsToCurrentAgent),
-        and(channelHasMultipleAdmins, membershipHasAdminRole),
-        not(membershipBelongsToCurrentAgent),
-      ),
+      not(membershipBelongsToCurrentAgent),
     ),
     channelMembershipVerify: and(
       currentAgentIsAuthenticated,

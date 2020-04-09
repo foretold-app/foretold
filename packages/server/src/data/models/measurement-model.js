@@ -19,32 +19,6 @@ class MeasurementModel extends ModelPostgres {
   }
 
   /**
-   * @param {Defs.AgentID} agentId
-   * @param {string} [name]
-   * @return {string}
-   */
-  _taggedMeasurementsLiteral(agentId, name = '') {
-    return this.literal(this._taggedMeasurements(agentId, name));
-  }
-
-  /**
-   * @protected
-   * @param {Defs.AgentID} agentId
-   * @param {string} name
-   * @return {string}
-   */
-  _taggedMeasurements(agentId, name = '') {
-    assert(!!agentId, 'Agent ID is required.');
-    return `(
-      /* T͟a͟g͟g͟e͟d͟ ͟M͟e͟a͟s͟u͟r͟e͟m͟e͟n͟t͟s͟ (${name}) */
-      SELECT "taggedMeasurementId"
-      FROM "Measurements"
-      WHERE "agentId" = '${agentId}'
-      AND "taggedMeasurementId" IS NOT NULL
-    )`;
-  }
-
-  /**
    * @return {*[] | null}
    * @protected
    */

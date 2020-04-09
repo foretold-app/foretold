@@ -478,6 +478,7 @@ class ModelPostgres extends Model {
     if (!where) where = {};
     if (!where[this.and]) where[this.and] = [];
 
+    const name = _.get(filter, 'constructor.name', 'Filter');
     this.applyAbstracts(where, filter);
 
     if (!!filter.isArchived) {
@@ -563,7 +564,16 @@ class ModelPostgres extends Model {
         id: {
           [this.notIn]: this._taggedMeasurementsLiteral(
             filter.notTaggedByAgent,
+            name,
           ),
+        },
+      });
+    }
+
+    if (!!filter.isVerified) {
+      where[this.and].push({
+        id: {
+          [this.in]: this._verifiedMeasurementsLiteral(name),
         },
       });
     }
@@ -634,7 +644,7 @@ class ModelPostgres extends Model {
     if (!!filter.excludeChannelId) {
       where[this.and].push({
         id: {
-          [this.notIn]: this._agentsIdsLiteral(filter.excludeChannelId),
+          [this.notIn]: this._agentsIdsLiteral(filter.excludeChannelId, name),
         },
       });
     }
@@ -832,6 +842,84 @@ class ModelPostgres extends Model {
         AND "ChannelMemberships"."agentId" = '${agentId}'
       WHERE
         "ChannelMemberships"."agentId" IS NOT NULL
+    )`;
+  }
+
+
+  /**
+   * @todo: see this._publicAndJoinedChannels()
+   * @protected
+   * @param {Defs.ChannelID} channelId
+   * @param {string} name
+   * @return {Sequelize.literal}
+   */
+  _agentsIdsLiteral(channelId, name = '') {
+    return this.literal(this._agentsIds(channelId));
+  }
+
+  /**
+   * @todo: Use ORM opportunities to join tables.
+   * @todo: No, do not this ORM for this.
+   * @protected
+   * @param {Defs.ChannelID} channelId
+   * @param {string} name
+   * @return {string}
+   */
+  _agentsIds(channelId, name = '') {
+    assert(!!channelId, 'Channel ID is required.');
+    return `(
+      /* Agent Ids (${name}) */
+      SELECT "ChannelMemberships"."agentId" FROM "ChannelMemberships"
+      WHERE "ChannelMemberships"."channelId" = '${channelId}'
+    )`;
+  }
+
+  /**
+   * @param {string} [name]
+   * @return {string}
+   */
+  _verifiedMeasurementsLiteral(name = '') {
+    return this.literal(this._verifiedMeasurements(name));
+  }
+
+  /**
+   * @protected
+   * @param {string} name
+   * @return {string}
+   */
+  _verifiedMeasurements(name = '') {
+    return `(
+      /* T͟a͟g͟g͟e͟d͟ ͟M͟e͟a͟s͟u͟r͟e͟m͟e͟n͟t͟s͟ (${name}) */
+      SELECT "taggedMeasurementId"
+      FROM "Measurements"
+      WHERE "agentId" = '${agentId}'
+      AND "taggedMeasurementId" IS NOT NULL
+    )`;
+  }
+
+  /**
+   * @param {Defs.AgentID} agentId
+   * @param {string} [name]
+   * @return {string}
+   */
+  _taggedMeasurementsLiteral(agentId, name = '') {
+    return this.literal(this._taggedMeasurements(agentId, name));
+  }
+
+  /**
+   * @protected
+   * @param {Defs.AgentID} agentId
+   * @param {string} name
+   * @return {string}
+   */
+  _taggedMeasurements(agentId, name = '') {
+    assert(!!agentId, 'Agent ID is required.');
+    return `(
+      /* T͟a͟g͟g͟e͟d͟ ͟M͟e͟a͟s͟u͟r͟e͟m͟e͟n͟t͟s͟ (${name}) */
+      SELECT "taggedMeasurementId"
+      FROM "Measurements"
+      WHERE "agentId" = '${agentId}'
+      AND "taggedMeasurementId" IS NOT NULL
     )`;
   }
 

@@ -367,6 +367,7 @@ export namespace Layers {
     isEmailVerified?: boolean[];
     notAuth0AccessToken?: boolean;
     isNotEmailVerified?: boolean;
+    isVerified?: boolean;
     needsToBePending?: boolean;
     needsResolutionResponse?: boolean;
     role?: string;

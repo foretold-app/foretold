@@ -15,31 +15,6 @@ class AgentModel extends ModelPostgres {
   }
 
   /**
-   * @todo: see this._publicAndJoinedChannels()
-   * @protected
-   * @param {Defs.ChannelID} channelId
-   * @return {Sequelize.literal}
-   */
-  _agentsIdsLiteral(channelId) {
-    return this.literal(this._agentsIds(channelId));
-  }
-
-  /**
-   * @todo: Use ORM opportunities to join tables.
-   * @todo: No, do not this ORM for this.
-   * @protected
-   * @param {Defs.ChannelID} channelId
-   * @return {string}
-   */
-  _agentsIds(channelId) {
-    assert(!!channelId, 'Channel ID is required.');
-    return `(
-      SELECT "ChannelMemberships"."agentId" FROM "ChannelMemberships"
-      WHERE "ChannelMemberships"."channelId" = '${channelId}'
-    )`;
-  }
-
-  /**
    * @param _options
    * @returns {*}
    * @protected

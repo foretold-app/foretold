@@ -76,6 +76,7 @@ const schema = new graphql.GraphQLSchema({
           measurableState: {
             type: graphql.GraphQLList(types.measurables.measurableState),
           },
+          isVerified: { type: graphql.GraphQLBoolean },
         },
         resolve: resolvers.measurements.all,
       },

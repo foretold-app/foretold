@@ -5,13 +5,14 @@ const resolvers = require('../resolvers');
 const agentsTypes = require('./agents');
 const channelsTypes = require('./channels');
 const commonTypes = require('./common');
+const scalars = require('./scalars');
 
 const agentChannel = new graphql.GraphQLObjectType({
   name: 'AgentChannel',
   fields: () => ({
-    id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-    agentId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-    channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    id: { type: graphql.GraphQLNonNull(scalars.$agentChannelId) },
+    agentId: { type: graphql.GraphQLNonNull(scalars.$agentId) },
+    channelId: { type: graphql.GraphQLNonNull(scalars.$channelId) },
     primaryPointScore: {
       type: graphql.GraphQLFloat,
       resolve: resolvers.agentChannels.primaryPointScore,
@@ -40,7 +41,7 @@ const agentChannelsEdge = new graphql.GraphQLObjectType({
   name: 'AgentChannelsEdge',
   fields: () => ({
     node: { type: agentChannel },
-    cursor: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    cursor: { type: graphql.GraphQLNonNull(scalars.$cursor) },
   }),
 });
 

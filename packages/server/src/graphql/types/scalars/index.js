@@ -50,6 +50,10 @@ const $templateId = graphql.GraphQLString;
 const $tokenId = graphql.GraphQLString;
 const $userId = graphql.GraphQLString;
 const $voteId = graphql.GraphQLString;
+const $agentChannelId = graphql.GraphQLString;
+const $cursor = graphql.GraphQLString;
+const $globalSettingsName = graphql.GraphQLString;
+const $agentMeasurableId = graphql.GraphQLString;
 
 const string0to255 = createLimitedString(0, 255);
 const string3to255 = createLimitedString(3, 255);
@@ -118,6 +122,10 @@ module.exports = {
   $tokenId,
   $userId,
   $voteId,
+  $agentChannelId,
+  $cursor,
+  $globalSettingsName,
+  $agentMeasurableId,
 
   string0to255,
   string3to255,

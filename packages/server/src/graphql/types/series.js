@@ -6,13 +6,14 @@ const resolvers = require('../resolvers');
 const commonTypes = require('./common');
 const channelsTypes = require('./channels');
 const agentsTypes = require('./agents');
+const scalars = require('./scalars');
 
 const seriesCreateInput = new graphql.GraphQLInputObjectType({
   name: 'SeriesCreateInput',
   fields: () => ({
     name: { type: graphql.GraphQLString },
     description: { type: graphql.GraphQLString },
-    channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    channelId: { type: graphql.GraphQLNonNull(scalars.$channelId) },
     subjects: { type: graphql.GraphQLList(graphql.GraphQLString) },
     properties: { type: graphql.GraphQLList(graphql.GraphQLString) },
     dates: { type: graphql.GraphQLList(DateType.default) },
@@ -22,13 +23,13 @@ const seriesCreateInput = new graphql.GraphQLInputObjectType({
 const series = new graphql.GraphQLObjectType({
   name: 'Series',
   fields: () => ({
-    id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    id: { type: graphql.GraphQLNonNull(scalars.$seriesId) },
     name: { type: graphql.GraphQLString },
     description: { type: graphql.GraphQLString },
     subjects: { type: graphql.GraphQLList(graphql.GraphQLString) },
     properties: { type: graphql.GraphQLList(graphql.GraphQLString) },
     dates: { type: graphql.GraphQLList(DateType.default) },
-    channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    channelId: { type: graphql.GraphQLNonNull(scalars.$channelId) },
 
     measurableCount: {
       type: graphql.GraphQLInt,
@@ -37,7 +38,7 @@ const series = new graphql.GraphQLObjectType({
 
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
-    creatorId: { type: graphql.GraphQLString },
+    creatorId: { type: scalars.$agentId },
     iAmOwner: commonTypes.iAmOwner,
 
     // @todo: security?

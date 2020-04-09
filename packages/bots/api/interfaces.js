@@ -26,7 +26,7 @@ query {
 `;
 
 const measurements = `
-query search(
+query measurements(
   $measurableId: String
   $competitorType: [competitorType!]
   $notTaggedByAgent: String
@@ -38,6 +38,7 @@ query search(
     competitorType: $competitorType
     notTaggedByAgent: $notTaggedByAgent
     findInDateRange: $findInDateRange
+    isVerified: true
   ) {
     edges {
       node {

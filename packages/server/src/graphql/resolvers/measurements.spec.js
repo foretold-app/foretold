@@ -22,6 +22,7 @@ describe('Measurements Resolver', () => {
             agentId: 'agentId2',
             competitorType: null,
             findInDateRange: null,
+            isVerified: null,
             measurableId: 'measurableId1',
             notTaggedByAgent: null,
             withinMeasurables: null,

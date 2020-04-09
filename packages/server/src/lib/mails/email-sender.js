@@ -4,7 +4,7 @@ const Mustache = require('mustache');
 const { emailConfig } = require('./email-config');
 const { transporter } = require('./transporter');
 const { SmtpGateways } = require('./smtp-gateways');
-const logger = require('../../lib/log');
+const logger = require('../log');
 
 const log = logger.module('lib/mails/mail-helper');
 

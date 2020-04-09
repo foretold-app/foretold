@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer');
-const logger = require('../../lib/log');
+const logger = require('../log');
 
 const log = logger.module('lib/github');
 

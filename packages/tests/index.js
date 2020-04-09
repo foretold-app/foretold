@@ -12,27 +12,33 @@ const auth0accessToken = 'tFgp55FR5h2BGtTqMIN9EulZ6uQ3zsFL';
 
 async function main() {
   // Authentication
+  console.log('Authentication');
   const authentication = await api.authentication(auth0jwt, auth0accessToken);
   const serverJwt = _.get(authentication, 'jwt');
   assert(_.isString(serverJwt), 'ServerJWT is not a string.');
 
   // Agent Id
+  console.log('Agent Id');
   api.setToken(serverJwt);
   const authenticated = await api.authenticated();
   const agentId = _.get(authenticated, 'agent.id');
   assert(_.isString(agentId), 'AgentId is not a string.');
 
   // Creates Channel
+  console.log('Creates Channel');
   const channelInput = {
     name: "Test Channel 200",
     isPublic: true,
     isArchived: false,
+    requireVerification: false,
   };
   const channel = await api.channelCreate(channelInput);
   const channelId = _.get(channel, 'id');
   assert(_.isString(channelId), 'ChannelId is not a string.');
+  console.log('OK');
 
   // Creates Measurable
+  console.log('Creates Measurable');
   const measurableCreateInput = {
     channelId: channelId,
     valueType: "FLOAT",
@@ -81,9 +87,11 @@ async function main() {
   assert(_.isString(updatedAt), 'updatedAt is not a string.');
   assert(_.isString(expectedResolutionDate),
     'expectedResolutionDate is not a string.');
+  console.log('OK');
 
   // Creates Measurement as Float CDF
   {
+    console.log('Creates Measurement as Float CDF');
     const measurementCreateInput = {
       "value": {
         "floatCdf": {
@@ -99,10 +107,12 @@ async function main() {
     const measurement = await api.measurementCreate(measurementCreateInput);
     const measurementId = _.get(measurement, 'id');
     assert(_.isString(measurementId), 'MeasurementId is not a string.');
+    console.log('OK');
   }
 
   // Creates Measurement as Comment
   {
+    console.log('Creates Measurement as Comment');
     const measurementCreateInput = {
         "value": { "comment": "GENERIC" },
         "valueText": "",
@@ -114,9 +124,11 @@ async function main() {
     const measurement = await api.measurementCreate(measurementCreateInput);
     const measurementId = _.get(measurement, 'id');
     assert(_.isString(measurementId), 'MeasurementId is not a string.');
+    console.log('OK');
   }
 
   // Measurables
+  console.log('Measurables');
   const measurablesParams = {
     "channelId": channelId,
     "first": 10,
@@ -125,7 +137,9 @@ async function main() {
   const measurables = await api.measurables(measurablesParams);
   assert(_.isArray(measurables), 'Measurable Edges is not an array.');
   assert(_.size(measurables) === 1, 'Measurables arrays size is wrong.');
-
+  console.log('OK');
+  
+  console.log('Finish');
   return 1;
 }
 

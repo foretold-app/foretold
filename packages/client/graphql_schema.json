@@ -4541,7 +4541,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "String",
+                  "name": "AgentId",
                   "ofType": null
                 }
               },
@@ -4557,7 +4557,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "String",
+                  "name": "ChannelId",
                   "ofType": null
                 }
               },
@@ -4635,6 +4635,16 @@
           ],
           "inputFields": null,
           "interfaces": [],
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "SCALAR",
+          "name": "ChannelId",
+          "description": "A special custom scalar type for a ChannelId",
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
           "enumValues": null,
           "possibleTypes": null
         },
@@ -6271,16 +6281,6 @@
           "kind": "SCALAR",
           "name": "String3to131072",
           "description": "A special custom scalar type for a String3to131072",
-          "fields": null,
-          "inputFields": null,
-          "interfaces": null,
-          "enumValues": null,
-          "possibleTypes": null
-        },
-        {
-          "kind": "SCALAR",
-          "name": "ChannelId",
-          "description": "A special custom scalar type for a ChannelId",
           "fields": null,
           "inputFields": null,
           "interfaces": null,
@@ -9412,7 +9412,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "String",
+                  "name": "AgentId",
                   "ofType": null
                 }
               },
@@ -9426,7 +9426,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "String",
+                  "name": "ChannelId",
                   "ofType": null
                 }
               },
@@ -9465,7 +9465,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "String",
+                  "name": "AgentId",
                   "ofType": null
                 }
               },
@@ -9479,7 +9479,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "String",
+                  "name": "ChannelId",
                   "ofType": null
                 }
               },
@@ -9504,7 +9504,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "String",
+                  "name": "AgentId",
                   "ofType": null
                 }
               },

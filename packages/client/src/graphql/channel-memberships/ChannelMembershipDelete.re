@@ -15,7 +15,11 @@ module Mutation = ReasonApollo.CreateMutation(Query);
 let mutate = (mutation: Mutation.apolloMutation, agentId, channelId) => {
   let m =
     Query.make(
-      ~input={"channelId": channelId, "agentId": agentId, "role": `VIEWER},
+      ~input={
+        "channelId": E.J.fromString(channelId),
+        "agentId": E.J.fromString(agentId),
+        "role": `VIEWER,
+      },
       (),
     );
   mutation(

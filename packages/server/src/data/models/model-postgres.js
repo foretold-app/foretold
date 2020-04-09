@@ -572,7 +572,7 @@ class ModelPostgres extends Model {
 
     if (!!filter.isVerified) {
       where[this.and].push({
-        id: {
+        agentId: {
           [this.in]: this._verifiedMeasurementsLiteral(name),
         },
       });
@@ -889,11 +889,10 @@ class ModelPostgres extends Model {
    */
   _verifiedMeasurements(name = '') {
     return `(
-      /* T͟a͟g͟g͟e͟d͟ ͟M͟e͟a͟s͟u͟r͟e͟m͟e͟n͟t͟s͟ (${name}) */
-      SELECT "taggedMeasurementId"
-      FROM "Measurements"
-      WHERE "agentId" = '${agentId}'
-      AND "taggedMeasurementId" IS NOT NULL
+      /* Verified Channel Memberships (${name}) */
+      SELECT "agentId"
+      FROM "ChannelMemberships"
+      WHERE "isVerified" = TRUE
     )`;
   }
 

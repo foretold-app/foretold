@@ -1,7 +1,7 @@
 const emitter = require('./emitter');
 const events = require('./events');
 
-const logger = require('./log');
+const logger = require('../log');
 
 const log = logger.module('bots/listeners');
 const bots = require('../bots');

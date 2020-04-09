@@ -26,6 +26,9 @@ class Bot {
       await this.mutexTake();
       assert(this.mutex !== null, 'Mutex is not free.');
 
+      this.log.debug('Agent Token', config.BOT_TOKEN);
+      this.log.debug('Agent Id', agentId);
+      
       const measurementsNotTagged = await this.api.measurementsCompetitive({
         notTaggedByAgent: agentId,
       });

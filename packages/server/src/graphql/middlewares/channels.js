@@ -1,7 +1,5 @@
 const _ = require('lodash');
 
-const { channelDoesNotExists } = require('../../../config/lang');
-
 const { ChannelsData } = require('../../data');
 const logger = require('../../lib/log');
 
@@ -11,25 +9,6 @@ const { Options } = require('../../data/classes');
 
 const log = logger.module('middlewares/channels');
 
-/**
- * @param {*} root
- * @param {object} args
- * @param {Schema.Context} _context
- * @param {object} _info
- * @return {Promise<boolean>}
- */
-async function channelExistsValidation(root, args, _context, _info) {
-  const channelId = _.get(args, 'channelId', null);
-
-  const params = new Params({ id: channelId });
-  const query = new Query();
-  const options = new Options({ raw: true });
-  const count = await new ChannelsData().getCount(params, query, options);
-
-  if (!count) throw new Error(channelDoesNotExists());
-
-  return true;
-}
 
 /**
  * @todo: To fix "||" a joined logic.
@@ -75,8 +54,6 @@ async function setContextChannelByRoot(root, args, context, _info) {
 }
 
 module.exports = {
-  channelExistsValidation,
-
   setContextChannel,
   setContextChannelByRoot,
 };

@@ -6,11 +6,11 @@ const { DataBase } = require('./data-base');
 const { ChannelMembershipModel } = require('./models');
 const { CHANNEL_MEMBERSHIP_TYPE } = require('../enums');
 
-const { Data } = require('../data/classes');
-const { Filter } = require('../data/classes');
-const { Params } = require('../data/classes');
-const { Pagination } = require('../data/classes');
-const { Options } = require('../data/classes');
+const { Data } = require('./classes');
+const { Filter } = require('./classes');
+const { Params } = require('./classes');
+const { Pagination } = require('./classes');
+const { Options } = require('./classes');
 
 /**
  * @implements {Layers.DataSource.DataGeneric}
@@ -70,6 +70,29 @@ class ChannelMembershipsData extends DataBase {
       channelId: options.channelId,
       agentId: options.agentId,
     }));
+  }
+
+  /**
+   * @public
+   * @param {Defs.AgentID} agentId
+   * @param {Defs.ChannelID} channelId
+   * @param {boolean} isVerified
+   * @return {Promise<boolean>}
+   */
+  async verify(channelId, agentId, isVerified) {
+    assert(!!agentId, 'verify::agentId is required.');
+    assert(!!channelId, 'verify::channelId is required.');
+    assert(_.isBoolean(isVerified), 'isVerified should be boolean.');
+
+    try {
+      const params = new Params({ agentId, channelId });
+      const data = new Data({ isVerified });
+      const result = await this.updateOne(params, data);
+      return !!result;
+    } catch (e) {
+      this.log.error(e.message);
+    }
+    return false;
   }
 
   /**

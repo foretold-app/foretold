@@ -35,7 +35,7 @@ const labelCustom = {
 const measurable = new graphql.GraphQLObjectType({
   name: 'Measurable',
   fields: () => ({
-    id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    id: { type: graphql.GraphQLNonNull(scalars.$measurableId) },
     name,
     labelSubject,
     labelOnDate,
@@ -47,7 +47,7 @@ const measurable = new graphql.GraphQLObjectType({
     isArchived: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
     resolutionEndpoint: { type: graphql.GraphQLString },
     expectedResolutionDate: { type: DateType.default },
-    channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    channelId: { type: graphql.GraphQLNonNull(scalars.$channelId) },
 
     measurementCount: {
       type: graphql.GraphQLInt,
@@ -66,8 +66,8 @@ const measurable = new graphql.GraphQLObjectType({
 
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
-    creatorId: { type: graphql.GraphQLString },
-    seriesId: { type: graphql.GraphQLString },
+    creatorId: { type: scalars.$agentId },
+    seriesId: { type: scalars.$seriesId },
     iAmOwner: commonTypes.iAmOwner,
     min: { type: graphql.GraphQLFloat },
     max: { type: graphql.GraphQLFloat },
@@ -152,7 +152,7 @@ const measurablesEdge = new graphql.GraphQLObjectType({
   name: 'MeasurablesEdge',
   fields: () => ({
     node: { type: measurable },
-    cursor: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    cursor: { type: graphql.GraphQLNonNull(scalars.$cursor) },
   }),
 });
 

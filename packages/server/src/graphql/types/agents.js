@@ -8,11 +8,12 @@ const commonTypes = require('./common');
 const preferencesTypes = require('./preferences');
 const usersTypes = require('./users');
 const botsTypes = require('./bots');
+const scalars = require('./scalars');
 
 const agent = new graphql.GraphQLObjectType({
   name: 'Agent',
   fields: () => ({
-    id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    id: { type: graphql.GraphQLNonNull(scalars.$agentId) },
     type: { type: graphql.GraphQLNonNull(agentType) },
     name: { type: graphql.GraphQLString },
 

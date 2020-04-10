@@ -4,6 +4,7 @@ module Query = [%graphql
       channel(id: $id){
         id
         channelMemberships{
+            isVerified
             role
             permissions {
               mutations {
@@ -71,6 +72,7 @@ let toChannelMemberships = (m): array(Types.channelMembership) => {
 
            Primary.ChannelMembership.make(
              ~role=r##role,
+             ~isVerified=r##isVerified,
              ~agent,
              ~permissions=Some(permissions),
              (),

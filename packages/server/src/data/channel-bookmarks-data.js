@@ -1,10 +1,10 @@
 const { DataBase } = require('./data-base');
 const { ChannelBookmarkModel } = require('./models');
 
-const { Options } = require('../data/classes');
-const { Params } = require('../data/classes');
-const { Data } = require('../data/classes');
-const { Query } = require('../data/classes');
+const { Options } = require('./classes');
+const { Params } = require('./classes');
+const { Data } = require('./classes');
+const { Query } = require('./classes');
 
 const logger = require('../lib/log');
 

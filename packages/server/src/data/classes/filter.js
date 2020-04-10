@@ -59,6 +59,7 @@ const list = {
   isArchived: (v) => _.isArray(v) || utils.none(v),
   isEmailVerified: (v) => _.isArray(v) || utils.none(v),
   isNotEmailVerified: (v) => _.isBoolean(v) || utils.none(v),
+  isVerified: (v) => _.isBoolean(v) || utils.none(v),
   measurableId: (v) => _.isString(v) || utils.none(v),
   measurableIds: (v) => _.isArray(v) || utils.none(v),
   measuredByAgentId: (v) => _.isString(v) || utils.none(v),

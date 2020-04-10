@@ -1,8 +1,0 @@
-const INVITATION_STATUS = {
-  AWAITING: 'AWAITING',
-  ACCEPTED: 'ACCEPTED',
-};
-
-module.exports = {
-  INVITATION_STATUS,
-};

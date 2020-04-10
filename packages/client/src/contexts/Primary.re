@@ -153,11 +153,21 @@ module Permissions = {
 
 module ChannelMembership = {
   type t = Types.channelMembership;
-  let make = (~role, ~channel=None, ~agent=None, ~permissions=None, ()): t => {
+  let make =
+      (
+        ~role,
+        ~channel=None,
+        ~agent=None,
+        ~permissions=None,
+        ~isVerified=None,
+        (),
+      )
+      : t => {
     role,
     channel,
     agent,
     permissions,
+    isVerified,
   };
 };
 

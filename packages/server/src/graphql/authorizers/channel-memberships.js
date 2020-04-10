@@ -1,7 +1,6 @@
 const _ = require('lodash');
 const { rule } = require('graphql-shield');
 
-const models = require('../../data/models/definitions');
 const { CHANNEL_MEMBERSHIP_ROLES } = require('../../enums');
 const logger = require('../../lib/log');
 
@@ -14,7 +13,7 @@ const log = logger.module('authorizers/channel-memberships');
  * @return {boolean}
  */
 function currentAgentIsChannelAdminRule(_root, args, context) {
-  const roleName = models.ChannelMemberships.ROLE.ADMIN;
+  const roleName = CHANNEL_MEMBERSHIP_ROLES.ADMIN;
   const role = _.get(context, 'channelMembershipsRole', null);
 
   const result = (!!role && !!roleName)
@@ -29,13 +28,35 @@ function currentAgentIsChannelAdminRule(_root, args, context) {
 }
 
 /**
+ * @param {*} root
+ * @param {object} _args
+ * @param {Schema.Context} _context
+ * @param {object} _info
+ * @return {boolean}
+ */
+function currentAgentIsChannelAdminFromRootRule(root, _args, _context, _info) {
+  const roleName = CHANNEL_MEMBERSHIP_ROLES.ADMIN;
+  const role = _.get(root, 'role', null);
+
+  const result = (!!role && !!roleName)
+    && (role === roleName);
+
+  log.trace(
+    '\x1b[33m Rule Channel Memberships (currentAgentIsChannelAdminFromRootRule)'
+    + ` role "${role}" = "${roleName}", result = "${result}".\x1b[0m`,
+  );
+
+  return result;
+}
+
+/**
  * @param {*} _root
  * @param {object} args
  * @param {Schema.Context} context
  * @return {boolean}
  */
 function currentAgentIsChannelViewerRule(_root, args, context) {
-  const roleName = models.ChannelMemberships.ROLE.VIEWER;
+  const roleName = CHANNEL_MEMBERSHIP_ROLES.VIEWER;
   const role = _.get(context, 'channelMembershipsRole', null);
 
   const result = (!!role && !!roleName)
@@ -109,10 +130,11 @@ function channelHasMultipleAdminsRule(_root, _args, context, _info) {
  */
 function membershipBelongsToCurrentAgentRule(root, args, context, _info) {
   const membershipAgentId = _.get(args, 'input.agentId', null)
-    || _.get(root, 'agentId', null);
+    || _.get(root, 'agentId', null)
+    || _.get(context, 'channelMembership.agentId', null);
   const currentAgentId = _.get(context, 'agent.id', null);
 
-  const result = (!!membershipAgentId && !!currentAgentId )
+  const result = (!!membershipAgentId && !!currentAgentId)
     && membershipAgentId === currentAgentId;
 
   log.trace(
@@ -179,6 +201,11 @@ const membershipHasAdminRole = rule({
   cache: 'no_cache',
 })(membershipHasAdminRoleRule);
 
+/** @type {Rule} */
+const currentAgentIsChannelAdminFromRoot = rule({
+  cache: 'no_cache',
+})(currentAgentIsChannelAdminFromRootRule);
+
 module.exports = {
   currentAgentIsChannelAdmin,
   currentAgentIsChannelViewer,
@@ -186,4 +213,5 @@ module.exports = {
   channelHasMultipleAdmins,
   membershipBelongsToCurrentAgent,
   membershipHasAdminRole,
+  currentAgentIsChannelAdminFromRoot,
 };

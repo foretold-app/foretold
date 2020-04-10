@@ -1,9 +1,9 @@
 module Query = [%graphql
   {|
-            mutation channelMembershipDelete (
-                $input: ChannelMembershipDeleteInput!
+            mutation channelMembershipCreate (
+                $input: ChannelMembershipRoleInput!
             ) {
-                channelMembershipDelete (input: $input) {
+                channelMembershipCreate (input: $input) {
                  agentId
                 }
             }
@@ -16,20 +16,15 @@ let mutate = (mutation: Mutation.apolloMutation, agentId, channelId) => {
   let m =
     Query.make(
       ~input={
-        "channelId": Some(channelId),
-        "agentId": Some(agentId),
+        "channelId": E.J.fromString(channelId),
+        "agentId": E.J.fromString(agentId),
         "role": `VIEWER,
       },
       (),
     );
   mutation(
     ~variables=m##variables,
-    ~refetchQueries=[|
-      "channels",
-      "user",
-      "channel",
-      "channelMemberships",
-    |],
+    ~refetchQueries=[|"channels", "user", "channelMemberships", "agents"|],
     (),
   )
   |> ignore;

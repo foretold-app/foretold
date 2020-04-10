@@ -1,9 +1,0 @@
-const CHANNEL_MEMBERSHIP_ROLES = {
-  ADMIN: 'ADMIN',
-  VIEWER: 'VIEWER',
-  NONE: 'NONE',
-};
-
-module.exports = {
-  CHANNEL_MEMBERSHIP_ROLES,
-};

@@ -9,6 +9,7 @@ const measurablesTypes = require('./measurables');
 const agentsTypes = require('./agents');
 const permissionsTypes = require('./permissions');
 const commonTypes = require('./common');
+const scalars = require('./scalars');
 
 const { measurementUnresolvableResolution } = require('./enums');
 const { measurementCommentType } = require('./enums');
@@ -105,7 +106,7 @@ const measurementsInDateRangeInput = new graphql.GraphQLInputObjectType({
 const measurement = new graphql.GraphQLObjectType({
   name: 'Measurement',
   fields: () => ({
-    id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    id: { type: graphql.GraphQLNonNull(scalars.$measurementId) },
     value: {
       type: graphql.GraphQLNonNull(measurementValue),
       resolve: resolvers.measurements.value,
@@ -114,12 +115,12 @@ const measurement = new graphql.GraphQLObjectType({
       type: measurementCompetitorType,
     },
     description: { type: graphql.GraphQLString },
-    measurableId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-    agentId: { type: graphql.GraphQLString },
+    measurableId: { type: graphql.GraphQLNonNull(scalars.$measurableId) },
+    agentId: { type: scalars.$agentId },
     relevantAt: { type: DateType.default },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
-    taggedMeasurementId: { type: graphql.GraphQLString },
+    taggedMeasurementId: { type: scalars.$measurementId },
     iAmOwner: commonTypes.iAmOwner,
     valueText: { type: graphql.GraphQLString },
 
@@ -169,7 +170,7 @@ const measurementsEdge = new graphql.GraphQLObjectType({
   name: 'MeasurementsEdge',
   fields: () => ({
     node: { type: measurement },
-    cursor: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    cursor: { type: graphql.GraphQLNonNull(scalars.$cursor) },
   }),
 });
 
@@ -190,7 +191,7 @@ const agentMeasurementsEdge = new graphql.GraphQLObjectType({
   name: 'AgentMeasurementsEdge',
   fields: () => ({
     node: { type: measurement },
-    cursor: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    cursor: { type: graphql.GraphQLNonNull(scalars.$cursor) },
   }),
 });
 

@@ -23,7 +23,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
     },
     role: {
-      type: DataTypes.STRING(8),
+      // @todo: To change DB schema.
+      type: DataTypes.ENUM([
+        CHANNEL_MEMBERSHIP_ROLES.ADMIN,
+        CHANNEL_MEMBERSHIP_ROLES.VIEWER,
+      ]),
       allowNull: false,
       defaultValue: CHANNEL_MEMBERSHIP_ROLES.VIEWER,
     },
@@ -34,6 +38,10 @@ module.exports = (sequelize, DataTypes) => {
         CHANNEL_MEMBERSHIP_TYPE.ADDED_BY_EMAIL_BY_ADMIN,
       ]),
       defaultValue: CHANNEL_MEMBERSHIP_TYPE.ADDED_IN_APP_BY_ADMIN,
+    },
+    isVerified: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
     },
     createdAt: {
       type: DataTypes.DATE,

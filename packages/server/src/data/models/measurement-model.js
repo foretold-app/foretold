@@ -48,7 +48,7 @@ class MeasurementModel extends ModelPostgres {
    * @return {*[] | null}
    * @protected
    */
-  _getOrder() {
+  _getDefaultOrder() {
     return [
       ['relevantAt', 'DESC'],
       ['createdAt', 'DESC'],

@@ -890,11 +890,23 @@ class ModelPostgres extends Model {
   _verifiedMeasurements(name = '') {
     return `(
       /* Verified Channel Memberships (${name}) */
+      WITH "Measurable" AS (
+          SELECT "Measurables"."channelId"
+          FROM "Measurables"
+          WHERE "Measurables"."id" = "Measurement"."measurableId"
+          LIMIT 1
+      ),
+      "Channel" AS (
+          SELECT "Channels"."requireVerification", "Channels"."id"
+          FROM "Channels", "Measurable"
+          WHERE "Channels"."id" = "Measurable"."channelId"
+          LIMIT 1
+      )
       SELECT "ChannelMemberships"."agentId"
-      FROM "ChannelMemberships"
-      LEFT JOIN "Channels" ON "Channels"."id" = "ChannelMemberships"."channelId"
-      WHERE "ChannelMemberships"."isVerified" = TRUE
-      OR "Channels"."requireVerification" != TRUE
+      FROM "ChannelMemberships", "Channel"
+      WHERE "ChannelMemberships"."channelId" = "Channel"."id"
+        AND ("ChannelMemberships"."isVerified" = TRUE
+          OR "Channel"."requireVerification" != TRUE)
     )`;
   }
 

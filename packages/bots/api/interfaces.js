@@ -33,7 +33,7 @@ query measurements(
   $findInDateRange: MeasurementsInDateRangeInput
 ) {
   measurements(
-    first: 200
+    first: 500
     measurableId: $measurableId
     competitorType: $competitorType
     notTaggedByAgent: $notTaggedByAgent

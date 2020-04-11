@@ -182,7 +182,8 @@ class API {
     if (errors.length === 0) return;
     _.each(errors, (err) => {
       const message = _.get(err, 'message', null);
-      console.error(message);
+      const path = _.get(err, 'path', null);
+      console.error(message + ', path = ' + path.join('.') + '.');
     });
   }
 }

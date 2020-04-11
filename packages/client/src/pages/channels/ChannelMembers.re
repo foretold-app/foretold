@@ -100,8 +100,8 @@ module Columns = {
                  {"Member" |> Utils.ste}
                </div>
              }}
-            {switch (membership.role, membership.isVerified) {
-             | (`VIEWER, Some(true)) =>
+            {switch (membership.isVerified) {
+             | Some(true) =>
                <div className="ant-tag ant-tag-magenta">
                  {"Verified" |> Utils.ste}
                </div>

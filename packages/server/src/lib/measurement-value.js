@@ -64,16 +64,6 @@ class MeasurementValue {
             + `${MeasurementValue.FLOAT_CDF_MAX_XS}.`);
         }
 
-        const isXsNormalized = _.every(xs, _.isNumber);
-        if (!isXsNormalized) {
-          throw new Error('An array of Xs includes not numbers.');
-        }
-
-        const isYsNormalized = _.every(ys, _.isNumber);
-        if (!isYsNormalized) {
-          throw new Error('An array of Ys includes not numbers.');
-        }
-
         return true;
       }
 

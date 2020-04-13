@@ -47,6 +47,7 @@ class MeasurementValue {
    */
   validate() {
     switch (this.type) {
+
       case MEASUREMENT_VALUE.floatCdf: {
         const xs = _.get(this.value, 'xs');
         const sizeXs = _.size(xs);
@@ -57,17 +58,22 @@ class MeasurementValue {
         if (sizeXs !== sizeYs) {
           throw new Error('Xs and Ys should be the same size.');
         }
+
         if (sizeXs > MeasurementValue.FLOAT_CDF_MAX_XS) {
           throw new Error(`Xs of length (${sizeXs}) `
             + 'exceeds maximum of length '
             + `${MeasurementValue.FLOAT_CDF_MAX_XS}.`);
         }
+
         return true;
       }
+
       case MEASUREMENT_VALUE.none:
         return false;
+
       default:
         return true;
+
     }
   }
 }

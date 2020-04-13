@@ -778,12 +778,20 @@ class ModelPostgres extends Model {
   _publicAndJoinedChannels(agentId, name = '') {
     assert(!!agentId, 'Agent ID is required.');
     return `(
-      /* P͟u͟b͟l͟i͟c͟ ͟a͟n͟d͟ ͟J͟o͟i͟n͟e͟d͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${name}) */
+      /* Public and Joined Channels (${name}) */
       SELECT "Channels"."id" FROM "Channels"
-      LEFT OUTER JOIN
-        "ChannelMemberships"
+      LEFT OUTER JOIN "ChannelMemberships"
         ON "Channels".id = "ChannelMemberships"."channelId"
-        AND "ChannelMemberships"."agentId" = '${agentId}'
+        AND (
+          "ChannelMemberships"."agentId" = '${agentId}'
+          OR "ChannelMemberships"."agentId" = (
+            /* AgentId of bot owner */
+            SELECT "Users"."agentId" FROM "Bots"
+            LEFT JOIN "Users" ON "Users"."id" = "Bots"."userId"
+            WHERE "Bots"."agentId" = '${agentId}'
+            LIMIT 1
+          )
+        )
       WHERE
         "ChannelMemberships"."agentId" IS NOT NULL
         OR "Channels"."isPublic" = TRUE
@@ -806,7 +814,7 @@ class ModelPostgres extends Model {
    */
   _publicChannels(name = '') {
     return `(
-      /* P͟u͟b͟l͟i͟c͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${name}) */
+      /* Public Channels (${name}) */
       SELECT "Channels"."id" FROM "Channels"
       WHERE "Channels"."isPublic" = TRUE
     )`;
@@ -834,10 +842,9 @@ class ModelPostgres extends Model {
   _joinedChannels(agentId, name = '') {
     assert(!!agentId, 'Agent ID is required.');
     return `(
-      /* J͟o͟i͟n͟e͟d͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${name}) */
+      /* Joined Channel (${name}) */
       SELECT "Channels"."id" FROM "Channels"
-      LEFT OUTER JOIN
-        "ChannelMemberships"
+      LEFT OUTER JOIN "ChannelMemberships"
         ON "Channels".id = "ChannelMemberships"."channelId"
         AND "ChannelMemberships"."agentId" = '${agentId}'
       WHERE
@@ -854,7 +861,7 @@ class ModelPostgres extends Model {
    * @return {Sequelize.literal}
    */
   _agentsIdsLiteral(channelId, name = '') {
-    return this.literal(this._agentsIds(channelId));
+    return this.literal(this._agentsIds(channelId, name));
   }
 
   /**
@@ -868,7 +875,7 @@ class ModelPostgres extends Model {
   _agentsIds(channelId, name = '') {
     assert(!!channelId, 'Channel ID is required.');
     return `(
-      /* Agent Ids (${name}) */
+      /* AgentIds (${name}) */
       SELECT "ChannelMemberships"."agentId" FROM "ChannelMemberships"
       WHERE "ChannelMemberships"."channelId" = '${channelId}'
     )`;
@@ -928,7 +935,7 @@ class ModelPostgres extends Model {
   _taggedMeasurements(agentId, name = '') {
     assert(!!agentId, 'Agent ID is required.');
     return `(
-      /* T͟a͟g͟g͟e͟d͟ ͟M͟e͟a͟s͟u͟r͟e͟m͟e͟n͟t͟s͟ (${name}) */
+      /* Tagged Measurements͟ (${name}) */
       SELECT "taggedMeasurementId"
       FROM "Measurements"
       WHERE "agentId" = '${agentId}'
@@ -958,7 +965,7 @@ class ModelPostgres extends Model {
   _measurablesInPublicAndJoinedChannels(agentId, name = '') {
     assert(!!agentId, 'Agent ID is required.');
     return `(
-      /* M͟e͟a͟s͟u͟r͟a͟b͟l͟e͟s͟ ͟i͟n͟ ͟P͟u͟b͟l͟i͟c͟ ͟a͟n͟d͟ ͟J͟o͟i͟n͟e͟d͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${name}) */
+      /* Measurables in Public and Joined Channels (${name}) */
       WITH channelIds AS (${this._publicAndJoinedChannels(agentId, name)})
       SELECT "Measurables"."id" FROM "Measurables"
       WHERE "Measurables"."channelId" IN (SELECT id FROM channelIds)
@@ -984,7 +991,7 @@ class ModelPostgres extends Model {
    */
   _measurablesInPublicChannels(name = '') {
     return `(
-      /* M͟e͟a͟s͟u͟r͟a͟b͟l͟e͟s͟ ͟i͟n͟ ͟P͟u͟b͟l͟i͟c͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${name}) */
+      /* Measurables in Public Channels (${name}) */
       WITH channelIds AS (${this._publicChannels(name)})
       SELECT "Measurables"."id" FROM "Measurables"
       WHERE "Measurables"."channelId" IN (SELECT id FROM channelIds)
@@ -1024,7 +1031,7 @@ class ModelPostgres extends Model {
     const where = cond.length > 0 ? `WHERE (${cond.join(' AND ')})` : '';
 
     return `(
-      /* W͟i͟t͟h͟i͟n͟ ͟M͟e͟a͟s͟u͟r͟a͟b͟l͟e͟s͟ (${name}) */
+      /* Within Measurables (${name}) */
       SELECT "id" FROM "Measurables"
       ${where}
     )`;

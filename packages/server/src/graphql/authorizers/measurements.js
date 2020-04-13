@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const { rule } = require('graphql-shield');
+
 const logger = require('../../lib/log');
 const { MEASUREMENT_COMPETITOR_TYPE } = require('../../enums');
 

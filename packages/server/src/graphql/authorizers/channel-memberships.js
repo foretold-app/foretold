@@ -16,8 +16,7 @@ function currentAgentIsChannelAdminRule(_root, args, context) {
   const roleName = CHANNEL_MEMBERSHIP_ROLES.ADMIN;
   const role = _.get(context, 'channelMembershipsRole', null);
 
-  const result = (!!role && !!roleName)
-    && (role === roleName);
+  const result = (!!role && !!roleName) && (role === roleName);
 
   log.trace(
     '\x1b[33m Rule Channel Memberships (currentAgentIsChannelAdminRule) '
@@ -38,8 +37,7 @@ function currentAgentIsChannelAdminFromRootRule(root, _args, _context, _info) {
   const roleName = CHANNEL_MEMBERSHIP_ROLES.ADMIN;
   const role = _.get(root, 'role', null);
 
-  const result = (!!role && !!roleName)
-    && (role === roleName);
+  const result = (!!role && !!roleName) && (role === roleName);
 
   log.trace(
     '\x1b[33m Rule Channel Memberships (currentAgentIsChannelAdminFromRootRule)'
@@ -59,11 +57,52 @@ function currentAgentIsChannelViewerRule(_root, args, context) {
   const roleName = CHANNEL_MEMBERSHIP_ROLES.VIEWER;
   const role = _.get(context, 'channelMembershipsRole', null);
 
-  const result = (!!role && !!roleName)
-    && (role === roleName);
+  const result = (!!role && !!roleName) && (role === roleName);
 
   log.trace(
     '\x1b[33m Rule Channel Memberships (currentAgentIsChannelViewerRule) '
+    + `role "${role}" = "${roleName}", result = "${result}".\x1b[0m`,
+  );
+
+  return result;
+}
+
+/**
+ * @param {*} _root
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @return {boolean}
+ */
+function currentBotUserOwnerAgentIsChannelViewerRule(_root, args, context) {
+  const roleName = CHANNEL_MEMBERSHIP_ROLES.VIEWER;
+  const role = _.get(context, 'botUserOwnerChannelMembershipsRole', null);
+
+  const result = (!!role && !!roleName) && (role === roleName);
+
+  log.trace(
+    '\x1b[33m Rule Channel Memberships '
+    + '(currentBotUserOwnerAgentIsChannelViewerRule) '
+    + `role "${role}" = "${roleName}", result = "${result}".\x1b[0m`,
+  );
+
+  return result;
+}
+
+/**
+ * @param {*} _root
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @return {boolean}
+ */
+function currentBotUserOwnerAgentIsChannelAdminRule(_root, args, context) {
+  const roleName = CHANNEL_MEMBERSHIP_ROLES.ADMIN;
+  const role = _.get(context, 'botUserOwnerChannelMembershipsRole', null);
+
+  const result = (!!role && !!roleName) && (role === roleName);
+
+  log.trace(
+    '\x1b[33m Rule Channel Memberships '
+    + '(currentBotUserOwnerAgentIsChannelAdminRule) '
     + `role "${role}" = "${roleName}", result = "${result}".\x1b[0m`,
   );
 
@@ -206,6 +245,16 @@ const currentAgentIsChannelAdminFromRoot = rule({
   cache: 'no_cache',
 })(currentAgentIsChannelAdminFromRootRule);
 
+/** @type {Rule} */
+const currentBotUserOwnerAgentIsChannelViewer = rule({
+  cache: 'no_cache',
+})(currentBotUserOwnerAgentIsChannelViewerRule);
+
+/** @type {Rule} */
+const currentBotUserOwnerAgentIsChannelAdmin = rule({
+  cache: 'no_cache',
+})(currentBotUserOwnerAgentIsChannelAdminRule);
+
 module.exports = {
   currentAgentIsChannelAdmin,
   currentAgentIsChannelViewer,
@@ -214,4 +263,6 @@ module.exports = {
   membershipBelongsToCurrentAgent,
   membershipHasAdminRole,
   currentAgentIsChannelAdminFromRoot,
+  currentBotUserOwnerAgentIsChannelViewer,
+  currentBotUserOwnerAgentIsChannelAdmin,
 };

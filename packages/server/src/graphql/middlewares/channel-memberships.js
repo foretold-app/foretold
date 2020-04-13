@@ -48,6 +48,46 @@ async function setContextChannelMemberships(root, args, context, _info) {
 }
 
 /**
+ * @param {object | null} root
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @param {object} _info
+ * @return {Promise<void>}
+ */
+async function setContextBotOwnerChannelMemberships(
+  root, args, context, _info,
+) {
+  const channelId = _.get(args, 'channelId', null)
+    || _.get(args, 'input.channelId', null)
+    || _.get(root, 'channelId', null)
+    || _.get(context, 'channelId', null)
+    || _.get(context, 'measurable.channelId', null)
+    || _.get(context, 'channel.id', null);
+  const agentId = _.get(context, 'botUserOwner.agentId', null);
+
+  const compoundId = { agentId, channelId };
+
+  log.trace('\x1b[36m ---> \x1b[0m Middleware '
+    + '(setContextBotOwnerChannelMemberships)', compoundId);
+
+  if (!!channelId && !!agentId) {
+    const params = new Params(compoundId);
+    const query = new Query();
+    const options = new Options({ raw: true });
+    const channelMembership = await new ChannelMembershipsData().getOne(
+      params, query, options,
+    );
+    context.botUserOwnerChannelMembership = channelMembership;
+    context.botUserOwnerChannelMembershipsRole = _.get(
+      channelMembership, 'role', null,
+    );
+  } else {
+    context.botUserOwnerChannelMembership = null;
+    context.botUserOwnerChannelMembershipsRole = null;
+  }
+}
+
+/**
  * @todo: To fix "||" a joined logic.
  * @param {object | null} root
  * @param {object} args
@@ -77,4 +117,5 @@ async function setContextChannelMembershipsAdmins(root, args, context, _info) {
 module.exports = {
   setContextChannelMemberships,
   setContextChannelMembershipsAdmins,
+  setContextBotOwnerChannelMemberships,
 };

@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-const { MEASUREMENT_VALUE } = require('../../enums');
+const { MEASUREMENT_VALUE } = require('../enums');
 
 class MeasurementValue {
   constructor(input) {
@@ -47,7 +47,6 @@ class MeasurementValue {
    */
   validate() {
     switch (this.type) {
-
       case MEASUREMENT_VALUE.floatCdf: {
         const xs = _.get(this.value, 'xs');
         const sizeXs = _.size(xs);
@@ -65,6 +64,16 @@ class MeasurementValue {
             + `${MeasurementValue.FLOAT_CDF_MAX_XS}.`);
         }
 
+        const isXsNormalized = _.every(xs, _.isNumber);
+        if (!isXsNormalized) {
+          throw new Error('An array of Xs includes not numbers.');
+        }
+
+        const isYsNormalized = _.every(ys, _.isNumber);
+        if (!isYsNormalized) {
+          throw new Error('An array of Ys includes not numbers.');
+        }
+
         return true;
       }
 
@@ -73,7 +82,6 @@ class MeasurementValue {
 
       default:
         return true;
-
     }
   }
 }

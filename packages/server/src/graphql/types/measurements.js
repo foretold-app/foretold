@@ -19,10 +19,18 @@ const measurementValueInputFloatCdf = new graphql.GraphQLInputObjectType({
   name: 'MeasurementValueInputFloatCdf',
   fields: () => ({
     xs: {
-      type: graphql.GraphQLNonNull(graphql.GraphQLList(graphql.GraphQLFloat)),
+      type: graphql.GraphQLNonNull(
+        graphql.GraphQLList(
+          graphql.GraphQLNonNull(graphql.GraphQLFloat),
+        ),
+      ),
     },
     ys: {
-      type: graphql.GraphQLNonNull(graphql.GraphQLList(graphql.GraphQLFloat)),
+      type: graphql.GraphQLNonNull(
+        graphql.GraphQLList(
+          graphql.GraphQLNonNull(graphql.GraphQLFloat),
+        ),
+      ),
     },
   }),
 });
@@ -32,12 +40,16 @@ const measurementValueFloatCdf = new graphql.GraphQLObjectType({
   fields: () => ({
     xs: {
       type: graphql.GraphQLNonNull(
-        graphql.GraphQLList(graphql.GraphQLNonNull(graphql.GraphQLFloat)),
+        graphql.GraphQLList(
+          graphql.GraphQLNonNull(graphql.GraphQLFloat),
+        ),
       ),
     },
     ys: {
       type: graphql.GraphQLNonNull(
-        graphql.GraphQLList(graphql.GraphQLNonNull(graphql.GraphQLFloat)),
+        graphql.GraphQLList(
+          graphql.GraphQLNonNull(graphql.GraphQLFloat),
+        ),
       ),
     },
   }),

@@ -85,7 +85,8 @@ class AuthenticationSecondary {
    *  agent: Models.Agent,
    *  creator: Models.Creator,
    *  bot: Models.Bot,
-   *  user: Models.Bot,
+   *  user: Models.User,
+   *  botUserOwner: Models.User,
    * }>}
    */
   async _getContext(agentId) {
@@ -102,8 +103,12 @@ class AuthenticationSecondary {
     const user = await this.users.getOne(new Params({ agentId }));
     const creator = bot || user;
 
+    const botUserOwner = !!bot
+      ? await this.users.getOne(new Params({ id: bot.userId }))
+      : null;
+
     return {
-      agent, bot, user, creator,
+      agent, bot, user, creator, botUserOwner,
     };
   }
 }

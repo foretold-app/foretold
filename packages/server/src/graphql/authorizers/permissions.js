@@ -5,9 +5,6 @@ const { currentAgentIsApplicationAdmin } = require('./agents');
 const { channelIsPublic } = require('./channels');
 const { currentAgentIsChannelAdmin } = require('./channel-memberships');
 const { currentAgentIsChannelViewer } = require('./channel-memberships');
-const {
-  channelHasMembershipWithCurrentAgent,
-} = require('./channel-memberships');
 const { channelHasMultipleAdmins } = require('./channel-memberships');
 const { membershipBelongsToCurrentAgent } = require('./channel-memberships');
 const { measurableIsOwnedByCurrentAgent } = require('./measurables');
@@ -23,6 +20,15 @@ const { rateLimit } = require('./rate-limit');
 const { measurementIsCompetitiveOrCommentOnly } = require('./measurements');
 const { measurementIsOwnedByCurrentAgent } = require('./measurements');
 const { channelRequiresVerification } = require('./channels');
+const { currentBotUserOwnerAgentIsChannelViewer } = require(
+  './channel-memberships',
+);
+const { currentBotUserOwnerAgentIsChannelAdmin } = require(
+  './channel-memberships',
+);
+const { channelHasMembershipWithCurrentAgent } = require(
+  './channel-memberships',
+);
 
 const currentAgentIsApplicationAdminOrChannelAdmin = or(
   currentAgentIsApplicationAdmin,
@@ -96,6 +102,10 @@ const rulesMeasurables = () => ({
         or(
           currentAgentIsApplicationAdminOrChannelAdmin,
           currentAgentIsChannelViewer,
+          or (
+            currentBotUserOwnerAgentIsChannelViewer,
+            currentBotUserOwnerAgentIsChannelAdmin,
+          ),
         ),
       ),
     ),

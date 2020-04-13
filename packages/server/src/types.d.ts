@@ -265,6 +265,8 @@ export namespace Schema {
     measurement?: Defs.Measurement;
     measurable?: Defs.Measurable;
     channelBookmark?: Defs.ChannelBookmark;
+    botUserOwnerChannelMembership?: Defs.ChannelMemberships;
+    botUserOwnerChannelMembershipsRole?: Defs.ChannelMembershipRole[];
   }
 
   export interface ChannelsInput {

@@ -3,7 +3,7 @@ const { ApolloServer } = require('apollo-server-express');
 const depthLimit = require('graphql-depth-limit');
 
 const { schemaWithMiddlewares } = require('./schema');
-const { initContext } = require('./middlewares/init-context');
+const { context } = require('./middlewares/context');
 const logger = require('../lib/log');
 
 const log = logger.module('graphql/apollo-server');
@@ -29,7 +29,7 @@ const apolloServer = new ApolloServerDepth({
     log.error(_.get(error, 'extensions.exception.stacktrace'));
     return error;
   },
-  context: initContext,
+  context,
 });
 
 module.exports = {

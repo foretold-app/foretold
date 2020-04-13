@@ -4,6 +4,9 @@ const { setContextBot } = require('./bots');
 const { setContextChannel, setContextChannelByRoot } = require('./channels');
 const { setContextChannelMemberships } = require('./channel-memberships');
 const { setContextChannelMembershipsAdmins } = require('./channel-memberships');
+const { setContextBotOwnerChannelMemberships } = require(
+  './channel-memberships',
+);
 const { setContextMeasurable } = require('./measurables');
 const { setContextMeasurableByRoot } = require('./measurables');
 const { setContextMeasurement } = require('./measurements');
@@ -123,6 +126,7 @@ const middlewares = {
       await setContextMeasurable(root, args, context, info);
       await setContextChannel(root, args, context, info);
       await setContextChannelMemberships(root, args, context, info);
+      await setContextBotOwnerChannelMemberships(root, args, context, info);
       return resolve(root, args, context, info);
     },
 

@@ -207,6 +207,14 @@ module Columns = {
       (),
     );
 
+  let sortByPoints = (item1: Types.leaderboardItem, item2: Types.leaderboardItem) => {
+    switch((item1.pointScore, item2.pointScore)){
+    | (None, _) => -1;
+    | (_, None) => 1;
+    | (Some(x), Some (y)) => - Pervasives.compare(x, y);
+    }
+  };
+
   let measurables = [|
     agent,
     measurable,
@@ -244,5 +252,7 @@ module Columns = {
 };
 
 [@react.component]
-let make = (~items, ~columns=Columns.measurables) =>
+let make = (~items : array(Types.leaderboardItem), ~columns=Columns.measurables) =>{
+  Array.sort(Columns.sortByPoints, items);
   <Table columns rows=items />;
+}

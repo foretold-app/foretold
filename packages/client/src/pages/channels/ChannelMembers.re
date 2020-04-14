@@ -19,6 +19,40 @@ let changeRoleAction = (agentId, channelId, role, text) =>
     }
   </ChannelMembershipRoleUpdate.Mutation>;
 
+let verify = (agentId, channelId, text) =>
+  <ChannelMembershipVerify.Mutation>
+    ...{(mutation, _) =>
+      <Link
+        linkType={
+          Action(
+            _ =>
+              ChannelMembershipVerify.mutate(mutation, ~agentId, ~channelId),
+          )
+        }>
+        {text |> Utils.ste}
+      </Link>
+    }
+  </ChannelMembershipVerify.Mutation>;
+
+let unverify = (agentId, channelId, text) =>
+  <ChannelMembershipUnverify.Mutation>
+    ...{(mutation, _) =>
+      <Link
+        linkType={
+          Action(
+            _ =>
+              ChannelMembershipUnverify.mutate(
+                mutation,
+                ~agentId,
+                ~channelId,
+              ),
+          )
+        }>
+        {text |> Utils.ste}
+      </Link>
+    }
+  </ChannelMembershipUnverify.Mutation>;
+
 // @todo: To make component.
 let removeFromChannel = (agentId, channelId) =>
   <ChannelMembershipDelete.Mutation>
@@ -55,16 +89,25 @@ module Columns = {
       ~name="Role" |> Utils.ste,
       ~render=
         (membership: Types.channelMembership) =>
-          switch (membership.role) {
-          | `ADMIN =>
-            <div className="ant-tag ant-tag-blue">
-              {"Admin" |> Utils.ste}
-            </div>
-          | `VIEWER =>
-            <div className="ant-tag ant-tag-green">
-              {"Member" |> Utils.ste}
-            </div>
-          },
+          <>
+            {switch (membership.role) {
+             | `ADMIN =>
+               <div className="ant-tag ant-tag-blue">
+                 {"Admin" |> Utils.ste}
+               </div>
+             | `VIEWER =>
+               <div className="ant-tag ant-tag-green">
+                 {"Member" |> Utils.ste}
+               </div>
+             }}
+            {switch (membership.isVerified) {
+             | Some(true) =>
+               <div className="ant-tag ant-tag-magenta">
+                 {"Verified" |> Utils.ste}
+               </div>
+             | _ => <Null />
+             }}
+          </>,
       (),
     );
 
@@ -107,6 +150,51 @@ module Columns = {
       (),
     );
 
+  let verificationChange = channelId =>
+    Table.Column.make(
+      ~name="Change Verification" |> Utils.ste,
+      ~render=
+        (membership: Types.channelMembership) =>
+          <div>
+            {switch (membership.isVerified, membership.agent) {
+             | (Some(true), Some(agent)) =>
+               E.React2.showIf(
+                 Primary.Permissions.can(
+                   `CHANNEL_MEMBERSHIP_UNVERIFY,
+                   membership.permissions,
+                 ),
+                 unverify(agent.id, channelId, "Remove Verification"),
+               )
+             | (_, Some(agent)) =>
+               E.React2.showIf(
+                 Primary.Permissions.can(
+                   `CHANNEL_MEMBERSHIP_VERIFY,
+                   membership.permissions,
+                 ),
+                 verify(agent.id, channelId, "Verify"),
+               )
+             | _ => <Null />
+             }}
+          </div>,
+      ~show=
+        (membership: Types.channelMembership) => {
+          switch (membership.isVerified, membership.agent) {
+          | (Some(true), Some(agent)) =>
+            Primary.Permissions.can(
+              `CHANNEL_MEMBERSHIP_UNVERIFY,
+              membership.permissions,
+            )
+          | (_, Some(agent)) =>
+            Primary.Permissions.can(
+              `CHANNEL_MEMBERSHIP_VERIFY,
+              membership.permissions,
+            )
+          | _ => false
+          }
+        },
+      (),
+    );
+
   let removeFromChannel = channelId =>
     Table.Column.make(
       ~name="Remove" |> Utils.ste,
@@ -131,6 +219,7 @@ module Columns = {
         agent,
         role,
         roleChange(channelId),
+        verificationChange(channelId),
         removeFromChannel(channelId),
       |]
     | _ => [|agent, role|]
@@ -162,7 +251,8 @@ let addMembersButtonSection = (channelId: string) =>
     </ForetoldComponents.Base.Button>
   </ForetoldComponents.Base.Div>;
 
-// Currently seems broken, so I removed it for now. Add to "SuccesFn" later when fixed.
+// Currently seems broken, so I removed it for now.
+// Add to "SuccesFn" later when fixed.
 let inviteMemberButtonSection = (channelId: string) =>
   <ForetoldComponents.Base.Div
     float=`right
@@ -191,7 +281,11 @@ let succesFn = (~channelId: string, ~channel: Types.channel, ~memberships) => {
   let table =
     <Table columns={Columns.all(channelId, channel)} rows=memberships />;
 
-  <SLayout head> <ForetoldComponents.PageCard.Body> table </ForetoldComponents.PageCard.Body> </SLayout>;
+  <SLayout head>
+    <ForetoldComponents.PageCard.Body>
+      table
+    </ForetoldComponents.PageCard.Body>
+  </SLayout>;
 };
 
 let errorFn = _ => <NotFoundPage />;

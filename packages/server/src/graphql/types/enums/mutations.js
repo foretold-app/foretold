@@ -29,6 +29,8 @@ const mutations = new graphql.GraphQLEnumType({
     UNSUBSCRIBE: { value: 'UNSUBSCRIBE' },
     USER_UPDATE: { value: 'USER_UPDATE' },
     NOTEBOOK_UPDATE: { value: 'NOTEBOOK_UPDATE' },
+    CHANNEL_MEMBERSHIP_VERIFY: { value: 'CHANNEL_MEMBERSHIP_VERIFY' },
+    CHANNEL_MEMBERSHIP_UNVERIFY: { value: 'CHANNEL_MEMBERSHIP_UNVERIFY' },
   },
 });
 

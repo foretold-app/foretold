@@ -23,15 +23,19 @@ async function create(_root, args, context) {
   const input = _.get(args, 'input') || {};
   const inviterAgentId = _.get(context, 'agent.id', null);
 
-  return new ChannelMembershipsData().upsertOne(new Params({
+  const params = new Params({
     channelId: input.channelId,
     agentId: input.agentId,
-  }), new Query(), new Data({
-    channelId: input.channelId,
-    agentId: input.agentId,
+  });
+  const query = new Query();
+  const data = new Data({
     inviterAgentId,
     role: input.role,
-  }));
+    agentId: input.agentId,
+    channelId: input.channelId,
+  });
+
+  return new ChannelMembershipsData().upsertOne(params, query, data);
 }
 
 /**
@@ -44,16 +48,14 @@ async function create(_root, args, context) {
  * @returns {Promise<Models.ChannelMemberships>}
  */
 async function update(_root, args) {
-  const input = _.get(args, 'input') || {};
+  const channelId = _.get(args, 'input.channelId', null);
+  const agentId = _.get(args, 'input.agentId', null);
+  const role = _.get(args, 'input.role', null);
 
-  return new ChannelMembershipsData().updateOne(new Params({
-    channelId: input.channelId,
-    agentId: input.agentId,
-  }), new Data({
-    channelId: input.channelId,
-    agentId: input.agentId,
-    role: input.role,
-  }));
+  const params = new Params({ channelId, agentId });
+  const data = new Data({ channelId, agentId, role });
+
+  return new ChannelMembershipsData().updateOne(params, data);
 }
 
 /**
@@ -66,10 +68,11 @@ async function update(_root, args) {
  */
 async function remove(_root, args) {
   const input = _.get(args, 'input') || {};
-  return new ChannelMembershipsData().deleteOne(new Params({
+  const params = new Params({
     channelId: input.channelId,
     agentId: input.agentId,
-  }));
+  });
+  return new ChannelMembershipsData().deleteOne(params);
 }
 
 /**
@@ -120,10 +123,8 @@ async function join(_root, args, context, _info) {
   const channelId = _.get(args, 'input.channelId', null);
   const agentId = _.get(context, 'agent.id', null);
 
-  return new ChannelMembershipsData().join({
-    channelId,
-    agentId,
-  });
+  const options = { channelId, agentId };
+  return new ChannelMembershipsData().join(options);
 }
 
 /**
@@ -137,10 +138,8 @@ async function leave(_root, args, context, _info) {
   const channelId = _.get(args, 'input.channelId', null);
   const agentId = _.get(context, 'agent.id', null);
 
-  return new ChannelMembershipsData().leave({
-    channelId,
-    agentId,
-  });
+  const options = { channelId, agentId };
+  return new ChannelMembershipsData().leave(options);
 }
 
 /**
@@ -154,10 +153,8 @@ async function myRole(root, _args, context, _info) {
   const channelId = _.get(root, 'id', null);
   const agentId = _.get(context, 'agent.id', null);
 
-  return new ChannelMembershipsData().getOneOnlyRole(new Params({
-    channelId,
-    agentId,
-  }));
+  const params = new Params({ channelId, agentId });
+  return new ChannelMembershipsData().getOneOnlyRole(params);
 }
 
 /**
@@ -171,6 +168,36 @@ async function membershipCount(root, _args, _context, _info) {
   return _.get(root, 'membersCount', 0);
 }
 
+/**
+ * @param _root
+ * @param {{input: {
+ * channelId: Models.ChannelID,
+ * agentId: Models.AgentID,
+ * }}} args
+ * @returns {Promise<boolean>}
+ */
+async function verify(_root, args) {
+  const channelId = _.get(args, 'input.channelId', null);
+  const agentId = _.get(args, 'input.agentId', null);
+  const isVerified = true;
+  return new ChannelMembershipsData().verify(channelId, agentId, isVerified);
+}
+
+/**
+ * @param _root
+ * @param {{input: {
+ * channelId: Models.ChannelID,
+ * agentId: Models.AgentID,
+ * }}} args
+ * @returns {Promise<boolean>}
+ */
+async function unverify(_root, args) {
+  const channelId = _.get(args, 'input.channelId', null);
+  const agentId = _.get(args, 'input.agentId', null);
+  const isVerified = false;
+  return new ChannelMembershipsData().verify(channelId, agentId, isVerified);
+}
+
 module.exports = {
   allByAgentId,
   allByChannelId,
@@ -181,4 +208,6 @@ module.exports = {
   leave,
   myRole,
   membershipCount,
+  verify,
+  unverify,
 };

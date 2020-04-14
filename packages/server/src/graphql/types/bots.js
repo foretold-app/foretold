@@ -6,11 +6,12 @@ const resolvers = require('../resolvers');
 const { measurementCompetitorType } = require('./enums');
 const commonTypes = require('./common');
 const permissionsTypes = require('./permissions');
+const scalars = require('./scalars');
 
 const bot = new graphql.GraphQLObjectType({
   name: 'Bot',
   fields: () => ({
-    id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    id: { type: graphql.GraphQLNonNull(scalars.$botId) },
     name: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     description: { type: graphql.GraphQLString },
     picture: { type: graphql.GraphQLString },
@@ -61,7 +62,7 @@ const botsEdge = new graphql.GraphQLObjectType({
   name: 'BotsEdge',
   fields: () => ({
     node: { type: bot },
-    cursor: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    cursor: { type: graphql.GraphQLNonNull(scalars.$cursor) },
   }),
 });
 

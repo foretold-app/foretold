@@ -77,7 +77,7 @@ class MeasurableModel extends ModelPostgres {
    * @return {*[]}
    * @protected
    */
-  _getOrder() {
+  _getDefaultOrder() {
     return [
       [this.sequelize.col('stateOrder'), 'ASC'],
       ['createdAt', 'DESC'],

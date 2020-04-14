@@ -17,8 +17,8 @@ let mutate =
   let m =
     Query.make(
       ~input={
-        "agentId": Some(agentId),
-        "channelId": Some(channelId),
+        "agentId": E.J.fromString(agentId),
+        "channelId": E.J.fromString(channelId),
         "role": role,
       },
       (),

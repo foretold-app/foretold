@@ -1,6 +1,6 @@
 const util = require('util');
 const { IncomingWebhook } = require('@slack/client');
-const logger = require('../lib/log');
+const logger = require('./log');
 
 const log = logger.module('lib/slack');
 

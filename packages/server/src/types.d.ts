@@ -265,6 +265,8 @@ export namespace Schema {
     measurement?: Defs.Measurement;
     measurable?: Defs.Measurable;
     channelBookmark?: Defs.ChannelBookmark;
+    botUserOwnerChannelMembership?: Defs.ChannelMemberships;
+    botUserOwnerChannelMembershipsRole?: Defs.ChannelMembershipRole[];
   }
 
   export interface ChannelsInput {
@@ -367,6 +369,7 @@ export namespace Layers {
     isEmailVerified?: boolean[];
     notAuth0AccessToken?: boolean;
     isNotEmailVerified?: boolean;
+    isVerified?: boolean;
     needsToBePending?: boolean;
     needsResolutionResponse?: boolean;
     role?: string;

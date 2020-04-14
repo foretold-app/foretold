@@ -1,7 +1,7 @@
 const graphql = require('graphql');
 
 const resolvers = require('../resolvers');
-const { cursor, int500 } = require('./scalars');
+const { cursor, int500, $cursor } = require('./scalars');
 
 const iAmOwner = {
   type: graphql.GraphQLNonNull(graphql.GraphQLBoolean),
@@ -30,8 +30,8 @@ const pageInfoConnection = new graphql.GraphQLObjectType({
   fields: () => ({
     hasNextPage: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
     hasPreviousPage: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
-    startCursor: { type: graphql.GraphQLString },
-    endCursor: { type: graphql.GraphQLString },
+    startCursor: { type: $cursor },
+    endCursor: { type: $cursor },
   }),
 });
 

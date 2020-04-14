@@ -7,6 +7,7 @@ const resolvers = require('../resolvers');
 const commonTypes = require('./common');
 const channelsTypes = require('./channels');
 const agents = require('./agents');
+const scalars = require('./scalars');
 
 const feedItemBodyGeneric = new graphql.GraphQLObjectType({
   name: 'FeedItemBodyGeneric',
@@ -75,9 +76,9 @@ const feedItemBody = new graphql.GraphQLObjectType({
 const feedItem = new graphql.GraphQLObjectType({
   name: 'FeedItem',
   fields: () => ({
-    id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-    channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-    agentId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    id: { type: graphql.GraphQLNonNull(scalars.$feedItemId) },
+    channelId: { type: graphql.GraphQLNonNull(scalars.$channelId) },
+    agentId: { type: graphql.GraphQLNonNull(scalars.$agentId) },
     body: { type: graphql.GraphQLNonNull(feedItemBody) },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
@@ -98,7 +99,7 @@ const feedItemEdge = new graphql.GraphQLObjectType({
   name: 'FeedItemEdge',
   fields: () => ({
     node: { type: feedItem },
-    cursor: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    cursor: { type: graphql.GraphQLNonNull(scalars.$cursor) },
   }),
 });
 

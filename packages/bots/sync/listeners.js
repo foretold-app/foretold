@@ -1,30 +1,33 @@
 const emitter = require('./emitter');
 const events = require('./events');
 
+const logger = require('../log');
+
+const log = logger.module('bots/listeners');
 const bots = require('../bots');
 
 function runAggregationBot() {
   try {
-    console.log('Job::runAggregationBot');
+    log.trace('Job::runAggregationBot');
     new bots.Bot().main().then((result) => {
-      console.log('Job::runAggregationBot', 'all done', result);
+      log.trace('Job::runAggregationBot', 'all done', result);
     }).catch((err) => {
-      console.error('Job::runAggregationBot', err);
-      console.error(err);
+      log.error('Job::runAggregationBot', err);
+      log.error(err);
     });
   } catch (e) {
-    console.log('Job::runAggregationBot error');
-    console.error(e);
+    log.trace('Job::runAggregationBot error');
+    log.error(e);
   }
 }
 
 function runListeners() {
   try {
-    console.log('Jobs are ready.');
+    log.trace('Jobs are ready.');
     emitter.on(events.AGGREGATION_BOT, runAggregationBot);
   } catch (e) {
-    console.log('Listener error');
-    console.error(e);
+    log.trace('Listener error');
+    log.error(e);
   }
 }
 

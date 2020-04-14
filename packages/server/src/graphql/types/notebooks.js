@@ -68,7 +68,7 @@ const notebookEdge = new graphql.GraphQLObjectType({
   name: 'NotebookEdge',
   fields: () => ({
     node: { type: notebook },
-    cursor: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    cursor: { type: graphql.GraphQLNonNull(scalars.$cursor) },
   }),
 });
 

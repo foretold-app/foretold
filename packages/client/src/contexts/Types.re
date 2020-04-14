@@ -63,6 +63,8 @@ type permission = [
   | `NOTEBOOK_BOOKMARK_TOGGLE
   | `NOTEBOOK_DELETE
   | `NOTEBOOK_UPDATE
+  | `CHANNEL_MEMBERSHIP_UNVERIFY
+  | `CHANNEL_MEMBERSHIP_VERIFY
 ];
 
 type marketType = [ | `MARKET | `NON_MARKET];
@@ -144,6 +146,7 @@ and channel = {
 and channelMembership = {
   channel: option(channel),
   role: channelMembershipRole,
+  isVerified: option(bool),
   agent: option(agent),
   permissions: option(permissions),
 }

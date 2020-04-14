@@ -8,7 +8,7 @@ const { stats } = require('./types/stats');
 
 const { permissions } = require('./authorizers');
 const { middlewares } = require('./middlewares');
-const { validators } = require('./middlewares');
+const { validators } = require('./validators');
 
 const schema = new graphql.GraphQLSchema({
   types: [
@@ -27,8 +27,8 @@ const schema = new graphql.GraphQLSchema({
       permissions: {
         type: types.permissions.permissions,
         args: {
-          channelId: { type: graphql.GraphQLString },
-          measurableId: { type: graphql.GraphQLString },
+          channelId: { type: types.scalars.$channelId },
+          measurableId: { type: types.scalars.$measurableId },
         },
         resolve: resolvers.permissions.all,
       },
@@ -36,7 +36,7 @@ const schema = new graphql.GraphQLSchema({
       user: {
         type: types.users.user,
         args: {
-          id: { type: graphql.GraphQLString },
+          id: { type: types.scalars.$userId },
         },
         resolve: resolvers.users.one,
       },
@@ -49,7 +49,7 @@ const schema = new graphql.GraphQLSchema({
       measurement: {
         type: types.measurements.measurement,
         args: {
-          id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+          id: { type: graphql.GraphQLNonNull(types.scalars.$measurementId) },
         },
         resolve: resolvers.measurements.one,
       },
@@ -60,10 +60,10 @@ const schema = new graphql.GraphQLSchema({
           ...types.common.connectionArguments,
 
           // IDs
-          measurableId: { type: graphql.GraphQLString },
-          agentId: { type: graphql.GraphQLString },
-          channelId: { type: graphql.GraphQLString },
-          notTaggedByAgent: { type: graphql.GraphQLString },
+          measurableId: { type: types.scalars.$measurableId },
+          agentId: { type: types.scalars.$agentId },
+          channelId: { type: types.scalars.$channelId },
+          notTaggedByAgent: { type: types.scalars.$agentId },
 
           competitorType: {
             type: graphql.GraphQLList(
@@ -76,6 +76,7 @@ const schema = new graphql.GraphQLSchema({
           measurableState: {
             type: graphql.GraphQLList(types.measurables.measurableState),
           },
+          isVerified: { type: graphql.GraphQLBoolean },
         },
         resolve: resolvers.measurements.all,
       },
@@ -83,7 +84,7 @@ const schema = new graphql.GraphQLSchema({
       measurable: {
         type: types.measurables.measurable,
         args: {
-          id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+          id: { type: graphql.GraphQLNonNull(types.scalars.$measurableId) },
         },
         resolve: resolvers.measurables.one,
       },
@@ -94,13 +95,13 @@ const schema = new graphql.GraphQLSchema({
           ...types.common.connectionArguments,
           measurableIds: {
             type: graphql.GraphQLList(
-              graphql.GraphQLNonNull(graphql.GraphQLString),
+              graphql.GraphQLNonNull(types.scalars.$measurableId),
             ),
           },
-          creatorId: { type: graphql.GraphQLString },
-          seriesId: { type: graphql.GraphQLString },
-          channelId: { type: graphql.GraphQLString },
-          measuredByAgentId: { type: graphql.GraphQLString },
+          creatorId: { type: types.scalars.$agentId },
+          seriesId: { type: types.scalars.$seriesId },
+          channelId: { type: types.scalars.$channelId },
+          measuredByAgentId: { type: types.scalars.$agentId },
           states: {
             type: graphql.GraphQLList(
               types.measurables.measurableState,
@@ -120,8 +121,8 @@ const schema = new graphql.GraphQLSchema({
         type: types.agentMeasurables.agentMeasurablesConnection,
         args: {
           ...types.common.connectionArguments,
-          channelId: { type: graphql.GraphQLString },
-          measurableId: { type: graphql.GraphQLString },
+          channelId: { type: types.scalars.$channelId },
+          measurableId: { type: types.scalars.$measurableId },
           measurableState: {
             type: graphql.GraphQLList(
               types.measurables.measurableState,
@@ -143,8 +144,8 @@ const schema = new graphql.GraphQLSchema({
           ...types.common.connectionArguments,
           minNumberOfPredictions: { type: graphql.GraphQLInt },
           minNumberOfQuestionsScored: { type: graphql.GraphQLInt },
-          channelId: { type: graphql.GraphQLString },
-          agentId: { type: graphql.GraphQLString },
+          channelId: { type: types.scalars.$channelId },
+          agentId: { type: types.scalars.$agentId },
         },
         resolve: resolvers.agentChannels.all,
       },
@@ -152,7 +153,7 @@ const schema = new graphql.GraphQLSchema({
       bot: {
         type: types.bots.bot,
         args: {
-          id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+          id: { type: graphql.GraphQLNonNull(types.scalars.$botId) },
         },
         resolve: resolvers.bots.one,
       },
@@ -161,7 +162,7 @@ const schema = new graphql.GraphQLSchema({
         type: types.bots.botsConnection,
         args: {
           ...types.common.connectionArguments,
-          ownerId: { type: graphql.GraphQLString },
+          ownerId: { type: types.scalars.$agentId },
         },
         resolve: resolvers.bots.all,
       },
@@ -189,8 +190,8 @@ const schema = new graphql.GraphQLSchema({
         type: types.feedItems.feedItemsConnection,
         args: {
           ...types.common.connectionArguments,
-          channelId: { type: graphql.GraphQLString },
-          agentId: { type: graphql.GraphQLString },
+          channelId: { type: types.scalars.$channelId },
+          agentId: { type: types.scalars.$agentId },
         },
         resolve: resolvers.feedItems.all,
       },
@@ -206,14 +207,14 @@ const schema = new graphql.GraphQLSchema({
       agent: {
         type: types.agents.agent,
         args: {
-          id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+          id: { type: graphql.GraphQLNonNull(types.scalars.$agentId) },
         },
         resolve: resolvers.agents.one,
       },
 
       agents: {
         args: {
-          excludeChannelId: { type: graphql.GraphQLString },
+          excludeChannelId: { type: types.scalars.$channelId },
           types: { type: graphql.GraphQLList(types.agents.agentType) },
         },
         type: graphql.GraphQLNonNull(graphql.GraphQLList(types.agents.agent)),
@@ -223,7 +224,7 @@ const schema = new graphql.GraphQLSchema({
       series: {
         type: types.series.series,
         args: {
-          id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+          id: { type: graphql.GraphQLNonNull(types.scalars.$seriesId) },
         },
         resolve: resolvers.series.one,
       },
@@ -231,14 +232,16 @@ const schema = new graphql.GraphQLSchema({
       seriesCollection: {
         type: graphql.GraphQLNonNull(graphql.GraphQLList(types.series.series)),
         args: {
-          channelId: { type: graphql.GraphQLString },
+          channelId: { type: types.scalars.$channelId },
         },
         resolve: resolvers.series.all,
       },
 
       channel: {
         type: types.channels.channel,
-        args: { id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) } },
+        args: {
+          id: { type: graphql.GraphQLNonNull(types.scalars.$channelId) },
+        },
         resolve: resolvers.channels.one,
       },
 
@@ -249,7 +252,7 @@ const schema = new graphql.GraphQLSchema({
         args: {
           offset: { type: graphql.GraphQLInt },
           limit: { type: graphql.GraphQLInt },
-          channelMemberId: { type: graphql.GraphQLString },
+          channelMemberId: { type: types.scalars.$agentId },
           isArchived: { type: graphql.GraphQLList(types.common.isArchived) },
           order: { type: graphql.GraphQLList(types.channels.orderChannels) },
         },
@@ -331,7 +334,7 @@ const schema = new graphql.GraphQLSchema({
       measurableArchive: {
         type: types.measurables.measurable,
         args: {
-          id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+          id: { type: graphql.GraphQLNonNull(types.scalars.$measurableId) },
         },
         resolve: resolvers.measurables.archive,
       },
@@ -339,7 +342,7 @@ const schema = new graphql.GraphQLSchema({
       measurableUnarchive: {
         type: types.measurables.measurable,
         args: {
-          id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+          id: { type: graphql.GraphQLNonNull(types.scalars.$measurableId) },
         },
         resolve: resolvers.measurables.unarchive,
       },
@@ -359,7 +362,7 @@ const schema = new graphql.GraphQLSchema({
       measurableUpdate: {
         type: types.measurables.measurable,
         args: {
-          id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+          id: { type: graphql.GraphQLNonNull(types.scalars.$measurableId) },
           input: {
             type: graphql.GraphQLNonNull(
               types.measurables.measurableUpdateInput,
@@ -372,7 +375,7 @@ const schema = new graphql.GraphQLSchema({
       userUpdate: {
         type: types.users.user,
         args: {
-          id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+          id: { type: graphql.GraphQLNonNull(types.scalars.$userId) },
           input: { type: graphql.GraphQLNonNull(types.users.userUpdateInput) },
         },
         resolve: resolvers.users.update,
@@ -381,7 +384,7 @@ const schema = new graphql.GraphQLSchema({
       userAccessTokenUpdate: {
         type: types.users.user,
         args: {
-          id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+          id: { type: graphql.GraphQLNonNull(types.scalars.$userId) },
           input: {
             type: graphql.GraphQLNonNull(
               types.users.userAccessTokenUpdateInput,
@@ -394,7 +397,7 @@ const schema = new graphql.GraphQLSchema({
       channelUpdate: {
         type: types.channels.channel,
         args: {
-          id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+          id: { type: graphql.GraphQLNonNull(types.scalars.$channelId) },
           input: { type: graphql.GraphQLNonNull(types.channels.channelInput) },
         },
         resolve: resolvers.channels.update,
@@ -406,6 +409,30 @@ const schema = new graphql.GraphQLSchema({
           input: { type: graphql.GraphQLNonNull(types.channels.channelInput) },
         },
         resolve: resolvers.channels.create,
+      },
+
+      channelMembershipVerify: {
+        type: graphql.GraphQLNonNull(graphql.GraphQLBoolean),
+        args: {
+          input: {
+            type: graphql.GraphQLNonNull(
+              types.channelMemberships.channelMembershipVerifyInput,
+            ),
+          },
+        },
+        resolve: resolvers.channelMemberships.verify,
+      },
+
+      channelMembershipUnverify: {
+        type: graphql.GraphQLNonNull(graphql.GraphQLBoolean),
+        args: {
+          input: {
+            type: graphql.GraphQLNonNull(
+              types.channelMemberships.channelMembershipUnverifyInput,
+            ),
+          },
+        },
+        resolve: resolvers.channelMemberships.unverify,
       },
 
       channelMembershipCreate: {
@@ -483,7 +510,7 @@ const schema = new graphql.GraphQLSchema({
       botUpdate: {
         type: types.bots.bot,
         args: {
-          id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+          id: { type: graphql.GraphQLNonNull(types.scalars.$botId) },
           input: { type: graphql.GraphQLNonNull(types.bots.botInput) },
         },
         resolve: resolvers.bots.update,
@@ -492,7 +519,7 @@ const schema = new graphql.GraphQLSchema({
       botTokenRefresh: {
         type: types.authentications.authenticationToken,
         args: {
-          id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+          id: { type: graphql.GraphQLNonNull(types.scalars.$botId) },
         },
         resolve: resolvers.bots.tokenRefresh,
       },
@@ -512,7 +539,7 @@ const schema = new graphql.GraphQLSchema({
       notebookUpdate: {
         type: types.notebooks.notebook,
         args: {
-          id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+          id: { type: graphql.GraphQLNonNull(types.scalars.$notebookId) },
           input: {
             type: graphql.GraphQLNonNull(
               types.notebooks.notebookUpdateInput,
@@ -557,7 +584,7 @@ const schema = new graphql.GraphQLSchema({
       preferenceUpdate: {
         type: types.preferences.preference,
         args: {
-          id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+          id: { type: graphql.GraphQLNonNull(types.scalars.$preferenceId) },
           input: {
             type: graphql.GraphQLNonNull(
               types.preferences.preferenceUpdateInput,
@@ -612,7 +639,7 @@ const schema = new graphql.GraphQLSchema({
         type: graphql.GraphQLBoolean,
         args: {
           id: {
-            type: graphql.GraphQLNonNull(graphql.GraphQLString),
+            type: graphql.GraphQLNonNull(types.scalars.$mutexId),
           },
         },
         resolve: resolvers.mutexes.free,

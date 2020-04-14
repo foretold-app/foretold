@@ -137,10 +137,16 @@ class ModelPostgres extends Model {
     this.applyRestrictions(where, restrictions);
     this.applyFilter(where, filter);
 
+    // Block 2
+    const order = pagination.isOrderSet()
+      ? this._getOrderFromPagination(pagination)
+      : this._getDefaultOrder();
+
     const findCond = {
       limit: pagination.limit,
       offset: pagination.offset,
       where,
+      order,
     };
     this._extendGenericConditions(findCond, options);
     this._extendAdvancedConditions(findCond, options);
@@ -194,12 +200,12 @@ class ModelPostgres extends Model {
     this._extendAdvancedConditions(findCond, options);
     const data = await this.model.findAll(findCond);
 
-    // Block 1
+    // Block 3
     const countCond = { where, include };
     this._extendGenericConditions(countCond, options);
     const total = await this.model.count(countCond);
 
-    // Block 3
+    // Block 4
     const spacedLimit = filter.getSpacedLimit();
     return new ResponseAll(data, total, offset, spacedLimit);
   }
@@ -472,6 +478,7 @@ class ModelPostgres extends Model {
     if (!where) where = {};
     if (!where[this.and]) where[this.and] = [];
 
+    const name = _.get(filter, 'constructor.name', 'Filter');
     this.applyAbstracts(where, filter);
 
     if (!!filter.isArchived) {
@@ -557,7 +564,16 @@ class ModelPostgres extends Model {
         id: {
           [this.notIn]: this._taggedMeasurementsLiteral(
             filter.notTaggedByAgent,
+            name,
           ),
+        },
+      });
+    }
+
+    if (!!filter.isVerified) {
+      where[this.and].push({
+        agentId: {
+          [this.in]: this._verifiedMeasurementsLiteral(name),
         },
       });
     }
@@ -628,7 +644,7 @@ class ModelPostgres extends Model {
     if (!!filter.excludeChannelId) {
       where[this.and].push({
         id: {
-          [this.notIn]: this._agentsIdsLiteral(filter.excludeChannelId),
+          [this.notIn]: this._agentsIdsLiteral(filter.excludeChannelId, name),
         },
       });
     }
@@ -762,12 +778,20 @@ class ModelPostgres extends Model {
   _publicAndJoinedChannels(agentId, name = '') {
     assert(!!agentId, 'Agent ID is required.');
     return `(
-      /* P͟u͟b͟l͟i͟c͟ ͟a͟n͟d͟ ͟J͟o͟i͟n͟e͟d͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${name}) */
+      /* Public and Joined Channels (${name}) */
       SELECT "Channels"."id" FROM "Channels"
-      LEFT OUTER JOIN
-        "ChannelMemberships"
+      LEFT OUTER JOIN "ChannelMemberships"
         ON "Channels".id = "ChannelMemberships"."channelId"
-        AND "ChannelMemberships"."agentId" = '${agentId}'
+        AND (
+          "ChannelMemberships"."agentId" = '${agentId}'
+          OR "ChannelMemberships"."agentId" = (
+            /* AgentId of bot owner */
+            SELECT "Users"."agentId" FROM "Bots"
+            LEFT JOIN "Users" ON "Users"."id" = "Bots"."userId"
+            WHERE "Bots"."agentId" = '${agentId}'
+            LIMIT 1
+          )
+        )
       WHERE
         "ChannelMemberships"."agentId" IS NOT NULL
         OR "Channels"."isPublic" = TRUE
@@ -790,7 +814,7 @@ class ModelPostgres extends Model {
    */
   _publicChannels(name = '') {
     return `(
-      /* P͟u͟b͟l͟i͟c͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${name}) */
+      /* Public Channels (${name}) */
       SELECT "Channels"."id" FROM "Channels"
       WHERE "Channels"."isPublic" = TRUE
     )`;
@@ -818,14 +842,104 @@ class ModelPostgres extends Model {
   _joinedChannels(agentId, name = '') {
     assert(!!agentId, 'Agent ID is required.');
     return `(
-      /* J͟o͟i͟n͟e͟d͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${name}) */
+      /* Joined Channel (${name}) */
       SELECT "Channels"."id" FROM "Channels"
-      LEFT OUTER JOIN
-        "ChannelMemberships"
+      LEFT OUTER JOIN "ChannelMemberships"
         ON "Channels".id = "ChannelMemberships"."channelId"
         AND "ChannelMemberships"."agentId" = '${agentId}'
       WHERE
         "ChannelMemberships"."agentId" IS NOT NULL
+    )`;
+  }
+
+
+  /**
+   * @todo: see this._publicAndJoinedChannels()
+   * @protected
+   * @param {Defs.ChannelID} channelId
+   * @param {string} name
+   * @return {Sequelize.literal}
+   */
+  _agentsIdsLiteral(channelId, name = '') {
+    return this.literal(this._agentsIds(channelId, name));
+  }
+
+  /**
+   * @todo: Use ORM opportunities to join tables.
+   * @todo: No, do not this ORM for this.
+   * @protected
+   * @param {Defs.ChannelID} channelId
+   * @param {string} name
+   * @return {string}
+   */
+  _agentsIds(channelId, name = '') {
+    assert(!!channelId, 'Channel ID is required.');
+    return `(
+      /* AgentIds (${name}) */
+      SELECT "ChannelMemberships"."agentId" FROM "ChannelMemberships"
+      WHERE "ChannelMemberships"."channelId" = '${channelId}'
+    )`;
+  }
+
+  /**
+   * @param {string} [name]
+   * @return {string}
+   */
+  _verifiedMeasurementsLiteral(name = '') {
+    return this.literal(this._verifiedMeasurements(name));
+  }
+
+  /**
+   * @protected
+   * @param {string} name
+   * @return {string}
+   */
+  _verifiedMeasurements(name = '') {
+    return `(
+      /* Verified Channel Memberships (${name}) */
+      WITH "Measurable" AS (
+          SELECT "Measurables"."channelId"
+          FROM "Measurables"
+          WHERE "Measurables"."id" = "Measurement"."measurableId"
+          LIMIT 1
+      ),
+      "Channel" AS (
+          SELECT "Channels"."requireVerification", "Channels"."id"
+          FROM "Channels", "Measurable"
+          WHERE "Channels"."id" = "Measurable"."channelId"
+          LIMIT 1
+      )
+      SELECT "ChannelMemberships"."agentId"
+      FROM "ChannelMemberships", "Channel"
+      WHERE "ChannelMemberships"."channelId" = "Channel"."id"
+        AND ("ChannelMemberships"."isVerified" = TRUE
+          OR "Channel"."requireVerification" != TRUE)
+    )`;
+  }
+
+  /**
+   * @param {Defs.AgentID} agentId
+   * @param {string} [name]
+   * @return {string}
+   */
+  _taggedMeasurementsLiteral(agentId, name = '') {
+    return this.literal(this._taggedMeasurements(agentId, name));
+  }
+
+  /**
+   * @protected
+   * @param {Defs.AgentID} agentId
+   * @param {string} name
+   * @return {string}
+   */
+  _taggedMeasurements(agentId, name = '') {
+    assert(!!agentId, 'Agent ID is required.');
+    return `(
+      /* Tagged Measurements͟ (${name}) */
+      SELECT "taggedMeasurementId"
+      FROM "Measurements"
+      WHERE "agentId" = '${agentId}'
+      AND "taggedMeasurementId" IS NOT NULL
     )`;
   }
 
@@ -851,7 +965,7 @@ class ModelPostgres extends Model {
   _measurablesInPublicAndJoinedChannels(agentId, name = '') {
     assert(!!agentId, 'Agent ID is required.');
     return `(
-      /* M͟e͟a͟s͟u͟r͟a͟b͟l͟e͟s͟ ͟i͟n͟ ͟P͟u͟b͟l͟i͟c͟ ͟a͟n͟d͟ ͟J͟o͟i͟n͟e͟d͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${name}) */
+      /* Measurables in Public and Joined Channels (${name}) */
       WITH channelIds AS (${this._publicAndJoinedChannels(agentId, name)})
       SELECT "Measurables"."id" FROM "Measurables"
       WHERE "Measurables"."channelId" IN (SELECT id FROM channelIds)
@@ -877,7 +991,7 @@ class ModelPostgres extends Model {
    */
   _measurablesInPublicChannels(name = '') {
     return `(
-      /* M͟e͟a͟s͟u͟r͟a͟b͟l͟e͟s͟ ͟i͟n͟ ͟P͟u͟b͟l͟i͟c͟ ͟C͟h͟a͟n͟n͟e͟l͟s͟ (${name}) */
+      /* Measurables in Public Channels (${name}) */
       WITH channelIds AS (${this._publicChannels(name)})
       SELECT "Measurables"."id" FROM "Measurables"
       WHERE "Measurables"."channelId" IN (SELECT id FROM channelIds)
@@ -917,7 +1031,7 @@ class ModelPostgres extends Model {
     const where = cond.length > 0 ? `WHERE (${cond.join(' AND ')})` : '';
 
     return `(
-      /* W͟i͟t͟h͟i͟n͟ ͟M͟e͟a͟s͟u͟r͟a͟b͟l͟e͟s͟ (${name}) */
+      /* Within Measurables (${name}) */
       SELECT "id" FROM "Measurables"
       ${where}
     )`;

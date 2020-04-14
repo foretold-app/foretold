@@ -5,12 +5,8 @@ const { currentAgentIsApplicationAdmin } = require('./agents');
 const { channelIsPublic } = require('./channels');
 const { currentAgentIsChannelAdmin } = require('./channel-memberships');
 const { currentAgentIsChannelViewer } = require('./channel-memberships');
-const {
-  channelHasMembershipWithCurrentAgent,
-} = require('./channel-memberships');
 const { channelHasMultipleAdmins } = require('./channel-memberships');
 const { membershipBelongsToCurrentAgent } = require('./channel-memberships');
-const { membershipHasAdminRole } = require('./channel-memberships');
 const { measurableIsOwnedByCurrentAgent } = require('./measurables');
 const { measurableIsArchived } = require('./measurables');
 const { botBelongsToCurrentUser } = require('./bots');
@@ -23,6 +19,16 @@ const { notebookIsOwnedByCurrentAgent } = require('./notebooks');
 const { rateLimit } = require('./rate-limit');
 const { measurementIsCompetitiveOrCommentOnly } = require('./measurements');
 const { measurementIsOwnedByCurrentAgent } = require('./measurements');
+const { channelRequiresVerification } = require('./channels');
+const { currentBotUserOwnerAgentIsChannelViewer } = require(
+  './channel-memberships',
+);
+const { currentBotUserOwnerAgentIsChannelAdmin } = require(
+  './channel-memberships',
+);
+const { channelHasMembershipWithCurrentAgent } = require(
+  './channel-memberships',
+);
 
 const currentAgentIsApplicationAdminOrChannelAdmin = or(
   currentAgentIsApplicationAdmin,
@@ -66,19 +72,22 @@ const rulesChannelMemberships = () => ({
     channelMembershipDelete: and(
       currentAgentIsAuthenticated,
       currentAgentIsApplicationAdminOrChannelAdmin,
-      or(
-        and(membershipHasAdminRole, channelHasMultipleAdmins),
-        not(membershipBelongsToCurrentAgent),
-      ),
+      not(membershipBelongsToCurrentAgent),
     ),
     channelMembershipRoleUpdate: and(
       currentAgentIsAuthenticated,
       currentAgentIsApplicationAdminOrChannelAdmin,
-      or(
-        and(channelHasMultipleAdmins, membershipBelongsToCurrentAgent),
-        and(channelHasMultipleAdmins, membershipHasAdminRole),
-        not(membershipBelongsToCurrentAgent),
-      ),
+      not(membershipBelongsToCurrentAgent),
+    ),
+    channelMembershipVerify: and(
+      currentAgentIsAuthenticated,
+      currentAgentIsApplicationAdminOrChannelAdmin,
+      channelRequiresVerification,
+    ),
+    channelMembershipUnverify: and(
+      currentAgentIsAuthenticated,
+      currentAgentIsApplicationAdminOrChannelAdmin,
+      channelRequiresVerification,
     ),
   },
 });
@@ -93,6 +102,10 @@ const rulesMeasurables = () => ({
         or(
           currentAgentIsApplicationAdminOrChannelAdmin,
           currentAgentIsChannelViewer,
+          or (
+            currentBotUserOwnerAgentIsChannelViewer,
+            currentBotUserOwnerAgentIsChannelAdmin,
+          ),
         ),
       ),
     ),

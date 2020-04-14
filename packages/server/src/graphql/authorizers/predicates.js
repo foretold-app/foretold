@@ -1,6 +1,11 @@
 const _ = require('lodash');
 
 /**
+ * @todo: When I had been working on this file
+ * @todo: I did not know what the "predicate" is.
+ */
+
+/**
  * @todo: But in programing language, “predicate” just means
  * @todo: a function that return true or false.
  */

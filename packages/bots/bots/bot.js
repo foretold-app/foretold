@@ -26,6 +26,9 @@ class Bot {
       await this.mutexTake();
       assert(this.mutex !== null, 'Mutex is not free.');
 
+      this.log.debug('Agent Token', config.BOT_TOKEN);
+      this.log.debug('Agent Id', agentId);
+      
       const measurementsNotTagged = await this.api.measurementsCompetitive({
         notTaggedByAgent: agentId,
       });
@@ -40,9 +43,16 @@ class Bot {
         `for an aggregation.\x1b[0m`
       );
 
+      const aggretations = [];
       for (const measurement of measurementsNotTagged) {
-        await this.aggregate(measurement);
+        const aggregation = await this.aggregate(measurement);
+        aggretations.push(aggregation);
       }
+      const normalAggregation = aggretations.filter(item => item !== null);
+      this.log.trace(
+        `\n\n\n---Aggregation count = ${normalAggregation.length}.---\n\n\n`,
+      );
+
 
     } catch (e) {
       this.log.trace(e.message);
@@ -99,22 +109,24 @@ class Bot {
       = await this.getLastMeasurementsByAgent(measurableId, createdAt);
 
     if (lastMeasurementsByAgent.length === 0) {
-      return;
+      return null;
     }
 
     const aggregated = await new Aggregation(lastMeasurementsByAgent).main();
     if (!aggregated) {
       this.log.trace(`\x1b[43mNothing to aggregate.\x1b[0m`);
-      return;
+      return null;
     }
 
     const measurementIds = lastMeasurementsByAgent.map(item => item.id);
 
     this.log.trace(
-      `\x1b[43mMeasurement IDs "${measurementIds.join(', ')}".\x1b[0m`,
+      `\x1b[43mMeasurement IDs to aggregate "${
+        measurementIds.join(', ')
+      }".\x1b[0m`,
     );
 
-    await this.api.measurementCreateAggregation({
+    return await this.api.measurementCreateAggregation({
       measurableId,
       relevantAt,
       taggedMeasurementId,

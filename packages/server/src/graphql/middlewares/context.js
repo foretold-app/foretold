@@ -10,7 +10,7 @@ const log = logger.module('middlewares/init-context');
  *
  * @param req
  */
-async function initContext({ req }) {
+async function context({ req }) {
   const identity = await authentication(req);
   const botAgentId = await new GlobalSettingsData().getBotAgentId();
   const ip = req.ip;
@@ -22,11 +22,12 @@ async function initContext({ req }) {
   };
 
   const logs = {
-    'Identity User Id': _.get(initContext$, 'user.id', null),
-    'Identity Agent Id': _.get(initContext$, 'agent.id', null),
-    'Identity Bot Id': _.get(initContext$, 'bot.id', null),
-    'Identity Creator Id': _.get(initContext$, 'creator.id', null),
-    'Identity Creator Name':
+    'User Id': _.get(initContext$, 'user.id', null),
+    'Agent Id': _.get(initContext$, 'agent.id', null),
+    'Bot Id': _.get(initContext$, 'bot.id', null),
+    'Bot User Owner Id': _.get(initContext$, 'botUserOwner.id', null),
+    'Creator Id': _.get(initContext$, 'creator.id', null),
+    'Creator Name':
       _.get(initContext$, 'creator.constructor.name', null),
     'Settings Bot Agent Id': _.get(initContext$, 'botAgentId', null),
     IP: _.get(initContext$, 'ip'),
@@ -38,5 +39,5 @@ async function initContext({ req }) {
 }
 
 module.exports = {
-  initContext,
+  context,
 };

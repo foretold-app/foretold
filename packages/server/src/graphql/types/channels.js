@@ -9,11 +9,12 @@ const commonTypes = require('./common');
 const { string3to255 } = require('./scalars');
 const { string3to4K } = require('./scalars');
 const { string0to32K } = require('./scalars');
+const scalars = require('./scalars');
 
 const channel = new graphql.GraphQLObjectType({
   name: 'Channel',
   fields: () => ({
-    id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    id: { type: graphql.GraphQLNonNull(scalars.$channelId) },
     name: { type: graphql.GraphQLNonNull(string3to255) },
     description: { type: string3to4K },
     isArchived: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },

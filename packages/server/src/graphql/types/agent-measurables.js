@@ -10,6 +10,7 @@ const { measurementCompetitorType } = require('./enums');
 const { marketScoreType } = require('./enums');
 const { startAt } = require('./enums');
 const { finalComparisonMeasurement } = require('./enums');
+const scalars = require('./scalars');
 
 const points = graphql.GraphQLList(new graphql.GraphQLObjectType({
   name: 'point',
@@ -51,9 +52,9 @@ const timeAverageScore = new graphql.GraphQLObjectType({
 const agentMeasurable = new graphql.GraphQLObjectType({
   name: 'AgentMeasurable',
   fields: () => ({
-    id: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-    agentId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
-    measurableId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    id: { type: graphql.GraphQLNonNull(scalars.$agentMeasurableId) },
+    agentId: { type: graphql.GraphQLNonNull(scalars.$agentId) },
+    measurableId: { type: graphql.GraphQLNonNull(scalars.$measurableId) },
     primaryPointScore: {
       type: graphql.GraphQLFloat,
       resolve: resolvers.agentMeasurables.primaryPointScore,
@@ -98,7 +99,7 @@ const agentMeasurablesEdge = new graphql.GraphQLObjectType({
   name: 'AgentMeasurablesEdge',
   fields: () => ({
     node: { type: agentMeasurable },
-    cursor: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    cursor: { type: graphql.GraphQLNonNull(scalars.$cursor) },
   }),
 });
 

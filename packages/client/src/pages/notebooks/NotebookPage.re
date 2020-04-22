@@ -13,7 +13,7 @@ module Styles = {
     ]);
   let sidebarInner =
     style([
-      width(`percent(99.0)),
+      width(`percent(98.0)),
       float(`left),
       overflow(`scroll),
       height(`vh(99.0)),

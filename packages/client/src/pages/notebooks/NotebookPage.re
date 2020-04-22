@@ -5,7 +5,19 @@ module Styles = {
   let full = style([Css.float(`left), width(`percent(100.))]);
   let sidebarOutside = style([background(`hex("f0f2f5"))]);
   let sidebar =
-    style([position(`sticky), top(`em(2.0)), Css.float(`left)]);
+    style([
+      position(`sticky),
+      top(`em(0.0)),
+      Css.float(`left),
+      width(`percent(100.0)),
+    ]);
+  let sidebarInner =
+    style([
+      width(`percent(98.0)),
+      float(`left),
+      overflow(`scroll),
+      height(`vh(99.0)),
+    ]);
 };
 
 type tab =
@@ -127,7 +139,9 @@ let make = (~notebookId: string) => {
         {NotebookSidebar.make(~notebookRedux)
          |> E.O.React.fmapOrNull(sidebar =>
               <Div flex={`num(3.)} styles=[Styles.sidebarOutside]>
-                <div className=Styles.sidebar> sidebar </div>
+                <div className=Styles.sidebar>
+                  <div className=Styles.sidebarInner> sidebar </div>
+                </div>
               </Div>
             )}
       </Div>

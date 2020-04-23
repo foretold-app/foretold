@@ -55,6 +55,8 @@ async function all(root, args, context, _info) {
     states: _.get(args, 'states', null),
     isArchived: _.get(args, 'isArchived', null),
     measuredByAgentId: _.get(args, 'measuredByAgentId', null),
+    labelProperty: _.get(args, 'labelProperty', null),
+    labelSubject: _.get(args, 'labelSubject', null),
   });
   const pagination = new Pagination(args);
   const options = new Options({

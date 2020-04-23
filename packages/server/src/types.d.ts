@@ -384,6 +384,8 @@ export namespace Layers {
     states?: string[];
     isArchived?: string[];
     types?: string[];
+    labelProperty?: string[];
+    labelSubject?: string[];
 
     getSpacedLimit?(): number | undefined;
   }

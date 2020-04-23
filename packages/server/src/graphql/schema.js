@@ -113,6 +113,16 @@ const schema = new graphql.GraphQLSchema({
               types.measurables.orderMeasurables,
             ),
           },
+          labelProperty: {
+            type: graphql.GraphQLList(
+              graphql.GraphQLNonNull(graphql.GraphQLString),
+            ),
+          },
+          labelSubject: {
+            type: graphql.GraphQLList(
+              graphql.GraphQLNonNull(graphql.GraphQLString),
+            ),
+          },
         },
         resolve: resolvers.measurables.all,
       },

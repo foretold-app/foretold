@@ -37,10 +37,6 @@ module FormComponent = {
        | Data(_) => <p> {"Series are created." |> Utils.ste} </p>
        | _ =>
          <Antd.Form onSubmit>
-           <h3>
-             {"Warning: You can not edit a Series after created it at this time."
-              |> Utils.ste}
-           </h3>
            <Form.Field
              field=FormConfig.Name
              render={({handleChange, value}) =>
@@ -216,11 +212,55 @@ module Create = {
   };
 };
 
-[@react.component]
-let make = (~channelId: string) => {
-  <SLayout head={<SLayout.TextDiv text="Make a New Series" />}>
-    <ForetoldComponents.PageCard.BodyPadding>
-      <Create channelId />
-    </ForetoldComponents.PageCard.BodyPadding>
-  </SLayout>;
+module Edit = {
+  [@react.component]
+  let make = (~series: Types.series) => {
+    let (mutate, result, _) = SeriesUpdate.Mutation.use();
+
+    let reform =
+      Form.use(
+        ~validationStrategy=OnDemand,
+        ~schema=Form.Validation.Schema([||]),
+        ~onSubmit=
+          ({state}) => {
+            mutate(
+              ~variables=
+                SeriesUpdate.Query.make(
+                  ~id=series.id,
+                  ~input={
+                    "name": Some(state.values.name),
+                    "description": Some(state.values.description),
+                    "subjects": Some(state.values.subjects |> processArray),
+                    "properties":
+                      Some(state.values.properties |> processArray),
+                    "dates":
+                      Some(
+                        state.values.dates
+                        |> E.L.toArray
+                        |> E.A.fmap(
+                             formatDate ||> Js.Json.string ||> E.O.some,
+                           ),
+                      ),
+                  },
+                  (),
+                )##variables,
+              ~refetchQueries=[|"channels"|],
+              (),
+            )
+            |> ignore;
+
+            None;
+          },
+        ~initialState={
+          description: series.description |> E.O.default(""),
+          name: series.name |> E.O.default(""),
+          subjects: [""],
+          properties: [""],
+          dates: [MomentRe.momentNow()],
+        },
+        (),
+      );
+
+    <FormComponent reform result />;
+  };
 };

@@ -74,8 +74,26 @@ async function create(root, args, context, _info) {
   return new SeriesData().createOne(datas);
 }
 
+/**
+ * @param {*} root
+ * @param {object} args
+ * @param {Defs.NotebookID} args.id
+ * @param {object} args.input
+ * @param {Schema.Context} _context
+ * @param {object} _info
+ * @returns {Promise<*|Array<Model>>}
+ */
+async function update(root, args, _context, _info) {
+  const seriesId = _.get(args, 'id', null);
+  const input = _.get(args, 'input') || {};
+  const params = new Params({ id: seriesId });
+  return new SeriesData().updateOne(params, input);
+}
+
+
 module.exports = {
   create,
   one,
   all,
+  update,
 };

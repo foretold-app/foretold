@@ -170,7 +170,7 @@ module MakeCdf = (Item: Point) => {
   };
 
   let ys = t => {
-    let (ys,_) = t |> toArrays;
+    let (ys, _) = t |> toArrays;
     ys;
   };
 
@@ -358,11 +358,7 @@ let encodeToGraphQLMutation = (e: t) => {
   | `FloatCdf(k) =>
     Some({
       "floatPoint": None,
-      "floatCdf":
-        Some({
-          "xs": FloatCdf.xs(k) |> Array.map(e => Some(e)),
-          "ys": FloatCdf.ys(k) |> Array.map(e => Some(e)),
-        }),
+      "floatCdf": Some({"xs": FloatCdf.xs(k), "ys": FloatCdf.ys(k)}),
       "percentage": None,
       "binary": None,
       "unresolvableResolution": None,

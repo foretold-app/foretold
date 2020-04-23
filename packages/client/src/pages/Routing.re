@@ -47,6 +47,7 @@ module ChannelPage = {
       | Settings
       | NewSeries
       | Series(seriesId)
+      | SeriesEdit(seriesId)
       | Notebooks
       | Notebook(string)
       | NotebookDetails(string)
@@ -182,6 +183,11 @@ module Route = {
         channelId: getChannelId(channelId),
         subPage: Series(seriesId),
       })
+    | ["c", channelId, "s", seriesId, "edit"] =>
+      Channel({
+        channelId: getChannelId(channelId),
+        subPage: SeriesEdit(seriesId),
+      })
 
     // Notebooks
     | ["c", channelId, "notebooks"] =>
@@ -230,6 +236,7 @@ module Url = {
     | EntityShow(string)
     | Agent(AgentPage.t)
     | SeriesShow(string, string)
+    | SeriesEdit(string, string)
     | MeasurableShow(string, string)
     | SeriesNew(string)
     | ChannelEdit(string)
@@ -312,8 +319,10 @@ module Url = {
 
     // Series
     | SeriesNew(channelId) => "/c/" ++ setChannelId(channelId) ++ "/s/new"
-    | SeriesShow(channelId, id) =>
-      "/c/" ++ setChannelId(channelId) ++ "/s/" ++ id
+    | SeriesShow(channelId, seriesId) =>
+      "/c/" ++ setChannelId(channelId) ++ "/s/" ++ seriesId
+    | SeriesEdit(channelId, seriesId) =>
+      "/c/" ++ setChannelId(channelId) ++ "/s/" ++ seriesId ++ "/edit"
 
     // Static pages
     | Home => "/"

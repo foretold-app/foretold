@@ -25,6 +25,7 @@ let make = (~channelPage: Routing.ChannelPage.t) => {
        // Series
        | NewSeries => <SeriesNew channelId />
        | Series(seriesId) => <SeriesPage seriesId channelId />
+       | SeriesEdit(seriesId) => <SeriesEdit seriesId />
 
        // Notebooks
        | Notebook(notebookId) => <NotebookPage notebookId />
@@ -36,6 +37,7 @@ let make = (~channelPage: Routing.ChannelPage.t) => {
        | Settings => <ChannelEdit channelId />
        | FeedItems => <FeedItemsIndex channelId={Some(channelId)} />
        | Unknown => <NotFoundPage />
+       | _ => <NotFoundPage />
        }}
     </Channel>;
   };

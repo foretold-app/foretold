@@ -132,7 +132,7 @@ let getValueFromState = (state): MeasurementValue.t =>
   | ("FLOAT_CDF_AND_POINT", "CDF") =>
     `FloatCdf(
       MeasurementValue.FloatCdf.fromArrays(
-        state.floatCdf |> (e => (e.ys, e.xs)),
+        state.floatCdf |> (e => (e.xs, e.ys)),
       ),
     )
 

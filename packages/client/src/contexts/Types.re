@@ -273,6 +273,7 @@ and series = {
   creator: option(agent),
   channel: option(channel),
   measurableCount: option(int),
+  channelId: string,
 }
 
 and feedItem = {

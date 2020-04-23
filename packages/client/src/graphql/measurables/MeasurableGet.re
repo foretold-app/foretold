@@ -48,6 +48,7 @@ module Query = [%graphql
           series {
             id
             name
+            channelId
           }
           min
           max
@@ -114,7 +115,14 @@ let toMeasurable = (m): Types.measurable => {
 
   let series =
     m##series
-    |> E.O.fmap(r => Primary.Series.make(~id=r##id, ~name=r##name, ()));
+    |> E.O.fmap(r =>
+         Primary.Series.make(
+           ~id=r##id,
+           ~name=r##name,
+           ~channelId=r##channelId,
+           (),
+         )
+       );
 
   let allowMutations =
     m##permissions##mutations##allow |> E.A.O.concatSome |> E.A.to_list;

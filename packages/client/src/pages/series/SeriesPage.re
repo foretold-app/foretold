@@ -1,3 +1,5 @@
+open Style.Grid;
+
 module Config = {
   type itemType = Types.measurable;
   type callFnParams = string;
@@ -53,32 +55,51 @@ let load2Queries = (channelId, seriesId, itemsPerPage, fn) =>
 
 [@react.component]
 let make = (~channelId: string, ~seriesId: string) => {
-  let loadData = load2Queries(channelId, seriesId, 50);
+  let pagination =
+      (
+        reducerParams: Reducer.Types.reducerParams,
+        series: option(Types.series),
+      ) => {
+    switch (series) {
+    | Some(series) =>
+      <Div>
+        <Div
+          float=`left
+          styles=[
+            Css.style([
+              ForetoldComponents.PageCard.HeaderRow.Styles.itemTopPadding,
+              ForetoldComponents.PageCard.HeaderRow.Styles.itemBottomPadding,
+            ]),
+          ]>
+          <SLayout.SeriesHead seriesName={series.name |> E.O.default("")} />
+        </Div>
+        <Div
+          float=`right
+          styles=[
+            Css.style([
+              ForetoldComponents.PageCard.HeaderRow.Styles.itemTopPadding,
+              ForetoldComponents.PageCard.HeaderRow.Styles.itemBottomPadding,
+            ]),
+          ]>
+          <ForetoldComponents.Base.Button
+            variant=ForetoldComponents.Base.Button.Primary
+            size=ForetoldComponents.Base.Button.Small
+            className=Css.(style([marginRight(`em(1.5))]))
+            onClick={e =>
+              LinkType.onClick(Internal(SeriesNew(series.channelId)), e)
+            }>
+            {"Edit Series" |> Utils.ste}
+          </ForetoldComponents.Base.Button>
+          {Reducer.Components.paginationPage(reducerParams)}
+        </Div>
+      </Div>
+    | _ => <Null />
+    };
+  };
 
-  loadData(((selectWithPaginationParams, channel, series)) =>
-    <SLayout
-      head={
-        switch (channel, series, selectWithPaginationParams.selection) {
-        | (Success(_), Some((series: Types.series)), Some(_selection)) =>
-          <>
-            <SLayout.SeriesHead seriesName={series.name |> E.O.default("")} />
-            {Reducer.Components.deselectButton(
-               selectWithPaginationParams.send,
-             )}
-            {Reducer.Components.correctButtonDuo(selectWithPaginationParams)}
-          </>
-        | (Success(_), Some((series: Types.series)), None) =>
-          <>
-            <SLayout.SeriesHead seriesName={series.name |> E.O.default("")} />
-            {Reducer.Components.correctButtonDuo(selectWithPaginationParams)}
-          </>
-        | _ => <div />
-        }
-      }>
-      {switch (
-         selectWithPaginationParams.response,
-         selectWithPaginationParams.selection,
-       ) {
+  load2Queries(channelId, seriesId, 50, ((reducerParams, channel, series)) => {
+    <SLayout container=`fluid head={pagination(reducerParams, series)}>
+      {switch (reducerParams.response, reducerParams.selection) {
        | (_, Some(measurable)) => <MeasurablePage measurable />
 
        | (Success(connection), None) =>
@@ -86,12 +107,12 @@ let make = (~channelId: string, ~seriesId: string) => {
            measurables={connection.edges}
            selected=None
            onClick={id =>
-             Reducer.Components.sendSelectItem(selectWithPaginationParams, id)
+             Reducer.Components.sendSelectItem(reducerParams, id)
            }
          />
 
        | _ => <div />
        }}
     </SLayout>
-  );
+  });
 };

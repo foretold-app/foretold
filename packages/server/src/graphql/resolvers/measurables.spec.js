@@ -30,6 +30,8 @@ describe('Measurables Resolvers', () => {
             withinJoinedChannels: null,
             measurableIds: null,
             measuredByAgentId: null,
+            labelProperty: null,
+            labelSubject: null,
           },
           {
             after: 2,

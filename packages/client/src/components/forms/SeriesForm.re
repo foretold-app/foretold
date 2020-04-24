@@ -244,7 +244,7 @@ module Edit = {
                   },
                   (),
                 )##variables,
-              ~refetchQueries=[|"channels"|],
+              ~refetchQueries=[|"channels2"|],
               (),
             )
             |> ignore;

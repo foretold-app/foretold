@@ -86,7 +86,10 @@ let make = (~channelId: string, ~seriesId: string) => {
             size=ForetoldComponents.Base.Button.Small
             className=Css.(style([marginRight(`em(1.5))]))
             onClick={e =>
-              LinkType.onClick(Internal(SeriesNew(series.channelId)), e)
+              LinkType.onClick(
+                Internal(SeriesEdit(series.channelId, series.id)),
+                e,
+              )
             }>
             {"Edit Series" |> Utils.ste}
           </ForetoldComponents.Base.Button>

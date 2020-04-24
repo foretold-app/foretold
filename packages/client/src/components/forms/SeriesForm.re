@@ -19,6 +19,11 @@ let formatDate = E.M.format(E.M.format_standard);
 let processArray =
   E.L.filter(r => r != "") ||> E.L.toArray ||> E.A.fmap(E.O.some);
 
+let convertArray = arr =>
+  arr
+  |> E.O.fmap(arr => arr |> E.A.fmap(E.O.toString) |> E.A.to_list)
+  |> E.O.default([""]);
+
 module FormComponent = {
   [@react.component]
   let make =
@@ -244,7 +249,7 @@ module Edit = {
                   },
                   (),
                 )##variables,
-              ~refetchQueries=[|"channels2"|],
+              ~refetchQueries=[|"channels"|],
               (),
             )
             |> ignore;
@@ -254,8 +259,8 @@ module Edit = {
         ~initialState={
           description: series.description |> E.O.default(""),
           name: series.name |> E.O.default(""),
-          subjects: [""],
-          properties: [""],
+          subjects: series.subjects |> convertArray,
+          properties: series.properties |> convertArray,
           dates: [MomentRe.momentNow()],
         },
         (),

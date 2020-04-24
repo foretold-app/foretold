@@ -274,6 +274,9 @@ and series = {
   channel: option(channel),
   measurableCount: option(int),
   channelId: string,
+  subjects: option(array(option(string))),
+  properties: option(array(option(string))),
+  dates: option(array(option(Js.Json.t))),
 }
 
 and feedItem = {

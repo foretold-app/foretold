@@ -88,7 +88,8 @@ class ModelPostgres extends Model {
     this._extendGenericConditions(cond, options);
 
     const entity = await this.model.findOne(cond);
-    if (!!entity) await this.model.update(data, cond);
+    if (!!entity && !options.hooks) await this.model.update(data, cond);
+    if (!!entity && !!options.hooks) await entity.update(data, cond);
     return entity;
   }
 

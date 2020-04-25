@@ -512,6 +512,7 @@ export namespace Layers {
       group?: boolean;
       lock?: lock;
       raw?: boolean;
+      hooks?: boolean;
       skipLocked?: boolean;
       transaction?: object;
     }

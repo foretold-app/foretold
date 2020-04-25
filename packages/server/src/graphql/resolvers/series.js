@@ -88,7 +88,8 @@ async function update(root, args, _context, _info) {
   const input = _.get(args, 'input') || {};
   const params = new Params({ id: seriesId });
   const data = new Data(input);
-  return new SeriesData().updateOne(params, data);
+  const options = new Options({ hooks: true });
+  return new SeriesData().updateOne(params, data, options);
 }
 
 

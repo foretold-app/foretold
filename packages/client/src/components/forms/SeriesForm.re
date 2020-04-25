@@ -19,10 +19,18 @@ let formatDate = E.M.format(E.M.format_standard);
 let processArray =
   E.L.filter(r => r != "") ||> E.L.toArray ||> E.A.fmap(E.O.some);
 
-let convertArray = arr =>
-  arr
-  |> E.O.fmap(arr => arr |> E.A.fmap(E.O.toString) |> E.A.to_list)
-  |> E.O.default([""]);
+let convertArray =
+  E.O.fmap(E.A.fmap(E.O.toString) ||> E.A.to_list) ||> E.O.default([""]);
+
+let convertDates =
+  E.O.fmap(
+    E.A.fmap(
+      E.O.fmap(E.J.toString ||> MomentRe.momentDefaultFormat)
+      ||> E.O.default(MomentRe.momentNow()),
+    )
+    ||> E.A.to_list,
+  )
+  ||> E.O.default([MomentRe.momentNow()]);
 
 module FormComponent = {
   [@react.component]
@@ -261,7 +269,7 @@ module Edit = {
           name: series.name |> E.O.default(""),
           subjects: series.subjects |> convertArray,
           properties: series.properties |> convertArray,
-          dates: [MomentRe.momentNow()],
+          dates: series.dates |> convertDates,
         },
         (),
       );

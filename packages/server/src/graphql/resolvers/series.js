@@ -67,11 +67,11 @@ async function all(root, args, context, _info) {
  */
 async function create(root, args, context, _info) {
   const agentId = _.get(context, 'agent.id', null);
-  const datas = new Data({
+  const data = new Data({
     ...args.input,
     creatorId: agentId,
   });
-  return new SeriesData().createOne(datas);
+  return new SeriesData().createOne(data);
 }
 
 /**
@@ -87,7 +87,8 @@ async function update(root, args, _context, _info) {
   const seriesId = _.get(args, 'id', null);
   const input = _.get(args, 'input') || {};
   const params = new Params({ id: seriesId });
-  return new SeriesData().updateOne(params, input);
+  const data = new Data(input);
+  return new SeriesData().updateOne(params, data);
 }
 
 

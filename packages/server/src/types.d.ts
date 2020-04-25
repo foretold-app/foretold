@@ -256,6 +256,7 @@ export namespace Schema {
 
     // After Middleware Interceptions
     userAsObject?: Defs.User;
+    series?: Defs.Series;
     preference?: Defs.Preference;
     channel?: Defs.Channel;
     channelMembership?: Defs.ChannelMemberships;

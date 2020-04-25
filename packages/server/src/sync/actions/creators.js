@@ -46,6 +46,9 @@ class Creators {
    * @returns {Promise<void>}
    */
   async createNewMeasurables(series) {
+    log.trace(series.previous('subjects'), series.get('subjects'));
+    log.trace(series.previous('properties'), series.get('properties'));
+    log.trace(series.previous('dates'), series.get('dates'));
     // for (const subject of series.subjects) {
     //   for (const property of series.properties) {
     //     for (const date of series.dates) {

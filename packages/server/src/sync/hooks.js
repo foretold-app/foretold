@@ -39,6 +39,13 @@ function addHooks(db) {
       log.trace('Hook USER_CHANGED', e);
     }
   });
+  db.Series.addHook('afterUpdate', (instance) => {
+    try {
+      emitter.emit(events.SERIES_CHANGED, instance);
+    } catch (e) {
+      log.trace('Hook SERIES_CHANGED', e);
+    }
+  });
 
   /** afterCreate */
   db.Measurement.addHook('afterCreate', (instance) => {

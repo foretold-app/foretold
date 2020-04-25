@@ -1,6 +1,7 @@
 const { AgentsData } = require('../../data');
 const { MeasurablesData } = require('../../data');
 const { ChannelMembershipsData } = require('../../data');
+const logger = require('../../lib/log');
 
 const { Data } = require('../../data/classes');
 const { Params } = require('../../data/classes');
@@ -10,6 +11,8 @@ const { MEASURABLE_VALUE_TYPE } = require('../../enums');
 const { CHANNEL_MEMBERSHIP_ROLES } = require('../../enums');
 const { AGENT_TYPE } = require('../../enums');
 const { MEASURABLE_STATE } = require('../../enums');
+
+const log = logger.module('sync/actions/creators');
 
 class Creators {
   constructor() {
@@ -36,6 +39,26 @@ class Creators {
         }
       }
     }
+  }
+
+  /**
+   * @param {Defs.Series} series
+   * @returns {Promise<void>}
+   */
+  async createNewMeasurables(series) {
+    // for (const subject of series.subjects) {
+    //   for (const property of series.properties) {
+    //     for (const date of series.dates) {
+    //       console.log(
+    //         'Making Measurable for Series:',
+    //         subject,
+    //         property,
+    //         date,
+    //       );
+    //       await this._createMeasurable(subject, property, date, series);
+    //     }
+    //   }
+    // }
   }
 
   /**

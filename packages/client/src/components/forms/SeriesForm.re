@@ -38,6 +38,7 @@ module FormComponent = {
       (
         ~reform: Form.api,
         ~result: ReasonApolloHooks.Mutation.controledVariantResult('a),
+        ~successComponent,
       ) => {
     let onSubmit = event => {
       ReactEvent.Synthetic.preventDefault(event);
@@ -47,7 +48,7 @@ module FormComponent = {
     <Form.Provider value=reform>
       {switch (result) {
        | Error(_error) => <Sorry />
-       | Data(_) => <p> {"Series are created." |> Utils.ste} </p>
+       | Data(_) => successComponent
        | _ =>
          <Antd.Form onSubmit>
            <Form.Field
@@ -173,6 +174,8 @@ module FormComponent = {
 };
 
 module Create = {
+  let successComponent = <p> {"Series are created." |> Utils.ste} </p>;
+
   [@react.component]
   let make = (~channelId) => {
     let (mutate, result, _) = SeriesCreate.Mutation.use();
@@ -221,11 +224,13 @@ module Create = {
         (),
       );
 
-    <FormComponent reform result />;
+    <FormComponent reform result successComponent />;
   };
 };
 
 module Edit = {
+  let successComponent = <p> {"Series are updated." |> Utils.ste} </p>;
+
   [@react.component]
   let make = (~series: Types.series) => {
     let (mutate, result, _) = SeriesUpdate.Mutation.use();
@@ -274,6 +279,6 @@ module Edit = {
         (),
       );
 
-    <FormComponent reform result />;
+    <FormComponent reform result successComponent />;
   };
 };

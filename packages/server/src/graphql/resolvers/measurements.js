@@ -437,7 +437,8 @@ async function truncateCdf(root, args, _context, _info) {
  */
 async function measurementCountByAgentId(root, _args, _context, _info) {
   const agentId = _.get(root, 'id', null);
-  return new MeasurementsData().getCount(new Params({ agentId }));
+  const params = new Params({ agentId });
+  return new MeasurementsData().getCount(params);
 }
 
 /**
@@ -450,7 +451,8 @@ async function measurementCountByAgentId(root, _args, _context, _info) {
  */
 async function measurementCountByMeasurableId(root, _args, _context, _info) {
   const measurableId = _.get(root, 'id', null);
-  return new MeasurementsData().getCount(new Params({ measurableId }));
+  const params = new Params({ measurableId });
+  return new MeasurementsData().getCount(params);
 }
 
 /**

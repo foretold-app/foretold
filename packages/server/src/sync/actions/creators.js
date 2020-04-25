@@ -32,20 +32,33 @@ class Creators {
             property,
             date,
           );
-          await this.measurables.createOne(new Data({
-            name: '',
-            labelSubject: subject,
-            labelProperty: property,
-            labelOnDate: date,
-            expectedResolutionDate: date,
-            seriesId: series.id,
-            creatorId: series.creatorId,
-            channelId: series.channelId,
-            valueType: MEASURABLE_VALUE_TYPE.FLOAT,
-          }));
+          await this._createMeasurable(subject, property, date, series);
         }
       }
     }
+  }
+
+  /**
+   * @param subject
+   * @param property
+   * @param date
+   * @param series
+   * @returns {Promise<void>}
+   * @private
+   */
+  async _createMeasurable(subject, property, date, series) {
+    const data = new Data({
+      name: '',
+      labelSubject: subject,
+      labelProperty: property,
+      labelOnDate: date,
+      expectedResolutionDate: date,
+      seriesId: series.id,
+      creatorId: series.creatorId,
+      channelId: series.channelId,
+      valueType: MEASURABLE_VALUE_TYPE.FLOAT,
+    });
+    await this.measurables.createOne(data);
   }
 
   /**
@@ -53,14 +66,17 @@ class Creators {
    * @returns {Promise<boolean>}
    */
   async createChannelMembership(channel) {
-    await this.channelMemberships.upsertOne(new Params({
+    const params = new Params({
       channelId: channel.id,
       agentId: channel.creatorId,
-    }), new Query({}), new Data({
+    });
+    const query = new Query({});
+    const data = new Data({
       role: CHANNEL_MEMBERSHIP_ROLES.ADMIN,
       channelId: channel.id,
       agentId: channel.creatorId,
-    }));
+    });
+    await this.channelMemberships.upsertOne(params, query, data);
     return true;
   }
 

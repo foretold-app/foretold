@@ -5,6 +5,7 @@ const { FeedItemJoinedMember } = require('./feed-items');
 const { FeedItemMeasurement } = require('./feed-items');
 const { FeedItemChannel } = require('./feed-items');
 const { FeedItemNotebook } = require('./feed-items');
+const { FeedItemSeries } = require('./feed-items');
 
 const { Options } = require('./options');
 const { ResponseAll } = require('./response-all');
@@ -22,4 +23,5 @@ module.exports = {
   FeedItemMeasurement,
   FeedItemChannel,
   FeedItemNotebook,
+  FeedItemSeries,
 };

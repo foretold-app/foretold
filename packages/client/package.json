@@ -47,11 +47,11 @@
     "rc-menu": "7.4.20",
     "vega-embed": "6.6.0",
     "vega": "5.11.0",
-    "react-use": "13.24.0",
+    "react-use": "14.2.0",
     "react-textarea-autosize": "7.1.2",
-    "autoprefixer": "9.7.4",
+    "autoprefixer": "9.7.6",
     "gh-pages": "2.2.0",
-    "jest": "25.1.0",
+    "jest": "25.4.0",
     "jstat": "1.9.2",
     "mathjs": "5.10.3",
     "moduleserve": "0.9.1",
@@ -60,7 +60,7 @@
     "financejs": "4.1.0"
   },
   "dependencies": {
-    "@apollo/react-hooks": "3.1.3",
+    "@apollo/react-hooks": "3.1.5",
     "@baransu/graphql_ppx_re": "0.6.1",
     "@foretold/bs-distplus": "0.0.3",
     "@foretold/components": "0.0.5",

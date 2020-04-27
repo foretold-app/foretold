@@ -96,7 +96,7 @@ function runListeners() {
     emitter.on(events.NEW_CHANNEL,
       listen(actions.Creators, 'createChannelMembership'));
 
-    /// Common.
+    // Common.
     emitter.on(events.NEW_SERIES,
       listen(actions.Creators, 'createMeasurables'));
     emitter.on(events.SERIES_CHANGED,

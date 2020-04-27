@@ -25,7 +25,11 @@ let convertArray =
 let convertDates =
   E.O.fmap(
     E.A.fmap(
-      E.O.fmap(E.J.toString ||> MomentRe.momentDefaultFormat)
+      E.O.fmap(
+        E.J.toString
+        ||> MomentRe.momentDefaultFormat
+        ||> MomentRe.Moment.startOf(`day),
+      )
       ||> E.O.default(MomentRe.momentNow()),
     )
     ||> E.A.to_list,

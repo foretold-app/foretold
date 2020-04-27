@@ -87,6 +87,11 @@ module Query = [%graphql
                    item
                    description
                  }
+                 series {
+                   item
+                   description
+                   seriesId
+                 }
               }
               channel {
                 id

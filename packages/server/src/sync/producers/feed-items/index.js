@@ -11,6 +11,7 @@ const {
 const { NewMeasurable } = require('./new-measurable');
 const { NewChannel } = require('./new-channel');
 const { NewNotebook } = require('./new-notebook');
+const { NewSeries } = require('./new-series');
 
 module.exports = {
   MemberJoinedCommunity,
@@ -22,4 +23,5 @@ module.exports = {
   NewMeasurable,
   NewChannel,
   NewNotebook,
+  NewSeries,
 };

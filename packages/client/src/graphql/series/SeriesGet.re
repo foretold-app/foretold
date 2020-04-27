@@ -26,6 +26,7 @@ let toSeries = (m: series): Types.series =>
     ~subjects=m.subjects,
     ~properties=m.properties,
     ~dates=m.dates,
+    ~description=m.description,
     (),
   );
 

@@ -47,7 +47,7 @@ class Creators {
     for (const subject of subjects) {
       for (const property of properties) {
         for (const date of dates) {
-          console.log('Making Measurable for Series:',
+          this.log.trace('Making Measurable for Series:',
             subject, property, date);
           await this._createMeasurable(subject, property, date, series);
         }

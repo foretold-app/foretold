@@ -44,7 +44,8 @@ async function create(_root, args, context, _info) {
 async function update(root, args, _context, _info) {
   const id = _.get(args, 'id', null);
   const input = _.get(args, 'input') || {};
-  return new NotebooksData().updateOne(new Params({ id }), input);
+  const params = new Params({ id });
+  return new NotebooksData().updateOne(params, input);
 }
 
 /**

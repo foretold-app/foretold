@@ -54,9 +54,7 @@ function runListeners() {
     emitter.on(events.MAIL,
       listen(Mailer));
 
-    /**
-     * MEASURABLE_CHANGED
-     */
+    // MEASURABLE_CHANGED
     emitter.on(events.MEASURABLE_CHANGED,
       listen(producers.notifications.MeasurableStateChanged));
     emitter.on(events.MEASURABLE_CHANGED,
@@ -66,17 +64,13 @@ function runListeners() {
     // emitter.on(events.MEASURABLE_CHANGED,
     //   listenFor(actions.Notifications, 'updateMeasurableSlackNotification'));
 
-    /**
-     * NEW_MEMBERSHIP
-     */
+    // NEW_MEMBERSHIP
     emitter.on(events.NEW_MEMBERSHIP,
       listen(producers.notifications.MemberAddedToCommunity));
     emitter.on(events.NEW_MEMBERSHIP,
       listen(producers.feedItems.MemberJoinedCommunity));
 
-    /**
-     * NEW_MEASUREMENT
-     */
+    // NEW_MEASUREMENT
     emitter.on(events.NEW_MEASUREMENT,
       listen(producers.feedItems.NewMeasurementPrediction));
     emitter.on(events.NEW_MEASUREMENT,
@@ -90,27 +84,23 @@ function runListeners() {
     emitter.on(events.NEW_MEASUREMENT,
       listen(actions.MeasurablesStateMachine, 'measurableStateTransition'));
 
-    /**
-     * NEW_MEASURABLE
-     */
+    //  NEW_MEASURABLE
     emitter.on(events.NEW_MEASURABLE,
       listen(producers.feedItems.NewMeasurable));
     // emitter.on(events.NEW_MEASURABLE,
     //   listenFor(actions.Notifications, 'newMeasurableSlackNotification'));
 
-    /**
-     * NEW_CHANNEL
-     */
+    // NEW_CHANNEL
     emitter.on(events.NEW_CHANNEL,
       listen(producers.feedItems.NewChannel));
     emitter.on(events.NEW_CHANNEL,
       listen(actions.Creators, 'createChannelMembership'));
 
-    /**
-     * Common.
-     */
+    // Common.
     emitter.on(events.NEW_SERIES,
       listen(actions.Creators, 'createMeasurables'));
+    emitter.on(events.SERIES_CHANGED,
+      listen(actions.Creators, 'createNewMeasurables'));
     emitter.on(events.CREATING_BOT,
       listen(actions.Creators, 'createBotAgent'));
     emitter.on(events.CREATING_USER,

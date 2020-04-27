@@ -256,6 +256,7 @@ export namespace Schema {
 
     // After Middleware Interceptions
     userAsObject?: Defs.User;
+    series?: Defs.Series;
     preference?: Defs.Preference;
     channel?: Defs.Channel;
     channelMembership?: Defs.ChannelMemberships;
@@ -511,6 +512,7 @@ export namespace Layers {
       group?: boolean;
       lock?: lock;
       raw?: boolean;
+      hooks?: boolean;
       skipLocked?: boolean;
       transaction?: object;
     }

@@ -13,6 +13,7 @@ let toSeries = c =>
     ~id=c##id,
     ~description=c##description,
     ~name=c##name,
+    ~channelId=c##channelId,
     (),
   );
 
@@ -192,6 +193,7 @@ module Query = [%graphql
                 id
                 name
                 description
+                channelId
               }
               outcome {
                   id

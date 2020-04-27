@@ -187,7 +187,8 @@ async function count(_root, _args, _context, _info) {
  */
 async function measurableCount(root, _args, _context, _info) {
   const seriesId = _.get(root, 'id', null);
-  return new MeasurablesData().getCount(new Params({ seriesId }));
+  const params = new Params({ seriesId });
+  return new MeasurablesData().getCount(params);
 }
 
 /**

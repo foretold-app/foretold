@@ -17,10 +17,10 @@
     "migrate": "yarn server/db:migrate",
     "l": "lerna",
     "b": "lerna bootstrap",
-    "packages/build": "cd packages/guesstimator && yarn build && cd ../.. && cd packages/components && yarn build && cd ../.. && cd packages/prediction-analysis && yarn build && cd ../.. && cd packages/distplus && yarn build && cd ../.. && cd packages/client && yarn build-t && cd ../..",
-    "packages/client/build-dev": "cd packages/components && yarn build && cd ../.. && cd packages/distplus && yarn build && cd ../.. && cd packages/client && yarn bsb-watch",
-    "packages/clean": "cd packages/guesstimator && yarn clean && cd ../.. && cd packages/components && yarn clean && cd ../.. && cd packages/prediction-analysis && yarn clean && cd ../.. && cd packages/distplus && yarn clean && cd ../.. && cd packages/client && yarn clean && cd ../..",
-    "packages/remove": "rm -rf ./packages/client/node_modules && rm -rf ./packages/components/node_modules && rm -rf ./packages/prediction-analysis/node_modules && rm -rf ./packages/guesstimator/node_modules && rm -rf ./packages/distplus/node_modules",
+    "packages/build": "cd packages/guesstimator && yarn build && cd ../.. && cd packages/components && yarn build && cd ../.. && cd packages/prediction-analysis && yarn build && cd ../.. && cd packages/bs-distplus && yarn build && cd ../.. && cd packages/client && yarn build-t && cd ../..",
+    "packages/client/build-dev": "cd packages/components && yarn build && cd ../.. && cd packages/bs-distplus && yarn build && cd ../.. && cd packages/client && yarn bsb-watch",
+    "packages/clean": "cd packages/guesstimator && yarn clean && cd ../.. && cd packages/components && yarn clean && cd ../.. && cd packages/prediction-analysis && yarn clean && cd ../.. && cd packages/bs-distplus && yarn clean && cd ../.. && cd packages/client && yarn clean && cd ../..",
+    "packages/remove": "rm -rf ./packages/client/node_modules && rm -rf ./packages/components/node_modules && rm -rf ./packages/prediction-analysis/node_modules && rm -rf ./packages/guesstimator/node_modules && rm -rf packages/bs-distplus/node_modules",
     "packages/test": "yarn server/test:ci && yarn guesstimator/test:ci && yarn cdf/test:ci && yarn bots/test:ci && yarn prediction-analysis/test:ci && yarn tests/test:ci",
     "packages/lint": "yarn server/lint:ci",
     "pb": "yarn packages/build",
@@ -55,7 +55,7 @@
       "packages/components/*",
       "packages/guesstimator/*",
       "packages/tests/*",
-      "packages/distplus/*",
+      "packages/bs-distplus/*",
       "*.spec.js"
     ],
     "delay": 50

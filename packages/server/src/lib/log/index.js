@@ -12,7 +12,6 @@ const logger = process.env.NODE_ENV === 'development'
   : require('bunyan-buddy')(config);
 
 if (process.env.NODE_ENV === 'development') {
-
   const prettyStdOut = new PrettyStream();
   prettyStdOut.pipe(process.stdout);
 

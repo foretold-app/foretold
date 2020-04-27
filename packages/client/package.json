@@ -67,7 +67,7 @@
     "@glennsl/bs-jest": "0.4.9",
     "@glennsl/bs-json": "5.0.2",
     "antd": "3.17.0",
-    "apollo-client": "2.6.4",
+    "apollo-client": "2.6.8",
     "auth0-js": "9.13.2",
     "bs-ant-design-alt": "2.0.0-alpha.33",
     "bs-css": "11.0.0",

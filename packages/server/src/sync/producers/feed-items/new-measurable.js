@@ -15,6 +15,14 @@ class NewMeasurable extends ProducerFeedItems {
   }
 
   /**
+   * @protected
+   * @return {Promise<boolean>}
+   */
+  async _isActual() {
+    return !_.get(this.input, 'seriesId', null);
+  }
+
+  /**
    * @param {Defs.Agent} agent
    * @return {Promise.<{
    * agent: {name: string},

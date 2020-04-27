@@ -1010,10 +1010,10 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@baransu/graphql_ppx_re@0.6.1":
-  version "0.6.1"
-  resolved "https://registry.yarnpkg.com/@baransu/graphql_ppx_re/-/graphql_ppx_re-0.6.1.tgz#7a701b5f2f1797095a034b5b6eca2a5d8781975f"
-  integrity sha512-jrHTlTMAasNU296RIL5ACa50Dj2YjP/ZmqLph+VM2Nso24B80ujXJF4iOdsiNh5DT48FNOcIVluCKtLrFQw5qw==
+"@baransu/graphql_ppx_re@0.7.1":
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/@baransu/graphql_ppx_re/-/graphql_ppx_re-0.7.1.tgz#8146a36a94d56e65692d74488e2bd6cbd4eb8dc9"
+  integrity sha512-S9RYUWk8IkFxjE1Xl5eohRgbHJP5nCWOD6J1hMV3hY+D43igDrILq1doAXJatYB82BxcsrBC9V+VeU2LtCxIDw==
 
 "@bcoe/v8-coverage@^0.2.3":
   version "0.2.3"
@@ -1146,6 +1146,13 @@
   integrity sha512-WAqXMcI6WL7JVvGdakBr1tcw8BYWXHrOZfuA1myMkFggzAv24H/OEwyqaU7x+yXd4cJaBUY8v3SjQ3Pnk/zqsg==
   dependencies:
     jest "^24.3.1"
+
+"@glennsl/bs-jest@0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@glennsl/bs-jest/-/bs-jest-0.5.1.tgz#2e16ad94268fc1e5ba0af978c141db1684556a55"
+  integrity sha512-+yhWn6uxFt+k61xcWz/xnLC3ticZR5m2d2++a7vXIq2qxiktegBc3ZD/5nvKU8ciFnsHEOoyIzBzoZH2oRGdkw==
+  dependencies:
+    jest "^25.1.0"
 
 "@glennsl/bs-json@5.0.2":
   version "5.0.2"
@@ -6608,7 +6615,7 @@ jest-worker@^25.4.0:
     merge-stream "^2.0.0"
     supports-color "^7.0.0"
 
-jest@25.4.0:
+jest@25.4.0, jest@^25.1.0:
   version "25.4.0"
   resolved "https://registry.yarnpkg.com/jest/-/jest-25.4.0.tgz#fb96892c5c4e4a6b9bcb12068849cddf4c5f8cc7"
   integrity sha512-XWipOheGB4wai5JfCYXd6vwsWNwM/dirjRoZgAa7H2wd8ODWbli2AiKjqG8AYhyx+8+5FBEdpO92VhGlBydzbw==
@@ -6834,10 +6841,10 @@ jsprim@^1.2.2:
     json-schema "0.2.3"
     verror "1.10.0"
 
-jstat@1.9.2:
-  version "1.9.2"
-  resolved "https://registry.yarnpkg.com/jstat/-/jstat-1.9.2.tgz#cd2d24df200fd3488861dc7868be01ff65a238cc"
-  integrity sha512-nc3uAadgrWWvJz6RyXUFN0lvTWEXYxMVIrm6ZVoOh4YPLvukLKYpqMofKIE2ReWkL7gFw6hEo6VWZjotYW2Bsw==
+jstat@1.9.3:
+  version "1.9.3"
+  resolved "https://registry.yarnpkg.com/jstat/-/jstat-1.9.3.tgz#6a0e60c3b87fd714b61e765b77fc6b035437ee34"
+  integrity sha512-/2JL4Xv6xfhN2+AEKQGTYr1LZTmBCR/5fHxJVvb9zWNsmKZfKrl3wYYK8SD/Z8kXkf+ZSusfumLZ4wDTHrWujA==
 
 jwt-decode@2.2.0:
   version "2.2.0"
@@ -8021,10 +8028,10 @@ parcel-plugin-bundle-visualiser@1.2.0:
     gzip-size "^4.1.0"
     yargs "^11.0.0"
 
-parcel-plugin-html-externals@0.1.2:
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/parcel-plugin-html-externals/-/parcel-plugin-html-externals-0.1.2.tgz#130ef16855b700599d6d2b0d797f3eabdfb64d5f"
-  integrity sha512-ngyIlta99E7UvHTYQA3cKDUhj3aVfZO9+MmEwrMU9pD4paWvPvqfNRhUQg/xk2Alo+VwEMbZFmaONkrwI47tgg==
+parcel-plugin-html-externals@0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/parcel-plugin-html-externals/-/parcel-plugin-html-externals-0.2.0.tgz#2f87ce4dcb16e69ed35c194d553b0a360a316064"
+  integrity sha512-2UAGLhVd/RH4wz2l9VB7Hnl2VHy7+9IYabh60hSdJQsjXE6qiCq/ehXvW7ZsnqndG2B1fWmoHlG6dv1Z++CO5w==
   dependencies:
     minimatch "^3.0.4"
 

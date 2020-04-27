@@ -10,7 +10,6 @@ const { Options } = require('../../data/classes');
 const log = logger.module('middlewares/users');
 
 /**
- * @todo: Do not use "context.user" to compare objects.
  * @param {object | null} root
  * @param {object} args
  * @param {object} args.id

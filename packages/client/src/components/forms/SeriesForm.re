@@ -179,7 +179,7 @@ module FormComponent = {
 };
 
 module Create = {
-  let successComponent = <p> {"Series have been created." |> Utils.ste} </p>;
+  let successComponent = <p> {"Series has been created." |> Utils.ste} </p>;
 
   [@react.component]
   let make = (~channelId) => {
@@ -234,7 +234,7 @@ module Create = {
 };
 
 module Edit = {
-  let successComponent = <p> {"Series have been updated." |> Utils.ste} </p>;
+  let successComponent = <p> {"Series has been updated." |> Utils.ste} </p>;
 
   [@react.component]
   let make = (~series: Types.series) => {

@@ -17,7 +17,6 @@ class NewMeasurementPrediction extends NewMeasurement {
    */
   async _isActual() {
     const { competitorType } = this.input;
-
     return competitorType === MEASUREMENT_COMPETITOR_TYPE.COMPETITIVE;
   }
 }

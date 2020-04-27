@@ -53,11 +53,11 @@ class MeasurableStateResolved extends MeasurableState {
       assert(agents.length !== 0,
         'Channel Members list is empty.');
       assert(_.every(agents, (agent) => _.get(agent, 'id')),
-        'Agent ID is required');
+        'Agent ID is required.');
 
       /** @type {Defs.Measurement} */
       const lastMeasurement = await this._getLastResolvedMeasurement();
-      assert(!!_.get(lastMeasurement, 'agentId'), 'Agent ID is required');
+      assert(!!_.get(lastMeasurement, 'agentId'), 'Agent ID is required.');
 
       const replacements = await this._getReplacements(
         channel,

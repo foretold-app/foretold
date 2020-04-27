@@ -14,7 +14,8 @@ module FormConfig = [%lenses
 
 module Form = ReForm.Make(FormConfig);
 
-let formatDate = E.M.format(E.M.format_standard);
+let formatDate =
+  MomentRe.Moment.startOf(`day) ||> E.M.format(E.M.format_standard);
 
 let processArray =
   E.L.filter(r => r != "") ||> E.L.toArray ||> E.A.fmap(E.O.some);
@@ -178,7 +179,7 @@ module FormComponent = {
 };
 
 module Create = {
-  let successComponent = <p> {"Series are created." |> Utils.ste} </p>;
+  let successComponent = <p> {"Series has been created." |> Utils.ste} </p>;
 
   [@react.component]
   let make = (~channelId) => {
@@ -211,7 +212,7 @@ module Create = {
                   },
                   (),
                 )##variables,
-              ~refetchQueries=[|"channels"|],
+              ~refetchQueries=[|"channels", "measurables", "feedItems"|],
               (),
             )
             |> ignore;
@@ -233,7 +234,7 @@ module Create = {
 };
 
 module Edit = {
-  let successComponent = <p> {"Series are updated." |> Utils.ste} </p>;
+  let successComponent = <p> {"Series has been updated." |> Utils.ste} </p>;
 
   [@react.component]
   let make = (~series: Types.series) => {
@@ -266,7 +267,12 @@ module Edit = {
                   },
                   (),
                 )##variables,
-              ~refetchQueries=[|"channels"|],
+              ~refetchQueries=[|
+                "channels",
+                "series",
+                "measurables",
+                "feedItems",
+              |],
               (),
             )
             |> ignore;

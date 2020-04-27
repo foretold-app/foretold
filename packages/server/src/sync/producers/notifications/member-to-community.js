@@ -22,7 +22,7 @@ class MemberToCommunity extends ProducerNotifications {
     super({});
 
     assert(_.isObject(channelMembership),
-      'Channel Membership is not an object');
+      'Channel Membership is not an object.');
     assert(!!_.get(channelMembership,
       'channelId'), 'Channel ID is required.');
     assert(!!_.get(channelMembership,

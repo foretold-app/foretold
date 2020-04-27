@@ -37,9 +37,10 @@ class InvitationsData extends DataBase {
       const email = _.get(input, 'email');
       const inviterAgentId = _.get(input, 'inviterAgentId');
 
-      assert(_.isString(email), 'Email should be a string');
-      assert(_.isString(channelId), 'Channel Id should be a string');
-      assert(_.isString(inviterAgentId), 'Inviter Agent Id should be a string');
+      assert(_.isString(email), 'Email should be a string.');
+      assert(_.isString(channelId), 'Channel Id should be a string.');
+      assert(_.isString(inviterAgentId),
+        'Inviter Agent Id should be a string.');
 
       const added = await this.addMemberships(
         email,

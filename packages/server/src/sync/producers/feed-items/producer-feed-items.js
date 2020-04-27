@@ -130,7 +130,7 @@ class ProducerFeedItems extends Producer {
   async _createFeedItem(feedItem, channelId, agentId) {
     assert(
       feedItem instanceof Producer.FeedItem,
-      'feedItem is not FeedItem',
+      'feedItem is not FeedItem.',
     );
     const feedItemBodyName = feedItem.getName();
     const body = { [feedItemBodyName]: feedItem };

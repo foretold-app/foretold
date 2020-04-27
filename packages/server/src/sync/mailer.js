@@ -6,10 +6,10 @@ const { EmailSender } = require('../lib/mails/email-sender');
 class Mailer {
   constructor(envelope = {}) {
     assert(_.isObject(envelope), '"Envelope" should be an object.');
-    assert(!!envelope.to, 'Email recipient is required');
-    assert(!!envelope.body, 'Email body is required');
-    assert(!!envelope.subject, 'Email subject is required');
-    assert(!!envelope.replacements, 'Email replacements is required');
+    assert(!!envelope.to, 'Email recipient is required.');
+    assert(!!envelope.body, 'Email body is required.');
+    assert(!!envelope.subject, 'Email subject is required.');
+    assert(!!envelope.replacements, 'Email replacements is required.');
 
     this.envelope = envelope;
 

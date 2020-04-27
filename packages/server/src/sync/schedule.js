@@ -118,6 +118,8 @@ function runListeners() {
     emitter.on(events.USER_CHANGED,
       listen(actions.UserUpdater, 'updateUser'));
 
+    emitter.on(events.NEW_SERIES,
+      listen(producers.feedItems.NewSeries));
     emitter.on(events.NEW_NOTEBOOK,
       listen(producers.feedItems.NewNotebook));
   } catch (e) {

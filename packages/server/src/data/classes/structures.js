@@ -10,7 +10,7 @@ const assert = require('assert');
  * @return {Layers.withinJoinedChannels}
  */
 module.exports.withinJoinedChannelsByChannelId = (agentId) => {
-  assert(!!agentId, 'AgentId is required');
+  assert(!!agentId, 'AgentId is required.');
   return { as: 'channelId', agentId };
 };
 
@@ -19,7 +19,7 @@ module.exports.withinJoinedChannelsByChannelId = (agentId) => {
  * @return {Layers.withinJoinedChannels}
  */
 module.exports.withinJoinedChannelsById = (agentId) => {
-  assert(!!agentId, 'AgentId is required');
+  assert(!!agentId, 'AgentId is required.');
   return { as: 'id', agentId };
 };
 
@@ -28,7 +28,7 @@ module.exports.withinJoinedChannelsById = (agentId) => {
  * @return {Layers.withinPublicAndJoinedChannels}
  */
 module.exports.withinPublicAndJoinedChannelsByChannelId = (agentId) => {
-  assert(!!agentId, 'AgentId is required');
+  assert(!!agentId, 'AgentId is required.');
   return { as: 'channelId', agentId };
 };
 
@@ -37,7 +37,7 @@ module.exports.withinPublicAndJoinedChannelsByChannelId = (agentId) => {
  * @return {Layers.withinPublicAndJoinedChannels}
  */
 module.exports.withinPublicAndJoinedChannelsById = (agentId) => {
-  assert(!!agentId, 'AgentId is required');
+  assert(!!agentId, 'AgentId is required.');
   return { as: 'id', agentId };
 };
 

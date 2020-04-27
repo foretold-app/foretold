@@ -153,4 +153,13 @@ module.exports = [
       notebookId: '{{{ notebook.id }}}',
     },
   },
+  {
+    name: TEMPLATE_NAME.NEW_SERIES_FEED_ITEM,
+    type: TEMPLATE_TYPE.FEED_ITEM,
+    envelopeTemplate: {
+      item: '',
+      description: '<split><agent /></split> made a series',
+      seriesId: '{{{ series.id }}}',
+    },
+  },
 ];

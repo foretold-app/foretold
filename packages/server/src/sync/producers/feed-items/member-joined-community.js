@@ -14,7 +14,7 @@ class MemberJoinedCommunity extends ProducerFeedItems {
 
     assert(
       !!_.get(input, 'methodCreatedBy'),
-      'Channel Membership "Method Created By" is required',
+      'Channel Membership "Method Created By" is required.',
     );
 
     this.templateName = Producer.TEMPLATE_NAME

@@ -16,9 +16,10 @@ class FeedItemMeasurement extends FeedItemGeneric {
    */
   constructor(options) {
     super(options);
-    assert(_.isString(options.measurableId), 'MeasurableId should be a string');
+    assert(_.isString(options.measurableId),
+      'MeasurableId should be a string.');
     assert(_.isString(options.measurementId),
-      'MeasurementId should be a string');
+      'MeasurementId should be a string.');
     this.measurableId = options.measurableId;
     this.measurementId = options.measurementId;
   }

@@ -24,13 +24,14 @@ const { FeedItemMeasurement } = require('../../data/models/classes');
 const { FeedItemJoinedMember } = require('../../data/models/classes');
 const { FeedItemChannel } = require('../../data/models/classes');
 const { FeedItemNotebook } = require('../../data/models/classes');
+const { FeedItemSeries } = require('../../data/models/classes');
 
 /**
  * @abstract
  */
 class Producer {
   constructor(options = {}) {
-    assert(_.isObject(options), 'Options is not an object');
+    assert(_.isObject(options), 'Options is not an object.');
 
     this.measurements = new MeasurementsData();
     this.users = new UsersData();
@@ -88,15 +89,15 @@ class Producer {
    * @protected
    */
   async _getTemplate(name = this.templateName) {
-    assert(!!name, 'Template Name is required');
+    assert(!!name, 'Template Name is required.');
 
     const params = new Params({ name });
     const template = await this.templates.getOne(params);
 
-    assert(!!_.get(template, 'name'), 'Template name is required');
+    assert(!!_.get(template, 'name'), 'Template name is required.');
     assert(
       !!_.get(template, 'envelopeTemplate'),
-      'Envelope Template ID is required',
+      'Envelope Template ID is required.',
     );
 
     return template;
@@ -123,6 +124,7 @@ Producer.FeedItemMeasurement = FeedItemMeasurement;
 Producer.FeedItemJoinedMember = FeedItemJoinedMember;
 Producer.FeedItemChannel = FeedItemChannel;
 Producer.FeedItemNotebook = FeedItemNotebook;
+Producer.FeedItemSeries = FeedItemSeries;
 
 module.exports = {
   Producer,

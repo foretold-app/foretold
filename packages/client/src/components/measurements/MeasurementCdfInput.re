@@ -467,13 +467,18 @@ module Main = {
 };
 
 module MarkdownPreprocessing = {
-
-  let addNewLines = description: string => {
-    let duplicateNewLines = Js.String.replaceByRe([%re "/[\\n]/g"], "\n\n", description);
-    let pruneCuatrupleLines = Js.String.replaceByRe([%re "/[\\n\\n\\n\\n]/g"], "\n\n", duplicateNewLines);
-    pruneCuatrupleLines;
-  }
-}
+  let addNewLines = (description): string => {
+    let duplicateNewLines =
+      Js.String.replaceByRe([%re "/[\\n]/g"], "\n\n", description);
+    let pruneCuadrupleLines =
+      Js.String.replaceByRe(
+        [%re "/[\\n\\n\\n\\n]/g"],
+        "\n\n",
+        duplicateNewLines,
+      );
+    pruneCuadrupleLines;
+  };
+};
 
 [@react.component]
 let make =

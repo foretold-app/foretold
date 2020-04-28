@@ -16,8 +16,7 @@ class NewMeasurementResolution extends NewMeasurement {
    * @return {Promise<boolean>}
    */
   async _isActual() {
-    const { competitorType } = this.input;
-    return competitorType === MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE;
+    return this.input.competitorType === MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE;
   }
 }
 

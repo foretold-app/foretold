@@ -43,6 +43,7 @@ const CHANNEL_MEMBERSHIP_TYPE = {
 const FEED_ITEM_BODY = {
   generic: 'generic',
   measurable: 'measurable',
+  series: 'series',
   measurement: 'measurement',
   joinedMember: 'joinedMember',
   channel: 'channel',
@@ -127,6 +128,7 @@ const TEMPLATE_NAME = {
   MEASURABLE_REACHED_RESOLUTION_DATE_FEED_ITEM:
     'MEASURABLE_REACHED_RESOLUTION_DATE_FEED_ITEM',
   NEW_MEASURABLE_FEED_ITEM: 'NEW_MEASURABLE_FEED_ITEM',
+  NEW_SERIES_FEED_ITEM: 'NEW_SERIES_FEED_ITEM',
   NEW_CHANNEL_FEED_ITEM: 'NEW_CHANNEL_FEED_ITEM',
   NEW_NOTEBOOK_FEED_ITEM: 'NEW_NOTEBOOK_FEED_ITEM',
 };

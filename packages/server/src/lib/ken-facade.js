@@ -15,7 +15,6 @@ const kenFacade = require('bs-ken/dist');
 class KenFacade {
   constructor(entityGraph) {
     this.db = kenFacade.main(entityGraph);
-    console.log(this.db);
     this.NAME = '@base/properties/p-name';
   }
 

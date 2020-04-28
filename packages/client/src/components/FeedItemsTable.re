@@ -51,6 +51,7 @@ module Columns = {
     | JoinedMember(row) => row.item |> Utils.ste
     | Channel(row) => row.item |> Utils.ste
     | Notebook(row) => row.item |> Utils.ste
+    | Series(row) => row.item |> Utils.ste
     | _ => "" |> Utils.ste
     };
 
@@ -118,6 +119,17 @@ module Columns = {
           <Link
             className=Style.iconGray
             linkType={Internal(ChannelNotebook(r.channelId, row.notebookId))}>
+            <Icon icon="LINK" />
+          </Link>
+        </div>
+      </>
+    | Series(row) =>
+      <>
+        <div className=Styles.text> {toDescription(row.description, r)} </div>
+        <div className=Styles.icons>
+          <Link
+            className=Style.iconGray
+            linkType={Internal(SeriesShow(r.channelId, row.seriesId))}>
             <Icon icon="LINK" />
           </Link>
         </div>

@@ -12,7 +12,7 @@ module Styles = {
   let seriesText =
     style([
       color(`hex("3d547b")),
-      fontSize(`em(2.0)),
+      fontSize(`em(1.0)),
       float(`left),
       fontWeight(`medium),
     ]);

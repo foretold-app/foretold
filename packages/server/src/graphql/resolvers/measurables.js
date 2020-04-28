@@ -55,6 +55,8 @@ async function all(root, args, context, _info) {
     states: _.get(args, 'states', null),
     isArchived: _.get(args, 'isArchived', null),
     measuredByAgentId: _.get(args, 'measuredByAgentId', null),
+    labelProperty: _.get(args, 'labelProperty', null),
+    labelSubject: _.get(args, 'labelSubject', null),
   });
   const pagination = new Pagination(args);
   const options = new Options({
@@ -185,7 +187,8 @@ async function count(_root, _args, _context, _info) {
  */
 async function measurableCount(root, _args, _context, _info) {
   const seriesId = _.get(root, 'id', null);
-  return new MeasurablesData().getCount(new Params({ seriesId }));
+  const params = new Params({ seriesId });
+  return new MeasurablesData().getCount(params);
 }
 
 /**

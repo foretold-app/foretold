@@ -232,6 +232,13 @@ const rules = () => ({
         currentAgentIsApplicationAdminOrChannelAdmin,
       ),
     ),
+    seriesUpdate: and(
+      currentAgentIsAuthenticated,
+      or(
+        channelIsPublic,
+        currentAgentIsApplicationAdminOrChannelAdmin,
+      ),
+    ),
     measurableCreate: and(
       currentAgentIsAuthenticated,
       or(

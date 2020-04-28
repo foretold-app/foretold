@@ -20,6 +20,17 @@ const seriesCreateInput = new graphql.GraphQLInputObjectType({
   }),
 });
 
+const seriesUpdateInput = new graphql.GraphQLInputObjectType({
+  name: 'SeriesUpdateInput',
+  fields: () => ({
+    name: { type: graphql.GraphQLString },
+    description: { type: graphql.GraphQLString },
+    subjects: { type: graphql.GraphQLList(graphql.GraphQLString) },
+    properties: { type: graphql.GraphQLList(graphql.GraphQLString) },
+    dates: { type: graphql.GraphQLList(DateType.default) },
+  }),
+});
+
 const series = new graphql.GraphQLObjectType({
   name: 'Series',
   fields: () => ({
@@ -58,4 +69,5 @@ const series = new graphql.GraphQLObjectType({
 module.exports = {
   series,
   seriesCreateInput,
+  seriesUpdateInput,
 };

@@ -67,15 +67,35 @@ async function all(root, args, context, _info) {
  */
 async function create(root, args, context, _info) {
   const agentId = _.get(context, 'agent.id', null);
-  const datas = new Data({
+  const data = new Data({
     ...args.input,
     creatorId: agentId,
   });
-  return new SeriesData().createOne(datas);
+  return new SeriesData().createOne(data);
 }
+
+/**
+ * @param {*} root
+ * @param {object} args
+ * @param {Defs.NotebookID} args.id
+ * @param {object} args.input
+ * @param {Schema.Context} _context
+ * @param {object} _info
+ * @returns {Promise<*|Array<Model>>}
+ */
+async function update(root, args, _context, _info) {
+  const seriesId = _.get(args, 'id', null);
+  const input = _.get(args, 'input') || {};
+  const params = new Params({ id: seriesId });
+  const data = new Data(input);
+  const options = new Options({ hooks: true });
+  return new SeriesData().updateOne(params, data, options);
+}
+
 
 module.exports = {
   create,
   one,
   all,
+  update,
 };

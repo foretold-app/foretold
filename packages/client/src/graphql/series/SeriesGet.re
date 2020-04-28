@@ -8,6 +8,10 @@ type series = {
   name: option(string),
   description: option(string),
   creator: option(creator),
+  channelId: string,
+  subjects: option(array(option(string))),
+  properties: option(array(option(string))),
+  dates: option(array(option(Js.Json.t))),
 };
 
 let toAgent = (m: creator): Types.agent =>
@@ -18,13 +22,18 @@ let toSeries = (m: series): Types.series =>
     ~id=m.id,
     ~name=m.name,
     ~creator=m.creator |> E.O.fmap(toAgent),
+    ~channelId=m.channelId,
+    ~subjects=m.subjects,
+    ~properties=m.properties,
+    ~dates=m.dates,
+    ~description=m.description,
     (),
   );
 
 module Query = [%graphql
   {|
       query series ($id: String!) {
-          series (id: $id) @bsRecord{
+        series (id: $id) @bsRecord{
            id
            name
            description
@@ -32,7 +41,11 @@ module Query = [%graphql
              id
              name
            }
-          }
+           channelId
+           subjects
+           properties
+           dates
+        }
       }
     |}
 ];

@@ -113,6 +113,16 @@ const schema = new graphql.GraphQLSchema({
               types.measurables.orderMeasurables,
             ),
           },
+          labelProperty: {
+            type: graphql.GraphQLList(
+              graphql.GraphQLNonNull(graphql.GraphQLString),
+            ),
+          },
+          labelSubject: {
+            type: graphql.GraphQLList(
+              graphql.GraphQLNonNull(graphql.GraphQLString),
+            ),
+          },
         },
         resolve: resolvers.measurables.all,
       },
@@ -329,6 +339,19 @@ const schema = new graphql.GraphQLSchema({
           },
         },
         resolve: resolvers.series.create,
+      },
+
+      seriesUpdate: {
+        type: types.series.series,
+        args: {
+          id: { type: graphql.GraphQLNonNull(types.scalars.$seriesId) },
+          input: {
+            type: graphql.GraphQLNonNull(
+              types.series.seriesUpdateInput,
+            ),
+          },
+        },
+        resolve: resolvers.series.update,
       },
 
       measurableArchive: {

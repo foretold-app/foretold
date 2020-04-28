@@ -129,11 +129,6 @@ module MakeCdf = (Item: Point) => {
   let toPoints = (t: t) =>
     t |> toArray |> sortArrayByXs |> Array.map(((y, x)) => point(~x, ~y));
 
-  let toJss = (t: t) => {
-    "ys": t |> Belt.Map.keysToArray,
-    "xs": t |> Belt.Map.valuesToArray,
-  };
-
   let toJs = (t: t) => {
     let points = t |> toArray |> sortArrayByXs;
     {
@@ -170,20 +165,20 @@ module MakeCdf = (Item: Point) => {
     decodeResult(Json.Decode.field("data", dataDecoder) ||> fromDict);
 
   let xs = t => {
-    let (xs, _) = t |> toArrays;
+    let (_, xs) = t |> toArrays;
     xs;
   };
 
   let ys = t => {
-    let (_, ys) = t |> toArrays;
+    let (ys, _) = t |> toArrays;
     ys;
   };
 
   let xsEncoded = t =>
-    t |> xs |> Array.map(Json.Encode.float) |> Json.Encode.jsonArray;
+    t |> xs |> Array.map(Item.encodeFn) |> Json.Encode.jsonArray;
 
   let ysEncoded = t =>
-    t |> ys |> Array.map(Item.encodeFn) |> Json.Encode.jsonArray;
+    t |> ys |> Array.map(Json.Encode.float) |> Json.Encode.jsonArray;
 
   let dataEncoder = t =>
     Json.Encode.(object_([("xs", xsEncoded(t)), ("ys", ysEncoded(t))]));
@@ -363,11 +358,7 @@ let encodeToGraphQLMutation = (e: t) => {
   | `FloatCdf(k) =>
     Some({
       "floatPoint": None,
-      "floatCdf":
-        Some({
-          "xs": FloatCdf.xs(k) |> Array.map(e => Some(e)),
-          "ys": FloatCdf.ys(k) |> Array.map(e => Some(e)),
-        }),
+      "floatCdf": Some({"xs": FloatCdf.xs(k), "ys": FloatCdf.ys(k)}),
       "percentage": None,
       "binary": None,
       "unresolvableResolution": None,

@@ -3,23 +3,15 @@ const _ = require('lodash');
 const { ProducerFeedItems } = require('./producer-feed-items');
 const { Producer } = require('../producer');
 
-class NewMeasurable extends ProducerFeedItems {
+class NewSeries extends ProducerFeedItems {
   /**
-   * @param {Defs.Measurable} measurable
+   * @param {Defs.Series} series
    */
-  constructor(measurable) {
-    super(measurable);
+  constructor(series) {
+    super(series);
 
-    this.templateName = Producer.TEMPLATE_NAME.NEW_MEASURABLE_FEED_ITEM;
-    this.FeedItem = Producer.FeedItemMeasurable;
-  }
-
-  /**
-   * @protected
-   * @return {Promise<boolean>}
-   */
-  async _isActual() {
-    return !_.get(this.input, 'seriesId', null);
+    this.templateName = Producer.TEMPLATE_NAME.NEW_SERIES_FEED_ITEM;
+    this.FeedItem = Producer.FeedItemSeries;
   }
 
   /**
@@ -35,8 +27,7 @@ class NewMeasurable extends ProducerFeedItems {
       agent: {
         name: (await _.get(agent, 'name', null)) || 'Somebody',
       },
-      measurable: {
-        name: (await _.get(this.input, 'name', null)) || 'Question',
+      series: {
         id: this.input.id,
       },
     };
@@ -44,5 +35,5 @@ class NewMeasurable extends ProducerFeedItems {
 }
 
 module.exports = {
-  NewMeasurable,
+  NewSeries,
 };

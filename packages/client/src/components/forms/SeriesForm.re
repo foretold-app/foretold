@@ -14,10 +14,28 @@ module FormConfig = [%lenses
 
 module Form = ReForm.Make(FormConfig);
 
-let formatDate = E.M.format(E.M.format_standard);
+let formatDate =
+  MomentRe.Moment.startOf(`day) ||> E.M.format(E.M.format_standard);
 
 let processArray =
   E.L.filter(r => r != "") ||> E.L.toArray ||> E.A.fmap(E.O.some);
+
+let convertArray =
+  E.O.fmap(E.A.fmap(E.O.toString) ||> E.A.to_list) ||> E.O.default([""]);
+
+let convertDates =
+  E.O.fmap(
+    E.A.fmap(
+      E.O.fmap(
+        E.J.toString
+        ||> MomentRe.momentDefaultFormat
+        ||> MomentRe.Moment.startOf(`day),
+      )
+      ||> E.O.default(MomentRe.momentNow()),
+    )
+    ||> E.A.to_list,
+  )
+  ||> E.O.default([MomentRe.momentNow()]);
 
 module FormComponent = {
   [@react.component]
@@ -25,6 +43,7 @@ module FormComponent = {
       (
         ~reform: Form.api,
         ~result: ReasonApolloHooks.Mutation.controledVariantResult('a),
+        ~successComponent,
       ) => {
     let onSubmit = event => {
       ReactEvent.Synthetic.preventDefault(event);
@@ -34,13 +53,9 @@ module FormComponent = {
     <Form.Provider value=reform>
       {switch (result) {
        | Error(_error) => <Sorry />
-       | Data(_) => <p> {"Series are created." |> Utils.ste} </p>
+       | Data(_) => successComponent
        | _ =>
          <Antd.Form onSubmit>
-           <h3>
-             {"Warning: You can not edit a Series after created it at this time."
-              |> Utils.ste}
-           </h3>
            <Form.Field
              field=FormConfig.Name
              render={({handleChange, value}) =>
@@ -164,6 +179,8 @@ module FormComponent = {
 };
 
 module Create = {
+  let successComponent = <p> {"Series has been created." |> Utils.ste} </p>;
+
   [@react.component]
   let make = (~channelId) => {
     let (mutate, result, _) = SeriesCreate.Mutation.use();
@@ -195,7 +212,7 @@ module Create = {
                   },
                   (),
                 )##variables,
-              ~refetchQueries=[|"channels"|],
+              ~refetchQueries=[|"channels", "measurables", "feedItems"|],
               (),
             )
             |> ignore;
@@ -212,15 +229,66 @@ module Create = {
         (),
       );
 
-    <FormComponent reform result />;
+    <FormComponent reform result successComponent />;
   };
 };
 
-[@react.component]
-let make = (~channelId: string) => {
-  <SLayout head={<SLayout.TextDiv text="Make a New Series" />}>
-    <ForetoldComponents.PageCard.BodyPadding>
-      <Create channelId />
-    </ForetoldComponents.PageCard.BodyPadding>
-  </SLayout>;
+module Edit = {
+  let successComponent = <p> {"Series has been updated." |> Utils.ste} </p>;
+
+  [@react.component]
+  let make = (~series: Types.series) => {
+    let (mutate, result, _) = SeriesUpdate.Mutation.use();
+
+    let reform =
+      Form.use(
+        ~validationStrategy=OnDemand,
+        ~schema=Form.Validation.Schema([||]),
+        ~onSubmit=
+          ({state}) => {
+            mutate(
+              ~variables=
+                SeriesUpdate.Query.make(
+                  ~id=series.id,
+                  ~input={
+                    "name": Some(state.values.name),
+                    "description": Some(state.values.description),
+                    "subjects": Some(state.values.subjects |> processArray),
+                    "properties":
+                      Some(state.values.properties |> processArray),
+                    "dates":
+                      Some(
+                        state.values.dates
+                        |> E.L.toArray
+                        |> E.A.fmap(
+                             formatDate ||> Js.Json.string ||> E.O.some,
+                           ),
+                      ),
+                  },
+                  (),
+                )##variables,
+              ~refetchQueries=[|
+                "channels",
+                "series",
+                "measurables",
+                "feedItems",
+              |],
+              (),
+            )
+            |> ignore;
+
+            None;
+          },
+        ~initialState={
+          description: series.description |> E.O.default(""),
+          name: series.name |> E.O.default(""),
+          subjects: series.subjects |> convertArray,
+          properties: series.properties |> convertArray,
+          dates: series.dates |> convertDates,
+        },
+        (),
+      );
+
+    <FormComponent reform result successComponent />;
+  };
 };

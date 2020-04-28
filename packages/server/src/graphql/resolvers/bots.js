@@ -128,7 +128,8 @@ async function oneByAgentId(root, _args, _context, _info) {
  */
 async function tokenRefresh(_root, args, _context, _info) {
   const botId = _.get(args, 'id', null);
-  const token = await new BotsData().tokenRefresh({ id: botId });
+  const params = new Params({ id: botId });
+  const token = await new BotsData().tokenRefresh(params);
   return { token };
 }
 

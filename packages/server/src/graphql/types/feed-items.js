@@ -61,6 +61,15 @@ const feedItemBodyJoinedMember = new graphql.GraphQLObjectType({
   }),
 });
 
+const feedItemBodySeries = new graphql.GraphQLObjectType({
+  name: 'FeedItemBodySeries',
+  fields: () => ({
+    item: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    description: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    seriesId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+  }),
+});
+
 const feedItemBody = new graphql.GraphQLObjectType({
   name: 'FeedItemBody',
   fields: () => ({
@@ -70,6 +79,7 @@ const feedItemBody = new graphql.GraphQLObjectType({
     [FEED_ITEM_BODY.channel]: { type: feedItemBodyChannel },
     [FEED_ITEM_BODY.notebook]: { type: feedItemBodyNotebook },
     [FEED_ITEM_BODY.joinedMember]: { type: feedItemBodyJoinedMember },
+    [FEED_ITEM_BODY.series]: { type: feedItemBodySeries },
   }),
 });
 

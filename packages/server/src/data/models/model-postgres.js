@@ -88,7 +88,8 @@ class ModelPostgres extends Model {
     this._extendGenericConditions(cond, options);
 
     const entity = await this.model.findOne(cond);
-    if (!!entity) await this.model.update(data, cond);
+    if (!!entity && !options.hooks) await this.model.update(data, cond);
+    if (!!entity && !!options.hooks) await entity.update(data, cond);
     return entity;
   }
 
@@ -480,6 +481,22 @@ class ModelPostgres extends Model {
 
     const name = _.get(filter, 'constructor.name', 'Filter');
     this.applyAbstracts(where, filter);
+
+    if (!!filter.labelProperty) {
+      where[this.and].push({
+        labelProperty: {
+          [this.in]: filter.labelProperty,
+        },
+      });
+    }
+
+    if (!!filter.labelSubject) {
+      where[this.and].push({
+        labelSubject: {
+          [this.in]: filter.labelSubject,
+        },
+      });
+    }
 
     if (!!filter.isArchived) {
       where[this.and].push({

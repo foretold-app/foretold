@@ -10,7 +10,7 @@ class FeedItem {
    * @param {object} options
    */
   constructor(options) {
-    assert(_.isObject(options), 'Options should be an object');
+    assert(_.isObject(options), 'Options should be an object.');
   }
 
   /**

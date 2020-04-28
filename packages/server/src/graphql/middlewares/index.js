@@ -15,6 +15,7 @@ const { setContextNotebook } = require('./notebooks');
 const { setContextPreferenceFromAgentId } = require('./preferences');
 const { setContextPreferenceFromId } = require('./preferences');
 const { setContextUser } = require('./users');
+const { setContextSeries } = require('./series');
 
 /**
  * Do not try to use DRY principle here.
@@ -117,6 +118,14 @@ const middlewares = {
     },
 
     seriesCreate: async (resolve, root, args, context, info) => {
+      await setContextChannel(root, args, context, info);
+      await setContextChannelMemberships(root, args, context, info);
+      return resolve(root, args, context, info);
+    },
+
+    seriesUpdate: async (resolve, root, args, context, info) => {
+      await setContextSeries(root, args, context, info);
+      // @todo: These functions should get channelId from "series.channelId".
       await setContextChannel(root, args, context, info);
       await setContextChannelMemberships(root, args, context, info);
       return resolve(root, args, context, info);

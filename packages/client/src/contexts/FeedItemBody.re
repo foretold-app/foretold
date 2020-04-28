@@ -32,9 +32,16 @@ type joinedMember = {
   description: string,
 };
 
+type series = {
+  item: string,
+  description: string,
+  seriesId: string,
+};
+
 type body =
   | Generic(generic)
   | Measurable(measurable)
+  | Series(series)
   | Measurement(measurement)
   | Notebook(notebook)
   | Channel(channel)
@@ -129,6 +136,25 @@ module Channel = {
   };
 };
 
+module Series = {
+  type t = series;
+
+  let make = (~item, ~description, ~seriesId, ()): t => {
+    item,
+    description,
+    seriesId,
+  };
+
+  let fromJson = m => {
+    make(
+      ~item=m##item,
+      ~description=m##description,
+      ~seriesId=m##seriesId,
+      (),
+    );
+  };
+};
+
 let toBody = m => {
   switch (
     m##generic,
@@ -137,13 +163,15 @@ let toBody = m => {
     m##notebook,
     m##channel,
     m##joinedMember,
+    m##series,
   ) {
-  | (Some(m), _, _, _, _, _) => Generic(Generic.fromJson(m))
-  | (_, Some(m), _, _, _, _) => Measurable(Measurable.fromJson(m))
-  | (_, _, Some(m), _, _, _) => Measurement(Measurement.fromJson(m))
-  | (_, _, _, Some(m), _, _) => Notebook(Notebook.fromJson(m))
-  | (_, _, _, _, Some(m), _) => Channel(Channel.fromJson(m))
-  | (_, _, _, _, _, Some(m)) => JoinedMember(JoinedMember.fromJson(m))
+  | (Some(m), _, _, _, _, _, _) => Generic(Generic.fromJson(m))
+  | (_, Some(m), _, _, _, _, _) => Measurable(Measurable.fromJson(m))
+  | (_, _, Some(m), _, _, _, _) => Measurement(Measurement.fromJson(m))
+  | (_, _, _, Some(m), _, _, _) => Notebook(Notebook.fromJson(m))
+  | (_, _, _, _, Some(m), _, _) => Channel(Channel.fromJson(m))
+  | (_, _, _, _, _, Some(m), _) => JoinedMember(JoinedMember.fromJson(m))
+  | (_, _, _, _, _, _, Some(m)) => Series(Series.fromJson(m))
   | _ => Empty
   };
 };

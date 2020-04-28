@@ -5,6 +5,7 @@ const { FeedItemMeasurable } = require('./feed-item-measurable');
 const { FeedItemChannel } = require('./feed-item-channel');
 const { FeedItemNotebook } = require('./feed-item-notebook');
 const { FeedItemMeasurement } = require('./feed-item-measurement');
+const { FeedItemSeries } = require('./feed-item-series');
 
 module.exports = {
   FeedItem,
@@ -14,4 +15,5 @@ module.exports = {
   FeedItemMeasurement,
   FeedItemChannel,
   FeedItemNotebook,
+  FeedItemSeries,
 };

@@ -488,6 +488,10 @@ module Series = {
         ~creator=None,
         ~measurableCount=None,
         ~channel=None,
+        ~channelId,
+        ~subjects=None,
+        ~properties=None,
+        ~dates=None,
         (),
       )
       : t => {
@@ -497,6 +501,10 @@ module Series = {
     creator,
     measurableCount,
     channel,
+    channelId,
+    subjects,
+    properties,
+    dates,
   };
 };
 

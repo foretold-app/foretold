@@ -16,7 +16,7 @@ let make = (~measurable: Types.measurable, ~defaultValueText="") => {
               measurable.id,
               value,
               competitorType,
-              description,
+              MeasurementCdfInput.MarkdownPreprocessing.addNewLines(description),
               valueText,
               asAgent,
             )

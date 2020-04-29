@@ -9,3 +9,4 @@ rsync -av --progress ./packages/components ./packages/client/node_modules/@foret
 rsync -av --progress ./packages/bs-distplus ./packages/client/node_modules/@foretold --exclude node_modules
 
 rm -rf ./packages/client/node_modules/bs-ant-design-alt/node_modules/bs-moment
+rm -rf ./packages/client/node_modules/bs-ken/node_modules/@glennsl/bs-jest

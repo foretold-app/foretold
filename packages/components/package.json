@@ -1,6 +1,6 @@
 {
     "name": "@foretold/components",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "description": "Kit-demo of UX components",
     "private": false,
     "scripts": {

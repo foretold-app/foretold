@@ -12,7 +12,6 @@ module Main = {
              <Providers.AppContexProvider value>
                <Navigator />
                <Intercom />
-               <CheckSession />
              </Providers.AppContexProvider>;
            })
          )}

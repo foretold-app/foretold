@@ -309,7 +309,7 @@ module Header = {
               float=`left styles=[Css.style([Css.marginLeft(`em(0.9))])]>
               {switch (agent.name) {
                | Some("")
-               | None => "Please add a Username on the Profile page" |> ste
+               | None => "Please add a Username on the Settings page" |> ste
                | Some(name) => name |> ste
                }}
             </Div>

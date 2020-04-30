@@ -120,7 +120,7 @@ module Inner = {
               <MeasurableItems.LinkMeasurable measurable />
             </ForetoldComponents.Div>
             <ForetoldComponents.Div styles=[Styles.block]>
-              <h4> {"Desciption:" |> Utils.ste} </h4>
+              <h4> {"Description:" |> Utils.ste} </h4>
               <MeasurableItems.Description measurable />
             </ForetoldComponents.Div>
             <ForetoldComponents.Div styles=[Styles.block]>

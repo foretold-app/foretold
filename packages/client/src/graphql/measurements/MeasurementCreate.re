@@ -35,9 +35,14 @@ let mutate =
       (),
     );
 
+  // if "measurables" is added to the list of refreshQueries, it
+  // causes a bug where once a user makes a prediction on anything
+  // but the most recently-predicted distribution, the currently selected
+  // measurable will change
+
   mutation(
     ~variables=m##variables,
-    ~refetchQueries=[|"measurements", "measurables", "measurable"|],
+    ~refetchQueries=[|"measurements", "measurable"|],
     (),
   )
   |> ignore;

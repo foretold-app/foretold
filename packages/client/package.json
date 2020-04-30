@@ -63,7 +63,7 @@
     "@apollo/react-hooks": "3.1.5",
     "@baransu/graphql_ppx_re": "0.7.1",
     "@foretold/bs-distplus": "0.0.3",
-    "@foretold/components": "0.0.5",
+    "@foretold/components": "0.0.6",
     "@glennsl/bs-jest": "0.5.1",
     "@glennsl/bs-json": "5.0.2",
     "antd": "3.17.0",

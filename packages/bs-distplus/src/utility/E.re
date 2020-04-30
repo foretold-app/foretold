@@ -242,7 +242,7 @@ module A = {
   let of_list = Array.of_list;
   let length = Array.length;
   let append = Array.append;
-  //  let empty = [||];
+  // let empty = [||];
   let unsafe_get = Array.unsafe_get;
   let get = Belt.Array.get;
   let getBy = Belt.Array.getBy;
@@ -253,6 +253,9 @@ module A = {
   let fold_right = Array.fold_right;
   let concatMany = Belt.Array.concatMany;
   let keepMap = Belt.Array.keepMap;
+  let init = Array.init;
+  let reduce = Belt.Array.reduce;
+  let reducei = Belt.Array.reduceWithIndex;
   let min = a =>
     get(a, 0)
     |> O.fmap(first => Belt.Array.reduce(a, first, (i, j) => i < j ? i : j));

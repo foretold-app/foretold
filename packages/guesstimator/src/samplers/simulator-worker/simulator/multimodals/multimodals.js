@@ -1,5 +1,7 @@
 import math from 'mathjs';
-import { Discrete } from 'discrete-sampling';
+import {
+  Discrete
+} from 'discrete-sampling';
 
 /**
  * @param d1
@@ -16,6 +18,9 @@ function bimodal(d1, d2, w = math.matrix([0.5])) {
   }
   return multimodal(d1, d2, w);
 }
+
+// TODO: This sometimes seems to fail when the array isn't long enough.
+// filterLessThan(mm(0.2 to 0.9, normal(0.8, 0.3), normal(1, 0.3), normal(1.6, 0.5), normal(2, 0.5), [4,4,1,1]), 0)
 
 // Input should take the form:
 // ( d1, d2, d3, ... math.matrix([w1, w2, w3, ...])  where

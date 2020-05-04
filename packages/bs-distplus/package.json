@@ -22,7 +22,7 @@
     "@glennsl/bs-jest": "0.5.1",
     "@glennsl/bs-json": "5.0.2",
     "autoprefixer": "9.7.6",
-    "bs-moment": "0.4.4",
+    "bs-moment": "0.4.5",
     "bs-platform": "7.2.2",
     "bsb-js": "1.1.7",
     "gh-pages": "2.2.0",

@@ -40,7 +40,7 @@
     "tests/test:ci": "cd packages/tests && yarn test:ci && cd ../..",
     "google": "echo ${GOOGLE_AUTH} > ./packages/server/config/google.json",
     "preinstall": "printenv && yarn google",
-    "postinstall": "yarn bootstrap && yarn migrate && yarn packages/build && yarn packages/clean && yarn packages/remove"
+    "postinstall": "yarn bootstrap && ./ws-fixer.sh && yarn migrate && yarn packages/build && yarn packages/clean && yarn packages/remove"
   },
   "author": "Foretold",
   "license": "MIT",

@@ -4772,11 +4772,6 @@ bs-ken@0.0.8:
     ramda "0.26.1"
     rationale "0.2.0"
 
-bs-moment@0.4.4:
-  version "0.4.4"
-  resolved "https://registry.yarnpkg.com/bs-moment/-/bs-moment-0.4.4.tgz#3d59767e8cd0107393c4f371e15b95bf862ceaac"
-  integrity sha512-fAcofbF1bTj6fuwk4cCZ0Teod75dhXPulnNhRwx7+PTtccNMdn35SCb98JxwrprQgCvoZircIgmu8nGLsOaqaA==
-
 bs-moment@0.4.5, bs-moment@^0.4.4:
   version "0.4.5"
   resolved "https://registry.yarnpkg.com/bs-moment/-/bs-moment-0.4.5.tgz#3f84fed55c2a70d25b0b6025e4e8d821fcdd4dc8"

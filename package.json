@@ -46,7 +46,8 @@
   "license": "MIT",
   "dependencies": {
     "lerna": "3.20.2",
-    "nodemon": "2.0.2"
+    "nodemon": "2.0.2",
+    "moment": "2.24.0"
   },
   "nodemonConfig": {
     "ignore": [

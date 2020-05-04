@@ -7,3 +7,5 @@ docker-compose.override.yml
 docker-compose.local.yml
 .persistence
 env.local
+.cache
+lerna-debug.log

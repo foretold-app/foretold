@@ -85,6 +85,13 @@
     "toml": "3.0.0",
     "warning": "4.0.3"
   },
+  "alias": {
+    "react": "../../node_modules/react",
+    "react-apollo": "./node_modules/react-apollo",
+    "react-dom": "../../node_modules/react-dom",
+    "bs-platform": "../../node_modules/bs-platform",
+    "remark-parse": "../../node_modules/remark-parse"
+  },
   "externals": {
     "/env.js": false
   }

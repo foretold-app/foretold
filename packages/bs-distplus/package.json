@@ -32,7 +32,6 @@
     "lodash": "4.17.15",
     "mathjs": "5.10.3",
     "moduleserve": "0.9.1",
-    "moment": "2.24.0",
     "parcel-bundler": "1.12.4",
     "pdfast": "0.2.0",
     "rationale": "0.2.0"

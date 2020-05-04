@@ -8,6 +8,7 @@
     "yarn": ">=1.16.0"
   },
   "private": true,
+  "workspaces": ["packages/*"],
   "scripts": {
     "lerna": "lerna",
     "bootstrap": "lerna bootstrap",

@@ -20,7 +20,8 @@ before_script:
 
 install:
   - docker-compose ps
-  - docker-compose up -d --build
+  - docker-compose build
+  - docker-compose up -d
   - docker-compose ps
   - docker-compose exec app yarn server/db:create
   - docker-compose exec app yarn server/db:migrate

@@ -1,7 +1,7 @@
 {
-  "name": "@foretold/foretold",
+  "name": "@foretold/foretold-travis",
   "version": "1.0.2",
-  "description": "Simple prediction service",
+  "description": "Simple prediction service (travis)",
   "main": "index.js",
   "engines": {
     "node": "12.6.0",
@@ -14,7 +14,7 @@
   },
   "scripts": {
     "lerna": "lerna",
-    "bootstrap": "lerna bootstrap --ignore-scripts",
+    "bootstrap": "lerna bootstrap",
     "postbootstrap": "./ws-fixer.sh",
     "publish": "lerna publish",
     "start": "node packages",
@@ -42,9 +42,6 @@
     "bots/test:ci": "cd packages/bots && yarn test:ci && cd ../..",
     "prediction-analysis/test:ci": "cd packages/prediction-analysis && yarn build && yarn test:ci && cd ../..",
     "tests/test:ci": "cd packages/tests && yarn test:ci && cd ../..",
-
-    "preinstall": "printenv && yarn google",
-    "postinstall": "yarn bootstrap && yarn migrate && yarn packages/build && yarn packages/clean && yarn packages/remove"
   },
   "author": "Foretold",
   "license": "MIT",

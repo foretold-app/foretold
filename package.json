@@ -10,7 +10,7 @@
   "private": true,
   "workspaces": {
     "packages": ["packages/*"],
-    "nohoist": ["**/@baransu/graphql_ppx_re", "**/lenses-ppx", "**/gentype"]
+    "nohoist": ["**/@baransu/graphql_ppx_re", "**/lenses-ppx"]
   },
   "scripts": {
     "lerna": "lerna",

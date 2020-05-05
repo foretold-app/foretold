@@ -14,8 +14,7 @@
   },
   "scripts": {
     "lerna": "lerna",
-    "bootstrap": "lerna bootstrap",
-    "postbootstrap": "./ws-fixer.sh",
+    "bootstrap": "lerna bootstrap --ignore-scripts && ./ws-fixer.sh",
     "publish": "lerna publish",
     "start": "node packages",
     "dev": "nodemon packages",

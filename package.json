@@ -8,7 +8,10 @@
     "yarn": ">=1.16.0"
   },
   "private": true,
-  "workspaces": ["packages/*"],
+  "workspaces": {
+    "packages": ["packages/*"],
+    "nohoist": ["**/@baransu/graphql_ppx_re"]
+  },
   "scripts": {
     "lerna": "lerna",
     "bootstrap": "lerna bootstrap --ignore-scripts && ./ws-fixer.sh",

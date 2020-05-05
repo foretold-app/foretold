@@ -10,11 +10,11 @@
   "private": true,
   "workspaces": {
     "packages": ["packages/*"],
-    "nohoist": ["**/@baransu/graphql_ppx_re"]
+    "nohoist": ["**/@baransu/graphql_ppx_re", "**/lenses-ppx"]
   },
   "scripts": {
     "lerna": "lerna",
-    "bootstrap": "lerna bootstrap",
+    "bootstrap": "lerna bootstrap --ignore-scripts",
     "postbootstrap": "./ws-fixer.sh",
     "publish": "lerna publish",
     "start": "node packages",

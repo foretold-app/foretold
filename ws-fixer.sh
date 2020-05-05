@@ -8,5 +8,6 @@ rm -rf ./node_modules/bs-ken/node_modules/@glennsl/bs-jest
 
 #mkdir -p ./packages/components/node_modules/react-textarea-autosize/node_modules/@babel/runtime
 #rsync -av --progress ./node_modules/@babel/runtime/ ./packages/components/node_modules/react-textarea-autosize/node_modules/@babel/runtime/
+#rsync -av /home/roman/PhpstormProjects/foretold-app/foretold/ /tmp/foretold7 --exclude node_modules --exclude .git --exclude .persistence
 
 echo "OK"

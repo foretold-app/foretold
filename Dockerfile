@@ -11,7 +11,7 @@ WORKDIR /opt/app
 
 # yarn install === lerna bootstrap (!)
 RUN yarn install --loglevel=warn --unsafe-perm
-RUN yarn lerna bootstrap --ignore-scripts
+RUN yarn lerna bootstrap
 # RUN yarn packages/clean
 RUN yarn packages/build
 

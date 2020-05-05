@@ -10,11 +10,11 @@
   "private": true,
   "workspaces": {
     "packages": ["packages/*"],
-    "nohoist": ["**/@baransu/graphql_ppx_re", "**/lenses-ppx"]
+    "nohoist": ["**/@baransu/graphql_ppx_re", "**/lenses-ppx", "**/gentype"]
   },
   "scripts": {
     "lerna": "lerna",
-    "bootstrap": "lerna bootstrap --ignore-scripts",
+    "bootstrap": "lerna bootstrap",
     "postbootstrap": "./ws-fixer.sh",
     "publish": "lerna publish",
     "start": "node packages",
@@ -50,7 +50,8 @@
   "license": "MIT",
   "dependencies": {
     "lerna": "3.20.2",
-    "nodemon": "2.0.2"
+    "nodemon": "2.0.2",
+    "lenses-ppx": "5.1.0"
   },
   "nodemonConfig": {
     "ignore": [

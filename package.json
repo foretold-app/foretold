@@ -1,35 +1,39 @@
 {
   "name": "@foretold/foretold",
   "version": "1.0.2",
-  "description": "Simple prediction service",
+  "description": "Simple prediction service 2",
   "main": "index.js",
   "engines": {
     "node": "12.6.0",
     "yarn": ">=1.16.0"
   },
   "private": true,
+  "workspaces": {
+    "packages": ["packages/*"],
+    "nohoist": ["**/@baransu/graphql_ppx_re", "**/lenses-ppx"]
+  },
   "scripts": {
     "lerna": "lerna",
-    "bootstrap": "lerna bootstrap",
+    "bootstrap": "lerna bootstrap && ./ws-fixer.sh",
     "publish": "lerna publish",
     "start": "node packages",
     "dev": "nodemon packages",
+    "google": "echo ${GOOGLE_AUTH} > ./packages/server/config/google.json",
+
     "migrate": "yarn server/db:migrate",
-    "l": "lerna",
-    "b": "lerna bootstrap",
     "packages/build": "cd packages/guesstimator && yarn build && cd ../.. && cd packages/components && yarn build && cd ../.. && cd packages/prediction-analysis && yarn build && cd ../.. && cd packages/bs-distplus && yarn build && cd ../.. && cd packages/client && yarn build-t && cd ../..",
     "packages/client/build-dev": "cd packages/components && yarn build && cd ../.. && cd packages/bs-distplus && yarn build && cd ../.. && cd packages/client && yarn bsb-watch",
     "packages/clean": "cd packages/guesstimator && yarn clean && cd ../.. && cd packages/components && yarn clean && cd ../.. && cd packages/prediction-analysis && yarn clean && cd ../.. && cd packages/bs-distplus && yarn clean && cd ../.. && cd packages/client && yarn clean && cd ../..",
     "packages/remove": "rm -rf ./packages/client/node_modules && rm -rf ./packages/components/node_modules && rm -rf ./packages/prediction-analysis/node_modules && rm -rf ./packages/guesstimator/node_modules && rm -rf packages/bs-distplus/node_modules",
     "packages/test": "yarn server/test:ci && yarn guesstimator/test:ci && yarn cdf/test:ci && yarn bots/test:ci && yarn prediction-analysis/test:ci && yarn tests/test:ci",
     "packages/lint": "yarn server/lint:ci",
-    "pb": "yarn packages/build",
-    "pc": "yarn packages/clean",
+
     "server/db:create": "cd packages/server && yarn db:create && cd ../..",
     "server/db:migrate": "cd packages/server && yarn db:migrate cd ../..",
     "server/db:migrate:undo": "cd packages/server && yarn db:migrate:undo cd ../..",
     "server/db:reset": "cd packages/server && yarn db:reset && cd ../..",
     "server/db:seed": "cd packages/server && yarn db:seed && cd ../..",
+
     "server/test:ci": "cd packages/server && yarn test:ci && cd ../..",
     "server/lint:ci": "cd packages/server && yarn lint:ci && cd ../..",
     "guesstimator/test:ci": "cd packages/guesstimator && yarn test:ci && cd ../..",
@@ -37,9 +41,8 @@
     "bots/test:ci": "cd packages/bots && yarn test:ci && cd ../..",
     "prediction-analysis/test:ci": "cd packages/prediction-analysis && yarn build && yarn test:ci && cd ../..",
     "tests/test:ci": "cd packages/tests && yarn test:ci && cd ../..",
-    "google": "echo ${GOOGLE_AUTH} > ./packages/server/config/google.json",
-    "preinstall": "printenv && yarn google",
-    "postinstall": "yarn bootstrap && yarn migrate && yarn packages/build && yarn packages/clean && yarn packages/remove"
+
+    "heroku-postbuild": "printenv && yarn google && yarn bootstrap && yarn migrate && yarn packages/build && yarn packages/clean && yarn packages/remove"
   },
   "author": "Foretold",
   "license": "MIT",

@@ -42,8 +42,9 @@
     "prediction-analysis/test:ci": "cd packages/prediction-analysis && yarn build && yarn test:ci && cd ../..",
     "tests/test:ci": "cd packages/tests && yarn test:ci && cd ../..",
 
-    "preinstall": "printenv && yarn google",
-    "postinstall": "yarn bootstrap && yarn migrate && yarn packages/build && yarn packages/clean && yarn packages/remove"
+    "prebuild": "printenv && yarn google",
+    "build": "echo OK",
+    "postbuild": "yarn bootstrap && yarn migrate && yarn packages/build && yarn packages/clean && yarn packages/remove"
   },
   "author": "Foretold",
   "license": "MIT",

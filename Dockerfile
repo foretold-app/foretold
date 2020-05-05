@@ -2,7 +2,7 @@ FROM node:12.6.0
 
 RUN env
 
-COPY package.json /opt/app/
+COPY package-travis.json.json /opt/app/package.json
 COPY yarn.lock /opt/app/
 COPY lerna.json /opt/app/
 COPY ws-fixer.sh /opt/app/

@@ -11,6 +11,7 @@ const { agentExistsValidation } = require('./agents');
 const { channelMembershipExistsValidation } = require('./channel-memberships');
 
 /**
+ * @todo: To move these validators into "validators.js" file.
  * Do not try to use DRY principle here.
  * Just read each section as it is.
  */

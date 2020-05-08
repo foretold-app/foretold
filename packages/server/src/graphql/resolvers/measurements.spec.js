@@ -26,6 +26,7 @@ describe('Measurements Resolver', () => {
             measurableId: 'measurableId1',
             notTaggedByAgent: null,
             withinMeasurables: null,
+            isCancelled: null,
           },
           {
             after: 3,

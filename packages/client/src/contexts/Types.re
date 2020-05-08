@@ -197,6 +197,7 @@ and measurement = {
   createdAt: option(MomentRe.Moment.t),
   updatedAt: option(MomentRe.Moment.t),
   relevantAt: option(MomentRe.Moment.t),
+  cancelledAt: option(Js.Json.t),
   measurableId: option(string),
   valueText: option(string),
   measurable: option(measurable),

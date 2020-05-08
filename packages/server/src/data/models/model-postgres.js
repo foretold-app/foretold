@@ -587,11 +587,18 @@ class ModelPostgres extends Model {
       });
     }
 
+    // @todo: What if this filter will be "false"?
     if (!!filter.isVerified) {
       where[this.and].push({
         agentId: {
           [this.in]: this._verifiedMeasurementsLiteral(name),
         },
+      });
+    }
+
+    if (filter.isCancelled === false) {
+      where[this.and].push({
+        cancelledAt: null,
       });
     }
 
@@ -633,6 +640,7 @@ class ModelPostgres extends Model {
       });
     }
 
+    // @todo: What if this filter will be "false"?
     if (!!filter.isEmailVerified) {
       where[this.and].push({
         isEmailVerified: {
@@ -641,6 +649,7 @@ class ModelPostgres extends Model {
       });
     }
 
+    // @todo: What if this filter will be "false"?
     if (!!filter.isNotEmailVerified) {
       where[this.and].push({
         [this.or]: [
@@ -674,6 +683,7 @@ class ModelPostgres extends Model {
       });
     }
 
+    // OK
     if (filter.sentAt || filter.sentAt === null) {
       where[this.and].push({
         sentAt: filter.sentAt,

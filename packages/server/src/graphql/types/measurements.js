@@ -132,6 +132,7 @@ const measurement = new graphql.GraphQLObjectType({
     relevantAt: { type: DateType.default },
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
+    cancelledAt: { type: DateType.default },
     taggedMeasurementId: { type: scalars.$measurementId },
     iAmOwner: commonTypes.iAmOwner,
     valueText: { type: graphql.GraphQLString },

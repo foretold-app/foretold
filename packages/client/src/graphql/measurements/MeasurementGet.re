@@ -9,6 +9,7 @@ module Query = [%graphql
           id
           createdAt @bsDecoder(fn: "E.J.toMoment")
           updatedAt @bsDecoder(fn: "E.J.toMoment")
+          cancelledAt
           value {
               floatCdf {
                   xs

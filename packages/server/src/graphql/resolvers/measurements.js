@@ -40,6 +40,7 @@ const log = logger.module('resolvers/measurements');
  * @param {string[]} args.competitorType
  * @param {string[]} args.measurableState
  * @param {boolean} args.isVerified
+ * @param {boolean} args.isCancelled
  * @param {Schema.Context} context
  * @param {object} _info
  * @returns {Promise<*>}
@@ -56,6 +57,7 @@ async function all(root, args, context, _info) {
     findInDateRange: _.get(args, 'findInDateRange', null),
     notTaggedByAgent: _.get(args, 'notTaggedByAgent', null),
     isVerified: _.get(args, 'isVerified', null),
+    isCancelled: _.get(args, 'isCancelled', null),
   });
   const pagination = new Pagination(args);
   const options = new Options({

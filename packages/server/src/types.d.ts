@@ -105,10 +105,11 @@ export namespace Defs {
     competitorType: string;
     measurableId: MeasurableID;
     agentId: AgentID;
-    relevantAt: number;
+    relevantAt: string;
     taggedMeasurementId: MeasurementID;
     description: string;
     valueText: string;
+    cancelledAt: string;
 
     getMeasurable(): Measurable;
 
@@ -371,6 +372,7 @@ export namespace Layers {
     notAuth0AccessToken?: boolean;
     isNotEmailVerified?: boolean;
     isVerified?: boolean;
+    isCancelled?: boolean;
     needsToBePending?: boolean;
     needsResolutionResponse?: boolean;
     role?: string;

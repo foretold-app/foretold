@@ -10,22 +10,13 @@ module Styles = {
 let make = (~cdf: Types.Dist.t, ~showMean=true) =>
   <>
     {showMean
-       ? <div className=Styles.mainText>
-           <NumberShower
-             precision=2
-             number={cdf |> Types.Dist.findX(0.5)}
-           />
-         </div>
+       ? <span className=Styles.mainText>
+           <NumberShower precision=2 number={cdf |> Types.Dist.findX(0.5)} />
+         </span>
        : ReasonReact.null}
-    <div className=Styles.secondaryText>
-      <NumberShower
-        precision=2
-        number={cdf |> Types.Dist.findX(0.05)}
-      />
+    <span className=Styles.secondaryText>
+      <NumberShower precision=2 number={cdf |> Types.Dist.findX(0.05)} />
       {" to " |> ReasonReact.string}
-      <NumberShower
-        precision=2
-        number={cdf |> Types.Dist.findX(0.95)}
-      />
-    </div>
+      <NumberShower precision=2 number={cdf |> Types.Dist.findX(0.95)} />
+    </span>
   </>;

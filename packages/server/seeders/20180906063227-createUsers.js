@@ -1,76 +1,80 @@
-const _ = require("lodash");
+const _ = require('lodash');
 
-const models = require("../src/data/models/definitions");
+const models = require('../src/data/models/definitions');
+
+/**
+ * @todo: To check this file manually, does it work?
+ * @todo: Last check date: _.
+ */
 
 const users = [
   {
-    name: "Goe Roggins"
+    name: 'Goe Roggins',
   },
   {
-    name: "Bill Holliday"
+    name: 'Bill Holliday',
   },
   {
-    name: "Dread Stein"
+    name: 'Dread Stein',
   },
   {
-    name: "Paul Smith"
+    name: 'Paul Smith',
   },
 ];
 
 const bots = [
   {
-    name: "FooBot",
-    competitorType: "COMPETITIVE",
+    name: 'FooBot',
+    competitorType: 'COMPETITIVE',
   },
   {
-    name: "Bot 2",
-    competitorType: "COMPETITIVE",
+    name: 'Bot 2',
+    competitorType: 'COMPETITIVE',
   },
   {
-    name: "Bot 3",
-    competitorType: "COMPETITIVE",
+    name: 'Bot 3',
+    competitorType: 'COMPETITIVE',
   },
   {
-    name: "Bot 4",
-    competitorType: "AGGREGATION",
+    name: 'Bot 4',
+    competitorType: 'AGGREGATION',
   },
 ];
 
 const measurables = [
   {
-    name: "Rating of usefulness of X",
-    valueType: "FLOAT"
+    name: 'Rating of usefulness of X',
+    valueType: 'FLOAT',
   },
   {
-    name: "Rating of usefulness of Y",
-    valueType: "FLOAT"
+    name: 'Rating of usefulness of Y',
+    valueType: 'FLOAT',
   },
   {
-    name: "Rating of usefulness of Bednets",
-    valueType: "DATE"
+    name: 'Rating of usefulness of Bednets',
+    valueType: 'DATE',
   },
   {
-    name: "Rating of usefulness of Malaria",
-    valueType: "PERCENTAGE"
+    name: 'Rating of usefulness of Malaria',
+    valueType: 'PERCENTAGE',
   },
   {
-    name: "Rating of usefulness of Georgia",
-    valueType: "FLOAT"
+    name: 'Rating of usefulness of Georgia',
+    valueType: 'FLOAT',
   },
 ];
 
 module.exports = {
-  up: async (e) => {
-
-    const xxx = await models.User.create({
-      id: "1010a04d-5307-4bd0-9246-000000000000",
-      name: "initial"
+  up: async (_e) => {
+    await models.User.create({
+      id: '1010a04d-5307-4bd0-9246-000000000000',
+      name: 'initial',
     });
 
-    const yyy = await models.Bot.create({
-      id: "1010a04d-5307-4bd0-9246-000000000000",
-      userId: "1010a04d-5307-4bd0-9246-000000000000",
-      name: "aggbot1"
+    await models.Bot.create({
+      id: '1010a04d-5307-4bd0-9246-000000000000',
+      userId: '1010a04d-5307-4bd0-9246-000000000000',
+      name: 'aggbot1',
     });
 
     let allUsers = [];
@@ -81,10 +85,10 @@ module.exports = {
 
     let allBots = [];
     for (let bot of bots) {
-      let bb = {
+      const bb = {
         ...bot,
         userId: allUsers[0].id,
-        description: "sdf",
+        description: 'sdf',
       };
       const b = await models.Bot.create(bb);
       allBots = [...allBots, b];
@@ -102,11 +106,11 @@ module.exports = {
       let agent = await user.getAgent();
       let measurable = _.sample(allMeasurables);
 
-      const u = await models.Measurement.create({
+      await models.Measurement.create({
         agentId: agent.id,
         measurableId: measurable.id,
         isAggregation: false,
-        competitorType: "COMPETITIVE",
+        competitorType: 'COMPETITIVE',
         value: { trio: { p25: 10.5, p50: 40.5, p75: 100.5 } },
       });
     }
@@ -116,11 +120,11 @@ module.exports = {
       let agent = await bot.getAgent();
       let measurable = _.sample(allMeasurables);
 
-      const u = await models.Measurement.create({
+      await models.Measurement.create({
         agentId: agent.id,
         measurableId: measurable.id,
         isAggregation: false,
-        competitorType: "COMPETITIVE",
+        competitorType: 'COMPETITIVE',
         value: { trio: { p25: 12.5, p50: 43.5, p75: 130.5 } },
       });
     }

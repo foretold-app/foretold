@@ -39,6 +39,7 @@ query measurements(
     notTaggedByAgent: $notTaggedByAgent
     findInDateRange: $findInDateRange
     isVerified: true
+    isCancelled: false
   ) {
     edges {
       node {

@@ -52,6 +52,7 @@ let toMeasurement = (measurement): Types.measurement => {
     ~createdAt=Some(measurement##createdAt),
     ~updatedAt=Some(measurement##updatedAt),
     ~relevantAt=measurement##relevantAt,
+    ~cancelledAt=measurement##cancelledAt,
     ~agent,
     ~measurementScoreSet,
     ~measurable,
@@ -110,6 +111,7 @@ module Query = [%graphql
                       comment
                   }
                   relevantAt @bsDecoder(fn: "E.J.O.toMoment")
+                  cancelledAt
                   competitorType
                   description
                   valueText

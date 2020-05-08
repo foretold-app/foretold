@@ -53,6 +53,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID(),
       allowNull: true,
     },
+    cancelledAt: {
+      type: DataTypes.DATE,
+      defaultValue: sequelize.fn('statement_timestamp'),
+      allowNull: true,
+    },
     createdAt: {
       type: DataTypes.DATE,
       defaultValue: sequelize.fn('statement_timestamp'),

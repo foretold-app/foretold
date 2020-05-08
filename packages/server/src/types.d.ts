@@ -105,10 +105,11 @@ export namespace Defs {
     competitorType: string;
     measurableId: MeasurableID;
     agentId: AgentID;
-    relevantAt: number;
+    relevantAt: string;
     taggedMeasurementId: MeasurementID;
     description: string;
     valueText: string;
+    cancelledAt: string;
 
     getMeasurable(): Measurable;
 

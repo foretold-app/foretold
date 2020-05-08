@@ -55,7 +55,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     cancelledAt: {
       type: DataTypes.DATE,
-      defaultValue: sequelize.fn('statement_timestamp'),
       allowNull: true,
     },
     createdAt: {

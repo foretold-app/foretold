@@ -2,6 +2,6 @@ const index = require('./lang');
 
 describe('Lang Configuration', () => {
   it('returns an object', () => {
-    expect(index).toBeInstanceOf(Object);
+    expect(!!index).toBe(true);
   });
 });

@@ -40,7 +40,7 @@ module Styles = {
   let measurementForm =
     style([padding(`em(1.0)), border(`px(1), `solid, `hex("D5D7DA"))]);
 
-  let cancelled = style([marginLeft(`em(1.0))]);
+  let cancelled = style([marginLeft(`em(0.5))]);
 };
 
 module Helpers = {

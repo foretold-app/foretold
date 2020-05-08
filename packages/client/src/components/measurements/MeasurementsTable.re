@@ -39,6 +39,8 @@ module Styles = {
 
   let measurementForm =
     style([padding(`em(1.0)), border(`px(1), `solid, `hex("D5D7DA"))]);
+
+  let cancelled = style([marginLeft(`em(1.0))]);
 };
 
 module Helpers = {
@@ -308,7 +310,16 @@ let predictionValue =
     ~flex=3,
     ~render=
       (measurement: Types.measurement) =>
-        <div> <Helpers.StatSummary measurement /> </div>,
+        <div>
+          <Helpers.StatSummary measurement />
+          {switch (measurement.cancelledAt) {
+           | None => <Null />
+           | _ =>
+             <span className={"ant-tag ant-tag-volcano " ++ Styles.cancelled}>
+               {"Cancelled" |> Utils.ste}
+             </span>
+           }}
+        </div>,
     (),
   );
 

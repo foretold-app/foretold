@@ -21,7 +21,7 @@ module Query = [%graphql
 
 module QueryComponent = ReasonApollo.CreateQuery(Query);
 
-// @todo:
+// @todo: To make a component.
 let redirectingMessage =
   <h3> {"You are being redirected..." |> Utils.ste} </h3>;
 

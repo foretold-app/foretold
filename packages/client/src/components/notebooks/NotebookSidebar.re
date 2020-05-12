@@ -1,7 +1,7 @@
 module Styles = {
+  let topActions = Css.(style([display(`flex), padding(`em(0.2))]));
   let actionButtonPosition =
     Css.(style([float(`right), marginLeft(`em(1.))]));
-  let topActions = Css.(style([display(`flex), padding(`em(0.2))]));
   let actionButtonsInner = Css.(style([width(`percent(100.0))]));
   let actionButtonsRight = Css.(style([float(`right)]));
 };

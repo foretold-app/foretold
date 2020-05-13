@@ -41,6 +41,13 @@ module Styles = {
       lineHeight(`em(1.56)),
       fontSize(`em(1.1)),
     ]);
+
+  let conditionalOnStyle =
+    style([
+      marginLeft(`em(0.2)),
+      lineHeight(`em(1.56)),
+      fontSize(`em(1.1)),
+    ]);
 };
 
 module DateItem = {
@@ -67,6 +74,52 @@ module DateItem = {
     };
 };
 
+module StartEndDates = {
+  [@react.component]
+  let make = (~measurable: Types.measurable, ~onStyle=Styles.dateOnStyle, ()) => {
+    let startAt =
+      switch (measurable.labelStartAtDate) {
+      | Some(e) => [|
+          <span className=onStyle key="from"> {"from " |> ste} </span>,
+          <span className=Shared.TagLink.dateItem key="fromItem">
+            {e |> E.M.goFormat_short |> ste}
+          </span>,
+        |]
+      | _ => [||]
+      };
+    let endAt =
+      switch (measurable.labelEndAtDate) {
+      | Some(e) => [|
+          <span className=onStyle key="to"> {"to " |> ste} </span>,
+          <span className=Shared.TagLink.dateItem key="toItem">
+            {e |> E.M.goFormat_short |> ste}
+          </span>,
+        |]
+      | _ => [||]
+      };
+
+    E.A.concatMany([|startAt, endAt|]) |> ReasonReact.array;
+  };
+};
+
+module ConditionalOn = {
+  [@react.component]
+  let make =
+      (~measurable: Types.measurable, ~onStyle=Styles.conditionalOnStyle, ()) =>
+    switch (measurable.labelConditionals) {
+    | None => <Null />
+    | Some(e) =>
+      <>
+        <span className=onStyle key="conditionalOn">
+          {"conditional on " |> ste}
+        </span>
+        <span className=Shared.TagLink.conditionalOn key="conditionalOn">
+          {e |> E.A.fmap(e => <span> {e |> ste} </span>) |> ReasonReact.array}
+        </span>
+      </>
+    };
+};
+
 module LinkName = {
   [@react.component]
   let make = (~measurable: Types.measurable) => {
@@ -85,6 +138,8 @@ module LinkName = {
        )
        |> E.O.React.defaultNull}
       <DateItem measurable />
+      <ConditionalOn measurable />
+      <StartEndDates measurable />
     </>;
   };
 };

@@ -163,9 +163,11 @@ module M = {
   let format = MomentRe.Moment.format;
   let format_standard = "MMM DD, YYYY HH:mm";
   let format_simple = "L";
+  let format_short = "MMM D YYYY";
   /* TODO: Figure out better name */
   let goFormat_simple = MomentRe.Moment.format(format_simple);
   let goFormat_standard = MomentRe.Moment.format(format_standard);
+  let goFormat_short = MomentRe.Moment.format(format_short);
   let toUtc = MomentRe.momentUtc;
   let toJSON = MomentRe.Moment.toJSON;
   let momentDefaultFormat = MomentRe.momentDefaultFormat;

@@ -74,6 +74,40 @@ module DateItem = {
     };
 };
 
+module StartEndDates = {
+  [@react.component]
+  let make =
+      (
+        ~measurable: Types.measurable,
+        ~showOn=true,
+        ~onStyle=Styles.dateOnStyle,
+        (),
+      ) => {
+    let startAt =
+      switch (measurable.labelStartAtDate) {
+      | Some(e) => [|
+          <span className=onStyle key="from"> {"from " |> ste} </span>,
+          <span className=Shared.TagLink.dateItem key="fromItem">
+            {e |> E.M.goFormat_short |> ste}
+          </span>,
+        |]
+      | _ => [||]
+      };
+    let endAt =
+      switch (measurable.labelEndAtDate) {
+      | Some(e) => [|
+          <span className=onStyle key="to"> {"to " |> ste} </span>,
+          <span className=Shared.TagLink.dateItem key="toItem">
+            {e |> E.M.goFormat_short |> ste}
+          </span>,
+        |]
+      | _ => [||]
+      };
+
+    E.A.concatMany([|startAt, endAt|]) |> ReasonReact.array;
+  };
+};
+
 module ConditionalOn = {
   [@react.component]
   let make =
@@ -111,6 +145,7 @@ module LinkName = {
        |> E.O.React.defaultNull}
       <DateItem measurable />
       <ConditionalOn measurable />
+      <StartEndDates measurable />
     </>;
   };
 };

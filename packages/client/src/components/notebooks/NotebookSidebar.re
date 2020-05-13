@@ -4,13 +4,17 @@ module Styles = {
     Css.(style([float(`right), marginLeft(`em(1.))]));
   let actionButtonsInner = Css.(style([width(`percent(100.0))]));
   let actionButtonsRight = Css.(style([float(`right)]));
-  let iconOuter = Css.(style([marginTop(`em(-0.25))]));
-  let icon = Css.(style([color(`hex("2a456c")), marginRight(`em(0.5))]));
 };
 
-let headerButton = (~onClick, ~icon, ~text) =>
-  ForetoldComponents.(
-    <Button size=Button.Small className=Styles.actionButtonPosition onClick>
+module TextIcon = {
+  module Styles = {
+    let iconOuter = Css.(style([marginTop(`em(-0.25))]));
+    let icon =
+      Css.(style([color(`hex("2a456c")), marginRight(`em(0.5))]));
+  };
+  [@react.component]
+  let make = (~icon, ~text) =>
+    ForetoldComponents.(
       <Div
         flexDirection=`row
         justifyContent=`spaceAround
@@ -21,7 +25,23 @@ let headerButton = (~onClick, ~icon, ~text) =>
         </Div>
         <Div flex={`num(1.)}> {text |> Utils.ste} </Div>
       </Div>
+    );
+};
+
+// @todo: Make a component.
+let headerButton = (~onClick, ~icon, ~text) =>
+  ForetoldComponents.(
+    <Button size=Button.Small className=Styles.actionButtonPosition onClick>
+      <TextIcon icon text />
     </Button>
+  );
+
+// @todo: Make a component.
+let headerLink = (~icon, ~text, ~href) =>
+  ForetoldComponents.(
+    <Button.Link size=Button.Small className=Styles.actionButtonPosition href>
+      <TextIcon icon text />
+    </Button.Link>
   );
 
 let make = (~notebookRedux: NotebookRedux.t) => {
@@ -41,15 +61,14 @@ let make = (~notebookRedux: NotebookRedux.t) => {
                  <div className=Styles.topActions>
                    <div className=Styles.actionButtonsInner>
                      <div className=Styles.actionButtonsRight>
-                       {headerButton(
-                          ~onClick=
-                            _e =>
-                              Routing.Url.push(
-                                MeasurableShow(
-                                  measurable.channelId,
-                                  measurable.id,
-                                ),
+                       {headerLink(
+                          ~href=
+                            Routing.Url.toString(
+                              MeasurableShow(
+                                measurable.channelId,
+                                measurable.id,
                               ),
+                            ),
                           ~icon="REPLY",
                           ~text="Open",
                         )}

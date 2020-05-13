@@ -85,6 +85,9 @@ let toMeasurable = m => {
     ~labelProperty=m##labelProperty,
     ~createdAt=Some(m##createdAt),
     ~updatedAt=Some(m##updatedAt),
+    ~labelStartAtDate=m##labelStartAtDate,
+    ~labelEndAtDate=m##labelEndAtDate,
+    ~labelConditionals=m##labelConditionals,
     ~expectedResolutionDate=m##expectedResolutionDate,
     ~state=Some(m##state),
     ~stateUpdatedAt=m##stateUpdatedAt,
@@ -159,6 +162,9 @@ module Query = [%graphql
               min
               max
               state
+              labelStartAtDate @bsDecoder(fn: "E.J.O.toMoment")
+              labelEndAtDate @bsDecoder(fn: "E.J.O.toMoment")
+              labelConditionals @bsDecoder(fn: "E.JsArray.toStrings")
               labelOnDate @bsDecoder(fn: "E.J.O.toMoment")
               stateUpdatedAt @bsDecoder(fn: "E.J.O.toMoment")
               expectedResolutionDate @bsDecoder(fn: "E.J.O.toMoment")

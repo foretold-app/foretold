@@ -92,4 +92,12 @@ module TagLink = {
       important(textDecorationColor(`hex("ccc"))),
       ..._linkCommonAttributes,
     ]);
+
+  let conditionalOn =
+    style([
+      color(`hex("666")),
+      important(textDecorationColor(`hex("ccc"))),
+      selector("span+span:not(:last-child):after", [contentRule(", ")]),
+      ..._linkCommonAttributes,
+    ]);
 };

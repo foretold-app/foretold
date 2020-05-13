@@ -6,8 +6,8 @@ let xyToDist =
   {xs, ys};
 };
 
-let run =
-    (guesstimatorString: string) => {
+//
+let run = (guesstimatorString: string) => {
   let distPlusIngredients =
     ForetoldBsDistplus.RenderTypes.DistPlusRenderer.Ingredients.make(
       ~guesstimatorString,
@@ -27,7 +27,8 @@ let run =
       distPlus
       |> E.O.fmap(ForetoldBsDistplus.Distributions.DistPlus.T.toShape)
     ) {
-    | Some(Discrete({xs: [|_|], ys: [|_|]} as foo)) => Some(xyToDist(foo))
+    | Some(Discrete({xs: [|_|], ys: [|_|]} as foo)) =>
+      Some(xyToDist(foo))
     | _ => None
     };
 
@@ -45,6 +46,9 @@ let run =
       |> E.O.fmap((continuous: ForetoldBsDistplus.DistTypes.continuousShape) =>
            continuous.xyShape
          );
-    dist |> E.O.fmap(xyToDist) |> E.O.fmap(r => `Dist(r)) |> E.O.default(`None)
+    dist
+    |> E.O.fmap(xyToDist)
+    |> E.O.fmap(r => `Dist(r))
+    |> E.O.default(`None);
   };
 };

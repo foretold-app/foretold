@@ -31,7 +31,9 @@ const labelCustom = {
   type: graphql.GraphQLString,
   description: 'Description of a question',
 };
-const labelConditionals = { type: graphql.GraphQLList(scalars.string0to255) };
+const labelConditionals = {
+  type: graphql.GraphQLList(graphql.GraphQLNonNull(scalars.string0to255)),
+};
 const labelEndAtDate = { type: DateType.default };
 const labelStartAtDate = { type: DateType.default };
 

@@ -13,6 +13,9 @@ module Query = [%graphql
           resolutionEndpointResponse
           labelSubject
           labelProperty
+          labelStartAtDate @bsDecoder(fn: "E.J.O.toMoment")
+          labelEndAtDate @bsDecoder(fn: "E.J.O.toMoment")
+          labelConditionals @bsDecoder(fn: "E.JsArray.toStrings")
           iAmOwner
           state
           labelOnDate @bsDecoder(fn: "E.J.O.toMoment")
@@ -144,6 +147,9 @@ let toMeasurable = (m): Types.measurable => {
     ~labelSubject=m##labelSubject,
     ~labelOnDate=m##labelOnDate,
     ~labelProperty=m##labelProperty,
+    ~labelStartAtDate=m##labelStartAtDate,
+    ~labelEndAtDate=m##labelEndAtDate,
+    ~labelConditionals=m##labelConditionals,
     ~valueType=m##valueType,
     ~measurements=None,
     ~creator=agent,

@@ -111,6 +111,36 @@ let styles = (~isDisabled=false, ~variant, ~size, ~fullWidth=false, ()) => {
   Css.merge([sizeStyles(size), total]);
 };
 
+module Link = {
+  let handleStringUrlClick = (href, event: ReactEvent.Mouse.t) =>
+    if (!ReactEvent.Mouse.defaultPrevented(event)) {
+      ReactEvent.Mouse.preventDefault(event);
+      ReasonReact.Router.push(href);
+    };
+
+  [@react.component]
+  let make =
+      (
+        ~variant=Secondary,
+        ~size=Medium,
+        ~isDisabled=false,
+        ~fullWidth=false,
+        ~className="",
+        ~href="#",
+        ~children=ReasonReact.null,
+      ) =>
+    <a
+      onClick={handleStringUrlClick(href)}
+      href
+      disabled=isDisabled
+      className={Css.merge([
+        styles(~isDisabled, ~fullWidth, ~variant, ~size, ()),
+        className,
+      ])}>
+      children
+    </a>;
+};
+
 // Button must be button
 
 [@react.component]

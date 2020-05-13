@@ -3651,6 +3651,46 @@
               "deprecationReason": null
             },
             {
+              "name": "labelStartAtDate",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Date",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "labelEndAtDate",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Date",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "labelConditionals",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String0to255",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "valueType",
               "description": null,
               "args": [],
@@ -3662,6 +3702,30 @@
                   "name": "valueType",
                   "ofType": null
                 }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "min",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "max",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -3735,6 +3799,18 @@
               "deprecationReason": null
             },
             {
+              "name": "resolutionEndpointResponse",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "Float",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "channelId",
               "description": null,
               "args": [],
@@ -3751,36 +3827,24 @@
               "deprecationReason": null
             },
             {
-              "name": "measurementCount",
+              "name": "seriesId",
               "description": null,
               "args": [],
               "type": {
                 "kind": "SCALAR",
-                "name": "Int",
+                "name": "String",
                 "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "measurerCount",
+              "name": "creatorId",
               "description": null,
               "args": [],
               "type": {
                 "kind": "SCALAR",
-                "name": "Int",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "resolutionEndpointResponse",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "Float",
+                "name": "String",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -3819,24 +3883,24 @@
               "deprecationReason": null
             },
             {
-              "name": "creatorId",
+              "name": "measurementCount",
               "description": null,
               "args": [],
               "type": {
                 "kind": "SCALAR",
-                "name": "String",
+                "name": "Int",
                 "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
-              "name": "seriesId",
+              "name": "measurerCount",
               "description": null,
               "args": [],
               "type": {
                 "kind": "SCALAR",
-                "name": "String",
+                "name": "Int",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -3854,30 +3918,6 @@
                   "name": "Boolean",
                   "ofType": null
                 }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "min",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "Float",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "max",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "SCALAR",
-                "name": "Float",
-                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null
@@ -3980,6 +4020,16 @@
           "kind": "SCALAR",
           "name": "String3to512",
           "description": "A special custom scalar type for a String3to512",
+          "fields": null,
+          "inputFields": null,
+          "interfaces": null,
+          "enumValues": null,
+          "possibleTypes": null
+        },
+        {
+          "kind": "SCALAR",
+          "name": "String0to255",
+          "description": "A special custom scalar type for a String0to255",
           "fields": null,
           "inputFields": null,
           "interfaces": null,
@@ -8927,6 +8977,40 @@
               "defaultValue": null
             },
             {
+              "name": "labelStartAtDate",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Date",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "labelEndAtDate",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Date",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "labelConditionals",
+              "description": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String0to255",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null
+            },
+            {
               "name": "valueType",
               "description": null,
               "type": {
@@ -9346,6 +9430,40 @@
                 "kind": "SCALAR",
                 "name": "String",
                 "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "labelStartAtDate",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Date",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "labelEndAtDate",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "Date",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "labelConditionals",
+              "description": null,
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String0to255",
+                  "ofType": null
+                }
               },
               "defaultValue": null
             },

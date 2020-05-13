@@ -419,6 +419,9 @@ module Create = {
                   "max":
                     state.values.max == ""
                       ? None : Some(state.values.max |> float_of_string),
+                  "labelStartAtDate": None,
+                  "labelEndAtDate": None,
+                  "labelConditionals": None,
                 }
                 : {
                   "name": state.values.name |> E.J.fromString,
@@ -442,6 +445,9 @@ module Create = {
                   "max":
                     state.values.max == ""
                       ? None : Some(state.values.max |> float_of_string),
+                  "labelStartAtDate": None,
+                  "labelEndAtDate": None,
+                  "labelConditionals": None,
                 };
             mutate(
               ~variables=MeasurableCreate.Query.make(~input, ())##variables,
@@ -542,6 +548,9 @@ module Edit = {
                           |> Rationale.Option.some
                         : None,
                     "channelId": state.values.channelId,
+                    "labelStartAtDate": None,
+                    "labelEndAtDate": None,
+                    "labelConditionals": None,
                   },
                   (),
                 )##variables,

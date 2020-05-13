@@ -87,7 +87,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.TEXT,
       allowNull: true,
     },
-
     // We default to having questions resolve 1 month after they are created.
     expectedResolutionDate: {
       allowNull: true,

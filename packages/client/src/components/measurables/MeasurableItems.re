@@ -76,13 +76,7 @@ module DateItem = {
 
 module StartEndDates = {
   [@react.component]
-  let make =
-      (
-        ~measurable: Types.measurable,
-        ~showOn=true,
-        ~onStyle=Styles.dateOnStyle,
-        (),
-      ) => {
+  let make = (~measurable: Types.measurable, ~onStyle=Styles.dateOnStyle, ()) => {
     let startAt =
       switch (measurable.labelStartAtDate) {
       | Some(e) => [|

@@ -35,42 +35,42 @@ const labelCustom = {
 const measurable = new graphql.GraphQLObjectType({
   name: 'Measurable',
   fields: () => ({
-    id: { type: graphql.GraphQLNonNull(scalars.$measurableId) },
-    name,
-    labelSubject,
+    labelCustom,
     labelOnDate,
     labelProperty,
-    labelCustom,
-    valueType: { type: measurableValueType },
-    state: { type: graphql.GraphQLNonNull(measurableState) },
-    stateUpdatedAt: { type: DateType.default },
-    isArchived: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
-    resolutionEndpoint: { type: graphql.GraphQLString },
-    expectedResolutionDate: { type: DateType.default },
-    channelId: { type: graphql.GraphQLNonNull(scalars.$channelId) },
+    labelSubject,
+    name,
 
+    channelId: { type: graphql.GraphQLNonNull(scalars.$channelId) },
+    createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
+    creatorId: { type: scalars.$agentId },
+    expectedResolutionDate: { type: DateType.default },
+    iAmOwner: commonTypes.iAmOwner,
+    id: { type: graphql.GraphQLNonNull(scalars.$measurableId) },
+    isArchived: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
+    labelConditionals: { type: graphql.GraphQLList(scalars.string0to255) },
+    labelEndAtDate: { type: DateType.default },
+    labelStartAtDate: { type: DateType.default },
+    max: { type: graphql.GraphQLFloat },
     measurementCount: {
       type: graphql.GraphQLInt,
       resolve: resolvers.measurements.measurementCountByMeasurableId,
     },
-
     measurerCount: {
       type: graphql.GraphQLInt,
       resolve: resolvers.measurements.measurerCount,
     },
-
+    min: { type: graphql.GraphQLFloat },
+    resolutionEndpoint: { type: graphql.GraphQLString },
     resolutionEndpointResponse: {
       type: graphql.GraphQLFloat,
       resolve: resolvers.measurables.resolutionEndpointResponse,
     },
-
-    createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
-    updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
-    creatorId: { type: scalars.$agentId },
     seriesId: { type: scalars.$seriesId },
-    iAmOwner: commonTypes.iAmOwner,
-    min: { type: graphql.GraphQLFloat },
-    max: { type: graphql.GraphQLFloat },
+    state: { type: graphql.GraphQLNonNull(measurableState) },
+    stateUpdatedAt: { type: DateType.default },
+    updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
+    valueType: { type: measurableValueType },
 
     permissions: {
       type: graphql.GraphQLNonNull(permissionsTypes.permissions),

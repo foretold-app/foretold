@@ -34,6 +34,18 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.TEXT,
       allowNull: true,
     },
+    labelStartAtDate: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
+    labelEndAtDate: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
+    labelConditionals: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      allowNull: true,
+    },
     valueType: {
       type: DataTypes.ENUM([
         MEASURABLE_VALUE_TYPE.FLOAT,
@@ -80,6 +92,7 @@ module.exports = (sequelize, DataTypes) => {
     expectedResolutionDate: {
       allowNull: true,
       type: DataTypes.DATE,
+      // @todo: This should be function.
       defaultValue: moment().add(1, 'months').format('MMM DD, YYYY HH:mm'),
     },
 
@@ -118,6 +131,7 @@ module.exports = (sequelize, DataTypes) => {
    */
   async function getName() {
     if (this.labelSubject && this.labelProperty) {
+      // @todo: To fix require.
       const { GlobalSettingsData } = require('../../index');
       const globalSettings = new GlobalSettingsData();
       const kenFacade = await globalSettings.getKen();

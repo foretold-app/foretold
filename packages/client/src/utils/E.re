@@ -231,6 +231,7 @@ module A = {
 
   let asList = (f: list('a) => list('a), r: array('a)) =>
     r |> to_list |> f |> of_list;
+
   /* TODO: Is there a better way of doing this? */
   let uniq = r => asList(L.uniq, r);
 
@@ -292,6 +293,8 @@ module JsArray = {
          Rationale.Option.toExn("Warning: This should not have happened"),
        );
   let filter = Js.Array.filter;
+  let toStrings: option(array(Js.Json.t)) => option(array(string)) =
+    O.fmap(A.fmap(J.toString));
 };
 
 module FloatCdf = {

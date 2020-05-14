@@ -78,6 +78,23 @@ let momentToString = m =>
   |> Js.Json.string
   |> E.O.some;
 
+let labelStartAtDate' = (values: FormConfig.state) => {
+  values.turnOnLabelStartAtDate
+    ? values.labelStartAtDate |> momentToString : Some(Js.Json.string(""));
+};
+
+let labelEndAtDate' = (values: FormConfig.state) =>
+  values.turnOnLabelEndAtDate
+    ? values.labelEndAtDate |> momentToString : Some(Js.Json.string(""));
+
+let labelConditionals' = (values: FormConfig.state) => {
+  values.labelConditionals
+  |> E.L.filter(r => r != "")
+  |> E.L.toArray
+  |> E.A.fmap(Js.Json.string)
+  |> E.O.some;
+};
+
 module FormComponent = {
   open Style.Grid;
 
@@ -509,21 +526,9 @@ module Create = {
         ~schema,
         ~onSubmit=
           ({state: {values}}) => {
-            let labelStartAtDate =
-              values.turnOnLabelStartAtDate
-                ? values.labelStartAtDate |> momentToString
-                : Some(Js.Json.string(""));
-            let labelEndAtDate =
-              values.turnOnLabelEndAtDate
-                ? values.labelEndAtDate |> momentToString
-                : Some(Js.Json.string(""));
-            let labelConditionals' =
-              values.labelConditionals
-              |> E.L.filter(r => r != "")
-              |> E.L.toArray;
-            let labelConditionals =
-              E.A.length(labelConditionals') > 0
-                ? Some(labelConditionals' |> E.A.fmap(Js.Json.string)) : None;
+            let labelStartAtDate = labelStartAtDate'(values);
+            let labelEndAtDate = labelEndAtDate'(values);
+            let labelConditionals = labelConditionals'(values);
 
             let input =
               values.showDescriptionDate == "TRUE"
@@ -636,21 +641,9 @@ module Edit = {
         ~schema,
         ~onSubmit=
           ({state: {values}}) => {
-            let labelStartAtDate =
-              values.turnOnLabelStartAtDate
-                ? values.labelStartAtDate |> momentToString
-                : Some(Js.Json.string(""));
-            let labelEndAtDate =
-              values.turnOnLabelEndAtDate
-                ? values.labelEndAtDate |> momentToString
-                : Some(Js.Json.string(""));
-            let labelConditionals' =
-              values.labelConditionals
-              |> E.L.filter(r => r != "")
-              |> E.L.toArray;
-            let labelConditionals =
-              E.A.length(labelConditionals') > 0
-                ? Some(labelConditionals' |> E.A.fmap(Js.Json.string)) : None;
+            let labelStartAtDate = labelStartAtDate'(values);
+            let labelEndAtDate = labelEndAtDate'(values);
+            let labelConditionals = labelConditionals'(values);
 
             let date =
               values.showDescriptionDate == "TRUE" ? values.labelOnDate : "";

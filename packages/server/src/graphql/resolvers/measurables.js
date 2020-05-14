@@ -151,7 +151,8 @@ async function update(root, args, _context, _info) {
   const input = _.get(args, 'input') || {};
   const params = new Params({ id: measurableId });
   const data = new Data(input);
-  return new MeasurablesData().updateOne(params, data);
+  const options = new Options({ hooks: true });
+  return new MeasurablesData().updateOne(params, data, options);
 }
 
 /**

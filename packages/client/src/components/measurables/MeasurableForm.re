@@ -1,3 +1,4 @@
+open Rationale.Function.Infix;
 open Utils;
 open BsReform;
 
@@ -15,6 +16,7 @@ module FormConfig = [%lenses
     labelProperty: string,
     labelStartAtDate: string,
     labelEndAtDate: string,
+    labelConditionals: list(string),
     expectedResolutionDate: string,
     resolutionEndpoint: string,
     showDescriptionDate: string,
@@ -271,6 +273,35 @@ module FormComponent = {
                />
              </Antd.Form.Item>
              <Form.Field
+               field=FormConfig.LabelConditionals
+               render={({handleChange, value}) =>
+                 <Antd.Form.Item label={"Conditional On" |> Utils.ste}>
+                   {value
+                    |> E.L.fmapi((i, r) =>
+                         <Antd.Input
+                           value=r
+                           onChange={e =>
+                             value
+                             |> E.L.update(
+                                  ReactEvent.Form.target(e)##value,
+                                  i,
+                                )
+                             |> handleChange
+                           }
+                         />
+                       )
+                    |> E.L.toArray
+                    |> ReasonReact.array}
+                   <Antd.Button
+                     onClick={_ =>
+                       value |> Rationale.RList.append("") |> handleChange
+                     }>
+                     {"Add" |> Utils.ste}
+                   </Antd.Button>
+                 </Antd.Form.Item>
+               }
+             />
+             <Form.Field
                field=FormConfig.LabelCustom
                render={({handleChange, value}) =>
                  <Antd.Form.Item
@@ -438,6 +469,12 @@ module Create = {
         ~schema,
         ~onSubmit=
           ({state}) => {
+            let labelConditionals =
+              Some(
+                state.values.labelConditionals
+                |> E.L.toArray
+                |> E.A.fmap(Js.Json.string),
+              );
             let input =
               state.values.showDescriptionDate == "TRUE"
                 ? {
@@ -465,7 +502,7 @@ module Create = {
                     state.values.labelStartAtDate |> Js.Json.string |> E.O.some,
                   "labelEndAtDate":
                     state.values.labelEndAtDate |> Js.Json.string |> E.O.some,
-                  "labelConditionals": None,
+                  "labelConditionals": labelConditionals,
                 }
                 : {
                   "name": state.values.name |> E.J.fromString,
@@ -493,7 +530,7 @@ module Create = {
                     state.values.labelStartAtDate |> Js.Json.string |> E.O.some,
                   "labelEndAtDate":
                     state.values.labelEndAtDate |> Js.Json.string |> E.O.some,
-                  "labelConditionals": None,
+                  "labelConditionals": labelConditionals,
                 };
             mutate(
               ~variables=MeasurableCreate.Query.make(~input, ())##variables,
@@ -530,6 +567,7 @@ module Create = {
                  ~duration=MomentRe.duration(1.0, `months),
                )
             |> formatDate,
+          labelConditionals: [],
           resolutionEndpoint: "",
           showDescriptionDate: "FALSE",
           showDescriptionProperty: "FALSE",
@@ -556,6 +594,12 @@ module Edit = {
         ~schema,
         ~onSubmit=
           ({state}) => {
+            let labelConditionals =
+              Some(
+                state.values.labelConditionals
+                |> E.L.toArray
+                |> E.A.fmap(Js.Json.string),
+              );
             let date =
               state.values.showDescriptionDate == "TRUE"
                 ? state.values.labelOnDate : "";
@@ -595,7 +639,7 @@ module Edit = {
                     "channelId": state.values.channelId,
                     "labelStartAtDate": labelStartAtDate,
                     "labelEndAtDate": labelEndAtDate,
-                    "labelConditionals": None,
+                    "labelConditionals": labelConditionals,
                   },
                   (),
                 )##variables,
@@ -624,6 +668,10 @@ module Edit = {
             measurable.labelEndAtDate
             |> E.O.default(MomentRe.momentNow())
             |> formatDate,
+          labelConditionals:
+            measurable.labelConditionals
+            |> E.O.fmap(E.A.to_list)
+            |> E.O.default([]),
           expectedResolutionDate:
             measurable.expectedResolutionDate
             |> E.O.default(MomentRe.momentNow())

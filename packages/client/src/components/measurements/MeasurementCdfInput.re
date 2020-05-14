@@ -384,15 +384,12 @@ module ValueInputMapper = {
 
     | "COMMENT" =>
       <>
-        {Primary.User.show(
-           loggedUser,
-           <>
-             <div className=Styles.inputBox>
-               <h4 className=Styles.label> {"Comment Type" |> ste} </h4>
-             </div>
-             {ValueInput.comment(state.comment, send)}
-           </>,
-         )}
+        <Experimental>
+          <div className=Styles.inputBox>
+            <h4 className=Styles.label> {"Comment Type" |> ste} </h4>
+          </div>
+          {ValueInput.comment(state.comment, send)}
+        </Experimental>
         <div className=Styles.inputBox>
           <h4 className=Styles.label> {"Comment" |> ste} </h4>
         </div>

@@ -203,7 +203,7 @@ module User = {
   let authorized = (user: option(t), component: ReasonReact.reactElement) => {
     switch (user) {
     | Some(_) => component
-    | _ => ReasonReact.null
+    | _ => <Null />
     };
   };
 

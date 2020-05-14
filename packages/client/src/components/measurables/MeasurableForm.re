@@ -5,6 +5,7 @@ open BsReform;
 module Styles = {
   open Css;
   let shortInput = [width(`em(6.))] |> style;
+  let labelSwitcher = [marginRight(`em(1.))] |> style;
 };
 
 module FormConfig = [%lenses
@@ -16,6 +17,8 @@ module FormConfig = [%lenses
     labelProperty: string,
     labelStartAtDate: string,
     labelEndAtDate: string,
+    turnOnLabelStartAtDate: bool,
+    turnOnLabelEndAtDate: bool,
     labelConditionals: list(string),
     expectedResolutionDate: string,
     resolutionEndpoint: string,
@@ -243,7 +246,26 @@ module FormComponent = {
               )}
              <Experimental>
                <Antd.Form.Item
-                 help={"" |> Utils.ste} label={"Start Date" |> Utils.ste}>
+                 help={
+                   (
+                     reform.state.values.turnOnLabelStartAtDate
+                       ? "" : "Turn on start date with the swither."
+                   )
+                   |> Utils.ste
+                 }
+                 label={"Start Date" |> Utils.ste}>
+                 <span className=Styles.labelSwitcher>
+                   <Form.Field
+                     field=FormConfig.TurnOnLabelStartAtDate
+                     render={({handleChange, value}) =>
+                       <Antd_Switch
+                         checked=value
+                         onChange=handleChange
+                         size=`small
+                       />
+                     }
+                   />
+                 </span>
                  <Form.Field
                    field=FormConfig.LabelStartAtDate
                    render={({handleChange, value}) =>
@@ -253,13 +275,31 @@ module FormComponent = {
                          handleChange(e |> formatDate);
                          (_ => ());
                        }}
-                       disabled={value == "TRUE"}
                      />
                    }
                  />
                </Antd.Form.Item>
                <Antd.Form.Item
-                 help={"" |> Utils.ste} label={"End Date" |> Utils.ste}>
+                 help={
+                   (
+                     reform.state.values.turnOnLabelEndAtDate
+                       ? "" : "Turn on end date with the swither."
+                   )
+                   |> Utils.ste
+                 }
+                 label={"End Date" |> Utils.ste}>
+                 <span className=Styles.labelSwitcher>
+                   <Form.Field
+                     field=FormConfig.TurnOnLabelEndAtDate
+                     render={({handleChange, value}) =>
+                       <Antd_Switch
+                         checked=value
+                         onChange=handleChange
+                         size=`small
+                       />
+                     }
+                   />
+                 </span>
                  <Form.Field
                    field=FormConfig.LabelEndAtDate
                    render={({handleChange, value}) =>
@@ -269,7 +309,6 @@ module FormComponent = {
                          handleChange(e |> formatDate);
                          (_ => ());
                        }}
-                       disabled={value == "TRUE"}
                      />
                    }
                  />
@@ -469,70 +508,70 @@ module Create = {
         ~validationStrategy=OnDemand,
         ~schema,
         ~onSubmit=
-          ({state}) => {
+          ({state: {values}}) => {
             let labelStartAtDate =
-              state.values.labelStartAtDate |> momentToString;
-            let labelEndAtDate = state.values.labelEndAtDate |> momentToString;
+              values.turnOnLabelStartAtDate
+                ? values.labelStartAtDate |> momentToString
+                : Some(Js.Json.string(""));
+            let labelEndAtDate =
+              values.turnOnLabelEndAtDate
+                ? values.labelEndAtDate |> momentToString
+                : Some(Js.Json.string(""));
             let labelConditionals =
               Some(
-                state.values.labelConditionals
+                values.labelConditionals
                 |> E.L.filter(r => r != "")
                 |> E.L.toArray
                 |> E.A.fmap(Js.Json.string),
               );
+
             let input =
-              state.values.showDescriptionDate == "TRUE"
+              values.showDescriptionDate == "TRUE"
                 ? {
-                  "name": state.values.name |> E.J.fromString,
-                  "labelCustom": Some(state.values.labelCustom),
-                  "labelProperty": Some(state.values.labelProperty),
+                  "name": values.name |> E.J.fromString,
+                  "labelCustom": Some(values.labelCustom),
+                  "labelProperty": Some(values.labelProperty),
                   "expectedResolutionDate":
-                    state.values.expectedResolutionDate
-                    |> Js.Json.string
-                    |> E.O.some,
-                  "resolutionEndpoint":
-                    state.values.resolutionEndpoint |> E.O.some,
-                  "labelSubject": state.values.labelSubject |> E.O.some,
+                    values.expectedResolutionDate |> Js.Json.string |> E.O.some,
+                  "resolutionEndpoint": values.resolutionEndpoint |> E.O.some,
+                  "labelSubject": values.labelSubject |> E.O.some,
                   "labelOnDate":
-                    state.values.labelOnDate |> Js.Json.string |> E.O.some,
+                    values.labelOnDate |> Js.Json.string |> E.O.some,
                   "valueType": `FLOAT,
-                  "channelId": state.values.channelId,
+                  "channelId": values.channelId,
                   "min":
-                    state.values.min == ""
-                      ? None : Some(state.values.min |> float_of_string),
+                    values.min == ""
+                      ? None : Some(values.min |> float_of_string),
                   "max":
-                    state.values.max == ""
-                      ? None : Some(state.values.max |> float_of_string),
+                    values.max == ""
+                      ? None : Some(values.max |> float_of_string),
                   "labelStartAtDate": labelStartAtDate,
                   "labelEndAtDate": labelEndAtDate,
                   "labelConditionals": labelConditionals,
                 }
                 : {
-                  "name": state.values.name |> E.J.fromString,
-                  "labelCustom": Some(state.values.labelCustom),
-                  "labelProperty": Some(state.values.labelProperty),
+                  "name": values.name |> E.J.fromString,
+                  "labelCustom": Some(values.labelCustom),
+                  "labelProperty": Some(values.labelProperty),
                   "expectedResolutionDate":
-                    state.values.expectedResolutionDate
-                    |> Js.Json.string
-                    |> E.O.some,
-                  "resolutionEndpoint":
-                    state.values.resolutionEndpoint |> E.O.some,
-                  "labelSubject": state.values.labelSubject |> E.O.some,
+                    values.expectedResolutionDate |> Js.Json.string |> E.O.some,
+                  "resolutionEndpoint": values.resolutionEndpoint |> E.O.some,
+                  "labelSubject": values.labelSubject |> E.O.some,
                   "labelOnDate": None,
                   "valueType":
-                    state.values.valueType
-                    |> Primary.Measurable.valueTypeToEnum,
-                  "channelId": state.values.channelId,
+                    values.valueType |> Primary.Measurable.valueTypeToEnum,
+                  "channelId": values.channelId,
                   "min":
-                    state.values.min == ""
-                      ? None : Some(state.values.min |> float_of_string),
+                    values.min == ""
+                      ? None : Some(values.min |> float_of_string),
                   "max":
-                    state.values.max == ""
-                      ? None : Some(state.values.max |> float_of_string),
+                    values.max == ""
+                      ? None : Some(values.max |> float_of_string),
                   "labelStartAtDate": labelStartAtDate,
                   "labelEndAtDate": labelEndAtDate,
                   "labelConditionals": labelConditionals,
                 };
+
             mutate(
               ~variables=MeasurableCreate.Query.make(~input, ())##variables,
               ~refetchQueries=[|"agent", "measurable", "measurements"|],
@@ -568,7 +607,7 @@ module Create = {
                  ~duration=MomentRe.duration(1.0, `months),
                )
             |> formatDate,
-          labelConditionals: [],
+          labelConditionals: [""],
           resolutionEndpoint: "",
           showDescriptionDate: "FALSE",
           showDescriptionProperty: "FALSE",
@@ -576,6 +615,8 @@ module Create = {
           min: "",
           max: "",
           channelId,
+          turnOnLabelStartAtDate: false,
+          turnOnLabelEndAtDate: false,
         },
         (),
       );
@@ -594,54 +635,53 @@ module Edit = {
         ~validationStrategy=OnDemand,
         ~schema,
         ~onSubmit=
-          ({state}) => {
+          ({state: {values}}) => {
+            let labelStartAtDate =
+              values.turnOnLabelStartAtDate
+                ? values.labelStartAtDate |> momentToString
+                : Some(Js.Json.string(""));
+            let labelEndAtDate =
+              values.turnOnLabelEndAtDate
+                ? values.labelEndAtDate |> momentToString
+                : Some(Js.Json.string(""));
             let labelConditionals =
               Some(
-                state.values.labelConditionals
+                values.labelConditionals
                 |> E.L.filter(r => r != "")
                 |> E.L.toArray
                 |> E.A.fmap(Js.Json.string),
               );
+
             let date =
-              state.values.showDescriptionDate == "TRUE"
-                ? state.values.labelOnDate : "";
+              values.showDescriptionDate == "TRUE" ? values.labelOnDate : "";
             let expectedResolutionDate =
-              state.values.expectedResolutionDate |> momentToString;
-            let labelStartAtDate =
-              state.values.labelStartAtDate |> momentToString;
-            let labelEndAtDate = state.values.labelEndAtDate |> momentToString;
+              values.expectedResolutionDate |> momentToString;
+
+            let input = {
+              "name": values.name |> E.J.fromString,
+              "labelCustom": values.labelCustom |> E.O.some,
+              "labelProperty": values.labelProperty |> E.O.some,
+              "labelOnDate": date |> Js.Json.string |> E.O.some,
+              "expectedResolutionDate": expectedResolutionDate,
+              "resolutionEndpoint": values.resolutionEndpoint |> E.O.some,
+              "labelSubject": values.labelSubject |> E.O.some,
+              "valueType":
+                values.valueType |> Primary.Measurable.valueTypeToEnum,
+              "min":
+                values.min != ""
+                  ? values.min |> Js.Float.fromString |> E.O.some : None,
+              "max":
+                values.max != ""
+                  ? values.max |> Js.Float.fromString |> E.O.some : None,
+              "channelId": values.channelId,
+              "labelStartAtDate": labelStartAtDate,
+              "labelEndAtDate": labelEndAtDate,
+              "labelConditionals": labelConditionals,
+            };
 
             mutate(
               ~variables=
-                MeasurableUpdate.Query.make(
-                  ~id,
-                  ~input={
-                    "name": state.values.name |> E.J.fromString,
-                    "labelCustom": state.values.labelCustom |> E.O.some,
-                    "labelProperty": state.values.labelProperty |> E.O.some,
-                    "labelOnDate": date |> Js.Json.string |> E.O.some,
-                    "expectedResolutionDate": expectedResolutionDate,
-                    "resolutionEndpoint":
-                      state.values.resolutionEndpoint |> E.O.some,
-                    "labelSubject": state.values.labelSubject |> E.O.some,
-                    "valueType":
-                      state.values.valueType
-                      |> Primary.Measurable.valueTypeToEnum,
-                    "min":
-                      state.values.min != ""
-                        ? state.values.min |> Js.Float.fromString |> E.O.some
-                        : None,
-                    "max":
-                      state.values.max != ""
-                        ? state.values.max |> Js.Float.fromString |> E.O.some
-                        : None,
-                    "channelId": state.values.channelId,
-                    "labelStartAtDate": labelStartAtDate,
-                    "labelEndAtDate": labelEndAtDate,
-                    "labelConditionals": labelConditionals,
-                  },
-                  (),
-                )##variables,
+                MeasurableUpdate.Query.make(~id, ~input, ())##variables,
               ~refetchQueries=[|"measurables", "measurable"|],
               (),
             )
@@ -683,6 +723,8 @@ module Edit = {
           min: measurable.min |> E.O.dimap(E.Float.toString, () => ""),
           max: measurable.max |> E.O.dimap(E.Float.toString, () => ""),
           channelId: measurable.channelId,
+          turnOnLabelStartAtDate: measurable.labelStartAtDate |> E.O.toBool,
+          turnOnLabelEndAtDate: measurable.labelEndAtDate |> E.O.toBool,
         },
         (),
       );

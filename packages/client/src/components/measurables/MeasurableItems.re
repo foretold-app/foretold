@@ -138,8 +138,6 @@ module LinkName = {
        )
        |> E.O.React.defaultNull}
       <DateItem measurable />
-      <ConditionalOn measurable />
-      <StartEndDates measurable />
     </>;
   };
 };
@@ -147,32 +145,40 @@ module LinkName = {
 module LinkMeasurable = {
   [@react.component]
   let make = (~measurable: Types.measurable) => {
-    switch (measurable.labelSubject, measurable.labelProperty) {
-    | (Some(""), Some(""))
-    | (None, _)
-    | (_, None) =>
-      <Link
-        className=Styles.nameLink
-        linkType={
-          Internal(MeasurableShow(measurable.channelId, measurable.id))
-        }>
-        {measurable.name |> ste}
-      </Link>
-    | (Some(_), Some(_)) => <LinkName measurable />
-    };
+    <>
+      {switch (measurable.labelSubject, measurable.labelProperty) {
+       | (Some(""), Some(""))
+       | (None, _)
+       | (_, None) =>
+         <Link
+           className=Styles.nameLink
+           linkType={
+             Internal(MeasurableShow(measurable.channelId, measurable.id))
+           }>
+           {measurable.name |> ste}
+         </Link>
+       | (Some(_), Some(_)) => <LinkName measurable />
+       }}
+      <ConditionalOn measurable />
+      <StartEndDates measurable />
+    </>;
   };
 };
 
 module NameMeasurable = {
   [@react.component]
   let make = (~measurable: Types.measurable) => {
-    switch (measurable.labelSubject, measurable.labelProperty) {
-    | (Some(""), Some(""))
-    | (None, _)
-    | (_, None) =>
-      <div className=Styles.nameLink> {measurable.name |> ste} </div>
-    | (Some(_), Some(_)) => <LinkName measurable />
-    };
+    <>
+      {switch (measurable.labelSubject, measurable.labelProperty) {
+       | (Some(""), Some(""))
+       | (None, _)
+       | (_, None) =>
+         <span className=Styles.nameLink> {measurable.name |> ste} </span>
+       | (Some(_), Some(_)) => <LinkName measurable />
+       }}
+      <ConditionalOn measurable />
+      <StartEndDates measurable />
+    </>;
   };
 };
 

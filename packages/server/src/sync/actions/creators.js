@@ -185,7 +185,7 @@ class Creators {
 
   /**
    * @todo: This is a temporary solution.
-   * @todo: How to send a null values by the client-end through GraphQL?
+   * @todo: How to send a null value by the client-end through GraphQL?
    *
    * If the array "labelConditionals" is empty
    * then we set this as a null. There is no way

@@ -240,67 +240,69 @@ module FormComponent = {
                      : <div />}
                 </>,
               )}
-             <Antd.Form.Item
-               help={"" |> Utils.ste} label={"Start Date" |> Utils.ste}>
+             <Experimental>
+               <Antd.Form.Item
+                 help={"" |> Utils.ste} label={"Start Date" |> Utils.ste}>
+                 <Form.Field
+                   field=FormConfig.LabelStartAtDate
+                   render={({handleChange, value}) =>
+                     <Antd_DatePicker
+                       value={value |> MomentRe.momentDefaultFormat}
+                       onChange={e => {
+                         handleChange(e |> formatDate);
+                         (_ => ());
+                       }}
+                       disabled={value == "TRUE"}
+                     />
+                   }
+                 />
+               </Antd.Form.Item>
+               <Antd.Form.Item
+                 help={"" |> Utils.ste} label={"End Date" |> Utils.ste}>
+                 <Form.Field
+                   field=FormConfig.LabelEndAtDate
+                   render={({handleChange, value}) =>
+                     <Antd_DatePicker
+                       value={value |> MomentRe.momentDefaultFormat}
+                       onChange={e => {
+                         handleChange(e |> formatDate);
+                         (_ => ());
+                       }}
+                       disabled={value == "TRUE"}
+                     />
+                   }
+                 />
+               </Antd.Form.Item>
                <Form.Field
-                 field=FormConfig.LabelStartAtDate
+                 field=FormConfig.LabelConditionals
                  render={({handleChange, value}) =>
-                   <Antd_DatePicker
-                     value={value |> MomentRe.momentDefaultFormat}
-                     onChange={e => {
-                       handleChange(e |> formatDate);
-                       (_ => ());
-                     }}
-                     disabled={value == "TRUE"}
-                   />
+                   <Antd.Form.Item label={"Conditional On" |> Utils.ste}>
+                     {value
+                      |> E.L.fmapi((i, r) =>
+                           <Antd.Input
+                             value=r
+                             onChange={e =>
+                               value
+                               |> E.L.update(
+                                    ReactEvent.Form.target(e)##value,
+                                    i,
+                                  )
+                               |> handleChange
+                             }
+                           />
+                         )
+                      |> E.L.toArray
+                      |> ReasonReact.array}
+                     <Antd.Button
+                       onClick={_ =>
+                         value |> Rationale.RList.append("") |> handleChange
+                       }>
+                       {"Add" |> Utils.ste}
+                     </Antd.Button>
+                   </Antd.Form.Item>
                  }
                />
-             </Antd.Form.Item>
-             <Antd.Form.Item
-               help={"" |> Utils.ste} label={"End Date" |> Utils.ste}>
-               <Form.Field
-                 field=FormConfig.LabelEndAtDate
-                 render={({handleChange, value}) =>
-                   <Antd_DatePicker
-                     value={value |> MomentRe.momentDefaultFormat}
-                     onChange={e => {
-                       handleChange(e |> formatDate);
-                       (_ => ());
-                     }}
-                     disabled={value == "TRUE"}
-                   />
-                 }
-               />
-             </Antd.Form.Item>
-             <Form.Field
-               field=FormConfig.LabelConditionals
-               render={({handleChange, value}) =>
-                 <Antd.Form.Item label={"Conditional On" |> Utils.ste}>
-                   {value
-                    |> E.L.fmapi((i, r) =>
-                         <Antd.Input
-                           value=r
-                           onChange={e =>
-                             value
-                             |> E.L.update(
-                                  ReactEvent.Form.target(e)##value,
-                                  i,
-                                )
-                             |> handleChange
-                           }
-                         />
-                       )
-                    |> E.L.toArray
-                    |> ReasonReact.array}
-                   <Antd.Button
-                     onClick={_ =>
-                       value |> Rationale.RList.append("") |> handleChange
-                     }>
-                     {"Add" |> Utils.ste}
-                   </Antd.Button>
-                 </Antd.Form.Item>
-               }
-             />
+             </Experimental>
              <Form.Field
                field=FormConfig.LabelCustom
                render={({handleChange, value}) =>
@@ -379,25 +381,24 @@ module FormComponent = {
                   </Antd.Form.Item>
                 </>,
               )}
-             {Primary.User.show(
-                loggedUser,
-                <Antd.Form.Item
-                  label={"Resolution Endpoint" |> Utils.ste}
-                  help={
-                    "If you enter an url that returns a number, this will be called when the resolution date occurs, and entered as a judgement value."
-                    |> Utils.ste
-                  }>
-                  <Form.Field
-                    field=FormConfig.ResolutionEndpoint
-                    render={({handleChange, value}) =>
-                      <Antd.Input
-                        value
-                        onChange={Helpers.handleChange(handleChange)}
-                      />
-                    }
-                  />
-                </Antd.Form.Item>,
-              )}
+             <Experimental>
+               <Antd.Form.Item
+                 label={"Resolution Endpoint" |> Utils.ste}
+                 help={
+                   "If you enter an url that returns a number, this will be called when the resolution date occurs, and entered as a judgement value."
+                   |> Utils.ste
+                 }>
+                 <Form.Field
+                   field=FormConfig.ResolutionEndpoint
+                   render={({handleChange, value}) =>
+                     <Antd.Input
+                       value
+                       onChange={Helpers.handleChange(handleChange)}
+                     />
+                   }
+                 />
+               </Antd.Form.Item>
+             </Experimental>
              <Antd.Form.Item
                label={"Expected Resolution Date" |> Utils.ste}
                help={
@@ -418,25 +419,24 @@ module FormComponent = {
                  }
                />
              </Antd.Form.Item>
-             {Primary.User.show(
-                loggedUser,
-                <Antd.Form.Item label={"Use Entities in Title" |> Utils.ste}>
-                  <Form.Field
-                    field=FormConfig.ShowDescriptionProperty
-                    render={({handleChange, value}) =>
-                      <Antd.Radio.Group
-                        value
-                        defaultValue=value
-                        onChange={Helpers.handleChange(handleChange)}>
-                        <Antd.Radio value="FALSE"> {"No" |> ste} </Antd.Radio>
-                        <Antd.Radio value="TRUE">
-                          {"Yes (Experimental)" |> ste}
-                        </Antd.Radio>
-                      </Antd.Radio.Group>
-                    }
-                  />
-                </Antd.Form.Item>,
-              )}
+             <Experimental>
+               <Antd.Form.Item label={"Use Entities in Title" |> Utils.ste}>
+                 <Form.Field
+                   field=FormConfig.ShowDescriptionProperty
+                   render={({handleChange, value}) =>
+                     <Antd.Radio.Group
+                       value
+                       defaultValue=value
+                       onChange={Helpers.handleChange(handleChange)}>
+                       <Antd.Radio value="FALSE"> {"No" |> ste} </Antd.Radio>
+                       <Antd.Radio value="TRUE">
+                         {"Yes (Experimental)" |> ste}
+                       </Antd.Radio>
+                     </Antd.Radio.Group>
+                   }
+                 />
+               </Antd.Form.Item>
+             </Experimental>
              <Antd.Form.Item>
                {reform.state.formState == Submitting
                   ? <Spin />

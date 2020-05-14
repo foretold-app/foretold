@@ -69,6 +69,7 @@ let formatDate = E.M.format(E.M.format_standard);
 let momentToString = m =>
   m
   |> E.M.momentDefaultFormat
+  |> MomentRe.Moment.startOf(`day)
   |> E.M.toJSON
   |> E.O.default("")
   |> Js.Json.string
@@ -469,6 +470,9 @@ module Create = {
         ~schema,
         ~onSubmit=
           ({state}) => {
+            let labelStartAtDate =
+              state.values.labelStartAtDate |> momentToString;
+            let labelEndAtDate = state.values.labelEndAtDate |> momentToString;
             let labelConditionals =
               Some(
                 state.values.labelConditionals
@@ -499,10 +503,8 @@ module Create = {
                   "max":
                     state.values.max == ""
                       ? None : Some(state.values.max |> float_of_string),
-                  "labelStartAtDate":
-                    state.values.labelStartAtDate |> Js.Json.string |> E.O.some,
-                  "labelEndAtDate":
-                    state.values.labelEndAtDate |> Js.Json.string |> E.O.some,
+                  "labelStartAtDate": labelStartAtDate,
+                  "labelEndAtDate": labelEndAtDate,
                   "labelConditionals": labelConditionals,
                 }
                 : {
@@ -527,10 +529,8 @@ module Create = {
                   "max":
                     state.values.max == ""
                       ? None : Some(state.values.max |> float_of_string),
-                  "labelStartAtDate":
-                    state.values.labelStartAtDate |> Js.Json.string |> E.O.some,
-                  "labelEndAtDate":
-                    state.values.labelEndAtDate |> Js.Json.string |> E.O.some,
+                  "labelStartAtDate": labelStartAtDate,
+                  "labelEndAtDate": labelEndAtDate,
                   "labelConditionals": labelConditionals,
                 };
             mutate(

@@ -1,5 +1,4 @@
 open Rationale.Function.Infix;
-
 open BsReform;
 
 module FormConfig = [%lenses

@@ -97,7 +97,10 @@ module TagLink = {
     style([
       color(`hex("666")),
       important(textDecorationColor(`hex("ccc"))),
-      selector("span+span:not(:last-child):after", [contentRule(", ")]),
+      selector(
+        "span:not(:empty):not(:last-child):after",
+        [contentRule(", ")],
+      ),
       ..._linkCommonAttributes,
     ]);
 };

@@ -427,6 +427,7 @@ export namespace Layers {
       agentId?: Defs.AgentID;
       currentAgentId?: Defs.AgentID;
       isAdmin?: boolean;
+      hooks?: boolean;
 
       attributes?: boolean | attributes;
       group?: boolean;

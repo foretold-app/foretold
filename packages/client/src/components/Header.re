@@ -339,28 +339,23 @@ module Header = {
 let make = (~loggedUser: option(Types.user)) => {
   <Div styles=[Styles.outer]>
     <Logo />
-    {switch (loggedUser) {
-     | Some(loggedUser) =>
-       <>
-         <Div float=`left> <MyCommunities /> </Div>
-         <Div float=`left>
-           {Primary.User.show(
-              loggedUser,
-              <Link linkType={Internal(EntityIndex)} className=Styles.button>
-                <span className=Styles.headerIcon>
-                  <Icon icon="NAVIGATE" />
-                </span>
-                {"Entity Explorer" |> ste}
-              </Link>,
-            )}
-         </Div>
-       </>
-     | None =>
-       <Link linkType={Internal(ChannelIndex)} className=Styles.button>
-         <span className=Styles.headerIcon> <Icon icon="PEOPLE" /> </span>
-         {"Communities" |> ste}
-       </Link>
-     }}
+    <LoggedIn>
+      <Div float=`left> <MyCommunities /> </Div>
+      <Div float=`left>
+        <Experimental>
+          <Link linkType={Internal(EntityIndex)} className=Styles.button>
+            <span className=Styles.headerIcon> <Icon icon="NAVIGATE" /> </span>
+            {"Entity Explorer" |> ste}
+          </Link>
+        </Experimental>
+      </Div>
+    </LoggedIn>
+    <NotLoggedIn>
+      <Link linkType={Internal(ChannelIndex)} className=Styles.button>
+        <span className=Styles.headerIcon> <Icon icon="PEOPLE" /> </span>
+        {"Communities" |> ste}
+      </Link>
+    </NotLoggedIn>
     <Div float=`left> <VerificationWarning /> </Div>
     <Div float=`right>
       {switch (loggedUser) {

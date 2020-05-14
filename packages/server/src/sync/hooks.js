@@ -120,6 +120,13 @@ function addHooks(db) {
       log.trace('Hook CREATING_USER', e);
     }
   });
+  db.Measurable.addHook('beforeCreate', async (instance) => {
+    try {
+      await emitter.emitAsync(events.CREATING_MEASURABLE, instance);
+    } catch (e) {
+      log.trace('Hook CREATING_MEASURABLE', e);
+    }
+  });
 
   /** beforeUpdate */
   db.Measurable.addHook('beforeUpdate', async (instance) => {

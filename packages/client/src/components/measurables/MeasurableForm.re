@@ -517,13 +517,13 @@ module Create = {
               values.turnOnLabelEndAtDate
                 ? values.labelEndAtDate |> momentToString
                 : Some(Js.Json.string(""));
+            let labelConditionals' =
+              values.labelConditionals
+              |> E.L.filter(r => r != "")
+              |> E.L.toArray;
             let labelConditionals =
-              Some(
-                values.labelConditionals
-                |> E.L.filter(r => r != "")
-                |> E.L.toArray
-                |> E.A.fmap(Js.Json.string),
-              );
+              E.A.length(labelConditionals') > 0
+                ? Some(labelConditionals' |> E.A.fmap(Js.Json.string)) : None;
 
             let input =
               values.showDescriptionDate == "TRUE"
@@ -644,13 +644,13 @@ module Edit = {
               values.turnOnLabelEndAtDate
                 ? values.labelEndAtDate |> momentToString
                 : Some(Js.Json.string(""));
+            let labelConditionals' =
+              values.labelConditionals
+              |> E.L.filter(r => r != "")
+              |> E.L.toArray;
             let labelConditionals =
-              Some(
-                values.labelConditionals
-                |> E.L.filter(r => r != "")
-                |> E.L.toArray
-                |> E.A.fmap(Js.Json.string),
-              );
+              E.A.length(labelConditionals') > 0
+                ? Some(labelConditionals' |> E.A.fmap(Js.Json.string)) : None;
 
             let date =
               values.showDescriptionDate == "TRUE" ? values.labelOnDate : "";

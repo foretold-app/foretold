@@ -472,6 +472,7 @@ module Create = {
             let labelConditionals =
               Some(
                 state.values.labelConditionals
+                |> E.L.filter(r => r != "")
                 |> E.L.toArray
                 |> E.A.fmap(Js.Json.string),
               );
@@ -597,19 +598,17 @@ module Edit = {
             let labelConditionals =
               Some(
                 state.values.labelConditionals
+                |> E.L.filter(r => r != "")
                 |> E.L.toArray
                 |> E.A.fmap(Js.Json.string),
               );
             let date =
               state.values.showDescriptionDate == "TRUE"
                 ? state.values.labelOnDate : "";
-
             let expectedResolutionDate =
               state.values.expectedResolutionDate |> momentToString;
-
             let labelStartAtDate =
               state.values.labelStartAtDate |> momentToString;
-
             let labelEndAtDate = state.values.labelEndAtDate |> momentToString;
 
             mutate(

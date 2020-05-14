@@ -703,7 +703,7 @@ module Edit = {
           labelConditionals:
             measurable.labelConditionals
             |> E.O.fmap(E.A.to_list)
-            |> E.O.default([]),
+            |> E.O.default([""]),
           expectedResolutionDate:
             measurable.expectedResolutionDate
             |> E.O.default(MomentRe.momentNow())

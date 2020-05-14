@@ -13,6 +13,8 @@ module FormConfig = [%lenses
     labelSubject: string,
     labelOnDate: string,
     labelProperty: string,
+    labelStartAtDate: string,
+    labelEndAtDate: string,
     expectedResolutionDate: string,
     resolutionEndpoint: string,
     showDescriptionDate: string,
@@ -27,8 +29,6 @@ module FormConfig = [%lenses
 module Form = ReForm.Make(FormConfig);
 
 type result('a) = ReasonApolloHooks.Mutation.controledVariantResult('a);
-
-let formatDate = E.M.format(E.M.format_standard);
 
 let schema =
   Form.Validation.Schema([|
@@ -61,6 +61,16 @@ let onSuccess = measurable => {
   | _ => ()
   };
 };
+
+let formatDate = E.M.format(E.M.format_standard);
+
+let momentToString = m =>
+  m
+  |> E.M.momentDefaultFormat
+  |> E.M.toJSON
+  |> E.O.default("")
+  |> Js.Json.string
+  |> E.O.some;
 
 module FormComponent = {
   open Style.Grid;
@@ -228,6 +238,38 @@ module FormComponent = {
                      : <div />}
                 </>,
               )}
+             <Antd.Form.Item
+               help={"" |> Utils.ste} label={"Start Date" |> Utils.ste}>
+               <Form.Field
+                 field=FormConfig.LabelStartAtDate
+                 render={({handleChange, value}) =>
+                   <Antd_DatePicker
+                     value={value |> MomentRe.momentDefaultFormat}
+                     onChange={e => {
+                       handleChange(e |> formatDate);
+                       (_ => ());
+                     }}
+                     disabled={value == "TRUE"}
+                   />
+                 }
+               />
+             </Antd.Form.Item>
+             <Antd.Form.Item
+               help={"" |> Utils.ste} label={"End Date" |> Utils.ste}>
+               <Form.Field
+                 field=FormConfig.LabelEndAtDate
+                 render={({handleChange, value}) =>
+                   <Antd_DatePicker
+                     value={value |> MomentRe.momentDefaultFormat}
+                     onChange={e => {
+                       handleChange(e |> formatDate);
+                       (_ => ());
+                     }}
+                     disabled={value == "TRUE"}
+                   />
+                 }
+               />
+             </Antd.Form.Item>
              <Form.Field
                field=FormConfig.LabelCustom
                render={({handleChange, value}) =>
@@ -419,8 +461,10 @@ module Create = {
                   "max":
                     state.values.max == ""
                       ? None : Some(state.values.max |> float_of_string),
-                  "labelStartAtDate": None,
-                  "labelEndAtDate": None,
+                  "labelStartAtDate":
+                    state.values.labelStartAtDate |> Js.Json.string |> E.O.some,
+                  "labelEndAtDate":
+                    state.values.labelEndAtDate |> Js.Json.string |> E.O.some,
                   "labelConditionals": None,
                 }
                 : {
@@ -445,8 +489,10 @@ module Create = {
                   "max":
                     state.values.max == ""
                       ? None : Some(state.values.max |> float_of_string),
-                  "labelStartAtDate": None,
-                  "labelEndAtDate": None,
+                  "labelStartAtDate":
+                    state.values.labelStartAtDate |> Js.Json.string |> E.O.some,
+                  "labelEndAtDate":
+                    state.values.labelEndAtDate |> Js.Json.string |> E.O.some,
                   "labelConditionals": None,
                 };
             mutate(
@@ -477,6 +523,13 @@ module Create = {
                )
             |> formatDate,
           labelOnDate: MomentRe.momentNow() |> formatDate,
+          labelStartAtDate: MomentRe.momentNow() |> formatDate,
+          labelEndAtDate:
+            MomentRe.momentNow()
+            |> MomentRe.Moment.add(
+                 ~duration=MomentRe.duration(1.0, `months),
+               )
+            |> formatDate,
           resolutionEndpoint: "",
           showDescriptionDate: "FALSE",
           showDescriptionProperty: "FALSE",
@@ -508,12 +561,12 @@ module Edit = {
                 ? state.values.labelOnDate : "";
 
             let expectedResolutionDate =
-              state.values.expectedResolutionDate
-              |> E.M.momentDefaultFormat
-              |> E.M.toJSON
-              |> E.O.default("")
-              |> Js.Json.string
-              |> Rationale.Option.some;
+              state.values.expectedResolutionDate |> momentToString;
+
+            let labelStartAtDate =
+              state.values.labelStartAtDate |> momentToString;
+
+            let labelEndAtDate = state.values.labelEndAtDate |> momentToString;
 
             mutate(
               ~variables=
@@ -521,35 +574,27 @@ module Edit = {
                   ~id,
                   ~input={
                     "name": state.values.name |> E.J.fromString,
-                    "labelCustom":
-                      state.values.labelCustom |> Rationale.Option.some,
-                    "labelProperty":
-                      state.values.labelProperty |> Rationale.Option.some,
-                    "labelOnDate":
-                      date |> Js.Json.string |> Rationale.Option.some,
+                    "labelCustom": state.values.labelCustom |> E.O.some,
+                    "labelProperty": state.values.labelProperty |> E.O.some,
+                    "labelOnDate": date |> Js.Json.string |> E.O.some,
                     "expectedResolutionDate": expectedResolutionDate,
                     "resolutionEndpoint":
-                      state.values.resolutionEndpoint |> Rationale.Option.some,
-                    "labelSubject":
-                      state.values.labelSubject |> Rationale.Option.some,
+                      state.values.resolutionEndpoint |> E.O.some,
+                    "labelSubject": state.values.labelSubject |> E.O.some,
                     "valueType":
                       state.values.valueType
                       |> Primary.Measurable.valueTypeToEnum,
                     "min":
                       state.values.min != ""
-                        ? state.values.min
-                          |> Js.Float.fromString
-                          |> Rationale.Option.some
+                        ? state.values.min |> Js.Float.fromString |> E.O.some
                         : None,
                     "max":
                       state.values.max != ""
-                        ? state.values.max
-                          |> Js.Float.fromString
-                          |> Rationale.Option.some
+                        ? state.values.max |> Js.Float.fromString |> E.O.some
                         : None,
                     "channelId": state.values.channelId,
-                    "labelStartAtDate": None,
-                    "labelEndAtDate": None,
+                    "labelStartAtDate": labelStartAtDate,
+                    "labelEndAtDate": labelEndAtDate,
                     "labelConditionals": None,
                   },
                   (),
@@ -571,6 +616,14 @@ module Edit = {
             measurable.labelOnDate |> E.O.isSome |> (e => e ? "TRUE" : "FALSE"),
           labelSubject: measurable.labelSubject |> E.O.default(""),
           labelCustom: measurable.labelCustom |> E.O.default(""),
+          labelStartAtDate:
+            measurable.labelStartAtDate
+            |> E.O.default(MomentRe.momentNow())
+            |> formatDate,
+          labelEndAtDate:
+            measurable.labelEndAtDate
+            |> E.O.default(MomentRe.momentNow())
+            |> formatDate,
           expectedResolutionDate:
             measurable.expectedResolutionDate
             |> E.O.default(MomentRe.momentNow())

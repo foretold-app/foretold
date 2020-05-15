@@ -5,6 +5,7 @@ const { competitiveMeasurementCanBeAddedToOpenMeasurable } = require(
   './measurements',
 );
 const { measurableNameValidation } = require('./measurables');
+const { measurableOnlyOneTitleValidation } = require('./measurables');
 const { measurementValueTypeValidation } = require('./measurements');
 const { measurementValueValidation } = require('./measurements');
 const { agentExistsValidation } = require('./agents');
@@ -34,6 +35,13 @@ const validators = {
     },
 
     measurableCreate: async (resolve, root, args, context, info) => {
+      await measurableOnlyOneTitleValidation(root, args, context, info);
+      await measurableNameValidation(root, args, context, info);
+      return resolve(root, args, context, info);
+    },
+
+    measurableUpdate: async (resolve, root, args, context, info) => {
+      await measurableOnlyOneTitleValidation(root, args, context, info);
       await measurableNameValidation(root, args, context, info);
       return resolve(root, args, context, info);
     },

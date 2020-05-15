@@ -1,5 +1,7 @@
 module.exports.measurableEmptyName = () => 'Question should have either name'
   + ' or subject.';
+module.exports.measurableOnlyNameErr = () => 'Question should have only name'
+  + ' or subject.';
 module.exports.measurableNameLess3 = () => 'Question name should '
   + 'be more than 3 chars.';
 module.exports.measurableLabelSubjectErr = () => 'Question subject label '

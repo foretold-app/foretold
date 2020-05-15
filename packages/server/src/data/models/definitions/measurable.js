@@ -131,7 +131,11 @@ module.exports = (sequelize, DataTypes) => {
    * @returns {string}
    */
   async function getName() {
-    if (this.labelSubject && this.labelProperty) {
+    if (!!this.dataValues.name) {
+      return this.dataValues.name;
+    }
+
+    if (!!this.labelSubject && !!this.labelProperty) {
       // @todo: To fix require.
       const { GlobalSettingsData } = require('../../index');
       const globalSettings = new GlobalSettingsData();
@@ -141,10 +145,6 @@ module.exports = (sequelize, DataTypes) => {
         this.labelProperty,
       );
       return `${names.subject} ${names.property}`;
-    }
-
-    if (this.dataValues.name) {
-      return this.dataValues.name;
     }
 
     return '';

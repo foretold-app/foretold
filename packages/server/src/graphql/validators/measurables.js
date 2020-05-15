@@ -45,6 +45,26 @@ async function measurableNameValidation(root, args, context, _info) {
   return true;
 }
 
+/**
+ * @param {*} root
+ * @param {object} args
+ * @param {Schema.Context} _context
+ * @param {object} _info
+ * @return {Promise<boolean>}
+ */
+async function measurableOnlyOneTitleValidation(root, args, _context, _info) {
+  const name = _.get(args, 'input.name', null);
+  const labelSubject = _.get(args, 'input.labelSubject', null);
+  const labelProperty = _.get(args, 'input.labelProperty', null);
+
+  if (!!name && !!labelSubject && !!labelProperty) {
+    throw new Error(lang.measurableOnlyNameErr());
+  }
+
+  return true;
+}
+
 module.exports = {
   measurableNameValidation,
+  measurableOnlyOneTitleValidation,
 };

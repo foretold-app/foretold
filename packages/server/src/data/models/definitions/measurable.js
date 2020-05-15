@@ -126,7 +126,7 @@ module.exports = (sequelize, DataTypes) => {
   /**
    * @todo: To fix, remove this code from this layer.
    * @todo: It leads the architecture of the app to circular dependency
-   * @todo: To move this into hooks layer and create name
+   * @todo: To move this into the hooks layer and to create name
    * @todo: right before storing in the DB.
    * @returns {string}
    */

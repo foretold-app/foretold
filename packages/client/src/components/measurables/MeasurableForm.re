@@ -420,17 +420,24 @@ module FormComponent = {
                       <Antd.Form.Item label={"Conditional On" |> Utils.ste}>
                         {value
                          |> E.L.fmapi((i, r) =>
-                              <Antd.Input
-                                value=r
-                                onChange={e =>
-                                  value
-                                  |> E.L.update(
-                                       ReactEvent.Form.target(e)##value,
-                                       i,
-                                     )
-                                  |> handleChange
-                                }
-                              />
+                              <Antd.Form.Item
+                                help={
+                                  KenTools.toString(reform.state.values.g, r)
+                                  |> E.O.default("(none)")
+                                  |> Utils.ste
+                                }>
+                                <Antd.Input
+                                  value=r
+                                  onChange={e =>
+                                    value
+                                    |> E.L.update(
+                                         ReactEvent.Form.target(e)##value,
+                                         i,
+                                       )
+                                    |> handleChange
+                                  }
+                                />
+                              </Antd.Form.Item>
                             )
                          |> E.L.toArray
                          |> ReasonReact.array}

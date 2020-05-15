@@ -13,7 +13,7 @@ const agentsTypes = require('./agents');
 const channelsTypes = require('./channels');
 
 const name = {
-  type: graphql.GraphQLNonNull(scalars.string3to512),
+  type: graphql.GraphQLNonNull(scalars.string0to512),
 };
 const labelSubject = {
   type: graphql.GraphQLString,

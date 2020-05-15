@@ -129,6 +129,7 @@ describe('Measurables Resolvers', () => {
         expect(new MeasurablesData().updateOne).toHaveBeenCalledWith(
           { id: 'id1' },
           { b: 'b1' },
+          { hooks: true },
         );
         expect(result).toBe(true);
       });

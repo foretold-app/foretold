@@ -8,7 +8,7 @@ const { Params } = require('../../data/classes');
 const { Query } = require('../../data/classes');
 const { Options } = require('../../data/classes');
 
-const log = logger.module('middlewares/channel-memberships');
+const log = logger.module('validators/channel-memberships');
 
 /**
  * @todo: Should be divided on two middleware.

@@ -36,6 +36,7 @@ module Columns = {
   type record = Types.feedItem;
   type column = Table.column(record);
 
+  // @todo: To make a component.
   let name = (r: record) =>
     switch (r.body) {
     | Measurable(row) =>
@@ -55,6 +56,7 @@ module Columns = {
     | _ => "" |> Utils.ste
     };
 
+  // @todo: To make a component.
   let toDescription = (str: string, r: record) => {
     str
     |> Splitter.toBlocks
@@ -67,6 +69,7 @@ module Columns = {
     |> ReasonReact.array;
   };
 
+  // @todo: To make a component.
   let description = (r: record) =>
     switch (r.body) {
     | Generic(row) => toDescription(row.description, r)

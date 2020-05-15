@@ -2,6 +2,10 @@ open Rationale.Function.Infix;
 open Utils;
 open BsReform;
 
+// @todo: To move these properties into the server-end:
+// @todo: showDescriptionDate
+// @todo: showDescriptionProperty
+
 module Styles = {
   open Css;
   let shortInput = [width(`em(6.))] |> style;
@@ -28,6 +32,7 @@ module FormConfig = [%lenses
     min: string,
     max: string,
     channelId: string,
+    kenToolsGraph: KenTools.g,
   }
 ];
 
@@ -40,14 +45,67 @@ let schema =
     Custom(
       Name,
       values =>
-        Js.String.length(values.name) > 512
-          ? ReSchema.Error("Must be less than 512 characters.") : Valid,
+        values.showDescriptionProperty == "FALSE"
+        && Js.String.length(values.name) > 512
+          ? ReSchema.Error(Lang.less512) : Valid,
     ),
     Custom(
       Name,
       values =>
-        Js.String.length(values.name) < 3
-          ? Error("Must be over 2 characters.") : Valid,
+        values.showDescriptionProperty == "FALSE"
+        && Js.String.length(values.name) < 3
+          ? Error(Lang.more2) : Valid,
+    ),
+    Custom(
+      LabelSubject,
+      values =>
+        values.showDescriptionProperty == "TRUE"
+        && Js.String.length(values.labelSubject) > 512
+          ? ReSchema.Error(Lang.less512) : Valid,
+    ),
+    Custom(
+      LabelSubject,
+      values =>
+        values.showDescriptionProperty == "TRUE"
+        && Js.String.length(values.labelSubject) < 3
+          ? Error(Lang.more2) : Valid,
+    ),
+    Custom(
+      LabelSubject,
+      values =>
+        values.showDescriptionProperty == "TRUE"
+        && Js.String.length(
+             KenTools.toString(values.kenToolsGraph, values.labelSubject)
+             |> E.O.default(""),
+           )
+        < 2
+          ? Error(Lang.subjectLabelErr) : Valid,
+    ),
+    Custom(
+      LabelProperty,
+      values =>
+        values.showDescriptionProperty == "TRUE"
+        && Js.String.length(values.labelProperty) > 512
+          ? ReSchema.Error(Lang.less512) : Valid,
+    ),
+    Custom(
+      LabelProperty,
+      values => {
+        values.showDescriptionProperty == "TRUE"
+        && Js.String.length(values.labelProperty) < 3
+          ? Error(Lang.more2) : Valid
+      },
+    ),
+    Custom(
+      LabelProperty,
+      values =>
+        values.showDescriptionProperty == "TRUE"
+        && Js.String.length(
+             KenTools.toString(values.kenToolsGraph, values.labelProperty)
+             |> E.O.default(""),
+           )
+        < 2
+          ? Error(Lang.propertyLabelErr) : Valid,
     ),
   |]);
 
@@ -91,15 +149,21 @@ let labelConditionals' = (values: FormConfig.state) => {
   values.labelConditionals
   |> E.L.filter(r => r != "")
   |> E.L.toArray
+  |> E.A.fmap(Js.String.trim)
   |> E.A.fmap(Js.Json.string)
   |> E.O.some;
 };
+
+let name' = (values: FormConfig.state) =>
+  (values.showDescriptionProperty == "FALSE" ? values.name : "")
+  |> E.J.fromString;
 
 module FormComponent = {
   open Style.Grid;
 
   [@react.component]
   let make = (~creating: bool, ~reform: Form.api, ~result: result('a)) => {
+    let g = KenTools.Graph.fromContext();
     let onSubmit = event => {
       ReactEvent.Synthetic.preventDefault(event);
       reform.submit();
@@ -209,25 +273,47 @@ module FormComponent = {
                   </p>
                   <Form.Field
                     field=FormConfig.LabelSubject
-                    render={({handleChange, value}) =>
+                    render={({handleChange, value, error, validate}) =>
                       <Antd.Form.Item
-                        label={"Subject" |> Utils.ste} required=true>
+                        label={"Subject" |> Utils.ste}
+                        required=true
+                        help={
+                          KenTools.toString(
+                            reform.state.values.kenToolsGraph,
+                            reform.state.values.labelSubject,
+                          )
+                          |> E.O.default("(none)")
+                          |> Utils.ste
+                        }>
                         <Antd.Input
                           value
+                          onBlur={_ => validate()}
                           onChange={Helpers.handleChange(handleChange)}
                         />
+                        <Warning error />
                       </Antd.Form.Item>
                     }
                   />
                   <Form.Field
                     field=FormConfig.LabelProperty
-                    render={({handleChange, value}) =>
+                    render={({handleChange, value, error, validate}) =>
                       <Antd.Form.Item
-                        label={"Property" |> Utils.ste} required=true>
+                        label={"Property" |> Utils.ste}
+                        required=true
+                        help={
+                          KenTools.toString(
+                            reform.state.values.kenToolsGraph,
+                            reform.state.values.labelProperty,
+                          )
+                          |> E.O.default("(none)")
+                          |> Utils.ste
+                        }>
                         <Antd.Input
                           value
+                          onBlur={_ => validate()}
                           onChange={Helpers.handleChange(handleChange)}
                         />
+                        <Warning error />
                       </Antd.Form.Item>
                     }
                   />
@@ -261,105 +347,120 @@ module FormComponent = {
                      : <div />}
                 </>,
               )}
-             <Experimental>
-               <Antd.Form.Item
-                 help={
-                   (
-                     reform.state.values.turnOnLabelStartAtDate
-                       ? "" : "Turn on start date with the swither."
-                   )
-                   |> Utils.ste
-                 }
-                 label={"Start Date" |> Utils.ste}>
-                 <span className=Styles.labelSwitcher>
-                   <Form.Field
-                     field=FormConfig.TurnOnLabelStartAtDate
-                     render={({handleChange, value}) =>
-                       <Antd_Switch
-                         checked=value
-                         onChange=handleChange
-                         size=`small
-                       />
-                     }
-                   />
-                 </span>
-                 <Form.Field
-                   field=FormConfig.LabelStartAtDate
-                   render={({handleChange, value}) =>
-                     <Antd_DatePicker
-                       value={value |> MomentRe.momentDefaultFormat}
-                       onChange={e => {
-                         handleChange(e |> formatDate);
-                         (_ => ());
-                       }}
-                     />
-                   }
-                 />
-               </Antd.Form.Item>
-               <Antd.Form.Item
-                 help={
-                   (
-                     reform.state.values.turnOnLabelEndAtDate
-                       ? "" : "Turn on end date with the swither."
-                   )
-                   |> Utils.ste
-                 }
-                 label={"End Date" |> Utils.ste}>
-                 <span className=Styles.labelSwitcher>
-                   <Form.Field
-                     field=FormConfig.TurnOnLabelEndAtDate
-                     render={({handleChange, value}) =>
-                       <Antd_Switch
-                         checked=value
-                         onChange=handleChange
-                         size=`small
-                       />
-                     }
-                   />
-                 </span>
-                 <Form.Field
-                   field=FormConfig.LabelEndAtDate
-                   render={({handleChange, value}) =>
-                     <Antd_DatePicker
-                       value={value |> MomentRe.momentDefaultFormat}
-                       onChange={e => {
-                         handleChange(e |> formatDate);
-                         (_ => ());
-                       }}
-                     />
-                   }
-                 />
-               </Antd.Form.Item>
-               <Form.Field
-                 field=FormConfig.LabelConditionals
-                 render={({handleChange, value}) =>
-                   <Antd.Form.Item label={"Conditional On" |> Utils.ste}>
-                     {value
-                      |> E.L.fmapi((i, r) =>
-                           <Antd.Input
-                             value=r
-                             onChange={e =>
-                               value
-                               |> E.L.update(
-                                    ReactEvent.Form.target(e)##value,
-                                    i,
+             {E.React2.showIf(
+                reform.state.values.showDescriptionProperty == "TRUE",
+                <Experimental>
+                  <Antd.Form.Item
+                    help={
+                      (
+                        reform.state.values.turnOnLabelStartAtDate
+                          ? "" : "Turn on start date with the swither."
+                      )
+                      |> Utils.ste
+                    }
+                    label={"Start Date" |> Utils.ste}>
+                    <span className=Styles.labelSwitcher>
+                      <Form.Field
+                        field=FormConfig.TurnOnLabelStartAtDate
+                        render={({handleChange, value}) =>
+                          <Antd_Switch
+                            checked=value
+                            onChange=handleChange
+                            size=`small
+                          />
+                        }
+                      />
+                    </span>
+                    <Form.Field
+                      field=FormConfig.LabelStartAtDate
+                      render={({handleChange, value}) =>
+                        <Antd_DatePicker
+                          value={value |> MomentRe.momentDefaultFormat}
+                          onChange={e => {
+                            handleChange(e |> formatDate);
+                            _ => ();
+                          }}
+                        />
+                      }
+                    />
+                  </Antd.Form.Item>
+                  <Antd.Form.Item
+                    help={
+                      (
+                        reform.state.values.turnOnLabelEndAtDate
+                          ? "" : "Turn on end date with the swither."
+                      )
+                      |> Utils.ste
+                    }
+                    label={"End Date" |> Utils.ste}>
+                    <span className=Styles.labelSwitcher>
+                      <Form.Field
+                        field=FormConfig.TurnOnLabelEndAtDate
+                        render={({handleChange, value}) =>
+                          <Antd_Switch
+                            checked=value
+                            onChange=handleChange
+                            size=`small
+                          />
+                        }
+                      />
+                    </span>
+                    <Form.Field
+                      field=FormConfig.LabelEndAtDate
+                      render={({handleChange, value}) =>
+                        <Antd_DatePicker
+                          value={value |> MomentRe.momentDefaultFormat}
+                          onChange={e => {
+                            handleChange(e |> formatDate);
+                            _ => ();
+                          }}
+                        />
+                      }
+                    />
+                  </Antd.Form.Item>
+                  <Form.Field
+                    field=FormConfig.LabelConditionals
+                    render={({handleChange, value}) =>
+                      <Antd.Form.Item label={"Conditional On" |> Utils.ste}>
+                        {value
+                         |> E.L.fmapi((i, r) =>
+                              <Antd.Form.Item
+                                help={
+                                  KenTools.toString(
+                                    reform.state.values.kenToolsGraph,
+                                    r,
                                   )
-                               |> handleChange
-                             }
-                           />
-                         )
-                      |> E.L.toArray
-                      |> ReasonReact.array}
-                     <Antd.Button
-                       onClick={_ =>
-                         value |> Rationale.RList.append("") |> handleChange
-                       }>
-                       {"Add" |> Utils.ste}
-                     </Antd.Button>
-                   </Antd.Form.Item>
-                 }
-               />
-             </Experimental>
+                                  |> E.O.default("(none)")
+                                  |> Utils.ste
+                                }>
+                                <Antd.Input
+                                  value=r
+                                  onChange={e =>
+                                    value
+                                    |> E.L.update(
+                                         ReactEvent.Form.target(e)##value,
+                                         i,
+                                       )
+                                    |> handleChange
+                                  }
+                                />
+                              </Antd.Form.Item>
+                            )
+                         |> E.L.toArray
+                         |> ReasonReact.array}
+                        <Antd.Button
+                          onClick={_ =>
+                            value
+                            |> Rationale.RList.append("")
+                            |> handleChange
+                          }>
+                          {"Add" |> Utils.ste}
+                        </Antd.Button>
+                      </Antd.Form.Item>
+                    }
+                  />
+                </Experimental>,
+              )}
              <Form.Field
                field=FormConfig.LabelCustom
                render={({handleChange, value}) =>
@@ -518,6 +619,7 @@ module Create = {
 
   [@react.component]
   let make = (~channelId: string) => {
+    let kenToolsGraph = KenTools.Graph.fromContext();
     let (mutate, result, _) = MeasurableCreate.Mutation.use();
 
     let reform =
@@ -529,11 +631,12 @@ module Create = {
             let labelStartAtDate = labelStartAtDate'(values);
             let labelEndAtDate = labelEndAtDate'(values);
             let labelConditionals = labelConditionals'(values);
+            let name = name'(values);
 
             let input =
               values.showDescriptionDate == "TRUE"
                 ? {
-                  "name": values.name |> E.J.fromString,
+                  "name": name,
                   "labelCustom": Some(values.labelCustom),
                   "labelProperty": Some(values.labelProperty),
                   "expectedResolutionDate":
@@ -555,7 +658,7 @@ module Create = {
                   "labelConditionals": labelConditionals,
                 }
                 : {
-                  "name": values.name |> E.J.fromString,
+                  "name": name,
                   "labelCustom": Some(values.labelCustom),
                   "labelProperty": Some(values.labelProperty),
                   "expectedResolutionDate":
@@ -622,6 +725,7 @@ module Create = {
           channelId,
           turnOnLabelStartAtDate: false,
           turnOnLabelEndAtDate: false,
+          kenToolsGraph,
         },
         (),
       );
@@ -633,6 +737,7 @@ module Create = {
 module Edit = {
   [@react.component]
   let make = (~id, ~measurable: Types.measurable) => {
+    let kenToolsGraph = KenTools.Graph.fromContext();
     let (mutate, result, _) = MeasurableUpdate.Mutation.use();
 
     let reform =
@@ -644,6 +749,7 @@ module Edit = {
             let labelStartAtDate = labelStartAtDate'(values);
             let labelEndAtDate = labelEndAtDate'(values);
             let labelConditionals = labelConditionals'(values);
+            let name = name'(values);
 
             let date =
               values.showDescriptionDate == "TRUE" ? values.labelOnDate : "";
@@ -651,7 +757,7 @@ module Edit = {
               values.expectedResolutionDate |> momentToString;
 
             let input = {
-              "name": values.name |> E.J.fromString,
+              "name": name,
               "labelCustom": values.labelCustom |> E.O.some,
               "labelProperty": values.labelProperty |> E.O.some,
               "labelOnDate": date |> Js.Json.string |> E.O.some,
@@ -718,6 +824,7 @@ module Edit = {
           channelId: measurable.channelId,
           turnOnLabelStartAtDate: measurable.labelStartAtDate |> E.O.toBool,
           turnOnLabelEndAtDate: measurable.labelEndAtDate |> E.O.toBool,
+          kenToolsGraph,
         },
         (),
       );

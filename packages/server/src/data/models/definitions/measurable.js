@@ -126,10 +126,16 @@ module.exports = (sequelize, DataTypes) => {
   /**
    * @todo: To fix, remove this code from this layer.
    * @todo: It leads the architecture of the app to circular dependency
+   * @todo: To move this into the hooks layer and to create name
+   * @todo: right before storing in the DB.
    * @returns {string}
    */
   async function getName() {
-    if (this.labelSubject && this.labelProperty) {
+    if (!!this.dataValues.name) {
+      return this.dataValues.name;
+    }
+
+    if (!!this.labelSubject && !!this.labelProperty) {
       // @todo: To fix require.
       const { GlobalSettingsData } = require('../../index');
       const globalSettings = new GlobalSettingsData();
@@ -139,10 +145,6 @@ module.exports = (sequelize, DataTypes) => {
         this.labelProperty,
       );
       return `${names.subject} ${names.property}`;
-    }
-
-    if (this.dataValues.name) {
-      return this.dataValues.name;
     }
 
     return '';

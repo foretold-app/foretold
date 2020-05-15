@@ -32,11 +32,12 @@ class GlobalSettingsData extends DataBase {
 
   /**
    * @public
+   * @param {object} main
    * @return {Promise<string | null>}
    */
-  async getBotAgentId() {
-    const main = await this.getMain();
-    return _.get(main, 'botAgentId', null);
+  async getBotAgentId(main) {
+    const mainSet = main || await this.getMain();
+    return _.get(mainSet, 'botAgentId', null);
   }
 
   /**

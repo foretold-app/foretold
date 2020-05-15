@@ -182,6 +182,7 @@ module User = {
     | _ => ()
     };
 
+  // @todo: Move to logical components.
   let showif = (user: t): bool => {
     user.agent
     |> E.O.bind(_, (r: Types.agent) => r.preference)
@@ -189,10 +190,12 @@ module User = {
     |> E.O.default(false);
   };
 
+  // @todo: Move to logical components.
   let show = (user: t, component: ReasonReact.reactElement) => {
     showif(user) ? component : <Null />;
   };
 
+  // @todo: Move to logical components.
   let show2 = (user: option(t), component: ReasonReact.reactElement) => {
     switch (user) {
     | Some(user) => show(user, component)
@@ -200,10 +203,11 @@ module User = {
     };
   };
 
+  // @todo: Move to logical components.
   let authorized = (user: option(t), component: ReasonReact.reactElement) => {
     switch (user) {
     | Some(_) => component
-    | _ => ReasonReact.null
+    | _ => <Null />
     };
   };
 
@@ -659,6 +663,9 @@ module Measurable = {
         ~labelOnDate=None,
         ~labelProperty=None,
         ~labelCustom=None,
+        ~labelStartAtDate=None,
+        ~labelEndAtDate=None,
+        ~labelConditionals=None,
         ~series=None,
         ~isArchived=None,
         ~iAmOwner=None,
@@ -691,6 +698,9 @@ module Measurable = {
     labelOnDate,
     labelProperty,
     labelCustom,
+    labelStartAtDate,
+    labelEndAtDate,
+    labelConditionals,
     series,
     isArchived,
     iAmOwner,

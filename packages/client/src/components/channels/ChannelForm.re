@@ -99,28 +99,29 @@ module FormComponent = {
                </Antd.Form.Item>
              }
            />
-           {<Form.Field
-              field=FormConfig.KnowledgeGraph
-              render={({handleChange, error, value}) =>
-                <Antd.Form.Item
-                  label={"Knowledge graph" |> Utils.ste}
-                  help={"Toml Supported" |> Utils.ste}>
-                  <ForetoldComponents.ReAutosizeTextareaInput
-                    value
-                    className="ant-input"
-                    minRows=4
-                    onChange=handleChange
-                  />
-                  {switch (Toml.realParse(value)) {
-                   | Ok(r) => Js.Json.stringify(r) |> Utils.ste
-                   | Error(error) =>
-                     <Antd_Alert message={error |> Utils.ste} _type=`error />
-                   }}
-                  <Warning error />
-                </Antd.Form.Item>
-              }
-            />
-            |> Primary.User.show2(context.loggedUser)}
+           <Experimental>
+             <Form.Field
+               field=FormConfig.KnowledgeGraph
+               render={({handleChange, error, value}) =>
+                 <Antd.Form.Item
+                   label={"Knowledge graph" |> Utils.ste}
+                   help={"Toml Supported" |> Utils.ste}>
+                   <ForetoldComponents.ReAutosizeTextareaInput
+                     value
+                     className="ant-input"
+                     minRows=4
+                     onChange=handleChange
+                   />
+                   {switch (Toml.realParse(value)) {
+                    | Ok(r) => Js.Json.stringify(r) |> Utils.ste
+                    | Error(error) =>
+                      <Antd_Alert message={error |> Utils.ste} _type=`error />
+                    }}
+                   <Warning error />
+                 </Antd.Form.Item>
+               }
+             />
+           </Experimental>
            <Form.Field
              field=FormConfig.IsPublic
              render={({handleChange, error, value}) =>

@@ -41,6 +41,13 @@ module Styles = {
       lineHeight(`em(1.56)),
       fontSize(`em(1.1)),
     ]);
+
+  let conditionalOnStyle =
+    style([
+      marginLeft(`em(0.2)),
+      lineHeight(`em(1.56)),
+      fontSize(`em(1.1)),
+    ]);
 };
 
 module DateItem = {
@@ -64,6 +71,52 @@ module DateItem = {
       |> ReasonReact.array
     | (Some(e), false) =>
       <span className=Shared.TagLink.dateItem> {e |> ste} </span>
+    };
+};
+
+module StartEndDates = {
+  [@react.component]
+  let make = (~measurable: Types.measurable, ~onStyle=Styles.dateOnStyle, ()) => {
+    let startAt =
+      switch (measurable.labelStartAtDate) {
+      | Some(e) => [|
+          <span className=onStyle key="from"> {"from " |> ste} </span>,
+          <span className=Shared.TagLink.dateItem key="fromItem">
+            {e |> E.M.goFormat_short |> ste}
+          </span>,
+        |]
+      | _ => [||]
+      };
+    let endAt =
+      switch (measurable.labelEndAtDate) {
+      | Some(e) => [|
+          <span className=onStyle key="to"> {"to " |> ste} </span>,
+          <span className=Shared.TagLink.dateItem key="toItem">
+            {e |> E.M.goFormat_short |> ste}
+          </span>,
+        |]
+      | _ => [||]
+      };
+
+    E.A.concatMany([|startAt, endAt|]) |> ReasonReact.array;
+  };
+};
+
+module ConditionalOn = {
+  [@react.component]
+  let make =
+      (~measurable: Types.measurable, ~onStyle=Styles.conditionalOnStyle, ()) =>
+    switch (measurable.labelConditionals) {
+    | None => <Null />
+    | Some(e) =>
+      <>
+        <span className=onStyle key="conditionalOn">
+          {"conditional on " |> ste}
+        </span>
+        <span className=Shared.TagLink.conditionalOn key="conditionalOn">
+          {e |> E.A.fmap(e => <span> {e |> ste} </span>) |> ReasonReact.array}
+        </span>
+      </>
     };
 };
 
@@ -92,32 +145,40 @@ module LinkName = {
 module LinkMeasurable = {
   [@react.component]
   let make = (~measurable: Types.measurable) => {
-    switch (measurable.labelSubject, measurable.labelProperty) {
-    | (Some(""), Some(""))
-    | (None, _)
-    | (_, None) =>
-      <Link
-        className=Styles.nameLink
-        linkType={
-          Internal(MeasurableShow(measurable.channelId, measurable.id))
-        }>
-        {measurable.name |> ste}
-      </Link>
-    | (Some(_), Some(_)) => <LinkName measurable />
-    };
+    <>
+      {switch (measurable.labelSubject, measurable.labelProperty) {
+       | (Some(""), Some(""))
+       | (None, _)
+       | (_, None) =>
+         <Link
+           className=Styles.nameLink
+           linkType={
+             Internal(MeasurableShow(measurable.channelId, measurable.id))
+           }>
+           {measurable.name |> ste}
+         </Link>
+       | (Some(_), Some(_)) => <LinkName measurable />
+       }}
+      <ConditionalOn measurable />
+      <StartEndDates measurable />
+    </>;
   };
 };
 
 module NameMeasurable = {
   [@react.component]
   let make = (~measurable: Types.measurable) => {
-    switch (measurable.labelSubject, measurable.labelProperty) {
-    | (Some(""), Some(""))
-    | (None, _)
-    | (_, None) =>
-      <div className=Styles.nameLink> {measurable.name |> ste} </div>
-    | (Some(_), Some(_)) => <LinkName measurable />
-    };
+    <>
+      {switch (measurable.labelSubject, measurable.labelProperty) {
+       | (Some(""), Some(""))
+       | (None, _)
+       | (_, None) =>
+         <span className=Styles.nameLink> {measurable.name |> ste} </span>
+       | (Some(_), Some(_)) => <LinkName measurable />
+       }}
+      <ConditionalOn measurable />
+      <StartEndDates measurable />
+    </>;
   };
 };
 

@@ -184,6 +184,25 @@ class Creators {
   }
 
   /**
+   * @todo: This is a temporary solution.
+   * @todo: How to send a null value by the client-end through GraphQL?
+   *
+   * If the array "labelConditionals" is empty
+   * then we set this as a null. There is no way
+   * to pass the null instead of an empty array.
+   *
+   * @param {Defs.Measurable} instance
+   * @returns {Promise<boolean>}
+   */
+  async checkMeasurableLabels(instance) {
+    const labelConditionals = instance.get('labelConditionals');
+    if (_.isArray(labelConditionals) && _.size(labelConditionals) === 0) {
+      await instance.set('labelConditionals', null);
+    }
+    return true;
+  }
+
+  /**
    * @param {Defs.Measurement} instance
    * @returns {Promise<boolean>}
    */

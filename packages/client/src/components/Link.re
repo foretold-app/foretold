@@ -7,6 +7,7 @@ module Styles = {
     ]);
 };
 
+// @todo: To use link from components folder.
 [@react.component]
 let make =
     (~linkType: LinkType.t, ~className: option(string)=?, ~children=<Null />) =>

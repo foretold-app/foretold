@@ -95,13 +95,15 @@ module DataTypeSelect = {
 };
 
 let getIsValid = (state): bool => {
-  switch (state.dataType) {
-  | "FLOAT_CDF" => E.A.length(state.floatCdf.xs) > 1
-  | "FLOAT_CDF_AND_POINT" => E.A.length(state.floatCdf.xs) == 1
-  | "PERCENTAGE_FLOAT" => true
-  | "BINARY_BOOL" => true
-  | "UNRESOLVABLE_RESOLUTION" => true
-  | "COMMENT" => true
+  switch (state.dataType, state.cdfType, state.hasLimitError) {
+  | (_, _, true) => false
+  | ("FLOAT_CDF", _, _) => E.A.length(state.floatCdf.xs) > 1
+  | ("FLOAT_CDF_AND_POINT", "POINT", _) => E.A.length(state.floatCdf.xs) == 1
+  | ("FLOAT_CDF_AND_POINT", "CDF", _) => E.A.length(state.floatCdf.xs) > 1
+  | ("PERCENTAGE_FLOAT", _, _) => true
+  | ("BINARY_BOOL", _, _) => true
+  | ("UNRESOLVABLE_RESOLUTION", _, _) => true
+  | ("COMMENT", _, _) => true
   | _ => true
   };
 };
@@ -152,7 +154,7 @@ let getValueFromState = (state): MeasurementValue.t =>
 
 let getValueTextFromState = state =>
   switch (state.dataType) {
-  | "FLOAT_CDF" => state.valueText
+  | "FLOAT_CDF"
   | "FLOAT_CDF_AND_POINT" => state.valueText
   | _ => ""
   };
@@ -208,9 +210,14 @@ module ValueInput = {
               | `Float(f) =>
                 send(UpdateCdfType("POINT"));
                 send(UpdateFloatCdf(f));
+                send(UpdateHasLimitError(false));
+
               | `Dist(f) =>
                 send(UpdateCdfType("CDF"));
                 send(UpdateFloatCdf(f));
+                send(UpdateHasLimitError(false));
+
+              | _ => send(UpdateHasLimitError(true))
               };
               send(UpdateValueText(r));
             }
@@ -384,15 +391,12 @@ module ValueInputMapper = {
 
     | "COMMENT" =>
       <>
-        {Primary.User.show(
-           loggedUser,
-           <>
-             <div className=Styles.inputBox>
-               <h4 className=Styles.label> {"Comment Type" |> ste} </h4>
-             </div>
-             {ValueInput.comment(state.comment, send)}
-           </>,
-         )}
+        <Experimental>
+          <div className=Styles.inputBox>
+            <h4 className=Styles.label> {"Comment Type" |> ste} </h4>
+          </div>
+          {ValueInput.comment(state.comment, send)}
+        </Experimental>
         <div className=Styles.inputBox>
           <h4 className=Styles.label> {"Comment" |> ste} </h4>
         </div>

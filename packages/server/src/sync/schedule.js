@@ -107,6 +107,10 @@ function runListeners() {
       listen(actions.Creators, 'createUserAgent'));
     emitter.on(events.UPDATING_MEASURABLE,
       listen(actions.Creators, 'checkMeasurableState'));
+    emitter.on(events.UPDATING_MEASURABLE,
+      listen(actions.Creators, 'checkMeasurableLabels'));
+    emitter.on(events.CREATING_MEASURABLE,
+      listen(actions.Creators, 'checkMeasurableLabels'));
     emitter.on(events.VALIDATING_MEASUREMENT,
       listen(actions.Creators, 'checkMeasurement'));
     emitter.on(events.NEW_INVITATION,

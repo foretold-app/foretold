@@ -31,80 +31,95 @@ const labelCustom = {
   type: graphql.GraphQLString,
   description: 'Description of a question',
 };
+const labelConditionals = {
+  type: graphql.GraphQLList(graphql.GraphQLNonNull(scalars.string0to255)),
+};
+const labelEndAtDate = { type: DateType.default };
+const labelStartAtDate = { type: DateType.default };
 
 const measurable = new graphql.GraphQLObjectType({
   name: 'Measurable',
   fields: () => ({
     id: { type: graphql.GraphQLNonNull(scalars.$measurableId) },
+
+    // Meta
     name,
     labelSubject,
     labelOnDate,
     labelProperty,
     labelCustom,
+    labelStartAtDate,
+    labelEndAtDate,
+    labelConditionals,
     valueType: { type: measurableValueType },
+    min: { type: graphql.GraphQLFloat },
+    max: { type: graphql.GraphQLFloat },
+
+    // State
     state: { type: graphql.GraphQLNonNull(measurableState) },
     stateUpdatedAt: { type: DateType.default },
+
+    // Status
     isArchived: { type: graphql.GraphQLNonNull(graphql.GraphQLBoolean) },
+
+    // Resolution
     resolutionEndpoint: { type: graphql.GraphQLString },
     expectedResolutionDate: { type: DateType.default },
-    channelId: { type: graphql.GraphQLNonNull(scalars.$channelId) },
-
-    measurementCount: {
-      type: graphql.GraphQLInt,
-      resolve: resolvers.measurements.measurementCountByMeasurableId,
-    },
-
-    measurerCount: {
-      type: graphql.GraphQLInt,
-      resolve: resolvers.measurements.measurerCount,
-    },
-
     resolutionEndpointResponse: {
       type: graphql.GraphQLFloat,
       resolve: resolvers.measurables.resolutionEndpointResponse,
     },
 
+    // Links
+    channelId: { type: graphql.GraphQLNonNull(scalars.$channelId) },
+    seriesId: { type: scalars.$seriesId },
+    creatorId: { type: scalars.$agentId },
+
+    // Object Dates
     createdAt: { type: graphql.GraphQLNonNull(DateType.default) },
     updatedAt: { type: graphql.GraphQLNonNull(DateType.default) },
-    creatorId: { type: scalars.$agentId },
-    seriesId: { type: scalars.$seriesId },
-    iAmOwner: commonTypes.iAmOwner,
-    min: { type: graphql.GraphQLFloat },
-    max: { type: graphql.GraphQLFloat },
 
+    // Counts
+    measurementCount: {
+      type: graphql.GraphQLInt,
+      resolve: resolvers.measurements.measurementCountByMeasurableId,
+    },
+    measurerCount: {
+      type: graphql.GraphQLInt,
+      resolve: resolvers.measurements.measurerCount,
+    },
+
+    // Additional
+    iAmOwner: commonTypes.iAmOwner,
+
+    // Nested Objects
     permissions: {
       type: graphql.GraphQLNonNull(permissionsTypes.permissions),
       resolve: resolvers.permissions.measurablesPermissions,
     },
-
     series: {
       type: seriesTypes.series,
       resolve: resolvers.series.one,
     },
-
     creator: {
       type: agentsTypes.agent,
       resolve: resolvers.agents.one,
     },
-
     channel: {
       type: channelsTypes.channel,
       resolve: resolvers.channels.one,
     },
-
     recentMeasurement: {
       description: 'Returns either objective measurement for a judged'
         + ' measurable or latest measurement of an agent.',
       type: require('./measurements').measurement,
       resolve: resolvers.measurements.latest,
     },
-
     outcome: {
       description: 'Returns latest objective measurement.',
       type: require('./measurements').measurement,
       resolve: resolvers.measurements.outcomeByRootId,
     },
-
     previousAggregate: {
       deprecated: 'Will be renamed on latestAggregate.',
       description: 'Returns latest aggregation measurement.',
@@ -122,6 +137,9 @@ const measurableCreateInput = new graphql.GraphQLInputObjectType({
     labelSubject,
     labelOnDate,
     labelProperty,
+    labelStartAtDate,
+    labelEndAtDate,
+    labelConditionals,
     valueType: { type: measurableValueType },
     channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     expectedResolutionDate: { type: DateType.default },
@@ -139,6 +157,9 @@ const measurableUpdateInput = new graphql.GraphQLInputObjectType({
     labelSubject,
     labelOnDate,
     labelProperty,
+    labelStartAtDate,
+    labelEndAtDate,
+    labelConditionals,
     valueType: { type: measurableValueType },
     channelId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
     expectedResolutionDate: { type: DateType.default },
@@ -190,11 +211,11 @@ const orderMeasurables = new graphql.GraphQLInputObjectType({
 });
 
 module.exports = {
-  measurableState,
   measurable,
   measurableCreateInput,
+  measurableState,
   measurableUpdateInput,
-  measurablesEdge,
   measurablesConnection,
+  measurablesEdge,
   orderMeasurables,
 };

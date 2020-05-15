@@ -32,7 +32,7 @@ module FormConfig = [%lenses
     min: string,
     max: string,
     channelId: string,
-    g: KenTools.g,
+    kenToolsGraph: KenTools.g,
   }
 ];
 
@@ -75,7 +75,7 @@ let schema =
       values =>
         values.showDescriptionProperty == "TRUE"
         && Js.String.length(
-             KenTools.toString(values.g, values.labelSubject)
+             KenTools.toString(values.kenToolsGraph, values.labelSubject)
              |> E.O.default(""),
            )
         < 2
@@ -101,7 +101,7 @@ let schema =
       values =>
         values.showDescriptionProperty == "TRUE"
         && Js.String.length(
-             KenTools.toString(values.g, values.labelProperty)
+             KenTools.toString(values.kenToolsGraph, values.labelProperty)
              |> E.O.default(""),
            )
         < 2
@@ -275,7 +275,7 @@ module FormComponent = {
                         required=true
                         help={
                           KenTools.toString(
-                            reform.state.values.g,
+                            reform.state.values.kenToolsGraph,
                             reform.state.values.labelSubject,
                           )
                           |> E.O.default("(none)")
@@ -298,7 +298,7 @@ module FormComponent = {
                         required=true
                         help={
                           KenTools.toString(
-                            reform.state.values.g,
+                            reform.state.values.kenToolsGraph,
                             reform.state.values.labelProperty,
                           )
                           |> E.O.default("(none)")
@@ -422,7 +422,10 @@ module FormComponent = {
                          |> E.L.fmapi((i, r) =>
                               <Antd.Form.Item
                                 help={
-                                  KenTools.toString(reform.state.values.g, r)
+                                  KenTools.toString(
+                                    reform.state.values.kenToolsGraph,
+                                    r,
+                                  )
                                   |> E.O.default("(none)")
                                   |> Utils.ste
                                 }>
@@ -612,7 +615,7 @@ module Create = {
 
   [@react.component]
   let make = (~channelId: string) => {
-    let g = KenTools.Graph.fromContext();
+    let kenToolsGraph = KenTools.Graph.fromContext();
     let (mutate, result, _) = MeasurableCreate.Mutation.use();
 
     let reform =
@@ -717,7 +720,7 @@ module Create = {
           channelId,
           turnOnLabelStartAtDate: false,
           turnOnLabelEndAtDate: false,
-          g,
+          kenToolsGraph,
         },
         (),
       );
@@ -729,7 +732,7 @@ module Create = {
 module Edit = {
   [@react.component]
   let make = (~id, ~measurable: Types.measurable) => {
-    let g = KenTools.Graph.fromContext();
+    let kenToolsGraph = KenTools.Graph.fromContext();
     let (mutate, result, _) = MeasurableUpdate.Mutation.use();
 
     let reform =
@@ -815,7 +818,7 @@ module Edit = {
           channelId: measurable.channelId,
           turnOnLabelStartAtDate: measurable.labelStartAtDate |> E.O.toBool,
           turnOnLabelEndAtDate: measurable.labelEndAtDate |> E.O.toBool,
-          g,
+          kenToolsGraph,
         },
         (),
       );

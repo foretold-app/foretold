@@ -20,6 +20,8 @@ let notebookRemove = "Are you sure you want to delete this notebook?";
 let areYouSure = "Are you sure?";
 let less512 = "Must be less than 512 characters.";
 let more2 = "Must be over 2 characters.";
+let subjectLabelErr = "Subject label does not exist.";
+let propertyLabelErr = "Property label does not exist.";
 
 module Title = {
   let main = "Foretold.io";

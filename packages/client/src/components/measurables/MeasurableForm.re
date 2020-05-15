@@ -32,6 +32,7 @@ module FormConfig = [%lenses
     min: string,
     max: string,
     channelId: string,
+    g: KenTools.g,
   }
 ];
 
@@ -70,6 +71,17 @@ let schema =
           ? Error(Lang.more2) : Valid,
     ),
     Custom(
+      LabelSubject,
+      values =>
+        values.showDescriptionProperty == "TRUE"
+        && Js.String.length(
+             KenTools.toString(values.g, values.labelSubject)
+             |> E.O.default(""),
+           )
+        < 2
+          ? Error(Lang.subjectLabelErr) : Valid,
+    ),
+    Custom(
       LabelProperty,
       values =>
         values.showDescriptionProperty == "TRUE"
@@ -78,10 +90,22 @@ let schema =
     ),
     Custom(
       LabelProperty,
-      values =>
+      values => {
         values.showDescriptionProperty == "TRUE"
         && Js.String.length(values.labelProperty) < 3
-          ? Error(Lang.more2) : Valid,
+          ? Error(Lang.more2) : Valid
+      },
+    ),
+    Custom(
+      LabelProperty,
+      values =>
+        values.showDescriptionProperty == "TRUE"
+        && Js.String.length(
+             KenTools.toString(values.g, values.labelProperty)
+             |> E.O.default(""),
+           )
+        < 2
+          ? Error(Lang.propertyLabelErr) : Valid,
     ),
   |]);
 
@@ -135,6 +159,7 @@ module FormComponent = {
 
   [@react.component]
   let make = (~creating: bool, ~reform: Form.api, ~result: result('a)) => {
+    let g = KenTools.Graph.fromContext();
     let onSubmit = event => {
       ReactEvent.Synthetic.preventDefault(event);
       reform.submit();
@@ -246,7 +271,16 @@ module FormComponent = {
                     field=FormConfig.LabelSubject
                     render={({handleChange, value, error, validate}) =>
                       <Antd.Form.Item
-                        label={"Subject" |> Utils.ste} required=true>
+                        label={"Subject" |> Utils.ste}
+                        required=true
+                        help={
+                          KenTools.toString(
+                            reform.state.values.g,
+                            reform.state.values.labelSubject,
+                          )
+                          |> E.O.default("(none)")
+                          |> Utils.ste
+                        }>
                         <Antd.Input
                           value
                           onBlur={_ => validate()}
@@ -260,7 +294,16 @@ module FormComponent = {
                     field=FormConfig.LabelProperty
                     render={({handleChange, value, error, validate}) =>
                       <Antd.Form.Item
-                        label={"Property" |> Utils.ste} required=true>
+                        label={"Property" |> Utils.ste}
+                        required=true
+                        help={
+                          KenTools.toString(
+                            reform.state.values.g,
+                            reform.state.values.labelProperty,
+                          )
+                          |> E.O.default("(none)")
+                          |> Utils.ste
+                        }>
                         <Antd.Input
                           value
                           onBlur={_ => validate()}
@@ -562,6 +605,7 @@ module Create = {
 
   [@react.component]
   let make = (~channelId: string) => {
+    let g = KenTools.Graph.fromContext();
     let (mutate, result, _) = MeasurableCreate.Mutation.use();
 
     let reform =
@@ -666,6 +710,7 @@ module Create = {
           channelId,
           turnOnLabelStartAtDate: false,
           turnOnLabelEndAtDate: false,
+          g,
         },
         (),
       );
@@ -677,6 +722,7 @@ module Create = {
 module Edit = {
   [@react.component]
   let make = (~id, ~measurable: Types.measurable) => {
+    let g = KenTools.Graph.fromContext();
     let (mutate, result, _) = MeasurableUpdate.Mutation.use();
 
     let reform =
@@ -762,6 +808,7 @@ module Edit = {
           channelId: measurable.channelId,
           turnOnLabelStartAtDate: measurable.labelStartAtDate |> E.O.toBool,
           turnOnLabelEndAtDate: measurable.labelEndAtDate |> E.O.toBool,
+          g,
         },
         (),
       );

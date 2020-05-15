@@ -113,3 +113,6 @@ module Thing = {
   let hasName = (g, i) => i |> id |> Subject.name(g) |> E.O.isSome;
   let withNames = g => g |> all |> E.A.filter(hasName(g));
 };
+
+let toString = (~g, ~attribute) =>
+  attribute |> Subject.name(g) |> E.O.bind(_, FactValue.toString);

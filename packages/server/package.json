@@ -43,7 +43,7 @@
     "@slack/client": "5.0.2",
     "@foretold/cdf": "1.0.16",
     "@foretold/prediction-analysis": "0.0.9",
-    "bs-ken": "0.0.8",
+    "bs-ken": "0.0.11",
     "apollo-server": "2.11.0",
     "apollo-server-express": "2.11.0",
     "auth0": "2.24.0",

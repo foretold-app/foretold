@@ -4764,18 +4764,14 @@ bs-ken@0.0.10:
     ramda "0.26.1"
     rationale "0.2.0"
 
-bs-ken@0.0.8:
-  version "0.0.8"
-  resolved "https://registry.yarnpkg.com/bs-ken/-/bs-ken-0.0.8.tgz#d10842ab176fb643a451da6db97536a948c4d92b"
-  integrity sha512-BWX0w3CA6Nas5neR+4dFPCI2463FWfOgwcrscOWHORpjL1qpcHjRFncJOoGDh4DslRdGKl0eMDbe8GMmPO2+9A==
+bs-ken@0.0.11:
+  version "0.0.11"
+  resolved "https://registry.yarnpkg.com/bs-ken/-/bs-ken-0.0.11.tgz#79d91ef6b71f0ef1285e1506d07562d3211c13a5"
+  integrity sha512-bYpn3fBgjldmoRyrFMxaHDMFpR5pfJxx6oEhIPY2WahnA77da0XkjJ+7I1QPpm4JzbBYyRF8lqmoQfqZpNhVBg==
   dependencies:
-    "@glennsl/bs-jest" "0.4.9"
     "@glennsl/bs-json" "5.0.2"
     "@ncthbrt/re-secure-random-string" "2.0.0"
-    bs-platform "7.0.1"
-    gentype "3.7.1"
     lodash "4.17.15"
-    parcel "1.12.4"
     ramda "0.26.1"
     rationale "0.2.0"
 

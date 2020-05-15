@@ -154,6 +154,10 @@ let labelConditionals' = (values: FormConfig.state) => {
   |> E.O.some;
 };
 
+let name' = (values: FormConfig.state) =>
+  (values.showDescriptionProperty == "FALSE" ? values.name : "")
+  |> E.J.fromString;
+
 module FormComponent = {
   open Style.Grid;
 
@@ -627,11 +631,12 @@ module Create = {
             let labelStartAtDate = labelStartAtDate'(values);
             let labelEndAtDate = labelEndAtDate'(values);
             let labelConditionals = labelConditionals'(values);
+            let name = name'(values);
 
             let input =
               values.showDescriptionDate == "TRUE"
                 ? {
-                  "name": values.name |> E.J.fromString,
+                  "name": name,
                   "labelCustom": Some(values.labelCustom),
                   "labelProperty": Some(values.labelProperty),
                   "expectedResolutionDate":
@@ -653,7 +658,7 @@ module Create = {
                   "labelConditionals": labelConditionals,
                 }
                 : {
-                  "name": values.name |> E.J.fromString,
+                  "name": name,
                   "labelCustom": Some(values.labelCustom),
                   "labelProperty": Some(values.labelProperty),
                   "expectedResolutionDate":
@@ -744,6 +749,7 @@ module Edit = {
             let labelStartAtDate = labelStartAtDate'(values);
             let labelEndAtDate = labelEndAtDate'(values);
             let labelConditionals = labelConditionals'(values);
+            let name = name'(values);
 
             let date =
               values.showDescriptionDate == "TRUE" ? values.labelOnDate : "";
@@ -751,7 +757,7 @@ module Edit = {
               values.expectedResolutionDate |> momentToString;
 
             let input = {
-              "name": values.name |> E.J.fromString,
+              "name": name,
               "labelCustom": values.labelCustom |> E.O.some,
               "labelProperty": values.labelProperty |> E.O.some,
               "labelOnDate": date |> Js.Json.string |> E.O.some,

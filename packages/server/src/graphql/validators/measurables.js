@@ -38,13 +38,13 @@ async function measurableLabelsValidation(root, args, context, _info) {
   if (_.size(kenNames.subject) < 3) {
     throw new Error(lang.measurableLabelSubjectErr());
   }
-  if (_.size(kenNames.subject) < 3) {
-    throw new Error(lang.measurableLabelSubjectErr());
+  if (_.size(kenNames.property) < 3) {
+    throw new Error(lang.measurableLabelPropertyErr());
   }
 
   // 2, impenetrable
-  if (_.size(kenNames.property) > 256) {
-    throw new Error(lang.measurableLabelPropertyErr());
+  if (_.size(kenNames.subject) > 256) {
+    throw new Error(lang.measurableLabelSubjectErr());
   }
   if (_.size(kenNames.property) > 256) {
     throw new Error(lang.measurableLabelPropertyErr());

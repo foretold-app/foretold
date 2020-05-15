@@ -254,6 +254,7 @@ export namespace Schema {
 
     // settings
     botAgentId?: Defs.AgentID;
+    globalSettings: object;
 
     // After Middleware Interceptions
     userAsObject?: Defs.User;

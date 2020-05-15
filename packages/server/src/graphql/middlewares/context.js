@@ -7,18 +7,21 @@ const logger = require('../../lib/log');
 const log = logger.module('middlewares/init-context');
 
 /**
- *
  * @param req
  */
 async function context({ req }) {
   const identity = await authentication(req);
-  const botAgentId = await new GlobalSettingsData().getBotAgentId();
   const ip = req.ip;
+
+  const gs = new GlobalSettingsData();
+  const globalSettings = await gs.getMain();
+  const botAgentId = await gs.getBotAgentId(globalSettings);
 
   const initContext$ = {
     ...identity,
-    botAgentId,
     ip,
+    botAgentId,
+    globalSettings,
   };
 
   const logs = {

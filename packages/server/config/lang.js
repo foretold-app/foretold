@@ -2,10 +2,10 @@ module.exports.measurableEmptyName = () => 'Question should have either name'
   + ' or subject.';
 module.exports.measurableNameLess3 = () => 'Question name should '
   + 'be more than 3 chars.';
-module.exports.measurableLabelSubjectLess3 = () => 'Question subject label '
-  + 'should be more than 3 chars.';
-module.exports.measurableLabelPropertyLess3 = () => 'Question property label '
-  + 'should be more than 3 chars.';
+module.exports.measurableLabelSubjectErr = () => 'Question subject label '
+  + 'should be existed.';
+module.exports.measurableLabelPropertyErr = () => 'Question property label '
+  + 'should be existed.';
 module.exports.measurableIsNotOpen = () => 'Measurable should be in an Open'
   + ' state.';
 module.exports.measurableValueType = () => 'Measurable value type is required.';

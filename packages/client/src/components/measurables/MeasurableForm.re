@@ -95,6 +95,7 @@ let labelConditionals' = (values: FormConfig.state) => {
   values.labelConditionals
   |> E.L.filter(r => r != "")
   |> E.L.toArray
+  |> E.A.fmap(Js.String.trim)
   |> E.A.fmap(Js.Json.string)
   |> E.O.some;
 };

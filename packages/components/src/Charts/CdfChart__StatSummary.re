@@ -10,9 +10,9 @@ module Styles = {
 let make = (~cdf: Types.Dist.t, ~showMean=true) =>
   <>
     {showMean
-       ? <span className=Styles.mainText>
+       ? <div className=Styles.mainText>
            <NumberShower precision=2 number={cdf |> Types.Dist.findX(0.5)} />
-         </span>
+         </div>
        : ReasonReact.null}
     <span className=Styles.secondaryText>
       <NumberShower precision=2 number={cdf |> Types.Dist.findX(0.05)} />

@@ -19,32 +19,31 @@ class KenFacade {
   }
 
   /**
-   *
    * subjectId = @foretold/main/n-foretold
    * propertyId = @foretold/main/measurables
-   *
    * @param {string} subjectId
    * @param {string} propertyId
    * @returns {{subject: string, property: string}}
    */
   names(subjectId, propertyId) {
-    const subjects = this.db.findThing(subjectId);
-    const subjectsFacts = subjects
-      ? subjects.propertyIdFacts(this.NAME)
-      : [];
-
-    const properties = this.db.findThing(propertyId);
-    const propertiesFacts = properties
-      ? properties.propertyIdFacts(this.NAME)
-      : [];
-
-    const subject = _.head(subjectsFacts);
-    const property = _.head(propertiesFacts);
-
     return {
-      subject: this.value(subject),
-      property: this.value(property),
+      subject: this.name(subjectId),
+      property: this.name(propertyId),
     };
+  }
+
+  /**
+   * id = @foretold/main/n-foretold
+   * @param {string} id
+   * @returns {string}
+   */
+  name(id) {
+    const result = this.db.findThing(id);
+    const things = result
+      ? result.propertyIdFacts(this.NAME)
+      : [];
+    const thing = _.head(things);
+    return this.value(thing);
   }
 
   /**

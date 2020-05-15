@@ -28,7 +28,7 @@
     "@babel/preset-env": "7.6.0",
     "@glennsl/bs-jest": "0.5.1",
     "gentype": "3.7.1",
-    "bs-platform": "7.2.2",
+    "bs-platform": "7.3.2",
     "@foretold/cdf": "1.0.16",
     "@glennsl/bs-json": "5.0.2",
     "lodash": "4.17.15",

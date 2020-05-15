@@ -44,14 +44,44 @@ let schema =
     Custom(
       Name,
       values =>
-        Js.String.length(values.name) > 512
-          ? ReSchema.Error("Must be less than 512 characters.") : Valid,
+        values.showDescriptionProperty == "FALSE"
+        && Js.String.length(values.name) > 512
+          ? ReSchema.Error(Lang.less512) : Valid,
     ),
     Custom(
       Name,
       values =>
-        Js.String.length(values.name) < 3
-          ? Error("Must be over 2 characters.") : Valid,
+        values.showDescriptionProperty == "FALSE"
+        && Js.String.length(values.name) < 3
+          ? Error(Lang.more2) : Valid,
+    ),
+    Custom(
+      LabelSubject,
+      values =>
+        values.showDescriptionProperty == "TRUE"
+        && Js.String.length(values.labelSubject) > 512
+          ? ReSchema.Error(Lang.less512) : Valid,
+    ),
+    Custom(
+      LabelSubject,
+      values =>
+        values.showDescriptionProperty == "TRUE"
+        && Js.String.length(values.labelSubject) < 3
+          ? Error(Lang.more2) : Valid,
+    ),
+    Custom(
+      LabelProperty,
+      values =>
+        values.showDescriptionProperty == "TRUE"
+        && Js.String.length(values.labelProperty) > 512
+          ? ReSchema.Error(Lang.less512) : Valid,
+    ),
+    Custom(
+      LabelProperty,
+      values =>
+        values.showDescriptionProperty == "TRUE"
+        && Js.String.length(values.labelProperty) < 3
+          ? Error(Lang.more2) : Valid,
     ),
   |]);
 
@@ -214,25 +244,29 @@ module FormComponent = {
                   </p>
                   <Form.Field
                     field=FormConfig.LabelSubject
-                    render={({handleChange, value}) =>
+                    render={({handleChange, value, error, validate}) =>
                       <Antd.Form.Item
                         label={"Subject" |> Utils.ste} required=true>
                         <Antd.Input
                           value
+                          onBlur={_ => validate()}
                           onChange={Helpers.handleChange(handleChange)}
                         />
+                        <Warning error />
                       </Antd.Form.Item>
                     }
                   />
                   <Form.Field
                     field=FormConfig.LabelProperty
-                    render={({handleChange, value}) =>
+                    render={({handleChange, value, error, validate}) =>
                       <Antd.Form.Item
                         label={"Property" |> Utils.ste} required=true>
                         <Antd.Input
                           value
+                          onBlur={_ => validate()}
                           onChange={Helpers.handleChange(handleChange)}
                         />
+                        <Warning error />
                       </Antd.Form.Item>
                     }
                   />

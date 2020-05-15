@@ -18,6 +18,8 @@ let backButtonTip = "Back";
 let pageIsNotFound = "Page not found";
 let notebookRemove = "Are you sure you want to delete this notebook?";
 let areYouSure = "Are you sure?";
+let less512 = "Must be less than 512 characters.";
+let more2 = "Must be over 2 characters.";
 
 module Title = {
   let main = "Foretold.io";

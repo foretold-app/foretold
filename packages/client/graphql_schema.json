@@ -3595,7 +3595,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "String3to512",
+                  "name": "String0to512",
                   "ofType": null
                 }
               },
@@ -4022,8 +4022,8 @@
         },
         {
           "kind": "SCALAR",
-          "name": "String3to512",
-          "description": "A special custom scalar type for a String3to512",
+          "name": "String0to512",
+          "description": "A special custom scalar type for a String0to512",
           "fields": null,
           "inputFields": null,
           "interfaces": null,
@@ -8934,7 +8934,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "String3to512",
+                  "name": "String0to512",
                   "ofType": null
                 }
               },
@@ -9395,7 +9395,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "String3to512",
+                  "name": "String0to512",
                   "ofType": null
                 }
               },

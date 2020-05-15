@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-const { measurableEmptyName } = require('../../../config/lang');
+const lang = require('../../../config/lang');
 
 /**
  * @param {*} root
@@ -12,9 +12,22 @@ const { measurableEmptyName } = require('../../../config/lang');
 async function measurableNameValidation(root, args, _context, _info) {
   const name = _.get(args, 'input.name', null);
   const labelSubject = _.get(args, 'input.labelSubject', null);
-  const isName = !!name || !!labelSubject;
+  const labelProperty = _.get(args, 'input.labelProperty', null);
 
-  if (!isName) throw new Error(measurableEmptyName());
+  if (!!name) {
+    if (_.size(name) < 3) {
+      throw new Error(lang.measurableNameLess3());
+    }
+  } else if (!!labelSubject && !!labelProperty) {
+    if (_.size(labelSubject) < 3) {
+      throw new Error(lang.measurableLabelSubjectLess3());
+    }
+    if (_.size(labelProperty) < 3) {
+      throw new Error(lang.measurableLabelPropertyLess3());
+    }
+  } else {
+    throw new Error(lang.measurableEmptyName());
+  }
 
   return true;
 }

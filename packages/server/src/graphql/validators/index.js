@@ -10,6 +10,8 @@ const { measurementValueTypeValidation } = require('./measurements');
 const { measurementValueValidation } = require('./measurements');
 const { agentExistsValidation } = require('./agents');
 const { channelMembershipExistsValidation } = require('./channel-memberships');
+const { measurableConditionalOnValidation } = require('./measurables');
+const { measurableLabelsValidation } = require('./measurables');
 
 /**
  * @todo: To move these validators into "validators.js" file.
@@ -37,12 +39,16 @@ const validators = {
     measurableCreate: async (resolve, root, args, context, info) => {
       await measurableOnlyOneTitleValidation(root, args, context, info);
       await measurableNameValidation(root, args, context, info);
+      await measurableLabelsValidation(root, args, context, info);
+      await measurableConditionalOnValidation(root, args, context, info);
       return resolve(root, args, context, info);
     },
 
     measurableUpdate: async (resolve, root, args, context, info) => {
       await measurableOnlyOneTitleValidation(root, args, context, info);
       await measurableNameValidation(root, args, context, info);
+      await measurableLabelsValidation(root, args, context, info);
+      await measurableConditionalOnValidation(root, args, context, info);
       return resolve(root, args, context, info);
     },
 

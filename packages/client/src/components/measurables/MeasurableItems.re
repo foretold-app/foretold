@@ -105,7 +105,8 @@ module StartEndDates = {
 module ConditionalOn = {
   [@react.component]
   let make =
-      (~measurable: Types.measurable, ~onStyle=Styles.conditionalOnStyle, ()) =>
+      (~measurable: Types.measurable, ~onStyle=Styles.conditionalOnStyle, ()) => {
+    let g = KenTools.Graph.fromContext();
     switch (measurable.labelConditionals) {
     | None => <Null />
     | Some(e) =>
@@ -114,10 +115,15 @@ module ConditionalOn = {
           {"conditional on " |> ste}
         </span>
         <span className=Shared.TagLink.conditionalOn key="conditionalOn">
-          {e |> E.A.fmap(e => <span> {e |> ste} </span>) |> ReasonReact.array}
+          {MeasurableEntityLinks.conditionalOnEntityLinks(
+             ~g,
+             ~m=measurable,
+             ~className=Shared.TagLink.item,
+           )}
         </span>
       </>
     };
+  };
 };
 
 module LinkName = {

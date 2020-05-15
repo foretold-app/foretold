@@ -2,6 +2,10 @@ open Rationale.Function.Infix;
 open Utils;
 open BsReform;
 
+// @todo: To move these properties into the server-end:
+// @todo: showDescriptionDate
+// @todo: showDescriptionProperty
+
 module Styles = {
   open Css;
   let shortInput = [width(`em(6.))] |> style;
@@ -261,105 +265,110 @@ module FormComponent = {
                      : <div />}
                 </>,
               )}
-             <Experimental>
-               <Antd.Form.Item
-                 help={
-                   (
-                     reform.state.values.turnOnLabelStartAtDate
-                       ? "" : "Turn on start date with the swither."
-                   )
-                   |> Utils.ste
-                 }
-                 label={"Start Date" |> Utils.ste}>
-                 <span className=Styles.labelSwitcher>
-                   <Form.Field
-                     field=FormConfig.TurnOnLabelStartAtDate
-                     render={({handleChange, value}) =>
-                       <Antd_Switch
-                         checked=value
-                         onChange=handleChange
-                         size=`small
-                       />
-                     }
-                   />
-                 </span>
-                 <Form.Field
-                   field=FormConfig.LabelStartAtDate
-                   render={({handleChange, value}) =>
-                     <Antd_DatePicker
-                       value={value |> MomentRe.momentDefaultFormat}
-                       onChange={e => {
-                         handleChange(e |> formatDate);
-                         (_ => ());
-                       }}
-                     />
-                   }
-                 />
-               </Antd.Form.Item>
-               <Antd.Form.Item
-                 help={
-                   (
-                     reform.state.values.turnOnLabelEndAtDate
-                       ? "" : "Turn on end date with the swither."
-                   )
-                   |> Utils.ste
-                 }
-                 label={"End Date" |> Utils.ste}>
-                 <span className=Styles.labelSwitcher>
-                   <Form.Field
-                     field=FormConfig.TurnOnLabelEndAtDate
-                     render={({handleChange, value}) =>
-                       <Antd_Switch
-                         checked=value
-                         onChange=handleChange
-                         size=`small
-                       />
-                     }
-                   />
-                 </span>
-                 <Form.Field
-                   field=FormConfig.LabelEndAtDate
-                   render={({handleChange, value}) =>
-                     <Antd_DatePicker
-                       value={value |> MomentRe.momentDefaultFormat}
-                       onChange={e => {
-                         handleChange(e |> formatDate);
-                         (_ => ());
-                       }}
-                     />
-                   }
-                 />
-               </Antd.Form.Item>
-               <Form.Field
-                 field=FormConfig.LabelConditionals
-                 render={({handleChange, value}) =>
-                   <Antd.Form.Item label={"Conditional On" |> Utils.ste}>
-                     {value
-                      |> E.L.fmapi((i, r) =>
-                           <Antd.Input
-                             value=r
-                             onChange={e =>
-                               value
-                               |> E.L.update(
-                                    ReactEvent.Form.target(e)##value,
-                                    i,
-                                  )
-                               |> handleChange
-                             }
-                           />
-                         )
-                      |> E.L.toArray
-                      |> ReasonReact.array}
-                     <Antd.Button
-                       onClick={_ =>
-                         value |> Rationale.RList.append("") |> handleChange
-                       }>
-                       {"Add" |> Utils.ste}
-                     </Antd.Button>
-                   </Antd.Form.Item>
-                 }
-               />
-             </Experimental>
+             {E.React2.showIf(
+                reform.state.values.showDescriptionProperty == "TRUE",
+                <Experimental>
+                  <Antd.Form.Item
+                    help={
+                      (
+                        reform.state.values.turnOnLabelStartAtDate
+                          ? "" : "Turn on start date with the swither."
+                      )
+                      |> Utils.ste
+                    }
+                    label={"Start Date" |> Utils.ste}>
+                    <span className=Styles.labelSwitcher>
+                      <Form.Field
+                        field=FormConfig.TurnOnLabelStartAtDate
+                        render={({handleChange, value}) =>
+                          <Antd_Switch
+                            checked=value
+                            onChange=handleChange
+                            size=`small
+                          />
+                        }
+                      />
+                    </span>
+                    <Form.Field
+                      field=FormConfig.LabelStartAtDate
+                      render={({handleChange, value}) =>
+                        <Antd_DatePicker
+                          value={value |> MomentRe.momentDefaultFormat}
+                          onChange={e => {
+                            handleChange(e |> formatDate);
+                            _ => ();
+                          }}
+                        />
+                      }
+                    />
+                  </Antd.Form.Item>
+                  <Antd.Form.Item
+                    help={
+                      (
+                        reform.state.values.turnOnLabelEndAtDate
+                          ? "" : "Turn on end date with the swither."
+                      )
+                      |> Utils.ste
+                    }
+                    label={"End Date" |> Utils.ste}>
+                    <span className=Styles.labelSwitcher>
+                      <Form.Field
+                        field=FormConfig.TurnOnLabelEndAtDate
+                        render={({handleChange, value}) =>
+                          <Antd_Switch
+                            checked=value
+                            onChange=handleChange
+                            size=`small
+                          />
+                        }
+                      />
+                    </span>
+                    <Form.Field
+                      field=FormConfig.LabelEndAtDate
+                      render={({handleChange, value}) =>
+                        <Antd_DatePicker
+                          value={value |> MomentRe.momentDefaultFormat}
+                          onChange={e => {
+                            handleChange(e |> formatDate);
+                            _ => ();
+                          }}
+                        />
+                      }
+                    />
+                  </Antd.Form.Item>
+                  <Form.Field
+                    field=FormConfig.LabelConditionals
+                    render={({handleChange, value}) =>
+                      <Antd.Form.Item label={"Conditional On" |> Utils.ste}>
+                        {value
+                         |> E.L.fmapi((i, r) =>
+                              <Antd.Input
+                                value=r
+                                onChange={e =>
+                                  value
+                                  |> E.L.update(
+                                       ReactEvent.Form.target(e)##value,
+                                       i,
+                                     )
+                                  |> handleChange
+                                }
+                              />
+                            )
+                         |> E.L.toArray
+                         |> ReasonReact.array}
+                        <Antd.Button
+                          onClick={_ =>
+                            value
+                            |> Rationale.RList.append("")
+                            |> handleChange
+                          }>
+                          {"Add" |> Utils.ste}
+                        </Antd.Button>
+                      </Antd.Form.Item>
+                    }
+                  />
+                </Experimental>,
+              )}
              <Form.Field
                field=FormConfig.LabelCustom
                render={({handleChange, value}) =>

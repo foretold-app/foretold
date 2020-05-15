@@ -1,3 +1,4 @@
+// @todo: To make a component.
 let kenDisplay = (g, id) => {
   KenTools.Subject.facts(g, id)
   |> E.A.of_list
@@ -21,6 +22,7 @@ let kenDisplay = (g, id) => {
   |> ReasonReact.array;
 };
 
+// @todo: To make a component.
 let showAttribute = (~attribute: option(string), ~g, ~className) =>
   attribute
   |> E.O.bind(_, KenTools.Subject.name(g))
@@ -40,5 +42,19 @@ let showAttribute = (~attribute: option(string), ~g, ~className) =>
 let xEntityLink = (attribute, ~g, ~m: Types.measurable, ~className: string) =>
   showAttribute(~attribute=attribute(m), ~g, ~className);
 
+let xEntityLinks = (attribute, ~g, ~m: Types.measurable, ~className: string) => {
+  switch (attribute(m)) {
+  | Some(attributes) =>
+    attributes
+    |> E.A.fmap(attribute => {
+         showAttribute(~attribute=Some(attribute), ~g, ~className)
+         |> E.O.default(<Null />)
+       })
+    |> ReasonReact.array
+  | None => <Null />
+  };
+};
+
 let nameEntityLink = xEntityLink(r => r.labelSubject);
 let propertyEntityLink = xEntityLink(r => r.labelProperty);
+let conditionalOnEntityLinks = xEntityLinks(r => r.labelConditionals);

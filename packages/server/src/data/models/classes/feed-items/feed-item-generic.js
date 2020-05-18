@@ -7,19 +7,24 @@ const { FEED_ITEM_BODY } = require('../../../../enums');
 
 class FeedItemGeneric extends FeedItem {
   /**
-   * @param {object} options
-   * @param {string} options.item
-   * @param {string} options.description
+   * @param {object} envelopeTemplate
+   * @param {string} envelopeTemplate.item
+   * @param {string} envelopeTemplate.description
+   * @param {object} inputs
    */
-  constructor(options) {
-    super(options);
-    assert(!!_.has(options, 'item'), 'Item is required.');
-    assert(!!_.has(options, 'description'), 'Description is required.');
-    assert(_.isString(options.item), 'Item should be a string.');
-    assert(_.isString(options.description), 'Item should be a string.');
+  constructor(envelopeTemplate, inputs = {}) {
+    super(envelopeTemplate, inputs);
 
-    this.item = options.item;
-    this.description = options.description;
+    assert(!!_.has(envelopeTemplate, 'item'), 'Item is required.');
+    assert(!!_.has(envelopeTemplate, 'description'),
+      'Description is required.');
+
+    assert(_.isString(envelopeTemplate.item), 'Item should be a string.');
+    assert(_.isString(envelopeTemplate.description),
+      'Item should be a string.');
+
+    this.item = envelopeTemplate.item;
+    this.description = envelopeTemplate.description;
   }
 
   /**
@@ -32,22 +37,6 @@ class FeedItemGeneric extends FeedItem {
 
   /**
    * @public
-   * @return {string}
-   */
-  getItem() {
-    return this.item;
-  }
-
-  /**
-   * @public
-   * @return {string}
-   */
-  getDescription() {
-    return this.description;
-  }
-
-  /**
-   * @public
    * @param {object} replacements
    * @return {FeedItem}
    */
@@ -55,7 +44,7 @@ class FeedItemGeneric extends FeedItem {
     const item = Mustache.render(this.item, replacements);
     const description = Mustache.render(this.description, replacements);
 
-    return new this.constructor({
+    return new FeedItemGeneric({
       item,
       description,
     });

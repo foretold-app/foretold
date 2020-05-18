@@ -8,16 +8,19 @@ const { FEED_ITEM_BODY } = require('../../../../enums');
 class FeedItemMeasurable extends FeedItemGeneric {
   /**
    * @public
-   * @param {object} options
-   * @param {string} options.item
-   * @param {string} options.description
-   * @param {Defs.MeasurableID} options.measurableId
+   * @param {object} envelopeTemplate
+   * @param {string} envelopeTemplate.item
+   * @param {string} envelopeTemplate.description
+   * @param {object} inputs
+   * @param {Defs.MeasurableID} inputs.measurableId
    */
-  constructor(options) {
-    super(options);
-    assert(_.isString(options.measurableId),
+  constructor(envelopeTemplate, inputs = {}) {
+    super(envelopeTemplate, inputs);
+
+    assert(_.isString(inputs.measurableId),
       'MeasurableId should be a string.');
-    this.measurableId = options.measurableId;
+
+    this.measurableId = inputs.measurableId;
   }
 
   /**
@@ -30,26 +33,18 @@ class FeedItemMeasurable extends FeedItemGeneric {
 
   /**
    * @public
-   * @return {string}
-   */
-  getMeasurableId() {
-    return this.measurableId;
-  }
-
-  /**
-   * @public
    * @param {object} replacements
    * @return {FeedItem}
    */
   instanceFactory(replacements) {
     const item = Mustache.render(this.item, replacements);
     const description = Mustache.render(this.description, replacements);
-    const measurableId = Mustache.render(this.measurableId, replacements);
 
     return new FeedItemMeasurable({
       item,
       description,
-      measurableId,
+    }, {
+      measurableId: this.measurableId,
     });
   }
 }

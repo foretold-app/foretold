@@ -10,26 +10,20 @@ class NewSeries extends ProducerFeedItems {
   constructor(series) {
     super(series);
 
+    this.series = series;
     this.templateName = Producer.TEMPLATE_NAME.NEW_SERIES_FEED_ITEM;
     this.FeedItem = Producer.FeedItemSeries;
   }
 
   /**
-   * @param {Defs.Agent} agent
-   * @return {Promise.<{
-   * agent: {name: string},
-   * measurable: {name: string, id: string}
-   * }>}
+   * @return {Promise.<object>}
    * @protected
    */
-  async _getReplacements(agent) {
+  async _getInputs() {
+    const seriesId = this.series.id;
+
     return {
-      agent: {
-        name: (await _.get(agent, 'name', null)) || 'Somebody',
-      },
-      series: {
-        id: this.input.id,
-      },
+      seriesId,
     };
   }
 }

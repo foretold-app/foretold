@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const moment = require('moment');
 
 const { ProducerFeedItems } = require('./producer-feed-items');
 const { Producer } = require('../producer');
@@ -10,8 +11,10 @@ class NewMeasurable extends ProducerFeedItems {
   constructor(measurable) {
     super(measurable);
 
-    this.templateName = Producer.TEMPLATE_NAME.NEW_MEASURABLE_FEED_ITEM;
-    this.FeedItem = Producer.FeedItemMeasurable;
+    this.measurable = measurable;
+    this.templateName = Producer.TEMPLATE_NAME
+      .NEW_MEASURABLE_WITH_ENTITIES_FEED_ITEM;
+    this.FeedItem = Producer.FeedItemMeasurableWithEntities;
   }
 
   /**
@@ -19,7 +22,7 @@ class NewMeasurable extends ProducerFeedItems {
    * @return {Promise<boolean>}
    */
   async _isActual() {
-    return !_.get(this.input, 'seriesId', null);
+    return !_.get(this.measurable, 'seriesId', null);
   }
 
   /**
@@ -31,14 +34,46 @@ class NewMeasurable extends ProducerFeedItems {
    * @protected
    */
   async _getReplacements(agent) {
+    const agentName = (await _.get(agent, 'name', null))
+      || 'Somebody';
+    const measurableName = (await _.get(this.measurable, 'name', null))
+      || 'Question';
+
     return {
       agent: {
-        name: (await _.get(agent, 'name', null)) || 'Somebody',
+        name: agentName,
       },
       measurable: {
-        name: (await _.get(this.input, 'name', null)) || 'Question',
-        id: this.input.id,
+        name: measurableName,
       },
+    };
+  }
+
+  /**
+   * @return {Promise.<object>}
+   * @protected
+   */
+  async _getInputs() {
+    const measurableId = _.get(this.measurable, 'id', null);
+
+    const labelSubject = _.get(this.measurable, 'labelSubject', null);
+    const labelProperty = _.get(this.measurable, 'labelProperty', null);
+    const labelCustom = _.get(this.measurable, 'labelCustom', null);
+    const labelStartAtDate$ = _.get(this.measurable, 'labelStartAtDate', null);
+    const labelEndAtDate$ = _.get(this.measurable, 'labelEndAtDate', null);
+    const labelConditionals = _.get(this.measurable, 'labelConditionals', null);
+
+    const labelStartAtDate = moment(labelStartAtDate$).toISOString();
+    const labelEndAtDate = moment(labelEndAtDate$).toISOString();
+
+    return {
+      measurableId,
+      labelSubject,
+      labelProperty,
+      labelCustom,
+      labelStartAtDate,
+      labelEndAtDate,
+      labelConditionals,
     };
   }
 }

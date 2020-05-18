@@ -10,6 +10,7 @@ class NewChannel extends ProducerFeedItems {
   constructor(channel) {
     super(channel);
 
+    this.channel = channel;
     this.templateName = Producer.TEMPLATE_NAME.NEW_CHANNEL_FEED_ITEM;
     this.FeedItem = Producer.FeedItemChannel;
   }
@@ -19,8 +20,8 @@ class NewChannel extends ProducerFeedItems {
    * @return {Promise<boolean>}
    */
   async _preload() {
-    this.agentId = _.get(this.input, 'creatorId', null);
-    this.channelId = _.get(this.input, 'id', null);
+    this.agentId = _.get(this.channel, 'creatorId', null);
+    this.channelId = _.get(this.channel, 'id', null);
     return true;
   }
 }

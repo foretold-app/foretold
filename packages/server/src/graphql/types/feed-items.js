@@ -26,6 +26,23 @@ const feedItemBodyMeasurable = new graphql.GraphQLObjectType({
   }),
 });
 
+const feedItemBodyMeasurableB = new graphql.GraphQLObjectType({
+  name: 'FeedItemBodyMeasurableB',
+  fields: () => ({
+    item: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    description: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    measurableId: { type: graphql.GraphQLNonNull(graphql.GraphQLString) },
+    labelSubject: { type: graphql.GraphQLString },
+    labelProperty: { type: graphql.GraphQLString },
+    labelCustom: { type: graphql.GraphQLString },
+    labelStartAtDate: { type: DateType.default },
+    labelEndAtDate: { type: DateType.default },
+    labelConditionals: {
+      type: graphql.GraphQLList(graphql.GraphQLNonNull(scalars.string0to255)),
+    },
+  }),
+});
+
 const feedItemBodyMeasurement = new graphql.GraphQLObjectType({
   name: 'FeedItemBodyMeasurement',
   fields: () => ({
@@ -70,11 +87,13 @@ const feedItemBodySeries = new graphql.GraphQLObjectType({
   }),
 });
 
+// @todo: Can we use union type here?
 const feedItemBody = new graphql.GraphQLObjectType({
   name: 'FeedItemBody',
   fields: () => ({
     [FEED_ITEM_BODY.generic]: { type: feedItemBodyGeneric },
     [FEED_ITEM_BODY.measurable]: { type: feedItemBodyMeasurable },
+    [FEED_ITEM_BODY.measurableWithEntities]: { type: feedItemBodyMeasurableB },
     [FEED_ITEM_BODY.measurement]: { type: feedItemBodyMeasurement },
     [FEED_ITEM_BODY.channel]: { type: feedItemBodyChannel },
     [FEED_ITEM_BODY.notebook]: { type: feedItemBodyNotebook },

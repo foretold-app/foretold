@@ -99,11 +99,20 @@ class ProducerFeedItems extends Producer {
    * @protected
    */
   async _getReplacements(agent) {
+    const agentName = (await _.get(agent, 'name', null)) || 'Somebody';
     return {
       agent: {
-        name: (await _.get(agent, 'name', null)) || 'Somebody',
+        name: agentName,
       },
     };
+  }
+
+  /**
+   * @return {Promise.<object>}
+   * @protected
+   */
+  async _getInputs() {
+    return {};
   }
 
   /**
@@ -115,7 +124,8 @@ class ProducerFeedItems extends Producer {
    */
   async _queueFeedItem(replacements, channelId, agentId) {
     const template = await this._getTemplate();
-    const feedItem = new this.FeedItem(template.envelopeTemplate);
+    const inputs = await this._getInputs();
+    const feedItem = new this.FeedItem(template.envelopeTemplate, inputs);
     const feedItem$ = feedItem.instanceFactory(replacements);
     return this._createFeedItem(feedItem$, channelId, agentId);
   }

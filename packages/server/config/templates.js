@@ -69,8 +69,6 @@ module.exports = [
     envelopeTemplate: {
       item: '{{{ measurable.name }}}',
       description: '<split><agent /></split> made a prediction',
-      measurableId: '{{{ measurable.id }}}',
-      measurementId: '{{{ measurement.id }}}',
     },
   },
   {
@@ -79,8 +77,6 @@ module.exports = [
     envelopeTemplate: {
       item: '{{{ measurable.name }}}',
       description: '<split><agent /></split> made a comment',
-      measurableId: '{{{ measurable.id }}}',
-      measurementId: '{{{ measurement.id }}}',
     },
   },
   {
@@ -90,8 +86,6 @@ module.exports = [
       item: '{{{ measurable.name }}}',
       description: '<split><agent /></split> resolved the question with an'
         + ' answer',
-      measurableId: '{{{ measurable.id }}}',
-      measurementId: '{{{ measurement.id }}}',
     },
   },
   {
@@ -101,8 +95,6 @@ module.exports = [
       item: '{{{ measurable.name }}}',
       description: '<split><agent /></split> has marked this question as '
         + 'unresolved',
-      measurableId: '{{{ measurable.id }}}',
-      measurementId: '{{{ measurement.id }}}',
     },
   },
   {
@@ -112,7 +104,6 @@ module.exports = [
       item: '{{{ measurable.name }}}',
       description: '{{{ measurable.name }}} has reached it\'s expected'
         + ' resolution date',
-      measurableId: '{{{ measurable.id }}}',
     },
   },
   {
@@ -121,7 +112,14 @@ module.exports = [
     envelopeTemplate: {
       item: '{{{ measurable.name }}}',
       description: '<split><agent /></split> made a question',
-      measurableId: '{{{ measurable.id }}}',
+    },
+  },
+  {
+    name: TEMPLATE_NAME.NEW_MEASURABLE_WITH_ENTITIES_FEED_ITEM,
+    type: TEMPLATE_TYPE.FEED_ITEM,
+    envelopeTemplate: {
+      item: '{{{ measurable.name }}}',
+      description: '<split><agent /></split> made a question',
     },
   },
   {
@@ -150,7 +148,6 @@ module.exports = [
     envelopeTemplate: {
       item: '',
       description: '<split><agent /></split> made a notebook',
-      notebookId: '{{{ notebook.id }}}',
     },
   },
   {
@@ -159,7 +156,6 @@ module.exports = [
     envelopeTemplate: {
       item: '',
       description: '<split><agent /></split> made a series',
-      seriesId: '{{{ series.id }}}',
     },
   },
 ];

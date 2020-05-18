@@ -68,6 +68,17 @@ module Query = [%graphql
                    description
                    measurableId
                  }
+                 measurableWithEntities {
+                   item
+                   description
+                   measurableId
+                   labelSubject
+                   labelProperty
+                   labelCustom
+                   labelStartAtDate @bsDecoder(fn: "E.J.O.toMoment")
+                   labelEndAtDate @bsDecoder(fn: "E.J.O.toMoment")
+                   labelConditionals @bsDecoder(fn: "E.JsArray.toStrings")
+                 }
                  measurement {
                    item
                    description

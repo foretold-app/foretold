@@ -32,6 +32,14 @@ module Splitter = {
   };
 };
 
+module FeedItemMeasurableName = {
+    [@react.component]
+    let make = (~feedItem: Types.feedItem, ~feedItemBody: FeedItemBody.measurableWithEntities) => {
+        let measurable = Primary.Measurable.ofFeedItemMeasurable(~feedItem, ~feedItemBody);
+        <MeasurableItems.LinkMeasurable measurable />;
+    };
+};
+
 module Columns = {
   type record = Types.feedItem;
   type column = Table.column(record);
@@ -44,6 +52,8 @@ module Columns = {
         linkType={Internal(MeasurableShow(r.channelId, row.measurableId))}>
         {row.item |> Utils.ste}
       </Link>
+    | MeasurableB(row) =>
+      <FeedItemMeasurableName feedItem=r feedItemBody=row/>
     | Measurement(row) =>
       <Link
         linkType={Internal(MeasurableShow(r.channelId, row.measurableId))}>
@@ -74,6 +84,19 @@ module Columns = {
     switch (r.body) {
     | Generic(row) => toDescription(row.description, r)
     | Measurable(row) =>
+      <>
+        <div className=Styles.text> {toDescription(row.description, r)} </div>
+        <div className=Styles.icons>
+          <Link
+            className=Style.iconGray
+            linkType={
+              Internal(MeasurableShow(r.channelId, row.measurableId))
+            }>
+            <Icon icon="LINK" />
+          </Link>
+        </div>
+      </>
+    | MeasurableB(row) =>
       <>
         <div className=Styles.text> {toDescription(row.description, r)} </div>
         <div className=Styles.icons>
@@ -187,6 +210,7 @@ module Columns = {
   let short = [|item, description, time|];
 };
 
+
 [@react.component]
 let make = (~feedItems, ~columns=Columns.all) =>
-  <Table columns rows=feedItems />;
+  <Table columns rows=feedItems/>;

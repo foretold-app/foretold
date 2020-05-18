@@ -19,6 +19,7 @@ class NewMeasurement extends ProducerFeedItems {
     );
     /** @type {Defs.Measurable} */
     this.measurable = null;
+    this.measurement = measurement;
     this.FeedItem = Producer.FeedItemMeasurement;
   }
 
@@ -28,9 +29,9 @@ class NewMeasurement extends ProducerFeedItems {
    */
   async _preload() {
     await super._preload();
-    this.measurable = await this.input.getMeasurable();
+    this.measurable = await this.measurement.getMeasurable();
     this.channelId = _.get(this.measurable, 'channelId', null);
-    this.measurementId = _.get(this.input, 'id', null);
+    this.measurementId = _.get(this.measurement, 'id', null);
     return true;
   }
 
@@ -55,10 +56,10 @@ class NewMeasurement extends ProducerFeedItems {
    * @protected
    */
   async _getReplacements(agent) {
-    const agentName = (await _.get(agent, 'name', null)) || 'Somebody';
+    const agentName = (await _.get(agent, 'name', null))
+      || 'Somebody';
     const measurableName = (await _.get(this.measurable, 'name', null))
       || 'Question';
-    const measurableId = _.get(this.measurable, 'id', null);
 
     return {
       agent: {
@@ -66,11 +67,21 @@ class NewMeasurement extends ProducerFeedItems {
       },
       measurable: {
         name: measurableName,
-        id: measurableId,
       },
-      measurement: {
-        id: this.measurementId,
-      },
+    };
+  }
+
+  /**
+   * @return {Promise.<object>}
+   * @protected
+   */
+  async _getInputs() {
+    const measurableId = _.get(this.measurable, 'id', null);
+    const measurementId = _.get(this.measurement, 'id', null);
+
+    return {
+      measurableId,
+      measurementId,
     };
   }
 }

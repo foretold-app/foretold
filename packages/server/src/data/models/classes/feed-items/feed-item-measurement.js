@@ -8,20 +8,23 @@ const { FEED_ITEM_BODY } = require('../../../../enums');
 class FeedItemMeasurement extends FeedItemGeneric {
   /**
    * @public
-   * @param {object} options
-   * @param {string} options.item
-   * @param {string} options.description
-   * @param {Defs.MeasurableID} options.measurableId
-   * @param {Defs.MeasurementID} options.measurementId
+   * @param {object} envelopeTemplate
+   * @param {string} envelopeTemplate.item
+   * @param {string} envelopeTemplate.description
+   * @param {object} inputs
+   * @param {Defs.MeasurableID} inputs.measurableId
+   * @param {Defs.MeasurementID} inputs.measurementId
    */
-  constructor(options) {
-    super(options);
-    assert(_.isString(options.measurableId),
+  constructor(envelopeTemplate, inputs = {}) {
+    super(envelopeTemplate, inputs);
+
+    assert(_.isString(inputs.measurableId),
       'MeasurableId should be a string.');
-    assert(_.isString(options.measurementId),
+    assert(_.isString(inputs.measurementId),
       'MeasurementId should be a string.');
-    this.measurableId = options.measurableId;
-    this.measurementId = options.measurementId;
+
+    this.measurableId = inputs.measurableId;
+    this.measurementId = inputs.measurementId;
   }
 
   /**
@@ -34,36 +37,19 @@ class FeedItemMeasurement extends FeedItemGeneric {
 
   /**
    * @public
-   * @return {string}
-   */
-  getMeasurableId() {
-    return this.measurableId;
-  }
-
-  /**
-   * @public
-   * @return {string}
-   */
-  getMeasurementId() {
-    return this.measurableId;
-  }
-
-  /**
-   * @public
    * @param {object} replacements
    * @return {FeedItem}
    */
   instanceFactory(replacements) {
     const item = Mustache.render(this.item, replacements);
     const description = Mustache.render(this.description, replacements);
-    const measurableId = Mustache.render(this.measurableId, replacements);
-    const measurementId = Mustache.render(this.measurementId, replacements);
 
     return new FeedItemMeasurement({
       item,
       description,
-      measurableId,
-      measurementId,
+    }, {
+      measurableId: this.measurableId,
+      measurementId: this.measurementId,
     });
   }
 }

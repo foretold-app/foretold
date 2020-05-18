@@ -1,3 +1,5 @@
+// @todo: To add validation of retrieving of not existed field.
+
 const MARKET_TYPE = {
   MARKET: 'MARKET',
   NON_MARKET: 'NON_MARKET',
@@ -43,6 +45,7 @@ const CHANNEL_MEMBERSHIP_TYPE = {
 const FEED_ITEM_BODY = {
   generic: 'generic',
   measurable: 'measurable',
+  measurableWithEntities: 'measurableWithEntities',
   series: 'series',
   measurement: 'measurement',
   joinedMember: 'joinedMember',
@@ -127,10 +130,12 @@ const TEMPLATE_NAME = {
     'NEW_MEASUREMENT_RESOLUTION_NOT_AVAILABLE_FEED_ITEM',
   MEASURABLE_REACHED_RESOLUTION_DATE_FEED_ITEM:
     'MEASURABLE_REACHED_RESOLUTION_DATE_FEED_ITEM',
-  NEW_MEASURABLE_FEED_ITEM: 'NEW_MEASURABLE_FEED_ITEM',
   NEW_SERIES_FEED_ITEM: 'NEW_SERIES_FEED_ITEM',
   NEW_CHANNEL_FEED_ITEM: 'NEW_CHANNEL_FEED_ITEM',
   NEW_NOTEBOOK_FEED_ITEM: 'NEW_NOTEBOOK_FEED_ITEM',
+
+  NEW_MEASURABLE_FEED_ITEM: 'NEW_MEASURABLE_FEED_ITEM',
+  NEW_MEASURABLE_WITH_ENTITIES_FEED_ITEM: 'NEW_MEASURABLE_WITH_ENTITIES_FEED_ITEM',
 };
 
 const TEMPLATE_TYPE = {

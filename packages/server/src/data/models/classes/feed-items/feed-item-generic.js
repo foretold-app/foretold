@@ -32,22 +32,6 @@ class FeedItemGeneric extends FeedItem {
 
   /**
    * @public
-   * @return {string}
-   */
-  getItem() {
-    return this.item;
-  }
-
-  /**
-   * @public
-   * @return {string}
-   */
-  getDescription() {
-    return this.description;
-  }
-
-  /**
-   * @public
    * @param {object} replacements
    * @return {FeedItem}
    */

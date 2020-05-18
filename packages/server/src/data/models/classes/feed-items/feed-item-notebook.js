@@ -29,14 +29,6 @@ class FeedItemNotebook extends FeedItemGeneric {
 
   /**
    * @public
-   * @return {string}
-   */
-  getNotebookId() {
-    return this.notebookId;
-  }
-
-  /**
-   * @public
    * @param {object} replacements
    * @return {FeedItem}
    */

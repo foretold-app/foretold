@@ -10,8 +10,8 @@ class NewMeasurable extends ProducerFeedItems {
   constructor(measurable) {
     super(measurable);
 
-    this.templateName = Producer.TEMPLATE_NAME.NEW_MEASURABLE_FEED_ITEM;
-    this.FeedItem = Producer.FeedItemMeasurable;
+    this.templateName = Producer.TEMPLATE_NAME.NEW_MEASURABLE_B_FEED_ITEM;
+    this.FeedItem = Producer.FeedItemMeasurableB;
   }
 
   /**
@@ -31,13 +31,31 @@ class NewMeasurable extends ProducerFeedItems {
    * @protected
    */
   async _getReplacements(agent) {
+    const agentName = (await _.get(agent, 'name', null)) || 'Somebody';
+    const measurableName = (await _.get(this.input, 'name', null))
+      || 'Question';
+
+    const labelSubject = _.get(this.input, 'labelSubject', '');
+    const labelProperty = _.get(this.input, 'labelProperty', '');
+    const labelCustom = _.get(this.input, 'labelCustom', '');
+    const labelStartAtDate = _.get(this.input, 'labelStartAtDate', '');
+    const labelEndAtDate = _.get(this.input, 'labelEndAtDate', '');
+    const labelConditionals = _.get(this.input, 'labelConditionals', []);
+
     return {
       agent: {
-        name: (await _.get(agent, 'name', null)) || 'Somebody',
+        name: agentName,
       },
       measurable: {
-        name: (await _.get(this.input, 'name', null)) || 'Question',
         id: this.input.id,
+        name: measurableName,
+
+        labelSubject,
+        labelProperty,
+        labelCustom,
+        labelStartAtDate,
+        labelEndAtDate,
+        labelConditionals,
       },
     };
   }

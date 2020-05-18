@@ -29,14 +29,6 @@ class FeedItemSeries extends FeedItemGeneric {
 
   /**
    * @public
-   * @return {string}
-   */
-  getSeriesId() {
-    return this.seriesId;
-  }
-
-  /**
-   * @public
    * @param {object} replacements
    * @return {FeedItem}
    */

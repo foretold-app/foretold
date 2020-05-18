@@ -30,14 +30,6 @@ class FeedItemMeasurable extends FeedItemGeneric {
 
   /**
    * @public
-   * @return {string}
-   */
-  getMeasurableId() {
-    return this.measurableId;
-  }
-
-  /**
-   * @public
    * @param {object} replacements
    * @return {FeedItem}
    */

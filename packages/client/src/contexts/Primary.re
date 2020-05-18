@@ -711,6 +711,22 @@ module Measurable = {
     previousAggregate,
     recentMeasurement,
   };
+
+  let ofFeedItemMeasurable =
+      (~feedItem: Types.feedItem, ~feedItemBody: FeedItemBody.measurableB) => {
+    make(
+      ~id=feedItemBody.measurableId,
+      ~name=feedItemBody.item,
+      ~channelId=feedItem.channelId,
+      ~labelSubject=feedItemBody.labelSubject,
+      ~labelProperty=feedItemBody.labelProperty,
+      ~labelCustom=feedItemBody.labelCustom,
+      ~labelStartAtDate=feedItemBody.labelStartAtDate,
+      ~labelEndAtDate=feedItemBody.labelEndAtDate,
+      ~labelConditionals=feedItemBody.labelConditionals,
+      (),
+    );
+  };
 };
 
 module FeedItem = {

@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const moment = require('moment');
 
 const { ProducerFeedItems } = require('./producer-feed-items');
 const { Producer } = require('../producer');
@@ -56,9 +57,12 @@ class NewMeasurable extends ProducerFeedItems {
     const labelSubject = _.get(this.measurable, 'labelSubject', null);
     const labelProperty = _.get(this.measurable, 'labelProperty', null);
     const labelCustom = _.get(this.measurable, 'labelCustom', null);
-    const labelStartAtDate = _.get(this.measurable, 'labelStartAtDate', null);
-    const labelEndAtDate = _.get(this.measurable, 'labelEndAtDate', null);
+    const labelStartAtDate$ = _.get(this.measurable, 'labelStartAtDate', null);
+    const labelEndAtDate$ = _.get(this.measurable, 'labelEndAtDate', null);
     const labelConditionals = _.get(this.measurable, 'labelConditionals', null);
+
+    const labelStartAtDate = moment(labelStartAtDate$).toISOString();
+    const labelEndAtDate = moment(labelEndAtDate$).toISOString();
 
     return {
       labelSubject,

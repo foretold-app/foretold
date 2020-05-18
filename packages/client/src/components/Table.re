@@ -82,10 +82,12 @@ let make = (~columns, ~rows, ~bottomSubRowFn=None, ~onRowClb=None) => {
             |> ReasonReact.array;
 
           let key = rowIndex |> string_of_int;
+
           let bottomSubRow =
             bottomSubRowFn
             |> E.O.bind(_, r => r(row))
             |> E.O.fmap(ReasonReact.array);
+
           let onClick =
             onRowClb
             |> E.O.fmap((r, _) => {

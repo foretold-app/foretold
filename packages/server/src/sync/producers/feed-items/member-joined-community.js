@@ -7,16 +7,17 @@ const { Producer } = require('../producer');
 
 class MemberJoinedCommunity extends ProducerFeedItems {
   /**
-   * @param {Defs.ChannelMembership} input
+   * @param {Defs.ChannelMembership} channelMembership
    */
-  constructor(input) {
-    super(input);
+  constructor(channelMembership) {
+    super(channelMembership);
 
     assert(
-      !!_.get(input, 'methodCreatedBy'),
+      !!_.get(channelMembership, 'methodCreatedBy'),
       'Channel Membership "Method Created By" is required.',
     );
 
+    this.channelMembership = channelMembership;
     this.templateName = Producer.TEMPLATE_NAME
       .MEMBER_JOINED_COMMUNITY_FEED_ITEM;
     this.FeedItem = Producer.FeedItemJoinedMember;
@@ -26,7 +27,7 @@ class MemberJoinedCommunity extends ProducerFeedItems {
    * @return {Promise<boolean>}
    */
   async _isActual() {
-    const { methodCreatedBy } = this.input;
+    const { methodCreatedBy } = this.channelMembership;
     return methodCreatedBy === CHANNEL_MEMBERSHIP_TYPE.AGENT_JOINED_DIRECTLY;
   }
 }

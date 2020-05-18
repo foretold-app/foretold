@@ -8,6 +8,7 @@ class NewMeasurementResolution extends NewMeasurement {
    */
   constructor(measurement) {
     super(measurement);
+    this.measurement = measurement;
     this.templateName = Producer.TEMPLATE_NAME
       .NEW_MEASUREMENT_RESOLUTION_FEED_ITEM;
   }
@@ -16,7 +17,8 @@ class NewMeasurementResolution extends NewMeasurement {
    * @return {Promise<boolean>}
    */
   async _isActual() {
-    return this.input.competitorType === MEASUREMENT_COMPETITOR_TYPE.OBJECTIVE;
+    const { OBJECTIVE } = MEASUREMENT_COMPETITOR_TYPE;
+    return this.measurement.competitorType === OBJECTIVE;
   }
 }
 

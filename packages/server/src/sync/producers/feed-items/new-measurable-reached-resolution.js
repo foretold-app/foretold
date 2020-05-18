@@ -11,6 +11,7 @@ class NewMeasurableReachedResolution extends NewMeasurable {
    */
   constructor(measurable) {
     super(measurable);
+    this.measurable = measurable;
     this.templateName = Producer.TEMPLATE_NAME
       .MEASURABLE_REACHED_RESOLUTION_DATE_FEED_ITEM;
   }
@@ -20,10 +21,10 @@ class NewMeasurableReachedResolution extends NewMeasurable {
    * @return {Promise<boolean>}
    */
   async _isActual() {
-    return this.input.changed('state')
-      && this.input.changed('stateUpdatedAt')
-      && this.input.previous('state') === MEASURABLE_STATE.OPEN
-      && this.input.get('state') === MEASURABLE_STATE.JUDGEMENT_PENDING;
+    return this.measurable.changed('state')
+      && this.measurable.changed('stateUpdatedAt')
+      && this.measurable.previous('state') === MEASURABLE_STATE.OPEN
+      && this.measurable.get('state') === MEASURABLE_STATE.JUDGEMENT_PENDING;
   }
 }
 

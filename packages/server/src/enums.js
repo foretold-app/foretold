@@ -1,3 +1,5 @@
+// @todo: To add validation of retrieving of not existed field.
+
 const MARKET_TYPE = {
   MARKET: 'MARKET',
   NON_MARKET: 'NON_MARKET',

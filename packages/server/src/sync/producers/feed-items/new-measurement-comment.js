@@ -12,6 +12,7 @@ class NewMeasurementComment extends NewMeasurement {
    */
   constructor(measurement) {
     super(measurement);
+    this.measurement = measurement;
     this.templateName = Producer.TEMPLATE_NAME
       .NEW_MEASUREMENT_COMMENT_FEED_ITEM;
   }
@@ -20,7 +21,11 @@ class NewMeasurementComment extends NewMeasurement {
    * @return {Promise<boolean>}
    */
   async _isActual() {
-    return !!_.get(this.input, ['value', MEASUREMENT_VALUE.comment], null);
+    return !!_.get(
+      this.measurement,
+      ['value', MEASUREMENT_VALUE.comment],
+      null,
+    );
   }
 }
 

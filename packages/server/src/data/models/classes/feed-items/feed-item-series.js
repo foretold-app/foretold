@@ -8,15 +8,18 @@ const { FEED_ITEM_BODY } = require('../../../../enums');
 class FeedItemSeries extends FeedItemGeneric {
   /**
    * @public
-   * @param {object} options
-   * @param {string} options.item
-   * @param {string} options.description
-   * @param {Defs.SeriesID} options.seriesId
+   * @param {object} envelopeTemplate
+   * @param {string} envelopeTemplate.item
+   * @param {string} envelopeTemplate.description
+   * @param {Defs.SeriesID} envelopeTemplate.seriesId
+   * @param {object} inputs
    */
-  constructor(options) {
-    super(options);
-    assert(_.isString(options.seriesId), 'SeriesId should be a string.');
-    this.seriesId = options.seriesId;
+  constructor(envelopeTemplate, inputs = {}) {
+    super(envelopeTemplate, inputs);
+    assert(_.isString(envelopeTemplate.seriesId),
+      'SeriesId should be a string.');
+
+    this.seriesId = envelopeTemplate.seriesId;
   }
 
   /**

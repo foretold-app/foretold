@@ -10,6 +10,7 @@ class NewMeasurable extends ProducerFeedItems {
   constructor(measurable) {
     super(measurable);
 
+    this.measurable = measurable;
     this.templateName = Producer.TEMPLATE_NAME.NEW_MEASURABLE_B_FEED_ITEM;
     this.FeedItem = Producer.FeedItemMeasurableB;
   }
@@ -19,7 +20,7 @@ class NewMeasurable extends ProducerFeedItems {
    * @return {Promise<boolean>}
    */
   async _isActual() {
-    return !_.get(this.input, 'seriesId', null);
+    return !_.get(this.measurable, 'seriesId', null);
   }
 
   /**
@@ -31,32 +32,41 @@ class NewMeasurable extends ProducerFeedItems {
    * @protected
    */
   async _getReplacements(agent) {
-    const agentName = (await _.get(agent, 'name', null)) || 'Somebody';
-    const measurableName = (await _.get(this.input, 'name', null))
+    const agentName = (await _.get(agent, 'name', null))
+      || 'Somebody';
+    const measurableName = (await _.get(this.measurable, 'name', null))
       || 'Question';
-
-    const labelSubject = _.get(this.input, 'labelSubject', '');
-    const labelProperty = _.get(this.input, 'labelProperty', '');
-    const labelCustom = _.get(this.input, 'labelCustom', '');
-    const labelStartAtDate = _.get(this.input, 'labelStartAtDate', '');
-    const labelEndAtDate = _.get(this.input, 'labelEndAtDate', '');
-    const labelConditionals = _.get(this.input, 'labelConditionals', []);
 
     return {
       agent: {
         name: agentName,
       },
       measurable: {
-        id: this.input.id,
+        id: this.measurable.id,
         name: measurableName,
-
-        labelSubject,
-        labelProperty,
-        labelCustom,
-        labelStartAtDate,
-        labelEndAtDate,
-        labelConditionals,
       },
+    };
+  }
+
+  /**
+   * @return {Promise.<object>}
+   * @protected
+   */
+  async _getInputs() {
+    const labelSubject = _.get(this.measurable, 'labelSubject', null);
+    const labelProperty = _.get(this.measurable, 'labelProperty', null);
+    const labelCustom = _.get(this.measurable, 'labelCustom', null);
+    const labelStartAtDate = _.get(this.measurable, 'labelStartAtDate', null);
+    const labelEndAtDate = _.get(this.measurable, 'labelEndAtDate', null);
+    const labelConditionals = _.get(this.measurable, 'labelConditionals', null);
+
+    return {
+      labelSubject,
+      labelProperty,
+      labelCustom,
+      labelStartAtDate,
+      labelEndAtDate,
+      labelConditionals,
     };
   }
 }

@@ -14,6 +14,7 @@ class NewNotebook extends ProducerFeedItems {
     this.templateName = Producer.TEMPLATE_NAME.NEW_NOTEBOOK_FEED_ITEM;
     this.FeedItem = Producer.FeedItemNotebook;
 
+    this.notebook = notebook;
     this.notebookId = null;
   }
 
@@ -23,7 +24,7 @@ class NewNotebook extends ProducerFeedItems {
    */
   async _preload() {
     await super._preload();
-    this.notebookId = _.get(this.input, 'id', null);
+    this.notebookId = _.get(this.notebook, 'id', null);
     return true;
   }
 

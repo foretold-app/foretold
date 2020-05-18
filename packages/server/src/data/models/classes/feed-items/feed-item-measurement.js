@@ -8,20 +8,24 @@ const { FEED_ITEM_BODY } = require('../../../../enums');
 class FeedItemMeasurement extends FeedItemGeneric {
   /**
    * @public
-   * @param {object} options
-   * @param {string} options.item
-   * @param {string} options.description
-   * @param {Defs.MeasurableID} options.measurableId
-   * @param {Defs.MeasurementID} options.measurementId
+   * @param {object} envelopeTemplate
+   * @param {string} envelopeTemplate.item
+   * @param {string} envelopeTemplate.description
+   * @param {Defs.MeasurableID} envelopeTemplate.measurableId
+   * @param {Defs.MeasurementID} envelopeTemplate.measurementId
+   * @param {object} inputs
    */
-  constructor(options) {
-    super(options);
-    assert(_.isString(options.measurableId),
+  constructor(envelopeTemplate, inputs = {}) {
+    super(envelopeTemplate, inputs);
+
+    assert(_.isString(envelopeTemplate.measurableId),
       'MeasurableId should be a string.');
-    assert(_.isString(options.measurementId),
+    assert(_.isString(envelopeTemplate.measurementId),
       'MeasurementId should be a string.');
-    this.measurableId = options.measurableId;
-    this.measurementId = options.measurementId;
+
+    // @todo: It is collision with a template.
+    this.measurableId = envelopeTemplate.measurableId;
+    this.measurementId = envelopeTemplate.measurementId;
   }
 
   /**

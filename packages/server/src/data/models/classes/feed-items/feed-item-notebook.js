@@ -8,15 +8,19 @@ const { FEED_ITEM_BODY } = require('../../../../enums');
 class FeedItemNotebook extends FeedItemGeneric {
   /**
    * @public
-   * @param {object} options
-   * @param {string} options.item
-   * @param {string} options.description
-   * @param {Defs.NotebookID} options.notebookId
+   * @param {object} envelopeTemplate
+   * @param {string} envelopeTemplate.item
+   * @param {string} envelopeTemplate.description
+   * @param {Defs.NotebookID} envelopeTemplate.notebookId
+   * @param {inputs} inputs
    */
-  constructor(options) {
-    super(options);
-    assert(_.isString(options.notebookId), 'NotebookId should be a string.');
-    this.notebookId = options.notebookId;
+  constructor(envelopeTemplate, inputs) {
+    super(envelopeTemplate, inputs);
+    assert(_.isString(envelopeTemplate.notebookId),
+      'NotebookId should be a string.');
+
+    // @todo: It is collision with a template.
+    this.notebookId = envelopeTemplate.notebookId;
   }
 
   /**
@@ -37,7 +41,7 @@ class FeedItemNotebook extends FeedItemGeneric {
     const description = Mustache.render(this.description, replacements);
     const notebookId = Mustache.render(this.notebookId, replacements);
 
-    return new this.constructor({
+    return new FeedItemNotebook({
       item,
       description,
       notebookId,

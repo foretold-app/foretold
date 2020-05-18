@@ -7,10 +7,14 @@ const _ = require('lodash');
  */
 class FeedItem {
   /**
-   * @param {object} options
+   * @param {object} envelopeTemplate
+   * @param {object} inputs
    */
-  constructor(options) {
-    assert(_.isObject(options), 'Options should be an object.');
+  constructor(envelopeTemplate, inputs = {}) {
+    assert(_.isObject(envelopeTemplate),
+      'envelopeTemplate should be an object.');
+    assert(_.isObject(inputs),
+      'inputs should be an object.');
   }
 
   /**

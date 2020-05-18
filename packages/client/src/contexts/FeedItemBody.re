@@ -9,6 +9,18 @@ type measurable = {
   measurableId: string,
 };
 
+type measurableB = {
+  item: string,
+  description: string,
+  measurableId: string,
+  labelSubject: option(string),
+  labelProperty: option(string),
+  labelCustom: option(string),
+  labelStartAtDate: option(MomentRe.Moment.t),
+  labelEndAtDate: option(MomentRe.Moment.t),
+  labelConditionals: option(array(string)),
+};
+
 type measurement = {
   item: string,
   description: string,
@@ -41,6 +53,7 @@ type series = {
 type body =
   | Generic(generic)
   | Measurable(measurable)
+  | MeasurableB(measurableB)
   | Series(series)
   | Measurement(measurement)
   | Notebook(notebook)
@@ -71,6 +84,51 @@ module Measurable = {
       ~item=m##item,
       ~description=m##description,
       ~measurableId=m##measurableId,
+      (),
+    );
+  };
+};
+
+module MeasurableB = {
+  type t = measurableB;
+
+  let make =
+      (
+        ~item,
+        ~description,
+        ~measurableId,
+        ~labelSubject=None,
+        ~labelProperty=None,
+        ~labelCustom=None,
+        ~labelStartAtDate=None,
+        ~labelEndAtDate=None,
+        ~labelConditionals=None,
+        (),
+      )
+      : t => {
+    item,
+    description,
+    measurableId,
+
+    labelSubject,
+    labelProperty,
+    labelCustom,
+    labelStartAtDate,
+    labelEndAtDate,
+    labelConditionals,
+  };
+
+  let fromJson = m => {
+    make(
+      ~item=m##item,
+      ~description=m##description,
+      ~measurableId=m##measurableId,
+      ~labelSubject=m##labelSubject,
+      ~labelProperty=m##labelProperty,
+      ~labelCustom=m##labelCustom,
+      ~labelStartAtDate=m##labelStartAtDate,
+      ~labelEndAtDate=m##labelEndAtDate,
+      ~labelConditionals=m##labelConditionals,
       (),
     );
   };
@@ -164,14 +222,16 @@ let toBody = m => {
     m##channel,
     m##joinedMember,
     m##series,
+    m##measurableB,
   ) {
-  | (Some(m), _, _, _, _, _, _) => Generic(Generic.fromJson(m))
-  | (_, Some(m), _, _, _, _, _) => Measurable(Measurable.fromJson(m))
-  | (_, _, Some(m), _, _, _, _) => Measurement(Measurement.fromJson(m))
-  | (_, _, _, Some(m), _, _, _) => Notebook(Notebook.fromJson(m))
-  | (_, _, _, _, Some(m), _, _) => Channel(Channel.fromJson(m))
-  | (_, _, _, _, _, Some(m), _) => JoinedMember(JoinedMember.fromJson(m))
-  | (_, _, _, _, _, _, Some(m)) => Series(Series.fromJson(m))
+  | (Some(m), _, _, _, _, _, _, _) => Generic(Generic.fromJson(m))
+  | (_, Some(m), _, _, _, _, _, _) => Measurable(Measurable.fromJson(m))
+  | (_, _, Some(m), _, _, _, _, _) => Measurement(Measurement.fromJson(m))
+  | (_, _, _, Some(m), _, _, _, _) => Notebook(Notebook.fromJson(m))
+  | (_, _, _, _, Some(m), _, _, _) => Channel(Channel.fromJson(m))
+  | (_, _, _, _, _, Some(m), _, _) => JoinedMember(JoinedMember.fromJson(m))
+  | (_, _, _, _, _, _, Some(m), _) => Series(Series.fromJson(m))
+  | (_, _, _, _, _, _, _, Some(m)) => MeasurableB(MeasurableB.fromJson(m))
   | _ => Empty
   };
 };

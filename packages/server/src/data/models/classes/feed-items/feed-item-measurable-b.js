@@ -77,11 +77,11 @@ class FeedItemMeasurableB extends FeedItemGeneric {
     this.measurableId = envelopeTemplate.measurableId;
 
     this.labelSubject = inputs.labelSubject;
-    this.labelProperty = inputs.labelSubject;
-    this.labelCustom = inputs.labelSubject;
-    this.labelStartAtDate = inputs.labelSubject;
-    this.labelEndAtDate = inputs.labelSubject;
-    this.labelConditionals = inputs.labelSubject;
+    this.labelProperty = inputs.labelProperty;
+    this.labelCustom = inputs.labelCustom;
+    this.labelStartAtDate = inputs.labelStartAtDate;
+    this.labelEndAtDate = inputs.labelEndAtDate;
+    this.labelConditionals = inputs.labelConditionals;
   }
 
   /**

@@ -713,7 +713,10 @@ module Measurable = {
   };
 
   let ofFeedItemMeasurable =
-      (~feedItem: Types.feedItem, ~feedItemBody: FeedItemBody.measurableB) => {
+      (
+        ~feedItem: Types.feedItem,
+        ~feedItemBody: FeedItemBody.measurableWithEntities,
+      ) => {
     make(
       ~id=feedItemBody.measurableId,
       ~name=feedItemBody.item,

@@ -93,7 +93,7 @@ const feedItemBody = new graphql.GraphQLObjectType({
   fields: () => ({
     [FEED_ITEM_BODY.generic]: { type: feedItemBodyGeneric },
     [FEED_ITEM_BODY.measurable]: { type: feedItemBodyMeasurable },
-    [FEED_ITEM_BODY.measurableB]: { type: feedItemBodyMeasurableB },
+    [FEED_ITEM_BODY.measurableWithEntities]: { type: feedItemBodyMeasurableB },
     [FEED_ITEM_BODY.measurement]: { type: feedItemBodyMeasurement },
     [FEED_ITEM_BODY.channel]: { type: feedItemBodyChannel },
     [FEED_ITEM_BODY.notebook]: { type: feedItemBodyNotebook },

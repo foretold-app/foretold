@@ -45,7 +45,7 @@ const CHANNEL_MEMBERSHIP_TYPE = {
 const FEED_ITEM_BODY = {
   generic: 'generic',
   measurable: 'measurable',
-  measurableB: 'measurableB',
+  measurableWithEntities: 'measurableWithEntities',
   series: 'series',
   measurement: 'measurement',
   joinedMember: 'joinedMember',
@@ -135,7 +135,7 @@ const TEMPLATE_NAME = {
   NEW_NOTEBOOK_FEED_ITEM: 'NEW_NOTEBOOK_FEED_ITEM',
 
   NEW_MEASURABLE_FEED_ITEM: 'NEW_MEASURABLE_FEED_ITEM',
-  NEW_MEASURABLE_B_FEED_ITEM: 'NEW_MEASURABLE_B_FEED_ITEM',
+  NEW_MEASURABLE_WITH_ENTITIES_FEED_ITEM: 'NEW_MEASURABLE_WITH_ENTITIES_FEED_ITEM',
 };
 
 const TEMPLATE_TYPE = {

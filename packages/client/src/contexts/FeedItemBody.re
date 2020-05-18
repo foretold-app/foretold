@@ -9,7 +9,7 @@ type measurable = {
   measurableId: string,
 };
 
-type measurableB = {
+type measurableWithEntities = {
   item: string,
   description: string,
   measurableId: string,
@@ -53,7 +53,7 @@ type series = {
 type body =
   | Generic(generic)
   | Measurable(measurable)
-  | MeasurableB(measurableB)
+  | MeasurableB(measurableWithEntities)
   | Series(series)
   | Measurement(measurement)
   | Notebook(notebook)
@@ -90,7 +90,7 @@ module Measurable = {
 };
 
 module MeasurableB = {
-  type t = measurableB;
+  type t = measurableWithEntities;
 
   let make =
       (
@@ -222,7 +222,7 @@ let toBody = m => {
     m##channel,
     m##joinedMember,
     m##series,
-    m##measurableB,
+    m##measurableWithEntities,
   ) {
   | (Some(m), _, _, _, _, _, _, _) => Generic(Generic.fromJson(m))
   | (_, Some(m), _, _, _, _, _, _) => Measurable(Measurable.fromJson(m))

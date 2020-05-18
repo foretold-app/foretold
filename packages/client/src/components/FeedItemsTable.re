@@ -34,7 +34,7 @@ module Splitter = {
 
 module FeedItemMeasurableName = {
     [@react.component]
-    let make = (~feedItem: Types.feedItem, ~feedItemBody: FeedItemBody.measurableB) => {
+    let make = (~feedItem: Types.feedItem, ~feedItemBody: FeedItemBody.measurableWithEntities) => {
         let measurable = Primary.Measurable.ofFeedItemMeasurable(~feedItem, ~feedItemBody);
         <MeasurableItems.LinkMeasurable measurable />;
     };

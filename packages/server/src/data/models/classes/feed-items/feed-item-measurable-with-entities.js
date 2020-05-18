@@ -5,7 +5,7 @@ const Mustache = require('mustache');
 const { FeedItemGeneric } = require('./feed-item-generic');
 const { FEED_ITEM_BODY } = require('../../../../enums');
 
-class FeedItemMeasurableB extends FeedItemGeneric {
+class FeedItemMeasurableWithEntities extends FeedItemGeneric {
   /**
    * @public
    *
@@ -86,7 +86,7 @@ class FeedItemMeasurableB extends FeedItemGeneric {
    * @return {string}
    */
   getName() {
-    return FEED_ITEM_BODY.measurableB;
+    return FEED_ITEM_BODY.measurableWithEntities;
   }
 
   /**
@@ -98,7 +98,7 @@ class FeedItemMeasurableB extends FeedItemGeneric {
     const item = Mustache.render(this.item, replacements);
     const description = Mustache.render(this.description, replacements);
 
-    return new FeedItemMeasurableB({
+    return new FeedItemMeasurableWithEntities({
       item,
       description,
     }, {
@@ -114,5 +114,5 @@ class FeedItemMeasurableB extends FeedItemGeneric {
 }
 
 module.exports = {
-  FeedItemMeasurableB,
+  FeedItemMeasurableWithEntities,
 };

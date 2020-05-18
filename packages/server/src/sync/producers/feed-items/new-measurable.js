@@ -12,8 +12,9 @@ class NewMeasurable extends ProducerFeedItems {
     super(measurable);
 
     this.measurable = measurable;
-    this.templateName = Producer.TEMPLATE_NAME.NEW_MEASURABLE_B_FEED_ITEM;
-    this.FeedItem = Producer.FeedItemMeasurableB;
+    this.templateName = Producer.TEMPLATE_NAME
+      .NEW_MEASURABLE_WITH_ENTITIES_FEED_ITEM;
+    this.FeedItem = Producer.FeedItemMeasurableWithEntities;
   }
 
   /**

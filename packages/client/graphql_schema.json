@@ -6822,7 +6822,7 @@
               "deprecationReason": null
             },
             {
-              "name": "measurableB",
+              "name": "measurableWithEntities",
               "description": null,
               "args": [],
               "type": {

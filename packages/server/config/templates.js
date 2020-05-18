@@ -115,7 +115,7 @@ module.exports = [
     },
   },
   {
-    name: TEMPLATE_NAME.NEW_MEASURABLE_B_FEED_ITEM,
+    name: TEMPLATE_NAME.NEW_MEASURABLE_WITH_ENTITIES_FEED_ITEM,
     type: TEMPLATE_TYPE.FEED_ITEM,
     envelopeTemplate: {
       item: '{{{ measurable.name }}}',

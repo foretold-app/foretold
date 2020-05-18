@@ -68,7 +68,7 @@ module Query = [%graphql
                    description
                    measurableId
                  }
-                 measurableB {
+                 measurableWithEntities {
                    item
                    description
                    measurableId

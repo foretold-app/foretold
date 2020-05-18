@@ -20,13 +20,12 @@ class FeedItemMeasurableB extends FeedItemGeneric {
    * @param {string} inputs.labelStartAtDate
    * @param {string} inputs.labelEndAtDate
    * @param {string[]} inputs.labelConditionals
-   *
-   * @param {Defs.MeasurableID} envelopeTemplate.measurableId
+   * @param {Defs.MeasurableID} inputs.measurableId
    */
   constructor(envelopeTemplate, inputs = {}) {
     super(envelopeTemplate, inputs);
 
-    assert(_.isString(envelopeTemplate.measurableId),
+    assert(_.isString(inputs.measurableId),
       'MeasurableId should be a string.');
 
     assert(!!_.has(inputs, 'labelSubject'),
@@ -73,9 +72,7 @@ class FeedItemMeasurableB extends FeedItemGeneric {
       'labelConditionals should be an array.',
     );
 
-    // @todo: It is collision with a template.
-    this.measurableId = envelopeTemplate.measurableId;
-
+    this.measurableId = inputs.measurableId;
     this.labelSubject = inputs.labelSubject;
     this.labelProperty = inputs.labelProperty;
     this.labelCustom = inputs.labelCustom;
@@ -100,13 +97,12 @@ class FeedItemMeasurableB extends FeedItemGeneric {
   instanceFactory(replacements) {
     const item = Mustache.render(this.item, replacements);
     const description = Mustache.render(this.description, replacements);
-    const measurableId = Mustache.render(this.measurableId, replacements);
 
     return new FeedItemMeasurableB({
       item,
       description,
-      measurableId,
     }, {
+      measurableId: this.measurableId,
       labelSubject: this.labelSubject,
       labelProperty: this.labelProperty,
       labelCustom: this.labelCustom,

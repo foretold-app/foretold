@@ -11,15 +11,16 @@ class FeedItemSeries extends FeedItemGeneric {
    * @param {object} envelopeTemplate
    * @param {string} envelopeTemplate.item
    * @param {string} envelopeTemplate.description
-   * @param {Defs.SeriesID} envelopeTemplate.seriesId
    * @param {object} inputs
+   * @param {Defs.SeriesID} inputs.seriesId
    */
   constructor(envelopeTemplate, inputs = {}) {
     super(envelopeTemplate, inputs);
-    assert(_.isString(envelopeTemplate.seriesId),
+
+    assert(_.isString(inputs.seriesId),
       'SeriesId should be a string.');
 
-    this.seriesId = envelopeTemplate.seriesId;
+    this.seriesId = inputs.seriesId;
   }
 
   /**
@@ -38,12 +39,12 @@ class FeedItemSeries extends FeedItemGeneric {
   instanceFactory(replacements) {
     const item = Mustache.render(this.item, replacements);
     const description = Mustache.render(this.description, replacements);
-    const seriesId = Mustache.render(this.seriesId, replacements);
 
     return new FeedItemSeries({
       item,
       description,
-      seriesId,
+    }, {
+      seriesId: this.seriesId,
     });
   }
 }

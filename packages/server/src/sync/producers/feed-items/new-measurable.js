@@ -43,7 +43,6 @@ class NewMeasurable extends ProducerFeedItems {
         name: agentName,
       },
       measurable: {
-        id: this.measurable.id,
         name: measurableName,
       },
     };
@@ -54,6 +53,8 @@ class NewMeasurable extends ProducerFeedItems {
    * @protected
    */
   async _getInputs() {
+    const measurableId = _.get(this.measurable, 'id', null);
+
     const labelSubject = _.get(this.measurable, 'labelSubject', null);
     const labelProperty = _.get(this.measurable, 'labelProperty', null);
     const labelCustom = _.get(this.measurable, 'labelCustom', null);
@@ -65,6 +66,7 @@ class NewMeasurable extends ProducerFeedItems {
     const labelEndAtDate = moment(labelEndAtDate$).toISOString();
 
     return {
+      measurableId,
       labelSubject,
       labelProperty,
       labelCustom,

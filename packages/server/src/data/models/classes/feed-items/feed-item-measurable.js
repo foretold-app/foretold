@@ -11,17 +11,16 @@ class FeedItemMeasurable extends FeedItemGeneric {
    * @param {object} envelopeTemplate
    * @param {string} envelopeTemplate.item
    * @param {string} envelopeTemplate.description
-   * @param {Defs.MeasurableID} envelopeTemplate.measurableId
    * @param {object} inputs
+   * @param {Defs.MeasurableID} inputs.measurableId
    */
   constructor(envelopeTemplate, inputs = {}) {
     super(envelopeTemplate, inputs);
 
-    assert(_.isString(envelopeTemplate.measurableId),
+    assert(_.isString(inputs.measurableId),
       'MeasurableId should be a string.');
 
-    // @todo: It is collision with a template.
-    this.measurableId = envelopeTemplate.measurableId;
+    this.measurableId = inputs.measurableId;
   }
 
   /**
@@ -40,12 +39,12 @@ class FeedItemMeasurable extends FeedItemGeneric {
   instanceFactory(replacements) {
     const item = Mustache.render(this.item, replacements);
     const description = Mustache.render(this.description, replacements);
-    const measurableId = Mustache.render(this.measurableId, replacements);
 
     return new FeedItemMeasurable({
       item,
       description,
-      measurableId,
+    }, {
+      measurableId: this.measurableId,
     });
   }
 }

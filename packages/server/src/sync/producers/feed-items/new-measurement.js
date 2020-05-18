@@ -60,7 +60,6 @@ class NewMeasurement extends ProducerFeedItems {
       || 'Somebody';
     const measurableName = (await _.get(this.measurable, 'name', null))
       || 'Question';
-    const measurableId = _.get(this.measurable, 'id', null);
 
     return {
       agent: {
@@ -68,11 +67,21 @@ class NewMeasurement extends ProducerFeedItems {
       },
       measurable: {
         name: measurableName,
-        id: measurableId,
       },
-      measurement: {
-        id: this.measurementId,
-      },
+    };
+  }
+
+  /**
+   * @return {Promise.<object>}
+   * @protected
+   */
+  async _getInputs() {
+    const measurableId = _.get(this.measurable, 'id', null);
+    const measurementId = _.get(this.measurement, 'id', null);
+
+    return {
+      measurableId,
+      measurementId,
     };
   }
 }

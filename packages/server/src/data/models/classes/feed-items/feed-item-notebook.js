@@ -11,16 +11,16 @@ class FeedItemNotebook extends FeedItemGeneric {
    * @param {object} envelopeTemplate
    * @param {string} envelopeTemplate.item
    * @param {string} envelopeTemplate.description
-   * @param {Defs.NotebookID} envelopeTemplate.notebookId
    * @param {inputs} inputs
+   * @param {Defs.NotebookID} inputs.notebookId
    */
   constructor(envelopeTemplate, inputs) {
     super(envelopeTemplate, inputs);
-    assert(_.isString(envelopeTemplate.notebookId),
+
+    assert(_.isString(inputs.notebookId),
       'NotebookId should be a string.');
 
-    // @todo: It is collision with a template.
-    this.notebookId = envelopeTemplate.notebookId;
+    this.notebookId = inputs.notebookId;
   }
 
   /**
@@ -39,12 +39,12 @@ class FeedItemNotebook extends FeedItemGeneric {
   instanceFactory(replacements) {
     const item = Mustache.render(this.item, replacements);
     const description = Mustache.render(this.description, replacements);
-    const notebookId = Mustache.render(this.notebookId, replacements);
 
     return new FeedItemNotebook({
       item,
       description,
-      notebookId,
+    }, {
+      notebookId: this.notebookId,
     });
   }
 }

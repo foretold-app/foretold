@@ -11,21 +11,20 @@ class FeedItemMeasurement extends FeedItemGeneric {
    * @param {object} envelopeTemplate
    * @param {string} envelopeTemplate.item
    * @param {string} envelopeTemplate.description
-   * @param {Defs.MeasurableID} envelopeTemplate.measurableId
-   * @param {Defs.MeasurementID} envelopeTemplate.measurementId
    * @param {object} inputs
+   * @param {Defs.MeasurableID} inputs.measurableId
+   * @param {Defs.MeasurementID} inputs.measurementId
    */
   constructor(envelopeTemplate, inputs = {}) {
     super(envelopeTemplate, inputs);
 
-    assert(_.isString(envelopeTemplate.measurableId),
+    assert(_.isString(inputs.measurableId),
       'MeasurableId should be a string.');
-    assert(_.isString(envelopeTemplate.measurementId),
+    assert(_.isString(inputs.measurementId),
       'MeasurementId should be a string.');
 
-    // @todo: It is collision with a template.
-    this.measurableId = envelopeTemplate.measurableId;
-    this.measurementId = envelopeTemplate.measurementId;
+    this.measurableId = inputs.measurableId;
+    this.measurementId = inputs.measurementId;
   }
 
   /**
@@ -44,14 +43,13 @@ class FeedItemMeasurement extends FeedItemGeneric {
   instanceFactory(replacements) {
     const item = Mustache.render(this.item, replacements);
     const description = Mustache.render(this.description, replacements);
-    const measurableId = Mustache.render(this.measurableId, replacements);
-    const measurementId = Mustache.render(this.measurementId, replacements);
 
     return new FeedItemMeasurement({
       item,
       description,
-      measurableId,
-      measurementId,
+    }, {
+      measurableId: this.measurableId,
+      measurementId: this.measurementId,
     });
   }
 }

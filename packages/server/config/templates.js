@@ -69,9 +69,6 @@ module.exports = [
     envelopeTemplate: {
       item: '{{{ measurable.name }}}',
       description: '<split><agent /></split> made a prediction',
-      // @todo: It is removable. Use "inputs" of feed item class instead.
-      measurableId: '{{{ measurable.id }}}',
-      measurementId: '{{{ measurement.id }}}',
     },
   },
   {
@@ -80,9 +77,6 @@ module.exports = [
     envelopeTemplate: {
       item: '{{{ measurable.name }}}',
       description: '<split><agent /></split> made a comment',
-      // @todo: It is removable. Use "inputs" of feed item class instead.
-      measurableId: '{{{ measurable.id }}}',
-      measurementId: '{{{ measurement.id }}}',
     },
   },
   {
@@ -92,9 +86,6 @@ module.exports = [
       item: '{{{ measurable.name }}}',
       description: '<split><agent /></split> resolved the question with an'
         + ' answer',
-      // @todo: It is removable. Use "inputs" of feed item class instead.
-      measurableId: '{{{ measurable.id }}}',
-      measurementId: '{{{ measurement.id }}}',
     },
   },
   {
@@ -104,9 +95,6 @@ module.exports = [
       item: '{{{ measurable.name }}}',
       description: '<split><agent /></split> has marked this question as '
         + 'unresolved',
-      // @todo: It is removable. Use "inputs" of feed item class instead.
-      measurableId: '{{{ measurable.id }}}',
-      measurementId: '{{{ measurement.id }}}',
     },
   },
   {
@@ -116,8 +104,6 @@ module.exports = [
       item: '{{{ measurable.name }}}',
       description: '{{{ measurable.name }}} has reached it\'s expected'
         + ' resolution date',
-      // @todo: It is removable. Use "inputs" of feed item class instead.
-      measurableId: '{{{ measurable.id }}}',
     },
   },
   {
@@ -126,8 +112,6 @@ module.exports = [
     envelopeTemplate: {
       item: '{{{ measurable.name }}}',
       description: '<split><agent /></split> made a question',
-      // @todo: It is removable. Use "inputs" of feed item class instead.
-      measurableId: '{{{ measurable.id }}}',
     },
   },
   {
@@ -136,8 +120,6 @@ module.exports = [
     envelopeTemplate: {
       item: '{{{ measurable.name }}}',
       description: '<split><agent /></split> made a question',
-      // @todo: It is removable. Use "inputs" of feed item class instead.
-      measurableId: '{{{ measurable.id }}}',
     },
   },
   {
@@ -166,8 +148,6 @@ module.exports = [
     envelopeTemplate: {
       item: '',
       description: '<split><agent /></split> made a notebook',
-      // @todo: It is removable. Use "inputs" of feed item class instead.
-      notebookId: '{{{ notebook.id }}}',
     },
   },
   {
@@ -176,8 +156,6 @@ module.exports = [
     envelopeTemplate: {
       item: '',
       description: '<split><agent /></split> made a series',
-      // @todo: It is removable. Use "inputs" of feed item class instead.
-      seriesId: '{{{ series.id }}}',
     },
   },
 ];

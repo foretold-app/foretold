@@ -39,23 +39,14 @@ class NewNotebook extends ProducerFeedItems {
   }
 
   /**
-   * @param {Defs.Agent} agent
-   * @return {Promise.<{
-   * agent: { name: string },
-   * notebook: { id: string }
-   * }>}
+   * @return {Promise.<object>}
    * @protected
    */
-  async _getReplacements(agent) {
-    const agentName = (await _.get(agent, 'name', null)) || 'Somebody';
+  async _getInputs() {
+    const notebookId = this.notebookId;
 
     return {
-      agent: {
-        name: agentName,
-      },
-      notebook: {
-        id: this.notebookId,
-      },
+      notebookId,
     };
   }
 }

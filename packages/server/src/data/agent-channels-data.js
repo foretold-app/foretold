@@ -61,7 +61,6 @@ class AgentChannelsData extends DataBase {
 
     return sum;
   }
-
 }
 
 module.exports = {

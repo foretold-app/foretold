@@ -1,5 +1,3 @@
-const assert = require('assert');
-
 const models = require('./definitions');
 const { ModelPostgres } = require('./model-postgres');
 

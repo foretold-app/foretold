@@ -25,19 +25,6 @@ type tab =
   | Edit
   | Details;
 
-// @todo: Adds to Server "iAmOwner" as in the measurables
-module ShowIfSameUser = {
-  [@react.component]
-  let make = (~agentId, ~children) => {
-    let context = React.useContext(Providers.app);
-    let isCorrect =
-      context.loggedUser
-      |> E.O.fmap((r: Types.user) => r.agentId == agentId)
-      |> E.O.default(false);
-    isCorrect ? children : ReasonReact.null;
-  };
-};
-
 module Tabs = {
   [@react.component]
   let make = (~switchTab, ~tab, ~notebook: Types.notebook) => {
@@ -64,12 +51,13 @@ module Tabs = {
           isActive={tab == Details} onClick={_ => switchTab(Details)}>
           {"Markdown" |> Utils.ste}
         </ForetoldComponents.Tab.Button>
-        <ShowIfSameUser agentId={notebook.ownerId}>
-          <ForetoldComponents.Tab.Button
-            isActive={tab == Edit} onClick={_ => switchTab(Edit)}>
-            {"Edit" |> Utils.ste}
-          </ForetoldComponents.Tab.Button>
-        </ShowIfSameUser>
+        {<ForetoldComponents.Tab.Button
+           isActive={tab == Edit} onClick={_ => switchTab(Edit)}>
+           {"Edit" |> Utils.ste}
+         </ForetoldComponents.Tab.Button>
+         |> E.React2.showIf(
+              Primary.Permissions.can(`NOTEBOOK_UPDATE, notebook.permissions),
+            )}
         {<Bookmarks.BookmarkNotebook notebook />
          |> E.React2.showIf(
               Primary.Permissions.can(

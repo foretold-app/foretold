@@ -24,6 +24,7 @@ async function setContextChannelMemberships(root, args, context, _info) {
     || _.get(root, 'channelId', null)
     || _.get(context, 'channelId', null)
     || _.get(context, 'measurable.channelId', null)
+    || _.get(context, 'notebook.channelId', null)
     || _.get(context, 'series.channelId', null)
     || _.get(context, 'channel.id', null);
   const agentId = _.get(context, 'agent.id', null);
@@ -105,7 +106,7 @@ async function setContextChannelMembershipsAdmins(root, args, context, _info) {
     || _.get(context, 'channel.id', null);
 
   log.trace('\x1b[36m ---> \x1b[0m Middleware '
-    + '(channelMembershipsAdmins)', channelId);
+    + '(setContextChannelMembershipsAdmins)', channelId);
 
   if (!!channelId) {
     context.channelMembershipsAdmins = await new ChannelMembershipsData()

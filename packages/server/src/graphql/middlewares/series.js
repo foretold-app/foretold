@@ -20,7 +20,7 @@ const log = logger.module('middlewares/users');
 async function setContextSeries(root, args, context, _info) {
   const seriesId = _.get(args, 'id', null);
 
-  log.trace('\x1b[36m ---> \x1b[0m Middleware (setContexSeries)', { seriesId });
+  log.trace('\x1b[36m ---> \x1b[0m Middleware (setContextSeries)', { seriesId });
 
   const params = new Params({ id: seriesId });
   const query = new Query();

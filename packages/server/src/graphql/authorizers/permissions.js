@@ -165,7 +165,10 @@ const rulesNotebooks = () => ({
     ),
     notebookUpdate: and(
       currentAgentIsAuthenticated,
-      notebookIsOwnedByCurrentAgent,
+      or(
+        currentAgentIsApplicationAdminOrChannelAdmin,
+        notebookIsOwnedByCurrentAgent,
+      ),
     ),
   },
 });

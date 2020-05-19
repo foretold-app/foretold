@@ -5,13 +5,13 @@ const logger = require('../../lib/log');
 const log = logger.module('authorizers/bots');
 
 /**
- * @param {object} _root
+ * @param {object} root
  * @param {object} _args
  * @param {Schema.Context} context
  * @param {object} _info
  * @return {boolean}
  */
-function notebookIsOwnedByCurrentAgentRule(_root, _args, context, _info) {
+function notebookIsOwnedByCurrentAgentRule(root, _args, context, _info) {
   const notebookAgentId = _.get(context, 'notebook.ownerId', null);
   const currentAgentId = _.get(context, 'agent.id', null);
 

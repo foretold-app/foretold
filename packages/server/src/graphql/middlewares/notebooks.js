@@ -35,6 +35,19 @@ async function setContextNotebook(root, args, context, _info) {
   }
 }
 
+/**
+ * @param {object | null} root
+ * @param {object} args
+ * @param {Schema.Context} context
+ * @param {object} _info
+ * @return {Promise<void>}
+ */
+async function setContextNotebookByRoot(root, args, context, _info) {
+  log.trace('\x1b[36m ---> \x1b[0m Middleware (setContextNotebookByRoot)');
+  context.notebook = root || null;
+}
+
 module.exports = {
   setContextNotebook,
+  setContextNotebookByRoot,
 };

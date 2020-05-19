@@ -24,6 +24,7 @@ async function setContextChannel(root, args, context, _info) {
     || _.get(root, 'channelId', null)
     || _.get(context, 'channelId', null)
     || _.get(context, 'measurable.channelId', null)
+    || _.get(context, 'notebook.channelId', null)
     || _.get(context, 'series.channelId', null)
     || _.get(args, 'id', null);
 

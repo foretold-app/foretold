@@ -76,6 +76,16 @@ const middlewares = {
   },
 
   // Copy context here (temporary solution)
+  Notebook: {
+    permissions: async (resolve, root, args, context, info) => {
+      const context$ = _.cloneDeep(context);
+      await setContextChannelMemberships(root, args, context$, info);
+      await setContextChannelMembershipsAdmins(root, args, context$, info);
+      return resolve(root, args, context$, info);
+    },
+  },
+
+  // Copy context here (temporary solution)
   Channel: {
     permissions: async (resolve, root, args, context, info) => {
       const context$ = _.cloneDeep(context);
@@ -115,6 +125,8 @@ const middlewares = {
 
     notebookUpdate: async (resolve, root, args, context, info) => {
       await setContextNotebook(root, args, context, info);
+      await setContextChannel(root, args, context, info);
+      await setContextChannelMemberships(root, args, context, info);
       return resolve(root, args, context, info);
     },
 

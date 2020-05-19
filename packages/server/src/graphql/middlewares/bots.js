@@ -19,7 +19,9 @@ const { Options } = require('../../data/classes');
  */
 async function setContextBot(root, args, context, _info) {
   const id = _.get(args, 'id', null);
+
   log.trace('\x1b[36m ---> \x1b[0m Middleware (setContextBot)', { id });
+
   const params = new Params({ id });
   const query = new Query();
   const options = new Options({ raw: true });

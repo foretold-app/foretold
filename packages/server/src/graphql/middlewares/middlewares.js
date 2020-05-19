@@ -16,6 +16,7 @@ const { setContextPreferenceFromAgentId } = require('./preferences');
 const { setContextPreferenceFromId } = require('./preferences');
 const { setContextUser } = require('./users');
 const { setContextSeries } = require('./series');
+const { setContextNotebookByRoot } = require('./notebooks');
 
 /**
  * @todo: To move these "middlewares" into "middlewares.js" files.
@@ -79,6 +80,7 @@ const middlewares = {
   Notebook: {
     permissions: async (resolve, root, args, context, info) => {
       const context$ = _.cloneDeep(context);
+      await setContextNotebookByRoot(root, args, context$, info);
       await setContextChannelMemberships(root, args, context$, info);
       await setContextChannelMembershipsAdmins(root, args, context$, info);
       return resolve(root, args, context$, info);

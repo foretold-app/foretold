@@ -7,7 +7,7 @@ const config = require('../config/config');
 
 const { events, emitter } = require('./sync');
 const { app: subApp } = require('./sync/github/app');
-const { apolloServer } = require('./graphql/apollo-server');
+const { getApolloServer } = require('./graphql');
 const logger = require('./lib/log');
 
 const log = logger.module('src/server.js');
@@ -84,6 +84,7 @@ function run() {
   {
     // Supporting of Graphql server.
     app.use(bodyParser.graphql());
+    const apolloServer = getApolloServer();
     apolloServer.applyMiddleware({ app });
   }
 

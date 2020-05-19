@@ -20,18 +20,20 @@ class ApolloServerDepth extends ApolloServer {
   }
 }
 
-const apolloServer = new ApolloServerDepth({
-  introspection: true,
-  playground: true,
-  schema: schemaWithMiddlewares,
-  formatError: (error) => {
-    log.error('Error!', error);
-    log.error(_.get(error, 'extensions.exception.stacktrace'));
-    return error;
-  },
-  context,
-});
+function getApolloServer() {
+  return new ApolloServerDepth({
+    introspection: true,
+    playground: true,
+    schema: schemaWithMiddlewares,
+    formatError: (error) => {
+      log.error('Error!', error);
+      log.error(_.get(error, 'extensions.exception.stacktrace'));
+      return error;
+    },
+    context,
+  });
+}
 
 module.exports = {
-  apolloServer,
+  getApolloServer,
 };

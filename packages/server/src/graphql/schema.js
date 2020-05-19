@@ -689,13 +689,17 @@ const schema = new graphql.GraphQLSchema({
   }),
 });
 
-const schemaWithMiddlewares = applyMiddleware(
-  schema,
-  middlewares,
-  validators,
-  permissions,
-);
+function getSchemaWithMiddlewares() {
+  const schemaWithMiddlewares = applyMiddleware(
+    schema,
+    middlewares,
+    validators,
+    permissions,
+  );
+
+  return schemaWithMiddlewares;
+}
 
 module.exports = {
-  schemaWithMiddlewares,
+  getSchemaWithMiddlewares,
 };

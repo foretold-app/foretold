@@ -2,7 +2,7 @@ const _ = require('lodash');
 const { ApolloServer } = require('apollo-server-express');
 const depthLimit = require('graphql-depth-limit');
 
-const { schemaWithMiddlewares } = require('./schema');
+const { getSchemaWithMiddlewares } = require('./schema');
 const { context } = require('./middlewares/context');
 const logger = require('../lib/log');
 
@@ -24,7 +24,7 @@ function getApolloServer() {
   return new ApolloServerDepth({
     introspection: true,
     playground: true,
-    schema: schemaWithMiddlewares,
+    schema: getSchemaWithMiddlewares(),
     formatError: (error) => {
       log.error('Error!', error);
       log.error(_.get(error, 'extensions.exception.stacktrace'));

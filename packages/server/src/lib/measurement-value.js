@@ -64,11 +64,11 @@ class MeasurementValue {
             + `${MeasurementValue.FLOAT_CDF_MAX_XS}.`);
         }
 
-        if (_.some(xs, null)) {
+        if (_.some(xs, _.isNull)) {
           throw new Error('Xs array has null value.');
         }
 
-        if (_.some(ys, null)) {
+        if (_.some(ys, _.isNull)) {
           throw new Error('Ys array has null value.');
         }
 
@@ -76,7 +76,8 @@ class MeasurementValue {
           throw new Error('Ys array has element less then zero.');
         }
 
-        if (_.max(ys) > 1) {
+        // @todo: Fix this comparison later with 1.0.
+        if (_.max(ys) > 1.1) {
           throw new Error('Ys array has an element more then one.');
         }
 
@@ -105,7 +106,7 @@ class MeasurementValue {
    */
   isIncreasing(a) {
     for (let i = 1, max = a.length; i < max; i++) {
-      if (a[i] !== a[i - 1] && a[i] !== a[i - 1] + 1) {
+      if (a[i - 1] > a[i]) {
         return false;
       }
     }

@@ -48,10 +48,10 @@ class MeasurementValue {
   validate() {
     switch (this.type) {
       case MEASUREMENT_VALUE.floatCdf: {
-        const xs = _.get(this.value, 'xs');
+        const xs = _.get(this.value, 'xs', null);
         const sizeXs = _.size(xs);
 
-        const ys = _.get(this.value, 'ys');
+        const ys = _.get(this.value, 'ys', null);
         const sizeYs = _.size(ys);
 
         if (sizeXs !== sizeYs) {
@@ -64,6 +64,30 @@ class MeasurementValue {
             + `${MeasurementValue.FLOAT_CDF_MAX_XS}.`);
         }
 
+        if (_.some(xs, null)) {
+          throw new Error('Xs array has null value.');
+        }
+
+        if (_.some(ys, null)) {
+          throw new Error('Ys array has null value.');
+        }
+
+        if (_.min(ys) < 0) {
+          throw new Error('Ys array has element less then zero.');
+        }
+
+        if (_.max(ys) > 1) {
+          throw new Error('Ys array has an element more then one.');
+        }
+
+        if (!this.isIncreasing(ys)) {
+          throw new Error('Ys has to increase.');
+        }
+
+        if (!this.isIncreasing(xs)) {
+          throw new Error('Xs has to increase.');
+        }
+
         return true;
       }
 
@@ -73,6 +97,19 @@ class MeasurementValue {
       default:
         return true;
     }
+  }
+
+  /**
+   * @param {number[]} a
+   * @returns {boolean}
+   */
+  isIncreasing(a) {
+    for (let i = 1, max = a.length; i < max; i++) {
+      if (a[i] !== a[i - 1] && a[i] !== a[i - 1] + 1) {
+        return false;
+      }
+    }
+    return true;
   }
 }
 

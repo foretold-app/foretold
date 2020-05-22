@@ -57,16 +57,13 @@ module type Config = {
 
 module Make = (Config: Config) => {
   type pageConfig = {direction};
-
   type itemSelected = {selectedIndex: int};
-
   type itemState =
     | ItemUnselected
     | ItemDeselected
     | ItemSelected(itemSelected);
 
   type connection = Primary.Connection.t(Config.itemType);
-
   type response = HttpResponse.t(connection);
 
   type action =
@@ -77,7 +74,6 @@ module Make = (Config: Config) => {
     | SelectIndex(int)
     | NextSelection
     | LastSelection;
-
   type send = action => unit;
 
   type reducerParams = {

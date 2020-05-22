@@ -88,7 +88,7 @@ let getReducedStateInOneSimpleForm =
       seriesQuery: seriesQuery,
     ) =>
   switch (
-    reducerParams.itemState,
+    reducerParams.item,
     channelQuery,
     seriesQuery,
     reducerParams.response,

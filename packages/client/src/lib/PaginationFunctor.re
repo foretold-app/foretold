@@ -56,7 +56,7 @@ module type Config = {
 };
 
 module Make = (Config: Config) => {
-  type itemState =
+  type item =
     | ItemUnselected
     | ItemDeselected
     | ItemSelected(int);
@@ -76,7 +76,7 @@ module Make = (Config: Config) => {
 
   type reducerParams = {
     itemsPerPage: int,
-    itemState,
+    item,
     response,
     selection: option(Config.itemType),
     send,
@@ -91,15 +91,15 @@ module Make = (Config: Config) => {
     E.BoundedInt.decrement(itemSelected, itemsPerPage)
     <$> (selectedIndex => ItemSelected(selectedIndex));
 
-  let selection = (itemState: itemState, response: response) =>
-    switch (itemState, response) {
+  let selection = (item: item, response: response) =>
+    switch (item, response) {
     | (ItemSelected(selectedIndex), Success(m)) =>
       E.A.get(m.edges, selectedIndex)
     | _ => None
     };
 
   let pageIndex = (reducerParams: reducerParams) =>
-    switch (reducerParams.itemState) {
+    switch (reducerParams.item) {
     | ItemSelected(selectedIndex) => Some(selectedIndex)
     | ItemUnselected(_) => None
     };
@@ -299,7 +299,7 @@ module Make = (Config: Config) => {
   [@react.component]
   let make =
       (~itemsPerPage=20, ~callFnParams: Config.callFnParams, ~subComponent) => {
-    let (itemState, setItemState) = React.useState(() => ItemUnselected);
+    let (item, setItem) = React.useState(() => ItemUnselected);
 
     let (response, setResponse) = React.useState(() => HttpResponse.Loading);
 
@@ -307,7 +307,7 @@ module Make = (Config: Config) => {
       React.useState(() => Primary.Connection.NoneDirection);
 
     let send = action =>
-      switch (itemState, action) {
+      switch (item, action) {
       | (ItemUnselected | ItemDeselected, NextPage) =>
         setDirection(_ => nextPage(response, direction))
 
@@ -316,29 +316,28 @@ module Make = (Config: Config) => {
 
       | (ItemUnselected | ItemDeselected, SelectIndex(i)) =>
         selectIndex(i, itemsPerPage)
-        |> E.O.fmap(itemState => setItemState(_ => itemState))
+        |> E.O.fmap(item => setItem(_ => item))
         |> ignore
 
-      | (ItemSelected(_), Deselect) => setItemState(_ => ItemDeselected)
+      | (ItemSelected(_), Deselect) => setItem(_ => ItemDeselected)
 
       | (ItemSelected(itemSelected), NextSelection) =>
         nextSelection(itemsPerPage, itemSelected)
-        |> E.O.fmap(itemState => setItemState(_ => itemState))
+        |> E.O.fmap(item => setItem(_ => item))
         |> ignore
 
       | (ItemSelected(itemSelected), LastSelection) =>
         lastSelection(itemsPerPage, itemSelected)
-        |> E.O.fmap(itemState => setItemState(_ => itemState))
+        |> E.O.fmap(item => setItem(_ => item))
         |> ignore
 
       | _ => ()
       };
 
     React.useEffect(() => {
-      switch (itemState) {
+      switch (item) {
       | ItemDeselected => Config.onItemDeselected(callFnParams)
-      | ItemSelected(_) =>
-        Config.onItemSelected(selection(itemState, response))
+      | ItemSelected(_) => Config.onItemSelected(selection(item, response))
       | _ => ()
       };
       None;
@@ -352,9 +351,9 @@ module Make = (Config: Config) => {
 
       subComponent({
         itemsPerPage,
-        itemState,
+        item,
         response: freshResponse,
-        selection: selection(itemState, response),
+        selection: selection(item, response),
         send,
         direction,
       });

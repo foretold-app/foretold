@@ -147,7 +147,7 @@ module MeasurableHeader = {
             ForetoldComponents.PageCard.HeaderRow.Styles.itemBottomPadding,
           ]),
         ]>
-        {Reducer.Components.paginationItem(subState.reducerParams)}
+        <Reducer.Components.PaginationItem state={subState.reducerParams} />
       </Div>
     </>;
 };

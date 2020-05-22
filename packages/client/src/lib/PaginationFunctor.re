@@ -198,57 +198,63 @@ module Make = (Config: Config) => {
       };
     };
 
-    let correctButtonDuo = (params: state) =>
-      switch (params.selection) {
-      | Some(_) =>
-        <>
-          <PageButton
-            facesRight=false
-            action=LastSelection
-            canMove=canDecrementSelection
-            state=params
-          />
-          <PageButton
-            facesRight=true
-            action=NextSelection
-            canMove=canIncrementSelection
-            state=params
-          />
-        </>
-      | None =>
-        <>
-          <PageButton
-            facesRight=false
-            action=LastPage
-            canMove=canDecrementPage
-            state=params
-          />
-          <PageButton
-            facesRight=true
-            action=NextPage
-            canMove=canIncrementPage
-            state=params
-          />
-        </>
-      };
+    module CorrectButtonDuo = {
+      [@react.component]
+      let make = (~state: state) =>
+        switch (state.selection) {
+        | Some(_) =>
+          <>
+            <PageButton
+              facesRight=false
+              action=LastSelection
+              canMove=canDecrementSelection
+              state
+            />
+            <PageButton
+              facesRight=true
+              action=NextSelection
+              canMove=canIncrementSelection
+              state
+            />
+          </>
+        | None =>
+          <>
+            <PageButton
+              facesRight=false
+              action=LastPage
+              canMove=canDecrementPage
+              state
+            />
+            <PageButton
+              facesRight=true
+              action=NextPage
+              canMove=canIncrementPage
+              state
+            />
+          </>
+        };
+    };
 
-    let paginationItem = state =>
-      switch (totalItems(state), selectionIndex(state)) {
-      | (Some(count), Some(selection)) =>
-        ForetoldComponents.PaginationButtons.make({
-          currentValue: Item(selection + 1),
-          max: count,
-          pageLeft: {
-            isDisabled: !canDecrementSelection(state),
-            onClick: _ => state.send(LastSelection),
-          },
-          pageRight: {
-            isDisabled: !canIncrementSelection(state),
-            onClick: _ => state.send(NextSelection),
-          },
-        })
-      | _ => "" |> Utils.ste
-      };
+    module PaginationItem = {
+      [@react.component]
+      let make = (~state) =>
+        switch (totalItems(state), selectionIndex(state)) {
+        | (Some(count), Some(selection)) =>
+          ForetoldComponents.PaginationButtons.make({
+            currentValue: Item(selection + 1),
+            max: count,
+            pageLeft: {
+              isDisabled: !canDecrementSelection(state),
+              onClick: _ => state.send(LastSelection),
+            },
+            pageRight: {
+              isDisabled: !canIncrementSelection(state),
+              onClick: _ => state.send(NextSelection),
+            },
+          })
+        | _ => "" |> Utils.ste
+        };
+    };
 
     let paginationPage = state =>
       switch (

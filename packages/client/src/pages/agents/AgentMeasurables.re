@@ -23,19 +23,19 @@ module Reducer = PaginationFunctor.Make(ReducerConfig);
 let make = (~pageParams: Types.pageParams) => {
   <Reducer
     callFnParams={pageParams.id}
-    subComponent={(reducerState: Reducer.state) =>
+    subComponent={(state: Reducer.state) =>
       <SLayout
         head={
-          switch (reducerState.selection) {
+          switch (state.selection) {
           | Some(_selection) =>
             <>
-              <Reducer.Components.DeselectButton send={reducerState.send} />
-              {Reducer.Components.correctButtonDuo(reducerState)}
+              <Reducer.Components.DeselectButton send={state.send} />
+              <Reducer.Components.CorrectButtonDuo state />
             </>
-          | None => <> {Reducer.Components.correctButtonDuo(reducerState)} </>
+          | None => <Reducer.Components.CorrectButtonDuo state />
           }
         }>
-        {switch (reducerState.response, reducerState.selection) {
+        {switch (state.response, state.selection) {
          | (_, Some(measurable)) => <MeasurablePage measurable />
 
          | (Success(connection), None) =>
@@ -43,7 +43,7 @@ let make = (~pageParams: Types.pageParams) => {
              measurables={connection.edges}
              showExtraData=true
              onSelect={(e: Types.measurable) =>
-               Reducer.Components.sendSelectItem(reducerState, e.id)
+               Reducer.Components.sendSelectItem(state, e.id)
              }
            />
 

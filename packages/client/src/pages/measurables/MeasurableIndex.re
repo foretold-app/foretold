@@ -81,18 +81,17 @@ type state =
   | LoadedAndUnselected(loadedAndUnselected)
   | LoadedAndSelected(loadedAndSelected);
 
-type input = {
-  reducerParams: Reducer.reducerParams,
-  channelQuery,
-  seriesQuery,
-};
-
-let getState = (input: input): state =>
+let getReducedStateInOneSimpleForm =
+    (
+      reducerParams: Reducer.reducerParams,
+      channelQuery: channelQuery,
+      seriesQuery: seriesQuery,
+    ) =>
   switch (
-    input.reducerParams.itemState,
-    input.channelQuery,
-    input.seriesQuery,
-    input.reducerParams.response,
+    reducerParams.itemState,
+    channelQuery,
+    seriesQuery,
+    reducerParams.response,
   ) {
   | (
       ItemSelected({selectedIndex}),
@@ -100,11 +99,11 @@ let getState = (input: input): state =>
       Success(seriesCollection),
       Success(_),
     ) =>
-    switch (input.reducerParams.selection) {
+    switch (reducerParams.selection) {
     | Some(selectedMeasurable) =>
       LoadedAndSelected({
         channel,
-        reducerParams: input.reducerParams,
+        reducerParams,
         itemState: {
           selectedIndex: selectedIndex,
         },
@@ -120,20 +119,12 @@ let getState = (input: input): state =>
       Success(seriesCollection),
       Success(_),
     ) =>
-    LoadedAndUnselected({
-      channel,
-      reducerParams: input.reducerParams,
-      seriesCollection,
-    })
+    LoadedAndUnselected({channel, reducerParams, seriesCollection})
 
   | (_, Success(channel), _, _) =>
-    WithChannelButNotQuery({
-      channel,
-      reducerParams: input.reducerParams,
-      seriesQuery: input.seriesQuery,
-    })
+    WithChannelButNotQuery({channel, reducerParams, seriesQuery})
 
-  | _ => WithoutChannel(input.channelQuery)
+  | _ => WithoutChannel(channelQuery)
   };
 
 module LoadedAndSelected = {
@@ -323,7 +314,11 @@ let make = (~channelId: string, ~searchParams: MeasurableQuery.query) => {
               send={reducerParams.send}
               selectedState=searchParams
               stats=statsQuery
-              state={getState({reducerParams, channelQuery, seriesQuery})}
+              state={getReducedStateInOneSimpleForm(
+                reducerParams,
+                channelQuery,
+                seriesQuery,
+              )}
               channelId
             />
           })

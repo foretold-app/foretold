@@ -38,10 +38,15 @@ function replaceState(state, title, path) {
   history.replaceState(state, title, path);
 }
 
+function getHistoryState() {
+  return window.history.state;
+}
+
 module.exports = {
   onReplaceState,
   onPushState,
   onPopState,
   pushState,
   replaceState,
+  getHistoryState,
 };

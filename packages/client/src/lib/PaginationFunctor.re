@@ -2,6 +2,11 @@ open Rationale.Option.Infix;
 
 type direction = Primary.Connection.direction;
 
+type item =
+  | ItemUnselected
+  | ItemDeselected
+  | ItemSelected(int);
+
 module Styles = {
   open Css;
 
@@ -41,8 +46,10 @@ module type Config = {
   let isEqual: (itemType, itemType) => bool;
   let getId: itemType => string;
 
-  let onItemDeselected: callFnParams => unit;
-  let onItemSelected: option(itemType) => unit;
+  let onItemDeselected:
+    (option(unit => History.state2), callFnParams) => unit;
+  let onItemSelected:
+    (option(unit => History.state2), option(itemType)) => unit;
 
   let callFn:
     (
@@ -56,11 +63,6 @@ module type Config = {
 };
 
 module Make = (Config: Config) => {
-  type item =
-    | ItemUnselected
-    | ItemDeselected
-    | ItemSelected(int);
-
   type connection = Primary.Connection.t(Config.itemType);
   type response = HttpResponse.t(connection);
 
@@ -304,9 +306,56 @@ module Make = (Config: Config) => {
       ) =>
     Belt.Array.eq(connectionA.edges, connectionB.edges, Config.isEqual);
 
+  let makeBrowserHistoryState =
+      (~direction: option(direction)=None, ~item: option(item)=None, ()) => {
+    let direction' =
+      switch (direction) {
+      | Some(Before(cursor))
+      | Some(After(cursor)) => Some(E.J.toString(cursor))
+      | _ => None
+      };
+    let directionType =
+      switch (direction) {
+      | Some(Before(_)) => Some("before")
+      | Some(After(_)) => Some("after")
+      | _ => None
+      };
+    let itemType =
+      switch (item) {
+      | Some(ItemUnselected) => Some("ItemUnselected")
+      | Some(ItemDeselected) => Some("ItemDeselected")
+      | Some(ItemSelected(int)) => Some("ItemSelected")
+      | _ => None
+      };
+    let itemIndex =
+      switch (item) {
+      | Some(ItemSelected(int)) => Some(string_of_int(int))
+      | _ => None
+      };
+
+    Js.Nullable.fromOption(
+      Some({
+        "itemType": Js.Nullable.fromOption(itemType),
+        "itemIndex": Js.Nullable.fromOption(itemIndex),
+        "directionType": Js.Nullable.fromOption(directionType),
+        "direction": Js.Nullable.fromOption(direction'),
+      }),
+    );
+  };
+
+  let setBrowserHistoryState = (historyState: History.state2) => {
+    History.replaceState2(historyState, "", "");
+  };
+
   [@react.component]
   let make =
-      (~itemsPerPage=20, ~callFnParams: Config.callFnParams, ~subComponent) => {
+      (
+        ~itemsPerPage=20,
+        ~item=ItemUnselected,
+        ~direction=Primary.Connection.NoneDirection,
+        ~callFnParams: Config.callFnParams,
+        ~subComponent,
+      ) => {
     let (item, setItem) = React.useState(() => ItemUnselected);
 
     let (response, setResponse) = React.useState(() => HttpResponse.Loading);
@@ -317,35 +366,66 @@ module Make = (Config: Config) => {
     let send = action =>
       switch (item, action) {
       | (ItemUnselected | ItemDeselected, NextPage) =>
-        setDirection(_ => nextPage(response, direction))
+        let direction = nextPage(response, direction);
+        makeBrowserHistoryState(
+          ~direction=Some(direction),
+          ~item=Some(item),
+          (),
+        )
+        |> setBrowserHistoryState;
+        setDirection(_ => direction);
 
       | (ItemUnselected | ItemDeselected, LastPage) =>
-        setDirection(_ => lastPage(response, direction))
+        let direction = lastPage(response, direction);
+        makeBrowserHistoryState(
+          ~direction=Some(direction),
+          ~item=Some(item),
+          (),
+        )
+        |> setBrowserHistoryState;
+        setDirection(_ => direction);
 
       | (ItemUnselected | ItemDeselected, SelectIndex(i)) =>
-        selectIndex(i, itemsPerPage)
-        |> E.O.fmap(item => setItem(_ => item))
-        |> ignore
+        let item = selectIndex(i, itemsPerPage);
+        makeBrowserHistoryState(~item, ~direction=Some(direction), ())
+        |> setBrowserHistoryState;
+        item |> E.O.fmap(item => setItem(_ => item));
+        ();
 
-      | (ItemSelected(_), Deselect) => setItem(_ => ItemDeselected)
+      | (ItemSelected(_), Deselect) =>
+        makeBrowserHistoryState(~direction=Some(direction), ())
+        |> setBrowserHistoryState;
+        setItem(_ => ItemDeselected);
 
       | (ItemSelected(itemSelected), NextSelection) =>
-        nextSelection(itemsPerPage, itemSelected)
-        |> E.O.fmap(item => setItem(_ => item))
-        |> ignore
+        let item = nextSelection(itemsPerPage, itemSelected);
+        makeBrowserHistoryState(~item, ~direction=Some(direction), ())
+        |> setBrowserHistoryState;
+        item |> E.O.fmap(item => setItem(_ => item));
+        ();
 
       | (ItemSelected(itemSelected), LastSelection) =>
-        lastSelection(itemsPerPage, itemSelected)
-        |> E.O.fmap(item => setItem(_ => item))
-        |> ignore
+        let item = lastSelection(itemsPerPage, itemSelected);
+        makeBrowserHistoryState(~item, ~direction=Some(direction), ())
+        |> setBrowserHistoryState;
+        item |> E.O.fmap(item => setItem(_ => item));
+        ();
 
       | _ => ()
       };
 
     React.useEffect(() => {
+      let history =
+        Some(
+          makeBrowserHistoryState(
+            ~item=Some(item),
+            ~direction=Some(direction),
+          ),
+        );
       switch (item) {
-      | ItemDeselected => Config.onItemDeselected(callFnParams)
-      | ItemSelected(_) => Config.onItemSelected(selection(item, response))
+      | ItemDeselected => Config.onItemDeselected(history, callFnParams)
+      | ItemSelected(_) =>
+        Config.onItemSelected(history, selection(item, response))
       | _ => ()
       };
       None;

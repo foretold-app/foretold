@@ -11,21 +11,33 @@ module ReducerConfig = {
 
   let getId = (itemType: itemType) => itemType.id;
 
-  let onItemDeselected = (params: callFnParams) => {
-    let st =
+  let onItemDeselected = (history, params: callFnParams) => {
+    let urlParams =
       params.states |> MeasurableQuery.make |> MeasurableQuery.toUrlParams;
+
     let channelLink = Routing.Url.toString(ChannelShow(params.channelId));
-    History.append(channelLink ++ st);
+
+    let history' =
+      history
+      |> E.O.fmap(history => history())
+      |> E.O.default(Js.Nullable.fromOption(None));
+
+    History.pushState2(history', "", channelLink ++ urlParams);
   };
 
-  let onItemSelected = (measurable: option(itemType)) => {
+  let onItemSelected = (history, measurable: option(itemType)) => {
+    let history' =
+      history
+      |> E.O.fmap(history => history())
+      |> E.O.default(Js.Nullable.fromOption(None));
+
     switch (measurable) {
     | Some(measurable) =>
       let measurableLink =
         Routing.Url.toString(
           MeasurableShow(measurable.channelId, measurable.id),
         );
-      History.append(measurableLink);
+      History.pushState2(history', "", measurableLink);
     | _ => ()
     };
     ();
@@ -302,7 +314,10 @@ module LayoutInput = {
 };
 
 [@react.component]
-let make = (~channelId: string, ~searchParams: MeasurableQuery.query) =>
+let make = (~channelId: string, ~searchParams: MeasurableQuery.query) => {
+  let historyState = History.getHistoryState();
+  Js.log2("historyState", historyState);
+
   ChannelGet.component2(~id=channelId, channelQuery =>
     SeriesCollectionGet.component2(~channelId, seriesQuery =>
       MeasurablesStateStatsGet.component2(~channelId, statsQuery =>
@@ -325,3 +340,4 @@ let make = (~channelId: string, ~searchParams: MeasurableQuery.query) =>
       )
     )
   );
+};

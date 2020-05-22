@@ -9,15 +9,20 @@ let make = () => {
     );
 
   React.useState(() => {
-    History.onPushState(event =>
-      if (!History.miss(event)) {
-        let url = ReasonReact.Router.dangerouslyGetInitialUrl();
-        setRoute(_ => url |> Routing.Route.fromUrl);
-      }
-    );
-    History.onPopState(_ => {
+    History.onPushState2((event: History.event2) => {
+      Js.log2("event1 onPushState2", event##state);
+      Js.log2("event1 onPushState2", History.getHistoryState());
+      let url = ReasonReact.Router.dangerouslyGetInitialUrl();
+      ();
+      setRoute(_ => url |> Routing.Route.fromUrl);
+    });
+    History.onPopState2((event: History.event2) => {
+      Js.log2("event2 onPopState2", event##state);
+      Js.log2("event2 onPopState2", History.getHistoryState());
+
       let url = ReasonReact.Router.dangerouslyGetInitialUrl();
       setRoute(_ => url |> Routing.Route.fromUrl);
+      ();
     });
   })
   |> ignore;

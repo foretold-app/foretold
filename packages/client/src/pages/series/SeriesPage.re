@@ -6,8 +6,8 @@ module Config = {
 
   let getId = (e: Types.measurable) => e.id;
 
-  let onItemDeselected = _ => ();
-  let onItemSelected = (_: option(itemType)) => ();
+  let onItemDeselected = (_, _) => ();
+  let onItemSelected = (_, _) => ();
 
   let callFn = (seriesId: callFnParams) =>
     MeasurablesGet.component(

@@ -4,8 +4,8 @@ module ReducerConfig = {
 
   let getId = (e: itemType) => e.id;
 
-  let onItemDeselected = _ => ();
-  let onItemSelected = (_: option(itemType)) => ();
+  let onItemDeselected = (_, _) => ();
+  let onItemSelected = (_, _) => ();
 
   let callFn = (measurableId: callFnParams) =>
     MeasurementsGet.component(~measurableId=Some(measurableId), ());

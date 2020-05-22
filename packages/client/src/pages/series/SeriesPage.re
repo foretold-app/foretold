@@ -90,7 +90,7 @@ let make = (~channelId: string, ~seriesId: string) => {
             }>
             {"Edit Series" |> Utils.ste}
           </ForetoldComponents.Base.Button>
-          {Reducer.Components.paginationPage(reducerParams)}
+          <Reducer.Components.PaginationPage state=reducerParams />
         </Div>
       </Div>
     | _ => <Null />

@@ -61,7 +61,8 @@ let make =
     let head =
       head(
         ~channelId,
-        ~paginationPage=Reducer.Components.paginationPage(reducerParams),
+        ~paginationPage=
+          <Reducer.Components.PaginationPage state=reducerParams />,
         (),
       );
 

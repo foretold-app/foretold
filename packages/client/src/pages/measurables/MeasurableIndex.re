@@ -231,7 +231,7 @@ module TableHeader = {
            {"New Question" |> Utils.ste}
          </ForetoldComponents.Button>
          |> E.React2.showIf(channelId != "")}
-        {Reducer.Components.paginationPage(subState.reducerParams)}
+        <Reducer.Components.PaginationPage state={subState.reducerParams} />
       </Div>
     </Div>;
 };

@@ -51,7 +51,7 @@ module Pagination = {
             ForetoldComponents.PageCard.HeaderRow.Styles.itemBottomPadding,
           ]),
         ]>
-        {Reducer.Components.paginationPage(reducerParams)}
+        <Reducer.Components.PaginationPage state=reducerParams />
       </Div>
     </Div>;
   };

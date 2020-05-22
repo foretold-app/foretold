@@ -31,7 +31,7 @@ let make = (~channelId=None, ~agentId=None) => {
             ForetoldComponents.PageCard.HeaderRow.Styles.itemBottomPadding,
           ]),
         ]>
-        {Reducer.Components.paginationPage(reducerParams)}
+        <Reducer.Components.PaginationPage state=reducerParams />
       </Div>
     </Div>;
 

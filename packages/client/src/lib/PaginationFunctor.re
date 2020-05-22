@@ -256,27 +256,30 @@ module Make = (Config: Config) => {
         };
     };
 
-    let paginationPage = state =>
-      switch (
-        totalItems(state),
-        upperBoundIndex(state),
-        lowerBoundIndex(state),
-      ) {
-      | (Some(count), Some(upper), Some(lower)) =>
-        ForetoldComponents.PaginationButtons.make({
-          currentValue: Range(lower + 1, upper + 1),
-          max: count,
-          pageLeft: {
-            isDisabled: !canDecrementPage(state),
-            onClick: _ => state.send(LastPage),
-          },
-          pageRight: {
-            isDisabled: !canIncrementPage(state),
-            onClick: _ => state.send(NextPage),
-          },
-        })
-      | _ => "" |> Utils.ste
-      };
+    module PaginationPage = {
+      [@react.component]
+      let make = (~state) =>
+        switch (
+          totalItems(state),
+          upperBoundIndex(state),
+          lowerBoundIndex(state),
+        ) {
+        | (Some(count), Some(upper), Some(lower)) =>
+          ForetoldComponents.PaginationButtons.make({
+            currentValue: Range(lower + 1, upper + 1),
+            max: count,
+            pageLeft: {
+              isDisabled: !canDecrementPage(state),
+              onClick: _ => state.send(LastPage),
+            },
+            pageRight: {
+              isDisabled: !canIncrementPage(state),
+              onClick: _ => state.send(NextPage),
+            },
+          })
+        | _ => "" |> Utils.ste
+        };
+    };
 
     let findIndexOfId = (state: state, id: string): option(int) =>
       switch (state.response) {

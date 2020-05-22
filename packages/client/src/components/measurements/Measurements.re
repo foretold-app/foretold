@@ -41,7 +41,8 @@ module Body = {
     <SLayout
       head={head(
         ~channelId=None,
-        ~paginationPage=Reducer.Components.paginationPage(reducerParams),
+        ~paginationPage=
+          <Reducer.Components.PaginationPage state=reducerParams />,
         (),
       )}
       container=`none>

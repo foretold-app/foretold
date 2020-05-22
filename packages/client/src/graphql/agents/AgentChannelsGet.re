@@ -114,7 +114,7 @@ module QueryComponent = ReasonApollo.CreateQuery(Query);
 let queryDirection =
     (~pageLimit, ~direction, ~fn: Types.connectionInputType('a), ()) =>
   switch ((direction: Primary.Connection.direction)) {
-  | None => fn(~first=pageLimit, ())
+  | NoneDirection => fn(~first=pageLimit, ())
   | After(after) => fn(~first=pageLimit, ~after, ())
   | Before(before) => fn(~last=pageLimit, ~before, ())
   };

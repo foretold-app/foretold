@@ -117,7 +117,7 @@ module Connection = {
   };
 
   type direction =
-    | None
+    | NoneDirection
     | Before(Types.cursor)
     | After(Types.cursor);
 

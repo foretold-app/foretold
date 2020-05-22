@@ -110,7 +110,7 @@ let queryDirection =
     ) => {
   let fn = Query.make(~channelId?, ~ownerId?, ~order?);
   switch ((direction: Primary.Connection.direction)) {
-  | None => fn(~first=pageLimit, ())
+  | NoneDirection => fn(~first=pageLimit, ())
   | After(after) => fn(~first=pageLimit, ~after, ())
   | Before(before) => fn(~last=pageLimit, ~before, ())
   };

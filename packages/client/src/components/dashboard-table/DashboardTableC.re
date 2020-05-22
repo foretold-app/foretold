@@ -109,7 +109,7 @@ let make = (~tableJson=tableJson, ~editor: editor) => {
     MeasurablesGet.component(
       ~measurableIds=Some(DashboardTable.Table.allMeasurableIds(table)),
       ~pageLimit=Js.Json.number(500 |> float_of_int),
-      ~direction=None,
+      ~direction=NoneDirection,
       ~innerComponentFn=
         e =>
           e

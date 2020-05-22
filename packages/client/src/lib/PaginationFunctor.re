@@ -56,7 +56,6 @@ module type Config = {
 };
 
 module Make = (Config: Config) => {
-  type pageConfig = {direction};
   type itemState =
     | ItemUnselected
     | ItemDeselected
@@ -86,7 +85,7 @@ module Make = (Config: Config) => {
   type state = {
     itemState,
     response,
-    pageConfig,
+    direction,
   };
 
   let nextSelection = (itemsPerPage: int, itemSelected: int) =>
@@ -166,18 +165,18 @@ module Make = (Config: Config) => {
     | _ => None
     };
 
-  let changePage = (state: state, pageDirection): pageConfig =>
+  let changePage = (state: state, pageDirection): direction =>
     state.response
     |> HttpResponse.fmap((r: Primary.Connection.t('a)) =>
-         pageDirection(r) |> E.O.fmap(d => {direction: d})
+         pageDirection(r) |> E.O.fmap(d => d)
        )
     |> HttpResponse.flattenDefault(None, a => a)
-    |> E.O.default(state.pageConfig);
+    |> E.O.default(state.direction);
 
-  let nextPage = (state): pageConfig =>
+  let nextPage = (state): direction =>
     changePage(state, Primary.Connection.nextPageDirection);
 
-  let lastPage = (state): pageConfig =>
+  let lastPage = (state): direction =>
     changePage(state, Primary.Connection.lastPageDirection);
 
   let selectIndex = (i, itemsPerPage) =>
@@ -309,16 +308,16 @@ module Make = (Config: Config) => {
 
     let (response, setResponse) = React.useState(() => HttpResponse.Loading);
 
-    let (pageConfig, setPageConfig) =
-      React.useState(() => {direction: None});
+    let (direction, setDirection) =
+      React.useState(() => Primary.Connection.NoneDirection);
 
     let send = action =>
       switch (itemState, action) {
       | (ItemUnselected | ItemDeselected, NextPage) =>
-        setPageConfig(_ => nextPage({itemState, response, pageConfig}))
+        setDirection(_ => nextPage({itemState, response, direction}))
 
       | (ItemUnselected | ItemDeselected, LastPage) =>
-        setPageConfig(_ => lastPage({itemState, response, pageConfig}))
+        setDirection(_ => lastPage({itemState, response, direction}))
 
       | (ItemUnselected | ItemDeselected, SelectIndex(i)) =>
         selectIndex(i, itemsPerPage)
@@ -344,7 +343,7 @@ module Make = (Config: Config) => {
       switch (itemState) {
       | ItemDeselected => Config.onItemDeselected(callFnParams)
       | ItemSelected(_) =>
-        Config.onItemSelected(selection({itemState, response, pageConfig}))
+        Config.onItemSelected(selection({itemState, response, direction}))
       | _ => ()
       };
       None;
@@ -360,14 +359,14 @@ module Make = (Config: Config) => {
         itemsPerPage,
         itemState,
         response: freshResponse,
-        selection: selection({itemState, response, pageConfig}),
+        selection: selection({itemState, response, direction}),
         send,
       });
     };
 
     Config.callFn(
       callFnParams,
-      ~direction=pageConfig.direction,
+      ~direction,
       ~pageLimit=Js.Json.number(itemsPerPage |> float_of_int),
       ~innerComponentFn,
     );

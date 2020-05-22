@@ -352,9 +352,9 @@ module Make = (Config: Config) => {
     });
 
     let innerComponentFn = freshResponse => {
-      // @todo: Fix this. Use hooks somehow.
+      // @todo: Fix this. Use hooks somehow!
       if (!HttpResponse.isEq(response, freshResponse, compareItems)) {
-        setResponse(_ => response);
+        setResponse(_ => freshResponse);
       };
 
       subComponent({

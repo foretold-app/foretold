@@ -310,7 +310,7 @@ let make = (~channelId: string, ~searchParams: MeasurableQuery.query) => {
     subComponent={(reducerParams: Reducer.reducerParams) =>
       ChannelGet.component2(~id=channelId, channelQuery =>
         SeriesCollectionGet.component2(~channelId, seriesQuery =>
-          MeasurablesStateStatsGet.component2(~channelId, statsQuery => {
+          MeasurablesStateStatsGet.component2(~channelId, statsQuery =>
             <LayoutInput
               send={reducerParams.send}
               selectedState=searchParams
@@ -322,7 +322,7 @@ let make = (~channelId: string, ~searchParams: MeasurableQuery.query) => {
               )}
               channelId
             />
-          })
+          )
         )
       )
     }

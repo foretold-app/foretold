@@ -179,10 +179,6 @@ module Make = (Config: Config) => {
     <$> (selectedIndex => ItemSelected(selectedIndex));
 
   module Components = {
-    type buttonGroupType =
-      | Page
-      | Item;
-
     module DeselectButton = {
       [@react.component]
       let make = (~send) => {
@@ -202,24 +198,9 @@ module Make = (Config: Config) => {
       };
     };
 
-    let buttonDuo = (buttonGroupType, params) =>
-      switch (buttonGroupType) {
-      | Page =>
-        <>
-          <PageButton
-            facesRight=false
-            action=LastPage
-            canMove=canDecrementPage
-            state=params
-          />
-          <PageButton
-            facesRight=true
-            action=NextPage
-            canMove=canIncrementPage
-            state=params
-          />
-        </>
-      | Item =>
+    let correctButtonDuo = (params: state) =>
+      switch (params.selection) {
+      | Some(_) =>
         <>
           <PageButton
             facesRight=false
@@ -234,12 +215,21 @@ module Make = (Config: Config) => {
             state=params
           />
         </>
-      };
-
-    let correctButtonDuo = (params: state) =>
-      switch (params.selection) {
-      | Some(_) => buttonDuo(Item, params)
-      | None => buttonDuo(Page, params)
+      | None =>
+        <>
+          <PageButton
+            facesRight=false
+            action=LastPage
+            canMove=canDecrementPage
+            state=params
+          />
+          <PageButton
+            facesRight=true
+            action=NextPage
+            canMove=canIncrementPage
+            state=params
+          />
+        </>
       };
 
     let paginationItem = state =>

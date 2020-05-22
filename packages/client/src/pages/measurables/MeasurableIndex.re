@@ -58,7 +58,7 @@ type loadedAndSelected = {
   reducerParams: Reducer.reducerParams,
   channel: Types.channel,
   seriesCollection,
-  itemState: Reducer.itemSelected,
+  itemState: int,
   selectedMeasurable: ReducerConfig.itemType,
 };
 
@@ -94,7 +94,7 @@ let getReducedStateInOneSimpleForm =
     reducerParams.response,
   ) {
   | (
-      ItemSelected({selectedIndex}),
+      ItemSelected(selectedIndex),
       Success(channel),
       Success(seriesCollection),
       Success(_),
@@ -104,9 +104,7 @@ let getReducedStateInOneSimpleForm =
       LoadedAndSelected({
         channel,
         reducerParams,
-        itemState: {
-          selectedIndex: selectedIndex,
-        },
+        itemState: selectedIndex,
         selectedMeasurable,
         seriesCollection,
       })

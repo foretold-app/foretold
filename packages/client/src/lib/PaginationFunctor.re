@@ -57,11 +57,10 @@ module type Config = {
 
 module Make = (Config: Config) => {
   type pageConfig = {direction};
-  type itemSelected = {selectedIndex: int};
   type itemState =
     | ItemUnselected
     | ItemDeselected
-    | ItemSelected(itemSelected);
+    | ItemSelected(int);
 
   type connection = Primary.Connection.t(Config.itemType);
   type response = HttpResponse.t(connection);
@@ -90,24 +89,24 @@ module Make = (Config: Config) => {
     pageConfig,
   };
 
-  let nextSelection = (itemsPerPage: int, itemSelected: itemSelected) =>
-    E.BoundedInt.increment(itemSelected.selectedIndex, itemsPerPage)
-    <$> (selectedIndex => ItemSelected({selectedIndex: selectedIndex}));
+  let nextSelection = (itemsPerPage: int, itemSelected: int) =>
+    E.BoundedInt.increment(itemSelected, itemsPerPage)
+    <$> (selectedIndex => ItemSelected(selectedIndex));
 
-  let lastSelection = (itemsPerPage: int, itemSelected: itemSelected) =>
-    E.BoundedInt.decrement(itemSelected.selectedIndex, itemsPerPage)
-    <$> (selectedIndex => ItemSelected({selectedIndex: selectedIndex}));
+  let lastSelection = (itemsPerPage: int, itemSelected: int) =>
+    E.BoundedInt.decrement(itemSelected, itemsPerPage)
+    <$> (selectedIndex => ItemSelected(selectedIndex));
 
   let selection = (state: state) =>
     switch (state.itemState, state.response) {
-    | (ItemSelected({selectedIndex}), Success(m)) =>
+    | (ItemSelected(selectedIndex), Success(m)) =>
       E.A.get(m.edges, selectedIndex)
     | _ => None
     };
 
   let pageIndex = (reducerParams: reducerParams) =>
     switch (reducerParams.itemState) {
-    | ItemSelected(r) => Some(r.selectedIndex)
+    | ItemSelected(selectedIndex) => Some(selectedIndex)
     | ItemUnselected(_) => None
     };
 
@@ -183,7 +182,7 @@ module Make = (Config: Config) => {
 
   let selectIndex = (i, itemsPerPage) =>
     E.BoundedInt.make(i, itemsPerPage)
-    <$> (selectedIndex => ItemSelected({selectedIndex: selectedIndex}));
+    <$> (selectedIndex => ItemSelected(selectedIndex));
 
   module Components = {
     type buttonType =

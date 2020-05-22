@@ -304,13 +304,13 @@ module LayoutInput = {
 };
 
 [@react.component]
-let make = (~channelId: string, ~searchParams: MeasurableQuery.query) => {
-  <Reducer
-    callFnParams={channelId, states: searchParams.state}
-    subComponent={(reducerParams: Reducer.reducerParams) =>
-      ChannelGet.component2(~id=channelId, channelQuery =>
-        SeriesCollectionGet.component2(~channelId, seriesQuery =>
-          MeasurablesStateStatsGet.component2(~channelId, statsQuery =>
+let make = (~channelId: string, ~searchParams: MeasurableQuery.query) =>
+  ChannelGet.component2(~id=channelId, channelQuery =>
+    SeriesCollectionGet.component2(~channelId, seriesQuery =>
+      MeasurablesStateStatsGet.component2(~channelId, statsQuery =>
+        <Reducer
+          callFnParams={channelId, states: searchParams.state}
+          subComponent={(reducerParams: Reducer.reducerParams) =>
             <LayoutInput
               send={reducerParams.send}
               selectedState=searchParams
@@ -322,9 +322,8 @@ let make = (~channelId: string, ~searchParams: MeasurableQuery.query) => {
               )}
               channelId
             />
-          )
-        )
+          }
+        />
       )
-    }
-  />;
-};
+    )
+  );

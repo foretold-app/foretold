@@ -179,12 +179,6 @@ module Make = (Config: Config) => {
     <$> (selectedIndex => ItemSelected(selectedIndex));
 
   module Components = {
-    type buttonType =
-      | PageLast
-      | PageNext
-      | ItemLast
-      | ItemNext;
-
     type buttonGroupType =
       | Page
       | Item;
@@ -196,33 +190,49 @@ module Make = (Config: Config) => {
       };
     };
 
-    let pageButton' = (facesRight: bool, action, canMove, params: state) =>
-      <div
-        className={Styles.header(~isDisabled=!canMove(params))}
-        onClick={_ => canMove(params) ? params.send(action) : ()}
-        disabled={!canMove(params)}>
-        <Icon icon={facesRight ? "CHEVRON_RIGHT" : "CHEVRON_LEFT"} />
-      </div>;
-
-    let pageButton' = buttonType =>
-      switch (buttonType) {
-      | PageLast => pageButton'(false, LastPage, canDecrementPage)
-      | PageNext => pageButton'(true, NextPage, canIncrementPage)
-      | ItemLast => pageButton'(false, LastSelection, canDecrementSelection)
-      | ItemNext => pageButton'(true, NextSelection, canIncrementSelection)
+    module PageButton = {
+      [@react.component]
+      let make = (~facesRight: bool, ~action: action, ~canMove, ~state: state) => {
+        <div
+          className={Styles.header(~isDisabled=!canMove(state))}
+          onClick={_ => canMove(state) ? state.send(action) : ()}
+          disabled={!canMove(state)}>
+          <Icon icon={facesRight ? "CHEVRON_RIGHT" : "CHEVRON_LEFT"} />
+        </div>;
       };
+    };
 
     let buttonDuo = (buttonGroupType, params) =>
       switch (buttonGroupType) {
       | Page =>
         <>
-          {pageButton'(PageLast, params)}
-          {pageButton'(PageNext, params)}
+          <PageButton
+            facesRight=false
+            action=LastPage
+            canMove=canDecrementPage
+            state=params
+          />
+          <PageButton
+            facesRight=true
+            action=NextPage
+            canMove=canIncrementPage
+            state=params
+          />
         </>
       | Item =>
         <>
-          {pageButton'(ItemLast, params)}
-          {pageButton'(ItemNext, params)}
+          <PageButton
+            facesRight=false
+            action=LastSelection
+            canMove=canDecrementSelection
+            state=params
+          />
+          <PageButton
+            facesRight=true
+            action=NextSelection
+            canMove=canIncrementSelection
+            state=params
+          />
         </>
       };
 

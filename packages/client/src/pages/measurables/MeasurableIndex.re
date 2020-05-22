@@ -241,24 +241,26 @@ module LoadedAndUnselected = {
       </Div>;
   };
 
-  // @todo: To make a component.
-  let measurableIndexTable = (subState: loadedAndUnselected) => {
-    let measurables =
-      (
-        switch (subState.reducerParams.response) {
-        | Success(r) => Some(r.edges)
-        | _ => None
+  module MeasurableIndexTable = {
+    [@react.component]
+    let make = (~subState: loadedAndUnselected) => {
+      let measurables =
+        (
+          switch (subState.reducerParams.response) {
+          | Success(r) => Some(r.edges)
+          | _ => None
+          }
+        )
+        |> E.O.toExn("");
+      <MeasurableIndexTable
+        measurables
+        showExtraData=true
+        channelId={Some(subState.channel.id)}
+        onSelect={(e: Types.measurable) =>
+          Reducer.Components.sendSelectItem(subState.reducerParams, e.id)
         }
-      )
-      |> E.O.toExn("");
-    <MeasurableIndexTable
-      measurables
-      showExtraData=true
-      channelId={Some(subState.channel.id)}
-      onSelect={(e: Types.measurable) =>
-        Reducer.Components.sendSelectItem(subState.reducerParams, e.id)
-      }
-    />;
+      />;
+    };
   };
 };
 
@@ -284,7 +286,7 @@ module LayoutInput = {
           />
         }
         container=`fluid>
-        {LoadedAndUnselected.measurableIndexTable(subState)}
+        <LoadedAndUnselected.MeasurableIndexTable subState />
       </SLayout>
 
     | LoadedAndSelected(subState) =>

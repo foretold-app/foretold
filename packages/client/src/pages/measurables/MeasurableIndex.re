@@ -252,7 +252,7 @@ module MeasurableTable = {
       showExtraData=true
       channelId={Some(subState.channel.id)}
       onSelect={(e: Types.measurable) =>
-        Reducer.Components.sendSelectItem(subState.reducerParams, e.id)
+        Reducer.sendSelectItem(subState.reducerParams, e.id)
       }
     />;
   };

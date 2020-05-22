@@ -178,6 +178,21 @@ module Make = (Config: Config) => {
     E.BoundedInt.make(i, itemsPerPage)
     <$> (selectedIndex => ItemSelected(selectedIndex));
 
+  let findIndexOfId = (state: state, id: string): option(int) =>
+    switch (state.response) {
+    | Success(m) => m.edges |> E.A.findIndex(r => Config.getId(r) == id)
+    | _ => None
+    };
+
+  let selectItemAction = (state, id: string): option(action) => {
+    findIndexOfId(state, id) |> E.O.fmap(e => SelectIndex(e));
+  };
+
+  let sendSelectItem = (state: state, id: string): unit => {
+    selectItemAction(state, id) |> E.O.fmap(state.send) |> E.O.default();
+    ();
+  };
+
   module Components = {
     module DeselectButton = {
       [@react.component]
@@ -279,21 +294,6 @@ module Make = (Config: Config) => {
           })
         | _ => "" |> Utils.ste
         };
-    };
-
-    let findIndexOfId = (state: state, id: string): option(int) =>
-      switch (state.response) {
-      | Success(m) => m.edges |> E.A.findIndex(r => Config.getId(r) == id)
-      | _ => None
-      };
-
-    let selectItemAction = (state, id: string): option(action) => {
-      findIndexOfId(state, id) |> E.O.fmap(e => SelectIndex(e));
-    };
-
-    let sendSelectItem = (state: state, id: string): unit => {
-      selectItemAction(state, id) |> E.O.fmap(state.send) |> E.O.default();
-      ();
     };
   };
 

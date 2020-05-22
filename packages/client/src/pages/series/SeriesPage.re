@@ -106,9 +106,7 @@ let make = (~channelId: string, ~seriesId: string) => {
          <MeasurablesSeriesTable
            measurables={connection.edges}
            selected=None
-           onClick={id =>
-             Reducer.Components.sendSelectItem(reducerParams, id)
-           }
+           onClick={id => Reducer.sendSelectItem(reducerParams, id)}
          />
 
        | _ => <div />

@@ -43,7 +43,7 @@ let make = (~pageParams: Types.pageParams) => {
              measurables={connection.edges}
              showExtraData=true
              onSelect={(e: Types.measurable) =>
-               Reducer.Components.sendSelectItem(state, e.id)
+               Reducer.sendSelectItem(state, e.id)
              }
            />
 

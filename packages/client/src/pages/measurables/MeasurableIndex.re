@@ -137,7 +137,7 @@ module MeasurableHeader = {
             ForetoldComponents.PageCard.HeaderRow.Styles.itemBottomPadding,
           ]),
         ]>
-        {Reducer.Components.deselectButton(send)}
+        <Reducer.Components.DeselectButton send />
       </Div>
       <Div
         float=`right

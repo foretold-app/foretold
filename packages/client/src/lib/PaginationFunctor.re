@@ -189,9 +189,12 @@ module Make = (Config: Config) => {
       | Page
       | Item;
 
-    // @todo:
-    let deselectButton = send =>
-      <SLayout.ChannelBack onClick={_ => send(Deselect)} />;
+    module DeselectButton = {
+      [@react.component]
+      let make = (~send) => {
+        <SLayout.ChannelBack onClick={_ => send(Deselect)} />;
+      };
+    };
 
     let pageButton' = (facesRight: bool, action, canMove, params: state) =>
       <div

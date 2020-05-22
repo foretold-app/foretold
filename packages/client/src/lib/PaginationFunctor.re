@@ -74,7 +74,7 @@ module Make = (Config: Config) => {
     | LastSelection;
   type send = action => unit;
 
-  type reducerParams = {
+  type state = {
     itemsPerPage: int,
     item,
     response,
@@ -98,64 +98,64 @@ module Make = (Config: Config) => {
     | _ => None
     };
 
-  let pageIndex = (reducerParams: reducerParams) =>
-    switch (reducerParams.item) {
+  let pageIndex = (state: state) =>
+    switch (state.item) {
     | ItemSelected(selectedIndex) => Some(selectedIndex)
     | ItemUnselected(_) => None
     };
 
-  let canDecrementPage = (reducerParams: reducerParams) =>
-    reducerParams.response
+  let canDecrementPage = (state: state) =>
+    state.response
     |> HttpResponse.fmap((r: connection) =>
          Primary.Connection.hasPreviousPage(r)
        )
     |> HttpResponse.flattenDefault(false, a => a);
 
-  let canIncrementPage = (reducerParams: reducerParams) =>
-    reducerParams.response
+  let canIncrementPage = (state: state) =>
+    state.response
     |> HttpResponse.fmap((r: connection) =>
          Primary.Connection.hasNextPage(r)
        )
     |> HttpResponse.flattenDefault(false, a => a);
 
-  let itemExistsAtIndex = (reducerParams: reducerParams, index) =>
-    switch (reducerParams.response) {
+  let itemExistsAtIndex = (state: state, index) =>
+    switch (state.response) {
     | Success(r) => index < E.A.length(r.edges) && index >= 0
     | _ => false
     };
 
-  let canDecrementSelection = (reducerParams: reducerParams) =>
-    reducerParams
+  let canDecrementSelection = (state: state) =>
+    state
     |> pageIndex
-    |> E.O.fmap(r => itemExistsAtIndex(reducerParams, r - 1))
+    |> E.O.fmap(r => itemExistsAtIndex(state, r - 1))
     |> E.O.default(false);
 
-  let canIncrementSelection = (reducerParams: reducerParams) =>
-    reducerParams
+  let canIncrementSelection = (state: state) =>
+    state
     |> pageIndex
-    |> E.O.fmap(r => itemExistsAtIndex(reducerParams, r + 1))
+    |> E.O.fmap(r => itemExistsAtIndex(state, r + 1))
     |> E.O.default(false);
 
-  let totalItems = (reducerParams: reducerParams) =>
-    switch (reducerParams.response) {
+  let totalItems = (state: state) =>
+    switch (state.response) {
     | Success(m) => m.total
     | _ => None
     };
 
-  let lowerBoundIndex = (reducerParams: reducerParams) =>
-    switch (reducerParams.response) {
+  let lowerBoundIndex = (state: state) =>
+    switch (state.response) {
     | Success(m) => m.pageInfo.startCursor |> E.O.fmap(Primary.Cursor.toInt)
     | _ => None
     };
 
-  let upperBoundIndex = (reducerParams: reducerParams) =>
-    switch (reducerParams.response) {
+  let upperBoundIndex = (state: state) =>
+    switch (state.response) {
     | Success(m) => m.pageInfo.endCursor |> E.O.fmap(Primary.Cursor.toInt)
     | _ => None
     };
 
-  let selectionIndex = (reducerParams: reducerParams) =>
-    switch (pageIndex(reducerParams), lowerBoundIndex(reducerParams)) {
+  let selectionIndex = (state: state) =>
+    switch (pageIndex(state), lowerBoundIndex(state)) {
     | (Some(page), Some(lower)) => Some(page + lower)
     | _ => None
     };
@@ -193,8 +193,7 @@ module Make = (Config: Config) => {
     let deselectButton = send =>
       <SLayout.ChannelBack onClick={_ => send(Deselect)} />;
 
-    let pageButton' =
-        (facesRight: bool, action, canMove, params: reducerParams) =>
+    let pageButton' = (facesRight: bool, action, canMove, params: state) =>
       <div
         className={Styles.header(~isDisabled=!canMove(params))}
         onClick={_ => canMove(params) ? params.send(action) : ()}
@@ -224,67 +223,64 @@ module Make = (Config: Config) => {
         </>
       };
 
-    let correctButtonDuo = (params: reducerParams) =>
+    let correctButtonDuo = (params: state) =>
       switch (params.selection) {
       | Some(_) => buttonDuo(Item, params)
       | None => buttonDuo(Page, params)
       };
 
-    let paginationItem = reducerParams =>
-      switch (totalItems(reducerParams), selectionIndex(reducerParams)) {
+    let paginationItem = state =>
+      switch (totalItems(state), selectionIndex(state)) {
       | (Some(count), Some(selection)) =>
         ForetoldComponents.PaginationButtons.make({
           currentValue: Item(selection + 1),
           max: count,
           pageLeft: {
-            isDisabled: !canDecrementSelection(reducerParams),
-            onClick: _ => reducerParams.send(LastSelection),
+            isDisabled: !canDecrementSelection(state),
+            onClick: _ => state.send(LastSelection),
           },
           pageRight: {
-            isDisabled: !canIncrementSelection(reducerParams),
-            onClick: _ => reducerParams.send(NextSelection),
+            isDisabled: !canIncrementSelection(state),
+            onClick: _ => state.send(NextSelection),
           },
         })
       | _ => "" |> Utils.ste
       };
 
-    let paginationPage = reducerParams =>
+    let paginationPage = state =>
       switch (
-        totalItems(reducerParams),
-        upperBoundIndex(reducerParams),
-        lowerBoundIndex(reducerParams),
+        totalItems(state),
+        upperBoundIndex(state),
+        lowerBoundIndex(state),
       ) {
       | (Some(count), Some(upper), Some(lower)) =>
         ForetoldComponents.PaginationButtons.make({
           currentValue: Range(lower + 1, upper + 1),
           max: count,
           pageLeft: {
-            isDisabled: !canDecrementPage(reducerParams),
-            onClick: _ => reducerParams.send(LastPage),
+            isDisabled: !canDecrementPage(state),
+            onClick: _ => state.send(LastPage),
           },
           pageRight: {
-            isDisabled: !canIncrementPage(reducerParams),
-            onClick: _ => reducerParams.send(NextPage),
+            isDisabled: !canIncrementPage(state),
+            onClick: _ => state.send(NextPage),
           },
         })
       | _ => "" |> Utils.ste
       };
 
-    let findIndexOfId =
-        (reducerParams: reducerParams, id: string): option(int) =>
-      switch (reducerParams.response) {
+    let findIndexOfId = (state: state, id: string): option(int) =>
+      switch (state.response) {
       | Success(m) => m.edges |> E.A.findIndex(r => Config.getId(r) == id)
       | _ => None
       };
 
-    let selectItemAction = (reducerParams, id: string): option(action) => {
-      findIndexOfId(reducerParams, id) |> E.O.fmap(e => SelectIndex(e));
+    let selectItemAction = (state, id: string): option(action) => {
+      findIndexOfId(state, id) |> E.O.fmap(e => SelectIndex(e));
     };
 
-    let sendSelectItem = (reducerParams: reducerParams, id: string): unit => {
-      selectItemAction(reducerParams, id)
-      |> E.O.fmap(reducerParams.send)
-      |> E.O.default();
+    let sendSelectItem = (state: state, id: string): unit => {
+      selectItemAction(state, id) |> E.O.fmap(state.send) |> E.O.default();
       ();
     };
   };

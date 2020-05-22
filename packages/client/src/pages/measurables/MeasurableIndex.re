@@ -55,7 +55,7 @@ type measurablesStateStatsQuery =
   HttpResponse.t(option(MeasurablesStateStatsGet.stats));
 
 type loadedAndSelected = {
-  reducerParams: Reducer.reducerParams,
+  reducerParams: Reducer.state,
   channel: Types.channel,
   seriesCollection,
   itemState: int,
@@ -63,13 +63,13 @@ type loadedAndSelected = {
 };
 
 type loadedAndUnselected = {
-  reducerParams: Reducer.reducerParams,
+  reducerParams: Reducer.state,
   channel: Types.channel,
   seriesCollection,
 };
 
 type withChannelButNotQuery = {
-  reducerParams: Reducer.reducerParams,
+  reducerParams: Reducer.state,
   channel: Types.channel,
   seriesQuery,
 };
@@ -83,7 +83,7 @@ type state =
 
 let getReducedStateInOneSimpleForm =
     (
-      reducerParams: Reducer.reducerParams,
+      reducerParams: Reducer.state,
       channelQuery: channelQuery,
       seriesQuery: seriesQuery,
     ) =>
@@ -308,7 +308,7 @@ let make = (~channelId: string, ~searchParams: MeasurableQuery.query) =>
       MeasurablesStateStatsGet.component2(~channelId, statsQuery =>
         <Reducer
           callFnParams={channelId, states: searchParams.state}
-          subComponent={(reducerParams: Reducer.reducerParams) =>
+          subComponent={(reducerParams: Reducer.state) =>
             <LayoutInput
               send={reducerParams.send}
               selectedState=searchParams

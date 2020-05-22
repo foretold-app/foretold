@@ -37,7 +37,7 @@ let make =
       ~finalComparisonMeasurement=None,
       ~container=`fluid,
     ) => {
-  let subComponent = (reducerParams: Reducer.reducerParams) => {
+  let subComponent = (reducerParams: Reducer.state) => {
     let items =
       switch (reducerParams.response) {
       | Success(connection) => connection.edges

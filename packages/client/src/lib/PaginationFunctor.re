@@ -317,15 +317,13 @@ module Make = (Config: Config) => {
     let (pageConfig, setPageConfig) =
       React.useState(() => {direction: None});
 
-    let state = {itemState, response, pageConfig};
-
     let send = action =>
       switch (itemState, action) {
       | (ItemUnselected | ItemDeselected, NextPage) =>
-        setPageConfig(_ => nextPage(state))
+        setPageConfig(_ => nextPage({itemState, response, pageConfig}))
 
       | (ItemUnselected | ItemDeselected, LastPage) =>
-        setPageConfig(_ => lastPage(state))
+        setPageConfig(_ => lastPage({itemState, response, pageConfig}))
 
       | (ItemUnselected | ItemDeselected, SelectIndex(i)) =>
         selectIndex(i, itemsPerPage)
@@ -350,30 +348,31 @@ module Make = (Config: Config) => {
     React.useEffect(() => {
       switch (itemState) {
       | ItemDeselected => Config.onItemDeselected(callFnParams)
-      | ItemSelected(_) => Config.onItemSelected(selection(state))
+      | ItemSelected(_) =>
+        Config.onItemSelected(selection({itemState, response, pageConfig}))
       | _ => ()
       };
       None;
     });
 
-    let innerComponentFn = response => {
+    let innerComponentFn = freshResponse => {
       // @todo: Fix this. Use hooks somehow.
-      if (!HttpResponse.isEq(state.response, response, compareItems)) {
+      if (!HttpResponse.isEq(response, freshResponse, compareItems)) {
         setResponse(_ => response);
       };
 
       subComponent({
         itemsPerPage,
         itemState,
-        response,
-        selection: selection(state),
+        response: freshResponse,
+        selection: selection({itemState, response, pageConfig}),
         send,
       });
     };
 
     Config.callFn(
       callFnParams,
-      ~direction=state.pageConfig.direction,
+      ~direction=pageConfig.direction,
       ~pageLimit=Js.Json.number(itemsPerPage |> float_of_int),
       ~innerComponentFn,
     );

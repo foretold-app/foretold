@@ -23,7 +23,7 @@ module Reducer = PaginationFunctor.Make(ReducerConfig);
 let make = (~pageParams: Types.pageParams) => {
   <Reducer
     callFnParams={pageParams.id}
-    subComponent={(selectWithPaginationParams: Reducer.Types.reducerParams) =>
+    subComponent={(selectWithPaginationParams: Reducer.reducerParams) =>
       <SLayout
         head={
           switch (selectWithPaginationParams.selection) {

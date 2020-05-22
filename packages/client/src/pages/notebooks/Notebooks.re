@@ -21,7 +21,7 @@ module Reducer = PaginationFunctor.Make(ReducerConfig);
 
 module Pagination = {
   [@react.component]
-  let make = (~reducerParams: Reducer.Types.reducerParams, ~channelId: string) => {
+  let make = (~reducerParams: Reducer.reducerParams, ~channelId: string) => {
     let context = React.useContext(Providers.app);
     <Div>
       {<Div
@@ -59,7 +59,7 @@ module Pagination = {
 
 [@react.component]
 let make = (~channelId: string) => {
-  let subComponent = (reducerParams: Reducer.Types.reducerParams) => {
+  let subComponent = (reducerParams: Reducer.reducerParams) => {
     let items =
       switch (reducerParams.response) {
       | Success(connection) => connection.edges

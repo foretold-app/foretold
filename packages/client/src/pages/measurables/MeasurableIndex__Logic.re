@@ -46,7 +46,7 @@ module ReducerConfig = {
 module Reducer = PaginationFunctor.Make(ReducerConfig);
 
 type seriesCollection = array(SeriesCollectionGet.series);
-type reducerParams = Reducer.Types.reducerParams;
+type reducerParams = Reducer.reducerParams;
 type seriesQuery = HttpResponse.t(seriesCollection);
 type channelQuery = HttpResponse.t(Types.channel);
 type measurablesStateStatsQuery =
@@ -56,7 +56,7 @@ type loadedAndSelected = {
   reducerParams,
   channel: Types.channel,
   seriesCollection,
-  itemState: Reducer.Types.itemSelected,
+  itemState: Reducer.itemSelected,
   selectedMeasurable: ReducerConfig.itemType,
 };
 

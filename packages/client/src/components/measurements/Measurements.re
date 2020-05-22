@@ -36,7 +36,7 @@ module Body = {
         ~head,
         ~block,
         ~measurable: Types.measurable,
-        ~reducerParams: Reducer.Types.reducerParams,
+        ~reducerParams: Reducer.reducerParams,
       ) => {
     <SLayout
       head={head(

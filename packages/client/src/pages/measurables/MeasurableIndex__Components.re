@@ -3,7 +3,7 @@ open Style.Grid;
 open MeasurableIndex__Logic;
 
 module LoadedAndSelected = {
-  let header = (subState: loadedAndSelected, send: Reducer.Types.send) =>
+  let header = (subState: loadedAndSelected, send: Reducer.send) =>
     <>
       <Div
         float=`left
@@ -131,7 +131,7 @@ module LoadedAndUnselected = {
 // @todo: To make a component.
 let toLayoutInput =
     (
-      send: Reducer.Types.send,
+      send: Reducer.send,
       selectedState: MeasurableQuery.query,
       stats: measurablesStateStatsQuery,
       state: state,

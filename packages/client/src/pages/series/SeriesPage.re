@@ -56,10 +56,7 @@ let load2Queries = (channelId, seriesId, itemsPerPage, fn) =>
 [@react.component]
 let make = (~channelId: string, ~seriesId: string) => {
   let pagination =
-      (
-        reducerParams: Reducer.Types.reducerParams,
-        series: option(Types.series),
-      ) => {
+      (reducerParams: Reducer.reducerParams, series: option(Types.series)) => {
     switch (series) {
     | Some(series) =>
       <Div>

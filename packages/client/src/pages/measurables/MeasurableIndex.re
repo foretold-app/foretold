@@ -127,140 +127,136 @@ let getReducedStateInOneSimpleForm =
   | _ => WithoutChannel(channelQuery)
   };
 
-module LoadedAndSelected = {
-  module Header = {
-    [@react.component]
-    let make = (~subState: loadedAndSelected, ~send: Reducer.send) =>
-      <>
-        <Div
-          float=`left
-          styles=[
-            Css.style([
-              ForetoldComponents.PageCard.HeaderRow.Styles.itemTopPadding,
-              ForetoldComponents.PageCard.HeaderRow.Styles.itemBottomPadding,
-            ]),
-          ]>
-          {Reducer.Components.deselectButton(send)}
-        </Div>
-        <Div
-          float=`right
-          styles=[
-            Css.style([
-              ForetoldComponents.PageCard.HeaderRow.Styles.itemTopPadding,
-              ForetoldComponents.PageCard.HeaderRow.Styles.itemBottomPadding,
-            ]),
-          ]>
-          {Reducer.Components.paginationItem(subState.reducerParams)}
-        </Div>
-      </>;
-  };
+module MeasurableHeader = {
+  [@react.component]
+  let make = (~subState: loadedAndSelected, ~send: Reducer.send) =>
+    <>
+      <Div
+        float=`left
+        styles=[
+          Css.style([
+            ForetoldComponents.PageCard.HeaderRow.Styles.itemTopPadding,
+            ForetoldComponents.PageCard.HeaderRow.Styles.itemBottomPadding,
+          ]),
+        ]>
+        {Reducer.Components.deselectButton(send)}
+      </Div>
+      <Div
+        float=`right
+        styles=[
+          Css.style([
+            ForetoldComponents.PageCard.HeaderRow.Styles.itemTopPadding,
+            ForetoldComponents.PageCard.HeaderRow.Styles.itemBottomPadding,
+          ]),
+        ]>
+        {Reducer.Components.paginationItem(subState.reducerParams)}
+      </Div>
+    </>;
 };
 
-module LoadedAndUnselected = {
-  module StateLink = {
-    [@react.component]
-    let make = (~state, ~text, ~num: int, ~isActive) =>
-      <ForetoldComponents.Tab2
-        isActive
-        number=num
-        onClick={LinkType.onClick(
-          Relative(
-            MeasurableQuery.make(Some(state)) |> MeasurableQuery.toUrlParams,
-          ),
-        )}>
-        {text |> ste}
-      </ForetoldComponents.Tab2>;
-  };
+module StateLink = {
+  [@react.component]
+  let make = (~state, ~text, ~num: int, ~isActive) =>
+    <ForetoldComponents.Tab2
+      isActive
+      number=num
+      onClick={LinkType.onClick(
+        Relative(
+          MeasurableQuery.make(Some(state)) |> MeasurableQuery.toUrlParams,
+        ),
+      )}>
+      {text |> ste}
+    </ForetoldComponents.Tab2>;
+};
 
-  module Header = {
-    [@react.component]
-    let make =
-        (
-          ~subState: loadedAndUnselected,
-          ~stats: measurablesStateStatsQuery,
-          ~query: MeasurableQuery.query,
-          ~channelId,
-        ) =>
-      <Div>
-        <Div float=`left>
-          {switch (stats) {
-           | Success(Some(r)) =>
-             <Div
-               float=`left
-               styles=[
-                 Css.style([
-                   ForetoldComponents.PageCard.HeaderRow.Styles.itemTopPadding,
-                   ForetoldComponents.PageCard.HeaderRow.Styles.itemBottomPadding,
-                 ]),
-               ]>
-               <StateLink
-                 state=[|`OPEN|]
-                 text="Open"
-                 num={r.openTotal}
-                 isActive={query.state == Some([|`OPEN|])}
-               />
-               <StateLink
-                 state=[|`JUDGEMENT_PENDING|]
-                 text="Pending Resolution"
-                 num={r.pendingTotal}
-                 isActive={query.state == Some([|`JUDGEMENT_PENDING|])}
-               />
-               <StateLink
-                 state=[|`JUDGED, `CLOSED_AS_UNRESOLVED|]
-                 text="Closed"
-                 num={r.closedTotal}
-                 isActive={
-                   query.state == Some([|`JUDGED, `CLOSED_AS_UNRESOLVED|])
-                 }
-               />
-             </Div>
-           | _ => "Error" |> ste
-           }}
-        </Div>
-        <Div
-          float=`right
-          styles=[
-            Css.style([
-              ForetoldComponents.PageCard.HeaderRow.Styles.itemTopPadding,
-              ForetoldComponents.PageCard.HeaderRow.Styles.itemBottomPadding,
-            ]),
-          ]>
-          {<ForetoldComponents.Button
-             variant=ForetoldComponents.Button.Primary
-             isDisabled=false
-             size=ForetoldComponents.Button.Small
-             className=Css.(style([marginRight(`em(1.5))]))
-             onClick={e =>
-               LinkType.onClick(Internal(MeasurableNew(channelId)), e)
-             }>
-             {"New Question" |> Utils.ste}
-           </ForetoldComponents.Button>
-           |> E.React2.showIf(channelId != "")}
-          {Reducer.Components.paginationPage(subState.reducerParams)}
-        </Div>
-      </Div>;
-  };
+module TableHeader = {
+  [@react.component]
+  let make =
+      (
+        ~subState: loadedAndUnselected,
+        ~stats: measurablesStateStatsQuery,
+        ~query: MeasurableQuery.query,
+        ~channelId,
+      ) =>
+    <Div>
+      <Div float=`left>
+        {switch (stats) {
+         | Success(Some(r)) =>
+           <Div
+             float=`left
+             styles=[
+               Css.style([
+                 ForetoldComponents.PageCard.HeaderRow.Styles.itemTopPadding,
+                 ForetoldComponents.PageCard.HeaderRow.Styles.itemBottomPadding,
+               ]),
+             ]>
+             <StateLink
+               state=[|`OPEN|]
+               text="Open"
+               num={r.openTotal}
+               isActive={query.state == Some([|`OPEN|])}
+             />
+             <StateLink
+               state=[|`JUDGEMENT_PENDING|]
+               text="Pending Resolution"
+               num={r.pendingTotal}
+               isActive={query.state == Some([|`JUDGEMENT_PENDING|])}
+             />
+             <StateLink
+               state=[|`JUDGED, `CLOSED_AS_UNRESOLVED|]
+               text="Closed"
+               num={r.closedTotal}
+               isActive={
+                 query.state == Some([|`JUDGED, `CLOSED_AS_UNRESOLVED|])
+               }
+             />
+           </Div>
+         | _ => "Error" |> ste
+         }}
+      </Div>
+      <Div
+        float=`right
+        styles=[
+          Css.style([
+            ForetoldComponents.PageCard.HeaderRow.Styles.itemTopPadding,
+            ForetoldComponents.PageCard.HeaderRow.Styles.itemBottomPadding,
+          ]),
+        ]>
+        {<ForetoldComponents.Button
+           variant=ForetoldComponents.Button.Primary
+           isDisabled=false
+           size=ForetoldComponents.Button.Small
+           className=Css.(style([marginRight(`em(1.5))]))
+           onClick={e =>
+             LinkType.onClick(Internal(MeasurableNew(channelId)), e)
+           }>
+           {"New Question" |> Utils.ste}
+         </ForetoldComponents.Button>
+         |> E.React2.showIf(channelId != "")}
+        {Reducer.Components.paginationPage(subState.reducerParams)}
+      </Div>
+    </Div>;
+};
 
-  module MeasurableIndexTable = {
-    [@react.component]
-    let make = (~subState: loadedAndUnselected) => {
-      let measurables =
-        (
-          switch (subState.reducerParams.response) {
-          | Success(r) => Some(r.edges)
-          | _ => None
-          }
-        )
-        |> E.O.toExn("");
-      <MeasurableIndexTable
-        measurables
-        showExtraData=true
-        channelId={Some(subState.channel.id)}
-        onSelect={(e: Types.measurable) =>
-          Reducer.Components.sendSelectItem(subState.reducerParams, e.id)
+module MeasurableTable = {
+  [@react.component]
+  let make = (~subState: loadedAndUnselected) => {
+    let measurables =
+      (
+        switch (subState.reducerParams.response) {
+        | Success(r) => Some(r.edges)
+        | _ => None
         }
-      />;
-    };
+      )
+      |> E.O.toExn("");
+    <MeasurableIndexTable
+      measurables
+      showExtraData=true
+      channelId={Some(subState.channel.id)}
+      onSelect={(e: Types.measurable) =>
+        Reducer.Components.sendSelectItem(subState.reducerParams, e.id)
+      }
+    />;
   };
 };
 
@@ -277,22 +273,14 @@ module LayoutInput = {
     switch (state) {
     | LoadedAndUnselected(subState) =>
       <SLayout
-        head={
-          <LoadedAndUnselected.Header
-            subState
-            stats
-            query=selectedState
-            channelId
-          />
-        }
+        head={<TableHeader subState stats query=selectedState channelId />}
         container=`fluid>
-        <LoadedAndUnselected.MeasurableIndexTable subState />
+        <MeasurableTable subState />
       </SLayout>
 
     | LoadedAndSelected(subState) =>
       <>
-        <SLayout
-          head={<LoadedAndSelected.Header subState send />} container=`fluid>
+        <SLayout head={<MeasurableHeader subState send />} container=`fluid>
           <MeasurablePage
             measurable={subState.selectedMeasurable}
             key={subState.selectedMeasurable.id}

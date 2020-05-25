@@ -302,7 +302,9 @@ module LayoutInput = {
 };
 
 [@react.component]
-let make = (~channelId: string, ~searchParams: MeasurableQuery.query) =>
+let make = (~channelId: string, ~searchParams: MeasurableQuery.query) => {
+  // @todo: This is temporary fix.
+  module Reducer = PaginationFunctor.Make(ReducerConfig);
   <Reducer
     callFnParams={channelId, states: searchParams.state}
     subComponent={(reducerParams: Reducer.state) =>
@@ -325,3 +327,4 @@ let make = (~channelId: string, ~searchParams: MeasurableQuery.query) =>
       )
     }
   />;
+};

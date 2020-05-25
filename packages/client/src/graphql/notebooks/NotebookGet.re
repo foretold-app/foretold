@@ -57,7 +57,7 @@ module QueryComponent = ReasonApollo.CreateQuery(Query);
 let component = (~id: string, innerFn) => {
   let id = id |> E.J.fromString;
   let query = Query.make(~id, ());
-  <QueryComponent variables=query##variables>
+  <QueryComponent variables=query##variables fetchPolicy="no-cache">
     ...{({result}) =>
       result
       |> ApolloUtils.apolloResponseToResult

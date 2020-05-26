@@ -36,12 +36,13 @@ module Body = {
         ~head,
         ~block,
         ~measurable: Types.measurable,
-        ~reducerParams: Reducer.Types.reducerParams,
+        ~reducerParams: Reducer.state,
       ) => {
     <SLayout
       head={head(
         ~channelId=None,
-        ~paginationPage=Reducer.Components.paginationPage(reducerParams),
+        ~paginationPage=
+          <Reducer.Components.PaginationPage state=reducerParams />,
         (),
       )}
       container=`none>

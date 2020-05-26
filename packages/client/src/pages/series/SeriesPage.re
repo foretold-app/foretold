@@ -56,10 +56,7 @@ let load2Queries = (channelId, seriesId, itemsPerPage, fn) =>
 [@react.component]
 let make = (~channelId: string, ~seriesId: string) => {
   let pagination =
-      (
-        reducerParams: Reducer.Types.reducerParams,
-        series: option(Types.series),
-      ) => {
+      (reducerParams: Reducer.state, series: option(Types.series)) => {
     switch (series) {
     | Some(series) =>
       <Div>
@@ -93,7 +90,7 @@ let make = (~channelId: string, ~seriesId: string) => {
             }>
             {"Edit Series" |> Utils.ste}
           </ForetoldComponents.Base.Button>
-          {Reducer.Components.paginationPage(reducerParams)}
+          <Reducer.Components.PaginationPage state=reducerParams />
         </Div>
       </Div>
     | _ => <Null />
@@ -109,9 +106,7 @@ let make = (~channelId: string, ~seriesId: string) => {
          <MeasurablesSeriesTable
            measurables={connection.edges}
            selected=None
-           onClick={id =>
-             Reducer.Components.sendSelectItem(reducerParams, id)
-           }
+           onClick={id => Reducer.sendSelectItem(reducerParams, id)}
          />
 
        | _ => <div />

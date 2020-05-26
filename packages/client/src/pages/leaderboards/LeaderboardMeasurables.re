@@ -37,7 +37,7 @@ let make =
       ~finalComparisonMeasurement=None,
       ~container=`fluid,
     ) => {
-  let subComponent = (reducerParams: Reducer.Types.reducerParams) => {
+  let subComponent = (reducerParams: Reducer.state) => {
     let items =
       switch (reducerParams.response) {
       | Success(connection) => connection.edges
@@ -61,7 +61,8 @@ let make =
     let head =
       head(
         ~channelId,
-        ~paginationPage=Reducer.Components.paginationPage(reducerParams),
+        ~paginationPage=
+          <Reducer.Components.PaginationPage state=reducerParams />,
         (),
       );
 

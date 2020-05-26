@@ -21,7 +21,7 @@ module Reducer = PaginationFunctor.Make(ReducerConfig);
 
 [@react.component]
 let make = (~channelId=None, ~agentId=None) => {
-  let pagination = (reducerParams: Reducer.Types.reducerParams) =>
+  let pagination = (reducerParams: Reducer.state) =>
     <Div>
       <Div
         float=`right
@@ -31,11 +31,11 @@ let make = (~channelId=None, ~agentId=None) => {
             ForetoldComponents.PageCard.HeaderRow.Styles.itemBottomPadding,
           ]),
         ]>
-        {Reducer.Components.paginationPage(reducerParams)}
+        <Reducer.Components.PaginationPage state=reducerParams />
       </Div>
     </Div>;
 
-  let subComponent = (reducerParams: Reducer.Types.reducerParams) => {
+  let subComponent = (reducerParams: Reducer.state) => {
     let feedItems =
       switch (reducerParams.response) {
       | Success(connection) => connection.edges

@@ -1448,6 +1448,13 @@
     parcel "1.12.3"
     pdfast "0.2.0"
 
+"@glennsl/bs-jest@0.4.9":
+  version "0.4.9"
+  resolved "https://registry.yarnpkg.com/@glennsl/bs-jest/-/bs-jest-0.4.9.tgz#a23af2668dda05947ce9c043fd5a7b295e91cef7"
+  integrity sha512-WAqXMcI6WL7JVvGdakBr1tcw8BYWXHrOZfuA1myMkFggzAv24H/OEwyqaU7x+yXd4cJaBUY8v3SjQ3Pnk/zqsg==
+  dependencies:
+    jest "^24.3.1"
+
 "@glennsl/bs-jest@0.5.1":
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/@glennsl/bs-jest/-/bs-jest-0.5.1.tgz#2e16ad94268fc1e5ba0af978c141db1684556a55"
@@ -4867,6 +4874,21 @@ bs-css@11.0.0:
   dependencies:
     emotion "^10.0.7"
 
+bs-ken@0.0.10:
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/bs-ken/-/bs-ken-0.0.10.tgz#5558b68e34bbd0bc91c4412abfa75209b033faf7"
+  integrity sha512-znF6o73txei3pReP79t+ogx/vJgSRaJMLuPW+aum9xgKAnHjvkummzzcS53rRJgjob3bT2CodJuT3ntnF6Gh2w==
+  dependencies:
+    "@glennsl/bs-jest" "0.4.9"
+    "@glennsl/bs-json" "5.0.2"
+    "@ncthbrt/re-secure-random-string" "2.0.0"
+    bs-platform "7.0.1"
+    gentype "3.7.1"
+    lodash "4.17.15"
+    parcel "1.12.4"
+    ramda "0.26.1"
+    rationale "0.2.0"
+
 bs-ken@0.0.11:
   version "0.0.11"
   resolved "https://registry.yarnpkg.com/bs-ken/-/bs-ken-0.0.11.tgz#79d91ef6b71f0ef1285e1506d07562d3211c13a5"
@@ -4883,19 +4905,24 @@ bs-moment@0.4.5, bs-moment@^0.4.4:
   resolved "https://registry.yarnpkg.com/bs-moment/-/bs-moment-0.4.5.tgz#3f84fed55c2a70d25b0b6025e4e8d821fcdd4dc8"
   integrity sha512-anPYkFSof+X8EeomnP0fbQBvWFJeganwPqqARVB+fcdKYX2Uog/n3CCiFGEA+66yHbwnWZD5YFhtHCuyLMcQfQ==
 
+bs-platform@7.0.1:
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-7.0.1.tgz#1d7b0ef6088b998dceee5db74a7cd8f01c20a3bd"
+  integrity sha512-UjStdtHhbtC/l6vKJ1XRDqrPk7rFf5PLYHtRX3akDXEYVnTbN36z0g4DEr5mU8S0N945e33HYts9x+i7hKKpZQ==
+
 bs-platform@7.3.2:
   version "7.3.2"
   resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-7.3.2.tgz#301f5c9b4e8cf5713cb60ca22e145e56e793affe"
   integrity sha512-seJL5g4anK9la4erv+B2o2sMHQCxDF6OCRl9en3hbaUos/S3JsusQ0sPp4ORsbx5eXfHLYBwPljwKXlgpXtsgQ==
 
-bs-reform@9.7.1:
-  version "9.7.1"
-  resolved "https://registry.yarnpkg.com/bs-reform/-/bs-reform-9.7.1.tgz#d398e49b983dfd1f23c264ba0599f2a546bbe64f"
-  integrity sha512-Cj2PFJkmNm2sZvg1zBla382T00qmtWk8BNTJEnTKvfY71I8p8rw830dFEQY0Nhus/r/SiaYzbfhfKK2/k4emug==
+bs-reform@9.8.0:
+  version "9.8.0"
+  resolved "https://registry.yarnpkg.com/bs-reform/-/bs-reform-9.8.0.tgz#5476abd57f4a56d91fdf38f0d711dfc1120bf027"
+  integrity sha512-APSYRdXcfjE9FY3xCu0xyea5SxasVqGb0hGmfOBkCDLoFn7wshVY8IVMO/erBvAjIRyy7Peqx72bOc9Y4oukTw==
   dependencies:
     reason-react-compat "^0.4.0"
     reason-react-update "^1.0.0"
-    reschema "^1.3.0"
+    reschema "^1.3.1"
 
 bsb-js@1.1.7:
   version "1.1.7"
@@ -10973,7 +11000,7 @@ jest-worker@^25.5.0:
     merge-stream "^2.0.0"
     supports-color "^7.0.0"
 
-jest@24.9.0:
+jest@24.9.0, jest@^24.3.1:
   version "24.9.0"
   resolved "https://registry.yarnpkg.com/jest/-/jest-24.9.0.tgz#987d290c05a08b52c56188c1002e368edb007171"
   integrity sha512-YvkBL1Zm7d2B1+h5fHEOdyjCG+sGMz4f8D86/0HiqJ6MB4MnDc8FgP5vdWsGnemOQro7lnYo8UakZ3+5A0jxGw==
@@ -13485,6 +13512,71 @@ parcel@1.12.3:
     v8-compile-cache "^2.0.0"
     ws "^5.1.1"
 
+parcel@1.12.4:
+  version "1.12.4"
+  resolved "https://registry.yarnpkg.com/parcel/-/parcel-1.12.4.tgz#c8136085179c6382e632ca98126093e110be2ac5"
+  integrity sha512-qfc74e2/R4pCoU6L/ZZnK9k3iDS6ir4uHea0e9th9w52eehcAGf2ido/iABq9PBXdsIOe4NSY3oUm7Khe7+S3w==
+  dependencies:
+    "@babel/code-frame" "^7.0.0"
+    "@babel/core" "^7.4.4"
+    "@babel/generator" "^7.4.4"
+    "@babel/parser" "^7.4.4"
+    "@babel/plugin-transform-flow-strip-types" "^7.4.4"
+    "@babel/plugin-transform-modules-commonjs" "^7.4.4"
+    "@babel/plugin-transform-react-jsx" "^7.0.0"
+    "@babel/preset-env" "^7.4.4"
+    "@babel/runtime" "^7.4.4"
+    "@babel/template" "^7.4.4"
+    "@babel/traverse" "^7.4.4"
+    "@babel/types" "^7.4.4"
+    "@iarna/toml" "^2.2.0"
+    "@parcel/fs" "^1.11.0"
+    "@parcel/logger" "^1.11.1"
+    "@parcel/utils" "^1.11.0"
+    "@parcel/watcher" "^1.12.1"
+    "@parcel/workers" "^1.11.0"
+    ansi-to-html "^0.6.4"
+    babylon-walk "^1.0.2"
+    browserslist "^4.1.0"
+    chalk "^2.1.0"
+    clone "^2.1.1"
+    command-exists "^1.2.6"
+    commander "^2.11.0"
+    core-js "^2.6.5"
+    cross-spawn "^6.0.4"
+    css-modules-loader-core "^1.1.0"
+    cssnano "^4.0.0"
+    deasync "^0.1.14"
+    dotenv "^5.0.0"
+    dotenv-expand "^5.1.0"
+    envinfo "^7.3.1"
+    fast-glob "^2.2.2"
+    filesize "^3.6.0"
+    get-port "^3.2.0"
+    htmlnano "^0.2.2"
+    is-glob "^4.0.0"
+    is-url "^1.2.2"
+    js-yaml "^3.10.0"
+    json5 "^1.0.1"
+    micromatch "^3.0.4"
+    mkdirp "^0.5.1"
+    node-forge "^0.7.1"
+    node-libs-browser "^2.0.0"
+    opn "^5.1.0"
+    postcss "^7.0.11"
+    postcss-value-parser "^3.3.1"
+    posthtml "^0.11.2"
+    posthtml-parser "^0.4.0"
+    posthtml-render "^1.1.3"
+    resolve "^1.4.0"
+    semver "^5.4.1"
+    serialize-to-js "^3.0.0"
+    serve-static "^1.12.4"
+    source-map "0.6.1"
+    terser "^3.7.3"
+    v8-compile-cache "^2.0.0"
+    ws "^5.1.1"
+
 parent-module@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/parent-module/-/parent-module-1.0.1.tgz#691d2709e78c79fae3a156622452d00762caaaa2"
@@ -15778,10 +15870,10 @@ require-main-filename@^2.0.0:
   resolved "https://registry.yarnpkg.com/require-main-filename/-/require-main-filename-2.0.0.tgz#d0b329ecc7cc0f61649f62215be69af54aa8989b"
   integrity sha512-NKN5kMDylKuldxYLSUfrbo5Tuzh4hd+2E8NPPX02mZtn1VuREQToYe/ZdlJy+J3uCpfaiGF05e7B8W0iXbQHmg==
 
-reschema@1.3.0, reschema@^1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/reschema/-/reschema-1.3.0.tgz#b8b33bdcdb7eeaa0a22fb024f28204e9d84243a6"
-  integrity sha512-s+Bb6aA4OrsPtE6D5Afb0eYmPbattAb8e+b2mbE06Wr+Uec8Pw8WP6435LWdB0/3Y8d8awHAQebscJjxRc4RQA==
+reschema@1.3.1, reschema@^1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/reschema/-/reschema-1.3.1.tgz#61a754b1cc41bb050b4c398baa75caf02d9fa465"
+  integrity sha512-/k370hEgJDUmJlsuNBij0VZWL+btIQEcXkdh9rCzpLufesxW+r9ll69okz2z77q4PO3dXyq6h21yyb+Jzp9/Iw==
 
 resize-observer-polyfill@^1.5.0, resize-observer-polyfill@^1.5.1:
   version "1.5.1"

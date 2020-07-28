@@ -23,14 +23,19 @@ let run = (guesstimatorString: string) => {
   let distPlus = response.distPlus;
 
   let asFloat =
-    switch (
-      distPlus
-      |> E.O.fmap(ForetoldBsDistplus.Distributions.DistPlus.T.toShape)
-    ) {
-    | Some(Discrete({xs: [|_|], ys: [|_|]} as foo)) =>
-      Some(xyToDist(foo))
-    | _ => None
-    };
+    (
+      switch (response.shapeRenderOutputs.symbolic) {
+      | Some(Ok({graph: `Simple(`Float(r))})) => Some(r)
+      | _ => None
+      }
+    )
+    |> E.O.fmap(r => {
+         let wrapped: ForetoldComponents.Types.Dist.t = {
+           xs: [|r|],
+           ys: [|1.0|],
+         };
+         wrapped;
+       });
 
   switch (asFloat) {
   | Some(f) => `Float(f)

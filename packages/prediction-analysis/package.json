@@ -31,7 +31,7 @@
     "bs-platform": "7.3.2",
     "@foretold/cdf": "1.0.16",
     "@glennsl/bs-json": "5.0.2",
-    "lodash": "4.17.15",
+    "lodash": "4.17.19",
     "rationale": "0.2.0"
   }
 }

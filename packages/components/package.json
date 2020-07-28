@@ -27,7 +27,7 @@
         "bs-platform": "7.3.2",
         "d3": "5.16.0",
         "emotion": "10.0.27",
-        "lodash": "4.17.15",
+        "lodash": "4.17.19",
         "rationale": "0.2.0",
         "rc-dropdown": "3.0.2",
         "rc-menu": "8.0.3",

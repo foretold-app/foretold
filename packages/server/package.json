@@ -46,7 +46,7 @@
     "bs-ken": "0.0.11",
     "apollo-server": "2.14.2",
     "apollo-server-express": "2.14.2",
-    "auth0": "2.24.0",
+    "auth0": "2.27.1",
     "body-parser": "1.19.0",
     "body-parser-graphql": "1.1.0",
     "change-case": "4.1.1",

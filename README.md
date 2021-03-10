@@ -91,4 +91,4 @@ If you’re interested in collaborating on either the platform, formal experimen
 **Notebook Table With Sidebar Open**  
 ![question-page](https://raw.githubusercontent.com/foretold-app/foretold/master/docs/images/screenshot-table-with-sidebar.png)
 
-
+ 

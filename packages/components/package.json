@@ -40,7 +40,7 @@
         "reason-apollo": "0.20.0",
         "reason-react": "0.7.1",
         "react-textarea-autosize": "7.1.2",
-        "parcel-bundler": "1.12.4",
+        "parcel-bundler": "1.12.3",
         "@babel/runtime": "^7.1.2"
     }
 }

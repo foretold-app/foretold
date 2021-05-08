@@ -39,7 +39,7 @@
     "cdf"
   ],
   "dependencies": {
-    "lodash": "4.17.19",
+    "lodash": "4.17.21",
     "@slack/client": "5.0.2",
     "@foretold/cdf": "1.0.16",
     "@foretold/prediction-analysis": "0.0.9",

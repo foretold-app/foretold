@@ -29,7 +29,7 @@
     "jest": "25.5.1",
     "jstat": "1.9.3",
     "less": "3.10.3",
-    "lodash": "4.17.19",
+    "lodash": "4.17.21",
     "mathjs": "5.10.3",
     "moduleserve": "0.9.1",
     "parcel-bundler": "1.12.3",

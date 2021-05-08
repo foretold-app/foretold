@@ -17,7 +17,7 @@
     "discrete-sampling": "1.0.3",
     "financejs": "4.1.0",
     "jstat": "1.9.0",
-    "lodash": "4.17.19",
+    "lodash": "4.17.21",
     "mathjs": "5.10.3",
     "parcel": "1.12.3"
   },

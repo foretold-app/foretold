@@ -62,7 +62,7 @@
     "less": "3.11.1",
     "lib": "4.1.2",
     "lodash": "4.17.19",
-    "moment": "2.24.0",
+    "moment": "2.29.4",
     "parcel-bundler": "1.12.3",
     "parcel-plugin-bundle-visualiser": "1.2.0",
     "parcel-plugin-html-externals": "0.2.0",

@@ -44,7 +44,7 @@
     "@foretold/cdf": "1.0.16",
     "@foretold/prediction-analysis": "0.0.9",
     "bs-ken": "0.0.11",
-    "apollo-server": "2.14.2",
+    "apollo-server": "2.25.4",
     "apollo-server-express": "2.14.2",
     "auth0": "2.24.0",
     "body-parser": "1.19.0",
